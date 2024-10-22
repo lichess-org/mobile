@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -74,10 +75,7 @@ class IsBoardTurned extends _$IsBoardTurned {
 }
 
 @riverpod
-Future<bool> shouldPreventGoingBack(
-  ShouldPreventGoingBackRef ref,
-  GameFullId gameId,
-) {
+Future<bool> shouldPreventGoingBack(Ref ref, GameFullId gameId) {
   return ref.watch(
     gameControllerProvider(gameId).selectAsync(
       (state) =>
@@ -94,10 +92,7 @@ Future<
       bool shouldConfirmMove,
       bool isZenModeEnabled,
       bool canAutoQueen
-    })> userGamePrefs(
-  UserGamePrefsRef ref,
-  GameFullId gameId,
-) async {
+    })> userGamePrefs(Ref ref, GameFullId gameId) async {
   final prefs = await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.prefs),
   );
@@ -128,10 +123,7 @@ Future<
 ///
 /// This is data that won't change during the game.
 @riverpod
-Future<GameMeta> gameMeta(
-  GameMetaRef ref,
-  GameFullId gameId,
-) async {
+Future<GameMeta> gameMeta(Ref ref, GameFullId gameId) async {
   return await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.meta),
   );

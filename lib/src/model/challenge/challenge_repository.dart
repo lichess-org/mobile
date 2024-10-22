@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,7 +12,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'challenge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-ChallengeRepository challengeRepository(ChallengeRepositoryRef ref) {
+ChallengeRepository challengeRepository(Ref ref) {
   return ChallengeRepository(ref.read(lichessClientProvider));
 }
 

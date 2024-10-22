@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -19,9 +20,7 @@ typedef PuzzleOpeningData = ({
 
 /// Returns a flattened list of openings with their respective counts.
 @riverpod
-Future<IList<PuzzleOpeningData>> flatOpeningsList(
-  FlatOpeningsListRef ref,
-) async {
+Future<IList<PuzzleOpeningData>> flatOpeningsList(Ref ref) async {
   final families = await ref.watch(puzzleOpeningsProvider.future);
   return families
       .map(
@@ -41,7 +40,7 @@ Future<IList<PuzzleOpeningData>> flatOpeningsList(
 }
 
 @riverpod
-Future<String> puzzleOpeningName(PuzzleOpeningNameRef ref, String key) async {
+Future<String> puzzleOpeningName(Ref ref, String key) async {
   final openings = await ref.watch(flatOpeningsListProvider.future);
   return openings.firstWhere((element) => element.key == key).name;
 }

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -26,7 +27,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
-CorrespondenceService correspondenceService(CorrespondenceServiceRef ref) {
+CorrespondenceService correspondenceService(Ref ref) {
   return CorrespondenceService(
     Logger('CorrespondenceService'),
     ref: ref,
@@ -37,7 +38,7 @@ CorrespondenceService correspondenceService(CorrespondenceServiceRef ref) {
 class CorrespondenceService {
   CorrespondenceService(this._log, {required this.ref});
 
-  final CorrespondenceServiceRef ref;
+  final Ref ref;
   final Logger _log;
 
   /// Handles a notification response that caused the app to open.

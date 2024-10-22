@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/openings_database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,14 +16,14 @@ const kOpeningAllowedVariants = ISetConst({
 });
 
 @Riverpod(keepAlive: true)
-OpeningService openingService(OpeningServiceRef ref) {
+OpeningService openingService(Ref ref) {
   return OpeningService(ref);
 }
 
 class OpeningService {
   OpeningService(this._ref);
 
-  final OpeningServiceRef _ref;
+  final Ref _ref;
 
   Future<Database> get _db => _ref.read(openingsDatabaseProvider.future);
 

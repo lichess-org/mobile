@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -475,7 +476,7 @@ class SocketPool {
     _pool[_currentRoute] = client;
   }
 
-  final SocketPoolRef _ref;
+  final Ref _ref;
 
   /// The delay before closing the socket if idle (no subscription).
   final Duration idleTimeout;
@@ -570,7 +571,7 @@ class SocketPool {
 }
 
 @Riverpod(keepAlive: true)
-SocketPool socketPool(SocketPoolRef ref) {
+SocketPool socketPool(Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
@@ -629,9 +630,7 @@ class AverageLag extends _$AverageLag {
 }
 
 @Riverpod(keepAlive: true)
-WebSocketChannelFactory webSocketChannelFactory(
-  WebSocketChannelFactoryRef ref,
-) {
+WebSocketChannelFactory webSocketChannelFactory(Ref ref) {
   return const WebSocketChannelFactory();
 }
 

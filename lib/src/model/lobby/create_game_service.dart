@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -24,7 +25,7 @@ typedef ChallengeResponse = ({
 
 /// A provider for the [CreateGameService].
 @riverpod
-CreateGameService createGameService(CreateGameServiceRef ref) {
+CreateGameService createGameService(Ref ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
   ref.onDispose(() {
     service.dispose();
@@ -36,7 +37,7 @@ CreateGameService createGameService(CreateGameServiceRef ref) {
 class CreateGameService {
   CreateGameService(this._log, {required this.ref});
 
-  final CreateGameServiceRef ref;
+  final Ref ref;
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,14 +21,14 @@ const kStorageAnonId = '**anonymous**';
 final _logger = Logger('Database');
 
 @Riverpod(keepAlive: true)
-Future<Database> database(DatabaseRef ref) async {
+Future<Database> database(Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   return openAppDatabase(databaseFactory, dbPath);
 }
 
 /// Returns the sqlite version as an integer.
 @Riverpod(keepAlive: true)
-Future<int?> sqliteVersion(SqliteVersionRef ref) async {
+Future<int?> sqliteVersion(Ref ref) async {
   final db = await ref.read(databaseProvider.future);
   return _getDatabaseVersion(db);
 }
@@ -48,7 +49,7 @@ Future<int?> _getDatabaseVersion(Database db) async {
 }
 
 @Riverpod(keepAlive: true)
-Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
+Future<int> getDbSizeInBytes(Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   final dbFile = File(dbPath);
 

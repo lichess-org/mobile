@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -15,7 +16,7 @@ final _logger = Logger('Connectivity');
 
 /// A provider that exposes a [Connectivity] instance.
 @Riverpod(keepAlive: true)
-Connectivity connectivityPlugin(ConnectivityPluginRef _) => Connectivity();
+Connectivity connectivityPlugin(Ref _) => Connectivity();
 
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.

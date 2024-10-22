@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -16,7 +17,7 @@ part 'puzzle_batch_storage.freezed.dart';
 part 'puzzle_batch_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<PuzzleBatchStorage> puzzleBatchStorage(PuzzleBatchStorageRef ref) async {
+Future<PuzzleBatchStorage> puzzleBatchStorage(Ref ref) async {
   final database = await ref.watch(databaseProvider.future);
   return PuzzleBatchStorage(database, ref);
 }
@@ -29,7 +30,7 @@ class PuzzleBatchStorage {
   const PuzzleBatchStorage(this._db, this._ref);
 
   final Database _db;
-  final PuzzleBatchStorageRef _ref;
+  final Ref _ref;
 
   Future<PuzzleBatch?> fetch({
     required UserId? userId,

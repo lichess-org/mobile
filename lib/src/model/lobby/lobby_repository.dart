@@ -1,5 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -13,9 +14,7 @@ import 'game_seek.dart';
 part 'lobby_repository.g.dart';
 
 @riverpod
-Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
-  CorrespondenceChallengesRef ref,
-) {
+Future<IList<CorrespondenceChallenge>> correspondenceChallenges(Ref ref) {
   return ref.withClient(
     (client) => LobbyRepository(client).getCorrespondenceChallenges(),
   );
