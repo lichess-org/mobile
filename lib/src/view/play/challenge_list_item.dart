@@ -159,7 +159,9 @@ class CorrespondenceChallengeListItem extends StatelessWidget {
         status: ChallengeStatus.created,
         variant: challenge.variant,
         speed: Speed.correspondence,
-        timeControl: ChallengeTimeControlType.correspondence,
+        timeControl: challenge.days != null
+            ? ChallengeTimeControlType.correspondence
+            : ChallengeTimeControlType.unlimited,
         rated: challenge.rated,
         sideChoice: challenge.side == null
             ? SideChoice.random
