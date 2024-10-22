@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
+import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -176,6 +177,11 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final gamebookActive = ref.watch(
+      studyControllerProvider(id)
+          .select((state) => state.requireValue.gamebookActive),
+    );
+
     return SafeArea(
       child: Column(
         children: [
@@ -229,6 +235,9 @@ class _Body extends ConsumerWidget {
                           )
                         : null;
 
+                final bottomChild =
+                    gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
+
                 return landscape
                     ? Row(
                         mainAxisSize: MainAxisSize.max,
@@ -267,7 +276,7 @@ class _Body extends ConsumerWidget {
                                       kTabletBoardTableSidePadding,
                                     ),
                                     semanticContainer: false,
-                                    child: StudyTreeView(id),
+                                    child: bottomChild,
                                   ),
                                 ),
                               ],
@@ -305,7 +314,7 @@ class _Body extends ConsumerWidget {
                                       horizontal: kTabletBoardTableSidePadding,
                                     )
                                   : EdgeInsets.zero,
-                              child: StudyTreeView(id),
+                              child: bottomChild,
                             ),
                           ),
                         ],
@@ -384,6 +393,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
             (prefs) => prefs.showVariationArrows,
           ),
         ) &&
+        !studyState.gamebookActive &&
         currentNode.children.length > 1;
 
     final pgnShapes = ISet(
