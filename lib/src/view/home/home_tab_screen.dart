@@ -232,13 +232,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         shouldShow: true,
         child: _HelloWidget(),
       ),
-      _EditableWidget(
-        widget: EnabledWidget.perfCards,
-        shouldShow: session != null,
-        child: const AccountPerfCards(
-          padding: Styles.horizontalBodyPadding,
+      if (status.isOnline)
+        _EditableWidget(
+          widget: EnabledWidget.perfCards,
+          shouldShow: session != null,
+          child: const AccountPerfCards(
+            padding: Styles.horizontalBodyPadding,
+          ),
         ),
-      ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
         shouldShow: status.isOnline,
@@ -344,13 +345,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         shouldShow: true,
         child: _HelloWidget(),
       ),
-      _EditableWidget(
-        widget: EnabledWidget.perfCards,
-        shouldShow: session != null,
-        child: const AccountPerfCards(
-          padding: Styles.bodySectionPadding,
+      if (status.isOnline)
+        _EditableWidget(
+          widget: EnabledWidget.perfCards,
+          shouldShow: session != null,
+          child: const AccountPerfCards(
+            padding: Styles.bodySectionPadding,
+          ),
         ),
-      ),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
