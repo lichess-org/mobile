@@ -1,8 +1,4 @@
-import 'dart:math' as math;
-import 'dart:ui';
-
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,7 +64,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
             analysisState.isEngineAvailable &&
             bestMoves != null
-        ? _computeBestMoveShapes(
+        ? computeBestMoveShapes(
             bestMoves,
             currentNode.position.turn,
             boardPrefs.pieceSet.assets,
@@ -116,75 +112,6 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
               newShapeColor: boardPrefs.shapeColor.color,
             ),
           ),
-    );
-  }
-
-  ISet<Shape> _computeBestMoveShapes(
-    IList<MoveWithWinningChances> moves,
-    Side sideToMove,
-    PieceAssets pieceAssets,
-  ) {
-    // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
-    // (assume moves are ordered by their winning chances, so index==0 is the best move)
-    double scaleArrowAgainstBestMove(int index) {
-      const minScale = 0.15;
-      const maxScale = 1.0;
-      const winningDiffScaleFactor = 2.5;
-
-      final bestMove = moves[0];
-      final winningDiffComparedToBestMove =
-          bestMove.winningChances - moves[index].winningChances;
-      // Force minimum scale if the best move is significantly better than this move
-      if (winningDiffComparedToBestMove > 0.3) {
-        return minScale;
-      }
-      return clampDouble(
-        math.max(
-          minScale,
-          maxScale - winningDiffScaleFactor * winningDiffComparedToBestMove,
-        ),
-        0,
-        1,
-      );
-    }
-
-    return ISet(
-      moves.mapIndexed(
-        (i, m) {
-          final move = m.move;
-          // Same colors as in the Web UI with a slightly different opacity
-          // The best move has a different color than the other moves
-          final color = Color((i == 0) ? 0x66003088 : 0x664A4A4A);
-          switch (move) {
-            case NormalMove(from: _, to: _, promotion: final promRole):
-              return [
-                Arrow(
-                  color: color,
-                  orig: move.from,
-                  dest: move.to,
-                  scale: scaleArrowAgainstBestMove(i),
-                ),
-                if (promRole != null)
-                  PieceShape(
-                    color: color,
-                    orig: move.to,
-                    pieceAssets: pieceAssets,
-                    piece: Piece(color: sideToMove, role: promRole),
-                  ),
-              ];
-            case DropMove(role: final role, to: _):
-              return [
-                PieceShape(
-                  color: color,
-                  orig: move.to,
-                  pieceAssets: pieceAssets,
-                  opacity: 0.5,
-                  piece: Piece(color: sideToMove, role: role),
-                ),
-              ];
-          }
-        },
-      ).expand((e) => e),
     );
   }
 
