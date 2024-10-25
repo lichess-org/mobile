@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
@@ -297,7 +299,10 @@ class _StudyListState extends ConsumerState<_StudyList> {
                     ],
                   ),
                 ),
-                onTap: () {},
+                onTap: () => pushPlatformRoute(
+                  context,
+                  builder: (context) => StudyScreen(id: study.id),
+                ),
               );
             },
           ),
