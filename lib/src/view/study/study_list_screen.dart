@@ -198,7 +198,9 @@ class _StudyList extends ConsumerStatefulWidget {
 }
 
 class _StudyListState extends ConsumerState<_StudyList> {
-  final _scrollController = ScrollController();
+  final _scrollController = ScrollController(keepScrollOffset: true);
+
+  bool requestedNextPage = false;
 
   @override
   void initState() {
@@ -214,11 +216,16 @@ class _StudyListState extends ConsumerState<_StudyList> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (!requestedNextPage &&
+        _scrollController.position.pixels >=
+            0.75 * _scrollController.position.maxScrollExtent) {
       final studiesList = ref.read(widget.paginatorProvider);
 
       if (!studiesList.isLoading) {
+        setState(() {
+          requestedNextPage = true;
+        });
+
         ref.read(widget.paginatorProvider.notifier).next();
       }
     }
@@ -226,6 +233,16 @@ class _StudyListState extends ConsumerState<_StudyList> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(widget.paginatorProvider, (prev, next) {
+      if (prev?.value?.nextPage != next.value?.nextPage) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            requestedNextPage = false;
+          });
+        });
+      }
+    });
+
     final studiesAsync = ref.watch(widget.paginatorProvider);
 
     return studiesAsync.when(
