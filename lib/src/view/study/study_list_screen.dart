@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -159,22 +160,12 @@ class _BodyState extends State<_Body> {
         children: [
           Padding(
             padding: Styles.bodySectionPadding,
-            child: SearchBar(
+            child: PlatformSearchBar(
               controller: _searchController,
-              leading: const Icon(Icons.search),
-              trailing: [
-                if (search != null)
-                  IconButton(
-                    onPressed: () => setState(() {
-                      search = null;
-                      _searchController.clear();
-                    }),
-                    tooltip: 'Clear',
-                    icon: const Icon(
-                      Icons.close,
-                    ),
-                  ),
-              ],
+              onClear: () => setState(() {
+                search = null;
+                _searchController.clear();
+              }),
               hintText: search ?? context.l10n.searchSearch,
               onSubmitted: (term) {
                 setState(() {
