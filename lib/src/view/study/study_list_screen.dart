@@ -49,7 +49,7 @@ class StudyListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.read(authSessionProvider)?.user.id != null;
+    final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
 
     final filter = ref.watch(studyFilterProvider);
     final categorySection =
