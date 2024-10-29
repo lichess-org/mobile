@@ -221,14 +221,14 @@ void main() {
       await playMove(tester, boardRect, 'e2', 'e4', orientation: Side.black);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('whitepawn-e2')), findsNothing);
-      expect(find.byKey(const Key('whitepawn-e4')), findsOneWidget);
+      expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
+      expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
 
       await playMove(tester, boardRect, 'e7', 'e5', orientation: Side.black);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('blackpawn-e5')), findsNothing);
-      expect(find.byKey(const Key('blackpawn-e7')), findsOneWidget);
+      expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
+      expect(find.byKey(const Key('e7-blackpawn')), findsNothing);
 
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
