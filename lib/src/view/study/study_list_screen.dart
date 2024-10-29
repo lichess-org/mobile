@@ -75,9 +75,7 @@ class StudyListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: _Body(
-        filter: ref.watch(studyFilterProvider),
-      ),
+      body: _Body(filter: filter),
     );
   }
 }
