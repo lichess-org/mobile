@@ -417,7 +417,7 @@ class _StudyFlair extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconIfNoFlair = Icon(
-      LichessIcons.book_lichess,
+      LichessIcons.study,
       size: size,
     );
 

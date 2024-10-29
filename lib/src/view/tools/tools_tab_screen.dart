@@ -179,7 +179,7 @@ class _Body extends ConsumerWidget {
           ),
           if (isOnline)
             _ToolsButton(
-              icon: LichessIcons.book_lichess,
+              icon: LichessIcons.study,
               title: context.l10n.studyMenu,
               onTap: () => pushPlatformRoute(
                 context,
