@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -115,6 +116,23 @@ void main() {
       final result = await repo.puzzleDashboard(30);
 
       expect(result, isA<PuzzleDashboard>());
+    });
+
+    test('puzzle activity', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/activity') {
+          return mockResponse(mockActivityResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = PuzzleRepository(client);
+      final result = await repo.puzzleActivity(3);
+
+      expect(result, isA<IList<PuzzleHistoryEntry>>());
+      expect(result.length, 3);
     });
   });
 }

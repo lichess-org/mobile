@@ -62,6 +62,7 @@ Widget _buildMainListItem(
   int index,
   Animation<double> animation,
   PuzzleAngle Function(int index) getAngle,
+  VoidCallback? onGoingBackFromPuzzleScreen,
 ) {
   switch (index) {
     case 0:
@@ -90,7 +91,7 @@ Widget _buildMainListItem(
             builder: (context) => const PuzzleScreen(
               angle: PuzzleTheme(PuzzleThemeKey.mix),
             ),
-          );
+          ).then((_) => onGoingBackFromPuzzleScreen?.call());
         },
       );
     default:
@@ -102,7 +103,7 @@ Widget _buildMainListItem(
             context,
             rootNavigator: true,
             builder: (context) => PuzzleScreen(angle: angle),
-          );
+          ).then((_) => onGoingBackFromPuzzleScreen?.call());
         },
       );
   }
@@ -172,22 +173,27 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
     }
   }
 
-  Widget _buildItem(
-    BuildContext context,
-    int index,
-    Animation<double> animation,
-  ) {
-    return _buildMainListItem(
-      context,
-      index,
-      animation,
-      (index) => _angles[index],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
+
+    Widget buildItem(
+      BuildContext context,
+      int index,
+      Animation<double> animation,
+    ) =>
+        _buildMainListItem(
+          context,
+          index,
+          animation,
+          (index) => _angles[index],
+          isTablet
+              ? () {
+                  ref.read(currentBottomTabProvider.notifier).state =
+                      BottomTab.home;
+                }
+              : null,
+        );
 
     if (isTablet) {
       return Row(
@@ -216,7 +222,7 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
                     sliver: SliverAnimatedList(
                       key: _listKey,
                       initialItemCount: _angles.length,
-                      itemBuilder: _buildItem,
+                      itemBuilder: buildItem,
                     ),
                   ),
                 ],
@@ -273,7 +279,7 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
             sliver: SliverAnimatedList(
               key: _listKey,
               initialItemCount: _angles.length,
-              itemBuilder: _buildItem,
+              itemBuilder: buildItem,
             ),
           ),
         ],
@@ -332,22 +338,27 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     }
   }
 
-  Widget _buildItem(
-    BuildContext context,
-    int index,
-    Animation<double> animation,
-  ) {
-    return _buildMainListItem(
-      context,
-      index,
-      animation,
-      (index) => _angles[index],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
+
+    Widget buildItem(
+      BuildContext context,
+      int index,
+      Animation<double> animation,
+    ) =>
+        _buildMainListItem(
+          context,
+          index,
+          animation,
+          (index) => _angles[index],
+          isTablet
+              ? () {
+                  ref.read(currentBottomTabProvider.notifier).state =
+                      BottomTab.home;
+                }
+              : null,
+        );
 
     return PopScope(
       canPop: false,
@@ -375,7 +386,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
                       key: _listKey,
                       initialItemCount: _angles.length,
                       controller: puzzlesScrollController,
-                      itemBuilder: _buildItem,
+                      itemBuilder: buildItem,
                     ),
                   ),
                   Expanded(
@@ -395,7 +406,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
                       key: _listKey,
                       controller: puzzlesScrollController,
                       initialItemCount: _angles.length,
-                      itemBuilder: _buildItem,
+                      itemBuilder: buildItem,
                     ),
                   ),
                 ],

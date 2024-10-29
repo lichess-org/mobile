@@ -82,7 +82,6 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
     super.didPop();
     if (mounted) {
       ref.invalidate(nextPuzzleProvider(widget.angle));
-      ref.invalidate(puzzleRecentActivityProvider);
     }
   }
 
