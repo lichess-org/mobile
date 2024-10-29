@@ -172,10 +172,12 @@ class _BodyState extends State<_Body> {
               },
             ),
           ),
-          _StudyList(
-            paginatorProvider: StudyListPaginatorProvider(
-              filter: widget.filter,
-              search: search,
+          Expanded(
+            child: _StudyList(
+              paginatorProvider: StudyListPaginatorProvider(
+                filter: widget.filter,
+                search: search,
+              ),
             ),
           ),
         ],
@@ -245,73 +247,71 @@ class _StudyListState extends ConsumerState<_StudyList> {
 
     return studiesAsync.when(
       data: (studies) {
-        return Expanded(
-          child: ListView.separated(
-            controller: _scrollController,
-            itemCount: studies.studies.length,
-            separatorBuilder: (context, index) => const PlatformDivider(
-              height: 1,
-              cupertinoHasLeading: true,
-            ),
-            itemBuilder: (context, index) {
-              final study = studies.studies[index];
-              return PlatformListTile(
-                padding: Styles.bodyPadding,
-                title: Row(
-                  children: [
-                    _StudyFlair(
-                      flair: study.flair,
-                      size: 30,
+        return ListView.separated(
+          controller: _scrollController,
+          itemCount: studies.studies.length,
+          separatorBuilder: (context, index) => const PlatformDivider(
+            height: 1,
+            cupertinoHasLeading: true,
+          ),
+          itemBuilder: (context, index) {
+            final study = studies.studies[index];
+            return PlatformListTile(
+              padding: Styles.bodyPadding,
+              title: Row(
+                children: [
+                  _StudyFlair(
+                    flair: study.flair,
+                    size: 30,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          study.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                        _StudySubtitle(
+                          study: study,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
+                  ),
+                ],
+              ),
+              subtitle: DefaultTextStyle.merge(
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            study.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
-                          _StudySubtitle(
-                            study: study,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                      flex: 4,
+                      child: _StudyChapters(study: study),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: _StudyMembers(
+                        study: study,
                       ),
                     ),
                   ],
                 ),
-                subtitle: DefaultTextStyle.merge(
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: _StudyChapters(study: study),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: _StudyMembers(
-                          study: study,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () => pushPlatformRoute(
-                  context,
-                  builder: (context) => StudyScreen(id: study.id),
-                ),
-              );
-            },
-          ),
+              ),
+              onTap: () => pushPlatformRoute(
+                context,
+                builder: (context) => StudyScreen(id: study.id),
+              ),
+            );
+          },
         );
       },
       loading: () {
