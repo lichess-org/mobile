@@ -129,7 +129,7 @@ class _StudyFilterSheet extends ConsumerWidget {
   }
 }
 
-class _Body extends StatefulWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.filter,
   });
@@ -137,70 +137,23 @@ class _Body extends StatefulWidget {
   final StudyFilterState filter;
 
   @override
-  State<_Body> createState() => _BodyState();
+  ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends State<_Body> {
+class _BodyState extends ConsumerState<_Body> {
   String? search;
 
   final _searchController = SearchController();
 
-  @override
-  void dispose() {
-    super.dispose();
-    _searchController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: PlatformSearchBar(
-              controller: _searchController,
-              onClear: () => setState(() {
-                search = null;
-                _searchController.clear();
-              }),
-              hintText: search ?? context.l10n.searchSearch,
-              onSubmitted: (term) {
-                setState(() {
-                  search = term;
-                });
-              },
-            ),
-          ),
-          Expanded(
-            child: _StudyList(
-              paginatorProvider: StudyListPaginatorProvider(
-                filter: widget.filter,
-                search: search,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StudyList extends ConsumerStatefulWidget {
-  const _StudyList({
-    required this.paginatorProvider,
-  });
-
-  final StudyListPaginatorProvider paginatorProvider;
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _StudyListState();
-}
-
-class _StudyListState extends ConsumerState<_StudyList> {
   final _scrollController = ScrollController(keepScrollOffset: true);
 
   bool requestedNextPage = false;
+
+  StudyListPaginatorProvider get paginatorProvider =>
+      StudyListPaginatorProvider(
+        filter: widget.filter,
+        search: search,
+      );
 
   @override
   void initState() {
@@ -212,6 +165,7 @@ class _StudyListState extends ConsumerState<_StudyList> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -219,37 +173,83 @@ class _StudyListState extends ConsumerState<_StudyList> {
     if (!requestedNextPage &&
         _scrollController.position.pixels >=
             0.75 * _scrollController.position.maxScrollExtent) {
-      final studiesList = ref.read(widget.paginatorProvider);
+      final studiesList = ref.read(paginatorProvider);
 
       if (!studiesList.isLoading) {
         setState(() {
           requestedNextPage = true;
         });
 
-        ref.read(widget.paginatorProvider.notifier).next();
+        ref.read(paginatorProvider.notifier).next();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(widget.paginatorProvider, (prev, next) {
+    ref.listen(paginatorProvider, (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          setState(() {
-            requestedNextPage = false;
-          });
+          if (mounted) {
+            setState(() {
+              requestedNextPage = false;
+            });
+          }
         });
       }
     });
 
-    final studiesAsync = ref.watch(widget.paginatorProvider);
+    return SafeArea(
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            Padding(
+              padding: Styles.bodySectionPadding,
+              child: PlatformSearchBar(
+                controller: _searchController,
+                onClear: () => setState(() {
+                  search = null;
+                  _searchController.clear();
+                }),
+                hintText: search ?? context.l10n.searchSearch,
+                onSubmitted: (term) {
+                  setState(() {
+                    search = term;
+                  });
+                },
+              ),
+            ),
+            _StudyList(
+              paginatorProvider: StudyListPaginatorProvider(
+                filter: widget.filter,
+                search: search,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StudyList extends ConsumerWidget {
+  const _StudyList({
+    required this.paginatorProvider,
+  });
+
+  final StudyListPaginatorProvider paginatorProvider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final studiesAsync = ref.watch(paginatorProvider);
 
     return studiesAsync.when(
       data: (studies) {
         return ListView.separated(
-          controller: _scrollController,
+          shrinkWrap: true,
           itemCount: studies.studies.length,
+          primary: false,
           separatorBuilder: (context, index) => const PlatformDivider(
             height: 1,
             cupertinoHasLeading: true,

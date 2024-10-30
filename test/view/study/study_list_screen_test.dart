@@ -79,17 +79,11 @@ void main() {
       expect(find.text('First Study Page 1'), findsOneWidget);
       expect(find.text('First Study Page 2'), findsNothing); // On page 2
 
-      // SearchBar also implements Scrollable, so we need to explicitly specify the ListView's Scrollable here
-      await tester.scrollUntilVisible(
+      await tester.dragUntilVisible(
         find.text('First Study Page 2'),
-        200,
-        scrollable: find.descendant(
-          of: find.byType(ListView),
-          matching: find.byType(Scrollable),
-        ),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -250),
       );
-
-      await tester.pumpAndSettle();
     });
 
     testWidgets('Searching', (WidgetTester tester) async {
