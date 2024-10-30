@@ -74,7 +74,9 @@ void main() {
         ],
       );
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
+
+      // Wait for study list to load
+      await tester.pump();
 
       expect(find.text('First Study Page 1'), findsOneWidget);
       expect(find.text('First Study Page 2'), findsNothing); // On page 2
