@@ -142,6 +142,8 @@ class _AppState extends ConsumerState<Application> {
             ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
             : (null, null);
 
+        final isTablet = isTabletOrLarger(context);
+
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
@@ -173,7 +175,9 @@ class _AppState extends ConsumerState<Application> {
                     .copyWith(color: Styles.cupertinoTitleColor),
               ),
           scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
-          barBackgroundColor: Styles.cupertinoAppBarColor,
+          barBackgroundColor: isTablet
+              ? Styles.cupertinoTabletAppBarColor
+              : Styles.cupertinoAppBarColor,
         );
 
         return MaterialApp(

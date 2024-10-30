@@ -77,6 +77,11 @@ abstract class Styles {
     color: Color(0xE6F9F9F9),
     darkColor: Color.fromARGB(210, 36, 36, 38),
   );
+  static const cupertinoTabletAppBarColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFF9F9F9),
+    darkColor: Color.fromARGB(255, 36, 36, 36),
+  );
   static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromARGB(255, 242, 242, 247),
     darkColor: Color.fromARGB(255, 23, 23, 23),
