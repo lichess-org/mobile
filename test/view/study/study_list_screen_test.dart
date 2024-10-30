@@ -9,23 +9,68 @@ import '../../test_provider_scope.dart';
 
 void main() {
   group('Study list screen', () {
-    final mockClient = MockClient((request) {
-      if (request.url.path == '/study/all/hot') {
-        if (request.url.queryParameters['page'] == '1') {
-          return mockResponse(kStudyAllHotPage1Response, 200);
-        }
-        if (request.url.queryParameters['page'] == '2') {
-          return mockResponse(kStudyAllHotPage2Response, 200);
-        }
-        return mockResponse(
-          emptyPage(int.parse(request.url.queryParameters['page']!)),
-          200,
-        );
-      }
-      if (request.url.path == '/study/search') {
-        if (request.url.queryParameters['q'] == 'Magnus') {
+    testWidgets('Scrolling down loads next page', (WidgetTester tester) async {
+      final requestedPages = <int>[];
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/study/all/hot') {
+          requestedPages.add(int.parse(request.url.queryParameters['page']!));
+
+          if (request.url.queryParameters['page'] == '1') {
+            return mockResponse(kStudyAllHotPage1Response, 200);
+          }
+          if (request.url.queryParameters['page'] == '2') {
+            return mockResponse(kStudyAllHotPage2Response, 200);
+          }
+
+          // Page 2 only contains a single item, so should also load page 3
           return mockResponse(
-            '''
+            emptyPage(int.parse(request.url.queryParameters['page']!)),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyListScreen(),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for study list to load
+      await tester.pump();
+
+      expect(find.text('First Study Page 1'), findsOneWidget);
+      expect(find.text('First Study Page 2'), findsNothing); // On page 2
+
+      await tester.dragUntilVisible(
+        find.text('First Study Page 2'),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -250),
+      );
+
+      // Wait for page 3 to load
+      await tester.pumpAndSettle();
+
+      expect(requestedPages, [1, 2, 3]);
+    });
+
+    testWidgets('Searching', (WidgetTester tester) async {
+      final requestedUrls = <String>[];
+      final mockClient = MockClient((request) {
+        requestedUrls.add(request.url.toString());
+        if (request.url.path == '/study/all/hot' &&
+            request.url.queryParameters['page'] == '1') {
+          return mockResponse(kStudyAllHotPage1Response, 200);
+        } else if (request.url.path == '/study/search') {
+          if (request.url.queryParameters['q'] == 'Magnus') {
+            return mockResponse(
+              '''
 {
   "paginator": {
     "currentPage": 1,
@@ -56,14 +101,13 @@ void main() {
   }
 }
               ''',
-            200,
-          );
+              200,
+            );
+          }
         }
-      }
-      return mockResponse('', 404);
-    });
+        return mockResponse('', 404);
+      });
 
-    testWidgets('Scrolling down loads next page', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyListScreen(),
@@ -74,32 +118,6 @@ void main() {
         ],
       );
       await tester.pumpWidget(app);
-
-      // Wait for study list to load
-      await tester.pump();
-
-      expect(find.text('First Study Page 1'), findsOneWidget);
-      expect(find.text('First Study Page 2'), findsNothing); // On page 2
-
-      await tester.dragUntilVisible(
-        find.text('First Study Page 2'),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -250),
-      );
-    });
-
-    testWidgets('Searching', (WidgetTester tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const StudyListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
-            return LichessClient(mockClient, ref);
-          }),
-        ],
-      );
-      await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.byType(SearchBar));
 
@@ -107,6 +125,7 @@ void main() {
       // submit the search
       await tester.testTextInput.receiveAction(TextInputAction.done);
 
+      // Wait for search results to load
       await tester.pumpAndSettle();
 
       expect(find.text('Magnus Carlsen Games'), findsOneWidget);
@@ -114,7 +133,10 @@ void main() {
       expect(find.textContaining('Chapter 2'), findsOneWidget);
       expect(find.textContaining('tom-anders'), findsOneWidget);
 
-      await tester.pumpAndSettle();
+      expect(requestedUrls, [
+        'https://lichess.dev/study/all/hot?page=1',
+        'https://lichess.dev/study/search?page=1&q=Magnus',
+      ]);
     });
   });
 }
