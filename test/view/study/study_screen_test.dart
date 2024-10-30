@@ -80,6 +80,8 @@ void main() {
         ],
       );
       await tester.pumpWidget(app);
+
+      // Wait for study to load
       await tester.pumpAndSettle();
 
       expect(find.text('root comment'), findsOneWidget);
@@ -142,6 +144,7 @@ void main() {
         ],
       );
       await tester.pumpWidget(app);
+      // Wait for study to load
       await tester.pumpAndSettle();
 
       expect(find.text('Chapter 1'), findsOneWidget);
@@ -152,8 +155,10 @@ void main() {
 
       // 2nd press should not have any effect, we're already at the last chapter
       await tester.tap(find.text('Next chapter'));
+      // Wait for next chapter to load
       await tester.pumpAndSettle();
       await tester.tap(find.text('Next chapter'));
+      // Wait for next chapter to load (even though it shouldn't)
       await tester.pumpAndSettle();
 
       expect(find.text('Chapter 1'), findsNothing);
@@ -164,6 +169,7 @@ void main() {
 
       // Open chapter selection dialog
       await tester.tap(find.byTooltip('Chapters'));
+      // Wait for dialog to open
       await tester.pumpAndSettle();
 
       expect(
@@ -182,6 +188,7 @@ void main() {
       );
 
       await tester.tap(find.text('Chapter 1'));
+      // Wait for chapter to load
       await tester.pumpAndSettle();
 
       expect(find.text('Chapter 1'), findsOneWidget);
@@ -215,17 +222,16 @@ void main() {
         ],
       );
       await tester.pumpWidget(app);
+      // Wait for study to load
       await tester.pumpAndSettle();
 
       final boardRect = tester.getRect(find.byType(Chessboard));
       await playMove(tester, boardRect, 'e2', 'e4', orientation: Side.black);
-      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
       expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
 
       await playMove(tester, boardRect, 'e7', 'e5', orientation: Side.black);
-      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
       expect(find.byKey(const Key('e7-blackpawn')), findsNothing);
