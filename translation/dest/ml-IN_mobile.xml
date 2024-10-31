@@ -11,6 +11,7 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ശരി</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">സ്പർശന പ്രതികരണം</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">ആഴത്തിലുള്ള അനുഭവരീതി</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ഉപയോക്തൃസമ്പർക്കമുഖം കളിക്കുമ്പോഴു് ഒളിപ്പിക്കുക. ദൃശ്യപ്രതലത്തിന്റെ അതിരിലുള്ള വ്യവസ്ഥയിന്റെ ഗതിനർണയ ആംഗ്യഭാഷകൾ നിന്നു് താങ്ങൾക്കു് പ്രശ്നമുണ്ടെങ്കിൽ ഇതു് ഉപയോഗിക്കൂ. ഈ പ്രവർത്തനം വെരും കളിയും പസ്സിൽ കൊടുങ്കാറ്റു്  ദൃശ്യപ്രതലത്തിൽ മാത്രം ചെയ്യാനൊക്കും.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">താങ്ങൾ ഒരു ഉപയോക്താവിനും പിന്തുടരുന്നില്ല.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാം കളികൾ</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">സമീപകാല തിരയലുകൾ</string>
@@ -18,6 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">%s ഒപ്പമുള്ള കളിക്കാർ</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ഫലങ്ങളൊന്നുമില്ല</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">താങ്ങൾക്ക് ഉറപ്പാണോ?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">താങ്ങളുടെ ഇപ്പോഴുള്ള കളിവരി നഷ്ടപെട്ടിട്ടു് താങ്ങളുടെ പ്രപ്താങ്കം കരുതിവച്ചിരിക്കും.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">ഒന്നും കാണിക്കാനില്ല. വേണെങ്കിൽ പസ്സിൽ കൊടുങ്കാറ്റു് കളിക്കുക.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ഈ പ്രശ്നംകരുനില പങ്കിടുക</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>
