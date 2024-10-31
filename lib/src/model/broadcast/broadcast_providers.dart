@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -44,7 +45,7 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
 
 @riverpod
 Future<BroadcastTournament> broadcastTournament(
-  BroadcastTournamentRef ref,
+  Ref ref,
   BroadcastTournamentId broadcastTournamentId,
 ) {
   return ref.withClient(
@@ -55,7 +56,7 @@ Future<BroadcastTournament> broadcastTournament(
 
 @riverpod
 Future<BroadcastRoundGames> broadcastRound(
-  BroadcastRoundRef ref,
+  Ref ref,
   BroadcastRoundId broadcastRoundId,
 ) {
   return ref.withClient(
@@ -65,7 +66,7 @@ Future<BroadcastRoundGames> broadcastRound(
 
 @riverpod
 Future<String> broadcastGame(
-  BroadcastGameRef ref, {
+  Ref ref, {
   required BroadcastRoundId roundId,
   required BroadcastGameId gameId,
 }) {
