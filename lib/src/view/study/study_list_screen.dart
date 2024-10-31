@@ -75,7 +75,7 @@ class StudyListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: _Body(filter: filter),
+      body: SafeArea(child: _Body(filter: filter)),
     );
   }
 }
@@ -199,63 +199,43 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            Padding(
-              padding: Styles.bodySectionPadding,
-              child: PlatformSearchBar(
-                controller: _searchController,
-                onClear: () => setState(() {
-                  search = null;
-                  _searchController.clear();
-                }),
-                hintText: search ?? context.l10n.searchSearch,
-                onSubmitted: (term) {
-                  setState(() {
-                    search = term;
-                  });
-                },
-              ),
-            ),
-            _StudyList(
-              paginatorProvider: StudyListPaginatorProvider(
-                filter: widget.filter,
-                search: search,
-              ),
-            ),
-          ],
-        ),
+    final studiesAsync = ref.watch(paginatorProvider);
+
+    final searchBar = Padding(
+      padding: Styles.bodySectionPadding,
+      child: PlatformSearchBar(
+        controller: _searchController,
+        onClear: () => setState(() {
+          search = null;
+          _searchController.clear();
+        }),
+        hintText: search ?? context.l10n.searchSearch,
+        onSubmitted: (term) {
+          setState(() {
+            search = term;
+          });
+        },
       ),
     );
-  }
-}
-
-class _StudyList extends ConsumerWidget {
-  const _StudyList({
-    required this.paginatorProvider,
-  });
-
-  final StudyListPaginatorProvider paginatorProvider;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final studiesAsync = ref.watch(paginatorProvider);
 
     return studiesAsync.when(
       data: (studies) {
         return ListView.separated(
           shrinkWrap: true,
-          itemCount: studies.studies.length,
-          primary: false,
-          separatorBuilder: (context, index) => const PlatformDivider(
-            height: 1,
-            cupertinoHasLeading: true,
-          ),
+          itemCount: studies.studies.length + 1,
+          controller: _scrollController,
+          separatorBuilder: (context, index) => index == 0
+              ? const SizedBox.shrink()
+              : const PlatformDivider(
+                  height: 1,
+                  cupertinoHasLeading: true,
+                ),
           itemBuilder: (context, index) {
-            final study = studies.studies[index];
+            if (index == 0) {
+              return searchBar;
+            }
+
+            final study = studies.studies[index - 1];
             return PlatformListTile(
               padding: Styles.bodyPadding,
               title: Row(
@@ -315,7 +295,14 @@ class _StudyList extends ConsumerWidget {
         );
       },
       loading: () {
-        return const Center(child: CircularProgressIndicator.adaptive());
+        return Column(
+          children: [
+            searchBar,
+            const Expanded(
+              child: Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          ],
+        );
       },
       error: (error, stack) {
         _logger.severe('Error loading studies', error, stack);

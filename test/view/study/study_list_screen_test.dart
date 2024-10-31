@@ -50,7 +50,7 @@ void main() {
 
       await tester.dragUntilVisible(
         find.text('First Study Page 2'),
-        find.byType(SingleChildScrollView),
+        find.byType(ListView),
         const Offset(0, -250),
       );
 
