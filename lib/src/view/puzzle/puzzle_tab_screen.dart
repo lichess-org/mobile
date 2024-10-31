@@ -381,8 +381,6 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
                 children: [
                   Expanded(
                     child: AnimatedList(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
                       key: _listKey,
                       initialItemCount: _angles.length,
                       controller: puzzlesScrollController,
