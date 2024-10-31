@@ -61,7 +61,7 @@ class AnalysisSettings extends ConsumerWidget {
           ),
           subtitle: NonLinearSlider(
             value: prefs.numEvalLines,
-            values: const [1, 2, 3],
+            values: const [0, 1, 2, 3],
             onChangeEnd: isEngineAvailable
                 ? (value) => ref
                     .read(ctrlProvider.notifier)
