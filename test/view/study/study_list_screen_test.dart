@@ -21,12 +21,6 @@ void main() {
           if (request.url.queryParameters['page'] == '2') {
             return mockResponse(kStudyAllHotPage2Response, 200);
           }
-
-          // Page 2 only contains a single item, so should also load page 3
-          return mockResponse(
-            emptyPage(int.parse(request.url.queryParameters['page']!)),
-            200,
-          );
         }
         return mockResponse('', 404);
       });
@@ -54,10 +48,7 @@ void main() {
         const Offset(0, -250),
       );
 
-      // Wait for page 3 to load
-      await tester.pumpAndSettle();
-
-      expect(requestedPages, [1, 2, 3]);
+      expect(requestedPages, [1, 2]);
     });
 
     testWidgets('Searching', (WidgetTester tester) async {
@@ -642,7 +633,7 @@ const kStudyAllHotPage1Response = '''
     "previousPage": null,
     "nextPage": 2,
     "nbResults": 9999,
-    "nbPages": 625
+    "nbPages": 2
   }
 }
 ''';
@@ -650,7 +641,7 @@ const kStudyAllHotPage1Response = '''
 const kStudyAllHotPage2Response = '''
 {
   "paginator": {
-    "currentPage": 1,
+    "currentPage": 2,
     "maxPerPage": 16,
     "currentPageResults": [
       {
@@ -690,23 +681,9 @@ const kStudyAllHotPage2Response = '''
       }
     ],
     "previousPage": null,
-    "nextPage": 2,
+    "nextPage": null,
     "nbResults": 9999,
-    "nbPages": 625
-  }
-}
-''';
-
-String emptyPage(int page) => '''
-{
-  "paginator": {
-    "currentPage": $page,
-    "maxPerPage": 16,
-    "currentPageResults": [],
-    "previousPage": null,
-    "nextPage": ${page + 1},
-    "nbResults": 9999,
-    "nbPages": 625
+    "nbPages": 2
   }
 }
 ''';

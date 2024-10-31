@@ -22,6 +22,7 @@ class StudyListPaginator extends _$StudyListPaginator {
 
   Future<void> next() async {
     final studyList = state.requireValue;
+    if (studyList.nextPage == null) return;
 
     final newStudyPage = await _nextPage();
 
@@ -35,7 +36,8 @@ class StudyListPaginator extends _$StudyListPaginator {
 
   Future<StudyList> _nextPage() async {
     final nextPage = state.value?.nextPage ?? 1;
-    final studies = await ref.withClient(
+
+    return await ref.withClient(
       (client) => search == null
           ? StudyRepository(client).getStudies(
               category: filter.category,
@@ -47,7 +49,5 @@ class StudyListPaginator extends _$StudyListPaginator {
               page: nextPage,
             ),
     );
-
-    return (studies: studies, nextPage: nextPage + 1);
   }
 }
