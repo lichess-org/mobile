@@ -18,6 +18,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.footer,
     this.lastMove,
     this.onTap,
+    this.animationDuration,
   });
 
   const BoardThumbnail.loading({
@@ -29,7 +30,8 @@ class BoardThumbnail extends ConsumerStatefulWidget {
         orientation = Side.white,
         fen = kInitialFEN,
         lastMove = null,
-        onTap = null;
+        onTap = null,
+        animationDuration = null;
 
   /// Size of the board.
   final double size;
@@ -57,6 +59,9 @@ class BoardThumbnail extends ConsumerStatefulWidget {
 
   final GestureTapCallback? onTap;
 
+  /// Optionally animate changes to the board by the specified duration.
+  final Duration? animationDuration;
+
   @override
   _BoardThumbnailState createState() => _BoardThumbnailState();
 }
@@ -78,25 +83,42 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final board = Chessboard.fixed(
-      size: widget.size,
-      fen: widget.fen,
-      orientation: widget.orientation,
-      lastMove: widget.lastMove as NormalMove?,
-      settings: ChessboardSettings(
-        enableCoordinates: false,
-        borderRadius: (widget.showEvaluationBar)
-            ? const BorderRadius.only(
-                topLeft: Radius.circular(4.0),
-                bottomLeft: Radius.circular(4.0),
-              )
-            : const BorderRadius.all(Radius.circular(4.0)),
-        boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
-        animationDuration: const Duration(milliseconds: 150),
-        pieceAssets: boardPrefs.pieceSet.assets,
-        colorScheme: boardPrefs.boardTheme.colors,
-      ),
-    );
+    final board = widget.animationDuration != null
+        ? Chessboard.fixed(
+            size: widget.size,
+            fen: widget.fen,
+            orientation: widget.orientation,
+            lastMove: widget.lastMove as NormalMove?,
+            settings: ChessboardSettings(
+              enableCoordinates: false,
+              borderRadius: (widget.showEvaluationBar)
+                  ? const BorderRadius.only(
+                      topLeft: Radius.circular(4.0),
+                      bottomLeft: Radius.circular(4.0),
+                    )
+                  : const BorderRadius.all(Radius.circular(4.0)),
+              boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
+              animationDuration: widget.animationDuration!,
+              pieceAssets: boardPrefs.pieceSet.assets,
+              colorScheme: boardPrefs.boardTheme.colors,
+            ),
+          )
+        : StaticChessboard(
+            size: widget.size,
+            fen: widget.fen,
+            orientation: widget.orientation,
+            lastMove: widget.lastMove as NormalMove?,
+            enableCoordinates: false,
+            borderRadius: (widget.showEvaluationBar)
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(4.0),
+                    bottomLeft: Radius.circular(4.0),
+                  )
+                : const BorderRadius.all(Radius.circular(4.0)),
+            boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
+            pieceAssets: boardPrefs.pieceSet.assets,
+            colorScheme: boardPrefs.boardTheme.colors,
+          );
 
     final maybeTappableBoard = widget.onTap != null
         ? GestureDetector(

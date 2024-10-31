@@ -1,5 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,7 +19,7 @@ import 'ongoing_game.dart';
 part 'account_repository.g.dart';
 
 @riverpod
-Future<User?> account(AccountRef ref) async {
+Future<User?> account(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
 
@@ -29,12 +30,12 @@ Future<User?> account(AccountRef ref) async {
 }
 
 @riverpod
-Future<LightUser?> accountUser(AccountUserRef ref) async {
+Future<LightUser?> accountUser(Ref ref) async {
   return ref.watch(accountProvider.selectAsync((user) => user?.lightUser));
 }
 
 @riverpod
-Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
+Future<IList<UserActivity>> accountActivity(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
   return ref.withClientCacheFor(
@@ -44,7 +45,7 @@ Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
 }
 
 @riverpod
-Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
+Future<IList<OngoingGame>> ongoingGames(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -13,19 +14,20 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_providers.g.dart';
 
 @riverpod
-Future<PuzzleContext?> nextPuzzle(
-  NextPuzzleRef ref,
-  PuzzleAngle angle,
-) async {
+Future<PuzzleContext?> nextPuzzle(Ref ref, PuzzleAngle angle) async {
   final session = ref.watch(authSessionProvider);
   final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
+  // useful for for preview puzzle list in puzzle tab (providers in a list can
+  // be invalidated multiple times when the user scrolls the list)
+  ref.cacheFor(const Duration(minutes: 1));
 
   return puzzleService.nextPuzzle(
     userId: session?.user.id,
@@ -34,18 +36,18 @@ Future<PuzzleContext?> nextPuzzle(
 }
 
 @riverpod
-Future<PuzzleStreakResponse> streak(StreakRef ref) {
+Future<PuzzleStreakResponse> streak(Ref ref) {
   return ref.withClient((client) => PuzzleRepository(client).streak());
 }
 
 @riverpod
-Future<PuzzleStormResponse> storm(StormRef ref) {
+Future<PuzzleStormResponse> storm(Ref ref) {
   return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
 /// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
 @riverpod
-Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
+Future<Puzzle> puzzle(Ref ref, PuzzleId id) async {
   final puzzleStorage = await ref.watch(puzzleStorageProvider.future);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
@@ -53,7 +55,7 @@ Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
 }
 
 @riverpod
-Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
+Future<Puzzle> dailyPuzzle(Ref ref) {
   return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).daily(),
     const Duration(hours: 6),
@@ -61,9 +63,14 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(
-  SavedThemeBatchesRef ref,
-) async {
+Future<IList<(PuzzleAngle, int)>> savedBatches(Ref ref) async {
+  final session = ref.watch(authSessionProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  return storage.fetchAll(userId: session?.user.id);
+}
+
+@riverpod
+Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
   return storage.fetchSavedThemes(userId: session?.user.id);
@@ -71,7 +78,7 @@ Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(
 
 @riverpod
 Future<IMap<String, int>> savedOpeningBatches(
-  SavedOpeningBatchesRef ref,
+  Ref ref,
 ) async {
   final session = ref.watch(authSessionProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
@@ -80,7 +87,7 @@ Future<IMap<String, int>> savedOpeningBatches(
 
 @riverpod
 Future<PuzzleDashboard?> puzzleDashboard(
-  PuzzleDashboardRef ref,
+  Ref ref,
   int days,
 ) async {
   final session = ref.watch(authSessionProvider);
@@ -92,9 +99,7 @@ Future<PuzzleDashboard?> puzzleDashboard(
 }
 
 @riverpod
-Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
-  PuzzleRecentActivityRef ref,
-) async {
+Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
   return ref.withClientCacheFor(
@@ -104,16 +109,14 @@ Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
 }
 
 @riverpod
-Future<StormDashboard?> stormDashboard(StormDashboardRef ref, UserId id) async {
+Future<StormDashboard?> stormDashboard(Ref ref, UserId id) async {
   return ref.withClient(
     (client) => PuzzleRepository(client).stormDashboard(id),
   );
 }
 
 @riverpod
-Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
-  PuzzleThemesRef ref,
-) {
+Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(Ref ref) {
   return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleThemes(),
     const Duration(days: 1),
@@ -121,7 +124,7 @@ Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
 }
 
 @riverpod
-Future<IList<PuzzleOpeningFamily>> puzzleOpenings(PuzzleOpeningsRef ref) {
+Future<IList<PuzzleOpeningFamily>> puzzleOpenings(Ref ref) {
   return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleOpenings(),
     const Duration(days: 1),

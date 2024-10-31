@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -32,9 +33,7 @@ const _nbPerPage = 20;
 /// If the user is not logged in, or there is no connectivity, the recent games
 /// stored locally are fetched instead.
 @riverpod
-Future<IList<LightArchivedGameWithPov>> myRecentGames(
-  MyRecentGamesRef ref,
-) async {
+Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref
       .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
@@ -62,7 +61,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(
-  UserRecentGamesRef ref, {
+  Ref ref, {
   required UserId userId,
 }) {
   return ref.withClientCacheFor(
@@ -83,7 +82,7 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(
 /// stored locally are fetched instead.
 @riverpod
 Future<int> userNumberOfGames(
-  UserNumberOfGamesRef ref,
+  Ref ref,
   LightUser? user, {
   required bool isOnline,
 }) async {

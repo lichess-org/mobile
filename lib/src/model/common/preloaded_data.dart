@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -20,7 +21,7 @@ typedef PreloadedData = ({
 });
 
 @Riverpod(keepAlive: true)
-Future<PreloadedData> preloadedData(PreloadedDataRef ref) async {
+Future<PreloadedData> preloadedData(Ref ref) async {
   final sessionStorage = ref.watch(sessionStorageProvider);
 
   final pInfo = await PackageInfo.fromPlatform();

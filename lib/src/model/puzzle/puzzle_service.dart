@@ -2,6 +2,7 @@ import 'dart:math' show max;
 
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -24,21 +25,21 @@ part 'puzzle_service.g.dart';
 const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
-Future<PuzzleService> puzzleService(PuzzleServiceRef ref) {
+Future<PuzzleService> puzzleService(Ref ref) {
   return ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
 }
 
 @Riverpod(keepAlive: true)
-PuzzleServiceFactory puzzleServiceFactory(PuzzleServiceFactoryRef ref) {
+PuzzleServiceFactory puzzleServiceFactory(Ref ref) {
   return PuzzleServiceFactory(ref);
 }
 
 class PuzzleServiceFactory {
   PuzzleServiceFactory(this._ref);
 
-  final PuzzleServiceFactoryRef _ref;
+  final Ref _ref;
 
   Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
@@ -73,7 +74,7 @@ class PuzzleService {
     required this.queueLength,
   });
 
-  final PuzzleServiceFactoryRef _ref;
+  final Ref _ref;
   final int queueLength;
   final PuzzleBatchStorage batchStorage;
   final PuzzleStorage puzzleStorage;

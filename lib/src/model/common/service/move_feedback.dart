@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'move_feedback.g.dart';
 
 @Riverpod(keepAlive: true)
-MoveFeedbackService moveFeedbackService(MoveFeedbackServiceRef ref) {
+MoveFeedbackService moveFeedbackService(Ref ref) {
   final soundService = ref.watch(soundServiceProvider);
   return MoveFeedbackService(soundService, ref);
 }
@@ -15,7 +16,7 @@ class MoveFeedbackService {
   MoveFeedbackService(this._soundService, this._ref);
 
   final SoundService _soundService;
-  final MoveFeedbackServiceRef _ref;
+  final Ref _ref;
 
   void moveFeedback({bool check = false}) {
     _soundService.play(Sound.move);

@@ -20,18 +20,6 @@ import 'package:timeago/timeago.dart' as timeago;
 
 final _dateFormatter = DateFormat.yMMMd();
 
-class PuzzleHistoryScreen extends StatelessWidget {
-  const PuzzleHistoryScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
-      body: _Body(),
-    );
-  }
-}
-
 /// Shows a short preview of the puzzle history.
 class PuzzleHistoryPreview extends ConsumerWidget {
   const PuzzleHistoryPreview(this.history, {this.maxRows, super.key});
@@ -79,6 +67,19 @@ class PuzzleHistoryPreview extends ConsumerWidget {
   }
 }
 
+/// A screen that displays the full puzzle history.
+class PuzzleHistoryScreen extends StatelessWidget {
+  const PuzzleHistoryScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
+      body: _Body(),
+    );
+  }
+}
+
 class _Body extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -88,8 +89,6 @@ const _kPuzzlePadding = 10.0;
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  bool _hasMore = true;
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -105,9 +104,10 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      if (_hasMore && !_isLoading) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.7) {
+      final currentState = ref.read(puzzleActivityProvider).valueOrNull;
+      if (currentState != null && !currentState.isLoading) {
         ref.read(puzzleActivityProvider.notifier).getNext();
       }
     }
@@ -119,8 +119,6 @@ class _BodyState extends ConsumerState<_Body> {
 
     return historyState.when(
       data: (state) {
-        _hasMore = state.hasMore;
-        _isLoading = state.isLoading;
         if (state.hasError) {
           showPlatformSnackbar(
             context,
@@ -162,8 +160,10 @@ class _BodyState extends ConsumerState<_Body> {
                 child: Row(
                   children: element
                       .map(
-                        (e) =>
-                            _HistoryBoard(e as PuzzleHistoryEntry, boardWidth),
+                        (e) => PuzzleHistoryBoard(
+                          e as PuzzleHistoryEntry,
+                          boardWidth,
+                        ),
                       )
                       .toList(),
                 ),
@@ -200,8 +200,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _HistoryBoard extends ConsumerWidget {
-  const _HistoryBoard(this.puzzle, this.boardWidth);
+class PuzzleHistoryBoard extends ConsumerWidget {
+  const PuzzleHistoryBoard(this.puzzle, this.boardWidth);
 
   final PuzzleHistoryEntry puzzle;
   final double boardWidth;

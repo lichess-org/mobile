@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -34,7 +35,7 @@ const engineSupportedVariants = {
 class EvaluationService {
   EvaluationService(this.ref, {required this.maxMemory});
 
-  final EvaluationServiceRef ref;
+  final Ref ref;
 
   final int maxMemory;
 
@@ -176,7 +177,7 @@ class EvaluationService {
 }
 
 @Riverpod(keepAlive: true)
-EvaluationService evaluationService(EvaluationServiceRef ref) {
+EvaluationService evaluationService(Ref ref) {
   final maxMemory =
       ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 

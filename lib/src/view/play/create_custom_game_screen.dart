@@ -236,7 +236,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
             return CorrespondenceChallengeListItem(
               challenge: challenge,
-              user: LightUser(
+              challengerUser: LightUser(
                 id: UserId.fromUserName(challenge.username),
                 name: challenge.username,
                 title: challenge.title,

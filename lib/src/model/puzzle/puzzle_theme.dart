@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/localizations.dart';
@@ -407,9 +408,7 @@ final IMap<String, PuzzleThemeKey> puzzleThemeNameMap =
 typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 
 @Riverpod(keepAlive: true)
-IList<PuzzleThemeCategory> puzzleThemeCategories(
-  PuzzleThemeCategoriesRef ref,
-) {
+IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
   final l10n = ref.watch(localizationsProvider);
 
   return IList([

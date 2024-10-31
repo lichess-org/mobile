@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
@@ -14,17 +15,14 @@ part 'user_repository_providers.g.dart';
 const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
-Future<User> user(UserRef ref, {required UserId id}) async {
+Future<User> user(Ref ref, {required UserId id}) async {
   return ref.withClient(
     (client) => UserRepository(client).getUser(id),
   );
 }
 
 @riverpod
-Future<IList<UserActivity>> userActivity(
-  UserActivityRef ref, {
-  required UserId id,
-}) async {
+Future<IList<UserActivity>> userActivity(Ref ref, {required UserId id}) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getActivity(id),
     // cache is important because the associated widget is in a [ListView] and
@@ -37,10 +35,7 @@ Future<IList<UserActivity>> userActivity(
 }
 
 @riverpod
-Future<(User, UserStatus)> userAndStatus(
-  UserAndStatusRef ref, {
-  required UserId id,
-}) async {
+Future<(User, UserStatus)> userAndStatus(Ref ref, {required UserId id}) async {
   return ref.withClient(
     (client) async {
       final repo = UserRepository(client);
@@ -59,7 +54,7 @@ Future<(User, UserStatus)> userAndStatus(
 
 @riverpod
 Future<UserPerfStats> userPerfStats(
-  UserPerfStatsRef ref, {
+  Ref ref, {
   required UserId id,
   required Perf perf,
 }) async {
@@ -70,7 +65,7 @@ Future<UserPerfStats> userPerfStats(
 
 @riverpod
 Future<IList<UserStatus>> userStatuses(
-  UserStatusesRef ref, {
+  Ref ref, {
   required ISet<UserId> ids,
 }) async {
   return ref.withClient(
@@ -79,7 +74,7 @@ Future<IList<UserStatus>> userStatuses(
 }
 
 @riverpod
-Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
+Future<IList<Streamer>> liveStreamers(Ref ref) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getLiveStreamers(),
     const Duration(minutes: 1),
@@ -87,7 +82,7 @@ Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
 }
 
 @riverpod
-Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
+Future<IMap<Perf, LeaderboardUser>> top1(Ref ref) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getTop1(),
     const Duration(hours: 12),
@@ -95,7 +90,7 @@ Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
 }
 
 @riverpod
-Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
+Future<Leaderboard> leaderboard(Ref ref) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getLeaderboard(),
     const Duration(hours: 2),
@@ -103,10 +98,7 @@ Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
 }
 
 @riverpod
-Future<IList<LightUser>> autoCompleteUser(
-  AutoCompleteUserRef ref,
-  String term,
-) async {
+Future<IList<LightUser>> autoCompleteUser(Ref ref, String term) async {
   // debounce calls as user might be typing
   var didDispose = false;
   ref.onDispose(() => didDispose = true);
@@ -122,7 +114,7 @@ Future<IList<LightUser>> autoCompleteUser(
 
 @riverpod
 Future<IList<UserRatingHistoryPerf>> userRatingHistory(
-  UserRatingHistoryRef ref, {
+  Ref ref, {
   required UserId id,
 }) async {
   return ref.withClientCacheFor(

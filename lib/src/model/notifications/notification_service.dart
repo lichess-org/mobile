@@ -24,12 +24,12 @@ final _logger = Logger('NotificationService');
 
 /// A provider instance of the [FlutterLocalNotificationsPlugin].
 @Riverpod(keepAlive: true)
-FlutterLocalNotificationsPlugin notificationDisplay(NotificationDisplayRef _) =>
+FlutterLocalNotificationsPlugin notificationDisplay(Ref _) =>
     FlutterLocalNotificationsPlugin();
 
 /// A provider instance of the [NotificationService].
 @Riverpod(keepAlive: true)
-NotificationService notificationService(NotificationServiceRef ref) {
+NotificationService notificationService(Ref ref) {
   final service = NotificationService(ref);
 
   ref.onDispose(() => service._dispose());
@@ -47,7 +47,7 @@ NotificationService notificationService(NotificationServiceRef ref) {
 class NotificationService {
   NotificationService(this._ref);
 
-  final NotificationServiceRef _ref;
+  final Ref _ref;
 
   /// The Firebase Cloud Messaging token refresh subscription.
   StreamSubscription<String>? _fcmTokenRefreshSubscription;

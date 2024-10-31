@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -14,7 +15,7 @@ part 'correspondence_game_storage.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<CorrespondenceGameStorage> correspondenceGameStorage(
-  CorrespondenceGameStorageRef ref,
+  Ref ref,
 ) async {
   final db = await ref.watch(databaseProvider.future);
   return CorrespondenceGameStorage(db, ref);
@@ -22,9 +23,7 @@ Future<CorrespondenceGameStorage> correspondenceGameStorage(
 
 @riverpod
 Future<IList<(DateTime, OfflineCorrespondenceGame)>>
-    offlineOngoingCorrespondenceGames(
-  OfflineOngoingCorrespondenceGamesRef ref,
-) async {
+    offlineOngoingCorrespondenceGames(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage save and delete methods
@@ -48,7 +47,7 @@ const kCorrespondenceStorageAnonId = '**anonymous**';
 class CorrespondenceGameStorage {
   const CorrespondenceGameStorage(this._db, this.ref);
   final Database _db;
-  final CorrespondenceGameStorageRef ref;
+  final Ref ref;
 
   /// Fetches all ongoing correspondence games, sorted by time left.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(

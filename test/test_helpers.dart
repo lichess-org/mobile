@@ -19,7 +19,7 @@ const kPlatformVariant =
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 
-/// Mocks an http response with a delay of 20ms.
+/// Mocks an http response
 Future<http.Response> mockResponse(
   String body,
   int code, {

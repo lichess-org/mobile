@@ -217,4 +217,14 @@ extension IDPick on Pick {
       return null;
     }
   }
+
+  StudyId asStudyIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return StudyId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to StudyId",
+    );
+  }
 }

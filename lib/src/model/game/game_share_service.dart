@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -11,14 +12,14 @@ import 'package:share_plus/share_plus.dart';
 part 'game_share_service.g.dart';
 
 @Riverpod(keepAlive: true)
-GameShareService gameShareService(GameShareServiceRef ref) {
+GameShareService gameShareService(Ref ref) {
   return GameShareService(ref);
 }
 
 class GameShareService {
   GameShareService(this._ref);
 
-  final GameShareServiceRef _ref;
+  final Ref _ref;
 
   /// Fetches the raw PGN of a game and launches the share dialog.
   Future<String> rawPgn(GameId id) async {

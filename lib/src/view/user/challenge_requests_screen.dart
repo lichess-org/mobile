@@ -121,7 +121,7 @@ class _Body extends ConsumerWidget {
 
             return ChallengeListItem(
               challenge: challenge,
-              user: user,
+              challengerUser: user,
               onPressed: challenge.direction == ChallengeDirection.inward
                   ? session == null
                       ? showMissingAccountMessage

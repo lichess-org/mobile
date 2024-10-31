@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -22,7 +23,7 @@ import 'package:stream_transform/stream_transform.dart';
 part 'challenge_service.g.dart';
 
 @Riverpod(keepAlive: true)
-ChallengeService challengeService(ChallengeServiceRef ref) {
+ChallengeService challengeService(Ref ref) {
   final service = ChallengeService(ref);
   ref.onDispose(() => service.dispose());
   return service;
@@ -32,7 +33,7 @@ ChallengeService challengeService(ChallengeServiceRef ref) {
 class ChallengeService {
   ChallengeService(this.ref);
 
-  final ChallengeServiceRef ref;
+  final Ref ref;
 
   ChallengesList? _current;
   ChallengesList? _previous;

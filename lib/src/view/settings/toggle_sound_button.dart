@@ -5,9 +5,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A button that toggles the sound on and off.
 class ToggleSoundButton extends ConsumerWidget {
-  const ToggleSoundButton({this.iconSize, super.key});
-
-  final double? iconSize;
+  const ToggleSoundButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,13 +15,12 @@ class ToggleSoundButton extends ConsumerWidget {
       ),
     );
 
-    return PlatformIconButton(
-      iconSize: iconSize,
-      // TODO: translate
+    return AppBarIconButton(
+      // TODO: i18n
       semanticsLabel: 'Toggle sound',
-      onTap: () =>
+      onPressed: () =>
           ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-      icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+      icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
     );
   }
 }

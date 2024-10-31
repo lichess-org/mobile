@@ -23,7 +23,7 @@ class PuzzleActivity extends _$PuzzleActivity {
 
   @override
   Future<PuzzleActivityState> build() async {
-    ref.cacheFor(const Duration(minutes: 30));
+    ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
       _list.clear();
     });
@@ -64,7 +64,7 @@ class PuzzleActivity extends _$PuzzleActivity {
     if (!state.hasValue) return;
 
     final currentVal = state.requireValue;
-    if (_list.length < _maxPuzzles) {
+    if (currentVal.hasMore && _list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       Result.capture(
         ref.withClient(

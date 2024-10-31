@@ -69,8 +69,7 @@ class HttpClientFactory {
 }
 
 @Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(HttpClientFactoryRef _) =>
-    HttpClientFactory();
+HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 
 /// The default http client.
 ///
@@ -78,7 +77,7 @@ HttpClientFactory httpClientFactory(HttpClientFactoryRef _) =>
 /// example, requests to lichess CDN, or other APIs.
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
-Client defaultClient(DefaultClientRef ref) {
+Client defaultClient(Ref ref) {
   final client = LoggingClient(ref.read(httpClientFactoryProvider)());
   ref.onDispose(() => client.close());
   return client;
@@ -88,7 +87,7 @@ Client defaultClient(DefaultClientRef ref) {
 ///
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
-LichessClient lichessClient(LichessClientRef ref) {
+LichessClient lichessClient(Ref ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
@@ -107,7 +106,7 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 @Riverpod(keepAlive: true)
-String userAgent(UserAgentRef ref) {
+String userAgent(Ref ref) {
   final session = ref.watch(authSessionProvider);
 
   return makeUserAgent(
@@ -163,7 +162,7 @@ class LoggingClient extends BaseClient {
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
-  final LichessClientRef _ref;
+  final Ref _ref;
   final Client _inner;
 
   @override

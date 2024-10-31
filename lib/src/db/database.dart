@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,14 +21,14 @@ const kStorageAnonId = '**anonymous**';
 final _logger = Logger('Database');
 
 @Riverpod(keepAlive: true)
-Future<Database> database(DatabaseRef ref) async {
+Future<Database> database(Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   return openAppDatabase(databaseFactory, dbPath);
 }
 
 /// Returns the sqlite version as an integer.
 @Riverpod(keepAlive: true)
-Future<int?> sqliteVersion(SqliteVersionRef ref) async {
+Future<int?> sqliteVersion(Ref ref) async {
   final db = await ref.read(databaseProvider.future);
   return _getDatabaseVersion(db);
 }
@@ -48,7 +49,7 @@ Future<int?> _getDatabaseVersion(Database db) async {
 }
 
 @Riverpod(keepAlive: true)
-Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
+Future<int> getDbSizeInBytes(Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   final dbFile = File(dbPath);
 
@@ -60,7 +61,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 2,
+      version: 3,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -79,7 +80,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        _createPuzzleBatchTableV1(batch);
+        _createPuzzleBatchTableV3(batch);
         _createPuzzleTableV1(batch);
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
@@ -91,6 +92,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
         if (oldVersion == 1) {
           _createGameTableV2(batch);
         }
+        if (oldVersion < 3) {
+          _updatePuzzleBatchTableToV3(batch);
+        }
         await batch.commit();
       },
       onDowngrade: onDatabaseDowngradeDelete,
@@ -98,16 +102,35 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
   );
 }
 
-void _createPuzzleBatchTableV1(Batch batch) {
+void _createPuzzleBatchTableV3(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle_batchs');
   batch.execute('''
     CREATE TABLE puzzle_batchs(
       userId TEXT NOT NULL,
       angle TEXT NOT NULL,
+      lastModified TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       data TEXT NOT NULL,
       PRIMARY KEY (userId, angle)
     )
     ''');
+}
+
+void _updatePuzzleBatchTableToV3(Batch batch) {
+  batch.execute('''
+    CREATE TABLE puzzle_batchs_new(
+      userId TEXT NOT NULL,
+      angle TEXT NOT NULL,
+      lastModified TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      data TEXT NOT NULL,
+      PRIMARY KEY (userId, angle)
+    )
+    ''');
+  batch.execute('''
+    INSERT INTO puzzle_batchs_new(userId, angle, data)
+    SELECT userId, angle, data FROM puzzle_batchs
+    ''');
+  batch.execute('DROP TABLE puzzle_batchs');
+  batch.execute('ALTER TABLE puzzle_batchs_new RENAME TO puzzle_batchs');
 }
 
 void _createPuzzleTableV1(Batch batch) {

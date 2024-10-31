@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,6 +42,10 @@ final mockClient = MockClient((request) async {
   return http.Response('', 200);
 });
 
+final offlineClient = MockClient((request) async {
+  throw const SocketException('No internet');
+});
+
 /// Returns a [MaterialApp] wrapped in a [ProviderScope] and default mocks, ready for testing.
 ///
 /// The [home] widget is the widget we want to test. Typically a screen widget, to
@@ -74,6 +79,29 @@ Future<Widget> makeTestProviderScopeApp(
     defaultPreferences: defaultPreferences,
   );
 }
+
+/// Wraps [makeTestProviderScope] with a [FakeHttpClientFactory] that returns an offline client.
+///
+/// This is useful to test the app in offline mode.
+Future<Widget> makeOfflineTestProviderScope(
+  WidgetTester tester, {
+  required Widget child,
+  List<Override>? overrides,
+  AuthSessionState? userSession,
+  Map<String, Object>? defaultPreferences,
+}) =>
+    makeTestProviderScope(
+      tester,
+      child: child,
+      overrides: [
+        httpClientFactoryProvider.overrideWith((ref) {
+          return FakeHttpClientFactory(() => offlineClient);
+        }),
+        ...overrides ?? [],
+      ],
+      userSession: userSession,
+      defaultPreferences: defaultPreferences,
+    );
 
 /// Returns a [ProviderScope] and default mocks, ready for testing.
 ///

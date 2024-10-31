@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -19,7 +20,7 @@ class IsBoardTurned extends _$IsBoardTurned {
 }
 
 @riverpod
-bool canGoForward(CanGoForwardRef ref, GameId id) {
+bool canGoForward(Ref ref, GameId id) {
   final gameCursor = ref.watch(gameCursorProvider(id));
   if (gameCursor.hasValue) {
     final (game, cursor) = gameCursor.value!;
@@ -30,7 +31,7 @@ bool canGoForward(CanGoForwardRef ref, GameId id) {
 }
 
 @riverpod
-bool canGoBackward(CanGoBackwardRef ref, GameId id) {
+bool canGoBackward(Ref ref, GameId id) {
   final gameCursor = ref.watch(gameCursorProvider(id));
   if (gameCursor.hasValue) {
     final (_, cursor) = gameCursor.value!;

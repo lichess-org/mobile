@@ -66,6 +66,8 @@ class LichessIcons {
   static const IconData radio_tower_lichess = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData crossed_swords = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData book_lichess = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData study = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData body_cut = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tag = IconData(0xf02b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tags = IconData(0xf02c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward = IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);

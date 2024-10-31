@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -28,7 +29,7 @@ enum Sound {
 }
 
 @Riverpod(keepAlive: true)
-SoundService soundService(SoundServiceRef ref) {
+SoundService soundService(Ref ref) {
   final service = SoundService(ref);
   ref.onDispose(() => service.release());
   return service;
@@ -70,7 +71,7 @@ Future<void> _loadSound(SoundTheme theme, Sound sound) async {
 class SoundService {
   SoundService(this._ref);
 
-  final SoundServiceRef _ref;
+  final Ref _ref;
 
   /// Initialize the sound service.
   ///

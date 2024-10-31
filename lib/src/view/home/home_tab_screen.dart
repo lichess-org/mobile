@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
@@ -22,7 +23,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
-import 'package:lichess_mobile/src/view/home/create_game_options.dart';
+import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
@@ -232,13 +233,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         shouldShow: true,
         child: _HelloWidget(),
       ),
-      _EditableWidget(
-        widget: EnabledWidget.perfCards,
-        shouldShow: session != null,
-        child: const AccountPerfCards(
-          padding: Styles.horizontalBodyPadding,
+      if (status.isOnline)
+        _EditableWidget(
+          widget: EnabledWidget.perfCards,
+          shouldShow: session != null,
+          child: const AccountPerfCards(
+            padding: Styles.horizontalBodyPadding,
+          ),
         ),
-      ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
         shouldShow: status.isOnline,
@@ -344,13 +346,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         shouldShow: true,
         child: _HelloWidget(),
       ),
-      _EditableWidget(
-        widget: EnabledWidget.perfCards,
-        shouldShow: session != null,
-        child: const AccountPerfCards(
-          padding: Styles.bodySectionPadding,
+      if (status.isOnline)
+        _EditableWidget(
+          widget: EnabledWidget.perfCards,
+          shouldShow: session != null,
+          child: const AccountPerfCards(
+            padding: Styles.bodySectionPadding,
+          ),
         ),
-      ),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -729,21 +732,21 @@ class _GamePreviewCarouselItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardCarouselItem(
-      fen: game.fen,
-      orientation: game.orientation,
-      lastMove: game.lastMove,
-      description: Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Opacity(
-                opacity: game.isMyTurn ? 1.0 : 0.6,
-                child: Row(
+    return Opacity(
+      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.6,
+      child: BoardCarouselItem(
+        fen: game.fen,
+        orientation: game.orientation,
+        lastMove: game.lastMove,
+        description: Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
                     if (game.isMyTurn) ...const [
                       Icon(
@@ -779,19 +782,19 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 4.0),
-              UserFullNameWidget.player(
-                user: game.opponent,
-                rating: game.opponentRating,
-                aiLevel: game.opponentAiLevel,
-                style: Styles.boardPreviewTitle,
-              ),
-            ],
+                const SizedBox(height: 4.0),
+                UserFullNameWidget.player(
+                  user: game.opponent,
+                  rating: game.opponentRating,
+                  aiLevel: game.opponentAiLevel,
+                  style: Styles.boardPreviewTitle,
+                ),
+              ],
+            ),
           ),
         ),
+        onTap: onTap,
       ),
-      onTap: onTap,
     );
   }
 }

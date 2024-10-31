@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../test_container.dart';
 
@@ -62,6 +66,90 @@ void main() {
               PuzzleThemeKey.rookEndgame: 1,
               PuzzleThemeKey.doubleBishopMate: 1,
             }),
+          ),
+        ),
+      );
+    });
+
+    test('fetchSavedOpenings', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      await storage.save(
+        userId: null,
+        angle: const PuzzleOpening('test_opening'),
+        data: data,
+      );
+      await storage.save(
+        userId: null,
+        angle: const PuzzleOpening('test_opening2'),
+        data: data,
+      );
+
+      expect(
+        storage.fetchSavedOpenings(userId: null),
+        completion(
+          equals(
+            IMap(const {
+              'test_opening': 1,
+              'test_opening2': 1,
+            }),
+          ),
+        ),
+      );
+    });
+
+    test('fetchAll', () async {
+      final container = await makeContainer();
+
+      final database = await container.read(databaseProvider.future);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      Future<void> save(PuzzleAngle angle, PuzzleBatch data, String timestamp) {
+        return database.insert(
+          'puzzle_batchs',
+          {
+            'userId': '**anon**',
+            'angle': angle.key,
+            'data': jsonEncode(data.toJson()),
+            'lastModified': timestamp,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+
+      await save(
+        const PuzzleTheme(PuzzleThemeKey.rookEndgame),
+        data,
+        '2021-01-02T00:00:00Z',
+      );
+      await save(
+        const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
+        data,
+        '2021-01-03T00:00:00Z',
+      );
+      await save(
+        const PuzzleOpening('test_opening'),
+        data,
+        '2021-01-04T00:00:00Z',
+      );
+      await save(
+        const PuzzleOpening('test_opening2'),
+        data,
+        '2021-01-04T80:00:00Z',
+      );
+
+      expect(
+        storage.fetchAll(userId: null),
+        completion(
+          equals(
+            [
+              const PuzzleOpening('test_opening2'),
+              const PuzzleOpening('test_opening'),
+              const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
+              const PuzzleTheme(PuzzleThemeKey.rookEndgame),
+            ].map((angle) => (angle, 1)).toIList(),
           ),
         ),
       );
