@@ -230,68 +230,9 @@ class _BodyState extends ConsumerState<_Body> {
                   height: 1,
                   cupertinoHasLeading: true,
                 ),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return searchBar;
-            }
-
-            final study = studies.studies[index - 1];
-            return PlatformListTile(
-              padding: Styles.bodyPadding,
-              title: Row(
-                children: [
-                  _StudyFlair(
-                    flair: study.flair,
-                    size: 30,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          study.name,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                        _StudySubtitle(
-                          study: study,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: DefaultTextStyle.merge(
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: _StudyChapters(study: study),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: _StudyMembers(
-                        study: study,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => StudyScreen(id: study.id),
-              ),
-            );
-          },
+          itemBuilder: (context, index) => index == 0
+              ? searchBar
+              : _StudyListItem(study: studies.studies[index - 1]),
         );
       },
       loading: () {
@@ -308,6 +249,73 @@ class _BodyState extends ConsumerState<_Body> {
         _logger.severe('Error loading studies', error, stack);
         return Center(child: Text(context.l10n.studyMenu));
       },
+    );
+  }
+}
+
+class _StudyListItem extends StatelessWidget {
+  const _StudyListItem({
+    required this.study,
+  });
+
+  final StudyPageData study;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      padding: Styles.bodyPadding,
+      title: Row(
+        children: [
+          _StudyFlair(
+            flair: study.flair,
+            size: 30,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  study.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                _StudySubtitle(
+                  study: study,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      subtitle: DefaultTextStyle.merge(
+        style: const TextStyle(
+          fontSize: 12,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 4,
+              child: _StudyChapters(study: study),
+            ),
+            Expanded(
+              flex: 3,
+              child: _StudyMembers(
+                study: study,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () => pushPlatformRoute(
+        context,
+        builder: (context) => StudyScreen(id: study.id),
+      ),
     );
   }
 }
