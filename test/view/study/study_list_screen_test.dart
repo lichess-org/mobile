@@ -110,6 +110,9 @@ void main() {
       );
       await tester.pumpWidget(app);
 
+      // Wait for default study list (all/hot) to load
+      await tester.pump();
+
       await tester.tap(find.byType(SearchBar));
 
       await tester.enterText(find.byType(TextField), 'Magnus');
