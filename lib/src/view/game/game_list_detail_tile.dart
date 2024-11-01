@@ -65,18 +65,20 @@ class GameListDetailTile extends StatelessWidget {
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            return IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  if (game.lastFen != null)
-                    BoardThumbnail(
-                      size: constraints.maxWidth / 3,
-                      fen: game.lastFen!,
-                      orientation: mySide,
-                      lastMove: game.lastMove,
-                    ),
-                  Expanded(
+            final boardSize = constraints.maxWidth / 3;
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                if (game.lastFen != null)
+                  BoardThumbnail(
+                    size: boardSize,
+                    fen: game.lastFen!,
+                    orientation: mySide,
+                    lastMove: game.lastMove,
+                  ),
+                Expanded(
+                  child: SizedBox(
+                    height: boardSize,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
@@ -137,8 +139,8 @@ class GameListDetailTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),
