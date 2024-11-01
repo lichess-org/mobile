@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -42,7 +43,7 @@ class GameListDetailTile extends StatelessWidget {
       fontSize: 12,
     );
 
-    return GestureDetector(
+    return AdaptiveInkWell(
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
           context: context,
