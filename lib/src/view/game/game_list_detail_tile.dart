@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -152,15 +153,16 @@ class GameListDetailTile extends StatelessWidget {
 class _RatingAndDiff extends StatelessWidget {
   const _RatingAndDiff({
     required this.player,
-    required this.style,
   });
 
   final Player player;
 
-  final TextStyle style;
-
   @override
   Widget build(BuildContext context) {
+    const style = TextStyle(
+      fontSize: 13,
+    );
+
     return RatingPrefAware(
       child: Text.rich(
         TextSpan(
@@ -189,6 +191,30 @@ class _RatingAndDiff extends StatelessWidget {
   }
 }
 
+class _User extends StatelessWidget {
+  const _User({
+    required this.user,
+  });
+
+  final LightUser? user;
+
+  @override
+  Widget build(BuildContext context) {
+    final longName = user?.name != null && user!.name.length > 10;
+    final style = TextStyle(
+      fontSize: longName ? 8 : 15,
+      fontWeight: FontWeight.w600,
+    );
+
+    return UserFullNameWidget(
+      user: user,
+      showPatron: false,
+      showFlair: false,
+      style: style,
+    );
+  }
+}
+
 class _UsersAndRatings extends StatelessWidget {
   const _UsersAndRatings({
     required this.white,
@@ -201,27 +227,16 @@ class _UsersAndRatings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const userStyle = TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-    );
-
-    const ratingStyle = TextStyle(
-      fontSize: 13,
-    );
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            UserFullNameWidget(
+            _User(
               user: white.user,
-              showPatron: false,
-              style: userStyle,
             ),
-            _RatingAndDiff(player: white, style: ratingStyle),
+            _RatingAndDiff(player: white),
           ],
         ),
         const Padding(
@@ -234,12 +249,10 @@ class _UsersAndRatings extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserFullNameWidget(
+            _User(
               user: black.user,
-              showPatron: false,
-              style: userStyle,
             ),
-            _RatingAndDiff(player: black, style: ratingStyle),
+            _RatingAndDiff(player: black),
           ],
         ),
       ],
