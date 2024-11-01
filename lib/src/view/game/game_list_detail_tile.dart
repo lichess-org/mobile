@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
@@ -157,27 +158,29 @@ class _RatingAndDiff extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          if (player.rating != null)
-            TextSpan(
-              text: player.rating.toString(),
-              style: style,
-            ),
-          if (player.ratingDiff != null)
-            TextSpan(
-              text:
-                  ' ${player.ratingDiff == 0 ? '±' : player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
-              style: style.copyWith(
-                color: player.ratingDiff! > 0
-                    ? LichessColors.green
-                    : player.ratingDiff! < 0
-                        ? LichessColors.error
-                        : style.color,
+    return RatingPrefAware(
+      child: Text.rich(
+        TextSpan(
+          children: [
+            if (player.rating != null)
+              TextSpan(
+                text: player.rating.toString(),
+                style: style,
               ),
-            ),
-        ],
+            if (player.ratingDiff != null)
+              TextSpan(
+                text:
+                    ' ${player.ratingDiff == 0 ? '±' : player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                style: style.copyWith(
+                  color: player.ratingDiff! > 0
+                      ? LichessColors.green
+                      : player.ratingDiff! < 0
+                          ? LichessColors.error
+                          : style.color,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
