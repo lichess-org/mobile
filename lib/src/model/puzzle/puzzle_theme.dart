@@ -95,8 +95,8 @@ enum PuzzleThemeKey {
       case PuzzleThemeKey.mix:
       case PuzzleThemeKey.unsupported:
         return PuzzleThemeL10n(
-          name: l10n.puzzleThemeHealthyMix,
-          description: l10n.puzzleThemeHealthyMixDescription,
+          name: l10n.puzzleThemeMix,
+          description: l10n.puzzleThemeMixDescription,
         );
       case PuzzleThemeKey.advancedPawn:
         return PuzzleThemeL10n(

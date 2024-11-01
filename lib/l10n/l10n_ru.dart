@@ -104,9 +104,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
 
   @override
-  String get mobileCancelDrawOffer => 'Отменить предложение ничьей';
-
-  @override
   String get mobileWaitingForOpponentToJoin => 'Ожидание соперника...';
 
   @override
@@ -142,7 +139,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Привет';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Увеличивать перетаскиваемую фигуру';
 
   @override
   String get activityActivity => 'Активность';
@@ -258,6 +255,19 @@ class AppLocalizationsRu extends AppLocalizations {
       many: 'Завершены $count игр по переписке',
       few: 'Завершены $count игры по переписке',
       one: 'Завершена $count игра по переписке',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Завершены $count $param2 игр по переписке',
+      many: 'Завершены $count $param2 игр по переписке',
+      few: 'Завершены $count $param2 игры по переписке',
+      one: 'Завершена $count $param2 игра по переписке',
     );
     return '$_temp0';
   }
@@ -383,7 +393,226 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastBroadcasts => 'Трансляции';
 
   @override
+  String get broadcastMyBroadcasts => 'Мои трансляции';
+
+  @override
   String get broadcastLiveBroadcasts => 'Прямые трансляции турнира';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Календарь трансляций';
+
+  @override
+  String get broadcastNewBroadcast => 'Новая прямая трансляция';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Подписанные рассылки';
+
+  @override
+  String get broadcastAboutBroadcasts => 'О трансляции';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Как пользоваться трансляциями Lichess.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'В новом туре примут участие те же участники и редакторы, что и в предыдущем туре.';
+
+  @override
+  String get broadcastAddRound => 'Добавить тур';
+
+  @override
+  String get broadcastOngoing => 'Текущие';
+
+  @override
+  String get broadcastUpcoming => 'Предстоящие';
+
+  @override
+  String get broadcastCompleted => 'Завершённые';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess определяет завершение тура на основе источника партий. Используйте этот переключатель, если нет источника.';
+
+  @override
+  String get broadcastRoundName => 'Название тура';
+
+  @override
+  String get broadcastRoundNumber => 'Номер тура';
+
+  @override
+  String get broadcastTournamentName => 'Название турнира';
+
+  @override
+  String get broadcastTournamentDescription => 'Краткое описание турнира';
+
+  @override
+  String get broadcastFullDescription => 'Полное описание события';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Необязательное полное описание трансляции. Доступна разметка $param1. Длина должна быть меньше $param2 символов.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'Исходный URL PGN';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL-адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.';
+
+  @override
+  String get broadcastSourceGameIds => 'До 64 идентификаторов (ID) игр Lichess, разделённых пробелами.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Дата начала турнира в местном часовом поясе: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Дополнительно, если вы знаете, когда событие начнётся';
+
+  @override
+  String get broadcastCurrentGameUrl => 'URL-адрес текущей партии';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Скачать все туры';
+
+  @override
+  String get broadcastResetRound => 'Сбросить тур';
+
+  @override
+  String get broadcastDeleteRound => 'Удалить этот тур';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Определенно удалить тур и его партии.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Удалить все партии этого тура. Для их пересоздания потребуется активный источник.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Редактировать студию тура';
+
+  @override
+  String get broadcastDeleteTournament => 'Удалить этот турнир';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Окончательно удалить весь турнир, его туры и партии.';
+
+  @override
+  String get broadcastShowScores => 'Показать очки игроков по результатам партий';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Необязательно: заменить имена игроков, рейтинги и звания';
+
+  @override
+  String get broadcastFideFederations => 'Федерации FIDE';
+
+  @override
+  String get broadcastTop10Rating => 'Топ-10';
+
+  @override
+  String get broadcastFidePlayers => 'Игроки FIDE';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'Профиль FIDE не найден';
+
+  @override
+  String get broadcastFideProfile => 'Профиль FIDE';
+
+  @override
+  String get broadcastFederation => 'Федерация';
+
+  @override
+  String get broadcastAgeThisYear => 'Возраст в этом году';
+
+  @override
+  String get broadcastUnrated => 'Без рейтинга';
+
+  @override
+  String get broadcastRecentTournaments => 'Недавние турниры';
+
+  @override
+  String get broadcastOpenLichess => 'Открыть в Lichess';
+
+  @override
+  String get broadcastTeams => 'Клубы';
+
+  @override
+  String get broadcastBoards => 'Доски';
+
+  @override
+  String get broadcastOverview => 'Обзор';
+
+  @override
+  String get broadcastSubscribeTitle => 'Подпишитесь, чтобы получать уведомления о начале каждого раунда. Вы можете включить звуковое или пуш-уведомление для трансляций в своих настройках.';
+
+  @override
+  String get broadcastUploadImage => 'Загрузить изображение турнира';
+
+  @override
+  String get broadcastNoBoardsYet => 'Пока нет досок. Они появятся после загрузки партий.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Доски могут быть загружены из источника или с помощью $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Начало после $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'Трансляция начнётся совсем скоро.';
+
+  @override
+  String get broadcastNotYetStarted => 'Трансляция ещё не началась.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Официальный веб-сайт';
+
+  @override
+  String get broadcastStandings => 'Турнирная таблица';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'Больше опций на $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'странице веб-мастера';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'Публичный PGN-источник для этого раунда в реальном времени. Мы также предлагаем $param для более быстрой и эффективной синхронизации.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Встройте эту трансляцию на ваш сайт';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Встроить $param на свой сайт';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Разница в рейтингах';
+
+  @override
+  String get broadcastGamesThisTournament => 'Партии этого турнира';
+
+  @override
+  String get broadcastScore => 'Очки';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count трансляций',
+      many: '$count трансляций',
+      few: '$count трансляции',
+      one: '$count трансляция',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -773,7 +1002,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesNotifyBell => 'Звуковое оповещение на Личесс';
 
   @override
-  String get preferencesNotifyPush => 'Оповещение на устройстве, когда Вы не находитесь на сайте Личесс';
+  String get preferencesNotifyPush => 'Оповещение на устройстве, когда вы не находитесь на сайте Lichess';
 
   @override
   String get preferencesNotifyWeb => 'Браузер';
@@ -1434,10 +1663,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Противник вынужден сделать один из немногих возможных ходов, но любой ход ведёт к ухудшению его положения.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Сборная солянка';
+  String get puzzleThemeMix => 'Сборная солянка';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Всего понемногу. Вы не знаете, чего ожидать, так что будьте готовы ко всему! Прямо как в настоящей партии.';
+  String get puzzleThemeMixDescription => 'Всего понемногу. Вы не знаете, чего ожидать, так что будьте готовы ко всему! Прямо как в настоящей партии.';
 
   @override
   String get puzzleThemePlayerGames => 'Партии игрока';
@@ -1773,7 +2002,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Играть первый ход изучателя дебютов/эндшпилей';
+  String get playFirstOpeningEndgameExplorerMove => 'Играть первый ход изучения дебютов/эндшпилей';
 
   @override
   String get winPreventedBy50MoveRule => 'Не удаётся победить из-за правила 50 ходов';
@@ -1788,7 +2017,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Поражение или 50 ходов после последней ошибки';
 
   @override
-  String get unknownDueToRounding => 'Победа/поражение гарантируется только если рекомендуемая последовательность ходов была выполнена с момента последнего взятия фигуры или хода пешки из-за возможного округления значений DTZ в базах Syzygy.';
+  String get unknownDueToRounding => 'Победа/поражение гарантируется, только если рекомендуемая последовательность ходов была выполнена с момента последнего взятия фигуры или хода пешки из-за возможного округления значений DTZ в базах Syzygy.';
 
   @override
   String get allSet => 'Готово!';
@@ -1840,9 +2069,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get removesTheDepthLimit => 'Снимает ограничение на глубину анализа, но заставляет поработать ваш компьютер';
-
-  @override
-  String get engineManager => 'Менеджер движка';
 
   @override
   String get blunder => 'Зевок';
@@ -2106,6 +2332,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Сыграно партий';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Отменить';
@@ -2747,7 +2976,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get descPrivate => 'Описание для членов команды';
 
   @override
-  String get descPrivateHelp => 'Текст, который будут видеть только члены команды(добавленный текст заменит публичное описание для членов команды).';
+  String get descPrivateHelp => 'Описание, которое будут видеть только члены клуба. Если установлено, то заменяет публичное описание для всех членов клуба.';
 
   @override
   String get no => 'Нет';
@@ -2816,7 +3045,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get other => 'Другое';
 
   @override
-  String get reportDescriptionHelp => 'Поделитесь с нами ссылками на игры, где, как вам кажется, были нарушены правила, и опишите, в чём дело. Недостаточно просто написать «он мухлюет», пожалуйста, опишите, как вы пришли к такому выводу. Мы сработаем оперативнее, если вы напишете на английском языке.';
+  String get reportCheatBoostHelp => 'Вставьте ссылку на игру (или несколько игр) и объясните, что не так в поведении этого пользователя. Не надо просто писать «он жульничал», лучше распишите, как вы пришли к такому выводу.';
+
+  @override
+  String get reportUsernameHelp => 'Объясните, что в этом имени пользователя является оскорбительным. Не надо просто писать «оно оскорбительно или неподобающе», лучше расскажите, как вы пришли к такому выводу, особенно если оскорбление завуалировано, не на английском языке, является сленгом, или же является исторической или культурной отсылкой.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Ваша жалоба будет рассмотрена быстрее, если она будет написана на английском языке.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Пожалуйста, добавьте ссылку хотя бы на одну игру, где по вашему мнению были нарушены правила.';
@@ -4122,6 +4357,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nothingToSeeHere => 'Здесь ничего нет пока.';
 
   @override
+  String get stats => 'Статистика';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4272,7 +4510,7 @@ class AppLocalizationsRu extends AppLocalizations {
       other: '$count минут',
       many: '$count минут',
       few: '$count минуты',
-      one: '$count минута',
+      one: '$count одна минута',
     );
     return '$_temp0';
   }
@@ -4856,8 +5094,521 @@ class AppLocalizationsRu extends AppLocalizations {
   String get streamerLichessStreamers => 'Стримеры Lichess';
 
   @override
+  String get studyPrivate => 'Частная';
+
+  @override
+  String get studyMyStudies => 'Мои студии';
+
+  @override
+  String get studyStudiesIContributeTo => 'Студии с моим участием';
+
+  @override
+  String get studyMyPublicStudies => 'Мои публичные студии';
+
+  @override
+  String get studyMyPrivateStudies => 'Мои частные студии';
+
+  @override
+  String get studyMyFavoriteStudies => 'Мои отмеченные студии';
+
+  @override
+  String get studyWhatAreStudies => 'Что такое «студии»?';
+
+  @override
+  String get studyAllStudies => 'Все студии';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Студии, созданные $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Пока ничего.';
+
+  @override
+  String get studyHot => 'Самые активные';
+
+  @override
+  String get studyDateAddedNewest => 'Недавно добавленные';
+
+  @override
+  String get studyDateAddedOldest => 'Давно добавленные';
+
+  @override
+  String get studyRecentlyUpdated => 'Недавно обновлённые';
+
+  @override
+  String get studyMostPopular => 'Самые популярные';
+
+  @override
+  String get studyAlphabetical => 'По алфавиту';
+
+  @override
+  String get studyAddNewChapter => 'Добавить новую главу';
+
+  @override
+  String get studyAddMembers => 'Добавить участников';
+
+  @override
+  String get studyInviteToTheStudy => 'Пригласить в студию';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Приглашайте только тех участников, которых вы знаете, и кто активно желает участвовать в этой студии.';
+
+  @override
+  String get studySearchByUsername => 'Поиск по имени';
+
+  @override
+  String get studySpectator => 'Зритель';
+
+  @override
+  String get studyContributor => 'Редактор';
+
+  @override
+  String get studyKick => 'Выгнать';
+
+  @override
+  String get studyLeaveTheStudy => 'Покинуть студию';
+
+  @override
+  String get studyYouAreNowAContributor => 'Теперь вы редактор';
+
+  @override
+  String get studyYouAreNowASpectator => 'Теперь вы зритель';
+
+  @override
+  String get studyPgnTags => 'Теги PGN';
+
+  @override
+  String get studyLike => 'Нравится';
+
+  @override
+  String get studyUnlike => 'Не нравится';
+
+  @override
+  String get studyNewTag => 'Новый тег';
+
+  @override
+  String get studyCommentThisPosition => 'Комментировать эту позицию';
+
+  @override
+  String get studyCommentThisMove => 'Комментировать этот ход';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Добавить символьную аннотацию';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Глава слишком короткая для анализа.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Только редакторы студии могут запросить компьютерный анализ.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Получить с сервера полный компьютерный анализ главной линии.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Убедитесь, что глава завершена. Вы можете запросить анализ только один раз.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Все синхронизированные участники остаются на той же позиции';
+
+  @override
+  String get studyShareChanges => 'Поделиться изменениями со зрителями и сохранить их на сервере';
+
+  @override
+  String get studyPlaying => 'Активные';
+
+  @override
+  String get studyShowEvalBar => 'Шкалы оценки';
+
+  @override
+  String get studyFirst => 'Первая';
+
+  @override
+  String get studyPrevious => 'Назад';
+
+  @override
+  String get studyNext => 'Дальше';
+
+  @override
+  String get studyLast => 'Последняя';
+
+  @override
   String get studyShareAndExport => 'Поделиться и экспортировать';
 
   @override
+  String get studyCloneStudy => 'Клонировать';
+
+  @override
+  String get studyStudyPgn => 'PGN студии';
+
+  @override
+  String get studyDownloadAllGames => 'Скачать все партии';
+
+  @override
+  String get studyChapterPgn => 'PGN главы';
+
+  @override
+  String get studyCopyChapterPgn => 'Копировать PGN';
+
+  @override
+  String get studyDownloadGame => 'Скачать партию';
+
+  @override
+  String get studyStudyUrl => 'Ссылка на студию';
+
+  @override
+  String get studyCurrentChapterUrl => 'Ссылка на эту главу';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Вставьте этот код на форум для вставки';
+
+  @override
+  String get studyStartAtInitialPosition => 'Открыть в начальной позиции';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Начать с $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Вставить в свой сайт или блог';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Подробнее о вставке на сайт';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Вставлять на сайт можно только публичные студии!';
+
+  @override
+  String get studyOpen => 'Открыть';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1 на $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Студия не найдена';
+
+  @override
+  String get studyEditChapter => 'Редактировать главу';
+
+  @override
+  String get studyNewChapter => 'Новая глава';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Импорт из $param';
+  }
+
+  @override
+  String get studyOrientation => 'Ориентация';
+
+  @override
+  String get studyAnalysisMode => 'Режим анализа';
+
+  @override
+  String get studyPinnedChapterComment => 'Закреплённый комментарий главы';
+
+  @override
+  String get studySaveChapter => 'Сохранить главу';
+
+  @override
+  String get studyClearAnnotations => 'Очистить аннотацию';
+
+  @override
+  String get studyClearVariations => 'Очистить варианты';
+
+  @override
+  String get studyDeleteChapter => 'Удалить главу';
+
+  @override
+  String get studyDeleteThisChapter => 'Удалить эту главу? Её нельзя будет вернуть!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Очистить все комментарии и обозначения этой главы?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Прямо под доской';
+
+  @override
+  String get studyNoPinnedComment => 'Нет';
+
+  @override
+  String get studyNormalAnalysis => 'Обычный анализ';
+
+  @override
+  String get studyHideNextMoves => 'Скрыть последующие ходы';
+
+  @override
+  String get studyInteractiveLesson => 'Интерактивный урок';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Глава $param';
+  }
+
+  @override
+  String get studyEmpty => 'Пусто';
+
+  @override
+  String get studyStartFromInitialPosition => 'Начать с исходной позиции';
+
+  @override
+  String get studyEditor => 'Редактор';
+
+  @override
+  String get studyStartFromCustomPosition => 'Начать со своей позиции';
+
+  @override
+  String get studyLoadAGameByUrl => 'Загрузить игру по URL';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Загрузить позицию из FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Загрузить игру из PGN';
+
+  @override
+  String get studyAutomatic => 'Автоматически';
+
+  @override
+  String get studyUrlOfTheGame => 'URL игры';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Загрузить игру из $param1 или $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Создать главу';
+
+  @override
+  String get studyCreateStudy => 'Создать студию';
+
+  @override
+  String get studyEditStudy => 'Изменить студию';
+
+  @override
+  String get studyVisibility => 'Доступно к просмотру';
+
+  @override
+  String get studyPublic => 'Публичная';
+
+  @override
+  String get studyUnlisted => 'Доступ по ссылке';
+
+  @override
+  String get studyInviteOnly => 'Только по приглашению';
+
+  @override
+  String get studyAllowCloning => 'Разрешить копирование';
+
+  @override
+  String get studyNobody => 'Никто';
+
+  @override
+  String get studyOnlyMe => 'Только я';
+
+  @override
+  String get studyContributors => 'Соавторы';
+
+  @override
+  String get studyMembers => 'Участники';
+
+  @override
+  String get studyEveryone => 'Все';
+
+  @override
+  String get studyEnableSync => 'Включить синхронизацию';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Да: устанавливать всем одинаковую позицию';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Нет: позволить участникам свободно изучать все позиции';
+
+  @override
+  String get studyPinnedStudyComment => 'Закреплённый комментарий студии';
+
+  @override
   String get studyStart => 'Начать';
+
+  @override
+  String get studySave => 'Сохранить';
+
+  @override
+  String get studyClearChat => 'Очистить чат';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Удалить чат студии? Восстановить будет невозможно!';
+
+  @override
+  String get studyDeleteStudy => 'Удалить студию';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Удалить всю студию? Удаление необратимо! Введите название студии для подтверждения: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Где вы хотите создать студию?';
+
+  @override
+  String get studyGoodMove => 'Хороший ход';
+
+  @override
+  String get studyMistake => 'Ошибка';
+
+  @override
+  String get studyBrilliantMove => 'Отличный ход';
+
+  @override
+  String get studyBlunder => 'Зевок';
+
+  @override
+  String get studyInterestingMove => 'Интересный ход';
+
+  @override
+  String get studyDubiousMove => 'Сомнительный ход';
+
+  @override
+  String get studyOnlyMove => 'Единственный ход';
+
+  @override
+  String get studyZugzwang => 'Цугцванг';
+
+  @override
+  String get studyEqualPosition => 'Равная позиция';
+
+  @override
+  String get studyUnclearPosition => 'Неясная позиция';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'У белых немного лучше';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'У чёрных немного лучше';
+
+  @override
+  String get studyWhiteIsBetter => 'У белых лучше';
+
+  @override
+  String get studyBlackIsBetter => 'У чёрных лучше';
+
+  @override
+  String get studyWhiteIsWinning => 'Белые побеждают';
+
+  @override
+  String get studyBlackIsWinning => 'Чёрные побеждают';
+
+  @override
+  String get studyNovelty => 'Новинка';
+
+  @override
+  String get studyDevelopment => 'Развитие';
+
+  @override
+  String get studyInitiative => 'Инициатива';
+
+  @override
+  String get studyAttack => 'Атака';
+
+  @override
+  String get studyCounterplay => 'Контригра';
+
+  @override
+  String get studyTimeTrouble => 'Цейтнот';
+
+  @override
+  String get studyWithCompensation => 'С компенсацией';
+
+  @override
+  String get studyWithTheIdea => 'С идеей';
+
+  @override
+  String get studyNextChapter => 'Следующая глава';
+
+  @override
+  String get studyPrevChapter => 'Предыдущая глава';
+
+  @override
+  String get studyStudyActions => 'Действия в студии';
+
+  @override
+  String get studyTopics => 'Темы';
+
+  @override
+  String get studyMyTopics => 'Мои темы';
+
+  @override
+  String get studyPopularTopics => 'Популярные темы';
+
+  @override
+  String get studyManageTopics => 'Управление темами';
+
+  @override
+  String get studyBack => 'Назад';
+
+  @override
+  String get studyPlayAgain => 'Сыграть снова';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Как бы вы сыграли в этой позиции?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Поздравляем! Вы прошли этот урок.';
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count глав',
+      many: '$count глав',
+      few: '$count главы',
+      one: '$count глава',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count партий',
+      many: '$count партий',
+      few: '$count партии',
+      one: '$count партия',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count участников',
+      many: '$count участников',
+      few: '$count участника',
+      one: '$count участник',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Вставьте текст в формате PGN, не больше $count игр',
+      many: 'Вставьте текст в формате PGN, не больше $count игр',
+      few: 'Вставьте текст в формате PGN, не больше $count игр',
+      one: 'Вставьте текст в формате PGN, не больше $count игры',
+    );
+    return '$_temp0';
+  }
 }

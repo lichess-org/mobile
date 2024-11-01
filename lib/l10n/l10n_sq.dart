@@ -104,9 +104,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
 
   @override
-  String get mobileCancelDrawOffer => 'Anulojeni ofertën për barazim';
-
-  @override
   String get mobileWaitingForOpponentToJoin => 'Po pritet që të vijë kundërshtari…';
 
   @override
@@ -142,7 +139,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Tungjatjeta';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Zmadho gurin e tërhequr';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -242,6 +239,17 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Plotësoi $count lojëra me korrespondencë',
       one: 'Përfundoi lojën e korrespondencës $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Completed $count $param2 correspondence games',
+      one: 'Completed $count $param2 correspondence game',
     );
     return '$_temp0';
   }
@@ -349,7 +357,224 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmetime';
 
   @override
+  String get broadcastMyBroadcasts => 'Transmetimet e mia';
+
+  @override
   String get broadcastLiveBroadcasts => 'Transmetime të drejtpërdrejta turnesh';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Kalendar transmetimesh';
+
+  @override
+  String get broadcastNewBroadcast => 'Transmetim i ri i drejtpërdrejtë';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Transmetime me pajtim';
+
+  @override
+  String get broadcastAboutBroadcasts => 'Rreth transmetimeve';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Si të përdoren Transmetimet Lichess.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'Raundi i ri do të ketë të njëjtën anëtarë dhe kontribues si i mëparshmi.';
+
+  @override
+  String get broadcastAddRound => 'Shtoni një raund';
+
+  @override
+  String get broadcastOngoing => 'Në zhvillim';
+
+  @override
+  String get broadcastUpcoming => 'I ardhshëm';
+
+  @override
+  String get broadcastCompleted => 'I mbaruar';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess-i e pikas plotësimin e raundit bazuar në lojërat burim. Përdoreni këtë buton, nëse s’ka burim.';
+
+  @override
+  String get broadcastRoundName => 'Emër raundi';
+
+  @override
+  String get broadcastRoundNumber => 'Numër raundi';
+
+  @override
+  String get broadcastTournamentName => 'Emër turneu';
+
+  @override
+  String get broadcastTournamentDescription => 'Përshkrim i shkurtër i turneut';
+
+  @override
+  String get broadcastFullDescription => 'Përshkrim i plotë i turneut';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Përshkrim i gjatë opsional i turneut. $param1 është e disponueshme. Gjatësia duhet të jetë më pak se $param2 shenja.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'URL Burimi PGN-je';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL-ja që do të kontrollojë Lichess-i për të marrë përditësime PGN-sh. Duhet të jetë e përdorshme publikisht që nga Interneti.';
+
+  @override
+  String get broadcastSourceGameIds => 'Deri në 64 ID lojërash Lichess, ndarë me hapësira.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Datë fillimi në zonën kohore vendore të turneut: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Opsionale, nëse e dini kur fillon veprimtaria';
+
+  @override
+  String get broadcastCurrentGameUrl => 'URL e lojës së tanishme';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Shkarko krejt raundet';
+
+  @override
+  String get broadcastResetRound => 'Reset this round';
+
+  @override
+  String get broadcastDeleteRound => 'Fshije këtë raund';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Fshije përfundimisht raundin dhe lojërat e tij.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Fshi krejt lojërat e këtij raundi. Burimi do të duhet të jetë aktiv, që të mund të rikrijohen ato.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Përpunoni analizë raundi';
+
+  @override
+  String get broadcastDeleteTournament => 'Fshije këtë turne';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Fshihe përfundimisht krejt turneun, krejt raundet e tij dhe krejt lojërat në të.';
+
+  @override
+  String get broadcastShowScores => 'Shfaq pikë lojtatësh bazuar në përfundime lojërash';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Opsionale: zëvendësoni emra lojëtarësh, vlerësime dhe tituj';
+
+  @override
+  String get broadcastFideFederations => 'Federata FIDE';
+
+  @override
+  String get broadcastTop10Rating => '10 vlerësimet kryesuese';
+
+  @override
+  String get broadcastFidePlayers => 'Lojtarë FIDE';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'S’u gjet lojtar FIDE';
+
+  @override
+  String get broadcastFideProfile => 'Profil FIDE';
+
+  @override
+  String get broadcastFederation => 'Federim';
+
+  @override
+  String get broadcastAgeThisYear => 'Moshë këtë vit';
+
+  @override
+  String get broadcastUnrated => 'Pa pikë';
+
+  @override
+  String get broadcastRecentTournaments => 'Turne së fundi';
+
+  @override
+  String get broadcastOpenLichess => 'Hape në Lichess';
+
+  @override
+  String get broadcastTeams => 'Ekipe';
+
+  @override
+  String get broadcastBoards => 'Fusha';
+
+  @override
+  String get broadcastOverview => 'Përmbledhje';
+
+  @override
+  String get broadcastSubscribeTitle => 'Pajtohuni, që të noftoheni se kur fillon çdo raund. Mund të aktivizoni/çaktivizoni zilen, ose njoftimet “push” për transmetime, që nga parapëlqimet për llogarinë tuaj.';
+
+  @override
+  String get broadcastUploadImage => 'Ngarkoni figurë turneu';
+
+  @override
+  String get broadcastNoBoardsYet => 'Ende pa fusha. Këto do të shfaqen sapo të ngrkohen lojërat.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Fushat mund të ngarkohen me një burim, ose përmes $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Fillon pas $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'Transmetimi do të fillojë shumë shpejt.';
+
+  @override
+  String get broadcastNotYetStarted => 'Transmetimi s’ka filluar ende.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Sajti zyrtar';
+
+  @override
+  String get broadcastStandings => 'Standings';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'Më tepër mundësi te $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'faqe webmaster-ësh';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'Një burim publik,, PGN, i atypëratyshëm për këtë raund. Ofrojmë gjithashtu edhe një $param, për njëkohësim më të shpejtë dhe më efikas.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Trupëzojeni këtë transmetim në sajtin tuaj';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Trupëzojeni $param në sajtin tuaj';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Rating diff';
+
+  @override
+  String get broadcastGamesThisTournament => 'Lojëra në këtë turne';
+
+  @override
+  String get broadcastScore => 'Përfundim';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transmetime',
+      one: '$count transmetim',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -727,7 +952,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyGameEvent => 'Përditësime loje me korrespondencë';
 
   @override
-  String get preferencesNotifyChallenge => 'Challenges';
+  String get preferencesNotifyChallenge => 'Sfida';
 
   @override
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
@@ -1390,10 +1615,10 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Kundërshtari është i kufizuar në lëvizjet që mund të bëjë dhe krejt lëvizjet përkeqësojnë pozicionin e tij.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Përzierje e ushtrimeve';
+  String get puzzleThemeMix => 'Ushtrime të përzierë';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Pak nga të gjitha. S’dini ç’të prisni, ndaj mbeteni gati për gjithçka! Mu si në lojëra të njëmendta.';
+  String get puzzleThemeMixDescription => 'Pak nga të gjitha. S’dini ç’të prisni, ndaj mbeteni gati për gjithçka! Mu si në lojëra të njëmendta.';
 
   @override
   String get puzzleThemePlayerGames => 'Lojëra të lojëtarit';
@@ -1798,9 +2023,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get removesTheDepthLimit => 'Heq kufirin e thellësisë dhe e mban të ngrohtë kompjuterin tuaj';
 
   @override
-  String get engineManager => 'Engine manager';
-
-  @override
   String get blunder => 'Gafë';
 
   @override
@@ -2062,6 +2284,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Lojëra të luajtura';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Anuloje';
@@ -2772,7 +2997,13 @@ class AppLocalizationsSq extends AppLocalizations {
   String get other => 'Tjetër';
 
   @override
-  String get reportDescriptionHelp => 'Ngjitni lidhjen për te loja(ra) dhe shpjegoni çfarë nuk shkon me sjelljen e këtij përdoruesi. Mos shkruani thjesht “mashtrojnë”, por na tregoni si mbërritët në këtë përfundim. Raportimi juaj do të përpunohet më shpejt, nëse shkruhet në anglisht.';
+  String get reportCheatBoostHelp => 'Ngjitni lidhjen për te loja(rat) dhe shpjegoni se ç’nuk shkon me sjelljen e këtij përdoruesi. Mos thoni thjesht “bën me hile”, por na tregoni se si arritët në këtë konkluzion.';
+
+  @override
+  String get reportUsernameHelp => 'Shpjegoni pse ky emër përdoruesi është fyes. Mos thoni thjesht “është fyes/i papërshtatshëm”, por na tregoni se si arritët në këtë konkluzion, veçanërisht nëse fyerja është e hollë, jo në anglisht, është në një slang, ose është një referencë historike/kulturore.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Raportimi juaj do të shqyrtohet më shpejt, nëse është shkruar në anglisht.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Ju lutemi, jepni të paktën një lidhje te një lojë me hile.';
@@ -4078,6 +4309,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get nothingToSeeHere => 'S’ka ç’shihet këtu tani.';
 
   @override
+  String get stats => 'Statistika';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4724,8 +4958,513 @@ class AppLocalizationsSq extends AppLocalizations {
   String get streamerLichessStreamers => 'Transmetues Lichess-i';
 
   @override
+  String get studyPrivate => 'Privat';
+
+  @override
+  String get studyMyStudies => 'Mësimet e mia';
+
+  @override
+  String get studyStudiesIContributeTo => 'Mësimet në të cilat kam kontribuar';
+
+  @override
+  String get studyMyPublicStudies => 'Mësimet e mia publike';
+
+  @override
+  String get studyMyPrivateStudies => 'Mësimet e mia private';
+
+  @override
+  String get studyMyFavoriteStudies => 'Mësimet e mia të parapëlqyera';
+
+  @override
+  String get studyWhatAreStudies => 'Ç’janë mësimet?';
+
+  @override
+  String get studyAllStudies => 'Krejt mësimet';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Mësime të krijuara nga $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Ende asnjë.';
+
+  @override
+  String get studyHot => 'Më aktualet';
+
+  @override
+  String get studyDateAddedNewest => 'Data e krijimit (nga më e reja)';
+
+  @override
+  String get studyDateAddedOldest => 'Data e krijimit (nga më e vjetra)';
+
+  @override
+  String get studyRecentlyUpdated => 'E përditësuar së fundmi';
+
+  @override
+  String get studyMostPopular => 'Më populloret';
+
+  @override
+  String get studyAlphabetical => 'Alfabetik';
+
+  @override
+  String get studyAddNewChapter => 'Shto një kapitull të ri';
+
+  @override
+  String get studyAddMembers => 'Shto anëtarë';
+
+  @override
+  String get studyInviteToTheStudy => 'Ftoni në mësim';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Ju lutemi, ftoni vetëm njerëzit që i njihni dhe që duan vërtet të marrin pjesë në këtë mësim.';
+
+  @override
+  String get studySearchByUsername => 'Kërkoni sipas emrit të përdoruesit';
+
+  @override
+  String get studySpectator => 'Shikues';
+
+  @override
+  String get studyContributor => 'Kontribues';
+
+  @override
+  String get studyKick => 'Përjashtoje';
+
+  @override
+  String get studyLeaveTheStudy => 'Braktisni mësimin';
+
+  @override
+  String get studyYouAreNowAContributor => 'Tani jeni një kontribues';
+
+  @override
+  String get studyYouAreNowASpectator => 'Tani jeni shikues';
+
+  @override
+  String get studyPgnTags => 'Etiketa PGN';
+
+  @override
+  String get studyLike => 'Pëlqejeni';
+
+  @override
+  String get studyUnlike => 'Shpëlqejeni';
+
+  @override
+  String get studyNewTag => 'Etiketë e re';
+
+  @override
+  String get studyCommentThisPosition => 'Komentoni këtë pozicion';
+
+  @override
+  String get studyCommentThisMove => 'Komentoni këtë lëvizje';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Shenjoni me karaktere';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Ky kapitull është shumë i shkurtë për t’u analizuar.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Analizë kompjuterike mund të kërkohet vetëm nga kontribuesit e këtij mësimi.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Merrni nga shërbyesi një analizë të plotë kompjuterike të variantit kryesor.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Sigurohuni që kapitulli të jetë i plotë. Mund të kërkoni analizë vetëm një herë.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Krejt anëtarët SYNC mbesin në të njëjtin pozicion';
+
+  @override
+  String get studyShareChanges => 'Ndani ndryshimet me shikuesit dhe ruajini ato në shërbyes';
+
+  @override
+  String get studyPlaying => 'Po luhet';
+
+  @override
+  String get studyShowEvalBar => 'Shtylla vlerësimi';
+
+  @override
+  String get studyFirst => 'E para';
+
+  @override
+  String get studyPrevious => 'E mëparshmja';
+
+  @override
+  String get studyNext => 'Pasuesja';
+
+  @override
+  String get studyLast => 'E fundit';
+
+  @override
   String get studyShareAndExport => 'Ndajeni me të tjerë & eksportoni';
 
   @override
+  String get studyCloneStudy => 'Klonoje';
+
+  @override
+  String get studyStudyPgn => 'Studioni PGN';
+
+  @override
+  String get studyDownloadAllGames => 'Shkarkoji krejt lojërat';
+
+  @override
+  String get studyChapterPgn => 'PGN e kapitullit';
+
+  @override
+  String get studyCopyChapterPgn => 'Kopjo PGN';
+
+  @override
+  String get studyDownloadGame => 'Shkarko lojën';
+
+  @override
+  String get studyStudyUrl => 'URL Mësimi';
+
+  @override
+  String get studyCurrentChapterUrl => 'URL e Kapitullit Aktual';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Këtë mund ta ngjitni te forumi ose blogu juaj Lichess, për ta trupëzuar';
+
+  @override
+  String get studyStartAtInitialPosition => 'Fillo në pozicionin fillestar';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Fillo tek $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Trupëzojeni te sajti juaj';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Lexoni më tepër rreth trupëzimit';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Mund të trupëzoni vetëm mësime publike!';
+
+  @override
+  String get studyOpen => 'Hap';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1, sjellë për ju nga $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Mësimi s’u gjet';
+
+  @override
+  String get studyEditChapter => 'Përpunoni kapitullin';
+
+  @override
+  String get studyNewChapter => 'Kapitull i ri';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Importo prej $param';
+  }
+
+  @override
+  String get studyOrientation => 'Drejtimi';
+
+  @override
+  String get studyAnalysisMode => 'Mënyra Analizim';
+
+  @override
+  String get studyPinnedChapterComment => 'Koment kapitulli i fiksuar';
+
+  @override
+  String get studySaveChapter => 'Ruaje kapitullin';
+
+  @override
+  String get studyClearAnnotations => 'Spastro shënimet';
+
+  @override
+  String get studyClearVariations => 'Spastroji variantet';
+
+  @override
+  String get studyDeleteChapter => 'Fshije kapitullin';
+
+  @override
+  String get studyDeleteThisChapter => 'Të fshihet ky kapitull? S’ka kthim mbrapa!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Të spastrohen krejt komentet, glifet dhe format e vizatuara në këtë kapitull?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Mu nën fushë';
+
+  @override
+  String get studyNoPinnedComment => 'Asnjë';
+
+  @override
+  String get studyNormalAnalysis => 'Analizë normale';
+
+  @override
+  String get studyHideNextMoves => 'Fshih lëvizjen e radhës';
+
+  @override
+  String get studyInteractiveLesson => 'Mësim me ndërveprim';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Kapitulli $param';
+  }
+
+  @override
+  String get studyEmpty => 'E zbrazët';
+
+  @override
+  String get studyStartFromInitialPosition => 'Fillo nga pozicioni fillestar';
+
+  @override
+  String get studyEditor => 'Përpunues';
+
+  @override
+  String get studyStartFromCustomPosition => 'Fillo nga pozicion vetjak';
+
+  @override
+  String get studyLoadAGameByUrl => 'Ngarko lojëra nga URL';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Ngarko pozicionin nga FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Ngarko lojëra nga PGN';
+
+  @override
+  String get studyAutomatic => 'Automatik';
+
+  @override
+  String get studyUrlOfTheGame => 'URL e lojërave, një për rresht';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Ngarko lojëra nga $param1 ose $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Krijo kapitull';
+
+  @override
+  String get studyCreateStudy => 'Krijoni mësim';
+
+  @override
+  String get studyEditStudy => 'Përpunoni mësimin';
+
+  @override
+  String get studyVisibility => 'Dukshmëri';
+
+  @override
+  String get studyPublic => 'Publike';
+
+  @override
+  String get studyUnlisted => 'Jo në listë';
+
+  @override
+  String get studyInviteOnly => 'Vetëm me ftesa';
+
+  @override
+  String get studyAllowCloning => 'Lejo klonimin';
+
+  @override
+  String get studyNobody => 'Askush';
+
+  @override
+  String get studyOnlyMe => 'Vetëm unë';
+
+  @override
+  String get studyContributors => 'Kontribues';
+
+  @override
+  String get studyMembers => 'Anëtarë';
+
+  @override
+  String get studyEveryone => 'Cilido';
+
+  @override
+  String get studyEnableSync => 'Lejo njëkohësim';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Po: mbaje këdo në të njëjtin pozicion';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Jo: lejoji njerëzit të shfletojnë lirisht';
+
+  @override
+  String get studyPinnedStudyComment => 'Koment studimi i fiksuar';
+
+  @override
   String get studyStart => 'Fillo';
+
+  @override
+  String get studySave => 'Ruaje';
+
+  @override
+  String get studyClearChat => 'Spastroje bisedën';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Të fshihet historiku i fjalosjeve të mësimit? S’ka kthim mbrapa!';
+
+  @override
+  String get studyDeleteStudy => 'Fshije mësimin';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Të fshihet krejt mësimi? S’ka kthim mbrapa! Për ta ripohuar, shtypni emrin e mësimit: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Ku doni ta studioni atë?';
+
+  @override
+  String get studyGoodMove => 'Lëvizje e mirë';
+
+  @override
+  String get studyMistake => 'Gabim';
+
+  @override
+  String get studyBrilliantMove => 'Lëvizje e shkëlqyer';
+
+  @override
+  String get studyBlunder => 'Gafë';
+
+  @override
+  String get studyInterestingMove => 'Lëvizje me interes';
+
+  @override
+  String get studyDubiousMove => 'Lëvizje e dyshimtë';
+
+  @override
+  String get studyOnlyMove => 'Lëvizja e vetme';
+
+  @override
+  String get studyZugzwang => 'Zugzwang';
+
+  @override
+  String get studyEqualPosition => 'është baras me';
+
+  @override
+  String get studyUnclearPosition => 'Shenjë gishti e paqartë';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'I bardhi është pakëz më mirë';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'I ziu është pakëz më mirë';
+
+  @override
+  String get studyWhiteIsBetter => 'I bardhi është më mirë';
+
+  @override
+  String get studyBlackIsBetter => 'I ziu është më mirë';
+
+  @override
+  String get studyWhiteIsWinning => 'I bardhi po fiton';
+
+  @override
+  String get studyBlackIsWinning => 'I ziu po fiton';
+
+  @override
+  String get studyNovelty => 'Risi';
+
+  @override
+  String get studyDevelopment => 'Zhvillim';
+
+  @override
+  String get studyInitiative => 'Nismë';
+
+  @override
+  String get studyAttack => 'Sulm';
+
+  @override
+  String get studyCounterplay => 'Kundërsulm';
+
+  @override
+  String get studyTimeTrouble => 'Probleme me këtë instalim?';
+
+  @override
+  String get studyWithCompensation => 'Me kompesim';
+
+  @override
+  String get studyWithTheIdea => 'Me idenë';
+
+  @override
+  String get studyNextChapter => 'Kapitulli pasues';
+
+  @override
+  String get studyPrevChapter => 'Kapitulli i mëparshëm';
+
+  @override
+  String get studyStudyActions => 'Studioni veprimet';
+
+  @override
+  String get studyTopics => 'Tema';
+
+  @override
+  String get studyMyTopics => 'Temat e mia';
+
+  @override
+  String get studyPopularTopics => 'Tema popullore';
+
+  @override
+  String get studyManageTopics => 'Administroni tema';
+
+  @override
+  String get studyBack => 'Mbrapsht';
+
+  @override
+  String get studyPlayAgain => 'Riluaje';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Ç’lëvizje do të bënit në këtë pozicion?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Përgëzime! E mbaruat këtë mësim.';
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Kapituj',
+      one: '$count Kapitull',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Lojëra',
+      one: '$count Lojë',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Anëtarë',
+      one: '$count Anëtar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojëra',
+      one: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojë',
+    );
+    return '$_temp0';
+  }
 }
