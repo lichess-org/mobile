@@ -67,7 +67,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
   }
 
   Future<void> setNumEvalLines(int numEvalLines) {
-    assert(numEvalLines >= 1 && numEvalLines <= 3);
+    assert(numEvalLines >= 0 && numEvalLines <= 3);
     return save(
       state.copyWith(
         numEvalLines: numEvalLines,
@@ -95,7 +95,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     required bool showBestMoveArrow,
     required bool showAnnotations,
     required bool showPgnComments,
-    @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
+    @Assert('numEvalLines >= 0 && numEvalLines <= 3') required int numEvalLines,
     @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
     required int numEngineCores,
   }) = _AnalysisPrefs;
