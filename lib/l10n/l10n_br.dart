@@ -104,9 +104,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
-
-  @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
@@ -271,6 +268,17 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Completed $count $param2 correspondence games',
+      one: 'Completed $count $param2 correspondence game',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String activityFollowedNbPlayers(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -400,7 +408,224 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastBroadcasts => 'War-eeun';
 
   @override
+  String get broadcastMyBroadcasts => 'My broadcasts';
+
+  @override
   String get broadcastLiveBroadcasts => 'Tournamantoù skignet war-eeun';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+
+  @override
+  String get broadcastNewBroadcast => 'Skignañ war-eeun nevez';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+
+  @override
+  String get broadcastAboutBroadcasts => 'About broadcasts';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'The new round will have the same members and contributors as the previous one.';
+
+  @override
+  String get broadcastAddRound => 'Add a round';
+
+  @override
+  String get broadcastOngoing => 'O ren';
+
+  @override
+  String get broadcastUpcoming => 'A-benn nebeut';
+
+  @override
+  String get broadcastCompleted => 'Tremenet';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
+
+  @override
+  String get broadcastRoundName => 'Round name';
+
+  @override
+  String get broadcastRoundNumber => 'Niverenn ar batalm';
+
+  @override
+  String get broadcastTournamentName => 'Tournament name';
+
+  @override
+  String get broadcastTournamentDescription => 'Short tournament description';
+
+  @override
+  String get broadcastFullDescription => 'Deskrivadur an abadenn a-bezh';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Deskrivadur hir ar skignañ war-eeun ma fell deoc\'h.$param1 zo dijabl. Ne vo ket hiroc\'h evit $param2 sin.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN Source URL';
+
+  @override
+  String get broadcastSourceUrlHelp => 'An URL a ray Lichess ganti evit kaout hizivadurioù ar PGN. Ret eo dezhi bezañ digor d\'an holl war Internet.';
+
+  @override
+  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Start date in the tournament local timezone: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Diret eo, ma ouzit pegoulz e krogo';
+
+  @override
+  String get broadcastCurrentGameUrl => 'Current game URL';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Download all rounds';
+
+  @override
+  String get broadcastResetRound => 'Reset this round';
+
+  @override
+  String get broadcastDeleteRound => 'Delete this round';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Delete all games of this round. The source will need to be active in order to re-create them.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Edit round study';
+
+  @override
+  String get broadcastDeleteTournament => 'Dilemel an tournamant-mañ';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Dilemel an tournamant da viken, an holl grogadoù ha pep tra penn-da-benn.';
+
+  @override
+  String get broadcastShowScores => 'Show players scores based on game results';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+
+  @override
+  String get broadcastFideFederations => 'FIDE federations';
+
+  @override
+  String get broadcastTop10Rating => 'Top 10 rating';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE players';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+
+  @override
+  String get broadcastFideProfile => 'FIDE profile';
+
+  @override
+  String get broadcastFederation => 'Federation';
+
+  @override
+  String get broadcastAgeThisYear => 'Age this year';
+
+  @override
+  String get broadcastUnrated => 'Unrated';
+
+  @override
+  String get broadcastRecentTournaments => 'Recent tournaments';
+
+  @override
+  String get broadcastOpenLichess => 'Open in Lichess';
+
+  @override
+  String get broadcastTeams => 'Teams';
+
+  @override
+  String get broadcastBoards => 'Boards';
+
+  @override
+  String get broadcastOverview => 'Overview';
+
+  @override
+  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+
+  @override
+  String get broadcastUploadImage => 'Upload tournament image';
+
+  @override
+  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Boards can be loaded with a source or via the $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Starts after $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+
+  @override
+  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Official website';
+
+  @override
+  String get broadcastStandings => 'Standings';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'More options on the $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'webmasters page';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Embed $param in your website';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Rating diff';
+
+  @override
+  String get broadcastGamesThisTournament => 'Games in this tournament';
+
+  @override
+  String get broadcastScore => 'Score';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count broadcasts',
+      one: '$count broadcast',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -1442,10 +1667,10 @@ class AppLocalizationsBr extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'The opponent is limited in the moves they can make, and all moves worsen their position.';
 
   @override
-  String get puzzleThemeHealthyMix => 'A bep seurt';
+  String get puzzleThemeMix => 'A bep seurt';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'A bep seurt. N\'ouzit ket petra gortoz hag e mod-se e voc\'h prest evit pep tra! Heñvel ouzh ar c\'hrogadoù gwir.';
+  String get puzzleThemeMixDescription => 'A bep seurt. N\'ouzit ket petra gortoz hag e mod-se e voc\'h prest evit pep tra! Heñvel ouzh ar c\'hrogadoù gwir.';
 
   @override
   String get puzzleThemePlayerGames => 'Player games';
@@ -1850,9 +2075,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get removesTheDepthLimit => 'Removes the depth limit, and keeps your computer warm';
 
   @override
-  String get engineManager => 'Merañ an urzhiataer';
-
-  @override
   String get blunder => 'Bourd';
 
   @override
@@ -2114,6 +2336,9 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Krogadoù c\'hoariet';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Nullañ';
@@ -2824,7 +3049,13 @@ class AppLocalizationsBr extends AppLocalizations {
   String get other => 'All';
 
   @override
-  String get reportDescriptionHelp => 'Pegit liamm ar c\'hrogad(où) ha displegit ar pezh a ya a-dreuz gant emzalc\'h oc\'h enebour. Lâret \"o truchañ emañ\" ne vo ket trawalc\'h, ret eo displegañ mat. Buanoc\'h e pledimp ganti ma skrivit e saozneg.';
+  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+
+  @override
+  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Roit d\'an nebeutañ ul liamm hag a gas d\'ur c\'hrogad trucherezh ennañ.';
@@ -4130,6 +4361,9 @@ class AppLocalizationsBr extends AppLocalizations {
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
 
   @override
+  String get stats => 'Stats';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4902,8 +5136,525 @@ class AppLocalizationsBr extends AppLocalizations {
   String get streamerLichessStreamers => 'Streamerien Lichess';
 
   @override
+  String get studyPrivate => 'Prevez';
+
+  @override
+  String get studyMyStudies => 'Ma studiadennoù';
+
+  @override
+  String get studyStudiesIContributeTo => 'Studiadennoù am eus kemeret perzh enne';
+
+  @override
+  String get studyMyPublicStudies => 'Ma studiadennoù foran';
+
+  @override
+  String get studyMyPrivateStudies => 'Ma studiadennoù prevez';
+
+  @override
+  String get studyMyFavoriteStudies => 'Ma studiadennoù muiañ-karet';
+
+  @override
+  String get studyWhatAreStudies => 'Petra eo ar studiadennoù?';
+
+  @override
+  String get studyAllStudies => 'An holl studiadennoù';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Studiadennoù krouet gant $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Hini ebet evit poent.';
+
+  @override
+  String get studyHot => 'Deus ar c\'hiz';
+
+  @override
+  String get studyDateAddedNewest => 'Deiziad ouzhpennet (nevesañ)';
+
+  @override
+  String get studyDateAddedOldest => 'Deiziad ouzhpennet (koshañ)';
+
+  @override
+  String get studyRecentlyUpdated => 'Hizivaet a-nevez';
+
+  @override
+  String get studyMostPopular => 'Muiañ karet';
+
+  @override
+  String get studyAlphabetical => 'Alphabetical';
+
+  @override
+  String get studyAddNewChapter => 'Ouzhpennañ ur pennad';
+
+  @override
+  String get studyAddMembers => 'Ouzhpennañ izili';
+
+  @override
+  String get studyInviteToTheStudy => 'Pediñ d\'ar studiadenn';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Na bedit nemet tud a anavezit hag o deus c\'hoant da gemer perzh da vat en ho studiadenn.';
+
+  @override
+  String get studySearchByUsername => 'Klask dre anv implijer';
+
+  @override
+  String get studySpectator => 'Arvester';
+
+  @override
+  String get studyContributor => 'Perzhiad';
+
+  @override
+  String get studyKick => 'Forbannañ';
+
+  @override
+  String get studyLeaveTheStudy => 'Kuitaat ar studiadenn';
+
+  @override
+  String get studyYouAreNowAContributor => 'Perzhiad oc\'h bremañ';
+
+  @override
+  String get studyYouAreNowASpectator => 'Un arvester oc\'h bremañ';
+
+  @override
+  String get studyPgnTags => 'Tikedennoù PGN';
+
+  @override
+  String get studyLike => 'Plijet';
+
+  @override
+  String get studyUnlike => 'Unlike';
+
+  @override
+  String get studyNewTag => 'Tikedenn nevez';
+
+  @override
+  String get studyCommentThisPosition => 'Lâret ur ger diwar-benn al lakadur-mañ';
+
+  @override
+  String get studyCommentThisMove => 'Ober un evezhiadenn diwar-benn ar fiñvadenn-mañ';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Notennaouiñ gant arouezioù';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Re verr eo ar pennad evit bezañ dielfennet.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'N\'eus nemet perzhidi ar studiadenn a c\'hall goulenn un dielfennañ urzhiataer.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Kaout un dielfennañ klok eus ar bennlinenn graet gant un urzhiataer.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Bezit sur eo klok ar pennad. Ne c\'hallit goulenn un dielfennañ nemet ur wech.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Er memes lec\'hiadur e chom holl izili ar SYNC';
+
+  @override
+  String get studyShareChanges => 'Rannañ cheñchamantoù gant an arvesterien ha saveteiñ anezhe war ar servor';
+
+  @override
+  String get studyPlaying => 'O c\'hoari';
+
+  @override
+  String get studyShowEvalBar => 'Evaluation bars';
+
+  @override
+  String get studyFirst => 'Kentañ';
+
+  @override
+  String get studyPrevious => 'War-gil';
+
+  @override
+  String get studyNext => 'War-lec\'h';
+
+  @override
+  String get studyLast => 'Diwezhañ';
+
+  @override
   String get studyShareAndExport => 'Skignañ & ezporzhiañ';
 
   @override
+  String get studyCloneStudy => 'Eilañ';
+
+  @override
+  String get studyStudyPgn => 'PGN ar studi';
+
+  @override
+  String get studyDownloadAllGames => 'Pellgargañ an holl grogadoù';
+
+  @override
+  String get studyChapterPgn => 'PGN ar pennad';
+
+  @override
+  String get studyCopyChapterPgn => 'Copy PGN';
+
+  @override
+  String get studyDownloadGame => 'Pellgargañ ur c\'hrogad';
+
+  @override
+  String get studyStudyUrl => 'Studiañ URL';
+
+  @override
+  String get studyCurrentChapterUrl => 'URL ar pennad evit poent';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Gallout a rit pegañ se er forom evit ensoc\'hañ';
+
+  @override
+  String get studyStartAtInitialPosition => 'Kregiñ el lec\'hiadur kentañ';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Kregiñ e $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Enframmañ en ho lec\'hienn pe blog';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Goût hiroc\'h diwar-benn an ensoc\'hañ';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Ar studiadennoù foran a c\'hall bezañ ensoc\'het!';
+
+  @override
+  String get studyOpen => 'Digeriñ';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1, zo kaset deoc\'h gant $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'N\'eo ket bet kavet ar studiadenn';
+
+  @override
+  String get studyEditChapter => 'Aozañ ar pennad';
+
+  @override
+  String get studyNewChapter => 'Pennad nevez';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Import from $param';
+  }
+
+  @override
+  String get studyOrientation => 'Tuadur';
+
+  @override
+  String get studyAnalysisMode => 'Doare dielfennañ';
+
+  @override
+  String get studyPinnedChapterComment => 'Ali war ar pennad spilhet';
+
+  @override
+  String get studySaveChapter => 'Saveteiñ pennad';
+
+  @override
+  String get studyClearAnnotations => 'Diverkañ an notennoù';
+
+  @override
+  String get studyClearVariations => 'Clear variations';
+
+  @override
+  String get studyDeleteChapter => 'Dilemel pennad';
+
+  @override
+  String get studyDeleteThisChapter => 'Dilemel ar pennad-mañ? Hep distro e vo!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Diverkañ an holl evezhiadennoù ha notennoù er pennad?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Dindan an dablez';
+
+  @override
+  String get studyNoPinnedComment => 'Hini ebet';
+
+  @override
+  String get studyNormalAnalysis => 'Dielfennañ normal';
+
+  @override
+  String get studyHideNextMoves => 'Kuzhat ar fiñvadennoù da heul';
+
+  @override
+  String get studyInteractiveLesson => 'Kentel etreoberiat';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Pennad $param';
+  }
+
+  @override
+  String get studyEmpty => 'Goullo';
+
+  @override
+  String get studyStartFromInitialPosition => 'Kregiñ el lec\'hiadur kentañ';
+
+  @override
+  String get studyEditor => 'Aozer';
+
+  @override
+  String get studyStartFromCustomPosition => 'Kregiñ adalek ul lakadur aozet';
+
+  @override
+  String get studyLoadAGameByUrl => 'Kargañ ur c\'hrogad dre URL';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Kargañ ul lakadur dre FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Kargañ ul lakadur dre PGN';
+
+  @override
+  String get studyAutomatic => 'Emgefre';
+
+  @override
+  String get studyUrlOfTheGame => 'URL ar c\'hrogad';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Kargañ ur c\'hrogad eus $param1 pe $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Krouiñ pennad';
+
+  @override
+  String get studyCreateStudy => 'Krouiñ ur studiadenn';
+
+  @override
+  String get studyEditStudy => 'Aozañ studiadenn';
+
+  @override
+  String get studyVisibility => 'Gwelusted';
+
+  @override
+  String get studyPublic => 'Foran';
+
+  @override
+  String get studyUnlisted => 'N\'eo ket bet listennet';
+
+  @override
+  String get studyInviteOnly => 'Kouvidi hepken';
+
+  @override
+  String get studyAllowCloning => 'Aotreañ ar c\'hlonañ';
+
+  @override
+  String get studyNobody => 'Den ebet';
+
+  @override
+  String get studyOnlyMe => 'Me hepken';
+
+  @override
+  String get studyContributors => 'Perzhidi';
+
+  @override
+  String get studyMembers => 'Izili';
+
+  @override
+  String get studyEveryone => 'An holl dud';
+
+  @override
+  String get studyEnableSync => 'Gweredekaat sync';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Ya: laoskit an traoù evel m\'emaint';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Nann: laoskit an dud merdeiñ trankilik';
+
+  @override
+  String get studyPinnedStudyComment => 'Ali war ar studiadenn spilhet';
+
+  @override
   String get studyStart => 'Kregiñ';
+
+  @override
+  String get studySave => 'Saveteiñ';
+
+  @override
+  String get studyClearChat => 'Diverkañ ar flapañ';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Dilemel an istor-flapañ? Hep distro e vo!';
+
+  @override
+  String get studyDeleteStudy => 'Dilemel ar studiadenn';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Pelec\'h ho peus c\'hoant da studiañ se?';
+
+  @override
+  String get studyGoodMove => 'Good move';
+
+  @override
+  String get studyMistake => 'Mistake';
+
+  @override
+  String get studyBrilliantMove => 'Brilliant move';
+
+  @override
+  String get studyBlunder => 'Blunder';
+
+  @override
+  String get studyInterestingMove => 'Interesting move';
+
+  @override
+  String get studyDubiousMove => 'Dubious move';
+
+  @override
+  String get studyOnlyMove => 'Only move';
+
+  @override
+  String get studyZugzwang => 'Zugzwang';
+
+  @override
+  String get studyEqualPosition => 'Equal position';
+
+  @override
+  String get studyUnclearPosition => 'Unclear position';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
+
+  @override
+  String get studyWhiteIsBetter => 'White is better';
+
+  @override
+  String get studyBlackIsBetter => 'Black is better';
+
+  @override
+  String get studyWhiteIsWinning => 'White is winning';
+
+  @override
+  String get studyBlackIsWinning => 'Black is winning';
+
+  @override
+  String get studyNovelty => 'Novelty';
+
+  @override
+  String get studyDevelopment => 'Development';
+
+  @override
+  String get studyInitiative => 'Initiative';
+
+  @override
+  String get studyAttack => 'Attack';
+
+  @override
+  String get studyCounterplay => 'Counterplay';
+
+  @override
+  String get studyTimeTrouble => 'Time trouble';
+
+  @override
+  String get studyWithCompensation => 'With compensation';
+
+  @override
+  String get studyWithTheIdea => 'With the idea';
+
+  @override
+  String get studyNextChapter => 'Next chapter';
+
+  @override
+  String get studyPrevChapter => 'Previous chapter';
+
+  @override
+  String get studyStudyActions => 'Study actions';
+
+  @override
+  String get studyTopics => 'Topics';
+
+  @override
+  String get studyMyTopics => 'My topics';
+
+  @override
+  String get studyPopularTopics => 'Popular topics';
+
+  @override
+  String get studyManageTopics => 'Manage topics';
+
+  @override
+  String get studyBack => 'Back';
+
+  @override
+  String get studyPlayAgain => 'Play again';
+
+  @override
+  String get studyWhatWouldYouPlay => 'What would you play in this position?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pennad',
+      many: '$count pennad',
+      few: '$count pennad',
+      two: '$count pennad',
+      one: '$count pennad',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count C\'hoariadenn',
+      many: '$count C\'hoariadenn',
+      few: '$count C\'hoariadenn',
+      two: '$count C\'hoariadenn',
+      one: '$count C\'hoariadenn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ezel',
+      many: '$count Ezel',
+      few: '$count Ezel',
+      two: '$count Ezel',
+      one: '$count Ezel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Pegit testenn ho PGN amañ, betek $count krogadoù',
+      many: 'Pegit testenn ho PGN amañ, betek $count krogadoù',
+      few: 'Pegit testenn ho PGN amañ, betek $count krogadoù',
+      two: 'Pegit testenn ho PGN amañ, betek $count grogad',
+      one: 'Pegit testenn ho PGN amañ, betek $count krogad',
+    );
+    return '$_temp0';
+  }
 }

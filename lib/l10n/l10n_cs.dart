@@ -54,92 +54,89 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileRecentSearches => 'Recent searches';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Vymazat';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Hráči s \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Žádné výsledky';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Jste si jistý?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy Bouřky úloh.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Sdílej tuto úlohu';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Sdílet URL hry';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Sdílet PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Sdílet pozici jako FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Zobraz variace';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Schovej variace';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Zobraz komentáře';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Chceš ukončit tento běh?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Nic k zobrazení, prosím změn filtry';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Zrušit nabídnutí vrácení tahu';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileBlindfoldMode => 'Páska přes oči';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileLiveStreamers => 'Živé vysílání';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileCustomGameJoinAGame => 'Připojit se ke hře';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCorrespondenceClearSavedMove => 'Vymazat uložené tahy';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileSomethingWentWrong => 'Něco se pokazilo.';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileShowResult => 'Zobrazit výsledky';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobilePuzzleThemesSubtitle => 'Hrej úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
-
-  @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Vyřeš co nejvíce úloh co dokážeš za 3 minuty.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Ahoj, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Ahoj';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -258,6 +255,19 @@ class AppLocalizationsCs extends AppLocalizations {
       many: 'Dokončeno $count korespondenčních partií',
       few: 'Dokončeny $count korespondenční partie',
       one: 'Dokončena $count korespondenční partie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dokončeno $count $param2 korespondenčních partii',
+      many: 'Dokončeno $count $param2 korespondenčních partii',
+      few: 'Dokončeny $count $param2 korespondenční partie',
+      one: 'Dokončena $count $param2 korespondenční partie',
     );
     return '$_temp0';
   }
@@ -383,7 +393,226 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastBroadcasts => 'Přenosy';
 
   @override
+  String get broadcastMyBroadcasts => 'Moje vysílání';
+
+  @override
   String get broadcastLiveBroadcasts => 'Živé přenosy turnajů';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Kalendář přenosů';
+
+  @override
+  String get broadcastNewBroadcast => 'Nový živý přenos';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Odebírané přenosy';
+
+  @override
+  String get broadcastAboutBroadcasts => 'O vysílání';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Jak používat Lichess vysílání.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'Nové kolo bude mít stejné členy a přispěvatele jako to předchozí.';
+
+  @override
+  String get broadcastAddRound => 'Přidat kolo';
+
+  @override
+  String get broadcastOngoing => 'Probíhající';
+
+  @override
+  String get broadcastUpcoming => 'Chystané';
+
+  @override
+  String get broadcastCompleted => 'Dokončené';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess detekuje dokončení kola na základě zdrojových her. Tento přepínač použijte, pokud není k dispozici žádný zdroj.';
+
+  @override
+  String get broadcastRoundName => 'Číslo kola';
+
+  @override
+  String get broadcastRoundNumber => 'Číslo kola';
+
+  @override
+  String get broadcastTournamentName => 'Název turnaje';
+
+  @override
+  String get broadcastTournamentDescription => 'Stručný popis turnaje';
+
+  @override
+  String get broadcastFullDescription => 'Úplný popis události';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Volitelný dlouhý popis přenosu. $param1 je k dispozici. Délka musí být menší než $param2 znaků.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN Zdrojová URL adresa';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL adresa, kterou bude Lichess kontrolovat pro získání PGN aktualizací. Musí být veřejně přístupná z internetu.';
+
+  @override
+  String get broadcastSourceGameIds => 'Až 64 ID Lichess her, oddělených mezerama.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Datum zahájení v lokálním čase turnaje: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Nepovinné, pokud víte, kdy událost začíná';
+
+  @override
+  String get broadcastCurrentGameUrl => 'URL adresa právě probíhající partie';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Stáhnout hry ze všech kol';
+
+  @override
+  String get broadcastResetRound => 'Resetovat toto kolo';
+
+  @override
+  String get broadcastDeleteRound => 'Smazat toto kolo';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Definitivně smazat kolo a jeho hry.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Smazat všechny hry v tomto kole. Zdroj musí být aktivní aby bylo možno je znovu vytvořit.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Upravit studie kola';
+
+  @override
+  String get broadcastDeleteTournament => 'Smazat tento turnaj';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Opravdu smazat celý turnaj, všechna kola a hry.';
+
+  @override
+  String get broadcastShowScores => 'Zobraz skóre hráču dle herních výsledků';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Volitelné: nahraď jména hráčů, rating a tituly';
+
+  @override
+  String get broadcastFideFederations => 'FIDE federace';
+
+  @override
+  String get broadcastTop10Rating => 'Rating top 10';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE hráči';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE hráč nenalezen';
+
+  @override
+  String get broadcastFideProfile => 'FIDE profil';
+
+  @override
+  String get broadcastFederation => 'Federace';
+
+  @override
+  String get broadcastAgeThisYear => 'Věk tento rok';
+
+  @override
+  String get broadcastUnrated => 'Nehodnocen';
+
+  @override
+  String get broadcastRecentTournaments => 'Nedávné tournamenty';
+
+  @override
+  String get broadcastOpenLichess => 'Open in Lichess';
+
+  @override
+  String get broadcastTeams => 'Teams';
+
+  @override
+  String get broadcastBoards => 'Boards';
+
+  @override
+  String get broadcastOverview => 'Overview';
+
+  @override
+  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+
+  @override
+  String get broadcastUploadImage => 'Upload tournament image';
+
+  @override
+  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Boards can be loaded with a source or via the $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Starts after $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+
+  @override
+  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Official website';
+
+  @override
+  String get broadcastStandings => 'Standings';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'More options on the $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'webmasters page';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Embed $param in your website';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Rating diff';
+
+  @override
+  String get broadcastGamesThisTournament => 'Games in this tournament';
+
+  @override
+  String get broadcastScore => 'Score';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vysílání',
+      many: '$count vysílání',
+      few: '$count vysílání',
+      one: '$count vysílání',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -1434,10 +1663,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Soupeř musí zahrát jakýkoliv tah, přičemž všechny zhoršují jeho pozici a zlepšují naší pozici.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Mix úloh';
+  String get puzzleThemeMix => 'Mix úloh';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Troška od všeho. Nevíte co čekat, čili jste na vše připraveni! Jako v normální partii.';
+  String get puzzleThemeMixDescription => 'Troška od všeho. Nevíte co čekat, čili jste na vše připraveni! Jako v normální partii.';
 
   @override
   String get puzzleThemePlayerGames => 'Z vašich her';
@@ -1680,10 +1909,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get deleteFromHere => 'Smazat odsud';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Schovat variace';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Zobrazit variace';
 
   @override
   String get forceVariation => 'Zobrazit jako variantu';
@@ -1842,9 +2071,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get removesTheDepthLimit => 'Zapne nekonečnou analýzu a odstraní omezení hloubky propočtu';
 
   @override
-  String get engineManager => 'Správce enginu';
-
-  @override
   String get blunder => 'Hrubá chyba';
 
   @override
@@ -1922,7 +2148,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get friends => 'Přátelé';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'ostatní hráči';
 
   @override
   String get discussions => 'Konverzace';
@@ -2106,6 +2332,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Odehraných partií';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Zrušit';
@@ -2675,16 +2904,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get editProfile => 'Upravit profil';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Skutečné jméno';
 
   @override
   String get setFlair => 'Nastav si svou ikonu za jménem';
 
   @override
-  String get flair => 'Upravitelná ikona';
+  String get flair => 'Ikona';
 
   @override
-  String get youCanHideFlair => 'There is a setting to hide all user flairs across the entire site.';
+  String get youCanHideFlair => 'Existuje nastavení které schová všechny uživatelské ikony za jménem po celém webu.';
 
   @override
   String get biography => 'O mně';
@@ -2735,7 +2964,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzles => 'Puzzle';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Online roboti';
 
   @override
   String get name => 'Jméno';
@@ -2756,10 +2985,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get yes => 'Ano';
 
   @override
-  String get website => 'Website';
+  String get website => 'Web';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobil';
 
   @override
   String get help => 'Nápověda:';
@@ -2816,7 +3045,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get other => 'Jiné';
 
   @override
-  String get reportDescriptionHelp => 'Vložte link na hru(y) a popište, co je špatně na chování tohoto hráče. (Pokud možno anglicky.)';
+  String get reportCheatBoostHelp => 'Zde vlož odkaz na hru(hry) a napiš co dělal tento uživatel. Nepiš pouze \"on podváděl\", ale napiš proč si myslíš že podváděl.';
+
+  @override
+  String get reportUsernameHelp => 'Vysvětli co je urážlivého na jeho u6ivatelském jménu. Nepiš pouze \"Je urážlivé/nevhodné\", ale řekni i důvod proč to tak je, zejména pokud je urážka zatemněná, nebo je v jiném jazyce než v angličtině, nebo je ve slangu či jde o historickou nebokulturní referenci.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Nahlášení bude rychlejší pokud bude v angličtině.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Prosím, uveďte alespoň jeden link na partii, ve které se podvádělo.';
@@ -2919,7 +3154,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get outsideTheBoard => 'Mimo šachovnici';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Všechny pole na šachovnici';
 
   @override
   String get onSlowGames => 'Při pomalých hrách';
@@ -3133,7 +3368,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get yourPendingSimuls => 'Your pending simuls';
+  String get yourPendingSimuls => 'Tvoje simulace ve frontě';
 
   @override
   String get createdSimuls => 'Nově vytvořené simultánky';
@@ -3142,7 +3377,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get hostANewSimul => 'Vytvoř novou simultánku';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul => 'Zaregistruj se abys mohl založit nebo se připojit k simulaci';
 
   @override
   String get noSimulFound => 'Simultánka nenalezena';
@@ -3217,7 +3452,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keyGoToStartOrEnd => 'běžte na začátek/konec';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyCycleSelectedVariation => 'Projdi zkrze vybranou variaci';
 
   @override
   String get keyShowOrHideComments => 'zobrazte/skryjte komentáře';
@@ -3241,22 +3476,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keyNextInaccuracy => 'Další nepřesnost';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Předchozí větev';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Další větev';
 
   @override
   String get toggleVariationArrows => 'Přepnout šipky variant';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Projdi předchozí/následující variantu';
 
   @override
   String get toggleGlyphAnnotations => 'Přepnout poznámky glyfů';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Přepni zvýraznění pozice';
 
   @override
   String get variationArrowsInfo => 'Šipky variant umožňují navigaci bez použití seznamu tahů.';
@@ -3515,22 +3750,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get backgroundImageUrl => 'URL zdroj obrázku na pozadí:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Šachovnice';
 
   @override
-  String get size => 'Size';
+  String get size => 'Velikost';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Průhlednost';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Jas';
 
   @override
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Vrátit barvy na původní nastavení';
 
   @override
   String get pieceSet => 'Vzhled figur';
@@ -4119,7 +4354,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get lichessPatronInfo => 'Lichess je bezplatný a zcela svobodný/nezávislý softvér s otevřeným zdrojovým kódem.\nVeškeré provozní náklady, vývoj a obsah jsou financovány výhradně z příspěvků uživatelů.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Momentálně zde není nic k vidění.';
+
+  @override
+  String get stats => 'Stats';
 
   @override
   String opponentLeftCounter(int count) {
@@ -4856,8 +5094,521 @@ class AppLocalizationsCs extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess streameři';
 
   @override
+  String get studyPrivate => 'Soukromé';
+
+  @override
+  String get studyMyStudies => 'Moje studie';
+
+  @override
+  String get studyStudiesIContributeTo => 'Studie, ke kterým přispívám';
+
+  @override
+  String get studyMyPublicStudies => 'Moje veřejné studie';
+
+  @override
+  String get studyMyPrivateStudies => 'Moje soukromé studie';
+
+  @override
+  String get studyMyFavoriteStudies => 'Moje oblíbené studie';
+
+  @override
+  String get studyWhatAreStudies => 'Co jsou studie?';
+
+  @override
+  String get studyAllStudies => 'Všechny studie';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Studie vytvořené hráčem $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Zatím nic.';
+
+  @override
+  String get studyHot => 'Oblíbené';
+
+  @override
+  String get studyDateAddedNewest => 'Datum přidání (nejnovější)';
+
+  @override
+  String get studyDateAddedOldest => 'Datum přidání (nejstarší)';
+
+  @override
+  String get studyRecentlyUpdated => 'Nedávno aktualizované';
+
+  @override
+  String get studyMostPopular => 'Nejoblíbenější';
+
+  @override
+  String get studyAlphabetical => 'Abecedně';
+
+  @override
+  String get studyAddNewChapter => 'Přidat novou kapitolu';
+
+  @override
+  String get studyAddMembers => 'Přidat uživatele';
+
+  @override
+  String get studyInviteToTheStudy => 'Pozvat do studie';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Prosím zvěte pouze lidi, které znáte a kteří se chtějí aktivně připojit k této studii.';
+
+  @override
+  String get studySearchByUsername => 'Hledat podle uživatelského jména';
+
+  @override
+  String get studySpectator => 'Divák';
+
+  @override
+  String get studyContributor => 'Přispívající';
+
+  @override
+  String get studyKick => 'Vyhodit';
+
+  @override
+  String get studyLeaveTheStudy => 'Opustit studii';
+
+  @override
+  String get studyYouAreNowAContributor => 'Nyní jste přispívající';
+
+  @override
+  String get studyYouAreNowASpectator => 'Nyní jste divák';
+
+  @override
+  String get studyPgnTags => 'PGN tagy';
+
+  @override
+  String get studyLike => 'To se mi líbí';
+
+  @override
+  String get studyUnlike => 'Už se mi nelíbí';
+
+  @override
+  String get studyNewTag => 'Nový štítek';
+
+  @override
+  String get studyCommentThisPosition => 'Komentář k tomuto příspěvku';
+
+  @override
+  String get studyCommentThisMove => 'Komentář k tomuto tahu';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Popsat glyfy';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Kapitola je moc krátká na to, aby mohla být zanalyzována.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Pouze přispěvatelé mohou požádat o počítačovou analýzu.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Získejte plnou počítačovou analýzu hlavní varianty.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Ujistěte se, že je kapitola úplná. O analýzu můžete požádat pouze jednou.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Všichni SYNCHRONIZOVANÍ členové zůstávají na stejné pozici';
+
+  @override
+  String get studyShareChanges => 'Sdílet změny s diváky a uložit je na server';
+
+  @override
+  String get studyPlaying => 'Probíhající';
+
+  @override
+  String get studyShowEvalBar => 'Lišta hodnotící pozici';
+
+  @override
+  String get studyFirst => 'První';
+
+  @override
+  String get studyPrevious => 'Předchozí';
+
+  @override
+  String get studyNext => 'Další';
+
+  @override
+  String get studyLast => 'Poslední';
+
+  @override
   String get studyShareAndExport => 'Sdílení a export';
 
   @override
+  String get studyCloneStudy => 'Klonovat';
+
+  @override
+  String get studyStudyPgn => 'PGN studie';
+
+  @override
+  String get studyDownloadAllGames => 'Stáhnout všechny hry';
+
+  @override
+  String get studyChapterPgn => 'PGN kapitoly';
+
+  @override
+  String get studyCopyChapterPgn => 'Kopírovat PGN';
+
+  @override
+  String get studyDownloadGame => 'Stáhnout hru';
+
+  @override
+  String get studyStudyUrl => 'URL studie';
+
+  @override
+  String get studyCurrentChapterUrl => 'URL aktuální kapitoly';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Tento odkaz můžete vložit např. do diskusního fóra';
+
+  @override
+  String get studyStartAtInitialPosition => 'Začít ve výchozí pozici';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Začít u tahu $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Vložte vaší stránku nebo blog';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Přečtěte si více o vkládání';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Lze vložit pouze veřejné studie!';
+
+  @override
+  String get studyOpen => 'Otevřít';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1 vám přináší $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Studie nenalezena';
+
+  @override
+  String get studyEditChapter => 'Upravit kapitolu';
+
+  @override
+  String get studyNewChapter => 'Nová kapitola';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Importovat z $param';
+  }
+
+  @override
+  String get studyOrientation => 'Orientace';
+
+  @override
+  String get studyAnalysisMode => 'Režim rozboru';
+
+  @override
+  String get studyPinnedChapterComment => 'Připnutý komentář u kapitoly';
+
+  @override
+  String get studySaveChapter => 'Uložit kapitolu';
+
+  @override
+  String get studyClearAnnotations => 'Vymazat anotace';
+
+  @override
+  String get studyClearVariations => 'Vymazat varianty';
+
+  @override
+  String get studyDeleteChapter => 'Odstranit kapitolu';
+
+  @override
+  String get studyDeleteThisChapter => 'Opravdu chcete odstranit tuto kapitolu? Kapitola bude navždy ztracena!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Vymazat všechny komentáře a výtvory v této kapitole?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Přímo pod šachovnicí';
+
+  @override
+  String get studyNoPinnedComment => 'Žádný';
+
+  @override
+  String get studyNormalAnalysis => 'Normální rozbor';
+
+  @override
+  String get studyHideNextMoves => 'Skrýt následující tahy';
+
+  @override
+  String get studyInteractiveLesson => 'Interaktivní lekce';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Kapitola: $param';
+  }
+
+  @override
+  String get studyEmpty => 'Prázdné';
+
+  @override
+  String get studyStartFromInitialPosition => 'Začít z původní pozice';
+
+  @override
+  String get studyEditor => 'Tvůrce';
+
+  @override
+  String get studyStartFromCustomPosition => 'Začít od vlastní pozice';
+
+  @override
+  String get studyLoadAGameByUrl => 'Načíst hru podle URL';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Načíst polohu z FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Načíst hru z PGN';
+
+  @override
+  String get studyAutomatic => 'Automatický';
+
+  @override
+  String get studyUrlOfTheGame => 'URL hry';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Načíst hru z $param1 nebo $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Vytvořit kapitolu';
+
+  @override
+  String get studyCreateStudy => 'Vytvořit studii';
+
+  @override
+  String get studyEditStudy => 'Upravit studii';
+
+  @override
+  String get studyVisibility => 'Viditelnost';
+
+  @override
+  String get studyPublic => 'Veřejná';
+
+  @override
+  String get studyUnlisted => 'Neveřejná';
+
+  @override
+  String get studyInviteOnly => 'Pouze na pozvání';
+
+  @override
+  String get studyAllowCloning => 'Povolit klonování';
+
+  @override
+  String get studyNobody => 'Nikdo';
+
+  @override
+  String get studyOnlyMe => 'Pouze já';
+
+  @override
+  String get studyContributors => 'Přispěvatelé';
+
+  @override
+  String get studyMembers => 'Členové';
+
+  @override
+  String get studyEveryone => 'Kdokoli';
+
+  @override
+  String get studyEnableSync => 'Povolit synchronizaci';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Ano, všichni zůstávají na stejné pozici';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Ne, umožnit volné procházení';
+
+  @override
+  String get studyPinnedStudyComment => 'Připnutý komentář studie';
+
+  @override
   String get studyStart => 'Začít';
+
+  @override
+  String get studySave => 'Uložit';
+
+  @override
+  String get studyClearChat => 'Vyčistit chat';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Opravdu chcete vymazat historii chatu? Operaci nelze vrátit!';
+
+  @override
+  String get studyDeleteStudy => 'Smazat studii';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Opravdu chcete smazat celou studii? Akci nelze vrátit zpět. Zadejte název studie pro potvrzení: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Kde chcete tuto pozici studovat?';
+
+  @override
+  String get studyGoodMove => 'Dobrý tah';
+
+  @override
+  String get studyMistake => 'Chyba';
+
+  @override
+  String get studyBrilliantMove => 'Výborný tah';
+
+  @override
+  String get studyBlunder => 'Hrubá chyba';
+
+  @override
+  String get studyInterestingMove => 'Zajímavý tah';
+
+  @override
+  String get studyDubiousMove => 'Pochybný tah';
+
+  @override
+  String get studyOnlyMove => 'Jediný tah';
+
+  @override
+  String get studyZugzwang => 'Zugzwang';
+
+  @override
+  String get studyEqualPosition => 'Rovná pozice';
+
+  @override
+  String get studyUnclearPosition => 'Nejasná pozice';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'Bílý stojí o něco lépe';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Černý stojí o něco lépe';
+
+  @override
+  String get studyWhiteIsBetter => 'Bílý stojí lépe';
+
+  @override
+  String get studyBlackIsBetter => 'Černý stojí lépe';
+
+  @override
+  String get studyWhiteIsWinning => 'Bílý má rozhodující výhodu';
+
+  @override
+  String get studyBlackIsWinning => 'Černý má rozhodující výhodu';
+
+  @override
+  String get studyNovelty => 'Novinka';
+
+  @override
+  String get studyDevelopment => 'Vývin';
+
+  @override
+  String get studyInitiative => 'S iniciativou';
+
+  @override
+  String get studyAttack => 'S útokem';
+
+  @override
+  String get studyCounterplay => 'S protihrou';
+
+  @override
+  String get studyTimeTrouble => 'Časová tíseň';
+
+  @override
+  String get studyWithCompensation => 'S kompenzací';
+
+  @override
+  String get studyWithTheIdea => 'S ideou';
+
+  @override
+  String get studyNextChapter => 'Další kapitola';
+
+  @override
+  String get studyPrevChapter => 'Předchozí kapitola';
+
+  @override
+  String get studyStudyActions => 'Akce pro studii';
+
+  @override
+  String get studyTopics => 'Témata';
+
+  @override
+  String get studyMyTopics => 'Moje témata';
+
+  @override
+  String get studyPopularTopics => 'Oblíbená témata';
+
+  @override
+  String get studyManageTopics => 'Správa témat';
+
+  @override
+  String get studyBack => 'Zpět';
+
+  @override
+  String get studyPlayAgain => 'Hrát znovu';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Co byste v této pozici hráli?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Blahopřejeme! Dokončili jste tuto lekci.';
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kapitol',
+      many: '$count kapitol',
+      few: '$count kapitoly',
+      one: '$count kapitola',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count her',
+      many: '$count her',
+      few: '$count hry',
+      one: '$count hra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count členů',
+      many: '$count členů',
+      few: '$count členi',
+      one: '$count člen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vložte obsah vašeho PGN souboru (až $count her)',
+      many: 'Vložte obsah vašeho PGN souboru (až $count her)',
+      few: 'Vložte obsah vašeho PGN souboru (až $count hry)',
+      one: 'Vložte obsah vašeho PGN souboru (až $count hra)',
+    );
+    return '$_temp0';
+  }
 }

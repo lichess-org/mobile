@@ -104,9 +104,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
-  String get mobileCancelDrawOffer => 'ドロー提案をキャンセル';
-
-  @override
   String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
 
   @override
@@ -142,7 +139,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileGreetingWithoutName => 'こんにちは';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
 
   @override
   String get activityActivity => '活動';
@@ -234,6 +231,16 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count 局の通信戦を完了',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 局の $param2 通信戦を完了しました',
     );
     return '$_temp0';
   }
@@ -332,7 +339,223 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastBroadcasts => 'イベント中継';
 
   @override
+  String get broadcastMyBroadcasts => '自分の配信';
+
+  @override
   String get broadcastLiveBroadcasts => '実戦トーナメントのライブ中継';
+
+  @override
+  String get broadcastBroadcastCalendar => '中継カレンダー';
+
+  @override
+  String get broadcastNewBroadcast => '新しいライブ中継';
+
+  @override
+  String get broadcastSubscribedBroadcasts => '登録した配信';
+
+  @override
+  String get broadcastAboutBroadcasts => '中継について';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Lichess 中継の使い方。';
+
+  @override
+  String get broadcastTheNewRoundHelp => '新ラウンドには前回と同じメンバーと投稿者が参加します。';
+
+  @override
+  String get broadcastAddRound => 'ラウンドを追加';
+
+  @override
+  String get broadcastOngoing => '配信中';
+
+  @override
+  String get broadcastUpcoming => '予定';
+
+  @override
+  String get broadcastCompleted => '終了';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess は元になる対局に基づいてラウンド終了を検出します。元になる対局がない時はこのトグルを使ってください。';
+
+  @override
+  String get broadcastRoundName => 'ラウンド名';
+
+  @override
+  String get broadcastRoundNumber => 'ラウンド';
+
+  @override
+  String get broadcastTournamentName => '大会名';
+
+  @override
+  String get broadcastTournamentDescription => '大会の短い説明';
+
+  @override
+  String get broadcastFullDescription => '長い説明';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return '内容の詳しい説明（オプション）。$param1 が利用できます。長さは [欧文換算で] $param2 字まで。';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN のソース URL';
+
+  @override
+  String get broadcastSourceUrlHelp => 'Lichess が PGN を取得するための URL。インターネット上に公表されているもののみ。';
+
+  @override
+  String get broadcastSourceGameIds => 'Lichess ゲーム ID、半角スペースで区切って最大 64 個まで。';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Start date in the tournament local timezone: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'イベント開始時刻（オプション）';
+
+  @override
+  String get broadcastCurrentGameUrl => '現在のゲームの URL';
+
+  @override
+  String get broadcastDownloadAllRounds => '全ラウンドをダウンロード';
+
+  @override
+  String get broadcastResetRound => 'このラウンドをリセット';
+
+  @override
+  String get broadcastDeleteRound => 'このラウンドを削除';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'このラウンドのゲームをすべて削除する。';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'このラウンドのすべてのゲームを削除します。復活させるには情報源がアクティブでなくてはなりません。';
+
+  @override
+  String get broadcastEditRoundStudy => 'ラウンドの研究を編集';
+
+  @override
+  String get broadcastDeleteTournament => 'このトーナメントを削除';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'トーナメント全体（全ラウンド、全ゲーム）を削除する。';
+
+  @override
+  String get broadcastShowScores => 'ゲーム結果に応じてプレイヤーのスコアを表示';
+
+  @override
+  String get broadcastReplacePlayerTags => 'オプション：プレイヤーの名前、レーティング、タイトルの変更';
+
+  @override
+  String get broadcastFideFederations => 'FIDE 加盟協会';
+
+  @override
+  String get broadcastTop10Rating => 'レーティング トップ10';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE 選手';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE 選手が見つかりません';
+
+  @override
+  String get broadcastFideProfile => 'FIDE プロフィール';
+
+  @override
+  String get broadcastFederation => '所属協会';
+
+  @override
+  String get broadcastAgeThisYear => '今年時点の年齢';
+
+  @override
+  String get broadcastUnrated => 'レーティングなし';
+
+  @override
+  String get broadcastRecentTournaments => '最近のトーナメント';
+
+  @override
+  String get broadcastOpenLichess => 'Lichess で開く';
+
+  @override
+  String get broadcastTeams => 'チーム';
+
+  @override
+  String get broadcastBoards => 'ボード';
+
+  @override
+  String get broadcastOverview => '概要';
+
+  @override
+  String get broadcastSubscribeTitle => '登録しておくと各ラウンドの開始時に通知が来ます。アカウント設定でベルやプッシュ通知の切り替えができます。';
+
+  @override
+  String get broadcastUploadImage => 'トーナメントの画像をアップロード';
+
+  @override
+  String get broadcastNoBoardsYet => 'ボードはまだありません。棋譜がアップロードされると表示されます。';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'ボードはソースまたは $param 経由で読み込めます';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return '$param 後に開始';
+  }
+
+  @override
+  String get broadcastStartVerySoon => '中継はまもなく始まります。';
+
+  @override
+  String get broadcastNotYetStarted => '中継はまだ始まっていません。';
+
+  @override
+  String get broadcastOfficialWebsite => '公式サイト';
+
+  @override
+  String get broadcastStandings => '順位';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return '他のオプションは $param にあります';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'ウェブ管理者のページ';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'このラウンドについて公表されたリアルタイムの PGN です。$param も利用でき、高速かつ高効率の同期が行なえます。';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'この中継をウェブサイトに埋め込む';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return '$param をウェブサイトに埋め込む';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'レーティングの差';
+
+  @override
+  String get broadcastGamesThisTournament => 'このトーナメントの対局';
+
+  @override
+  String get broadcastScore => 'スコア';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ブロードキャスト',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -1368,10 +1591,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => '相手の指せる手が、どれを選んでも局面を悪くしてしまう形。';
 
   @override
-  String get puzzleThemeHealthyMix => '混合';
+  String get puzzleThemeMix => '混合';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'いろいろな問題を少しずつ。どんな問題が来るかわからないので油断しないで！　実戦と同じです。';
+  String get puzzleThemeMixDescription => 'いろいろな問題を少しずつ。どんな問題が来るかわからないので油断しないで！　実戦と同じです。';
 
   @override
   String get puzzleThemePlayerGames => 'プレイヤーの対局';
@@ -1776,9 +1999,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get removesTheDepthLimit => '探索手数の制限をなくし最大限の解析を行なう';
 
   @override
-  String get engineManager => '解析エンジンの管理';
-
-  @override
   String get blunder => '大悪手';
 
   @override
@@ -2040,6 +2260,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get gamesPlayed => '対局数';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'キャンセル';
@@ -2750,7 +2973,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get other => 'その他';
 
   @override
-  String get reportDescriptionHelp => '問題のゲームへのリンクを貼って、相手ユーザーの問題点を説明してください。ただ「イカサマだ」と言うのではなく、なぜそう思うか理由を書いてください。英語で書くと対応が早くできます。';
+  String get reportCheatBoostHelp => 'ゲームへのリンクを張って、このユーザーの行動のどこが問題かを説明してください。ただ「チート」と言うのではなく、あなたがなぜそう思ったのか教えてください。';
+
+  @override
+  String get reportUsernameHelp => 'このユーザー名のどこが攻撃的かを説明してください。ただ「攻撃的」「不適切」と言うのではなく、あなたがなぜそう思ったのか教えてください。中でも綴りの変更、英語以外の言語、俗語、歴史・文化的要因に関係した場合は特に説明が必要です。';
+
+  @override
+  String get reportProcessedFasterInEnglish => '英語で書いていただくと通報への対応が早くなります。';
 
   @override
   String get error_provideOneCheatedGameLink => '不正のあった対局 1 局以上へのリンクを添えてください。';
@@ -4056,6 +4285,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nothingToSeeHere => '今は何もありません。';
 
   @override
+  String get stats => '統計';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4658,8 +4890,509 @@ class AppLocalizationsJa extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess 配信者';
 
   @override
+  String get studyPrivate => '非公開';
+
+  @override
+  String get studyMyStudies => '自分の研究';
+
+  @override
+  String get studyStudiesIContributeTo => '参加した研究';
+
+  @override
+  String get studyMyPublicStudies => '自分の公開研究';
+
+  @override
+  String get studyMyPrivateStudies => '自分の非公開研究';
+
+  @override
+  String get studyMyFavoriteStudies => 'お気に入りの研究';
+
+  @override
+  String get studyWhatAreStudies => '研究（study）とは？';
+
+  @override
+  String get studyAllStudies => 'すべての研究';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return '$param による研究';
+  }
+
+  @override
+  String get studyNoneYet => 'まだなし';
+
+  @override
+  String get studyHot => '注目';
+
+  @override
+  String get studyDateAddedNewest => '投稿日（新しい順）';
+
+  @override
+  String get studyDateAddedOldest => '投稿日（古い順）';
+
+  @override
+  String get studyRecentlyUpdated => '更新順';
+
+  @override
+  String get studyMostPopular => '人気順';
+
+  @override
+  String get studyAlphabetical => 'アルファベット順';
+
+  @override
+  String get studyAddNewChapter => '新たな章を追加';
+
+  @override
+  String get studyAddMembers => 'メンバーを追加する';
+
+  @override
+  String get studyInviteToTheStudy => 'この研究に招待する';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => '招待する相手は、あなたが知っていて参加したい人だけにしてください。';
+
+  @override
+  String get studySearchByUsername => 'ユーザー名で検索';
+
+  @override
+  String get studySpectator => '観戦者';
+
+  @override
+  String get studyContributor => '投稿参加者';
+
+  @override
+  String get studyKick => '追放';
+
+  @override
+  String get studyLeaveTheStudy => 'この研究から出る';
+
+  @override
+  String get studyYouAreNowAContributor => '投稿参加者になりました';
+
+  @override
+  String get studyYouAreNowASpectator => '観戦者になりました';
+
+  @override
+  String get studyPgnTags => 'PGN タグ';
+
+  @override
+  String get studyLike => 'いいね';
+
+  @override
+  String get studyUnlike => 'いいね解除';
+
+  @override
+  String get studyNewTag => '新しいタグ';
+
+  @override
+  String get studyCommentThisPosition => 'この局面にコメントする';
+
+  @override
+  String get studyCommentThisMove => 'この手にコメント';
+
+  @override
+  String get studyAnnotateWithGlyphs => '解説記号を入れる';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => '章が短すぎて解析できません。';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'コンピュータ解析を要請できるのは投稿参加者だけです。';
+
+  @override
+  String get studyGetAFullComputerAnalysis => '主手順についてサーバ上でのコンピュータ解析を行なう。';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => '章が完成したか確認してください。解析の要請は 1 回だけです。';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => '同期したメンバーは同じ局面に留まります';
+
+  @override
+  String get studyShareChanges => '変更を観戦者と共有し、サーバに保存する';
+
+  @override
+  String get studyPlaying => 'プレイ中';
+
+  @override
+  String get studyShowEvalBar => '評価値バー';
+
+  @override
+  String get studyFirst => '最初';
+
+  @override
+  String get studyPrevious => '前';
+
+  @override
+  String get studyNext => '次';
+
+  @override
+  String get studyLast => '最後';
+
+  @override
   String get studyShareAndExport => '共有とエクスポート';
 
   @override
+  String get studyCloneStudy => '研究をコピー';
+
+  @override
+  String get studyStudyPgn => '研究の PGN';
+
+  @override
+  String get studyDownloadAllGames => '全局をダウンロード';
+
+  @override
+  String get studyChapterPgn => '章の PGN';
+
+  @override
+  String get studyCopyChapterPgn => 'PGN をコピー';
+
+  @override
+  String get studyDownloadGame => '1 局をダウンロード';
+
+  @override
+  String get studyStudyUrl => '研究の URL';
+
+  @override
+  String get studyCurrentChapterUrl => '現在の章の URL';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'これをフォーラムにペーストすれば埋め込み表示できます';
+
+  @override
+  String get studyStartAtInitialPosition => '開始局面から';
+
+  @override
+  String studyStartAtX(String param) {
+    return '$param に開始';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => '自分のウェブサイト／ブログに埋め込む';
+
+  @override
+  String get studyReadMoreAboutEmbedding => '埋め込み（embedding）の説明';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => '埋め込みできるのは公開研究だけです！';
+
+  @override
+  String get studyOpen => '開く';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1 を $param2 がお届けします';
+  }
+
+  @override
+  String get studyStudyNotFound => '研究が見つかりません';
+
+  @override
+  String get studyEditChapter => '章を編集';
+
+  @override
+  String get studyNewChapter => '新しい章';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return '$param からインポート';
+  }
+
+  @override
+  String get studyOrientation => '盤の上下';
+
+  @override
+  String get studyAnalysisMode => '解析モード';
+
+  @override
+  String get studyPinnedChapterComment => '章の優先表示コメント';
+
+  @override
+  String get studySaveChapter => '章を保存';
+
+  @override
+  String get studyClearAnnotations => '注釈をクリア';
+
+  @override
+  String get studyClearVariations => '手順をクリア';
+
+  @override
+  String get studyDeleteChapter => '章を削除';
+
+  @override
+  String get studyDeleteThisChapter => 'ほんとうに削除しますか？　戻せませんよ！';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'この章のコメントと図形をすべて削除しますか？';
+
+  @override
+  String get studyRightUnderTheBoard => '盤のすぐ下に';
+
+  @override
+  String get studyNoPinnedComment => 'なし';
+
+  @override
+  String get studyNormalAnalysis => '通常解析';
+
+  @override
+  String get studyHideNextMoves => '次の手順をかくす';
+
+  @override
+  String get studyInteractiveLesson => '対話形式のレッスン';
+
+  @override
+  String studyChapterX(String param) {
+    return '章 $param';
+  }
+
+  @override
+  String get studyEmpty => '空白';
+
+  @override
+  String get studyStartFromInitialPosition => '開始局面から';
+
+  @override
+  String get studyEditor => 'エディタ';
+
+  @override
+  String get studyStartFromCustomPosition => '指定した局面から';
+
+  @override
+  String get studyLoadAGameByUrl => '棋譜を URL で読み込み';
+
+  @override
+  String get studyLoadAPositionFromFen => '局面を FEN で読み込み';
+
+  @override
+  String get studyLoadAGameFromPgn => '棋譜を PGN で読み込み';
+
+  @override
+  String get studyAutomatic => '自動';
+
+  @override
+  String get studyUrlOfTheGame => '棋譜の URL';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return '$param1 か $param2 から棋譜を読み込み';
+  }
+
+  @override
+  String get studyCreateChapter => '章を作成';
+
+  @override
+  String get studyCreateStudy => '研究を作成';
+
+  @override
+  String get studyEditStudy => '研究を編集';
+
+  @override
+  String get studyVisibility => '公開範囲';
+
+  @override
+  String get studyPublic => '公開';
+
+  @override
+  String get studyUnlisted => '非公開';
+
+  @override
+  String get studyInviteOnly => '招待のみ';
+
+  @override
+  String get studyAllowCloning => 'コピーの許可';
+
+  @override
+  String get studyNobody => '不許可';
+
+  @override
+  String get studyOnlyMe => '自分のみ';
+
+  @override
+  String get studyContributors => '参加者のみ';
+
+  @override
+  String get studyMembers => 'メンバー';
+
+  @override
+  String get studyEveryone => '全員';
+
+  @override
+  String get studyEnableSync => '同期';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => '同期する＝全員が同じ局面を見る';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => '同期しない＝各人が自由に閲覧';
+
+  @override
+  String get studyPinnedStudyComment => '優先表示コメント';
+
+  @override
   String get studyStart => '開始';
+
+  @override
+  String get studySave => '保存';
+
+  @override
+  String get studyClearChat => 'チャットを消去';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'ほんとうに削除しますか？　戻せませんよ！';
+
+  @override
+  String get studyDeleteStudy => '研究を削除';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return '研究全体を削除しますか？　戻せませんよ！　削除なら研究の名称を入力： $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'どこで研究しますか？';
+
+  @override
+  String get studyGoodMove => '好手';
+
+  @override
+  String get studyMistake => '悪手';
+
+  @override
+  String get studyBrilliantMove => '妙手';
+
+  @override
+  String get studyBlunder => '大悪手';
+
+  @override
+  String get studyInterestingMove => '面白い手';
+
+  @override
+  String get studyDubiousMove => '疑問手';
+
+  @override
+  String get studyOnlyMove => '絶対手';
+
+  @override
+  String get studyZugzwang => 'ツークツワンク';
+
+  @override
+  String get studyEqualPosition => '互角';
+
+  @override
+  String get studyUnclearPosition => '形勢不明';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => '白やや優勢';
+
+  @override
+  String get studyBlackIsSlightlyBetter => '黒やや優勢';
+
+  @override
+  String get studyWhiteIsBetter => '白優勢';
+
+  @override
+  String get studyBlackIsBetter => '黒優勢';
+
+  @override
+  String get studyWhiteIsWinning => '白勝勢';
+
+  @override
+  String get studyBlackIsWinning => '黒勝勢';
+
+  @override
+  String get studyNovelty => '新手';
+
+  @override
+  String get studyDevelopment => '展開';
+
+  @override
+  String get studyInitiative => '主導権';
+
+  @override
+  String get studyAttack => '攻撃';
+
+  @override
+  String get studyCounterplay => '反撃';
+
+  @override
+  String get studyTimeTrouble => '時間切迫';
+
+  @override
+  String get studyWithCompensation => '駒損だが代償あり';
+
+  @override
+  String get studyWithTheIdea => '狙い';
+
+  @override
+  String get studyNextChapter => '次の章';
+
+  @override
+  String get studyPrevChapter => '前の章';
+
+  @override
+  String get studyStudyActions => '研究の操作';
+
+  @override
+  String get studyTopics => 'トピック';
+
+  @override
+  String get studyMyTopics => '自分のトピック';
+
+  @override
+  String get studyPopularTopics => '人気のトピック';
+
+  @override
+  String get studyManageTopics => 'トピックの管理';
+
+  @override
+  String get studyBack => '戻る';
+
+  @override
+  String get studyPlayAgain => 'もう一度プレイ';
+
+  @override
+  String get studyWhatWouldYouPlay => 'この局面、あなたならどう指す？';
+
+  @override
+  String get studyYouCompletedThisLesson => 'おめでとう ！　このレッスンを修了しました。';
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 章',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 局',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count メンバー',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ここに PGN をペースト（$count 局まで）',
+    );
+    return '$_temp0';
+  }
 }
