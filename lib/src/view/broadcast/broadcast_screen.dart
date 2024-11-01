@@ -160,9 +160,9 @@ class _CupertinoScreenState extends State<_CupertinoScreen> {
       navigationBar: CupertinoNavigationBar(
         middle: CupertinoSlidingSegmentedControl<_ViewMode>(
           groupValue: _selectedSegment,
-          children: const {
-            _ViewMode.overview: Text('Overview'),
-            _ViewMode.boards: Text('Boards'),
+          children: {
+            _ViewMode.overview: Text(context.l10n.broadcastOverview),
+            _ViewMode.boards: Text(context.l10n.broadcastBoards),
           },
           onValueChanged: (_ViewMode? view) {
             if (view != null) {
