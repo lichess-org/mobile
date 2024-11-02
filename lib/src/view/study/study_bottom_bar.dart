@@ -36,7 +36,7 @@ class StudyBottomBar extends ConsumerWidget {
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: onGoBack,
-            label: 'Previous',
+            label: context.l10n.studyBack,
             showLabel: true,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
@@ -47,7 +47,7 @@ class StudyBottomBar extends ConsumerWidget {
               ? ref.read(studyControllerProvider(id).notifier).nextChapter
               : null,
           icon: Icons.play_arrow,
-          label: 'Next chapter',
+          label: context.l10n.studyNextChapter,
           showLabel: true,
           blink: !state.isIntroductoryChapter &&
               state.isAtEndOfChapter &&
@@ -59,7 +59,7 @@ class StudyBottomBar extends ConsumerWidget {
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             onTap: onGoForward,
-            label: context.l10n.next,
+            label: context.l10n.studyNext,
             showLabel: true,
             showTooltip: false,
           ),
