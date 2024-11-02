@@ -23,25 +23,24 @@ import 'package:timeago/timeago.dart' as timeago;
 
 final _logger = Logger('StudyListScreen');
 
-// TODO l10n
 String studyCategoryL10n(StudyCategory category, BuildContext context) =>
     switch (category) {
-      StudyCategory.all => 'All',
-      StudyCategory.mine => 'Mine',
-      StudyCategory.member => 'Member',
-      StudyCategory.public => 'Public',
-      StudyCategory.private => 'Private',
-      StudyCategory.likes => 'Liked',
+      StudyCategory.all => context.l10n.studyAllStudies,
+      StudyCategory.mine => context.l10n.studyMyStudies,
+      StudyCategory.member => context.l10n.studyStudiesIContributeTo,
+      StudyCategory.public => context.l10n.studyMyPublicStudies,
+      StudyCategory.private => context.l10n.studyMyPrivateStudies,
+      StudyCategory.likes => context.l10n.studyMyFavoriteStudies,
     };
 
 // TODO l10n
 String studyListOrderL10n(StudyListOrder order, BuildContext context) =>
     switch (order) {
-      StudyListOrder.hot => 'Hot',
-      StudyListOrder.newest => 'Newest',
-      StudyListOrder.oldest => 'Oldest',
-      StudyListOrder.updated => 'Updated',
-      StudyListOrder.popular => 'Popular',
+      StudyListOrder.hot => context.l10n.studyHot,
+      StudyListOrder.newest => context.l10n.studyDateAddedNewest,
+      StudyListOrder.oldest => context.l10n.studyDateAddedOldest,
+      StudyListOrder.updated => context.l10n.studyRecentlyUpdated,
+      StudyListOrder.popular => context.l10n.studyMostPopular,
     };
 
 /// A screen that displays a paginated list of studies
@@ -99,7 +98,7 @@ class _StudyFilterSheet extends ConsumerWidget {
             // If we're not logged in, the only category available is "All"
             if (isLoggedIn) ...[
               Filter<StudyCategory>(
-                // TODO l10n
+                // TODO mobile l10n
                 filterName: 'Category',
                 filterType: FilterType.singleChoice,
                 choices: StudyCategory.values,
@@ -113,7 +112,7 @@ class _StudyFilterSheet extends ConsumerWidget {
               const SizedBox(height: 10.0),
             ],
             Filter<StudyListOrder>(
-              // TODO l10n
+              // TODO mobile l10n
               filterName: 'Sort by',
               filterType: FilterType.singleChoice,
               choices: StudyListOrder.values,
