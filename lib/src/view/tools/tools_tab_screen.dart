@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -175,6 +177,16 @@ class _Body extends ConsumerWidget {
                     )
                 : null,
           ),
+          if (isOnline)
+            _ToolsButton(
+              icon: LichessIcons.study,
+              title: context.l10n.studyMenu,
+              onTap: () => pushPlatformRoute(
+                context,
+                builder: (context) => const StudyListScreen(),
+                rootNavigator: true,
+              ),
+            ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
