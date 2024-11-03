@@ -23,26 +23,6 @@ import 'package:timeago/timeago.dart' as timeago;
 
 final _logger = Logger('StudyListScreen');
 
-String studyCategoryL10n(StudyCategory category, BuildContext context) =>
-    switch (category) {
-      StudyCategory.all => context.l10n.studyAllStudies,
-      StudyCategory.mine => context.l10n.studyMyStudies,
-      StudyCategory.member => context.l10n.studyStudiesIContributeTo,
-      StudyCategory.public => context.l10n.studyMyPublicStudies,
-      StudyCategory.private => context.l10n.studyMyPrivateStudies,
-      StudyCategory.likes => context.l10n.studyMyFavoriteStudies,
-    };
-
-// TODO l10n
-String studyListOrderL10n(StudyListOrder order, BuildContext context) =>
-    switch (order) {
-      StudyListOrder.hot => context.l10n.studyHot,
-      StudyListOrder.newest => context.l10n.studyDateAddedNewest,
-      StudyListOrder.oldest => context.l10n.studyDateAddedOldest,
-      StudyListOrder.updated => context.l10n.studyRecentlyUpdated,
-      StudyListOrder.popular => context.l10n.studyMostPopular,
-    };
-
 /// A screen that displays a paginated list of studies
 class StudyListScreen extends ConsumerWidget {
   const StudyListScreen({super.key});
@@ -52,10 +32,8 @@ class StudyListScreen extends ConsumerWidget {
     final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
 
     final filter = ref.watch(studyFilterProvider);
-    final categorySection =
-        isLoggedIn ? ' • ${studyCategoryL10n(filter.category, context)}' : '';
     final title = Text(
-      '${context.l10n.studyMenu}$categorySection • ${studyListOrderL10n(filter.order, context)}',
+      isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu,
     );
 
     return PlatformScaffold(
@@ -103,8 +81,7 @@ class _StudyFilterSheet extends ConsumerWidget {
                 filterType: FilterType.singleChoice,
                 choices: StudyCategory.values,
                 choiceSelected: (choice) => filter.category == choice,
-                choiceLabel: (category) =>
-                    Text(studyCategoryL10n(category, context)),
+                choiceLabel: (category) => Text(category.l10n(context.l10n)),
                 onSelected: (value, selected) =>
                     ref.read(studyFilterProvider.notifier).setCategory(value),
               ),
@@ -117,7 +94,7 @@ class _StudyFilterSheet extends ConsumerWidget {
               filterType: FilterType.singleChoice,
               choices: StudyListOrder.values,
               choiceSelected: (choice) => filter.order == choice,
-              choiceLabel: (order) => Text(studyListOrderL10n(order, context)),
+              choiceLabel: (order) => Text(order.l10n(context.l10n)),
               onSelected: (value, selected) =>
                   ref.read(studyFilterProvider.notifier).setOrder(value),
             ),
