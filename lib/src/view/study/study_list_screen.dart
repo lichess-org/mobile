@@ -42,9 +42,12 @@ class StudyListScreen extends ConsumerWidget {
         actions: [
           AppBarIconButton(
             icon: const Icon(Icons.tune),
+            // TODO: translate
             semanticsLabel: 'Filter studies',
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
               builder: (_) => _StudyFilterSheet(
                 isLoggedIn: isLoggedIn,
               ),
@@ -66,41 +69,33 @@ class _StudyFilterSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(studyFilterProvider);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12.0),
-            // If we're not logged in, the only category available is "All"
-            if (isLoggedIn) ...[
-              Filter<StudyCategory>(
-                // TODO mobile l10n
-                filterName: 'Category',
-                filterType: FilterType.singleChoice,
-                choices: StudyCategory.values,
-                choiceSelected: (choice) => filter.category == choice,
-                choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                onSelected: (value, selected) =>
-                    ref.read(studyFilterProvider.notifier).setCategory(value),
-              ),
-              const PlatformDivider(thickness: 1, indent: 0),
-              const SizedBox(height: 10.0),
-            ],
-            Filter<StudyListOrder>(
-              // TODO mobile l10n
-              filterName: 'Sort by',
-              filterType: FilterType.singleChoice,
-              choices: StudyListOrder.values,
-              choiceSelected: (choice) => filter.order == choice,
-              choiceLabel: (order) => Text(order.l10n(context.l10n)),
-              onSelected: (value, selected) =>
-                  ref.read(studyFilterProvider.notifier).setOrder(value),
-            ),
-          ],
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        // If we're not logged in, the only category available is "All"
+        if (isLoggedIn) ...[
+          Filter<StudyCategory>(
+            filterType: FilterType.singleChoice,
+            choices: StudyCategory.values,
+            choiceSelected: (choice) => filter.category == choice,
+            choiceLabel: (category) => Text(category.l10n(context.l10n)),
+            onSelected: (value, selected) =>
+                ref.read(studyFilterProvider.notifier).setCategory(value),
+          ),
+          const PlatformDivider(thickness: 1, indent: 0),
+          const SizedBox(height: 10.0),
+        ],
+        Filter<StudyListOrder>(
+          // TODO mobile l10n
+          filterName: 'Sort by',
+          filterType: FilterType.singleChoice,
+          choices: StudyListOrder.values,
+          choiceSelected: (choice) => filter.order == choice,
+          choiceLabel: (order) => Text(order.l10n(context.l10n)),
+          onSelected: (value, selected) =>
+              ref.read(studyFilterProvider.notifier).setOrder(value),
         ),
-      ),
+      ],
     );
   }
 }

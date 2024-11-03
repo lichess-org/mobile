@@ -11,7 +11,7 @@ enum FilterType {
 /// Displays a row of choices that can be selected or deselected.
 class Filter<T extends Enum> extends StatelessWidget {
   const Filter({
-    required this.filterName,
+    this.filterName,
     required this.filterType,
     required this.choices,
     this.showCheckmark = true,
@@ -21,7 +21,7 @@ class Filter<T extends Enum> extends StatelessWidget {
   });
 
   /// Will be displayed above the choices as a title.
-  final String filterName;
+  final String? filterName;
 
   /// Controls how choices in a [Filter] are displayed.
   final FilterType filterType;
@@ -46,8 +46,10 @@ class Filter<T extends Enum> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(filterName, style: const TextStyle(fontSize: 18)),
-        const SizedBox(height: 10),
+        if (filterName != null) ...[
+          Text(filterName!, style: const TextStyle(fontSize: 18)),
+          const SizedBox(height: 10),
+        ],
         SizedBox(
           width: double.infinity,
           child: Wrap(
