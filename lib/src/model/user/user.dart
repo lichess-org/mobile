@@ -85,7 +85,6 @@ class User with _$User {
     bool? followable,
     bool? following,
     bool? blocking,
-    bool? followsYou,
     bool? canChallenge,
   }) = _User;
 
@@ -128,7 +127,6 @@ class User with _$User {
       followable: pick('followable').asBoolOrNull(),
       following: pick('following').asBoolOrNull(),
       blocking: pick('blocking').asBoolOrNull(),
-      followsYou: pick('followsYou').asBoolOrNull(),
       canChallenge: pick('canChallenge').asBoolOrNull(),
     );
   }
