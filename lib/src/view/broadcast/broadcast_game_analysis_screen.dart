@@ -21,12 +21,12 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class BroadcastAnalysisScreen extends ConsumerWidget {
+class BroadcastGameAnalysisScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String title;
 
-  const BroadcastAnalysisScreen({
+  const BroadcastGameAnalysisScreen({
     required this.roundId,
     required this.gameId,
     required this.title,
