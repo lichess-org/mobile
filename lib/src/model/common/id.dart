@@ -167,7 +167,7 @@ extension IDPick on Pick {
       return BroadcastTournamentId(value);
     }
     throw PickException(
-      "value $value at $debugParsingExit can't be casted to BroadcastRoundId",
+      "value $value at $debugParsingExit can't be casted to BroadcastTournamentId",
     );
   }
 
@@ -205,7 +205,7 @@ extension IDPick on Pick {
       return BroadcastGameId(value);
     }
     throw PickException(
-      "value $value at $debugParsingExit can't be casted to BroadcastRoundId",
+      "value $value at $debugParsingExit can't be casted to BroadcastGameId",
     );
   }
 
