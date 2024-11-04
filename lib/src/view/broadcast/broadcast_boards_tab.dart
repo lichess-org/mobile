@@ -259,11 +259,11 @@ class _PlayerWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 5),
-              if (gameStatus != null && gameStatus != '*')
+              if (game.isOver)
                 Text(
-                  (gameStatus == '½-½')
+                  (gameStatus == BroadcastResult.draw)
                       ? '½'
-                      : (gameStatus == '1-0')
+                      : (gameStatus == BroadcastResult.whiteWins)
                           ? side == Side.white
                               ? '1'
                               : '0'

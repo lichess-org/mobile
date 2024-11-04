@@ -12,6 +12,8 @@ typedef BroadcastsList = ({
   int? nextPage,
 });
 
+enum BroadcastResult { whiteWins, blackWins, draw, ongoing, noResultPgnTag }
+
 @freezed
 class Broadcast with _$Broadcast {
   const Broadcast._();
@@ -93,13 +95,17 @@ class BroadcastGame with _$BroadcastGame {
     required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
-    required String? status,
+    required BroadcastResult status,
 
     /// The amount of time that the player whose turn it is has been thinking since his last move
     required Duration thinkTime,
   }) = _BroadcastGame;
 
-  bool get isPlaying => status == '*';
+  bool get isPlaying => status == BroadcastResult.ongoing;
+  bool get isOver =>
+      status == BroadcastResult.draw ||
+      status == BroadcastResult.whiteWins ||
+      status == BroadcastResult.blackWins;
   Side get playingSide => Setup.parseFen(fen).turn;
   Duration? get timeLeft {
     final clock = players[playingSide]!.clock;

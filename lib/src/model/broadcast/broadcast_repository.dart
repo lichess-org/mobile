@@ -150,23 +150,37 @@ BroadcastRoundGames _gamesFromPick(
 
 MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
   RequiredPick pick,
-) =>
-    MapEntry(
-      pick('id').asBroadcastGameIdOrThrow(),
-      BroadcastGame(
-        id: pick('id').asBroadcastGameIdOrThrow(),
-        players: IMap({
-          Side.white: _playerFromPick(pick('players', 0).required()),
-          Side.black: _playerFromPick(pick('players', 1).required()),
-        }),
-        fen: pick('fen').asStringOrNull() ??
-            Variant.standard.initialPosition.fen,
-        lastMove: pick('lastMove').asUciMoveOrNull(),
-        status: pick('status').asStringOrNull(),
-        thinkTime:
-            pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero,
-      ),
-    );
+) {
+  final stringStatus = pick('status').asStringOrNull();
+
+  final status = (stringStatus == null)
+      ? BroadcastResult.noResultPgnTag
+      : switch (stringStatus) {
+          '½-½' => BroadcastResult.draw,
+          '1-0' => BroadcastResult.whiteWins,
+          '0-1' => BroadcastResult.blackWins,
+          '*' => BroadcastResult.ongoing,
+          _ => throw FormatException(
+              "value $stringStatus can't be interpreted as a broadcast result",
+            )
+        };
+
+  return MapEntry(
+    pick('id').asBroadcastGameIdOrThrow(),
+    BroadcastGame(
+      id: pick('id').asBroadcastGameIdOrThrow(),
+      players: IMap({
+        Side.white: _playerFromPick(pick('players', 0).required()),
+        Side.black: _playerFromPick(pick('players', 1).required()),
+      }),
+      fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
+      lastMove: pick('lastMove').asUciMoveOrNull(),
+      status: status,
+      thinkTime:
+          pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero,
+    ),
+  );
+}
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(

@@ -240,7 +240,7 @@ class _PlayerWidget extends StatelessWidget {
       width: width,
       child: Row(
         children: [
-          if (gameStatus != null && gameStatus != '*')
+          if (game.isOver)
             Card(
               margin: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
@@ -259,9 +259,9 @@ class _PlayerWidget extends StatelessWidget {
                   vertical: 4.0,
                 ),
                 child: Text(
-                  (gameStatus == '½-½')
+                  (gameStatus == BroadcastResult.draw)
                       ? '½'
-                      : (gameStatus == '1-0')
+                      : (gameStatus == BroadcastResult.whiteWins)
                           ? side == Side.white
                               ? '1'
                               : '0'
@@ -279,17 +279,13 @@ class _PlayerWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.top &&
-                            (gameStatus == null || gameStatus == '*')
-                        ? 8
-                        : 0,
+                    boardSide == _PlayerWidgetSide.top && !game.isOver ? 8 : 0,
                   ),
                   topRight: Radius.circular(
                     boardSide == _PlayerWidgetSide.top && clock == null ? 8 : 0,
                   ),
                   bottomLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.bottom &&
-                            (gameStatus == null || gameStatus == '*')
+                    boardSide == _PlayerWidgetSide.bottom && !game.isOver
                         ? 8
                         : 0,
                   ),
