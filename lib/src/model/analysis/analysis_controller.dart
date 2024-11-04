@@ -821,7 +821,7 @@ class AnalysisState with _$AnalysisState {
       );
 
   static AnalysisOptions get broadcastOptions => const AnalysisOptions(
-        id: standaloneAnalysisId,
+        id: standaloneBroadcastId,
         isLocalEvaluationAllowed: true,
         orientation: Side.white,
         variant: Variant.standard,
