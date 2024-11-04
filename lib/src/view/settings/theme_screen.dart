@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -46,7 +45,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    const horizontalPadding = 52.0;
+    const horizontalPadding = 16.0;
 
     return SafeArea(
       child: ListView(
@@ -54,7 +53,7 @@ class _Body extends ConsumerWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final double boardSize = math.min(
-                290,
+                400,
                 constraints.biggest.shortestSide - horizontalPadding * 2,
               );
               return Padding(
@@ -80,14 +79,12 @@ class _Body extends ConsumerWidget {
                         dest: Square.fromName('c6'),
                       ),
                     }.lock,
-                    settings: ChessboardSettings(
-                      enableCoordinates: false,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(4.0)),
-                      boxShadow: boardShadows,
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
-                    ),
+                    settings: boardPrefs.toBoardSettings().copyWith(
+                          enableCoordinates: true,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(4.0)),
+                          boxShadow: boardShadows,
+                        ),
                   ),
                 ),
               );
@@ -152,6 +149,15 @@ class _Body extends ConsumerWidget {
                           .setShapeColor(value ?? ShapeColor.green);
                     },
                   );
+                },
+              ),
+              SwitchSettingTile(
+                // TODO translate
+                leading: const Icon(Icons.border_outer),
+                title: const Text('Show border'),
+                value: boardPrefs.showBorder,
+                onChanged: (value) {
+                  ref.read(boardPreferencesProvider.notifier).toggleBorder();
                 },
               ),
             ],
