@@ -609,7 +609,6 @@ class GameController extends _$GameController {
               // server will send the lag only if it's more than 10ms
               ? data.clock?.lag ?? const Duration(milliseconds: 10)
               : Duration.zero;
-          print('Delay lag comp: $lagCompensation');
 
           if (newState.game.clock != null) {
             newState = newState.copyWith.game.clock!(
