@@ -43,6 +43,8 @@ class BoardPreferences extends _$BoardPreferences
     return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
 
+
+
   Future<void> toggleImmersiveModeWhilePlaying() {
     return save(
       state.copyWith(
@@ -81,6 +83,10 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
+  Future<void> toggleSwitchClockPosition() {
+    return save(state.copyWith(switchClockPosition: !state.switchClockPosition));
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(
       state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
@@ -106,6 +112,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    required bool switchClockPosition,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -132,6 +139,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    switchClockPosition: false,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,

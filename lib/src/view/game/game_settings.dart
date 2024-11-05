@@ -121,6 +121,18 @@ class GameSettings extends ConsumerWidget {
           },
         ),
         SwitchSettingTile(
+          //TODO Add i10n
+          title: Text(
+            'Switch clock position',
+          ),
+          value: boardPrefs.switchClockPosition,
+          onChanged: (value) {
+            ref
+                .read(boardPreferencesProvider.notifier)
+                .toggleSwitchClockPosition();
+          },
+        ),
+        SwitchSettingTile(
           title: Text(
             context.l10n.toggleTheChat,
           ),

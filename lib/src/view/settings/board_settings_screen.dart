@@ -195,6 +195,16 @@ class _Body extends ConsumerWidget {
                       .toggleShowMaterialDifference();
                 },
               ),
+              SwitchSettingTile(
+                //TODO Add i10n
+                title: const Text('Switch clock position'),
+                value: boardPrefs.switchClockPosition,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleSwitchClockPosition();
+                },
+              ),
             ],
           ),
         ],

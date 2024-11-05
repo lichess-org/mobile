@@ -30,6 +30,7 @@ class GamePlayer extends StatelessWidget {
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
     this.zenMode = false,
+    this.alternateClockPosition = false,
     super.key,
   });
 
@@ -43,6 +44,7 @@ class GamePlayer extends StatelessWidget {
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
   final bool zenMode;
+  final bool alternateClockPosition;
 
   /// Time left for the player to move at the start of the game.
   final Duration? timeToMove;
@@ -172,6 +174,7 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (clock != null && alternateClockPosition) Flexible(flex: 3, child: clock!),
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
             flex: 7,
@@ -207,7 +210,7 @@ class GamePlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-        if (clock != null) Flexible(flex: 3, child: clock!),
+        if (clock != null && !alternateClockPosition) Flexible(flex: 3, child: clock!),
       ],
     );
   }
