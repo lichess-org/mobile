@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,8 +34,8 @@ class BroadcastGameController extends _$BroadcastGameController {
       _subscription?.cancel();
     });
 
-    final pgn = await ref.watch(
-      broadcastGameProvider(roundId: roundId, gameId: gameId).future,
+    final pgn = await ref.withClient(
+      (client) => BroadcastRepository(client).getGame(roundId, gameId),
     );
     return pgn;
   }

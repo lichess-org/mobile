@@ -53,24 +53,3 @@ Future<BroadcastTournament> broadcastTournament(
         BroadcastRepository(client).getTournament(broadcastTournamentId),
   );
 }
-
-@riverpod
-Future<BroadcastRoundGames> broadcastRound(
-  Ref ref,
-  BroadcastRoundId broadcastRoundId,
-) {
-  return ref.withClient(
-    (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-  );
-}
-
-@riverpod
-Future<String> broadcastGame(
-  Ref ref, {
-  required BroadcastRoundId roundId,
-  required BroadcastGameId gameId,
-}) {
-  return ref.withClient(
-    (client) => BroadcastRepository(client).getGame(roundId, gameId),
-  );
-}
