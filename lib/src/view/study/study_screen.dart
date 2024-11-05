@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -23,10 +23,10 @@ import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('StudyScreen');
@@ -96,55 +96,72 @@ class _ChapterButton extends ConsumerWidget {
     return state == null
         ? const SizedBox.shrink()
         : AppBarIconButton(
-            onPressed: () => showAdaptiveDialog<void>(
-              context: context,
+            onPressed: () => pushPlatformRoute(
+              context,
               builder: (context) {
-                return SimpleDialog(
-                  title: const Text('Chapters'),
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          final chapter = state.study.chapters[index];
-                          final selected =
-                              chapter.id == state.currentChapter.id;
-                          final checkedIcon = Theme.of(context).platform ==
-                                  TargetPlatform.android
-                              ? const Icon(Icons.check)
-                              : Icon(
-                                  CupertinoIcons.check_mark_circled_solid,
-                                  color:
-                                      CupertinoTheme.of(context).primaryColor,
-                                );
-                          return PlatformListTile(
-                            selected: selected,
-                            trailing: selected ? checkedIcon : null,
-                            title: Text(chapter.name),
-                            onTap: () {
-                              ref
-                                  .read(studyControllerProvider(id).notifier)
-                                  .goToChapter(
-                                    chapter.id,
-                                  );
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        },
-                        separatorBuilder: (_, __) => const PlatformDivider(
-                          height: 1,
-                        ),
-                        itemCount: state.study.chapters.length,
-                      ),
-                    ),
-                  ],
-                );
+                return _StudyChaptersScreen(id: id);
               },
             ),
             semanticsLabel: 'Chapters',
             icon: const Icon(Icons.menu_book),
           );
+  }
+}
+
+class _StudyChaptersScreen extends ConsumerWidget {
+  const _StudyChaptersScreen({
+    required this.id,
+  });
+
+  final StudyId id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(studyControllerProvider(id)).requireValue;
+
+    final currentChapterKey = GlobalKey();
+
+    // Scroll to the current chapter
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentChapterKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentChapterKey.currentContext!,
+          alignment: 0.5,
+        );
+      }
+    });
+
+    return PlatformScaffold(
+      appBar: const PlatformAppBar(
+        // TODO mobile l10n
+        title: Text('Chapters'),
+      ),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              notchedTile: true,
+              choices: state.study.chapters.unlock,
+              selectedItem: state.study.chapters.firstWhere(
+                (chapter) => chapter.id == state.currentChapter.id,
+              ),
+              titleBuilder: (chapter) => Text(
+                chapter.name,
+                key: chapter.id == state.study.chapter.id
+                    ? currentChapterKey
+                    : null,
+              ),
+              onSelectedItemChanged: (chapter) {
+                ref.read(studyControllerProvider(id).notifier).goToChapter(
+                      chapter.id,
+                    );
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
