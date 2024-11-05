@@ -283,7 +283,6 @@ class AnalysisController extends _$AnalysisController
   @override
   void collapseVariations(UciPath path) {
     final node = _root.nodeAt(path);
-
     for (final child in node.children) {
       child.isHidden = true;
     }
