@@ -122,7 +122,7 @@ class GameSettings extends ConsumerWidget {
         ),
         SwitchSettingTile(
           //TODO Add i10n
-          title: Text(
+          title: const Text(
             'Switch clock position',
           ),
           value: boardPrefs.switchClockPosition,
