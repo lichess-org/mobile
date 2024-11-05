@@ -349,6 +349,46 @@ void main() {
         expect(find.byIcon(Icons.add_box), findsOneWidget);
         expect(find.byIcon(Icons.indeterminate_check_box), findsOneWidget);
       });
+      testWidgets(
+          'Expanding one line does not expand the following one (regression test)',
+          (tester) async {
+        /// Will be rendered as:
+        /// -------------------
+        /// 1. e4 e5
+        /// |- 1... d5 2. Nf3 (2.Nc3)
+        /// 2. Nf3
+        /// |- 2. a4 d5 (2... f5)
+        /// -------------------
+        await buildTree(
+          tester,
+          '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))',
+        );
+
+        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(2));
+        expect(find.byIcon(Icons.add_box), findsNothing);
+
+        // Collapse both lines
+        await tester.tap(find.byIcon(Icons.indeterminate_check_box).first);
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.indeterminate_check_box).first);
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle();
+
+        // In this state, there used to be a bug where expanding the first line would
+        // also expand the second line.
+        expect(find.byIcon(Icons.add_box), findsNWidgets(2));
+        await tester.tap(find.byIcon(Icons.add_box).first);
+
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle();
+
+        expect(find.byIcon(Icons.add_box), findsOneWidget);
+        expect(find.byIcon(Icons.indeterminate_check_box), findsOneWidget);
+
+        // Second sideline should still be collapsed
+        expect(find.text('2. a4'), findsNothing);
+      });
 
       testWidgets('subtrees not part of the current mainline part are cached',
           (tester) async {
