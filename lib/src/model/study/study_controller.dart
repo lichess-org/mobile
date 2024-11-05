@@ -248,7 +248,11 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     if (!state.hasValue) return;
 
     final node = _root.nodeAt(path);
-    for (final child in node.children) {
+
+    final childrenToShow =
+        _root.isOnMainline(path) ? node.children.skip(1) : node.children;
+
+    for (final child in childrenToShow) {
       child.isHidden = false;
       for (final grandChild in child.children) {
         grandChild.isHidden = false;
