@@ -174,7 +174,8 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (clock != null && alternateClockPosition) Flexible(flex: 3, child: clock!),
+        if (clock != null && alternateClockPosition)
+          Flexible(flex: 3, child: clock!),
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
             flex: 7,
@@ -210,7 +211,8 @@ class GamePlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-        if (clock != null && !alternateClockPosition) Flexible(flex: 3, child: clock!),
+        if (clock != null && !alternateClockPosition)
+          Flexible(flex: 3, child: clock!),
       ],
     );
   }

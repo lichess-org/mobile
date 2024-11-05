@@ -43,8 +43,6 @@ class BoardPreferences extends _$BoardPreferences
     return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
 
-
-
   Future<void> toggleImmersiveModeWhilePlaying() {
     return save(
       state.copyWith(
@@ -84,7 +82,8 @@ class BoardPreferences extends _$BoardPreferences
   }
 
   Future<void> toggleSwitchClockPosition() {
-    return save(state.copyWith(switchClockPosition: !state.switchClockPosition));
+    return save(
+        state.copyWith(switchClockPosition: !state.switchClockPosition));
   }
 
   Future<void> toggleEnableShapeDrawings() {
