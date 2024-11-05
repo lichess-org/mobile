@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
+import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -22,7 +23,7 @@ class StudyRepository {
 
   final Client client;
 
-  Future<IList<StudyPageData>> getStudies({
+  Future<StudyList> getStudies({
     required StudyCategory category,
     required StudyListOrder order,
     int page = 1,
@@ -33,7 +34,7 @@ class StudyRepository {
     );
   }
 
-  Future<IList<StudyPageData>> searchStudies({
+  Future<StudyList> searchStudies({
     required String query,
     int page = 1,
   }) {
@@ -43,7 +44,7 @@ class StudyRepository {
     );
   }
 
-  Future<IList<StudyPageData>> _requestStudies({
+  Future<StudyList> _requestStudies({
     required String path,
     required Map<String, String> queryParameters,
   }) {
@@ -57,11 +58,14 @@ class StudyRepository {
         final paginator =
             pick(json, 'paginator').asMapOrThrow<String, dynamic>();
 
-        return pick(paginator, 'currentPageResults')
-            .asListOrThrow(
-              (pick) => StudyPageData.fromJson(pick.asMapOrThrow()),
-            )
-            .toIList();
+        return (
+          studies: pick(paginator, 'currentPageResults')
+              .asListOrThrow(
+                (pick) => StudyPageData.fromJson(pick.asMapOrThrow()),
+              )
+              .toIList(),
+          nextPage: pick(paginator, 'nextPage').asIntOrNull()
+        );
       },
     );
   }

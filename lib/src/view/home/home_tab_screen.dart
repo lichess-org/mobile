@@ -733,7 +733,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.6,
+      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
       child: BoardCarouselItem(
         fen: game.fen,
         orientation: game.orientation,
