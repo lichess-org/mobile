@@ -40,7 +40,12 @@ class MoveEvent with _$MoveEvent {
     bool? blackOfferingDraw,
     GameStatus? status,
     Side? winner,
-    ({Duration white, Duration black, Duration? lag})? clock,
+    ({
+      Duration white,
+      Duration black,
+      Duration? lag,
+      DateTime at,
+    })? clock,
   }) = _MoveEvent;
 
   factory MoveEvent.fromJson(Map<String, dynamic> json) =>
@@ -78,6 +83,7 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     blackOfferingDraw: pick('bDraw').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
+        at: DateTime.now(),
         white: it('white').asDurationFromSecondsOrThrow(),
         black: it('black').asDurationFromSecondsOrThrow(),
         lag: it('lag')

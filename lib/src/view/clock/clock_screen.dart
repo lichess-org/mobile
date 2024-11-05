@@ -133,7 +133,7 @@ class ClockTile extends ConsumerWidget {
                           key: Key('${clockState.id}-$playerType'),
                           padLeft: true,
                           clockStyle: clockStyle,
-                          duration: clockState.getDuration(playerType),
+                          timeLeft: clockState.getDuration(playerType),
                           active: clockState.isActivePlayer(playerType),
                           onFlag: () {
                             ref

@@ -171,6 +171,23 @@ class PlayableGame
   }
 }
 
+@freezed
+class PlayableClockData with _$PlayableClockData {
+  const factory PlayableClockData({
+    required bool running,
+    required Duration white,
+    required Duration black,
+
+    /// The network lag of the clock.
+    ///
+    /// Will be sent along with move events.
+    Duration? lag,
+
+    /// The time when the clock event was received.
+    required DateTime at,
+  }) = _PlayableClockData;
+}
+
 PlayableGame _playableGameFromPick(RequiredPick pick) {
   final requiredGamePick = pick('game').required();
   final meta = _playableGameMetaFromPick(pick);
@@ -296,6 +313,7 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    at: DateTime.now(),
   );
 }
 

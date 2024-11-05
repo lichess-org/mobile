@@ -260,7 +260,7 @@ class _BoardBody extends ConsumerWidget {
           player: gameData.black,
           clock: blackClock != null
               ? CountdownClock(
-                  duration: blackClock,
+                  timeLeft: blackClock,
                   active: false,
                 )
               : null,
@@ -271,7 +271,7 @@ class _BoardBody extends ConsumerWidget {
           player: gameData.white,
           clock: whiteClock != null
               ? CountdownClock(
-                  duration: whiteClock,
+                  timeLeft: whiteClock,
                   active: false,
                 )
               : null,

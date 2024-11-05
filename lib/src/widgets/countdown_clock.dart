@@ -7,12 +7,14 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
-/// A simple countdown clock.
+/// A countdown clock.
 ///
 /// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
   const CountdownClock({
-    required this.duration,
+    required this.timeLeft,
+    this.delay,
+    this.clockEventTime,
     required this.active,
     this.emergencyThreshold,
     this.emergencySoundEnabled = true,
@@ -24,7 +26,18 @@ class CountdownClock extends ConsumerStatefulWidget {
   });
 
   /// The duration left on the clock.
-  final Duration duration;
+  final Duration timeLeft;
+
+  /// The delay before the clock starts counting down.
+  ///
+  /// This can be used to implement lag compensation.
+  final Duration? delay;
+
+  /// The time the time left was received at.
+  ///
+  /// Use this parameter to synchronize the clock with the time at which the clock
+  /// event was received from the server.
+  final DateTime? clockEventTime;
 
   /// If [timeLeft] is less than [emergencyThreshold], the clock will change
   /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
@@ -57,6 +70,7 @@ const _period = Duration(milliseconds: 100);
 const _emergencyDelay = Duration(seconds: 20);
 
 class _CountdownClockState extends ConsumerState<CountdownClock> {
+  Timer? _delayTimer;
   Timer? _timer;
   Duration timeLeft = Duration.zero;
   bool _shouldPlayEmergencyFeedback = true;
@@ -65,6 +79,29 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   final _stopwatch = Stopwatch();
 
   void startClock() {
+    final now = DateTime.now();
+    final delay = widget.delay ?? Duration.zero;
+    final clockEventTime = widget.clockEventTime ?? now;
+    // UI lag diff: the elapsed time between the time we received the clock event
+    // and the time the clock is actually started
+    final uiLag = now.difference(clockEventTime);
+    // The clock should have started at `clockEventTime`, but it started at `now`.
+    // so we need to adjust the delay.
+    final realDelay = delay - uiLag;
+
+    if (realDelay > Duration.zero) {
+      _delayTimer?.cancel();
+      _delayTimer = Timer(realDelay, _doStartClock);
+    } else if (realDelay < Duration.zero) {
+      // real delay is negative, so we need to adjust the timeLeft.
+      timeLeft = timeLeft + realDelay;
+      _doStartClock();
+    } else {
+      _doStartClock();
+    }
+  }
+
+  void _doStartClock() {
     _timer?.cancel();
     _stopwatch.reset();
     _stopwatch.start();
@@ -116,7 +153,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   @override
   void initState() {
     super.initState();
-    timeLeft = widget.duration;
+    timeLeft = widget.timeLeft;
     if (widget.active) {
       startClock();
     }
@@ -125,8 +162,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   @override
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
-    if (widget.duration != oldClock.duration) {
-      timeLeft = widget.duration;
+    if (widget.timeLeft != oldClock.timeLeft) {
+      timeLeft = widget.timeLeft;
     }
 
     if (widget.active != oldClock.active) {

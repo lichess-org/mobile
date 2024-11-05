@@ -602,14 +602,21 @@ class GameController extends _$GameController {
           }
         }
 
-        // TODO handle delay
         if (data.clock != null) {
           _lastMoveTime = DateTime.now();
+
+          final lagCompensation = newState.game.playable
+              // server will send the lag only if it's more than 10ms
+              ? data.clock?.lag ?? const Duration(milliseconds: 10)
+              : Duration.zero;
+          print('Delay lag comp: $lagCompensation');
 
           if (newState.game.clock != null) {
             newState = newState.copyWith.game.clock!(
               white: data.clock!.white,
               black: data.clock!.black,
+              lag: lagCompensation,
+              at: data.clock!.at,
             );
           } else if (newState.game.correspondenceClock != null) {
             newState = newState.copyWith.game.correspondenceClock!(

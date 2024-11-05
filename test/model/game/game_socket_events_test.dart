@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 void main() {
   test('decode game full event from websocket json', () {
@@ -16,10 +17,11 @@ void main() {
     expect(game.id, const GameId('nV3DaALy'));
     expect(
       game.clock,
-      const PlayableClockData(
+      PlayableClockData(
         running: true,
-        white: Duration(seconds: 149, milliseconds: 50),
-        black: Duration(seconds: 775, milliseconds: 940),
+        white: const Duration(seconds: 149, milliseconds: 50),
+        black: const Duration(seconds: 775, milliseconds: 940),
+        at: DateTime.now(),
       ),
     );
     expect(
