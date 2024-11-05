@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
@@ -70,55 +71,36 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final searchBar = PlatformSearchBar(
+      hintText: context.l10n.searchSearch,
+      controller: _searchController,
+      autoFocus: true,
+    );
+
+    final body = _Body(_term, setSearchText, widget.onUserTap);
+
     return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80, // Custom height to fit the search bar
-        title: SearchBar(
-          leading: const Icon(Icons.search),
-          trailing: [
-            if (_searchController.text.isNotEmpty)
-              IconButton(
-                onPressed: () => _searchController.clear(),
-                tooltip: 'Clear',
-                icon: const Icon(
-                  Icons.close,
-                ),
-              ),
-          ],
-          hintText: context.l10n.searchSearch,
-          controller: _searchController,
-          autoFocus: true,
+      androidBuilder: (context) => Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80, // Custom height to fit the search bar
+          title: searchBar,
         ),
+        body: body,
       ),
-      body: _Body(_term, setSearchText, widget.onUserTap),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        automaticallyImplyLeading: false,
-        middle: SizedBox(
-          height: 36.0,
-          child: CupertinoSearchTextField(
-            placeholder: context.l10n.searchSearch,
-            controller: _searchController,
-            autofocus: true,
+      iosBuilder: (context) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          automaticallyImplyLeading: false,
+          middle: SizedBox(
+            height: 36.0,
+            child: searchBar,
+          ),
+          trailing: NoPaddingTextButton(
+            child: Text(context.l10n.close),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
-        trailing: NoPaddingTextButton(
-          child: Text(context.l10n.close),
-          onPressed: () => Navigator.pop(context),
-        ),
+        child: body,
       ),
-      child: _Body(_term, setSearchText, widget.onUserTap),
     );
   }
 }

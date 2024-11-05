@@ -116,7 +116,9 @@ class GameController extends _$GameController {
         if (game.playable) {
           _appLifecycleListener = AppLifecycleListener(
             onResume: () {
-              if (_socketClient.isConnected) {
+              // socket client should never be disposed here, but in case it is
+              // we can safely skip the resync
+              if (!_socketClient.isDisposed && _socketClient.isConnected) {
                 _resyncGameData();
               }
             },
