@@ -33,6 +33,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Peruuta siirron peruutuspyyntö</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Sokko</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-striimaajat</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Liity peliin</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Poista tallennettu siirto</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Jokin meni vikaan.</string>
