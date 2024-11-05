@@ -83,7 +83,7 @@ class BoardPreferences extends _$BoardPreferences
 
   Future<void> toggleSwitchClockPosition() {
     return save(
-        state.copyWith(switchClockPosition: !state.switchClockPosition),
+      state.copyWith(switchClockPosition: !state.switchClockPosition),
     );
   }
 
