@@ -334,6 +334,11 @@ class GameController extends _$GameController {
     }
   }
 
+  /// Play a sound when the clock is about to run out
+  void onClockEmergency() {
+    ref.read(soundServiceProvider).play(Sound.lowTime);
+  }
+
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {

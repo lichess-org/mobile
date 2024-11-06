@@ -3,22 +3,20 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// A countdown clock.
 ///
 /// The clock starts only when [active] is `true`.
-class CountdownClock extends ConsumerStatefulWidget {
+class CountdownClock extends StatefulWidget {
   const CountdownClock({
     required this.timeLeft,
     this.delay,
     this.clockStartTime,
     required this.active,
     this.emergencyThreshold,
-    this.emergencySoundEnabled = true,
+    this.onEmergency,
     this.onFlag,
     this.onStop,
     this.clockStyle,
@@ -40,13 +38,13 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// event was received from the server and to compensate for UI lag.
   final DateTime? clockStartTime;
 
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will change
-  /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
-  /// If [emergencySoundEnabled] is `true`, the clock will also play a sound.
+  /// The duration at which the clock should change its background color to indicate an emergency.
+  ///
+  /// If [onEmergency] is provided, the clock will call it when the emergency threshold is reached.
   final Duration? emergencyThreshold;
 
-  /// Whether to play an emergency sound when the clock reaches the emergency
-  final bool emergencySoundEnabled;
+  /// Called when the clock reaches the emergency.
+  final VoidCallback? onEmergency;
 
   /// If [active] is `true`, the clock starts counting down.
   final bool active;
@@ -64,13 +62,13 @@ class CountdownClock extends ConsumerStatefulWidget {
   final bool padLeft;
 
   @override
-  ConsumerState<CountdownClock> createState() => _CountdownClockState();
+  State<CountdownClock> createState() => _CountdownClockState();
 }
 
 const _emergencyDelay = Duration(seconds: 20);
 const _showTenthsThreshold = Duration(seconds: 10);
 
-class _CountdownClockState extends ConsumerState<CountdownClock> {
+class _CountdownClockState extends State<CountdownClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
   bool _shouldPlayEmergencyFeedback = true;
@@ -145,9 +143,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         (_nextEmergency == null || _nextEmergency!.isBefore(clock.now()))) {
       _shouldPlayEmergencyFeedback = false;
       _nextEmergency = clock.now().add(_emergencyDelay);
-      if (widget.emergencySoundEnabled) {
-        ref.read(soundServiceProvider).play(Sound.lowTime);
-      }
+      widget.onEmergency?.call();
       HapticFeedback.heavyImpact();
     } else if (widget.emergencyThreshold != null &&
         timeLeft > widget.emergencyThreshold! * 1.5) {
@@ -168,6 +164,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
     final isSameTimeConfig = widget.timeLeft == oldClock.timeLeft;
+
     if (!isSameTimeConfig) {
       timeLeft = widget.timeLeft;
     }

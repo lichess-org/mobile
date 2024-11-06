@@ -157,7 +157,9 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
                       : null,
-                  emergencySoundEnabled: emergencySoundEnabled,
+                  onEmergency: emergencySoundEnabled
+                      ? () => ref.read(ctrlProvider.notifier).onClockEmergency()
+                      : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -199,7 +201,9 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency
                       : null,
-                  emergencySoundEnabled: emergencySoundEnabled,
+                  onEmergency: emergencySoundEnabled
+                      ? () => ref.read(ctrlProvider.notifier).onClockEmergency()
+                      : null,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
