@@ -68,6 +68,8 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     final variant = study.chapter.setup.variant;
     final orientation = study.chapter.setup.orientation;
 
+    // Some studies have illegal starting positions. This is usually the case for introductory chapters.
+    // We do not treat this as an error, but display a static board instead.
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
