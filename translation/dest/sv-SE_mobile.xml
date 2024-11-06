@@ -6,6 +6,7 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Titta</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemets färger</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du följer inte någon användare.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alla spel</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Senaste sökningar</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Rensa</string>
@@ -15,6 +16,7 @@
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Dela detta schackproblem</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Dela parti-URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Dela PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Dela position som FEN</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Visa variationer</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Dölj variationer</string>
   <string name="showComments" comment="Shown in the analysis screen.">Visa kommentarer</string>
