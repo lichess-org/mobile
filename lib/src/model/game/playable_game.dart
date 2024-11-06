@@ -181,7 +181,7 @@ class PlayableClockData with _$PlayableClockData {
     /// The network lag of the clock.
     ///
     /// Will be sent along with move events.
-    Duration? lag,
+    required Duration? lag,
 
     /// The time when the clock event was received.
     required DateTime at,
@@ -313,6 +313,9 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    lag: pick('lag').letOrNull(
+      (it) => Duration(milliseconds: it.asIntOrThrow() * 10),
+    ),
     at: DateTime.now(),
   );
 }
