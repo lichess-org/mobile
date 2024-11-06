@@ -11,6 +11,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
+import '../../utils/navigation.dart';
+import '../../widgets/adaptive_choice_picker.dart';
+import '../settings/board_clock_position_screen.dart';
 import 'game_screen_providers.dart';
 
 class GameSettings extends ConsumerWidget {
@@ -120,16 +123,30 @@ class GameSettings extends ConsumerWidget {
                 .toggleShowMaterialDifference();
           },
         ),
-        SwitchSettingTile(
+        SettingsListTile(
           //TODO Add i10n
-          title: const Text(
-            'Switch clock position',
-          ),
-          value: boardPrefs.switchClockPosition,
-          onChanged: (value) {
-            ref
-                .read(boardPreferencesProvider.notifier)
-                .toggleSwitchClockPosition();
+          settingsLabel: const Text('Clock position'), //TODO: l10n
+          settingsValue: BoardClockPositionScreen.position(
+              context, boardPrefs.clockPosition),
+          onTap: () {
+            if (Theme.of(context).platform == TargetPlatform.android) {
+              showChoicePicker(
+                context,
+                choices: ClockPosition.values,
+                selectedItem: boardPrefs.clockPosition,
+                labelBuilder: (t) =>
+                    Text(BoardClockPositionScreen.position(context, t)),
+                onSelectedItemChanged: (ClockPosition? value) => ref
+                    .read(boardPreferencesProvider.notifier)
+                    .setClockPosition(value ?? ClockPosition.right),
+              );
+            } else {
+              pushPlatformRoute(
+                context,
+                title: 'Clock position',
+                builder: (context) => const BoardClockPositionScreen(),
+              );
+            }
           },
         ),
         SwitchSettingTile(

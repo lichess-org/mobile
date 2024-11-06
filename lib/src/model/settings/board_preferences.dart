@@ -81,9 +81,9 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
-  Future<void> toggleSwitchClockPosition() {
+  Future<void> setClockPosition(ClockPosition clockPosition) {
     return save(
-      state.copyWith(switchClockPosition: !state.switchClockPosition),
+      state.copyWith(clockPosition: clockPosition),
     );
   }
 
@@ -112,7 +112,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
-    required bool switchClockPosition,
+    required ClockPosition clockPosition,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -139,7 +139,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    switchClockPosition: false,
+    clockPosition: ClockPosition.left,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -295,3 +295,5 @@ enum BoardTheme {
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
 }
+
+enum ClockPosition { left, right }

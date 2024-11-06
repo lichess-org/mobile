@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:lichess_mobile/src/view/settings/board_clock_position_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_shift_method_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -195,14 +196,30 @@ class _Body extends ConsumerWidget {
                       .toggleShowMaterialDifference();
                 },
               ),
-              SwitchSettingTile(
+              SettingsListTile(
                 //TODO Add i10n
-                title: const Text('Switch clock position'),
-                value: boardPrefs.switchClockPosition,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleSwitchClockPosition();
+                settingsLabel: const Text('Clock position'),
+                settingsValue: BoardClockPositionScreen.position(
+                    context, boardPrefs.clockPosition),
+                onTap: () {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: ClockPosition.values,
+                      selectedItem: boardPrefs.clockPosition,
+                      labelBuilder: (t) =>
+                          Text(BoardClockPositionScreen.position(context, t)),
+                      onSelectedItemChanged: (ClockPosition? value) => ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setClockPosition(value ?? ClockPosition.right),
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Clock position',
+                      builder: (context) => const BoardClockPositionScreen(),
+                    );
+                  }
                 },
               ),
             ],
