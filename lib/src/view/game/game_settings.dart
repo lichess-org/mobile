@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -125,9 +124,9 @@ class GameSettings extends ConsumerWidget {
         ),
         SettingsListTile(
           //TODO Add i10n
-          settingsLabel: const Text('Clock position'), //TODO: l10n
+          settingsLabel: const Text('Clock position'),
           settingsValue: BoardClockPositionScreen.position(
-              context, boardPrefs.clockPosition),
+              context, boardPrefs.clockPosition,),
           onTap: () {
             if (Theme.of(context).platform == TargetPlatform.android) {
               showChoicePicker(
