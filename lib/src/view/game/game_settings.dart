@@ -126,7 +126,9 @@ class GameSettings extends ConsumerWidget {
           //TODO Add i10n
           settingsLabel: const Text('Clock position'),
           settingsValue: BoardClockPositionScreen.position(
-              context, boardPrefs.clockPosition,),
+            context,
+            boardPrefs.clockPosition,
+          ),
           onTap: () {
             if (Theme.of(context).platform == TargetPlatform.android) {
               showChoicePicker(
