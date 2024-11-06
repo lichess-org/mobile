@@ -33,6 +33,17 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
   Timer? _startEngineEvalTimer;
 
+  @override
+  Future<StudyState> build(StudyId id) async {
+    final evaluationService = ref.watch(evaluationServiceProvider);
+    ref.onDispose(() {
+      _startEngineEvalTimer?.cancel();
+      _engineEvalDebounce.dispose();
+      evaluationService.disposeEngine();
+    });
+    return _fetchChapter(id);
+  }
+
   Future<void> nextChapter() async {
     if (state.hasValue) {
       final chapters = state.requireValue.study.chapters;
@@ -131,17 +142,6 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     }
 
     return studyState;
-  }
-
-  @override
-  Future<StudyState> build(StudyId id) async {
-    final evaluationService = ref.watch(evaluationServiceProvider);
-    ref.onDispose(() {
-      _startEngineEvalTimer?.cancel();
-      _engineEvalDebounce.dispose();
-      evaluationService.disposeEngine();
-    });
-    return _fetchChapter(id);
   }
 
   EvaluationContext _evaluationContext(Variant variant) => EvaluationContext(
