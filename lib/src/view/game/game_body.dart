@@ -151,7 +151,7 @@ class GameBody extends ConsumerWidget {
               ? CountdownClock(
                   key: blackClockKey,
                   delay: gameState.game.clock!.lag,
-                  clockEventTime: gameState.game.clock!.at,
+                  clockStartTime: gameState.game.clock!.at,
                   timeLeft: archivedBlackClock ?? gameState.game.clock!.black,
                   active: gameState.activeClockSide == Side.black,
                   emergencyThreshold: youAre == Side.black
@@ -194,7 +194,7 @@ class GameBody extends ConsumerWidget {
                   key: whiteClockKey,
                   timeLeft: archivedWhiteClock ?? gameState.game.clock!.white,
                   delay: gameState.game.clock!.lag,
-                  clockEventTime: gameState.game.clock!.at,
+                  clockStartTime: gameState.game.clock!.at,
                   active: gameState.activeClockSide == Side.white,
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency

@@ -1,9 +1,19 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:mocktail/mocktail.dart';
+
+import '../test_provider_scope.dart';
+
+class MockSoundService extends Mock implements SoundService {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(MockSoundService());
+  });
+
   testWidgets('does not tick when not active', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
@@ -137,8 +147,7 @@ void main() {
     expect(find.text('0:09.9', findRichText: true), findsOneWidget);
   });
 
-  testWidgets('compensates for UI lag if `clockEventTime` is set',
-      (WidgetTester tester) async {
+  testWidgets('compensates for UI lag', (WidgetTester tester) async {
     final now = clock.now();
     await tester.pump(const Duration(milliseconds: 10));
 
@@ -148,7 +157,7 @@ void main() {
           timeLeft: const Duration(seconds: 10),
           active: true,
           delay: const Duration(milliseconds: 20),
-          clockEventTime: now,
+          clockStartTime: now,
         ),
       ),
     );
@@ -162,7 +171,7 @@ void main() {
     expect(find.text('0:09.9', findRichText: true), findsOneWidget);
   });
 
-  testWidgets('UI lag makes negative start delay', (WidgetTester tester) async {
+  testWidgets('UI lag negative start delay', (WidgetTester tester) async {
     final now = clock.now();
     await tester.pump(const Duration(milliseconds: 20));
 
@@ -172,11 +181,108 @@ void main() {
           timeLeft: const Duration(seconds: 10),
           active: true,
           delay: const Duration(milliseconds: 10),
-          clockEventTime: now,
+          clockStartTime: now,
         ),
       ),
     );
     // delay was 10ms but UI lagged 20ms so the clock time is already 10ms ahead
     expect(find.text('0:09.9', findRichText: true), findsOneWidget);
+  });
+
+  testWidgets('should call onFlag', (WidgetTester tester) async {
+    int flagCount = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CountdownClock(
+          timeLeft: const Duration(seconds: 10),
+          active: true,
+          onFlag: () {
+            flagCount++;
+          },
+        ),
+      ),
+    );
+    expect(find.text('0:10', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(seconds: 11));
+    expect(flagCount, 1);
+    expect(find.text('0:00.0', findRichText: true), findsOneWidget);
+  });
+
+  testWidgets('calls onStop', (WidgetTester tester) async {
+    int onStopCount = 0;
+    Duration? lastOnStopTime;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CountdownClock(
+          timeLeft: const Duration(seconds: 10),
+          active: true,
+          onStop: (Duration timeLeft) {
+            onStopCount++;
+            lastOnStopTime = timeLeft;
+          },
+        ),
+      ),
+    );
+    expect(find.text('0:10', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CountdownClock(
+          timeLeft: const Duration(seconds: 10),
+          active: false,
+          onStop: (Duration timeLeft) {
+            onStopCount++;
+            lastOnStopTime = timeLeft;
+          },
+        ),
+      ),
+    );
+
+    expect(onStopCount, 1);
+    expect(lastOnStopTime, const Duration(seconds: 5));
+    expect(find.text('0:05.0', findRichText: true), findsOneWidget);
+  });
+
+  testWidgets('emergency feedback', (WidgetTester tester) async {
+    final mockSoundService = MockSoundService();
+    when(() => mockSoundService.play(Sound.lowTime)).thenAnswer((_) async {});
+
+    const timeLeft = Duration(seconds: 10);
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const CountdownClock(
+        timeLeft: timeLeft,
+        active: true,
+        emergencyThreshold: Duration(seconds: 5),
+      ),
+      overrides: [
+        soundServiceProvider.overrideWith((ref) => mockSoundService),
+      ],
+    );
+    await tester.pumpWidget(app);
+
+    expect(find.text('0:10', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    expect(find.text('0:05.0', findRichText: true), findsOneWidget);
+    verifyNever(() => mockSoundService.play(Sound.lowTime));
+    await tester.pump(const Duration(milliseconds: 1));
+    verify(() => mockSoundService.play(Sound.lowTime)).called(1);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('0:04.8', findRichText: true), findsOneWidget);
+    // emergency is only called once as long as the time is below the threshold
+    verifyNever(() => mockSoundService.play(Sound.lowTime));
+
+    // notifier.value = const CountdownClock(
+    //   timeLeft: Duration(milliseconds: 5100),
+    //   active: true,
+    //   emergencyThreshold: Duration(seconds: 5),
+    // );
+    // await tester.pump();
+    // expect(find.text('0:05.1', findRichText: true), findsOneWidget);
+    // await tester.pump(const Duration(milliseconds: 150));
+    // expect(find.text('0:04.9', findRichText: true), findsOneWidget);
+    // // emergency is called again after the threshold is passed
+    // verify(() => mockSoundService.play(Sound.lowTime)).called(1);
   });
 }

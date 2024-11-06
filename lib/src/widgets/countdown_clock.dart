@@ -15,7 +15,7 @@ class CountdownClock extends ConsumerStatefulWidget {
   const CountdownClock({
     required this.timeLeft,
     this.delay,
-    this.clockEventTime,
+    this.clockStartTime,
     required this.active,
     this.emergencyThreshold,
     this.emergencySoundEnabled = true,
@@ -34,11 +34,11 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// This can be used to implement lag compensation.
   final Duration? delay;
 
-  /// The time the time left was received at.
+  /// The time at which the clock should have started.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
-  /// event was received from the server.
-  final DateTime? clockEventTime;
+  /// event was received from the server and to compensate for UI lag.
+  final DateTime? clockStartTime;
 
   /// If [timeLeft] is less than [emergencyThreshold], the clock will change
   /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
@@ -81,15 +81,13 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void startClock() {
     final now = clock.now();
     final delay = widget.delay ?? Duration.zero;
-    final clockEventTime = widget.clockEventTime ?? now;
-    // UI lag diff: the elapsed time between the time we received the clock event
+    final clockStartTime = widget.clockStartTime ?? now;
+    // UI lag diff: the elapsed time between the time the clock should have started
     // and the time the clock is actually started
-    final uiLag = now.difference(clockEventTime);
-    // The clock should have started at `clockEventTime`, but it started at `now`.
-    // so we need to adjust the delay.
+    final uiLag = now.difference(clockStartTime);
     final realDelay = delay - uiLag;
 
-    // real delay is negative, so we need to adjust the timeLeft.
+    // real delay is negative, we need to adjust the timeLeft.
     if (realDelay < Duration.zero) {
       timeLeft = timeLeft + realDelay;
     }
