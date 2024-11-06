@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -96,20 +95,21 @@ class _ChapterButton extends ConsumerWidget {
     return state == null
         ? const SizedBox.shrink()
         : AppBarIconButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) {
-                return _StudyChaptersScreen(id: id);
-              },
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              isDismissible: true,
+              builder: (_) => _StudyChaptersMenu(id: id),
             ),
+            // TODO mobile l10n
             semanticsLabel: 'Chapters',
             icon: const Icon(Icons.menu_book),
           );
   }
 }
 
-class _StudyChaptersScreen extends ConsumerWidget {
-  const _StudyChaptersScreen({
+class _StudyChaptersMenu extends ConsumerWidget {
+  const _StudyChaptersMenu({
     required this.id,
   });
 
@@ -131,36 +131,39 @@ class _StudyChaptersScreen extends ConsumerWidget {
       }
     });
 
-    return PlatformScaffold(
-      appBar: const PlatformAppBar(
-        // TODO mobile l10n
-        title: Text('Chapters'),
-      ),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            ChoicePicker(
-              notchedTile: true,
-              choices: state.study.chapters.unlock,
-              selectedItem: state.study.chapters.firstWhere(
-                (chapter) => chapter.id == state.currentChapter.id,
-              ),
-              titleBuilder: (chapter) => Text(
-                chapter.name,
-                key: chapter.id == state.study.chapter.id
-                    ? currentChapterKey
-                    : null,
-              ),
-              onSelectedItemChanged: (chapter) {
-                ref.read(studyControllerProvider(id).notifier).goToChapter(
-                      chapter.id,
-                    );
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+    return Column(
+      children: [
+        Text(
+          context.l10n.studyNbChapters(state.study.chapters.length),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-      ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView(
+            children: [
+              ChoicePicker(
+                notchedTile: true,
+                choices: state.study.chapters.unlock,
+                selectedItem: state.study.chapters.firstWhere(
+                  (chapter) => chapter.id == state.currentChapter.id,
+                ),
+                titleBuilder: (chapter) => Text(
+                  chapter.name,
+                  key: chapter.id == state.study.chapter.id
+                      ? currentChapterKey
+                      : null,
+                ),
+                onSelectedItemChanged: (chapter) {
+                  ref.read(studyControllerProvider(id).notifier).goToChapter(
+                        chapter.id,
+                      );
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
