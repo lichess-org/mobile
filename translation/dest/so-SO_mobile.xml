@@ -33,4 +33,5 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ka diid \"ii celi-da\"</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Sugaya in tartamuhu kusoo biiro...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Indho-qarsi</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Toos</string>
 </resources>
