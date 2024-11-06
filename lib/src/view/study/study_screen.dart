@@ -77,8 +77,9 @@ class StudyScreen extends ConsumerWidget {
       },
       error: (error, st) {
         _logger.severe('Cannot load study: $error', st);
-        Navigator.of(context).pop();
-        return const SizedBox.shrink();
+        return Center(
+          child: Text('Cannot load study: $error'),
+        );
       },
     );
   }
