@@ -102,8 +102,8 @@ class _ChapterButton extends ConsumerWidget {
               isDismissible: true,
               builder: (_) => _StudyChaptersMenu(id: id),
             ),
-            // TODO mobile l10n
-            semanticsLabel: 'Chapters',
+            semanticsLabel:
+                context.l10n.studyNbChapters(state.study.chapters.length),
             icon: const Icon(Icons.menu_book),
           );
   }
