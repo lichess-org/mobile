@@ -168,7 +168,7 @@ void main() {
       expect(find.text('pgn 2'), findsOneWidget);
 
       // Open chapter selection dialog
-      await tester.tap(find.byTooltip('Chapters'));
+      await tester.tap(find.byTooltip('2 Chapters'));
       // Wait for dialog to open
       await tester.pumpAndSettle();
 
