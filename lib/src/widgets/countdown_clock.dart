@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,20 +67,19 @@ class CountdownClock extends ConsumerStatefulWidget {
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
 }
 
-const _period = Duration(milliseconds: 100);
 const _emergencyDelay = Duration(seconds: 20);
+const _showTenthsThreshold = Duration(seconds: 10);
 
 class _CountdownClockState extends ConsumerState<CountdownClock> {
-  Timer? _delayTimer;
   Timer? _timer;
   Duration timeLeft = Duration.zero;
   bool _shouldPlayEmergencyFeedback = true;
   DateTime? _nextEmergency;
 
-  final _stopwatch = Stopwatch();
+  final _stopwatch = clock.stopwatch();
 
   void startClock() {
-    final now = DateTime.now();
+    final now = clock.now();
     final delay = widget.delay ?? Duration.zero;
     final clockEventTime = widget.clockEventTime ?? now;
     // UI lag diff: the elapsed time between the time we received the clock event
@@ -89,43 +89,50 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     // so we need to adjust the delay.
     final realDelay = delay - uiLag;
 
-    if (realDelay > Duration.zero) {
-      _delayTimer?.cancel();
-      _delayTimer = Timer(realDelay, _doStartClock);
-    } else if (realDelay < Duration.zero) {
-      // real delay is negative, so we need to adjust the timeLeft.
+    // real delay is negative, so we need to adjust the timeLeft.
+    if (realDelay < Duration.zero) {
       timeLeft = timeLeft + realDelay;
-      _doStartClock();
-    } else {
-      _doStartClock();
     }
+
+    _scheduleTick(realDelay);
   }
 
-  void _doStartClock() {
+  void _scheduleTick(Duration extraDelay) {
     _timer?.cancel();
+    final delay = Duration(
+      milliseconds: (timeLeft < _showTenthsThreshold
+              ? timeLeft.inMilliseconds % 100
+              : timeLeft.inMilliseconds % 500) +
+          1,
+    );
+    _timer = Timer(delay + extraDelay, _tick);
     _stopwatch.reset();
     _stopwatch.start();
-    _timer = Timer.periodic(_period, (timer) {
-      setState(() {
-        timeLeft = timeLeft - _stopwatch.elapsed;
-        _stopwatch.reset();
-        _playEmergencyFeedback();
-        if (timeLeft <= Duration.zero) {
-          widget.onFlag?.call();
-          timeLeft = Duration.zero;
-          stopClock();
-        }
-      });
-    });
   }
 
-  void stopClock() {
+  void _tick() {
     setState(() {
       timeLeft = timeLeft - _stopwatch.elapsed;
-      if (timeLeft < Duration.zero) {
+      _playEmergencyFeedback();
+      if (timeLeft <= Duration.zero) {
+        widget.onFlag?.call();
         timeLeft = Duration.zero;
       }
     });
+    if (timeLeft > Duration.zero) {
+      _scheduleTick(Duration.zero);
+    }
+  }
+
+  void stopClock({bool countElapsedTime = true}) {
+    if (countElapsedTime) {
+      setState(() {
+        timeLeft = timeLeft - _stopwatch.elapsed;
+        if (timeLeft < Duration.zero) {
+          timeLeft = Duration.zero;
+        }
+      });
+    }
     _timer?.cancel();
     _stopwatch.stop();
     scheduleMicrotask(() {
@@ -137,9 +144,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     if (widget.emergencyThreshold != null &&
         timeLeft <= widget.emergencyThreshold! &&
         _shouldPlayEmergencyFeedback &&
-        (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
+        (_nextEmergency == null || _nextEmergency!.isBefore(clock.now()))) {
       _shouldPlayEmergencyFeedback = false;
-      _nextEmergency = DateTime.now().add(_emergencyDelay);
+      _nextEmergency = clock.now().add(_emergencyDelay);
       if (widget.emergencySoundEnabled) {
         ref.read(soundServiceProvider).play(Sound.lowTime);
       }
@@ -162,12 +169,19 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   @override
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
-    if (widget.timeLeft != oldClock.timeLeft) {
+    final isSameTimeConfig = widget.timeLeft == oldClock.timeLeft;
+    if (!isSameTimeConfig) {
       timeLeft = widget.timeLeft;
     }
 
     if (widget.active != oldClock.active) {
-      widget.active ? startClock() : stopClock();
+      if (widget.active) {
+        startClock();
+      } else {
+        // If the timeLeft was changed at the same time as the clock is stopped
+        // we don't want to count the elapsed time because the new time takes precedence.
+        stopClock(countElapsedTime: isSameTimeConfig);
+      }
     }
   }
 
@@ -229,7 +243,7 @@ class Clock extends StatelessWidget {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final showTenths = timeLeft < const Duration(seconds: 10);
+    final showTenths = timeLeft < _showTenthsThreshold;
     final isEmergency =
         emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
