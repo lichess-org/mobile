@@ -8,8 +8,6 @@ const _emergencyDelay = Duration(seconds: 20);
 const _tickDelay = Duration(milliseconds: 100);
 
 /// A chess clock.
-///
-/// The clock will call the [onFlag] callback when a side's time reaches zero.
 class ChessClock {
   ChessClock({
     required Duration whiteTime,
@@ -21,9 +19,7 @@ class ChessClock {
         _blackTime = ValueNotifier(blackTime),
         _activeSide = Side.white;
 
-  /// The duration at which the clock should change its background color to indicate an emergency.
-  ///
-  /// If [onEmergency] is provided, the clock will call it when the emergency threshold is reached.
+  /// The threshold at which the clock will call [onEmergency] if provided.
   final Duration? emergencyThreshold;
 
   /// Callback when the clock reaches zero.
