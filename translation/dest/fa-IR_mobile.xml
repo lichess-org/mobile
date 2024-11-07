@@ -12,7 +12,7 @@
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">بازخورد لمسی</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">حالت فراگیر</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">رابط کاربری را هنگام بازی پنهان کنید. اگر ناوبری لمسی در لبه‌های دستگاه اذیتتان می‌کند از این استفاده کنید. کارساز برای برگه‌های بازی و معماباران.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">شما هیچ کاربری را دنبال نمی‌کنید.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">شما هیچ کاربری را نمی‌دنبالید.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">واپسین جستجوها</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">پاکسازی</string>
@@ -31,7 +31,7 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">می‌خواهید این دور را به پایان برسانید؟</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">چیزی برای نمایش نیست، خواهشمندیم پالایه‌ها را دگرسان کنید.</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">رد درخواست برگرداندن</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">شکیبا برای پیوستن حریف...</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">در انتظار آمدن حریف...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">چشم‌بسته</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">بَرخَط-محتواسازان زنده</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">به بازی بپیوندید</string>
