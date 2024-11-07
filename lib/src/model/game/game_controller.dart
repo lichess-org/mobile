@@ -63,7 +63,7 @@ class GameController extends _$GameController {
   int? _socketEventVersion;
 
   /// Last move time
-  DateTime? _lastMoveTime;
+  DateTime? _lastClockUpdateAt;
 
   late SocketClient _socketClient;
 
@@ -424,8 +424,8 @@ class GameController extends _$GameController {
     final moveTime = hasClock
         ? isPremove == true
             ? Duration.zero
-            : _lastMoveTime != null
-                ? DateTime.now().difference(_lastMoveTime!)
+            : _lastClockUpdateAt != null
+                ? DateTime.now().difference(_lastClockUpdateAt!)
                 : null
         : null;
     _socketClient.send(
@@ -547,7 +547,7 @@ class GameController extends _$GameController {
           return;
         }
         _socketEventVersion = fullEvent.socketEventVersion;
-        _lastMoveTime = null;
+        _lastClockUpdateAt = null;
 
         state = AsyncValue.data(
           GameState(
@@ -608,7 +608,7 @@ class GameController extends _$GameController {
         }
 
         if (data.clock != null) {
-          _lastMoveTime = DateTime.now();
+          _lastClockUpdateAt = data.clock!.at;
 
           final lagCompensation = newState.game.playable
               // server will send the lag only if it's more than 10ms
@@ -1000,6 +1000,7 @@ class GameState with _$GameState {
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
+    DateTime? clockSwitchedAt,
 
     /// Promotion waiting to be selected (only if auto queen is disabled)
     NormalMove? promotionMove,

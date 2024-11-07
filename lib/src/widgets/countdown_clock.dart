@@ -13,12 +13,11 @@ class CountdownClock extends StatefulWidget {
   const CountdownClock({
     required this.timeLeft,
     this.delay,
-    this.clockStartTime,
+    this.clockUpdatedAt,
     required this.active,
     this.emergencyThreshold,
     this.onEmergency,
     this.onFlag,
-    this.onStop,
     this.clockStyle,
     this.padLeft = false,
     super.key,
@@ -32,11 +31,11 @@ class CountdownClock extends StatefulWidget {
   /// This can be used to implement lag compensation.
   final Duration? delay;
 
-  /// The time at which the clock should have started.
+  /// The time at which the clock was updated.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
   /// event was received from the server and to compensate for UI lag.
-  final DateTime? clockStartTime;
+  final DateTime? clockUpdatedAt;
 
   /// The duration at which the clock should change its background color to indicate an emergency.
   ///
@@ -51,9 +50,6 @@ class CountdownClock extends StatefulWidget {
 
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
-
-  /// Callback with the remaining duration when the clock stops
-  final ValueSetter<Duration>? onStop;
 
   /// Custom color style
   final ClockStyle? clockStyle;
@@ -79,10 +75,10 @@ class _CountdownClockState extends State<CountdownClock> {
   void startClock() {
     final now = clock.now();
     final delay = widget.delay ?? Duration.zero;
-    final clockStartTime = widget.clockStartTime ?? now;
+    final clockUpdatedAt = widget.clockUpdatedAt ?? now;
     // UI lag diff: the elapsed time between the time the clock should have started
     // and the time the clock is actually started
-    final uiLag = now.difference(clockStartTime);
+    final uiLag = now.difference(clockUpdatedAt);
     final realDelay = delay - uiLag;
 
     // real delay is negative, we need to adjust the timeLeft.
@@ -120,20 +116,9 @@ class _CountdownClockState extends State<CountdownClock> {
     }
   }
 
-  void stopClock({bool countElapsedTime = true}) {
-    if (countElapsedTime) {
-      setState(() {
-        timeLeft = timeLeft - _stopwatch.elapsed;
-        if (timeLeft < Duration.zero) {
-          timeLeft = Duration.zero;
-        }
-      });
-    }
+  void stopClock() {
     _timer?.cancel();
     _stopwatch.stop();
-    scheduleMicrotask(() {
-      widget.onStop?.call(timeLeft);
-    });
   }
 
   void _playEmergencyFeedback() {
@@ -163,9 +148,8 @@ class _CountdownClockState extends State<CountdownClock> {
   @override
   void didUpdateWidget(CountdownClock oldClock) {
     super.didUpdateWidget(oldClock);
-    final isSameTimeConfig = widget.timeLeft == oldClock.timeLeft;
 
-    if (!isSameTimeConfig) {
+    if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
       timeLeft = widget.timeLeft;
     }
 
@@ -173,9 +157,7 @@ class _CountdownClockState extends State<CountdownClock> {
       if (widget.active) {
         startClock();
       } else {
-        // If the timeLeft was changed at the same time as the clock is stopped
-        // we don't want to count the elapsed time because the new time takes precedence.
-        stopClock(countElapsedTime: isSameTimeConfig);
+        stopClock();
       }
     }
   }

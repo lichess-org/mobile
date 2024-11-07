@@ -42,6 +42,42 @@ void main() {
   testWidgets('update time by changing widget configuration',
       (WidgetTester tester) async {
     await tester.pumpWidget(
+      MaterialApp(
+        home: CountdownClock(
+          timeLeft: const Duration(seconds: 10),
+          clockUpdatedAt: clock.now(),
+          active: true,
+        ),
+      ),
+    );
+
+    expect(find.text('0:10', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('0:09.9', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('0:09.8', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('0:09.7', findRichText: true), findsOneWidget);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CountdownClock(
+          timeLeft: const Duration(seconds: 11),
+          clockUpdatedAt: clock.now(),
+          active: true,
+        ),
+      ),
+    );
+    expect(find.text('0:11', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('0:10', findRichText: true), findsOneWidget);
+    await tester.pump(const Duration(seconds: 11));
+    expect(find.text('0:00.0', findRichText: true), findsOneWidget);
+  });
+
+  testWidgets('do not update if clockUpdatedAt is same',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
       const MaterialApp(
         home: CountdownClock(
           timeLeft: Duration(seconds: 10),
@@ -66,40 +102,6 @@ void main() {
         ),
       ),
     );
-    expect(find.text('0:11', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('0:10', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(seconds: 11));
-    expect(find.text('0:00.0', findRichText: true), findsOneWidget);
-  });
-
-  testWidgets('do not update if timeLeft widget configuration is same',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: CountdownClock(
-          timeLeft: Duration(seconds: 10),
-          active: true,
-        ),
-      ),
-    );
-
-    expect(find.text('0:10', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('0:09.9', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('0:09.8', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('0:09.7', findRichText: true), findsOneWidget);
-
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: CountdownClock(
-          timeLeft: Duration(seconds: 10),
-          active: true,
-        ),
-      ),
-    );
 
     expect(find.text('0:09.7', findRichText: true), findsOneWidget);
     await tester.pump(const Duration(seconds: 10));
@@ -109,9 +111,10 @@ void main() {
   testWidgets('shows milliseconds when time < 1s and active is false',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: CountdownClock(
-          timeLeft: Duration(seconds: 1),
+          timeLeft: const Duration(seconds: 1),
+          clockUpdatedAt: clock.now(),
           active: true,
         ),
       ),
@@ -124,9 +127,10 @@ void main() {
     expect(find.text('0:00.9', findRichText: true), findsOneWidget);
 
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: CountdownClock(
-          timeLeft: Duration(milliseconds: 988),
+          timeLeft: const Duration(milliseconds: 988),
+          clockUpdatedAt: clock.now(),
           active: false,
         ),
       ),
@@ -195,7 +199,7 @@ void main() {
           timeLeft: const Duration(seconds: 10),
           active: true,
           delay: const Duration(milliseconds: 20),
-          clockStartTime: now,
+          clockUpdatedAt: now,
         ),
       ),
     );
@@ -219,7 +223,7 @@ void main() {
           timeLeft: const Duration(seconds: 10),
           active: true,
           delay: const Duration(milliseconds: 10),
-          clockStartTime: now,
+          clockUpdatedAt: now,
         ),
       ),
     );
@@ -244,41 +248,6 @@ void main() {
     await tester.pump(const Duration(seconds: 11));
     expect(flagCount, 1);
     expect(find.text('0:00.0', findRichText: true), findsOneWidget);
-  });
-
-  testWidgets('calls onStop', (WidgetTester tester) async {
-    int onStopCount = 0;
-    Duration? lastOnStopTime;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: CountdownClock(
-          timeLeft: const Duration(seconds: 10),
-          active: true,
-          onStop: (Duration timeLeft) {
-            onStopCount++;
-            lastOnStopTime = timeLeft;
-          },
-        ),
-      ),
-    );
-    expect(find.text('0:10', findRichText: true), findsOneWidget);
-    await tester.pump(const Duration(seconds: 5));
-    await tester.pumpWidget(
-      MaterialApp(
-        home: CountdownClock(
-          timeLeft: const Duration(seconds: 10),
-          active: false,
-          onStop: (Duration timeLeft) {
-            onStopCount++;
-            lastOnStopTime = timeLeft;
-          },
-        ),
-      ),
-    );
-
-    expect(onStopCount, 1);
-    expect(lastOnStopTime, const Duration(seconds: 5));
-    expect(find.text('0:05.0', findRichText: true), findsOneWidget);
   });
 
   testWidgets('emergency feedback', (WidgetTester tester) async {
