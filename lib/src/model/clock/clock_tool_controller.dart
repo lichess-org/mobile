@@ -56,7 +56,7 @@ class ClockToolController extends _$ClockToolController {
       );
     }
     ref.read(soundServiceProvider).play(Sound.clock);
-    _clock.startForSide(playerType.opposite);
+    _clock.startSide(playerType.opposite);
     _clock.incTime(
       playerType,
       playerType == Side.white

@@ -63,7 +63,21 @@ void main() {
     });
   });
 
-  test('start given side', () {
+  test('start side', () {
+    fakeAsync((async) {
+      final clock = ChessClock(
+        whiteTime: const Duration(seconds: 5),
+        blackTime: const Duration(seconds: 5),
+      );
+      final thinkTime = clock.startSide(Side.black);
+      expect(thinkTime, null);
+      async.elapse(const Duration(seconds: 1));
+      expect(clock.whiteTime.value, const Duration(seconds: 5));
+      expect(clock.blackTime.value, const Duration(seconds: 4));
+    });
+  });
+
+  test('start side (running clock)', () {
     fakeAsync((async) {
       final clock = ChessClock(
         whiteTime: const Duration(seconds: 5),
@@ -76,7 +90,8 @@ void main() {
       async.elapse(const Duration(seconds: 1));
       expect(clock.whiteTime.value, const Duration(seconds: 4));
       expect(clock.blackTime.value, const Duration(seconds: 5));
-      clock.startForSide(Side.black);
+      final thinkTime = clock.startSide(Side.black);
+      expect(thinkTime, const Duration(seconds: 1));
       async.elapse(const Duration(seconds: 1));
       expect(clock.whiteTime.value, const Duration(seconds: 4));
       expect(clock.blackTime.value, const Duration(seconds: 4));

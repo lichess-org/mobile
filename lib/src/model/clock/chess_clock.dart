@@ -93,21 +93,19 @@ class ChessClock {
     }
   }
 
-  /// Starts the clock for the given side.
+  /// Starts the clock and switch to the given side.
   ///
   /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
   ///
   /// Returns the think time of the active side before switching or `null` if the clock is not running.
-  Duration? startForSide(Side side, [Duration delay = Duration.zero]) {
+  Duration? startSide(Side side, [Duration delay = Duration.zero]) {
     _activeSide = side;
+    final thinkTime = _thinkTime;
     start(delay);
-    if (isRunning) {
-      return _thinkTime;
-    }
-    return null;
+    return thinkTime;
   }
 
-  /// Starts the clock for the active side.
+  /// Starts the clock.
   ///
   /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
   void start([Duration delay = Duration.zero]) {
