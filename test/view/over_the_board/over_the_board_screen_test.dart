@@ -28,11 +28,11 @@ void main() {
         boardRect.bottomLeft,
       );
 
-      await playMove(tester, boardRect, 'e2', 'e4');
-      await playMove(tester, boardRect, 'f7', 'f6');
-      await playMove(tester, boardRect, 'd2', 'd4');
-      await playMove(tester, boardRect, 'g7', 'g5');
-      await playMove(tester, boardRect, 'd1', 'h5');
+      await playMove(tester, 'e2', 'e4');
+      await playMove(tester, 'f7', 'f6');
+      await playMove(tester, 'd2', 'd4');
+      await playMove(tester, 'g7', 'g5');
+      await playMove(tester, 'd1', 'h5');
 
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
       expect(find.text('Checkmate • White is victorious'), findsOneWidget);
@@ -58,13 +58,13 @@ void main() {
 
     testWidgets('Game ends when out of time', (tester) async {
       const time = Duration(seconds: 1);
-      final boardRect = await initOverTheBoardGame(
+      await initOverTheBoardGame(
         tester,
         TimeIncrement(time.inSeconds, 0),
       );
 
-      await playMove(tester, boardRect, 'e2', 'e4');
-      await playMove(tester, boardRect, 'e7', 'e5');
+      await playMove(tester, 'e2', 'e4');
+      await playMove(tester, 'e7', 'e5');
 
       // The clock measures system time internally, so we need to actually sleep in order
       // for the clock to reach 0, instead of using tester.pump()
@@ -81,13 +81,13 @@ void main() {
     testWidgets('Pausing the clock', (tester) async {
       const time = Duration(seconds: 10);
 
-      final boardRect = await initOverTheBoardGame(
+      await initOverTheBoardGame(
         tester,
         TimeIncrement(time.inSeconds, 0),
       );
 
-      await playMove(tester, boardRect, 'e2', 'e4');
-      await playMove(tester, boardRect, 'e7', 'e5');
+      await playMove(tester, 'e2', 'e4');
+      await playMove(tester, 'e7', 'e5');
 
       await tester.tap(find.byTooltip('Pause'));
       await tester.pump();
@@ -108,7 +108,7 @@ void main() {
       expect(activeClock(tester), null);
 
       // ... but playing a move resumes the clock
-      await playMove(tester, boardRect, 'd7', 'd5');
+      await playMove(tester, 'd7', 'd5');
 
       expect(activeClock(tester), Side.white);
     });
@@ -116,13 +116,13 @@ void main() {
     testWidgets('Go back and Forward', (tester) async {
       const time = Duration(seconds: 10);
 
-      final boardRect = await initOverTheBoardGame(
+      await initOverTheBoardGame(
         tester,
         TimeIncrement(time.inSeconds, 0),
       );
 
-      await playMove(tester, boardRect, 'e2', 'e4');
-      await playMove(tester, boardRect, 'e7', 'e5');
+      await playMove(tester, 'e2', 'e4');
+      await playMove(tester, 'e7', 'e5');
 
       await tester.tap(find.byTooltip('Previous'));
       await tester.pumpAndSettle();
@@ -148,7 +148,7 @@ void main() {
 
       expect(activeClock(tester), Side.white);
 
-      await playMove(tester, boardRect, 'e2', 'e4');
+      await playMove(tester, 'e2', 'e4');
       expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
 
       expect(activeClock(tester), Side.black);
@@ -166,7 +166,7 @@ void main() {
     testWidgets('Clock logic', (tester) async {
       const time = Duration(minutes: 5);
 
-      final boardRect = await initOverTheBoardGame(
+      await initOverTheBoardGame(
         tester,
         TimeIncrement(time.inSeconds, 3),
       );
@@ -176,7 +176,7 @@ void main() {
       expect(findWhiteClock(tester).timeLeft, time);
       expect(findBlackClock(tester).timeLeft, time);
 
-      await playMove(tester, boardRect, 'e2', 'e4');
+      await playMove(tester, 'e2', 'e4');
 
       const moveTime = Duration(milliseconds: 500);
       await tester.pumpAndSettle(moveTime);
@@ -186,7 +186,7 @@ void main() {
       expect(findWhiteClock(tester).timeLeft, time);
       expect(findBlackClock(tester).timeLeft, lessThan(time));
 
-      await playMove(tester, boardRect, 'e7', 'e5');
+      await playMove(tester, 'e7', 'e5');
       await tester.pumpAndSettle();
 
       expect(activeClock(tester), Side.white);

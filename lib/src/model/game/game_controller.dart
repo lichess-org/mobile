@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
+import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -62,8 +64,7 @@ class GameController extends _$GameController {
   /// Last socket version received
   int? _socketEventVersion;
 
-  /// Last move time
-  DateTime? _lastClockUpdateAt;
+  ChessClock? _clock;
 
   late SocketClient _socketClient;
 
@@ -85,6 +86,7 @@ class GameController extends _$GameController {
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
       _appLifecycleListener?.dispose();
+      _clock?.dispose();
     });
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then(
@@ -123,13 +125,29 @@ class GameController extends _$GameController {
               }
             },
           );
+
+          if (game.clock != null) {
+            _clock = ChessClock(
+              whiteTime: game.clock!.white,
+              blackTime: game.clock!.black,
+              emergencyThreshold: game.meta.clock?.emergency,
+              onEmergency: onClockEmergency,
+              onFlag: onFlag,
+            );
+            if (game.clock!.running) {
+              final pos = game.lastPosition;
+              if (pos.fullmoves > 1) {
+                _clock!.startSide(pos.turn);
+              }
+            }
+          }
         }
 
         return GameState(
           gameFullId: gameFullId,
           game: game,
           stepCursor: game.steps.length - 1,
-          stopClockWaitingForServerAck: false,
+          liveClock: _liveClock,
         );
       },
     );
@@ -161,7 +179,6 @@ class GameController extends _$GameController {
           steps: curState.game.steps.add(newStep),
         ),
         stepCursor: curState.stepCursor + 1,
-        stopClockWaitingForServerAck: !shouldConfirmMove,
         moveToConfirm: shouldConfirmMove ? move : null,
         promotionMove: null,
         premove: null,
@@ -174,7 +191,6 @@ class GameController extends _$GameController {
       _sendMoveToSocket(
         move,
         isPremove: isPremove ?? false,
-        hasClock: curState.game.clock != null,
         // same logic as web client
         // we want to send client lag only at the beginning of the game when the clock is not running yet
         withLag:
@@ -229,14 +245,12 @@ class GameController extends _$GameController {
 
     state = AsyncValue.data(
       curState.copyWith(
-        stopClockWaitingForServerAck: true,
         moveToConfirm: null,
       ),
     );
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,
-      hasClock: curState.game.clock != null,
       // same logic as web client
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
@@ -335,8 +349,12 @@ class GameController extends _$GameController {
   }
 
   /// Play a sound when the clock is about to run out
-  void onClockEmergency() {
-    ref.read(soundServiceProvider).play(Sound.lowTime);
+  Future<void> onClockEmergency(Side activeSide) async {
+    if (activeSide != state.valueOrNull?.game.youAre) return;
+    final shouldPlay = await ref.read(clockSoundProvider.future);
+    if (shouldPlay) {
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+    }
   }
 
   void onFlag() {
@@ -415,18 +433,37 @@ class GameController extends _$GameController {
         Future<void>.value();
   }
 
+  /// Gets the live game clock if available.
+  LiveGameClock? get _liveClock => _clock != null
+      ? (
+          white: _clock!.whiteTime,
+          black: _clock!.blackTime,
+        )
+      : null;
+
+  /// Update the internal clock on clock server event
+  void _updateClock({
+    required Duration white,
+    required Duration black,
+    required Side? activeSide,
+    Duration? lag,
+  }) {
+    _clock?.setTimes(whiteTime: white, blackTime: black);
+    if (activeSide != null) {
+      _clock?.startSide(activeSide, delay: lag);
+    }
+  }
+
   void _sendMoveToSocket(
     Move move, {
     required bool isPremove,
-    required bool hasClock,
     required bool withLag,
   }) {
-    final moveTime = hasClock
+    final thinkTime = _clock?.stop();
+    final moveTime = _clock != null
         ? isPremove == true
             ? Duration.zero
-            : _lastClockUpdateAt != null
-                ? DateTime.now().difference(_lastClockUpdateAt!)
-                : null
+            : thinkTime
         : null;
     _socketClient.send(
       'move',
@@ -436,7 +473,7 @@ class GameController extends _$GameController {
           's': (moveTime.inMilliseconds * 0.1).round().toRadixString(36),
       },
       ackable: true,
-      withLag: hasClock && (moveTime == null || withLag),
+      withLag: _clock != null && (moveTime == null || withLag),
     );
 
     _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
@@ -547,19 +584,26 @@ class GameController extends _$GameController {
           return;
         }
         _socketEventVersion = fullEvent.socketEventVersion;
-        _lastClockUpdateAt = null;
 
         state = AsyncValue.data(
           GameState(
             gameFullId: gameFullId,
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
-            stopClockWaitingForServerAck: false,
+            liveClock: _liveClock,
             // cancel the premove to avoid playing wrong premove when the full
             // game data is reloaded
             premove: null,
           ),
         );
+
+        if (fullEvent.game.clock != null) {
+          _updateClock(
+            white: fullEvent.game.clock!.white,
+            black: fullEvent.game.clock!.black,
+            activeSide: state.requireValue.activeClockSide,
+          );
+        }
 
       // Move event, received after sending a move or receiving a move from the
       // opponent
@@ -608,19 +652,26 @@ class GameController extends _$GameController {
         }
 
         if (data.clock != null) {
-          _lastClockUpdateAt = data.clock!.at;
+          final lagCompensation =
+              newState.game.playable && newState.game.isPlayerTurn
+                  // server will send the lag only if it's more than 10ms
+                  ? Duration.zero
+                  : data.clock?.lag ?? const Duration(milliseconds: 10);
 
-          final lagCompensation = newState.game.playable
-              // server will send the lag only if it's more than 10ms
-              ? data.clock?.lag ?? const Duration(milliseconds: 10)
-              : Duration.zero;
+          _updateClock(
+            white: data.clock!.white,
+            black: data.clock!.black,
+            lag: lagCompensation,
+            activeSide: newState.activeClockSide,
+          );
 
           if (newState.game.clock != null) {
+            // TODO remove that
             newState = newState.copyWith.game.clock!(
               white: data.clock!.white,
               black: data.clock!.black,
-              lag: lagCompensation,
-              at: data.clock!.at,
+              // lag: lagCompensation,
+              // at: data.clock!.at,
             );
           } else if (newState.game.correspondenceClock != null) {
             newState = newState.copyWith.game.correspondenceClock!(
@@ -628,10 +679,6 @@ class GameController extends _$GameController {
               black: data.clock!.black,
             );
           }
-
-          newState = newState.copyWith(
-            stopClockWaitingForServerAck: false,
-          );
         }
 
         if (newState.game.expiration != null) {
@@ -697,6 +744,11 @@ class GameController extends _$GameController {
             white: endData.clock!.white,
             black: endData.clock!.black,
           );
+          _updateClock(
+            white: endData.clock!.white,
+            black: endData.clock!.black,
+            activeSide: newState.activeClockSide,
+          );
         }
 
         if (curState.game.lastPosition.fullmoves > 1) {
@@ -734,7 +786,11 @@ class GameController extends _$GameController {
         final newClock = pick(data['total'])
             .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
         final curState = state.requireValue;
+
         if (side != null && newClock != null) {
+          _clock?.setTime(side, newClock);
+
+          // TODO: remove
           final newState = side == Side.white
               ? curState.copyWith.game.clock!(
                   white: newClock,
@@ -989,6 +1045,11 @@ class GameController extends _$GameController {
   }
 }
 
+typedef LiveGameClock = ({
+  ValueListenable<Duration> white,
+  ValueListenable<Duration> black,
+});
+
 @freezed
 class GameState with _$GameState {
   const GameState._();
@@ -997,10 +1058,9 @@ class GameState with _$GameState {
     required GameFullId gameFullId,
     required PlayableGame game,
     required int stepCursor,
+    required LiveGameClock? liveClock,
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
-    required bool stopClockWaitingForServerAck,
-    DateTime? clockSwitchedAt,
 
     /// Promotion waiting to be selected (only if auto queen is disabled)
     NormalMove? promotionMove,
@@ -1100,9 +1160,6 @@ class GameState with _$GameState {
 
   Side? get activeClockSide {
     if (game.clock == null && game.correspondenceClock == null) {
-      return null;
-    }
-    if (stopClockWaitingForServerAck) {
       return null;
     }
     if (game.status == GameStatus.started) {

@@ -98,13 +98,34 @@ void main() {
     });
   });
 
+  test('start side (running clock, same side)', () {
+    fakeAsync((async) {
+      final clock = ChessClock(
+        whiteTime: const Duration(seconds: 5),
+        blackTime: const Duration(seconds: 5),
+      );
+      clock.start();
+      expect(clock.isRunning, true);
+      expect(clock.whiteTime.value, const Duration(seconds: 5));
+      expect(clock.blackTime.value, const Duration(seconds: 5));
+      async.elapse(const Duration(seconds: 1));
+      expect(clock.whiteTime.value, const Duration(seconds: 4));
+      expect(clock.blackTime.value, const Duration(seconds: 5));
+      final thinkTime = clock.startSide(Side.white);
+      expect(thinkTime, const Duration(seconds: 1));
+      async.elapse(const Duration(seconds: 1));
+      expect(clock.whiteTime.value, const Duration(seconds: 3));
+      expect(clock.blackTime.value, const Duration(seconds: 5));
+    });
+  });
+
   test('start with delay', () {
     fakeAsync((async) {
       final clock = ChessClock(
         whiteTime: const Duration(seconds: 5),
         blackTime: const Duration(seconds: 5),
       );
-      clock.start(const Duration(milliseconds: 20));
+      clock.start(delay: const Duration(milliseconds: 20));
       expect(clock.isRunning, true);
       expect(clock.whiteTime.value, const Duration(seconds: 5));
       async.elapse(const Duration(milliseconds: 10));
@@ -182,7 +203,7 @@ void main() {
         whiteTime: const Duration(seconds: 5),
         blackTime: const Duration(seconds: 5),
         emergencyThreshold: const Duration(seconds: 2),
-        onEmergency: () {
+        onEmergency: (_) {
           onEmergencyCount++;
         },
       );

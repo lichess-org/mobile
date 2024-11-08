@@ -25,8 +25,8 @@ class ChessClock {
   /// Callback when the clock reaches zero.
   VoidCallback? onFlag;
 
-  /// Called when the clock reaches the emergency.
-  final VoidCallback? onEmergency;
+  /// Called when one clock timers reaches the emergency threshold.
+  final void Function(Side activeSide)? onEmergency;
 
   Timer? _timer;
   Timer? _startDelayTimer;
@@ -95,23 +95,28 @@ class ChessClock {
 
   /// Starts the clock and switch to the given side.
   ///
+  /// Trying to start an already running clock on the same side is a no-op.
+  ///
   /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
   ///
   /// Returns the think time of the active side before switching or `null` if the clock is not running.
-  Duration? startSide(Side side, [Duration delay = Duration.zero]) {
+  Duration? startSide(Side side, {Duration? delay}) {
+    if (isRunning && _activeSide == side) {
+      return _thinkTime;
+    }
     _activeSide = side;
     final thinkTime = _thinkTime;
-    start(delay);
+    start(delay: delay);
     return thinkTime;
   }
 
   /// Starts the clock.
   ///
   /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
-  void start([Duration delay = Duration.zero]) {
-    _lastStarted = clock.now().add(delay);
+  void start({Duration? delay}) {
+    _lastStarted = clock.now().add(delay ?? Duration.zero);
     _startDelayTimer?.cancel();
-    _startDelayTimer = Timer(delay, _scheduleTick);
+    _startDelayTimer = Timer(delay ?? Duration.zero, _scheduleTick);
   }
 
   /// Pauses the clock.
@@ -172,7 +177,7 @@ class ChessClock {
         (_nextEmergency == null || _nextEmergency!.isBefore(clock.now()))) {
       _shouldPlayEmergencyFeedback = false;
       _nextEmergency = clock.now().add(_emergencyDelay);
-      onEmergency?.call();
+      onEmergency?.call(_activeSide);
     } else if (emergencyThreshold != null &&
         timeLeft > emergencyThreshold! * 1.5) {
       _shouldPlayEmergencyFeedback = true;

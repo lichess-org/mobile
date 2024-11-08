@@ -32,7 +32,7 @@ void main() {
   test('exposes a challenges stream', () async {
     final fakeChannel = FakeWebSocketChannel();
     final socketClient =
-        makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+        makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
     await socketClient.connect();
     await socketClient.firstConnection;
 
@@ -118,7 +118,7 @@ void main() {
     fakeAsync((async) {
       final fakeChannel = FakeWebSocketChannel();
       final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
       notificationService.start();
       challengeService.start();
@@ -221,7 +221,7 @@ void main() {
     fakeAsync((async) {
       final fakeChannel = FakeWebSocketChannel();
       final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
       notificationService.start();
       challengeService.start();

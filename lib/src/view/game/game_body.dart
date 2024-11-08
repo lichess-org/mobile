@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -104,11 +103,6 @@ class GameBody extends ConsumerWidget {
     );
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final emergencySoundEnabled = ref.watch(clockSoundProvider).maybeWhen(
-          data: (clockSound) => clockSound,
-          orElse: () => true,
-        );
-
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
         (prefs) => prefs.blindfoldMode,
@@ -147,28 +141,33 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.meta.clock != null
-              ? CountdownClock(
-                  key: blackClockKey,
-                  delay: gameState.game.clock!.lag,
-                  clockUpdatedAt: gameState.game.clock!.at,
-                  timeLeft: archivedBlackClock ?? gameState.game.clock!.black,
-                  active: gameState.activeClockSide == Side.black,
-                  emergencyThreshold: youAre == Side.black
-                      ? gameState.game.meta.clock?.emergency
-                      : null,
-                  onEmergency: emergencySoundEnabled
-                      ? () => ref.read(ctrlProvider.notifier).onClockEmergency()
-                      : null,
-                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+          clock: archivedBlackClock != null
+              ? Clock(
+                  timeLeft: archivedBlackClock,
+                  active: false,
                 )
-              : gameState.game.correspondenceClock != null
-                  ? CorrespondenceClock(
-                      duration: gameState.game.correspondenceClock!.black,
-                      active: gameState.activeClockSide == Side.black,
-                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+              : gameState.liveClock != null
+                  ? ValueListenableBuilder(
+                      key: blackClockKey,
+                      valueListenable: gameState.liveClock!.black,
+                      builder: (context, value, _) {
+                        return Clock(
+                          timeLeft: value,
+                          active: gameState.activeClockSide == Side.black,
+                          emergencyThreshold: youAre == Side.black
+                              ? gameState.game.meta.clock?.emergency
+                              : null,
+                        );
+                      },
                     )
-                  : null,
+                  : gameState.game.correspondenceClock != null
+                      ? CorrespondenceClock(
+                          duration: gameState.game.correspondenceClock!.black,
+                          active: gameState.activeClockSide == Side.black,
+                          onFlag: () =>
+                              ref.read(ctrlProvider.notifier).onFlag(),
+                        )
+                      : null,
         );
         final white = GamePlayer(
           player: gameState.game.white,
@@ -191,28 +190,33 @@ class GameBody extends ConsumerWidget {
                       },
                     )
                   : null,
-          clock: gameState.game.meta.clock != null
-              ? CountdownClock(
-                  key: whiteClockKey,
-                  timeLeft: archivedWhiteClock ?? gameState.game.clock!.white,
-                  delay: gameState.game.clock!.lag,
-                  clockUpdatedAt: gameState.game.clock!.at,
-                  active: gameState.activeClockSide == Side.white,
-                  emergencyThreshold: youAre == Side.white
-                      ? gameState.game.meta.clock?.emergency
-                      : null,
-                  onEmergency: emergencySoundEnabled
-                      ? () => ref.read(ctrlProvider.notifier).onClockEmergency()
-                      : null,
-                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+          clock: archivedWhiteClock != null
+              ? Clock(
+                  timeLeft: archivedWhiteClock,
+                  active: false,
                 )
-              : gameState.game.correspondenceClock != null
-                  ? CorrespondenceClock(
-                      duration: gameState.game.correspondenceClock!.white,
-                      active: gameState.activeClockSide == Side.white,
-                      onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+              : gameState.liveClock != null
+                  ? ValueListenableBuilder(
+                      key: whiteClockKey,
+                      valueListenable: gameState.liveClock!.white,
+                      builder: (context, value, _) {
+                        return Clock(
+                          timeLeft: value,
+                          active: gameState.activeClockSide == Side.white,
+                          emergencyThreshold: youAre == Side.white
+                              ? gameState.game.meta.clock?.emergency
+                              : null,
+                        );
+                      },
                     )
-                  : null,
+                  : gameState.game.correspondenceClock != null
+                      ? CorrespondenceClock(
+                          duration: gameState.game.correspondenceClock!.white,
+                          active: gameState.activeClockSide == Side.white,
+                          onFlag: () =>
+                              ref.read(ctrlProvider.notifier).onFlag(),
+                        )
+                      : null,
         );
 
         final isBoardTurned = ref.watch(isBoardTurnedProvider);

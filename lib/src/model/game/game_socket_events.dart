@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -83,7 +84,7 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     blackOfferingDraw: pick('bDraw').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
-        at: DateTime.now(),
+        at: clock.now(),
         white: it('white').asDurationFromSecondsOrThrow(),
         black: it('black').asDurationFromSecondsOrThrow(),
         lag: it('lag')
