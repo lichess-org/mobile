@@ -140,7 +140,29 @@ class GamePlayer extends StatelessWidget {
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
-        else if (materialDiff != null)
+        else if (materialDiff != null && true) //TODO put this as a pref
+          Row(
+            children: [
+              for (final role in Role.values)
+                for (int i = 0; i < materialDiff!.capturedPieces[role]!; i++)
+                  Icon(
+                    _iconByRole[role],
+                    size: 13,
+                    color: Colors.grey,
+                  ),
+              const SizedBox(width: 3),
+              Text(
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+                materialDiff != null && materialDiff!.score > 0
+                    ? '+${materialDiff!.score}'
+                    : '',
+              ),
+            ],
+          )
+        else if (materialDiff != null && false)
           Row(
             children: [
               for (final role in Role.values)
