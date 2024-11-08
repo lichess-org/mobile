@@ -131,6 +131,7 @@ class GameBody extends ConsumerWidget {
           materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
+          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.black
               ? gameState.timeToMove
               : null,
@@ -171,6 +172,7 @@ class GameBody extends ConsumerWidget {
           materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
+          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.white
               ? gameState.timeToMove
               : null,

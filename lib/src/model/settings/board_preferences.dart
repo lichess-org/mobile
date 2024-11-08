@@ -81,6 +81,12 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
+  Future<void> setMaterialDifferenceFormat(MaterialDifferenceFormat materialDifferenceFormat) {
+    return save(
+      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
+    );
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(
       state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
@@ -106,6 +112,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -132,6 +139,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    materialDifferenceFormat : MaterialDifferenceFormat.difference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -286,4 +294,16 @@ enum BoardTheme {
           height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
+}
+
+enum MaterialDifferenceFormat {
+  difference(description: 'Material difference'),
+  pieces(description: 'Captured pieces');
+
+  const MaterialDifferenceFormat({
+    required this.description,
+  });
+
+  final String description;
+
 }

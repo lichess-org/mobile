@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -25,6 +26,7 @@ class GamePlayer extends StatelessWidget {
     required this.player,
     this.clock,
     this.materialDiff,
+    this.materialDifferenceFormat,
     this.confirmMoveCallbacks,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
@@ -36,6 +38,7 @@ class GamePlayer extends StatelessWidget {
   final Player player;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
+  final MaterialDifferenceFormat? materialDifferenceFormat;
 
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
@@ -140,9 +143,10 @@ class GamePlayer extends StatelessWidget {
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
-        else if (materialDiff != null && true) //TODO put this as a pref
+        else if (materialDiff != null) //TODO put this as a pref
           Row(
             children: [
+              if (materialDifferenceFormat == MaterialDifferenceFormat.pieces)
               for (final role in Role.values)
                 for (int i = 0; i < materialDiff!.capturedPieces[role]!; i++)
                   Icon(
@@ -150,6 +154,14 @@ class GamePlayer extends StatelessWidget {
                     size: 13,
                     color: Colors.grey,
                   ),
+              if (materialDifferenceFormat == MaterialDifferenceFormat.difference)
+                for (final role in Role.values)
+                  for (int i = 0; i < materialDiff!.pieces[role]!; i++)
+                    Icon(
+                      _iconByRole[role],
+                      size: 13,
+                      color: Colors.grey,
+                    ),
               const SizedBox(width: 3),
               Text(
                 style: const TextStyle(
