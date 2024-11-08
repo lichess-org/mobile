@@ -196,29 +196,32 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                  settingsLabel: const Text('Material difference format'),
-                  settingsValue: boardPrefs.materialDifferenceFormat.description,
-                  onTap: () {
-                    // if (Theme.of(context).platform == TargetPlatform.android) {
-                    if (true) {
-                      showChoicePicker(
-                        context,
-                        choices: MaterialDifferenceFormat.values,
-                        selectedItem: boardPrefs.materialDifferenceFormat,
-                        labelBuilder: (t) =>
-                            Text(t.description),
-                        onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setMaterialDifferenceFormat(value ?? MaterialDifferenceFormat.difference),
-                      );
-                    } else {
-                      // pushPlatformRoute(
-                      //   context,
-                      //   title: 'Clock position',
-                      //   builder: (context) => const BoardClockPositionScreen(),
-                      // );
-                    }
-                  },
+                settingsLabel: const Text('Material difference format'),
+                settingsValue: boardPrefs.materialDifferenceFormat.description,
+                onTap: () {
+                  //TODO: implement different handling to android/ios
+                  // if (Theme.of(context).platform == TargetPlatform.android) {
+
+                  if (true) {
+                    showChoicePicker(
+                      context,
+                      choices: MaterialDifferenceFormat.values,
+                      selectedItem: boardPrefs.materialDifferenceFormat,
+                      labelBuilder: (t) => Text(t.description),
+                      onSelectedItemChanged:
+                          (MaterialDifferenceFormat? value) => ref
+                              .read(boardPreferencesProvider.notifier)
+                              .setMaterialDifferenceFormat(
+                                  value ?? MaterialDifferenceFormat.difference),
+                    );
+                  } else {
+                    // pushPlatformRoute(
+                    //   context,
+                    //   title: 'Clock position',
+                    //   builder: (context) => const BoardClockPositionScreen(),
+                    // );
+                  }
+                },
               ),
             ],
           ),

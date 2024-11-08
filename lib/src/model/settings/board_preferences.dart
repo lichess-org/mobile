@@ -81,7 +81,8 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
-  Future<void> setMaterialDifferenceFormat(MaterialDifferenceFormat materialDifferenceFormat) {
+  Future<void> setMaterialDifferenceFormat(
+      MaterialDifferenceFormat materialDifferenceFormat) {
     return save(
       state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
     );
@@ -139,7 +140,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    materialDifferenceFormat : MaterialDifferenceFormat.difference,
+    materialDifferenceFormat: MaterialDifferenceFormat.difference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -305,5 +306,4 @@ enum MaterialDifferenceFormat {
   });
 
   final String description;
-
 }

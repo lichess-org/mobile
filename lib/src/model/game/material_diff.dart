@@ -10,7 +10,6 @@ class MaterialDiffSide with _$MaterialDiffSide {
     required IMap<Role, int> pieces,
     required int score,
     required IMap<Role, int> capturedPieces,
-
   }) = _MaterialDiffSide;
 }
 
@@ -36,19 +35,27 @@ class MaterialDiff with _$MaterialDiff {
     int score = 0;
     final IMap<Role, int> blackCount = board.materialCount(Side.black);
     final IMap<Role, int> whiteCount = board.materialCount(Side.white);
-    
-    final IMap<Role, int> blackStartingCount = Board.standard.materialCount(Side.black);
-    final IMap<Role, int> whiteStartingCount = Board.standard.materialCount(Side.white);
+
+    final IMap<Role, int> blackStartingCount =
+        Board.standard.materialCount(Side.black);
+    final IMap<Role, int> whiteStartingCount =
+        Board.standard.materialCount(Side.white);
     // TODO: parameterise starting position maybe so it can be passed in
 
-    IMap<Role, int> subtractPieceCounts(IMap<Role, int> startingCount, IMap<Role, int> subtractCount){
+    IMap<Role, int> subtractPieceCounts(
+        IMap<Role, int> startingCount, IMap<Role, int> subtractCount) {
       IMap<Role, int> capturedPieces = IMap();
-      startingCount.forEach((role,count){capturedPieces = capturedPieces.add(role, count - (subtractCount.get(role) ?? 0) ) ;});
+      startingCount.forEach((role, count) {
+        capturedPieces =
+            capturedPieces.add(role, count - (subtractCount.get(role) ?? 0));
+      });
       return capturedPieces;
     }
 
-    final IMap<Role, int> blackCapturedPieces = subtractPieceCounts(whiteStartingCount, whiteCount);
-    final IMap<Role, int> whiteCapturedPieces = subtractPieceCounts(blackStartingCount, blackCount);
+    final IMap<Role, int> blackCapturedPieces =
+        subtractPieceCounts(whiteStartingCount, whiteCount);
+    final IMap<Role, int> whiteCapturedPieces =
+        subtractPieceCounts(blackStartingCount, blackCount);
 
     Map<Role, int> count;
     Map<Role, int> black;
@@ -95,9 +102,15 @@ class MaterialDiff with _$MaterialDiff {
     });
 
     return MaterialDiff(
-      black: MaterialDiffSide(pieces: black.toIMap(), score: -score, capturedPieces: blackCapturedPieces),
-      white: MaterialDiffSide(pieces: white.toIMap(), score: score, capturedPieces: whiteCapturedPieces)
-    ,);
+      black: MaterialDiffSide(
+          pieces: black.toIMap(),
+          score: -score,
+          capturedPieces: blackCapturedPieces),
+      white: MaterialDiffSide(
+          pieces: white.toIMap(),
+          score: score,
+          capturedPieces: whiteCapturedPieces),
+    );
   }
 
   MaterialDiffSide bySide(Side side) => side == Side.black ? black : white;
