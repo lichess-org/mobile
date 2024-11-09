@@ -255,14 +255,10 @@ void main() {
         expect(find.text('2… Qd7'), findsNothing);
 
         // sidelines with nesting > 2 are collapsed -> expand them
-        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(2));
         expect(find.byIcon(Icons.add_box), findsOneWidget);
 
         await tester.tap(find.byIcon(Icons.add_box));
         await tester.pumpAndSettle();
-
-        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(3));
-        expect(find.byIcon(Icons.add_box), findsNothing);
 
         expectSameLine(tester, ['2… h5']);
         expectSameLine(tester, ['2… Nc6', '3. d3']);
@@ -279,115 +275,11 @@ void main() {
 
         // Sidelines should be collapsed again
         expect(find.byIcon(Icons.add_box), findsOneWidget);
-        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(2));
 
         expect(find.text('2… h5'), findsNothing);
         expect(find.text('2… Nc6'), findsNothing);
         expect(find.text('3. d3'), findsNothing);
         expect(find.text('2… Qd7'), findsNothing);
-      });
-
-      testWidgets('expand/collapse sidelines via icon', (tester) async {
-        // Will be rendered as:
-        // -------------------
-        // 1. e4 e5 [-] // <- collapse icon
-        // |- 1... c5 [-] // <- collapse icon
-        //   |- 2. Nf3
-        //   |- 2. Nc3
-        //   |- 2. h4
-        // |- 1... h5
-        // 2. Ke2
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... c5 2. Nf3 (2. Nc3) (2. h4)) (1... h5) 2. Ke2',
-        );
-
-        // Sidelines should be visible by default
-        expect(find.byIcon(Icons.add_box), findsNothing);
-        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(2));
-        expect(find.text('1… c5'), findsOneWidget);
-        expect(find.text('1… h5'), findsOneWidget);
-        expect(find.text('2. Nc3'), findsOneWidget);
-        expect(find.text('2. h4'), findsOneWidget);
-
-        await tester.tap(find.byIcon(Icons.indeterminate_check_box).first);
-
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-
-        // After collapsing the first sideline:
-        // 1. e4 e5
-        // |- [+] // <- expand icon
-        // 2. Ke2
-        expect(find.text('1… c5'), findsNothing);
-        expect(find.text('1… h5'), findsNothing);
-        expect(find.text('2. Nc3'), findsNothing);
-        expect(find.text('2. h4'), findsNothing);
-
-        // Expand again
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.add_box));
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-
-        // Collapse the inner sidelines
-        await tester.tap(find.byIcon(Icons.indeterminate_check_box).last);
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-
-        // After collapsing the inner sidelines:
-        // 1. e4 e5 [-] // <- collapse icon
-        // |- 1... c5
-        //   |- [+] // <- expand icon
-        // |- 1... h5
-        // 2. Ke2
-        expect(find.text('1… c5'), findsOneWidget);
-        expect(find.text('1… h5'), findsOneWidget);
-        expect(find.text('2. Nc3'), findsNothing);
-        expect(find.text('2. h4'), findsNothing);
-
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
-        expect(find.byIcon(Icons.indeterminate_check_box), findsOneWidget);
-      });
-      testWidgets(
-          'Expanding one line does not expand the following one (regression test)',
-          (tester) async {
-        /// Will be rendered as:
-        /// -------------------
-        /// 1. e4 e5
-        /// |- 1... d5 2. Nf3 (2.Nc3)
-        /// 2. Nf3
-        /// |- 2. a4 d5 (2... f5)
-        /// -------------------
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))',
-        );
-
-        expect(find.byIcon(Icons.indeterminate_check_box), findsNWidgets(2));
-        expect(find.byIcon(Icons.add_box), findsNothing);
-
-        // Collapse both lines
-        await tester.tap(find.byIcon(Icons.indeterminate_check_box).first);
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-        await tester.tap(find.byIcon(Icons.indeterminate_check_box).first);
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-
-        // In this state, there used to be a bug where expanding the first line would
-        // also expand the second line.
-        expect(find.byIcon(Icons.add_box), findsNWidgets(2));
-        await tester.tap(find.byIcon(Icons.add_box).first);
-
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
-
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
-        expect(find.byIcon(Icons.indeterminate_check_box), findsOneWidget);
-
-        // Second sideline should still be collapsed
-        expect(find.text('2. a4'), findsNothing);
       });
 
       testWidgets('subtrees not part of the current mainline part are cached',

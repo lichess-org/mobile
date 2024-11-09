@@ -271,11 +271,7 @@ class AnalysisController extends _$AnalysisController
   @override
   void expandVariations(UciPath path) {
     final node = _root.nodeAt(path);
-
-    final childrenToHide =
-        _root.isOnMainline(path) ? node.children.skip(1) : node.children;
-
-    for (final child in childrenToHide) {
+    for (final child in node.children) {
       child.isHidden = false;
       for (final grandChild in child.children) {
         grandChild.isHidden = false;
@@ -287,6 +283,7 @@ class AnalysisController extends _$AnalysisController
   @override
   void collapseVariations(UciPath path) {
     final node = _root.nodeAt(path);
+
     for (final child in node.children) {
       child.isHidden = true;
     }
