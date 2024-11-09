@@ -127,13 +127,12 @@ Future<Widget> makeTestProviderScope(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  // disable piece animation and drawing shapes to simplify tests
+  // disable piece animation to simplify tests
   final defaultBoardPref = {
     'preferences.board': jsonEncode(
       BoardPrefs.defaults
           .copyWith(
             pieceAnimation: false,
-            enableShapeDrawings: false,
           )
           .toJson(),
     ),
