@@ -63,6 +63,10 @@ extension type const StudyId(String value) implements StringId {
   StudyId.fromJson(dynamic json) : this(json as String);
 }
 
+extension type const TournamentId(String value) implements StringId {
+  TournamentId.fromJson(dynamic json) : this(json as String);
+}
+
 extension type const StudyChapterId(String value) implements StringId {
   StudyChapterId.fromJson(dynamic json) : this(json as String);
 }
@@ -231,5 +235,13 @@ extension IDPick on Pick {
     } catch (_) {
       return null;
     }
+  }
+
+  TournamentId asTournamentIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return TournamentId(value);
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to TournamentId");
   }
 }
