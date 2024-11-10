@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/online_bots_screen.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
@@ -52,6 +53,22 @@ class CreateGameOptions extends ConsumerWidget {
                       : null,
               icon: Icons.computer,
               label: context.l10n.onlineBots,
+            ),
+          ],
+        ),
+        _Section(
+          children: [
+            _CreateGamePlatformButton(
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.tournaments,
+                  rootNavigator: true,
+                  builder: (_) => const TournamentListScreen(),
+                );
+              },
+              icon: LichessIcons.tournament_cup,
+              label: context.l10n.tournaments,
             ),
           ],
         ),
