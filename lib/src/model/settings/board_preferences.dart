@@ -139,7 +139,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    clockPosition: ClockPosition.left,
+    clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
