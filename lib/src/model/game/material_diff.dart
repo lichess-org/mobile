@@ -43,7 +43,9 @@ class MaterialDiff with _$MaterialDiff {
     // TODO: parameterise starting position maybe so it can be passed in
 
     IMap<Role, int> subtractPieceCounts(
-        IMap<Role, int> startingCount, IMap<Role, int> subtractCount) {
+      IMap<Role, int> startingCount,
+      IMap<Role, int> subtractCount,
+    ) {
       IMap<Role, int> capturedPieces = IMap();
       startingCount.forEach((role, count) {
         capturedPieces =
@@ -103,13 +105,15 @@ class MaterialDiff with _$MaterialDiff {
 
     return MaterialDiff(
       black: MaterialDiffSide(
-          pieces: black.toIMap(),
-          score: -score,
-          capturedPieces: blackCapturedPieces),
+        pieces: black.toIMap(),
+        score: -score,
+        capturedPieces: blackCapturedPieces,
+      ),
       white: MaterialDiffSide(
-          pieces: white.toIMap(),
-          score: score,
-          capturedPieces: whiteCapturedPieces),
+        pieces: white.toIMap(),
+        score: score,
+        capturedPieces: whiteCapturedPieces,
+      ),
     );
   }
 

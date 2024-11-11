@@ -82,7 +82,8 @@ class BoardPreferences extends _$BoardPreferences
   }
 
   Future<void> setMaterialDifferenceFormat(
-      MaterialDifferenceFormat materialDifferenceFormat) {
+    MaterialDifferenceFormat materialDifferenceFormat,
+  ) {
     return save(
       state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
     );

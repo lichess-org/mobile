@@ -212,7 +212,8 @@ class _Body extends ConsumerWidget {
                           (MaterialDifferenceFormat? value) => ref
                               .read(boardPreferencesProvider.notifier)
                               .setMaterialDifferenceFormat(
-                                  value ?? MaterialDifferenceFormat.difference),
+                                value ?? MaterialDifferenceFormat.difference,
+                              ),
                     );
                   } else {
                     // pushPlatformRoute(
