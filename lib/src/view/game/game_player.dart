@@ -147,6 +147,9 @@ class GamePlayer extends StatelessWidget {
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
         else if (materialDiff != null)
           Row(
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               for (final role in Role.values)
                 for (int i = 0; i < materialDiff!.pieces[role]!; i++)
@@ -175,7 +178,6 @@ class GamePlayer extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      // mainAxisAlignment: clockPosition == ClockPosition.right ? MainAxisAlignment.start : MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (clock != null && clockPosition == ClockPosition.left)
