@@ -133,6 +133,24 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               textAlign: TextAlign.center,
             ),
           )
+        else if (gameState.game.opponent?.offeringRematch == true)
+          Row(
+            children: [
+              Text("Rematch offered"),
+              SecondaryButton(
+                  semanticsLabel: context.l10n.rematch,
+                  child: Text("Accept"),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                  }),
+              SecondaryButton(
+                  semanticsLabel: context.l10n.rematch,
+                  child: Text("Decline"),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).declineRematch();
+                  }),
+            ],
+          )
         else if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
@@ -142,7 +160,6 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                     ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                   }
                 : null,
-            glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(
               context.l10n.rematch,
               textAlign: TextAlign.center,
