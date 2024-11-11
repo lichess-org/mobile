@@ -62,7 +62,9 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (!zenMode)
           Row(
-            mainAxisAlignment: clockPosition == ClockPosition.right ? MainAxisAlignment.start : MainAxisAlignment.end,
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (player.user != null) ...[
                 Icon(
