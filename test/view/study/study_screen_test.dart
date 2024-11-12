@@ -174,14 +174,14 @@ void main() {
 
       expect(
         find.descendant(
-          of: find.byType(ListView),
+          of: find.byType(Scrollable),
           matching: find.text('Chapter 1'),
         ),
         findsOneWidget,
       );
       expect(
         find.descendant(
-          of: find.byType(ListView),
+          of: find.byType(Scrollable),
           matching: find.text('Chapter 2'),
         ),
         findsOneWidget,
