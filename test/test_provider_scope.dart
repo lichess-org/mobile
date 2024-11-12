@@ -107,7 +107,7 @@ Future<Widget> makeOfflineTestProviderScope(
 ///
 /// The [child] widget is the widget we want to test. It will be wrapped in a
 /// [MediaQuery.new] widget, to simulate a device with a specific size, controlled
-/// by [kTestSurfaceSize].
+/// by [surfaceSize] (which default to [kTestSurfaceSize]).
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [userSession] parameter can be used to set the initial user session state.
@@ -118,12 +118,17 @@ Future<Widget> makeTestProviderScope(
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
+  Size surfaceSize = kTestSurfaceSize,
+  Key? key,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 
   addTearDown(binding.reset);
 
-  await tester.binding.setSurfaceSize(kTestSurfaceSize);
+  await tester.binding.setSurfaceSize(surfaceSize);
+  addTearDown(() {
+    tester.binding.setSurfaceSize(null);
+  });
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
@@ -157,6 +162,7 @@ Future<Widget> makeTestProviderScope(
   FlutterError.onError = _ignoreOverflowErrors;
 
   return ProviderScope(
+    key: key,
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
       notificationDisplayProvider.overrideWith((ref) {
@@ -220,15 +226,9 @@ Future<Widget> makeTestProviderScope(
       }),
       ...overrides ?? [],
     ],
-    child: MediaQuery(
-      data: const MediaQueryData(size: kTestSurfaceSize),
-      child: Center(
-        child: SizedBox(
-          width: kTestSurfaceSize.width,
-          height: kTestSurfaceSize.height,
-          child: child,
-        ),
-      ),
+    child: TestSurface(
+      size: surfaceSize,
+      child: child,
     ),
   );
 }

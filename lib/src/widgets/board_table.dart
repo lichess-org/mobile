@@ -237,11 +237,13 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                      left: kTabletBoardTableSidePadding,
-                      top: kTabletBoardTableSidePadding,
-                      bottom: kTabletBoardTableSidePadding,
-                    ),
+                    padding: isTablet
+                        ? const EdgeInsets.only(
+                            left: kTabletBoardTableSidePadding,
+                            top: kTabletBoardTableSidePadding,
+                            bottom: kTabletBoardTableSidePadding,
+                          )
+                        : EdgeInsets.zero,
                     child: Row(
                       children: [
                         boardWidget,
@@ -258,8 +260,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   Flexible(
                     fit: FlexFit.loose,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.all(kTabletBoardTableSidePadding),
+                      padding: isTablet
+                          ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                          : EdgeInsets.zero,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
