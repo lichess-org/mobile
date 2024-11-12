@@ -26,7 +26,7 @@ class GamePlayer extends StatelessWidget {
     required this.player,
     this.clock,
     this.materialDiff,
-    this.materialDifferenceFormat,
+    this.materialDifference,
     this.confirmMoveCallbacks,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
@@ -38,7 +38,7 @@ class GamePlayer extends StatelessWidget {
   final Player player;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
+  final MaterialDifference? materialDifference;
 
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
@@ -143,10 +143,10 @@ class GamePlayer extends StatelessWidget {
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
-        else if (materialDiff != null)
+        else if (materialDiff != null && materialDifference?.visible == true)
           Row(
             children: [
-              if (materialDifferenceFormat == MaterialDifferenceFormat.pieces)
+              if (materialDifference == MaterialDifference.capturedPieces)
                 for (final role in Role.values)
                   for (int i = 0; i < materialDiff!.capturedPieces[role]!; i++)
                     Icon(
@@ -154,8 +154,7 @@ class GamePlayer extends StatelessWidget {
                       size: 13,
                       color: Colors.grey,
                     ),
-              if (materialDifferenceFormat ==
-                  MaterialDifferenceFormat.difference)
+              if (materialDifference == MaterialDifference.materialDifference)
                 for (final role in Role.values)
                   for (int i = 0; i < materialDiff!.pieces[role]!; i++)
                     Icon(
@@ -163,28 +162,6 @@ class GamePlayer extends StatelessWidget {
                       size: 13,
                       color: Colors.grey,
                     ),
-              const SizedBox(width: 3),
-              Text(
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                ),
-                materialDiff != null && materialDiff!.score > 0
-                    ? '+${materialDiff!.score}'
-                    : '',
-              ),
-            ],
-          )
-        else if (materialDiff != null && false)
-          Row(
-            children: [
-              for (final role in Role.values)
-                for (int i = 0; i < materialDiff!.pieces[role]!; i++)
-                  Icon(
-                    _iconByRole[role],
-                    size: 13,
-                    color: Colors.grey,
-                  ),
               const SizedBox(width: 3),
               Text(
                 style: const TextStyle(

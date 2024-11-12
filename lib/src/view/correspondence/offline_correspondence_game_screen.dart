@@ -142,9 +142,9 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final shouldShowMaterialDiff = ref.watch(
+    final materialDifference = ref.watch(
       boardPreferencesProvider.select(
-        (prefs) => prefs.showMaterialDifference,
+        (prefs) => prefs.materialDifference,
       ),
     );
 
@@ -157,9 +157,10 @@ class _BodyState extends ConsumerState<_Body> {
 
     final black = GamePlayer(
       player: game.black,
-      materialDiff: shouldShowMaterialDiff
+      materialDiff: materialDifference.visible
           ? game.materialDiffAt(stepCursor, Side.black)
           : null,
+      materialDifference: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.black,
       confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
@@ -179,9 +180,10 @@ class _BodyState extends ConsumerState<_Body> {
     );
     final white = GamePlayer(
       player: game.white,
-      materialDiff: shouldShowMaterialDiff
+      materialDiff: materialDifference.visible
           ? game.materialDiffAt(stepCursor, Side.white)
           : null,
+      materialDifference: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.white,
       confirmMoveCallbacks: youAre == Side.white && moveToConfirm != null

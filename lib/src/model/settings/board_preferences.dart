@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -75,17 +76,17 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
-  Future<void> toggleShowMaterialDifference() {
-    return save(
-      state.copyWith(showMaterialDifference: !state.showMaterialDifference),
-    );
-  }
+  // Future<void> toggleShowMaterialDifference() {
+  //   return save(
+  //     state.copyWith(showMaterialDifference: !state.showMaterialDifference),
+  //   );
+  // }
 
   Future<void> setMaterialDifferenceFormat(
-    MaterialDifferenceFormat materialDifferenceFormat,
+    MaterialDifference materialDifference,
   ) {
     return save(
-      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
+      state.copyWith(materialDifference: materialDifference),
     );
   }
 
@@ -113,8 +114,9 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    required bool showMaterialDifference,
-    required MaterialDifferenceFormat materialDifferenceFormat,
+    // required bool showMaterialDifference,
+    required MaterialDifference materialDifference,
+    // required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -140,8 +142,9 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
-    showMaterialDifference: true,
-    materialDifferenceFormat: MaterialDifferenceFormat.difference,
+    materialDifference: MaterialDifference.materialDifference,
+    // showMaterialDifference: true,
+    // materialDifferenceFormat: MaterialDifferenceFormat.difference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -298,13 +301,16 @@ enum BoardTheme {
         );
 }
 
-enum MaterialDifferenceFormat {
-  difference(description: 'Material difference'),
-  pieces(description: 'Captured pieces');
+enum MaterialDifference {
+  materialDifference(label: 'Material difference', visible: false),
+  capturedPieces(label: 'Captured pieces', visible: true),
+  hidden(label: 'Hidden', visible: false);
 
-  const MaterialDifferenceFormat({
-    required this.description,
+  const MaterialDifference({
+    required this.label,
+    required this.visible,
   });
 
-  final String description;
+  final String label;
+  final bool visible;
 }

@@ -109,17 +109,17 @@ class GameSettings extends ConsumerWidget {
             ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
           },
         ),
-        SwitchSettingTile(
-          title: Text(
-            context.l10n.preferencesMaterialDifference,
-          ),
-          value: boardPrefs.showMaterialDifference,
-          onChanged: (value) {
-            ref
-                .read(boardPreferencesProvider.notifier)
-                .toggleShowMaterialDifference();
-          },
-        ),
+        // SwitchSettingTile(
+        //   title: Text(
+        //     context.l10n.preferencesMaterialDifference,
+        //   ),
+        //   value: boardPrefs.showMaterialDifference,
+        //   onChanged: (value) {
+        //     ref
+        //         .read(boardPreferencesProvider.notifier)
+        //         .toggleShowMaterialDifference();
+        //   },
+        // ),
         SwitchSettingTile(
           title: Text(
             context.l10n.toggleTheChat,

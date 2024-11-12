@@ -184,44 +184,35 @@ class _Body extends ConsumerWidget {
                       .togglePieceAnimation();
                 },
               ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesMaterialDifference,
-                ),
-                value: boardPrefs.showMaterialDifference,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleShowMaterialDifference();
-                },
-              ),
+              // SwitchSettingTile(
+              //   title: Text(
+              //     context.l10n.preferencesMaterialDifference,
+              //   ),
+              //   value: boardPrefs.showMaterialDifference,
+              //   onChanged: (value) {
+              //     ref
+              //         .read(boardPreferencesProvider.notifier)
+              //         .toggleShowMaterialDifference();
+              //   },
+              // ),
               SettingsListTile(
                 settingsLabel: const Text('Material difference format'),
-                settingsValue: boardPrefs.materialDifferenceFormat.description,
+                settingsValue: boardPrefs.materialDifference.label,
                 onTap: () {
                   //TODO: implement different handling to android/ios
                   // if (Theme.of(context).platform == TargetPlatform.android) {
 
-                  if (true) {
-                    showChoicePicker(
-                      context,
-                      choices: MaterialDifferenceFormat.values,
-                      selectedItem: boardPrefs.materialDifferenceFormat,
-                      labelBuilder: (t) => Text(t.description),
-                      onSelectedItemChanged:
-                          (MaterialDifferenceFormat? value) => ref
-                              .read(boardPreferencesProvider.notifier)
-                              .setMaterialDifferenceFormat(
-                                value ?? MaterialDifferenceFormat.difference,
-                              ),
-                    );
-                  } else {
-                    // pushPlatformRoute(
-                    //   context,
-                    //   title: 'Clock position',
-                    //   builder: (context) => const BoardClockPositionScreen(),
-                    // );
-                  }
+                  showChoicePicker(
+                    context,
+                    choices: MaterialDifference.values,
+                    selectedItem: boardPrefs.materialDifference,
+                    labelBuilder: (t) => Text(t.label),
+                    onSelectedItemChanged: (MaterialDifference? value) => ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setMaterialDifferenceFormat(
+                          value ?? MaterialDifference.materialDifference,
+                        ),
+                  );
                 },
               ),
             ],
