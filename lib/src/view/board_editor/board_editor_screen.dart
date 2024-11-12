@@ -132,15 +132,12 @@ class _BoardEditor extends ConsumerWidget {
       size: boardSize,
       pieces: pieces,
       orientation: orientation,
-      settings: ChessboardEditorSettings(
-        pieceAssets: boardPrefs.pieceSet.assets,
-        colorScheme: boardPrefs.boardTheme.colors,
-        enableCoordinates: boardPrefs.coordinates,
-        borderRadius: isTablet
-            ? const BorderRadius.all(Radius.circular(4.0))
-            : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-      ),
+      settings: boardPrefs.toBoardSettings().copyWith(
+            borderRadius: isTablet
+                ? const BorderRadius.all(Radius.circular(4.0))
+                : BorderRadius.zero,
+            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          ),
       pointerMode: editorState.editorPointerMode,
       onDiscardedPiece: (Square square) => ref
           .read(boardEditorControllerProvider(initialFen).notifier)

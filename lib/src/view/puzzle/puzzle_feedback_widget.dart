@@ -52,17 +52,27 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                     letterSpacing: 2.0,
                   ),
                   textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                 )
               : Text(
                   state.result == PuzzleResult.win
                       ? context.l10n.puzzlePuzzleSuccess
                       : context.l10n.puzzlePuzzleComplete,
+                  overflow: TextOverflow.ellipsis,
                 ),
           subtitle: onStreak && state.result == PuzzleResult.lose
               ? null
               : RatingPrefAware(
-                  orElse: Text('$playedXTimes.'),
-                  child: Text('$puzzleRating. $playedXTimes.'),
+                  orElse: Text(
+                    '$playedXTimes.',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  child: Text(
+                    '$puzzleRating. $playedXTimes.',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
                 ),
         );
       case PuzzleMode.load:
@@ -74,8 +84,15 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
               size: 36,
               color: context.lichessColors.error,
             ),
-            title: Text(context.l10n.puzzleNotTheMove),
-            subtitle: Text(context.l10n.puzzleTrySomethingElse),
+            title: Text(
+              context.l10n.puzzleNotTheMove,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              context.l10n.puzzleTrySomethingElse,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           );
         } else if (state.feedback == PuzzleFeedback.good) {
           return _FeedbackTile(
@@ -104,11 +121,16 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                 ),
               ),
             ),
-            title: Text(context.l10n.yourTurn),
+            title: Text(
+              context.l10n.yourTurn,
+              overflow: TextOverflow.ellipsis,
+            ),
             subtitle: Text(
               state.pov == Side.white
                   ? context.l10n.puzzleFindTheBestMoveForWhite
                   : context.l10n.puzzleFindTheBestMoveForBlack,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ),
           );
         }
@@ -135,23 +157,25 @@ class _FeedbackTile extends StatelessWidget {
       children: [
         if (leading != null) ...[
           leading!,
-          const SizedBox(width: 18),
+          const SizedBox(width: 16.0),
         ],
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                fontSize:
-                    defaultFontSize != null ? defaultFontSize * 1.2 : null,
-                fontWeight: FontWeight.bold,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DefaultTextStyle.merge(
+                style: TextStyle(
+                  fontSize:
+                      defaultFontSize != null ? defaultFontSize * 1.2 : null,
+                  fontWeight: FontWeight.bold,
+                ),
+                child: title,
               ),
-              child: title,
-            ),
-            if (subtitle != null) subtitle!,
-          ],
+              if (subtitle != null) subtitle!,
+            ],
+          ),
         ),
       ],
     );

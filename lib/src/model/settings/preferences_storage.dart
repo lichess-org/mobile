@@ -18,6 +18,7 @@ enum PrefCategory {
   home('preferences.home'),
   board('preferences.board'),
   analysis('preferences.analysis'),
+  study('preferences.study'),
   overTheBoard('preferences.overTheBoard'),
   challenge('preferences.challenge'),
   gameSetup('preferences.gameSetup'),
