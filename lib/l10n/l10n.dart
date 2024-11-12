@@ -942,6 +942,12 @@ abstract class AppLocalizations {
   /// **'Standings'**
   String get broadcastStandings;
 
+  /// No description provided for @broadcastOfficialStandings.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Standings'**
+  String get broadcastOfficialStandings;
+
   /// No description provided for @broadcastIframeHelp.
   ///
   /// In en, this message translates to:
@@ -989,6 +995,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Score'**
   String get broadcastScore;
+
+  /// No description provided for @broadcastAllTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'All teams'**
+  String get broadcastAllTeams;
+
+  /// No description provided for @broadcastTournamentFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament format'**
+  String get broadcastTournamentFormat;
+
+  /// No description provided for @broadcastTournamentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament Location'**
+  String get broadcastTournamentLocation;
+
+  /// No description provided for @broadcastTopPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Top players'**
+  String get broadcastTopPlayers;
+
+  /// No description provided for @broadcastTimezone.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone'**
+  String get broadcastTimezone;
+
+  /// No description provided for @broadcastFideRatingCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE rating category'**
+  String get broadcastFideRatingCategory;
+
+  /// No description provided for @broadcastOptionalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional details'**
+  String get broadcastOptionalDetails;
+
+  /// No description provided for @broadcastUpcomingBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming broadcasts'**
+  String get broadcastUpcomingBroadcasts;
+
+  /// No description provided for @broadcastPastBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Past broadcasts'**
+  String get broadcastPastBroadcasts;
+
+  /// No description provided for @broadcastAllBroadcastsByMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'View all broadcasts by month'**
+  String get broadcastAllBroadcastsByMonth;
 
   /// No description provided for @broadcastNbBroadcasts.
   ///
@@ -1145,6 +1211,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact Lichess'**
   String get contactContactLichess;
+
+  /// No description provided for @coordinatesCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get coordinatesCoordinates;
+
+  /// No description provided for @coordinatesCoordinateTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinate training'**
+  String get coordinatesCoordinateTraining;
+
+  /// No description provided for @coordinatesAverageScoreAsWhiteX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as white: {param}'**
+  String coordinatesAverageScoreAsWhiteX(String param);
+
+  /// No description provided for @coordinatesAverageScoreAsBlackX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as black: {param}'**
+  String coordinatesAverageScoreAsBlackX(String param);
+
+  /// No description provided for @coordinatesKnowingTheChessBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowing the chessboard coordinates is a very important skill for several reasons:'**
+  String get coordinatesKnowingTheChessBoard;
+
+  /// No description provided for @coordinatesMostChessCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Most chess courses and exercises use the algebraic notation extensively.'**
+  String get coordinatesMostChessCourses;
+
+  /// No description provided for @coordinatesTalkToYourChessFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.'**
+  String get coordinatesTalkToYourChessFriends;
+
+  /// No description provided for @coordinatesYouCanAnalyseAGameMoreEffectively.
+  ///
+  /// In en, this message translates to:
+  /// **'You can analyse a game more effectively if you can quickly recognise coordinates.'**
+  String get coordinatesYouCanAnalyseAGameMoreEffectively;
+
+  /// No description provided for @coordinatesACoordinateAppears.
+  ///
+  /// In en, this message translates to:
+  /// **'A coordinate appears on the board and you must click on the corresponding square.'**
+  String get coordinatesACoordinateAppears;
+
+  /// No description provided for @coordinatesASquareIsHighlightedExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").'**
+  String get coordinatesASquareIsHighlightedExplanation;
+
+  /// No description provided for @coordinatesYouHaveThirtySeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 30 seconds to correctly map as many squares as possible!'**
+  String get coordinatesYouHaveThirtySeconds;
+
+  /// No description provided for @coordinatesGoAsLongAsYouWant.
+  ///
+  /// In en, this message translates to:
+  /// **'Go as long as you want, there is no time limit!'**
+  String get coordinatesGoAsLongAsYouWant;
+
+  /// No description provided for @coordinatesShowCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Show coordinates'**
+  String get coordinatesShowCoordinates;
+
+  /// No description provided for @coordinatesShowCoordsOnAllSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates on every square'**
+  String get coordinatesShowCoordsOnAllSquares;
+
+  /// No description provided for @coordinatesShowPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pieces'**
+  String get coordinatesShowPieces;
+
+  /// No description provided for @coordinatesStartTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Start training'**
+  String get coordinatesStartTraining;
+
+  /// No description provided for @coordinatesFindSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Find square'**
+  String get coordinatesFindSquare;
+
+  /// No description provided for @coordinatesNameSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Name square'**
+  String get coordinatesNameSquare;
 
   /// No description provided for @patronDonate.
   ///
@@ -3636,12 +3810,6 @@ abstract class AppLocalizations {
   /// **'By CPL'**
   String get byCPL;
 
-  /// No description provided for @openStudy.
-  ///
-  /// In en, this message translates to:
-  /// **'Open study'**
-  String get openStudy;
-
   /// No description provided for @enable.
   ///
   /// In en, this message translates to:
@@ -4883,12 +5051,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unblock'**
   String get unblock;
-
-  /// No description provided for @followsYou.
-  ///
-  /// In en, this message translates to:
-  /// **'Follows you'**
-  String get followsYou;
 
   /// No description provided for @xStartedFollowingY.
   ///
@@ -9407,6 +9569,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Congratulations! You completed this lesson.'**
   String get studyYouCompletedThisLesson;
+
+  /// No description provided for @studyPerPage.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} per page'**
+  String studyPerPage(String param);
 
   /// No description provided for @studyNbChapters.
   ///

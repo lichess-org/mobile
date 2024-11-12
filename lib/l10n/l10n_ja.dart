@@ -518,6 +518,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastStandings => '順位';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '他のオプションは $param にあります';
   }
@@ -546,6 +549,36 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'スコア';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -643,6 +676,64 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess に連絡する';
+
+  @override
+  String get coordinatesCoordinates => 'マスの位置';
+
+  @override
+  String get coordinatesCoordinateTraining => '座標を読むトレーニング';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白番での平均スコア: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黒番での平均スコア: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'チェス盤の座標がすぐわかるのは非常にだいじなスキルです。';
+
+  @override
+  String get coordinatesMostChessCourses => 'チェスの講座、問題はほとんど「代数式」という記譜法を使っています。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'またチェスの友人と話をするのも簡単になります。双方がいわば「チェス語」を理解しているからです。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'このマスはどこか、いちいち探すことがなくなれば、ゲームの検討も効率よくできます。';
+
+  @override
+  String get coordinatesACoordinateAppears => 'ボード上にマスの名前が表示されるので、そのマスをクリックしてください。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'ボード上にハイライト表示されるマスの座標（たとえば「e4」）を入力してください。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30 秒の間にできるだけ多くのマスを正しくクリック！';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'じっくりどうぞ、時間制限なしです！';
+
+  @override
+  String get coordinatesShowCoordinates => '座標を表示';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'すべてのマスに座標を表示';
+
+  @override
+  String get coordinatesShowPieces => '駒を表示';
+
+  @override
+  String get coordinatesStartTraining => 'トレーニングを開始';
+
+  @override
+  String get coordinatesFindSquare => 'マスを探す';
+
+  @override
+  String get coordinatesNameSquare => 'マスの名前を入力';
 
   @override
   String get patronDonate => '寄付';
@@ -1969,9 +2060,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get byCPL => '評価値で';
 
   @override
-  String get openStudy => '研究を開く';
-
-  @override
   String get enable => '解析する';
 
   @override
@@ -2637,9 +2725,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get unblock => 'ブロックを外す';
-
-  @override
-  String get followsYou => 'あなたをフォローしています';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5440,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'おめでとう ！　このレッスンを修了しました。';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

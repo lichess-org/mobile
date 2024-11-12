@@ -536,6 +536,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'लिचेस से संपर्क करें';
+
+  @override
+  String get coordinatesCoordinates => 'निर्देशांक';
+
+  @override
+  String get coordinatesCoordinateTraining => 'निर्देशांक प्रशिक्षण';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'सफेद के साथ में औसत अंक: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'काले के साथ में औसत अंक: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'शतरंज निर्देशांक जानना एक बहुत महत्वपूर्ण शतरंज कौशल है:';
+
+  @override
+  String get coordinatesMostChessCourses => 'ज्यादातर शतरंज पाठ्यक्रम और अभ्यास बड़े पैमाने पर बीजगणित संकेतन का उपयोग करते हैं।';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'यह आपके शतरंज मित्रों से बात करना आसान बनाता है, क्योंकि आप दोनों \"शतरंज की भाषा\" को समझते हैं।';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'यदि आप वर्ग के नामों की खोज करने की आवश्यकता नहीं है, तो आप एक गेम को और अधिक प्रभावी ढंग से विश्लेषण कर सकते हैं।';
+
+  @override
+  String get coordinatesACoordinateAppears => 'बोर्ड पर एक निर्देशांक दिखाई देता है और आपको संबंधित वर्ग पर क्लिक करना होगा।';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'बोर्ड पर एक दृश्य दिखाई देगा और आप देखेंगे कि यह दिखाई देगा (जैसे e4)';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'आपके पास यथासंभव अधिक से अधिक वर्गों को सही ढंग से मैप करने के लिए 30 सेकंड का समय है!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'आप जितना चाहें उतना समय लें, कोई समय सीमा नहीं है!';
+
+  @override
+  String get coordinatesShowCoordinates => 'निर्देशांक दिखाएं';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'शतरंज के टुकड़ों को इंगित करें';
+
+  @override
+  String get coordinatesStartTraining => 'प्रशिक्षण शुरू करो';
+
+  @override
+  String get coordinatesFindSquare => 'वर्ग को ढूंढिए';
+
+  @override
+  String get coordinatesNameSquare => 'नाम वर्ग';
 
   @override
   String get patronDonate => 'दान करें';
@@ -1991,9 +2082,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get byCPL => 'CPL द्वारा';
 
   @override
-  String get openStudy => 'अध्ययन खोलो';
-
-  @override
   String get enable => 'सक्षम करें';
 
   @override
@@ -2659,9 +2747,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get unblock => 'अवस्र्द्ध (ब्लॉक) न करें';
-
-  @override
-  String get followsYou => 'आपका अनुसरण कर रहे हैं';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5421,6 +5506,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'बधाई हो! आपने यह सबक पूरा कर लिया है।';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -536,6 +536,9 @@ class AppLocalizationsFo extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Set teg í samband við Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Krosstøl';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Krosstalavenjing';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Miðal stigatal við hvítum: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Miðal stigatal við svørtum: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'At kenna krosstølini á talvborðinum er ein týdningarmikil telvingarførleiki:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Flestu talvskeið og talvuppgávur nýta bókstavarokningarskriviháttin (algebra).';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Tað ger tað lættari at práta við talvvinir, at tit øll kenna \'talvmálið\'.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Tú fært lættari greinað eitt talv, um tú kennir krosstølini skjótt aftur.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'A coordinate appears on the board and you must click on the corresponding square.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Show coordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Show pieces';
+
+  @override
+  String get coordinatesStartTraining => 'Byrja venjing';
+
+  @override
+  String get coordinatesFindSquare => 'Find square';
+
+  @override
+  String get coordinatesNameSquare => 'Name square';
 
   @override
   String get patronDonate => 'Stuðla';
@@ -1991,9 +2082,6 @@ class AppLocalizationsFo extends AppLocalizations {
   String get byCPL => 'Við CPL';
 
   @override
-  String get openStudy => 'Lat rannsókn upp';
-
-  @override
   String get enable => 'Loyv';
 
   @override
@@ -2659,9 +2747,6 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get unblock => 'Forða ikki';
-
-  @override
-  String get followsYou => 'Fylgir tær';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5421,6 +5506,11 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

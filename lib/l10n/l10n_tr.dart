@@ -536,6 +536,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastStandings => 'Sıralamalar';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '${param}nda daha fazla seçenek';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Skor';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess ile iletişime geçin';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinatlar';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinat Antrenmanı';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Beyaz olarak ortalama skor: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Siyah olarak ortalama skor: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Satranç tahtasının koordinatlarını bilmek çok önemli bir satranç becerisidir:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Satranç derslerinin ve alıştırmalarının çoğunda cebirsel gösterim kullanılır.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '\"Satranç dilini\" anlayabildiğin için satranç oynayan arkadaşlarınla anlaşman daha kolay bir hâl alır.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Karelerin adlarını iyice bilirsen oyunları daha etkili bir şekilde analiz edebilirsin.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Tahta üzerinde sana verilecek koordinata karşılık gelen kareye tıklamalısın.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Tahta üzerinde gösterilen karenin koordinatını yazmalısın (\"e4\" gibi).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30 saniye içinde kaç tane kare bulabilirsen!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'İstediğin kadar oyna, süre sınırı yok!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Koordinatları göster';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Her karede koordinatlar';
+
+  @override
+  String get coordinatesShowPieces => 'Taşları göster';
+
+  @override
+  String get coordinatesStartTraining => 'Antrenmana başla';
+
+  @override
+  String get coordinatesFindSquare => 'Kareleri bul';
+
+  @override
+  String get coordinatesNameSquare => 'Kareleri yaz';
 
   @override
   String get patronDonate => 'Bağış yap';
@@ -1993,9 +2084,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get byCPL => 'CPL ile';
 
   @override
-  String get openStudy => 'Çalışma oluştur';
-
-  @override
   String get enable => 'Etkinleştir';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get unblock => 'Engeli kaldır';
-
-  @override
-  String get followsYou => 'Sizi takip ediyor';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Tebrikler! Bu dersi tamamlandınız.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

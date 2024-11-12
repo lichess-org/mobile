@@ -536,6 +536,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
+
+  @override
+  String get coordinatesCoordinates => 'Koordenatuak';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordenatuen entrenamendua';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Zuri gisa egindako puntuen batazbestekoa: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Beltz gisa egindako puntuen batazbestekoa: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Xake-taulako koordenatuak jakitea oso garrantzitsua da jokalarientzat:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Ikastaro eta ariketa gehienek idazkera algebraikoa erabiltzen dute.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Horrela errazagoa da zure lagunekin hitz egitea, biok hitz egiten baituzue \"xakearen hizkuntza\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Partida errazago aztertu dezakezu ez badituzu laukien izenak aurkitu behar.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Koordenatua taulan agertzen dan eta dagokion laukian klik egin behar duzu.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Lauki bat markatuko da eta bere koordinatua idatzi beharko duzu (adb.: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30 segundo dituzu ahal bezain beste lauki asmatzeko!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Nahi duzun arte aritu honetan, ez dago denbora mugarik!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Erakutsi koordenatuak';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordenatuak lauki guztietan';
+
+  @override
+  String get coordinatesShowPieces => 'Erakutsi piezak';
+
+  @override
+  String get coordinatesStartTraining => 'Entrenatzen hasi';
+
+  @override
+  String get coordinatesFindSquare => 'Bilatu laukia';
+
+  @override
+  String get coordinatesNameSquare => 'Izendatu laukia';
 
   @override
   String get patronDonate => 'Dirua eman';
@@ -1993,9 +2084,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get byCPL => 'CPL';
 
   @override
-  String get openStudy => 'Ikerketa ireki';
-
-  @override
   String get enable => 'Aktibatu';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get unblock => 'Desblokeatu';
-
-  @override
-  String get followsYou => 'Zu jarraitzen';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Zorionak! Ikasgai hau osatu duzu.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

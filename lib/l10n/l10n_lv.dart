@@ -553,6 +553,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -581,6 +584,36 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -679,6 +712,64 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Sazināties ar Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinātas';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinātu treniņš';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Vidējais rezultāts ar baltajām: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Vidējais rezultāts ar melnajām: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Šaha galdiņa koordinātu zināšana ir svarīga šaha prasme:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Lielākajā daļā šaha literatūras plaši tiek lietota algebriskā notācija.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Būs vieglāk runāt ar saviem šaha draugiem, jo abi sapratīsiet \"šaha valodu\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Varēsi efektīvāk analizēt spēli, ja nevajadzēs ik reizi meklēt lauciņa nosaukumu.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Uz galdiņa parādās koordinātas, un jums jānoklikšķina uz attiecīgā lauciņa.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Kāds lauciņš tiek izcelts galdiņā, un jums jāievada tā koordinātas (piemēram, \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Jums ir 30 sekundes, lai atrastu pēc iespējas vairāk lauciņu!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Turpiniet, cik ilgi vēlaties; laika limita nav!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Rādīt koordinātas';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Rādīt figūras';
+
+  @override
+  String get coordinatesStartTraining => 'Sākt treniņu';
+
+  @override
+  String get coordinatesFindSquare => 'Atrast lauciņu';
+
+  @override
+  String get coordinatesNameSquare => 'Nosaukt lauciņu';
 
   @override
   String get patronDonate => 'Ziedot';
@@ -2015,9 +2106,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get byCPL => 'Pēc CPL';
 
   @override
-  String get openStudy => 'Atvērt izpēti';
-
-  @override
   String get enable => 'Iespējot';
 
   @override
@@ -2683,9 +2771,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get unblock => 'Atbloķēt';
-
-  @override
-  String get followsYou => 'Sekotāji';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5489,6 +5574,11 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Apsveicam! Pabeidzāt šo nodarbību.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

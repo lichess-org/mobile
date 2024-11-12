@@ -519,6 +519,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -547,6 +550,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -645,6 +678,64 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Kontak Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinat';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Latihan koordinat';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Skor rata-rata putih: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Skor rata-rata hitam: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Mengetahui koordinat papan catur adalah kemampuan catur yang sangat penting:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Kebanyakan program catur dan latihan menggunakan notasi aljabar secara ekstensif.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Itu membuatnya lebih mudah untuk berbicara dengan teman-teman catur Anda, karena Anda berdua memahami \"bahasa catur\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Anda dapat menganalisis permainan lebih efektif jika Anda tidak perlu untuk mencari nama-nama kotak.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'A coordinate appears on the board and you must click on the corresponding square.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Tampilkan koordinat';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Tampilkan buah';
+
+  @override
+  String get coordinatesStartTraining => 'Mulai latihan';
+
+  @override
+  String get coordinatesFindSquare => 'Cari petak';
+
+  @override
+  String get coordinatesNameSquare => 'Menamai petak';
 
   @override
   String get patronDonate => 'Donasi';
@@ -1971,9 +2062,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get byCPL => 'Secara CPL';
 
   @override
-  String get openStudy => 'Buka studi';
-
-  @override
   String get enable => 'Aktifkan';
 
   @override
@@ -2639,9 +2727,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get unblock => 'Buka blokir';
-
-  @override
-  String get followsYou => 'Mengikuti anda';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5357,6 +5442,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Selamat. Anda telah menyelesaikan pelajaran ini.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

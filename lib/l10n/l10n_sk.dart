@@ -572,6 +572,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastStandings => 'Poradie';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Viac možností nájdete na $param';
   }
@@ -600,6 +603,36 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Skóre';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -700,6 +733,64 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Kontaktuj Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Súradnice';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Tréning znalosti šachovnicových súradníc';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Priemerné skóre ako biely: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Priemerné skóre ako čierny: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Znalosť šachovnicových súradníc je pre šach veľmi dôležitá:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Väčšina šachových kurzov a cvičení veľmi často používa algebraickú notáciu.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Ľahšie sa dorozumiete so svojimi šachovými priateľmi, pretože obaja budete hovoriť \"rečou šachu\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Môžete efektívnejšie analyzovať partie, ak nebudete neustále potrebovať hľadať názvy polí.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Na šachovnici sa zobrazia súradnice a Vašou úlohou je kliknúť na korešpondujúce políčko.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Na šachovnici sa zvýrazní políčko a Vašou úlohou je zadať jeho súradnice (napr. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Máte 30 sekúnd na to aby ste správne klikli na čo najviac políčok!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Trénujte do ľubovôle, nie ste limitovaní časom!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Ukázať súradnice';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Súradnice na všetkých políčkach';
+
+  @override
+  String get coordinatesShowPieces => 'Ukázať figúrky';
+
+  @override
+  String get coordinatesStartTraining => 'Začať tréning';
+
+  @override
+  String get coordinatesFindSquare => 'Nájsť pole';
+
+  @override
+  String get coordinatesNameSquare => 'Pomenovať pole';
 
   @override
   String get patronDonate => 'Prispieť';
@@ -2041,9 +2132,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get byCPL => 'CHYBY';
 
   @override
-  String get openStudy => 'Otvoriť štúdie';
-
-  @override
   String get enable => 'Povoliť analýzu';
 
   @override
@@ -2709,9 +2797,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get unblock => 'Odblokovať';
-
-  @override
-  String get followsYou => 'Sleduje Vás';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5559,6 +5644,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulujeme! Túto lekciu ste ukončili.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

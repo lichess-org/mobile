@@ -536,6 +536,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Контактирајте ја Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Координати';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Вежба за координатите';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Просечен резултат со белите: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Просечен резултат со црните: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Препознавањето на координатите на шаховската табла е многу важна вештина:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Повеќето шаховски курсеви и вежби исклучиво ја користат алгебарската нотација.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Го олеснува разговорот со твоите шаховски пријатели, бидејќи и двајцата го знаете „шаховскиот јазик“.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Полесно можеш да ја анализираш играта ако брзо ги препознаваш координатите.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Координатите се појавуваат на екранот, а Вие треба да кликнете на соодветното поле.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Show coordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Show pieces';
+
+  @override
+  String get coordinatesStartTraining => 'Започни ја вежбата';
+
+  @override
+  String get coordinatesFindSquare => 'Find square';
+
+  @override
+  String get coordinatesNameSquare => 'Name square';
 
   @override
   String get patronDonate => 'Донирај';
@@ -1993,9 +2084,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get byCPL => 'По CPL';
 
   @override
-  String get openStudy => 'Отвори студија';
-
-  @override
   String get enable => 'Овозможи';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get unblock => 'Одблокирај';
-
-  @override
-  String get followsYou => 'Те следи';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

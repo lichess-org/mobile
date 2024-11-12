@@ -536,6 +536,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess-ի կոնտակտներ';
+
+  @override
+  String get coordinatesCoordinates => 'Կոորդինատներ';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Կոորդինատների մտապահում';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Միջին հաշիվը սպիտակներով՝ $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Միջին հաշիվը սևերով՝ $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Շախմատի կոորդինատները իմանալը շատ կարևոր հմտություն է:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Շախմատային դասընթացներում և խնդիրներում լայնորեն կիրառվում է նոտագրությունը:';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Հեշտանում է ընկերների հետ խոսելը, երբ երկուսն էլ հասկանում են «շախմատի լեզուն»:';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Պարտիաներ վերլուծելն ավելի արդյունավետ է, եթե կոորդինատներով դաշտերը փնտելու վրա ժամանակ չի ծախսվում:';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Կոորդինատները հայտնվում են տախտակին, և Ձեզ անհրաժեշտ է նշել դրանց համապատասխանող դաշտը։';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Դաշտը լուսավորված է տախտակի վրա, և դուք պետք է մուտքագրեք դրա կոորդինատները (օրինակ ՝ \"e4\"):';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Դուք ունեք 30 վայրկյան՝ հնարավորինս շատ դաշտեր ճիշտ նշելու համար:';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Գնացեք այնքան հեռու, որքան կարող եք: Ժամանակը սահմանափակ չէ:';
+
+  @override
+  String get coordinatesShowCoordinates => 'Ցույց տալ կոորդինատները';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Ցույց տալ խաղաքարերը';
+
+  @override
+  String get coordinatesStartTraining => 'Սկսել ուսուցումը';
+
+  @override
+  String get coordinatesFindSquare => 'Գտնել դաշտը';
+
+  @override
+  String get coordinatesNameSquare => 'Անվանել դաշտը';
 
   @override
   String get patronDonate => 'Նվիրաբերել';
@@ -1993,9 +2084,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get byCPL => 'Ըստ սխալների';
 
   @override
-  String get openStudy => 'Բացել ուսուցումը';
-
-  @override
   String get enable => 'Միացնել';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get unblock => 'Հանել արգելափակումը';
-
-  @override
-  String get followsYou => 'Հետևում են ձեզ';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Շնորհավորո՜ւմ ենք։ Դուք ավարեցիք այս դասը։';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

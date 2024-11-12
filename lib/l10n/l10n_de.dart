@@ -536,6 +536,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastStandings => 'Rangliste';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Weitere Optionen auf der $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Punktestand';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess kontaktieren';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinaten';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinatentraining';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Durchschnittliche Punktzahl als Weiß: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Durchschnittliche Punktzahl als Schwarz: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Die Koordinaten des Schachbretts zu kennen ist eine wichtige Fähigkeit:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Die meisten Schach-Kurse und Übungen verwenden die algebraische Notation.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Es macht es einfacher dich mit deinen Schachfreunden zu unterhalten, da ihr beide die \"Schachsprache\" versteht.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Du kannst ein Spiel effektiver analysieren, wenn du nicht immer nach den Feldbezeichnungen suchen musst.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Es erscheint eine Koordinate auf dem Brett und du musst auf das entsprechende Feld klicken.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Ein Feld wird auf dem Brett hervorgehoben und du musst dessen Koordinate eingeben (z. B. „e4“).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Du hast 30 Sekunden, um so viele Felder wie möglich korrekt zu benennen!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Spiele so lange du willst, es gibt keine Zeitbegrenzung!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Koordinaten anzeigen';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinaten auf jedem Feld';
+
+  @override
+  String get coordinatesShowPieces => 'Figuren anzeigen';
+
+  @override
+  String get coordinatesStartTraining => 'Training beginnen';
+
+  @override
+  String get coordinatesFindSquare => 'Feld finden';
+
+  @override
+  String get coordinatesNameSquare => 'Feld benennen';
 
   @override
   String get patronDonate => 'Spenden';
@@ -1993,9 +2084,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get byCPL => 'Nach CPL';
 
   @override
-  String get openStudy => 'Studie öffnen';
-
-  @override
   String get enable => 'Einschalten';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unblock => 'Nicht mehr blockieren';
-
-  @override
-  String get followsYou => 'Folgt dir';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulation! Du hast diese Lektion abgeschlossen.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

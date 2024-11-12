@@ -572,6 +572,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastStandings => 'Klasyfikacja';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Więcej opcji na $param';
   }
@@ -600,6 +603,36 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Wynik';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -700,6 +733,64 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Skontaktuj się z Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Współrzędne pól';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Trening współrzędnych pól';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Średni wynik białymi: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Średni wynik czarnymi: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Znajomość współrzędnych pól na szachownicy jest bardzo ważną umiejętnością:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Większość kursów i ćwiczeń szachowych powszechnie wykorzystuje notację algebraiczną.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Rozmowa ze znajomymi szachistami będzie łatwiejsza, gdy będziecie się porozumiewać w „języku szachów”.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Analiza partii przebiega sprawniej, jeśli nie musisz szukać pól mając ich współrzędne.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Wyświetlą się współrzędne, a Ty musisz kliknąć odpowiednie pole.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Masz 30 sekund, aby wskazać tak wiele pól, jak to możliwe!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Próbuj tak długo, jak chcesz, nie ma limitu czasowego!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Pokaż współrzędne';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Współrzędne na każdym polu';
+
+  @override
+  String get coordinatesShowPieces => 'Pokaż bierki';
+
+  @override
+  String get coordinatesStartTraining => 'Rozpocznij trening';
+
+  @override
+  String get coordinatesFindSquare => 'Znajdź pole';
+
+  @override
+  String get coordinatesNameSquare => 'Nazwij pole';
 
   @override
   String get patronDonate => 'Przekaż datek';
@@ -2041,9 +2132,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get byCPL => 'Wg SCP';
 
   @override
-  String get openStudy => 'Otwórz opracowanie';
-
-  @override
   String get enable => 'Włącz';
 
   @override
@@ -2709,9 +2797,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get unblock => 'Odblokuj';
-
-  @override
-  String get followsYou => 'Obserwuje Cię';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5559,6 +5644,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulacje! Ukończono tę lekcję.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

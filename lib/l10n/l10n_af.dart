@@ -536,6 +536,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Kontak Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Koördinate';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koördinaat oefening';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Gemiddelde telling as wit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Gemiddelde telling as swart: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Om die koördinate op die skaakbord te ken is \'n baie belangrike skaakvaardigheid:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Meeste skaak kursusse en oefeninge gebruik algebraïese notasie.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Dit maak dit makliker om met jou skaak vriende te praat omdat julle albei die \'taal van skaak\' verstaan.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Jy kan \'n spel meer effektief analiseer as jy vinnig koördinate kan herken.';
+
+  @override
+  String get coordinatesACoordinateAppears => '\'n Koördinaat verskyn op die bord en jy moet dan op die ooreenstemmende blokkie klik.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '\'n Blokkie op die bord word gemerk en jy moet dan die ooreenstemmende koördinate verskaf (bv. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Jy het 30 sekondes om soveel blokkies moontlik te merk!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Neem so lank as wat jy wil, daar is geen tydsbeperking nie!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Vertoon koördinate';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koördinate op elke blokkie';
+
+  @override
+  String get coordinatesShowPieces => 'Vertoon stukke';
+
+  @override
+  String get coordinatesStartTraining => 'Begin die oefening';
+
+  @override
+  String get coordinatesFindSquare => 'Vind die blokkie';
+
+  @override
+  String get coordinatesNameSquare => 'Gee die koördinate van die blokkie';
 
   @override
   String get patronDonate => 'Maak \'n skenking';
@@ -1993,9 +2084,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get byCPL => 'Met CPL';
 
   @override
-  String get openStudy => 'Open studie';
-
-  @override
   String get enable => 'Aktief';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get unblock => 'Ontblok';
-
-  @override
-  String get followsYou => 'Volg jou';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Geluk! Jy het hierdie les voltooi.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -587,6 +587,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -615,6 +618,36 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -713,6 +746,64 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Déan teagmháil le Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Comhordanáidí';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Cleachtadh comhordanáide';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Meánscór le bán: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Meánscór le dubh: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Is scil fichille an-tábhachtach é eolas a bheith agat ar chomhordanáidí an chláir fichille:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Baineann an chuid is mó de chúrsaí agus cleachtaí fichille úsáid as an nodaireacht ailgéabrach go fairsing.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Tá sé níos éascaigh labhairt le do chairde fichille, má dtuigeann an bheirt agaibh ‘teanga na fichille’.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Is féidir leat cluiche a anailísiú ar bhealach níos éifeachtaí más féidir leat comhordanáidí a aithint go tapa.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Tá comhordanáid le feiceáil ar an gclár agus ní mór duit cliceáil ar an gcearnóg chomhfhreagrach.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Aibhsítear cearnóg ar an gclár agus ní mór duit a chomhordanáid a chur isteach (m.sh. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Tá 30 soicind agat chun an oiread cearnóga agus is féidir a mhapáil i gceart!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Téigh chomh fada agus is mian leat, níl aon teorainn ama ann!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Taispeáin comhordanáidí';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Taispeáin píosaí';
+
+  @override
+  String get coordinatesStartTraining => 'Tosaigh';
+
+  @override
+  String get coordinatesFindSquare => 'Aimsigh cearnóg';
+
+  @override
+  String get coordinatesNameSquare => 'Ainmnigh cearnóg';
 
   @override
   String get patronDonate => 'Deonaigh';
@@ -2059,9 +2150,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get byCPL => 'De réir CPL';
 
   @override
-  String get openStudy => 'Oscail staidéar';
-
-  @override
   String get enable => 'Cumasaigh';
 
   @override
@@ -2727,9 +2815,6 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get unblock => 'Bain bac de';
-
-  @override
-  String get followsYou => 'Do leanúint';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5615,6 +5700,11 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Comhghairdeas! Chríochnaigh tú an ceacht seo.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

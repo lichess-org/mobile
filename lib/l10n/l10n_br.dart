@@ -587,6 +587,9 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -615,6 +618,36 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -713,6 +746,64 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Mont e darempred gant Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Daveennoù';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Pleustriñ war an daveennoù';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Disoc\'h keitat eus tu ar re wenn: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Disoc\'h keitat eus tu ar re zu: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Anavezout daveennoù an dachenn emgann zo ur varregezh a-bouez bras:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Darn vrasañ eus ar c\'hentelioù ha poelladennoù a ra gant an notadur aljebrek.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Aesoc\'h e vo deoc\'h kaozeal gant ho mignoned peogwir e veoc\'h gouest da gomz \"yezh an echedoù\" asambles gante.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Efedusoc\'h eo an dielfennañ pa ouzer diouzhtu pelec\'h emaomp war an dachenn emgann.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Un daveenn a zifoup war an dablez hag e rankit klikañ war ar garezenn.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Lakaet \'vez liv war ur garrezenn war an dablez hag e rankit skrivañ he daveennoù (sk \"e4).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Show coordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Show pieces';
+
+  @override
+  String get coordinatesStartTraining => 'Kregiñ ganti';
+
+  @override
+  String get coordinatesFindSquare => 'Find square';
+
+  @override
+  String get coordinatesNameSquare => 'Name square';
 
   @override
   String get patronDonate => 'Ober un donezon';
@@ -2045,9 +2136,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get byCPL => 'Dre CPL';
 
   @override
-  String get openStudy => 'Digeriñ ar studi';
-
-  @override
   String get enable => 'Enaouiñ';
 
   @override
@@ -2713,9 +2801,6 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get unblock => 'Distankañ';
-
-  @override
-  String get followsYou => 'Ho heuilh';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5601,6 +5686,11 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

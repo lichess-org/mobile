@@ -572,6 +572,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastStandings => 'Турнирная таблица';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Больше опций на $param';
   }
@@ -600,6 +603,36 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Очки';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -700,6 +733,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Контакты Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Координаты';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Запоминание координат полей';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Средний счёт за белых: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Средний счёт за чёрных: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Знание координат на шахматной доске — очень важный навык для шахматиста:';
+
+  @override
+  String get coordinatesMostChessCourses => 'В большинстве шахматных курсов и упражнений широко используется шахматная нотация.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Вам будет проще общаться с другом-шахматистом, если вы оба будете понимать «язык шахмат».';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Анализировать игры гораздо проще, когда не тратится время на поиск полей по их координатам.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Координаты появляются на доске, и вам нужно отметить соответствующее им поле.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Поле подсвечивается на доске, и вам нужно ввести его координаты (например, «e4»).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'У вас есть 30 секунд на то, чтобы правильно отметить как можно больше полей!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Продвиньтесь так далеко, как сможете. Время не ограничено!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Показывать координаты';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Координаты на каждом поле';
+
+  @override
+  String get coordinatesShowPieces => 'Показывать фигуры';
+
+  @override
+  String get coordinatesStartTraining => 'Начать тренировку';
+
+  @override
+  String get coordinatesFindSquare => 'Найти поле';
+
+  @override
+  String get coordinatesNameSquare => 'Обозначить поле';
 
   @override
   String get patronDonate => 'Поддержать проект';
@@ -2041,9 +2132,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get byCPL => 'По ошибкам';
 
   @override
-  String get openStudy => 'Открыть в студии';
-
-  @override
   String get enable => 'Включить';
 
   @override
@@ -2709,9 +2797,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unblock => 'Разблокировать';
-
-  @override
-  String get followsYou => 'Подписан на вас';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5559,6 +5644,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Поздравляем! Вы прошли этот урок.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

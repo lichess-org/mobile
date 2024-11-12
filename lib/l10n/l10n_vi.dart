@@ -518,6 +518,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastStandings => 'Bảng xếp hạng';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Thêm tùy chọn trên $param';
   }
@@ -546,6 +549,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Điểm số';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -643,6 +676,64 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Liên hệ Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Tầm nhìn';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Luyện tập tầm nhìn';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Điểm trung bình khi cầm quân trắng: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Điểm trung bình khi cầm quân đen: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Biết tọa độ bàn cờ là một kỹ năng rất quan trọng vì nhiều lý do:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Hầu hết các khóa học và bài tập cờ vua dùng ký hiệu đại số rộng rãi.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Nó giúp bạn cờ dễ nói chuyện với nhau hơn, vì cả hai đều hiểu \"ngôn ngữ cờ vua\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Bạn sẽ phân tích ván cờ hiệu quả hơn nếu bạn có thể tìm ra ngay ô cờ từ tọa độ.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Một tọa độ sẽ xuất hiện trên bàn cờ và bạn phải nhấp chuột vào ô tương ứng.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Một ô trên bàn cờ sẽ được làm nổi bật và bạn phải nhập đúng tên ô đó (vd: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Cố gắng tìm đúng nhiều ô nhất có thể trong vòng 30 giây!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Luyện tập vô tận, không có giới hạn thời gian!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Hiện tọa độ';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Tọa độ trên mỗi ô cờ';
+
+  @override
+  String get coordinatesShowPieces => 'Hiện quân cờ';
+
+  @override
+  String get coordinatesStartTraining => 'Bắt đầu tập luyện';
+
+  @override
+  String get coordinatesFindSquare => 'Tìm ô cờ';
+
+  @override
+  String get coordinatesNameSquare => 'Điền tên ô cờ';
 
   @override
   String get patronDonate => 'Ủng hộ';
@@ -1969,9 +2060,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get byCPL => 'Theo phần trăm mất tốt (CPL)';
 
   @override
-  String get openStudy => 'Mở nghiên cứu';
-
-  @override
   String get enable => 'Bật';
 
   @override
@@ -2637,9 +2725,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get unblock => 'Bỏ chặn';
-
-  @override
-  String get followsYou => 'Theo dõi bạn';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5440,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Chúc mừng! Bạn đã hoàn thành bài học này.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -536,6 +536,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastStandings => 'Tulostaulu';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Lisäasetuksia löytyy $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Pisteet';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Ota yhteyttä Lichessiin';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinaatit';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinaattiharjoittelu';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Keskimääräinen tulos valkeana: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Keskimääräinen tulos mustana: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Shakkilaudan koordinaattien hallinta on erittäin tärkeä kyky shakinpelaajalle:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Shakkikursseilla ja -harjoituksissa käytetään useimmiten algebrallista merkintätapaa.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'On helpompaa puhua shakkikavereidesi kanssa, kun ymmärrätte puolin ja toisin \"shakin kieltä\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Peliä voi analysoida tehokkaammin, kun ei tarvitse haeskella ruutujen nimiä.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Laudalle tulee näkyviin koordinaatit, ja sinun on klikattava niitä vastaavaa ruutua.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Laudalla valitaan vuorotellen eri ruutuja, ja tehtävänäsi on kirjoittaa kunkin koordinaatit (esim. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Sinulla on 30 sekuntia aikaa paikantaa niin monta ruutua kuin ehdit!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Tee sitä kaikessa rauhassa, aikarajaa ei ole!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Näytä koordinaatit';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinaatit jokaisessa ruudussa';
+
+  @override
+  String get coordinatesShowPieces => 'Näytä nappulat';
+
+  @override
+  String get coordinatesStartTraining => 'Aloita harjoitus';
+
+  @override
+  String get coordinatesFindSquare => 'Etsi ruutu';
+
+  @override
+  String get coordinatesNameSquare => 'Nimeä ruutu';
 
   @override
   String get patronDonate => 'Lahjoita';
@@ -1993,9 +2084,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get byCPL => 'Virheet';
 
   @override
-  String get openStudy => 'Avaa tutkielma';
-
-  @override
   String get enable => 'Käytössä';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get unblock => 'Poista esto';
-
-  @override
-  String get followsYou => 'Seuraa sinua';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Onnittelut! Olet suorittanut tämän oppiaiheen.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -536,6 +536,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastStandings => 'Clasificación';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Más opciones en $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Resultado';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Contactar con Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Coordenadas';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Entrenar coordenadas';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Puntuación media con blancas: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Puntuación media con negras: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Conocer las coordenadas de los escaques es esencial en el ajedrez:';
+
+  @override
+  String get coordinatesMostChessCourses => 'La mayoría de los cursos y ejercicios de ajedrez usan la notación algebraica.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Facilita la comunicación con otros jugadores, que también hablan el \"lenguaje del ajedrez\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Puedes analizar partidas de forma más eficiente si no tienes que andar buscando los nombres de los escaques.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Una coordenada aparece en el tablero y debes hacer clic en la casilla correspondiente.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Una casilla se resalta en el tablero y debes introducir su coordenada (por ejemplo, \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '¡Tienes 30 segundos para marcar correctamente tantas casillas como sea posible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '¡Tómate todo el tiempo que quieras, no hay límite de tiempo!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Mostrar coordenadas';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordenadas en cada casilla';
+
+  @override
+  String get coordinatesShowPieces => 'Mostrar piezas';
+
+  @override
+  String get coordinatesStartTraining => 'Comenzar entrenamiento';
+
+  @override
+  String get coordinatesFindSquare => 'Encontrar casilla';
+
+  @override
+  String get coordinatesNameSquare => 'Nombrar casilla';
 
   @override
   String get patronDonate => 'Donar';
@@ -1993,9 +2084,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get byCPL => 'Por PCP';
 
   @override
-  String get openStudy => 'Abrir estudio';
-
-  @override
   String get enable => 'Activar';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unblock => 'Desbloquear';
-
-  @override
-  String get followsYou => 'Te sigue';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => '¡Felicidades! Has completado esta lección.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

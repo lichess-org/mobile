@@ -518,6 +518,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastStandings => '순위';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '$param에서 더 많은 정보를 확인하실 수 있습니다';
   }
@@ -546,6 +549,36 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastScore => '점수';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -643,6 +676,64 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess에 문의하기';
+
+  @override
+  String get coordinatesCoordinates => '좌표';
+
+  @override
+  String get coordinatesCoordinateTraining => '좌표 훈련';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '백색으로 평균 점수: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '흑색으로 평균 점수: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => '체스판 좌표를 아는 것은 아주 중요한 체스 기술입니다:';
+
+  @override
+  String get coordinatesMostChessCourses => '대부분의 체스 강좌와 훈련은 `대수적 표기법`을 광범위하게 사용합니다.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '기보법을 안다면, 친구와 당신 모두 \'체스의 언어\'를 이해하기 때문에 체스 경기를 이야기하기 쉬워집니다.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '당신이 좌표를 빠르게 인식할 수 있다면 더 효과적으로 게임을 분석할 수 있습니다.';
+
+  @override
+  String get coordinatesACoordinateAppears => '보드 위에 좌표가 나타나며 알맞은 칸을 클릭해야 합니다.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '보드의 칸이 강조되며 좌표를 입력해야 합니다. (예: \"e4\")';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30초 동안 가능한 많은 칸을 매칭하세요!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '원하는 만큼 오래 하세요, 시간 제한은 없습니다!';
+
+  @override
+  String get coordinatesShowCoordinates => '좌표 표시';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => '모든 칸에 좌표';
+
+  @override
+  String get coordinatesShowPieces => '기물 표시';
+
+  @override
+  String get coordinatesStartTraining => '훈련 시작';
+
+  @override
+  String get coordinatesFindSquare => '칸 찾기';
+
+  @override
+  String get coordinatesNameSquare => '칸 이름 맞추기';
 
   @override
   String get patronDonate => '기부';
@@ -1969,9 +2060,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get byCPL => '센티폰 손실';
 
   @override
-  String get openStudy => '연구를 시작하기';
-
-  @override
   String get enable => '활성화';
 
   @override
@@ -2637,9 +2725,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get unblock => '차단 해제';
-
-  @override
-  String get followsYou => '팔로워';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5440,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => '축하합니다! 이 레슨을 완료했습니다.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

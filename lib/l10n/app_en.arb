@@ -327,6 +327,7 @@
   "broadcastNotYetStarted": "The broadcast has not yet started.",
   "broadcastOfficialWebsite": "Official website",
   "broadcastStandings": "Standings",
+  "broadcastOfficialStandings": "Official Standings",
   "broadcastIframeHelp": "More options on the {param}",
   "@broadcastIframeHelp": {
     "placeholders": {
@@ -356,6 +357,16 @@
   "broadcastRatingDiff": "Rating diff",
   "broadcastGamesThisTournament": "Games in this tournament",
   "broadcastScore": "Score",
+  "broadcastAllTeams": "All teams",
+  "broadcastTournamentFormat": "Tournament format",
+  "broadcastTournamentLocation": "Tournament Location",
+  "broadcastTopPlayers": "Top players",
+  "broadcastTimezone": "Time zone",
+  "broadcastFideRatingCategory": "FIDE rating category",
+  "broadcastOptionalDetails": "Optional details",
+  "broadcastUpcomingBroadcasts": "Upcoming broadcasts",
+  "broadcastPastBroadcasts": "Past broadcasts",
+  "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -434,6 +445,38 @@
   "challengeInviteLichessUser": "Or invite a Lichess user:",
   "contactContact": "Contact",
   "contactContactLichess": "Contact Lichess",
+  "coordinatesCoordinates": "Coordinates",
+  "coordinatesCoordinateTraining": "Coordinate training",
+  "coordinatesAverageScoreAsWhiteX": "Average score as white: {param}",
+  "@coordinatesAverageScoreAsWhiteX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "coordinatesAverageScoreAsBlackX": "Average score as black: {param}",
+  "@coordinatesAverageScoreAsBlackX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "coordinatesKnowingTheChessBoard": "Knowing the chessboard coordinates is a very important skill for several reasons:",
+  "coordinatesMostChessCourses": "Most chess courses and exercises use the algebraic notation extensively.",
+  "coordinatesTalkToYourChessFriends": "It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.",
+  "coordinatesYouCanAnalyseAGameMoreEffectively": "You can analyse a game more effectively if you can quickly recognise coordinates.",
+  "coordinatesACoordinateAppears": "A coordinate appears on the board and you must click on the corresponding square.",
+  "coordinatesASquareIsHighlightedExplanation": "A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").",
+  "coordinatesYouHaveThirtySeconds": "You have 30 seconds to correctly map as many squares as possible!",
+  "coordinatesGoAsLongAsYouWant": "Go as long as you want, there is no time limit!",
+  "coordinatesShowCoordinates": "Show coordinates",
+  "coordinatesShowCoordsOnAllSquares": "Coordinates on every square",
+  "coordinatesShowPieces": "Show pieces",
+  "coordinatesStartTraining": "Start training",
+  "coordinatesFindSquare": "Find square",
+  "coordinatesNameSquare": "Name square",
   "patronDonate": "Donate",
   "patronLichessPatron": "Lichess Patron",
   "perfStatPerfStats": "{param} stats",
@@ -1059,7 +1102,6 @@
   "replayMode": "Replay mode",
   "realtimeReplay": "Realtime",
   "byCPL": "By CPL",
-  "openStudy": "Open study",
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
   "showVariationArrows": "Show variation arrows",
@@ -1452,7 +1494,6 @@
   "block": "Block",
   "blocked": "Blocked",
   "unblock": "Unblock",
-  "followsYou": "Follows you",
   "xStartedFollowingY": "{param1} started following {param2}",
   "@xStartedFollowingY": {
     "placeholders": {
@@ -3116,6 +3157,14 @@
   "studyPlayAgain": "Play again",
   "studyWhatWouldYouPlay": "What would you play in this position?",
   "studyYouCompletedThisLesson": "Congratulations! You completed this lesson.",
+  "studyPerPage": "{param} per page",
+  "@studyPerPage": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
   "@studyNbChapters": {
     "placeholders": {

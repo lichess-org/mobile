@@ -536,6 +536,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Contact Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Coordinates';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Coordinate training';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Average score as white: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Average score as black: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Knowing the chessboard coordinates is a very important skill for several reasons:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Most chess courses and exercises use the algebraic notation extensively.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'You can analyse a game more effectively if you can quickly recognise coordinates.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'A coordinate appears on the board and you must click on the corresponding square.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Show coordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Show pieces';
+
+  @override
+  String get coordinatesStartTraining => 'Start training';
+
+  @override
+  String get coordinatesFindSquare => 'Find square';
+
+  @override
+  String get coordinatesNameSquare => 'Name square';
 
   @override
   String get patronDonate => 'Donate';
@@ -1991,9 +2082,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get byCPL => 'By CPL';
 
   @override
-  String get openStudy => 'Open study';
-
-  @override
   String get enable => 'Enable';
 
   @override
@@ -2659,9 +2747,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unblock => 'Unblock';
-
-  @override
-  String get followsYou => 'Follows you';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
 
   @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6052,6 +6142,64 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get contactContactLichess => 'Contact Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Coordinates';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Coordinate training';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Average score as white: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Average score as black: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Knowing the chessboard coordinates is a very important skill for several reasons:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Most chess courses and exercises use the algebraic notation extensively.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'It makes it easier to talk to your chess friends, since you both understand the \"language of chess\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'You can analyze a game more effectively if you can quickly recognize coordinates.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'A coordinate appears on the board and you must click on the corresponding square.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'You have 30 seconds to correctly map as many squares as possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Show coordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Show pieces';
+
+  @override
+  String get coordinatesStartTraining => 'Start training';
+
+  @override
+  String get coordinatesFindSquare => 'Find square';
+
+  @override
+  String get coordinatesNameSquare => 'Name square';
 
   @override
   String get patronDonate => 'Donate';
@@ -7380,9 +7528,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get byCPL => 'By CPL';
 
   @override
-  String get openStudy => 'Open study';
-
-  @override
   String get enable => 'Enable';
 
   @override
@@ -8045,9 +8190,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get unblock => 'Unblock';
-
-  @override
-  String get followsYou => 'Follows you';
 
   @override
   String xStartedFollowingY(String param1, String param2) {

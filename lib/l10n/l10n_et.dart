@@ -536,6 +536,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Kontakteerumine';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinaadid';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinaatide harjutamine';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Keskmine tulemus valgena: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Keskmine tulemus mustana: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Malelaua koordinaatide tundmine on males väga oluline oskus:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Enamik malekursustest ja -ülesannetest kasutavad ulatuslikult algebralisi märke.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'See teeb oma malesõpradega rääkimise kergemaks, sest Te mõlemad mõistate \"male keelt\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Saate mänge efektiivsemalt analüüsida, kui ei pea ruutude nimetusi taga otsima.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Koordinaat ilmub lauale ja seab pead vajutama vastavat ruutu.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Ruut on märgistatud laual ja sa pead kirjutama selle koordinaadi (nt. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Sul on 30 sekundit aega märgistada nii mitu ruutu kui võimalik!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Tee nii pikalt kui tahad, ajalimiiti ei ole!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Näita koordinaate';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Näita malendeid';
+
+  @override
+  String get coordinatesStartTraining => 'Alusta treeningut';
+
+  @override
+  String get coordinatesFindSquare => 'Leia ruut';
+
+  @override
+  String get coordinatesNameSquare => 'Nimeta ruut';
 
   @override
   String get patronDonate => 'Anneta';
@@ -1993,9 +2084,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get byCPL => 'CPL järgi';
 
   @override
-  String get openStudy => 'Ava uuring';
-
-  @override
   String get enable => 'Luba';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get unblock => 'Tühista blokeering';
-
-  @override
-  String get followsYou => 'Jälgib sind';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Palju õnne! Oled läbinud selle õppetunni.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

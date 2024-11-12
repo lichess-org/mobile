@@ -536,6 +536,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'امتیاز';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'ارتباط با Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'همآراها';
+
+  @override
+  String get coordinatesCoordinateTraining => 'تمرین همآرا';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'میانگین امتیاز به عنوان سفید: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'میانگین امتیاز به عنوان سیاه: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'دانستن همآراهای صفحه شطرنج، مهارت خیلی مهمی است، به چند دلیل:';
+
+  @override
+  String get coordinatesMostChessCourses => 'بیشتر دوره‌ها و تمرین‌های شطرنج، از نشانه‌گذاری جبری استفاده می‌کنند.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'صحبت با دوستان شطرنجی‌تان را آسان‌تر می‌کند، زیرا هر دوی‌تان «زبان شطرنج» را می‌فهمید.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'اگر بتوانید همآراها را به تندی تشخیص دهید، می‌توانید یک بازی را موثرتر واکاوید.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'همآرا روی صفحه ظاهر می‌شود و شما باید روی خانه همنوا بزنید.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'یک خانه روی صفحه رنگی شده است و شما باید همآرای آن را وارد کنید (مثال «e4»).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'شما 30 ثانیه فرصت دارید تا هر چه بیشتر خانه‌ها را به‌درستی بیابید!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'بدون محدودیت زمانی';
+
+  @override
+  String get coordinatesShowCoordinates => 'نمایش همآراها';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'همآراها روی خانه‌ها';
+
+  @override
+  String get coordinatesShowPieces => 'نمایش مهره ها';
+
+  @override
+  String get coordinatesStartTraining => 'آغاز تمرین';
+
+  @override
+  String get coordinatesFindSquare => 'خانه را بیابید';
+
+  @override
+  String get coordinatesNameSquare => 'خانه را بِنامید';
 
   @override
   String get patronDonate => 'کمک مالی';
@@ -1993,9 +2084,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get byCPL => 'درنگ هنگام اشتباه';
 
   @override
-  String get openStudy => 'گشودن مطالعه';
-
-  @override
   String get enable => 'فعال سازی';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get unblock => 'لغو انسداد';
-
-  @override
-  String get followsYou => 'شما را می‌دنبالد';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'تبریک! شما این درس را کامل کردید.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

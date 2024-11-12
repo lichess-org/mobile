@@ -536,6 +536,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastStandings => 'Κατάταξη';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Βαθμολογία';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Επικοινωνήστε με Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Συντεταγμένες';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Εξάσκηση στις συντεταγμένες';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Μέση βαθμολογία ως λευκά: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Μέση βαθμολογία ως μαύρα: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Η γνώση των συντεταγμένων της σκακιέρας είναι μια πολύ σημαντική δεξιότητα:';
+
+  @override
+  String get coordinatesMostChessCourses => 'Τα περισσότερα μαθήματα κι οι περισσότερες ασκήσεις στο σκάκι χρησιμοποιούν τον αλγεβρικό τρόπο γραφής.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Καθίσταται ευκολότερο να επικοινωνήσετε με τους φίλους σας στο σκάκι, δεδομένου ότι και οι δύο καταλαβαίνετε τη γλώσσα του σκακιού.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Μπορείτε να αναλύσετε ένα παιχνίδι αποτελεσματικότερα εάν δεν χρειάζεται να αναζητάτε τα ονόματα των τετραγώνων.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Μια συντεταγμένη εμφανίζεται στη σκακιέρα και πρέπει να κάνετε κλικ στο αντίστοιχο τετράγωνο.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Ένα τετράγωνο επισημαίνεται στη σκακιέρα και πρέπει να εισάγετε τη συντεταγμένη του (π.χ. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Έχετε 30 δευτερόλεπτα για να διαλέξτε σωστά όσα τετράγωνα γίνεται!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Πάρτε όσο χρόνο θέλετε, δεν υπάρχει χρονικό όριο!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Εμφάνιση συντεταγμένων';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Συντεταγμένες σε κάθε τετράγωνο';
+
+  @override
+  String get coordinatesShowPieces => 'Εμφάνιση κομματιών';
+
+  @override
+  String get coordinatesStartTraining => 'Έναρξη εξάσκησης';
+
+  @override
+  String get coordinatesFindSquare => 'Εύρεση τετραγώνου';
+
+  @override
+  String get coordinatesNameSquare => 'Ονομασία τετραγώνου';
 
   @override
   String get patronDonate => 'Κάντε δωρεά';
@@ -1993,9 +2084,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get byCPL => 'Με CPL';
 
   @override
-  String get openStudy => 'Άνοιγμα μελέτης';
-
-  @override
   String get enable => 'Ενεργοποίηση';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get unblock => 'Κατάργηση απόκλεισης';
-
-  @override
-  String get followsYou => 'Σας ακολουθεί';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Συγχαρητήρια! Ολοκληρώσατε αυτό το μάθημα.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -60,7 +60,9 @@ class ToolsTabScreen extends ConsumerWidget {
       child: CustomScrollView(
         controller: puzzlesScrollController,
         slivers: [
-          CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
+          CupertinoSliverNavigationBar(
+            largeTitle: Text(context.l10n.tools),
+          ),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
           const SliverSafeArea(
             top: false,
@@ -131,6 +133,30 @@ class _Body extends ConsumerWidget {
       if (Theme.of(context).platform == TargetPlatform.android)
         const SizedBox(height: 16.0),
       ListSection(
+        header: Text(context.l10n.learnMenu),
+        hasLeading: true,
+        children: [
+          _ToolsButton(
+            icon: Icons.where_to_vote_outlined,
+            title: context.l10n.coordinatesCoordinates,
+            onTap: () => pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => const CoordinateTrainingScreen(),
+            ),
+          ),
+          if (isOnline)
+            _ToolsButton(
+              icon: LichessIcons.study,
+              title: context.l10n.studyMenu,
+              onTap: () => pushPlatformRoute(
+                context,
+                builder: (context) => const StudyListScreen(),
+              ),
+            ),
+        ],
+      ),
+      ListSection(
         hasLeading: true,
         children: [
           _ToolsButton(
@@ -177,15 +203,6 @@ class _Body extends ConsumerWidget {
                     )
                 : null,
           ),
-          if (isOnline)
-            _ToolsButton(
-              icon: LichessIcons.study,
-              title: context.l10n.studyMenu,
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const StudyListScreen(),
-              ),
-            ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
@@ -193,15 +210,6 @@ class _Body extends ConsumerWidget {
               context,
               builder: (context) => const BoardEditorScreen(),
               rootNavigator: true,
-            ),
-          ),
-          _ToolsButton(
-            icon: Icons.where_to_vote_outlined,
-            title: 'Coordinate Training', // TODO l10n
-            onTap: () => pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (context) => const CoordinateTrainingScreen(),
             ),
           ),
           _ToolsButton(

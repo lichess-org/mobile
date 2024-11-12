@@ -536,6 +536,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastStandings => 'Classificació';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Més opcions a la $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Puntuació';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Contacte Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Coordenades';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Entrenament de coordenades';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Puntuació mitjana amb blanques: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Puntuació mitjana amb negres: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'Saber les coordenades del tauler és una habilitat important:';
+
+  @override
+  String get coordinatesMostChessCourses => 'La majoria de cursos i exercicis usa la notació algebraica de forma extensiva.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Facilita la comunicació amb altres jugadors, ja que tots enteneu l’«idioma dels escacs».';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Pots analitzar un joc de forma més eficient si en pots reconèixer ràpidament les coordenades.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Una coordenada apareix al tauler i heu de clicar la casella corresponent.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Es senyala una casella del tauler i heu d\'introduir la seva coordenada (p. ex.: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'Tens 30 segons per indicar correctament tantes caselles com sigui possible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Pren-te tant temps com vulguis, no hi ha límit de temps!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Mostrar les coordenades';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordenades en cada casella';
+
+  @override
+  String get coordinatesShowPieces => 'Mostrar les peces';
+
+  @override
+  String get coordinatesStartTraining => 'Comença l\'entrenament';
+
+  @override
+  String get coordinatesFindSquare => 'Cerca caselles';
+
+  @override
+  String get coordinatesNameSquare => 'Anomena caselles';
 
   @override
   String get patronDonate => 'Donar';
@@ -1993,9 +2084,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get byCPL => 'Per CPL';
 
   @override
-  String get openStudy => 'Obrir estudi';
-
-  @override
   String get enable => 'Habilitar';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get unblock => 'Desbloqueja';
-
-  @override
-  String get followsYou => 'T\'està seguint';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Enhorabona, heu completat aquesta lliçó.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

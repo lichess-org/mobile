@@ -536,6 +536,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +567,36 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -662,6 +695,64 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lépj velünk kapcsolatba';
+
+  @override
+  String get coordinatesCoordinates => 'Koordináták';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordináta gyakorló';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Átlagos pontszám világosként: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Átlagos pontszám sötétként: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'A sakktábla koordinátáinak ismerete nagyon fontos sakk készség:';
+
+  @override
+  String get coordinatesMostChessCourses => 'A sakk tanfolyamok és feladványok többnyire az algebrai jelölési rendszert alkalmazzák.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'Könnyebbé teszi a sakk társalgást a barátokkal, ha mindketten beszélik a \"sakk nyelvét\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'A játszmák hatékonyabban elemezhetőek, ha nem kell keresgetni a mezőket.';
+
+  @override
+  String get coordinatesACoordinateAppears => 'Kattints arra a mezőre, amelynek a koordinátáját látod!';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => 'Egy mező kijelölődik a táblán és neked kell beírni a koordinátáit (pl. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30 másodperced van helyesen megnevezni annyi mezőt amennyit csak tudsz!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Folytasd csak amíg szeretnéd, nincs időkorlát!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Koordináták megjelenítése';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+
+  @override
+  String get coordinatesShowPieces => 'Figurák megjelenítése';
+
+  @override
+  String get coordinatesStartTraining => 'Gyakorlás kezdése';
+
+  @override
+  String get coordinatesFindSquare => 'Találd meg a mezőt';
+
+  @override
+  String get coordinatesNameSquare => 'Nevezd meg a mezőt';
 
   @override
   String get patronDonate => 'Adakozz';
@@ -1993,9 +2084,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get byCPL => 'CPL';
 
   @override
-  String get openStudy => 'Tanulmány megnyitása';
-
-  @override
   String get enable => 'Engedélyezve';
 
   @override
@@ -2661,9 +2749,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get unblock => 'Letiltás feloldása';
-
-  @override
-  String get followsYou => 'Követ téged';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5508,11 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulálok! A fejezet végére értél.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {
