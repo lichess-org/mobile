@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -22,10 +23,10 @@ import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('StudyScreen');
@@ -45,9 +46,11 @@ class StudyScreen extends ConsumerWidget {
       data: (state) {
         return PlatformScaffold(
           appBar: PlatformAppBar(
-            title: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(state.currentChapterTitle),
+            title: AutoSizeText(
+              state.currentChapterTitle,
+              maxLines: 2,
+              minFontSize: 14,
+              overflow: TextOverflow.ellipsis,
             ),
             actions: [
               AppBarIconButton(
@@ -99,7 +102,11 @@ class _ChapterButton extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               showDragHandle: true,
+              isScrollControlled: true,
               isDismissible: true,
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.sizeOf(context).height * 0.5,
+              ),
               builder: (_) => _StudyChaptersMenu(id: id),
             ),
             semanticsLabel:
@@ -132,38 +139,29 @@ class _StudyChaptersMenu extends ConsumerWidget {
       }
     });
 
-    return Column(
+    return BottomSheetScrollableContainer(
       children: [
-        Text(
-          context.l10n.studyNbChapters(state.study.chapters.length),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: ListView(
-            children: [
-              ChoicePicker(
-                notchedTile: true,
-                choices: state.study.chapters.unlock,
-                selectedItem: state.study.chapters.firstWhere(
-                  (chapter) => chapter.id == state.currentChapter.id,
-                ),
-                titleBuilder: (chapter) => Text(
-                  chapter.name,
-                  key: chapter.id == state.study.chapter.id
-                      ? currentChapterKey
-                      : null,
-                ),
-                onSelectedItemChanged: (chapter) {
-                  ref.read(studyControllerProvider(id).notifier).goToChapter(
-                        chapter.id,
-                      );
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            context.l10n.studyNbChapters(state.study.chapters.length),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
+        for (final chapter in state.study.chapters)
+          PlatformListTile(
+            key: chapter.id == state.currentChapter.id
+                ? currentChapterKey
+                : null,
+            title: Text(chapter.name, maxLines: 2),
+            onTap: () {
+              ref.read(studyControllerProvider(id).notifier).goToChapter(
+                    chapter.id,
+                  );
+              Navigator.of(context).pop();
+            },
+            selected: chapter.id == state.currentChapter.id,
+          ),
       ],
     );
   }
