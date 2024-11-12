@@ -184,7 +184,6 @@ class _Body extends ConsumerWidget {
               onTap: () => pushPlatformRoute(
                 context,
                 builder: (context) => const StudyListScreen(),
-                rootNavigator: true,
               ),
             ),
           _ToolsButton(
