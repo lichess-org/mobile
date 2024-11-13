@@ -28,15 +28,12 @@ part 'analysis_controller.g.dart';
 
 const standaloneAnalysisId = StringId('standalone_analysis');
 const standaloneOpeningExplorerId = StringId('standalone_opening_explorer');
-const standaloneBroadcastId = StringId('standalone_broadcast');
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
 /// Whether the analysis is a standalone analysis (not a lichess game analysis).
 bool _isStandaloneAnalysis(StringId id) =>
-    id == standaloneAnalysisId ||
-    id == standaloneOpeningExplorerId ||
-    id == standaloneBroadcastId;
+    id == standaloneAnalysisId || id == standaloneOpeningExplorerId;
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
@@ -50,7 +47,6 @@ class AnalysisOptions with _$AnalysisOptions {
     int? initialMoveCursor,
     LightOpening? opening,
     Division? division,
-    @Default(false) bool isBroadcast,
 
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
@@ -154,9 +150,6 @@ class AnalysisController extends _$AnalysisController
       variant: options.variant,
       id: options.id,
       currentPath: currentPath,
-      broadcastLivePath: options.isBroadcast && pgnHeaders['Result'] == '*'
-          ? currentPath
-          : null,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -171,7 +164,6 @@ class AnalysisController extends _$AnalysisController
       playersAnalysis: options.serverAnalysis,
       acplChartData:
           options.serverAnalysis != null ? _makeAcplChartData() : null,
-      clocks: options.isBroadcast ? _makeClocks(currentPath) : null,
     );
 
     if (analysisState.isEngineAvailable) {
@@ -217,24 +209,6 @@ class AnalysisController extends _$AnalysisController
         shouldRecomputeRootView: isNewNode,
         shouldForceShowVariation: true,
       );
-    }
-  }
-
-  void onBroadcastMove(UciPath path, Move move, Duration? clock) {
-    final (newPath, isNewNode) = _root.addMoveAt(path, move, clock: clock);
-
-    if (newPath != null) {
-      if (state.broadcastLivePath == state.currentPath) {
-        _setPath(
-          newPath,
-          shouldRecomputeRootView: isNewNode,
-          shouldForceShowVariation: true,
-          isBroadcastMove: true,
-        );
-      } else {
-        _root.promoteAt(newPath, toMainline: true);
-        state = state.copyWith(broadcastLivePath: newPath, root: _root.view);
-      }
     }
   }
 
@@ -445,7 +419,6 @@ class AnalysisController extends _$AnalysisController
     bool shouldForceShowVariation = false,
     bool shouldRecomputeRootView = false,
     bool replaying = false,
-    bool isBroadcastMove = false,
   }) {
     final pathChange = state.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
@@ -494,26 +467,22 @@ class AnalysisController extends _$AnalysisController
 
       state = state.copyWith(
         currentPath: path,
-        broadcastLivePath: isBroadcastMove ? path : state.broadcastLivePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: currentNode.sanMove.move,
         promotionMove: null,
         root: rootView,
-        clocks: options.isBroadcast ? _makeClocks(path) : null,
       );
     } else {
       state = state.copyWith(
         currentPath: path,
-        broadcastLivePath: isBroadcastMove ? path : state.broadcastLivePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
         lastMove: null,
         promotionMove: null,
         root: rootView,
-        clocks: options.isBroadcast ? _makeClocks(path) : null,
       );
     }
 
@@ -675,16 +644,6 @@ class AnalysisController extends _$AnalysisController
     ).toList(growable: false);
     return list.isEmpty ? null : IList(list);
   }
-
-  ({Duration? parentClock, Duration? clock}) _makeClocks(UciPath path) {
-    final nodeView = _root.nodeAt(path).view;
-    final parentView = _root.parentAt(path).view;
-
-    return (
-      parentClock: (parentView is ViewBranch) ? parentView.clock : null,
-      clock: (nodeView is ViewBranch) ? nodeView.clock : null,
-    );
-  }
 }
 
 enum DisplayMode {
@@ -716,9 +675,6 @@ class AnalysisState with _$AnalysisState {
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
 
-    // The path to the current broadcast live move.
-    required UciPath? broadcastLivePath,
-
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
 
@@ -735,9 +691,6 @@ class AnalysisState with _$AnalysisState {
     ///
     /// It can be either moves, summary or opening explorer.
     required DisplayMode displayMode,
-
-    /// Clocks if avaible. Only used by the broadcast analysis screen.
-    ({Duration? parentClock, Duration? clock})? clocks,
 
     /// The last move played.
     Move? lastMove,
@@ -822,14 +775,6 @@ class AnalysisState with _$AnalysisState {
         orientation: pov,
         variant: variant,
         initialMoveCursor: currentPath.size,
-      );
-
-  static AnalysisOptions get broadcastOptions => const AnalysisOptions(
-        id: standaloneBroadcastId,
-        isLocalEvaluationAllowed: true,
-        orientation: Side.white,
-        variant: Variant.standard,
-        isBroadcast: true,
       );
 }
 

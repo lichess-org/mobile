@@ -8,8 +8,8 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 const kOpeningHeaderHeight = 32.0;
 
-class BroadcastTreeView extends ConsumerWidget {
-  const BroadcastTreeView(
+class BroadcastGameTreeView extends ConsumerWidget {
+  const BroadcastGameTreeView(
     this.roundId,
     this.gameId,
     this.displayMode,

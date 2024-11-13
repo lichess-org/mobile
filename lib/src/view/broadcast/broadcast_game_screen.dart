@@ -20,10 +20,10 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_bottom_bar.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_engine_depth.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_settings.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_tree_view.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_engine_depth.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -33,14 +33,14 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:logging/logging.dart';
 
-final _logger = Logger('BroadcastGameAnalysisScreen');
+final _logger = Logger('BroadcastGameScreen');
 
-class BroadcastGameAnalysisScreen extends ConsumerWidget {
+class BroadcastGameScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String title;
 
-  const BroadcastGameAnalysisScreen({
+  const BroadcastGameScreen({
     required this.roundId,
     required this.gameId,
     required this.title,
@@ -54,7 +54,7 @@ class BroadcastGameAnalysisScreen extends ConsumerWidget {
       appBar: PlatformAppBar(
         title: Text(title),
         actions: [
-          if (state.hasValue) BroadcastEngineDepth(roundId, gameId),
+          if (state.hasValue) BroadcastGameEngineDepth(roundId, gameId),
           AppBarIconButton(
             onPressed: () => (state.hasValue)
                 ? showAdaptiveBottomSheet<void>(
@@ -62,7 +62,7 @@ class BroadcastGameAnalysisScreen extends ConsumerWidget {
                     isScrollControlled: true,
                     showDragHandle: true,
                     isDismissible: true,
-                    builder: (_) => BroadcastGameAnalysisSettings(
+                    builder: (_) => BroadcastGameSettings(
                       roundId,
                       gameId,
                     ),
@@ -75,7 +75,8 @@ class BroadcastGameAnalysisScreen extends ConsumerWidget {
       ),
       body: state.when(
         data: (state) => _Body(roundId, gameId),
-        loading: () => const CircularProgressIndicator.adaptive(),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, stackTrace) {
           _logger.severe('Cannot load broadcast game: $error', stackTrace);
           return Center(
@@ -188,7 +189,7 @@ class _Body extends ConsumerWidget {
                                       kTabletBoardTableSidePadding,
                                     ),
                                     semanticContainer: false,
-                                    child: BroadcastTreeView(
+                                    child: BroadcastGameTreeView(
                                       roundId,
                                       gameId,
                                       Orientation.landscape,
@@ -231,7 +232,7 @@ class _Body extends ConsumerWidget {
                                       horizontal: kTabletBoardTableSidePadding,
                                     )
                                   : EdgeInsets.zero,
-                              child: BroadcastTreeView(
+                              child: BroadcastGameTreeView(
                                 roundId,
                                 gameId,
                                 Orientation.portrait,
@@ -243,7 +244,7 @@ class _Body extends ConsumerWidget {
               },
             ),
           ),
-          BroadcastBottomBar(roundId: roundId, gameId: gameId),
+          BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
         ],
       ),
     );

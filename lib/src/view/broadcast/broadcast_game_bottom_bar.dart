@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
-class BroadcastBottomBar extends ConsumerWidget {
-  const BroadcastBottomBar({
+class BroadcastGameBottomBar extends ConsumerWidget {
+  const BroadcastGameBottomBar({
     required this.roundId,
     required this.gameId,
   });

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -11,20 +13,22 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
-class EngineDepth extends ConsumerWidget {
-  const EngineDepth(this.ctrlProvider);
+class BroadcastGameEngineDepth extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
-  final AnalysisControllerProvider ctrlProvider;
+  const BroadcastGameEngineDepth(this.roundId, this.gameId);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEngineAvailable = ref.watch(
-      ctrlProvider.select(
-        (value) => value.isEngineAvailable,
+      broadcastGameControllerProvider(roundId, gameId).select(
+        (value) => value.requireValue.isEngineAvailable,
       ),
     );
     final currentNode = ref.watch(
-      ctrlProvider.select((value) => value.currentNode),
+      broadcastGameControllerProvider(roundId, gameId)
+          .select((value) => value.requireValue.currentNode),
     );
     final depth = ref.watch(
           engineEvaluationProvider.select((value) => value.eval?.depth),

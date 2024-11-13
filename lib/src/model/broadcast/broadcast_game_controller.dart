@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -9,10 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -21,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -42,11 +38,10 @@ class BroadcastGameController extends _$BroadcastGameController
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
   static AnalysisOptions get options => const AnalysisOptions(
-        id: standaloneBroadcastId,
+        id: StringId(''),
         isLocalEvaluationAllowed: true,
         orientation: Side.white,
         variant: Variant.standard,
-        isBroadcast: true,
       );
 
   StreamSubscription<SocketEvent>? _subscription;
@@ -74,7 +69,6 @@ class BroadcastGameController extends _$BroadcastGameController
     });
 
     final evaluationService = ref.watch(evaluationServiceProvider);
-    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     final isEngineAllowed = options.isLocalEvaluationAllowed &&
         engineSupportedVariants.contains(options.variant);
@@ -85,12 +79,7 @@ class BroadcastGameController extends _$BroadcastGameController
       if (isEngineAllowed) {
         evaluationService.disposeEngine();
       }
-      serverAnalysisService.lastAnalysisEvent
-          .removeListener(_listenToServerAnalysisEvents);
     });
-
-    serverAnalysisService.lastAnalysisEvent
-        .addListener(_listenToServerAnalysisEvents);
 
     UciPath path = UciPath.empty;
     Move? lastMove;
@@ -156,9 +145,7 @@ class BroadcastGameController extends _$BroadcastGameController
       variant: options.variant,
       id: options.id,
       currentPath: currentPath,
-      broadcastLivePath: options.isBroadcast && pgnHeaders['Result'] == '*'
-          ? currentPath
-          : null,
+      broadcastLivePath: pgnHeaders['Result'] == '*' ? currentPath : null,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -170,10 +157,7 @@ class BroadcastGameController extends _$BroadcastGameController
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
-      playersAnalysis: options.serverAnalysis,
-      acplChartData:
-          options.serverAnalysis != null ? _makeAcplChartData() : null,
-      clocks: options.isBroadcast ? _makeClocks(currentPath) : null,
+      clocks: _makeClocks(currentPath),
     );
 
     if (analysisState.isEngineAvailable) {
@@ -491,19 +475,6 @@ class BroadcastGameController extends _$BroadcastGameController
     state = AsyncData(state.requireValue.copyWith(displayMode: mode));
   }
 
-  Future<void> requestServerAnalysis() async {
-    if (!state.hasValue) return;
-
-    if (state.requireValue.canRequestServerAnalysis) {
-      final service = ref.read(serverAnalysisServiceProvider);
-      return service.requestAnalysis(
-        options.id as GameAnyId,
-        options.orientation,
-      );
-    }
-    return Future.error('Cannot request server analysis');
-  }
-
   /// Gets the node and maybe the associated branch opening at the given path.
   (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);
@@ -598,7 +569,7 @@ class BroadcastGameController extends _$BroadcastGameController
           lastMove: currentNode.sanMove.move,
           promotionMove: null,
           root: rootView,
-          clocks: options.isBroadcast ? _makeClocks(path) : null,
+          clocks: _makeClocks(path),
         ),
       );
     } else {
@@ -613,7 +584,7 @@ class BroadcastGameController extends _$BroadcastGameController
           lastMove: null,
           promotionMove: null,
           root: rootView,
-          clocks: options.isBroadcast ? _makeClocks(path) : null,
+          clocks: _makeClocks(path),
         ),
       );
     }
@@ -684,116 +655,6 @@ class BroadcastGameController extends _$BroadcastGameController
     );
   }
 
-  void _listenToServerAnalysisEvents() {
-    if (!state.hasValue) Exception('Cannot export PGN');
-
-    final event =
-        ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
-    if (event != null && event.$1 == state.requireValue.id) {
-      _mergeOngoingAnalysis(_root, event.$2.tree);
-      state = AsyncData(
-        state.requireValue.copyWith(
-          acplChartData: _makeAcplChartData(),
-          playersAnalysis: event.$2.analysis != null
-              ? (
-                  white: event.$2.analysis!.white,
-                  black: event.$2.analysis!.black
-                )
-              : null,
-          root: _root.view,
-        ),
-      );
-    }
-  }
-
-  void _mergeOngoingAnalysis(Node n1, Map<String, dynamic> n2) {
-    final eval = n2['eval'] as Map<String, dynamic>?;
-    final cp = eval?['cp'] as int?;
-    final mate = eval?['mate'] as int?;
-    final pgnEval = cp != null
-        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
-        : mate != null
-            ? PgnEvaluation.mate(mate: mate)
-            : null;
-    final glyphs = n2['glyphs'] as List<dynamic>?;
-    final glyph = glyphs?.first as Map<String, dynamic>?;
-    final comments = n2['comments'] as List<dynamic>?;
-    final comment =
-        (comments?.first as Map<String, dynamic>?)?['text'] as String?;
-    final children = n2['children'] as List<dynamic>? ?? [];
-    final pgnComment =
-        pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
-    if (n1 is Branch) {
-      if (pgnComment != null) {
-        if (n1.lichessAnalysisComments == null) {
-          n1.lichessAnalysisComments = [pgnComment];
-        } else {
-          n1.lichessAnalysisComments!.removeWhere((c) => c.eval != null);
-          n1.lichessAnalysisComments!.add(pgnComment);
-        }
-      }
-      if (glyph != null) {
-        n1.nags ??= [glyph['id'] as int];
-      }
-    }
-    for (final c in children) {
-      final n2child = c as Map<String, dynamic>;
-      final id = n2child['id'] as String;
-      final n1child = n1.childById(UciCharPair.fromStringId(id));
-      if (n1child != null) {
-        _mergeOngoingAnalysis(n1child, n2child);
-      } else {
-        final uci = n2child['uci'] as String;
-        final san = n2child['san'] as String;
-        final move = Move.parse(uci)!;
-        n1.addChild(
-          Branch(
-            position: n1.position.playUnchecked(move),
-            sanMove: SanMove(san, move),
-            isHidden: children.length > 1,
-          ),
-        );
-      }
-    }
-  }
-
-  IList<ExternalEval>? _makeAcplChartData() {
-    if (!_root.mainline.any((node) => node.lichessAnalysisComments != null)) {
-      return null;
-    }
-    final list = _root.mainline
-        .map(
-      (node) => (
-        node.position.isCheckmate,
-        node.position.turn,
-        node.lichessAnalysisComments
-            ?.firstWhereOrNull((c) => c.eval != null)
-            ?.eval
-      ),
-    )
-        .map(
-      (el) {
-        final (isCheckmate, side, eval) = el;
-        return eval != null
-            ? ExternalEval(
-                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                mate: eval.mate,
-                depth: eval.depth,
-              )
-            : ExternalEval(
-                cp: null,
-                // hack to display checkmate as the max eval
-                mate: isCheckmate
-                    ? side == Side.white
-                        ? -1
-                        : 1
-                    : null,
-              );
-      },
-    ).toList(growable: false);
-    return list.isEmpty ? null : IList(list);
-  }
-
   ({Duration? parentClock, Duration? clock}) _makeClocks(UciPath path) {
     final nodeView = _root.nodeAt(path).view;
     final parentView = _root.parentAt(path).view;
@@ -803,11 +664,6 @@ class BroadcastGameController extends _$BroadcastGameController
       clock: (nodeView is ViewBranch) ? nodeView.clock : null,
     );
   }
-}
-
-enum DisplayMode {
-  moves,
-  summary,
 }
 
 @freezed
@@ -869,12 +725,6 @@ class BroadcastGameState with _$BroadcastGameState {
     /// The opening of the current branch.
     Opening? currentBranchOpening,
 
-    /// Optional server analysis to display player stats.
-    ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,
-
-    /// Optional ACPL chart data of the game, coming from lichess server analysis.
-    IList<Eval>? acplChartData,
-
     /// The PGN headers of the game.
     required IMap<String, String> pgnHeaders,
 
@@ -889,21 +739,8 @@ class BroadcastGameState with _$BroadcastGameState {
         isChess960: variant == Variant.chess960,
       );
 
-  /// Whether the user can request server analysis.
-  ///
-  /// It must be a lichess game, which is finished and not already analyzed.
-  bool get canRequestServerAnalysis => false;
-
-  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
-
-  bool get hasServerAnalysis => playersAnalysis != null;
-
   /// Whether an evaluation can be available
-  bool get hasAvailableEval =>
-      isEngineAvailable ||
-      (isLocalEvaluationAllowed &&
-          acplChartData != null &&
-          acplChartData!.isNotEmpty);
+  bool get hasAvailableEval => isEngineAvailable;
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
@@ -930,62 +767,4 @@ class BroadcastGameState with _$BroadcastGameState {
         variant: variant,
         initialMoveCursor: currentPath.size,
       );
-}
-
-@freezed
-class AnalysisCurrentNode with _$AnalysisCurrentNode {
-  const AnalysisCurrentNode._();
-
-  const factory AnalysisCurrentNode({
-    required Position position,
-    required bool hasChild,
-    required bool isRoot,
-    SanMove? sanMove,
-    Opening? opening,
-    ClientEval? eval,
-    IList<PgnComment>? lichessAnalysisComments,
-    IList<PgnComment>? startingComments,
-    IList<PgnComment>? comments,
-    IList<int>? nags,
-  }) = _AnalysisCurrentNode;
-
-  factory AnalysisCurrentNode.fromNode(Node node) {
-    if (node is Branch) {
-      return AnalysisCurrentNode(
-        sanMove: node.sanMove,
-        position: node.position,
-        isRoot: node is Root,
-        hasChild: node.children.isNotEmpty,
-        opening: node.opening,
-        eval: node.eval,
-        lichessAnalysisComments: IList(node.lichessAnalysisComments),
-        startingComments: IList(node.startingComments),
-        comments: IList(node.comments),
-        nags: IList(node.nags),
-      );
-    } else {
-      return AnalysisCurrentNode(
-        position: node.position,
-        hasChild: node.children.isNotEmpty,
-        isRoot: node is Root,
-        opening: node.opening,
-        eval: node.eval,
-      );
-    }
-  }
-
-  /// The evaluation from the PGN comments.
-  ///
-  /// For now we only trust the eval coming from lichess analysis.
-  ExternalEval? get serverEval {
-    final pgnEval =
-        lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
-    return pgnEval != null
-        ? ExternalEval(
-            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-            mate: pgnEval.mate,
-            depth: pgnEval.depth,
-          )
-        : null;
-  }
 }

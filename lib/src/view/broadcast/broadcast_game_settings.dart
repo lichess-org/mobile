@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BroadcastGameAnalysisSettings extends ConsumerWidget {
-  const BroadcastGameAnalysisSettings(this.roundId, this.gameId);
+class BroadcastGameSettings extends ConsumerWidget {
+  const BroadcastGameSettings(this.roundId, this.gameId);
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
