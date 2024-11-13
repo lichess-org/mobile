@@ -25,8 +25,8 @@
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">همرسانی وب‌نشانی بازی</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">همرسانی PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">همرسانی وضعیت، به شکل FEN</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">باز کردن شاخه‌ها</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">بستن شاخه‌ها</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">نمایش وَرتِش</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">پنهانیدن وَرتِش</string>
   <string name="showComments" comment="Shown in the analysis screen.">نمایش دیدگاه‌ها</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">می‌خواهید این دور را به پایان برسانید؟</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">چیزی برای نمایش نیست، خواهشمندیم پالایه‌ها را دگرسان کنید.</string>
