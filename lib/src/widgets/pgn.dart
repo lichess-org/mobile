@@ -111,7 +111,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   const DebouncedPgnTreeView({
     required this.root,
     required this.currentPath,
-    required this.broadcastLivePath,
+    this.broadcastLivePath,
     required this.pgnRootComments,
     required this.notifier,
   });
