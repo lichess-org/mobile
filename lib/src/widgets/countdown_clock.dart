@@ -154,6 +154,10 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   }
 }
 
+const _kClockFontSize = 26.0;
+const _kClockTenthFontSize = 20.0;
+const _kClockHundredsFontSize = 18.0;
+
 /// A stateless widget that displays the time left on the clock.
 ///
 /// For a clock widget that automatically counts down, see [CountdownClock].
@@ -204,56 +208,68 @@ class Clock extends StatelessWidget {
             ? ClockStyle.darkThemeStyle
             : ClockStyle.lightThemeStyle);
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        color: active
-            ? isEmergency
-                ? activeClockStyle.emergencyBackgroundColor
-                : activeClockStyle.activeBackgroundColor
-            : activeClockStyle.backgroundColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-        child: MediaQuery.withClampedTextScaling(
-          maxScaleFactor: kMaxClockTextScaleFactor,
-          child: RichText(
-            text: TextSpan(
-              text: hours > 0
-                  ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                  : '$minsDisplay:$secs',
-              style: TextStyle(
-                color: active
-                    ? isEmergency
-                        ? activeClockStyle.emergencyTextColor
-                        : activeClockStyle.activeTextColor
-                    : activeClockStyle.textColor,
-                fontSize: 26,
-                height:
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        // TODO improve this
+        final fontScaleFactor = maxWidth < 90 ? 0.8 : 1.0;
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            color: active
+                ? isEmergency
+                    ? activeClockStyle.emergencyBackgroundColor
+                    : activeClockStyle.activeBackgroundColor
+                : activeClockStyle.backgroundColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+            child: MediaQuery.withClampedTextScaling(
+              maxScaleFactor: kMaxClockTextScaleFactor,
+              child: RichText(
+                text: TextSpan(
+                  text: hours > 0
+                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                      : '$minsDisplay:$secs',
+                  style: TextStyle(
+                    color: active
+                        ? isEmergency
+                            ? activeClockStyle.emergencyTextColor
+                            : activeClockStyle.activeTextColor
+                        : activeClockStyle.textColor,
+                    fontSize: _kClockFontSize * fontScaleFactor,
+                    height: remainingHeight <
+                            kSmallRemainingHeightLeftBoardThreshold
                         ? 1.0
                         : null,
-                fontFeatures: const [
-                  FontFeature.tabularFigures(),
-                ],
+                    fontFeatures: const [
+                      FontFeature.tabularFigures(),
+                    ],
+                  ),
+                  children: [
+                    if (showTenths)
+                      TextSpan(
+                        text:
+                            '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                        style: TextStyle(
+                          fontSize: _kClockTenthFontSize * fontScaleFactor,
+                        ),
+                      ),
+                    if (!active && timeLeft < const Duration(seconds: 1))
+                      TextSpan(
+                        text:
+                            '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                        style: TextStyle(
+                          fontSize: _kClockHundredsFontSize * fontScaleFactor,
+                        ),
+                      ),
+                  ],
+                ),
               ),
-              children: [
-                if (showTenths)
-                  TextSpan(
-                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                if (!active && timeLeft < const Duration(seconds: 1))
-                  TextSpan(
-                    text:
-                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-              ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

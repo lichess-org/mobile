@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -62,6 +63,10 @@ class BoardPreferences extends _$BoardPreferences
 
   Future<void> toggleCoordinates() {
     return save(state.copyWith(coordinates: !state.coordinates));
+  }
+
+  Future<void> toggleBorder() {
+    return save(state.copyWith(showBorder: !state.showBorder));
   }
 
   Future<void> togglePieceAnimation() {
@@ -131,6 +136,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: ShapeColor.green,
     )
     required ShapeColor shapeColor,
+    @JsonKey(defaultValue: false) required bool showBorder,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -149,12 +155,19 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     shapeColor: ShapeColor.green,
+    showBorder: false,
   );
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
+      border: showBorder
+          ? BoardBorder(
+              color: darken(boardTheme.colors.darkSquare, 0.2),
+              width: 16.0,
+            )
+          : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
