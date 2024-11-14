@@ -193,6 +193,15 @@ void main() {
       expect(flagCount, 1);
       expect(clock.whiteTime.value, Duration.zero);
       expect(clock.blackTime.value, const Duration(seconds: 5));
+
+      // continue ticking and calling onFlag
+      async.elapse(const Duration(milliseconds: 200));
+      expect(flagCount, 3);
+      clock.stop();
+
+      // no more onFlag calls
+      async.elapse(const Duration(seconds: 5));
+      expect(flagCount, 3);
     });
   });
 

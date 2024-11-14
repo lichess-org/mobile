@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -75,8 +74,8 @@ void main() {
       expect(findClockWithTime('3:00'), findsNWidgets(2));
       expect(
         tester
-            .widgetList(findClockWithTime('3:00'))
-            .where((widget) => widget is Clock && widget.active == false)
+            .widgetList<Clock>(find.byType(Clock))
+            .where((widget) => widget.active == false)
             .length,
         2,
         reason: 'clocks are not active yet',
@@ -193,6 +192,72 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime('2:57'), findsOneWidget);
       expect(findClockWithTime('2:56'), findsOneWidget);
+    });
+
+    testWidgets('flags', (WidgetTester tester) async {
+      final fakeSocket = FakeWebSocketChannel();
+      await createTestGame(
+        fakeSocket,
+        tester,
+        pgn: 'e4 e5 Nf3',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 3),
+          increment: Duration(seconds: 2),
+          white: Duration(minutes: 2, seconds: 58),
+          black: Duration(minutes: 2, seconds: 54),
+        ),
+      );
+      expect(
+        tester.widgetList<Clock>(find.byType(Clock)).first.active,
+        true,
+        reason: 'black clock is active',
+      );
+
+      expect(findClockWithTime('2:58'), findsOneWidget);
+      expect(findClockWithTime('2:54'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('2:53'), findsOneWidget);
+      await tester.pump(const Duration(minutes: 2, seconds: 53));
+      expect(findClockWithTime('2:58'), findsOneWidget);
+      expect(findClockWithTime('0:00.0'), findsOneWidget);
+
+      expect(
+        tester.widgetList<Clock>(find.byType(Clock)).first.active,
+        true,
+        reason:
+            'black clock is still active after flag (as long as we have not received server ack)',
+      );
+
+      // flag messages are throttled with 500ms delay
+      // we'll simulate an anormally long server response of 1s to check 2
+      // flag messages are sent
+      expectLater(
+        fakeSocket.sentMessagesExceptPing,
+        emitsInOrder([
+          '{"t":"flag","d":"black"}',
+          '{"t":"flag","d":"black"}',
+        ]),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      fakeSocket.addIncomingMessages([
+        '{"t":"endData","d":{"status":"outoftime","winner":"white","clock":{"wc":17800,"bc":0}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(
+        tester
+            .widgetList<Clock>(find.byType(Clock))
+            .where((widget) => widget.active == false)
+            .length,
+        2,
+        reason: 'both clocks are now inactive',
+      );
+      expect(findClockWithTime('2:58'), findsOneWidget);
+      expect(findClockWithTime('0:00.00'), findsOneWidget);
+
+      // wait for the dong
+      await tester.pump(const Duration(seconds: 500));
     });
   });
 }

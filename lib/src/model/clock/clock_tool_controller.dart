@@ -26,6 +26,9 @@ class ClockToolController extends _$ClockToolController {
     _clock = ChessClock(
       whiteTime: time,
       blackTime: time,
+      onFlag: () {
+        setLoser(_clock.activeSide);
+      },
     );
 
     ref.onDispose(() {

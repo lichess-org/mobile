@@ -451,6 +451,8 @@ class GameController extends _$GameController {
     _clock?.setTimes(whiteTime: white, blackTime: black);
     if (activeSide != null) {
       _clock?.startSide(activeSide, delay: lag);
+    } else {
+      _clock?.stop();
     }
   }
 

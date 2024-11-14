@@ -164,9 +164,7 @@ class ChessClock {
     if (_activeTime.value == Duration.zero) {
       onFlag?.call();
     }
-    if (_activeTime.value > Duration.zero) {
-      _scheduleTick();
-    }
+    _scheduleTick();
   }
 
   void _checkEmergency() {
