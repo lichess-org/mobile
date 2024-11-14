@@ -161,7 +161,8 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           ),
         ),
         if (gameState.canOfferRematch &&
-            !(gameState.game.opponent?.offeringRematch ?? false))
+            !(gameState.game.opponent?.offeringRematch ?? false) &&
+            !(gameState.game.me?.offeringRematch ?? false))
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
             onPressed: _activateButtons &&
