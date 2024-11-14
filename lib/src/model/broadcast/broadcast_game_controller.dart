@@ -611,7 +611,7 @@ class BroadcastGameState with _$BroadcastGameState {
   const BroadcastGameState._();
 
   const factory BroadcastGameState({
-    /// Analysis ID
+    /// Broadcast game ID
     required StringId id,
 
     /// The variant of the analysis.
@@ -679,15 +679,7 @@ class BroadcastGameState with _$BroadcastGameState {
         isChess960: variant == Variant.chess960,
       );
 
-  /// Whether an evaluation can be available
-  bool get hasAvailableEval => isEngineAvailable;
-
-  /// Whether the engine is allowed for this analysis and variant.
-  bool get isEngineAllowed =>
-      isLocalEvaluationAllowed && engineSupportedVariants.contains(variant);
-
-  /// Whether the engine is available for evaluation
-  bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
+  bool get isEngineAvailable => isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
