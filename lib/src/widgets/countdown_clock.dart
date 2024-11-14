@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
@@ -12,12 +11,8 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 class CountdownClock extends StatefulWidget {
   const CountdownClock({
     required this.timeLeft,
-    this.delay,
     this.clockUpdatedAt,
     required this.active,
-    this.emergencyThreshold,
-    this.onEmergency,
-    this.onFlag,
     this.clockStyle,
     this.padLeft = false,
     super.key,
@@ -26,30 +21,14 @@ class CountdownClock extends StatefulWidget {
   /// The duration left on the clock.
   final Duration timeLeft;
 
-  /// The delay before the clock starts counting down.
-  ///
-  /// This can be used to implement lag compensation.
-  final Duration? delay;
-
   /// The time at which the clock was updated.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
   /// event was received from the server and to compensate for UI lag.
   final DateTime? clockUpdatedAt;
 
-  /// The duration at which the clock should change its background color to indicate an emergency.
-  ///
-  /// If [onEmergency] is provided, the clock will call it when the emergency threshold is reached.
-  final Duration? emergencyThreshold;
-
-  /// Called when the clock reaches the emergency.
-  final VoidCallback? onEmergency;
-
   /// If [active] is `true`, the clock starts counting down.
   final bool active;
-
-  /// Callback when the clock reaches zero.
-  final VoidCallback? onFlag;
 
   /// Custom color style
   final ClockStyle? clockStyle;
@@ -61,43 +40,30 @@ class CountdownClock extends StatefulWidget {
   State<CountdownClock> createState() => _CountdownClockState();
 }
 
-const _emergencyDelay = Duration(seconds: 20);
+const _tickDelay = Duration(milliseconds: 100);
 const _showTenthsThreshold = Duration(seconds: 10);
 
 class _CountdownClockState extends State<CountdownClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
-  bool _shouldPlayEmergencyFeedback = true;
-  DateTime? _nextEmergency;
 
   final _stopwatch = clock.stopwatch();
 
   void startClock() {
     final now = clock.now();
-    final delay = widget.delay ?? Duration.zero;
     final clockUpdatedAt = widget.clockUpdatedAt ?? now;
     // UI lag diff: the elapsed time between the time the clock should have started
     // and the time the clock is actually started
     final uiLag = now.difference(clockUpdatedAt);
-    final realDelay = delay - uiLag;
 
-    // real delay is negative, we need to adjust the timeLeft.
-    if (realDelay < Duration.zero) {
-      timeLeft = timeLeft + realDelay;
-    }
+    timeLeft = timeLeft - uiLag;
 
-    _scheduleTick(realDelay);
+    _scheduleTick();
   }
 
-  void _scheduleTick(Duration extraDelay) {
+  void _scheduleTick() {
     _timer?.cancel();
-    final delay = Duration(
-      milliseconds: (timeLeft < _showTenthsThreshold
-              ? timeLeft.inMilliseconds % 100
-              : timeLeft.inMilliseconds % 500) +
-          1,
-    );
-    _timer = Timer(delay + extraDelay, _tick);
+    _timer = Timer(_tickDelay, _tick);
     _stopwatch.reset();
     _stopwatch.start();
   }
@@ -105,35 +71,18 @@ class _CountdownClockState extends State<CountdownClock> {
   void _tick() {
     setState(() {
       timeLeft = timeLeft - _stopwatch.elapsed;
-      _playEmergencyFeedback();
       if (timeLeft <= Duration.zero) {
-        widget.onFlag?.call();
         timeLeft = Duration.zero;
       }
     });
     if (timeLeft > Duration.zero) {
-      _scheduleTick(Duration.zero);
+      _scheduleTick();
     }
   }
 
   void stopClock() {
     _timer?.cancel();
     _stopwatch.stop();
-  }
-
-  void _playEmergencyFeedback() {
-    if (widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold! &&
-        _shouldPlayEmergencyFeedback &&
-        (_nextEmergency == null || _nextEmergency!.isBefore(clock.now()))) {
-      _shouldPlayEmergencyFeedback = false;
-      _nextEmergency = clock.now().add(_emergencyDelay);
-      widget.onEmergency?.call();
-      HapticFeedback.heavyImpact();
-    } else if (widget.emergencyThreshold != null &&
-        timeLeft > widget.emergencyThreshold! * 1.5) {
-      _shouldPlayEmergencyFeedback = true;
-    }
   }
 
   @override
@@ -175,7 +124,6 @@ class _CountdownClockState extends State<CountdownClock> {
         padLeft: widget.padLeft,
         timeLeft: timeLeft,
         active: widget.active,
-        emergencyThreshold: widget.emergencyThreshold,
         clockStyle: widget.clockStyle,
       ),
     );
