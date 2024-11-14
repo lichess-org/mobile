@@ -176,7 +176,7 @@ class GamePlayer extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 16.0),
               child: ConfirmMove(
                 onConfirm: confirmMoveCallbacks!.confirm,
                 onCancel: confirmMoveCallbacks!.cancel,
@@ -187,7 +187,7 @@ class GamePlayer extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 16.0),
               child: shouldLinkToUserProfile
                   ? GestureDetector(
                       onTap: player.user != null

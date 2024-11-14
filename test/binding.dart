@@ -321,6 +321,11 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   }
 
   @override
+  Future<String?> getAPNSToken() {
+    return Future.value('test-apns-token');
+  }
+
+  @override
   Stream<String> get onTokenRefresh => _tokenController.stream;
 
   /// Controller for [onMessage].

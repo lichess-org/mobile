@@ -495,15 +495,14 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
               ),
               squareHighlights: widget.squareHighlights,
               orientation: widget.orientation,
-              settings: ChessboardEditorSettings(
-                pieceAssets: boardPrefs.pieceSet.assets,
-                colorScheme: boardPrefs.boardTheme.colors,
-                enableCoordinates: trainingPrefs.showCoordinates,
-                borderRadius: widget.isTablet
-                    ? const BorderRadius.all(Radius.circular(4.0))
-                    : BorderRadius.zero,
-                boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-              ),
+              settings: boardPrefs.toBoardSettings().copyWith(
+                    enableCoordinates: trainingPrefs.showCoordinates,
+                    borderRadius: widget.isTablet
+                        ? const BorderRadius.all(Radius.circular(4.0))
+                        : BorderRadius.zero,
+                    boxShadow:
+                        widget.isTablet ? boardShadows : const <BoxShadow>[],
+                  ),
               pointerMode: EditorPointerMode.edit,
               onEditedSquare: (square) {
                 if (trainingState.trainingActive &&

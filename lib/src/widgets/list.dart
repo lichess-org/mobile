@@ -278,6 +278,7 @@ class PlatformListTile extends StatelessWidget {
     this.cupertinoBackgroundColor,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
+    super.key,
   });
 
   final Widget? leading;
@@ -295,7 +296,6 @@ class PlatformListTile extends StatelessWidget {
   /// Useful on some screens where ListTiles with and without subtitle are mixed.
   final bool harmonizeCupertinoTitleStyle;
 
-  // only on android
   final bool selected;
 
   // only on android
@@ -358,7 +358,10 @@ class PlatformListTile extends StatelessWidget {
                     )
                   : title,
               subtitle: subtitle,
-              trailing: trailing,
+              trailing: trailing ??
+                  (selected == true
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                      : null),
               additionalInfo: additionalInfo,
               padding: padding,
               onTap: onTap,

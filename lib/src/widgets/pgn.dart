@@ -615,38 +615,11 @@ class _SideLinePart extends ConsumerWidget {
           return moves;
         },
       ).flattened,
-      if (nodes.last.children.any((node) => !node.isHidden))
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: _CollapseVariationsButton(
-            onTap: () => params.notifier.collapseVariations(path),
-          ),
-        ),
     ];
 
     return Text.rich(
       TextSpan(
         children: moves,
-      ),
-    );
-  }
-}
-
-class _CollapseVariationsButton extends StatelessWidget {
-  const _CollapseVariationsButton({
-    required this.onTap,
-  });
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AdaptiveInkWell(
-      onTap: onTap,
-      child: Icon(
-        Icons.indeterminate_check_box,
-        color: _textColor(context, 0.6),
-        size: _baseTextStyle.fontSize! + 5,
       ),
     );
   }
@@ -677,47 +650,41 @@ class _MainLinePart extends ConsumerWidget {
     var path = initialPath;
     return Text.rich(
       TextSpan(
-        children: [
-          ...nodes.takeWhile((node) => node.children.isNotEmpty).mapIndexed(
-            (i, node) {
-              final mainlineNode = node.children.first;
-              final moves = [
-                _moveWithComment(
-                  mainlineNode,
-                  lineInfo: (
-                    type: _LineType.mainline,
-                    startLine: i == 0 || (node as ViewBranch).hasTextComment,
-                    pathToLine: initialPath,
-                  ),
-                  pathToNode: path,
-                  textStyle: textStyle,
-                  params: params,
-                ),
-                if (node.children.length == 2 &&
-                    _displaySideLineAsInline(node.children[1])) ...[
-                  _buildInlineSideLine(
-                    followsComment: mainlineNode.hasTextComment,
-                    firstNode: node.children[1],
-                    parent: node,
-                    initialPath: path,
+        children: nodes
+            .takeWhile((node) => node.children.isNotEmpty)
+            .mapIndexed(
+              (i, node) {
+                final mainlineNode = node.children.first;
+                final moves = [
+                  _moveWithComment(
+                    mainlineNode,
+                    lineInfo: (
+                      type: _LineType.mainline,
+                      startLine: i == 0 || (node as ViewBranch).hasTextComment,
+                      pathToLine: initialPath,
+                    ),
+                    pathToNode: path,
                     textStyle: textStyle,
                     params: params,
                   ),
-                ],
-              ];
-              path = path + mainlineNode.id;
-              return moves.flattened;
-            },
-          ).flattened,
-          if (nodes.last.children.skip(1).any((node) => !node.isHidden))
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: _CollapseVariationsButton(
-                onTap: () =>
-                    params.notifier.collapseVariations(path.penultimate),
-              ),
-            ),
-        ],
+                  if (node.children.length == 2 &&
+                      _displaySideLineAsInline(node.children[1])) ...[
+                    _buildInlineSideLine(
+                      followsComment: mainlineNode.hasTextComment,
+                      firstNode: node.children[1],
+                      parent: node,
+                      initialPath: path,
+                      textStyle: textStyle,
+                      params: params,
+                    ),
+                  ],
+                ];
+                path = path + mainlineNode.id;
+                return moves.flattened;
+              },
+            )
+            .flattened
+            .toList(growable: false),
       ),
     );
   }
@@ -950,35 +917,19 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
           children: [
             ...sideLineWidgets,
             if (_hasHiddenLines)
-              _ExpandVariationsButton(
-                key: _sideLinesStartKeys.last,
-                onTap: () => widget.params.notifier.expandVariations(
-                  widget.initialPath,
+              GestureDetector(
+                child: Icon(
+                  Icons.add_box,
+                  color: _textColor(context, 0.6),
+                  key: _sideLinesStartKeys.last,
+                  size: _baseTextStyle.fontSize! + 5,
                 ),
+                onTap: () {
+                  widget.params.notifier.expandVariations(widget.initialPath);
+                },
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ExpandVariationsButton extends StatelessWidget {
-  const _ExpandVariationsButton({
-    super.key,
-    required this.onTap,
-  });
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AdaptiveInkWell(
-      onTap: onTap,
-      child: Icon(
-        Icons.add_box,
-        color: _textColor(context, 0.6),
-        size: _baseTextStyle.fontSize! + 5,
       ),
     );
   }
