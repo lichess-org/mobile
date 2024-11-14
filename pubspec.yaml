@@ -12,8 +12,9 @@ environment:
 dependencies:
   app_settings: ^5.1.1
   async: ^2.10.0
+  auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^5.2.0
+  chessground: ^6.0.0
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
   cronet_http: ^1.3.1

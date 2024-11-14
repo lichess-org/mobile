@@ -285,6 +285,7 @@ class _StudyListItem extends StatelessWidget {
       ),
       onTap: () => pushPlatformRoute(
         context,
+        rootNavigator: true,
         builder: (context) => StudyScreen(id: study.id),
       ),
     );
