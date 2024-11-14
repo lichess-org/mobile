@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
@@ -29,20 +28,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'broadcast_game_controller.freezed.dart';
 part 'broadcast_game_controller.g.dart';
 
-final _dateFormat = DateFormat('yyyy.MM.dd');
-
 @riverpod
 class BroadcastGameController extends _$BroadcastGameController
     implements PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
-
-  static AnalysisOptions get options => const AnalysisOptions(
-        id: StringId(''),
-        isLocalEvaluationAllowed: true,
-        orientation: Side.white,
-        variant: Variant.standard,
-      );
 
   StreamSubscription<SocketEvent>? _subscription;
 
@@ -64,16 +54,12 @@ class BroadcastGameController extends _$BroadcastGameController
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    ref.onDispose(() {
-      _subscription?.cancel();
-    });
-
     final evaluationService = ref.watch(evaluationServiceProvider);
 
-    final isEngineAllowed = options.isLocalEvaluationAllowed &&
-        engineSupportedVariants.contains(options.variant);
+    const isEngineAllowed = true;
 
     ref.onDispose(() {
+      _subscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       if (isEngineAllowed) {
@@ -81,69 +67,28 @@ class BroadcastGameController extends _$BroadcastGameController
       }
     });
 
-    UciPath path = UciPath.empty;
     Move? lastMove;
 
     final pgn = await ref.withClient(
       (client) => BroadcastRepository(client).getGame(roundId, gameId),
     );
 
-    final game = PgnGame.parsePgn(
-      pgn,
-      initHeaders: () => options.isLichessGameAnalysis
-          ? {}
-          : {
-              'Event': '?',
-              'Site': '?',
-              'Date': _dateFormat.format(DateTime.now()),
-              'Round': '?',
-              'White': '?',
-              'Black': '?',
-              'Result': '*',
-              'WhiteElo': '?',
-              'BlackElo': '?',
-            },
-    );
-
+    final game = PgnGame.parsePgn(pgn);
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    Future<void>? openingFuture;
+    _root = Root.fromPgnGame(game);
 
-    _root = Root.fromPgnGame(
-      game,
-      isLichessAnalysis: options.isLichessGameAnalysis,
-      hideVariations: options.isLichessGameAnalysis,
-      onVisitNode: (root, branch, isMainline) {
-        if (isMainline &&
-            options.initialMoveCursor != null &&
-            branch.position.ply <=
-                root.position.ply + options.initialMoveCursor!) {
-          path = path + branch.id;
-          lastMove = branch.sanMove.move;
-        }
-        if (isMainline && options.opening == null && branch.position.ply <= 5) {
-          openingFuture = _fetchOpening(root, path);
-        }
-      },
-    );
-
-    final currentPath =
-        options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
-
-    // wait for the opening to be fetched to recompute the branch opening
-    openingFuture?.then((_) {
-      _setPath(currentPath);
-    });
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
     final analysisState = BroadcastGameState(
-      variant: options.variant,
-      id: options.id,
+      variant: Variant.standard,
+      id: gameId,
       currentPath: currentPath,
       broadcastLivePath: pgnHeaders['Result'] == '*' ? currentPath : null,
       isOnMainline: _root.isOnMainline(currentPath),
@@ -152,9 +97,9 @@ class BroadcastGameController extends _$BroadcastGameController
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
-      pov: options.orientation,
-      contextOpening: options.opening,
-      isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
+      pov: Side.white,
+      contextOpening: null,
+      isLocalEvaluationAllowed: true,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
       clocks: _makeClocks(currentPath),
@@ -256,7 +201,7 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   EvaluationContext get _evaluationContext => EvaluationContext(
-        variant: options.variant,
+        variant: Variant.standard,
         initialPosition: _root.position,
       );
 
@@ -270,13 +215,9 @@ class BroadcastGameController extends _$BroadcastGameController
       return;
     }
 
-    // For the opening explorer, last played move should always be the mainline
-    final shouldReplace = options.id == standaloneOpeningExplorerId;
-
     final (newPath, isNewNode) = _root.addMoveAt(
       state.requireValue.currentPath,
       move,
-      replace: shouldReplace,
     );
     if (newPath != null) {
       _setPath(
@@ -596,7 +537,6 @@ class BroadcastGameController extends _$BroadcastGameController
 
   Future<void> _fetchOpening(Node fromNode, UciPath path) async {
     if (!state.hasValue) return;
-    if (!kOpeningAllowedVariants.contains(options.variant)) return;
 
     final moves = fromNode.branchesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return;
