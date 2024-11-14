@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
+import '../../widgets/adaptive_choice_picker.dart';
 import 'game_screen_providers.dart';
 
 class GameSettings extends ConsumerWidget {
@@ -109,17 +110,6 @@ class GameSettings extends ConsumerWidget {
             ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
           },
         ),
-        // SwitchSettingTile(
-        //   title: Text(
-        //     context.l10n.preferencesMaterialDifference,
-        //   ),
-        //   value: boardPrefs.showMaterialDifference,
-        //   onChanged: (value) {
-        //     ref
-        //         .read(boardPreferencesProvider.notifier)
-        //         .toggleShowMaterialDifference();
-        //   },
-        // ),
         SwitchSettingTile(
           title: Text(
             context.l10n.toggleTheChat,
@@ -135,6 +125,23 @@ class GameSettings extends ConsumerWidget {
           value: gamePrefs.blindfoldMode ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
+          },
+        ),
+        SettingsListTile(
+          settingsLabel: const Text('Captured pieces'),
+          settingsValue: boardPrefs.materialDifference.label,
+          onTap: () {
+            showChoicePicker(
+              context,
+              choices: MaterialDifference.values,
+              selectedItem: boardPrefs.materialDifference,
+              labelBuilder: (t) => Text(t.label),
+              onSelectedItemChanged: (MaterialDifference? value) => ref
+                  .read(boardPreferencesProvider.notifier)
+                  .setMaterialDifferenceFormat(
+                value ?? MaterialDifference.materialDifference,
+              ),
+            );
           },
         ),
       ],

@@ -184,24 +184,10 @@ class _Body extends ConsumerWidget {
                       .togglePieceAnimation();
                 },
               ),
-              // SwitchSettingTile(
-              //   title: Text(
-              //     context.l10n.preferencesMaterialDifference,
-              //   ),
-              //   value: boardPrefs.showMaterialDifference,
-              //   onChanged: (value) {
-              //     ref
-              //         .read(boardPreferencesProvider.notifier)
-              //         .toggleShowMaterialDifference();
-              //   },
-              // ),
               SettingsListTile(
-                settingsLabel: const Text('Material difference format'),
+                settingsLabel: const Text('Captured pieces'),
                 settingsValue: boardPrefs.materialDifference.label,
                 onTap: () {
-                  //TODO: implement different handling to android/ios
-                  // if (Theme.of(context).platform == TargetPlatform.android) {
-
                   showChoicePicker(
                     context,
                     choices: MaterialDifference.values,

@@ -302,7 +302,7 @@ enum BoardTheme {
 }
 
 enum MaterialDifference {
-  materialDifference(label: 'Material difference', visible: false),
+  materialDifference(label: 'Material difference', visible: true),
   capturedPieces(label: 'Captured pieces', visible: true),
   hidden(label: 'Hidden', visible: false);
 
