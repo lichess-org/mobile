@@ -72,7 +72,8 @@ class _CountdownClockState extends State<CountdownClock> {
 
     // real delay is negative, we need to adjust the timeLeft.
     if (realDelay < Duration.zero) {
-      timeLeft = timeLeft + realDelay;
+      final newTimeLeft = timeLeft + realDelay;
+      timeLeft = newTimeLeft > Duration.zero ? newTimeLeft : Duration.zero;
     }
 
     if (realDelay > Duration.zero) {

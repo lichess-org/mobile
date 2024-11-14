@@ -243,6 +243,8 @@ class TvController extends _$TvController {
           newState = newState.copyWith.game.clock!(
             white: endData.clock!.white,
             black: endData.clock!.black,
+            at: DateTime.now(),
+            lag: null,
           );
         }
         state = AsyncData(newState);
