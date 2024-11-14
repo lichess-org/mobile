@@ -139,19 +139,17 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             children: [
               // Text("Rematch offered"),
               FatButton(
-                semanticsLabel: context.l10n.rematch,
-                child: const Text('Accept rematch'),
-                onPressed: () {
-                  ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                },
-              ),
+                  semanticsLabel: context.l10n.rematch,
+                  child: const Text('Accept rematch'),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                  },),
               SecondaryButton(
-                semanticsLabel: context.l10n.rematch,
-                child: const Text('Decline'),
-                onPressed: () {
-                  ref.read(ctrlProvider.notifier).declineRematch();
-                },
-              ),
+                  semanticsLabel: context.l10n.rematch,
+                  child: const Text('Decline'),
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).declineRematch();
+                  },),
             ],
           )
         else if (gameState.canOfferRematch)
