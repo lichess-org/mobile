@@ -24,10 +24,6 @@ class BroadcastGameSettings extends ConsumerWidget {
     final broacdcastGameAnalysisController =
         broadcastGameControllerProvider(roundId, gameId);
 
-    final isLocalEvaluationAllowed = ref.watch(
-      broacdcastGameAnalysisController
-          .select((s) => s.requireValue.isLocalEvaluationAllowed),
-    );
     final isEngineAvailable = ref.watch(
       broacdcastGameAnalysisController
           .select((s) => s.requireValue.isEngineAvailable),
@@ -44,13 +40,11 @@ class BroadcastGameSettings extends ConsumerWidget {
         SwitchSettingTile(
           title: Text(context.l10n.toggleLocalEvaluation),
           value: analysisPrefs.enableLocalEvaluation,
-          onChanged: isLocalEvaluationAllowed
-              ? (_) {
-                  ref
-                      .read(broacdcastGameAnalysisController.notifier)
-                      .toggleLocalEvaluation();
-                }
-              : null,
+          onChanged: (_) {
+            ref
+                .read(broacdcastGameAnalysisController.notifier)
+                .toggleLocalEvaluation();
+          },
         ),
         PlatformListTile(
           title: Text.rich(

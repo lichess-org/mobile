@@ -68,14 +68,12 @@ class _OpeningHeader extends ConsumerWidget {
         .watch(ctrlProvider.select((s) => s.requireValue.currentNode.opening));
     final branchOpening = ref
         .watch(ctrlProvider.select((s) => s.requireValue.currentBranchOpening));
-    final contextOpening =
-        ref.watch(ctrlProvider.select((s) => s.requireValue.contextOpening));
     final opening = isRootNode
         ? LightOpening(
             eco: '',
             name: context.l10n.startPosition,
           )
-        : nodeOpening ?? branchOpening ?? contextOpening;
+        : nodeOpening ?? branchOpening;
 
     return opening != null
         ? Container(

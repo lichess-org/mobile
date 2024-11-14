@@ -87,7 +87,6 @@ class BroadcastGameController extends _$BroadcastGameController
     final prefs = ref.read(analysisPreferencesProvider);
 
     final analysisState = BroadcastGameState(
-      variant: Variant.standard,
       id: gameId,
       currentPath: currentPath,
       broadcastLivePath: pgnHeaders['Result'] == '*' ? currentPath : null,
@@ -98,8 +97,6 @@ class BroadcastGameController extends _$BroadcastGameController
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
-      contextOpening: null,
-      isLocalEvaluationAllowed: true,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
       clocks: _makeClocks(currentPath),
@@ -614,9 +611,6 @@ class BroadcastGameState with _$BroadcastGameState {
     /// Broadcast game ID
     required StringId id,
 
-    /// The variant of the analysis.
-    required Variant variant,
-
     /// Immutable view of the whole tree
     required ViewRoot root,
 
@@ -639,15 +633,12 @@ class BroadcastGameState with _$BroadcastGameState {
     /// The side to display the board from.
     required Side pov,
 
-    /// Whether local evaluation is allowed for this analysis.
-    required bool isLocalEvaluationAllowed,
-
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
     /// The display mode of the analysis.
     ///
-    /// It can be either moves, summary or opening explorer.
+    /// It can be either moves or opening explorer in this controller (summary will be added later).
     required DisplayMode displayMode,
 
     /// Clocks if avaible. Only used by the broadcast analysis screen.
@@ -658,9 +649,6 @@ class BroadcastGameState with _$BroadcastGameState {
 
     /// Possible promotion move to be played.
     NormalMove? promotionMove,
-
-    /// Opening of the analysis context (from lichess archived games).
-    Opening? contextOpening,
 
     /// The opening of the current branch.
     Opening? currentBranchOpening,
@@ -674,10 +662,8 @@ class BroadcastGameState with _$BroadcastGameState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
-  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(
-        currentNode.position,
-        isChess960: variant == Variant.chess960,
-      );
+  IMap<Square, ISet<Square>> get validMoves =>
+      makeLegalMoves(currentNode.position);
 
   bool get isEngineAvailable => isLocalEvaluationEnabled;
 
@@ -696,7 +682,7 @@ class BroadcastGameState with _$BroadcastGameState {
         id: standaloneOpeningExplorerId,
         isLocalEvaluationAllowed: false,
         orientation: pov,
-        variant: variant,
+        variant: Variant.standard,
         initialMoveCursor: currentPath.size,
       );
 }
