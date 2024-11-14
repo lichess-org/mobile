@@ -64,12 +64,11 @@ class GameController extends _$GameController {
   /// Last socket version received
   int? _socketEventVersion;
 
-  ChessClock? _clock;
-
-  late SocketClient _socketClient;
-
   static Uri gameSocketUri(GameFullId gameFullId) =>
       Uri(path: '/play/$gameFullId/v6');
+
+  ChessClock? _clock;
+  late final SocketClient _socketClient;
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
