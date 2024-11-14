@@ -1,12 +1,15 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -16,6 +19,8 @@ import '../../test_provider_scope.dart';
 final client = MockClient((request) {
   return mockResponse('', 404);
 });
+
+class MockSoundService extends Mock implements SoundService {}
 
 void main() {
   group('Loading', () {
@@ -125,6 +130,7 @@ void main() {
           increment: Duration(seconds: 2),
           white: Duration(minutes: 2, seconds: 58),
           black: Duration(minutes: 2, seconds: 54),
+          emerg: Duration(seconds: 30),
         ),
       );
       expect(
@@ -152,6 +158,7 @@ void main() {
           increment: Duration(seconds: 2),
           white: Duration(minutes: 2, seconds: 58),
           black: Duration(minutes: 3),
+          emerg: Duration(seconds: 30),
         ),
       );
       expect(tester.widgetList<Clock>(find.byType(Clock)).last.active, true);
@@ -171,7 +178,6 @@ void main() {
       );
       expect(findClockWithTime('3:00'), findsOneWidget);
       // simulates a long lag just to show the clock is not running yet
-      // in such case the server would send a "lag" field but we'll ignore it in that test
       await tester.pump(const Duration(milliseconds: 200));
       expect(findClockWithTime('3:00'), findsOneWidget);
       // server ack having the white clock updated with the increment
@@ -194,6 +200,79 @@ void main() {
       expect(findClockWithTime('2:56'), findsOneWidget);
     });
 
+    testWidgets('compensates opponent lag', (WidgetTester tester) async {
+      final fakeSocket = FakeWebSocketChannel();
+      int socketVersion = 0;
+      await createTestGame(
+        fakeSocket,
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        socketVersion: socketVersion,
+      );
+      await tester.pump(const Duration(seconds: 3));
+      await playMoveWithServerAck(
+        fakeSocket,
+        tester,
+        'f1',
+        'c4',
+        ply: 5,
+        san: 'Bc4',
+        clockAck: (
+          white: const Duration(seconds: 55),
+          black: const Duration(seconds: 54),
+          lag: const Duration(milliseconds: 250),
+        ),
+        socketVersion: ++socketVersion,
+      );
+      // black clock is active
+      expect(tester.widgetList<Clock>(find.byType(Clock)).first.active, true);
+      expect(findClockWithTime('0:54'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 250));
+      // lag is 250ms, so clock will only start after that delay
+      expect(findClockWithTime('0:54'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(findClockWithTime('0:53'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('0:52'), findsOneWidget);
+    });
+
+    testWidgets('onEmergency', (WidgetTester tester) async {
+      final mockSoundService = MockSoundService();
+      when(() => mockSoundService.play(Sound.lowTime)).thenAnswer((_) async {});
+      final fakeSocket = FakeWebSocketChannel();
+      await createTestGame(
+        fakeSocket,
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 3),
+          increment: Duration(seconds: 2),
+          white: Duration(seconds: 40),
+          black: Duration(minutes: 3),
+          emerg: Duration(seconds: 30),
+        ),
+        overrides: [
+          soundServiceProvider.overrideWith((_) => mockSoundService),
+        ],
+      );
+      expect(
+        tester.widget<Clock>(findClockWithTime('0:40')).emergencyThreshold,
+        const Duration(seconds: 30),
+      );
+      await tester.pump(const Duration(seconds: 10));
+      expect(findClockWithTime('0:30'), findsOneWidget);
+      verify(() => mockSoundService.play(Sound.lowTime)).called(1);
+    });
+
     testWidgets('flags', (WidgetTester tester) async {
       final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
@@ -206,6 +285,7 @@ void main() {
           increment: Duration(seconds: 2),
           white: Duration(minutes: 2, seconds: 58),
           black: Duration(minutes: 2, seconds: 54),
+          emerg: Duration(seconds: 30),
         ),
       );
       expect(
@@ -269,27 +349,30 @@ Finder findClockWithTime(String text, {bool skipOffstage = true}) {
   );
 }
 
-// /// Simulates playing a move and getting the ack from the server after [elapsedTime].
-// Future<void> playMoveWithServerAck(
-//   FakeWebSocketChannel socket,
-//   WidgetTester tester,
-//   String from,
-//   String to, {
-//   required String san,
-//   required ({Duration white, Duration black}) clockAck,
-//   required int socketVersion,
-//   required int ply,
-//   Duration elapsedTime = const Duration(milliseconds: 10),
-//   Rect? rect,
-//   Side orientation = Side.white,
-// }) async {
-//   await playMove(tester, from, to, boardRect: rect, orientation: orientation);
-//   final uci = '$from$to';
-//   socket.addIncomingMessages([
-//     '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": 180, "black": 180}}}',
-//   ]);
-//   await tester.pump(elapsedTime);
-// }
+/// Simulates playing a move and getting the ack from the server after [elapsedTime].
+Future<void> playMoveWithServerAck(
+  FakeWebSocketChannel socket,
+  WidgetTester tester,
+  String from,
+  String to, {
+  required String san,
+  required ({Duration white, Duration black, Duration? lag}) clockAck,
+  required int socketVersion,
+  required int ply,
+  Duration elapsedTime = const Duration(milliseconds: 10),
+  Side orientation = Side.white,
+}) async {
+  await playMove(tester, from, to, orientation: orientation);
+  final uci = '$from$to';
+  final lagStr = clockAck.lag != null
+      ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}'
+      : '';
+  await tester.pump(elapsedTime - const Duration(milliseconds: 1));
+  socket.addIncomingMessages([
+    '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": ${(clockAck.white.inMilliseconds / 1000).toStringAsFixed(2)}, "black": ${(clockAck.black.inMilliseconds / 1000).toStringAsFixed(2)}$lagStr}}}',
+  ]);
+  await tester.pump(const Duration(milliseconds: 1));
+}
 
 /// Convenient function to start a new test game
 Future<void> createTestGame(
@@ -304,7 +387,9 @@ Future<void> createTestGame(
     increment: Duration(seconds: 2),
     white: Duration(minutes: 3),
     black: Duration(minutes: 3),
+    emerg: Duration(seconds: 30),
   ),
+  List<Override>? overrides,
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
@@ -316,6 +401,7 @@ Future<void> createTestGame(
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory((_) => socket);
       }),
+      ...?overrides,
     ],
   );
   await tester.pumpWidget(app);

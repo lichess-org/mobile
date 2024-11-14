@@ -654,16 +654,17 @@ class GameController extends _$GameController {
         }
 
         if (data.clock != null) {
-          final lagCompensation =
-              newState.game.playable && newState.game.isMyTurn
-                  // server will send the lag only if it's more than 10ms
-                  ? Duration.zero
-                  : data.clock?.lag ?? const Duration(milliseconds: 10);
+          final lag = newState.game.playable && newState.game.isMyTurn
+              // my own clock doesn't need to be compensated for
+              ? Duration.zero
+              // server will send the lag only if it's more than 10ms
+              // default lag of 10ms is also used by web client
+              : data.clock?.lag ?? const Duration(milliseconds: 10);
 
           _updateClock(
             white: data.clock!.white,
             black: data.clock!.black,
-            lag: lagCompensation,
+            lag: lag,
             activeSide: newState.activeClockSide,
           );
 

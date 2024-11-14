@@ -5,6 +5,7 @@ typedef FullEventTestClock = ({
   bool running,
   Duration initial,
   Duration increment,
+  Duration? emerg,
   Duration white,
   Duration black,
 });
@@ -20,6 +21,7 @@ String makeFullEvent(
     running: false,
     initial: Duration(minutes: 3),
     increment: Duration(seconds: 2),
+    emerg: Duration(seconds: 30),
     white: Duration(minutes: 3),
     black: Duration(minutes: 3),
   ),
@@ -73,7 +75,7 @@ String makeFullEvent(
       "increment": ${clock.increment.inSeconds},
       "white": ${(clock.white.inMilliseconds / 1000).toStringAsFixed(2)},
       "black": ${(clock.black.inMilliseconds / 1000).toStringAsFixed(2)},
-      "emerg": 60,
+      "emerg": 30,
       "moretime": 15
     },
     "expiration": {
