@@ -139,8 +139,8 @@ class GameSettings extends ConsumerWidget {
               onSelectedItemChanged: (MaterialDifference? value) => ref
                   .read(boardPreferencesProvider.notifier)
                   .setMaterialDifferenceFormat(
-                value ?? MaterialDifference.materialDifference,
-              ),
+                    value ?? MaterialDifference.materialDifference,
+                  ),
             );
           },
         ),
