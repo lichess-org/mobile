@@ -791,7 +791,7 @@ class GameController extends _$GameController {
         if (side != null && newClock != null) {
           _clock?.setTime(side, newClock);
 
-          // TODO: remove
+          // sync game clock object even if it's not used to display the clock
           final newState = side == Side.white
               ? curState.copyWith.game.clock!(
                   white: newClock,
