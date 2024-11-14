@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 class CountdownClock extends StatefulWidget {
   const CountdownClock({
     required this.timeLeft,
+    this.emergencyThreshold,
     this.clockUpdatedAt,
     required this.active,
     this.clockStyle,
@@ -20,6 +21,10 @@ class CountdownClock extends StatefulWidget {
 
   /// The duration left on the clock.
   final Duration timeLeft;
+
+  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
+  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  final Duration? emergencyThreshold;
 
   /// The time at which the clock was updated.
   ///
@@ -122,6 +127,7 @@ class _CountdownClockState extends State<CountdownClock> {
     return RepaintBoundary(
       child: Clock(
         padLeft: widget.padLeft,
+        emergencyThreshold: widget.emergencyThreshold,
         timeLeft: timeLeft,
         active: widget.active,
         clockStyle: widget.clockStyle,

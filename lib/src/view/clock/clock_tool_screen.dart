@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
 import 'custom_clock_settings.dart';
 
-class ClockScreen extends StatelessWidget {
-  const ClockScreen({super.key});
+class ClockToolScreen extends StatelessWidget {
+  const ClockToolScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
-    final backgroundColor = clockState.isLoser(playerType)
+    final backgroundColor = clockState.isFlagged(playerType)
         ? context.lichessColors.error
         : !clockState.paused && clockState.isPlayersTurn(playerType)
             ? colorScheme.primary
@@ -152,7 +152,7 @@ class ClockTile extends ConsumerWidget {
                           },
                         ),
                         secondChild: const Icon(Icons.flag),
-                        crossFadeState: clockState.isLoser(playerType)
+                        crossFadeState: clockState.isFlagged(playerType)
                             ? CrossFadeState.showSecond
                             : CrossFadeState.showFirst,
                       ),

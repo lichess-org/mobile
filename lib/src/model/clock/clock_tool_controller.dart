@@ -11,7 +11,7 @@ part 'clock_tool_controller.g.dart';
 
 @riverpod
 class ClockToolController extends _$ClockToolController {
-  late ChessClock _clock;
+  late final ChessClock _clock;
 
   @override
   ClockState build() {
@@ -26,9 +26,7 @@ class ClockToolController extends _$ClockToolController {
     _clock = ChessClock(
       whiteTime: time,
       blackTime: time,
-      onFlag: () {
-        setLoser(_clock.activeSide);
-      },
+      onFlag: _onFlagged,
     );
 
     ref.onDispose(() {
@@ -41,6 +39,11 @@ class ClockToolController extends _$ClockToolController {
       blackTime: _clock.blackTime,
       activeSide: Side.white,
     );
+  }
+
+  void _onFlagged() {
+    _clock.stop();
+    state = state.copyWith(flagged: _clock.activeSide);
   }
 
   void onTap(Side playerType) {
@@ -69,7 +72,7 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void updateDuration(Side playerType, Duration duration) {
-    if (state.loser != null || state.paused) {
+    if (state.flagged != null || state.paused) {
       return;
     }
 
@@ -85,7 +88,7 @@ class ClockToolController extends _$ClockToolController {
 
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement);
-    _clock = ChessClock(
+    _clock.setTimes(
       whiteTime: options.whiteTime,
       blackTime: options.blackTime,
     );
@@ -114,7 +117,7 @@ class ClockToolController extends _$ClockToolController {
           ? Duration(seconds: clock.increment)
           : state.options.blackIncrement,
     );
-    _clock = ChessClock(
+    _clock.setTimes(
       whiteTime: options.whiteTime,
       blackTime: options.blackTime,
     );
@@ -129,10 +132,8 @@ class ClockToolController extends _$ClockToolController {
   void setBottomPlayer(Side playerType) =>
       state = state.copyWith(bottomPlayer: playerType);
 
-  void setLoser(Side playerType) => state = state.copyWith(loser: playerType);
-
   void reset() {
-    _clock = ChessClock(
+    _clock.setTimes(
       whiteTime: state.options.whiteTime,
       blackTime: state.options.whiteTime,
     );
@@ -140,7 +141,7 @@ class ClockToolController extends _$ClockToolController {
       whiteTime: _clock.whiteTime,
       blackTime: _clock.blackTime,
       activeSide: Side.white,
-      loser: null,
+      flagged: null,
       started: false,
       paused: false,
       whiteMoves: 0,
@@ -205,7 +206,7 @@ class ClockState with _$ClockState {
     required ValueListenable<Duration> blackTime,
     required Side activeSide,
     @Default(Side.white) Side bottomPlayer,
-    Side? loser,
+    Side? flagged,
     @Default(false) bool started,
     @Default(false) bool paused,
     @Default(0) int whiteMoves,
@@ -219,12 +220,12 @@ class ClockState with _$ClockState {
       playerType == Side.white ? whiteMoves : blackMoves;
 
   bool isPlayersTurn(Side playerType) =>
-      started && activeSide == playerType && loser == null;
+      started && activeSide == playerType && flagged == null;
 
   bool isPlayersMoveAllowed(Side playerType) =>
       isPlayersTurn(playerType) && !paused;
 
   bool isActivePlayer(Side playerType) => isPlayersTurn(playerType) && !paused;
 
-  bool isLoser(Side playerType) => loser == playerType;
+  bool isFlagged(Side playerType) => flagged == playerType;
 }
