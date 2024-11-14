@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 class CountdownClock extends StatefulWidget {
   const CountdownClock({
     required this.timeLeft,
+    this.delay,
     this.emergencyThreshold,
     this.clockUpdatedAt,
     required this.active,
@@ -21,6 +22,11 @@ class CountdownClock extends StatefulWidget {
 
   /// The duration left on the clock.
   final Duration timeLeft;
+
+  /// The delay before the clock starts counting down.
+  ///
+  /// This can be used to implement lag compensation.
+  final Duration? delay;
 
   /// If [timeLeft] is less than [emergencyThreshold], the clock will set
   /// its background color to [ClockStyle.emergencyBackgroundColor].
@@ -50,20 +56,31 @@ const _showTenthsThreshold = Duration(seconds: 10);
 
 class _CountdownClockState extends State<CountdownClock> {
   Timer? _timer;
+  Timer? _delayTimer;
   Duration timeLeft = Duration.zero;
 
   final _stopwatch = clock.stopwatch();
 
   void startClock() {
     final now = clock.now();
+    final delay = widget.delay ?? Duration.zero;
     final clockUpdatedAt = widget.clockUpdatedAt ?? now;
     // UI lag diff: the elapsed time between the time the clock should have started
     // and the time the clock is actually started
     final uiLag = now.difference(clockUpdatedAt);
+    final realDelay = delay - uiLag;
 
-    timeLeft = timeLeft - uiLag;
+    // real delay is negative, we need to adjust the timeLeft.
+    if (realDelay < Duration.zero) {
+      timeLeft = timeLeft + realDelay;
+    }
 
-    _scheduleTick();
+    if (realDelay > Duration.zero) {
+      _delayTimer?.cancel();
+      _delayTimer = Timer(realDelay, _scheduleTick);
+    } else {
+      _scheduleTick();
+    }
   }
 
   void _scheduleTick() {
@@ -74,8 +91,9 @@ class _CountdownClockState extends State<CountdownClock> {
   }
 
   void _tick() {
+    final newTimeLeft = timeLeft - _stopwatch.elapsed;
     setState(() {
-      timeLeft = timeLeft - _stopwatch.elapsed;
+      timeLeft = newTimeLeft;
       if (timeLeft <= Duration.zero) {
         timeLeft = Duration.zero;
       }
@@ -86,6 +104,7 @@ class _CountdownClockState extends State<CountdownClock> {
   }
 
   void stopClock() {
+    _delayTimer?.cancel();
     _timer?.cancel();
     _stopwatch.stop();
   }
@@ -119,6 +138,7 @@ class _CountdownClockState extends State<CountdownClock> {
   @override
   void dispose() {
     super.dispose();
+    _delayTimer?.cancel();
     _timer?.cancel();
   }
 

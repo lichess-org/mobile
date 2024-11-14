@@ -95,6 +95,8 @@ class _Body extends ConsumerWidget {
                       ? CountdownClock(
                           key: blackClockKey,
                           timeLeft: gameState.game.clock!.black,
+                          delay: gameState.game.clock!.lag ??
+                              const Duration(milliseconds: 10),
                           clockUpdatedAt: gameState.game.clock!.at,
                           active: gameState.activeClockSide == Side.black,
                         )
@@ -108,6 +110,8 @@ class _Body extends ConsumerWidget {
                           key: whiteClockKey,
                           timeLeft: gameState.game.clock!.white,
                           clockUpdatedAt: gameState.game.clock!.at,
+                          delay: gameState.game.clock!.lag ??
+                              const Duration(milliseconds: 10),
                           active: gameState.activeClockSide == Side.white,
                         )
                       : null,
