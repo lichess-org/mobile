@@ -95,7 +95,8 @@ class PlayableGame
 
   bool get imported => source == GameSource.import;
 
-  bool get isPlayerTurn => lastPosition.turn == youAre;
+  /// Whether it is the current player's turn.
+  bool get isMyTurn => lastPosition.turn == youAre;
 
   /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
@@ -125,7 +126,7 @@ class PlayableGame
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
-      !isPlayerTurn &&
+      !isMyTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 

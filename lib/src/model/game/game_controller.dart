@@ -655,7 +655,7 @@ class GameController extends _$GameController {
 
         if (data.clock != null) {
           final lagCompensation =
-              newState.game.playable && newState.game.isPlayerTurn
+              newState.game.playable && newState.game.isMyTurn
                   // server will send the lag only if it's more than 10ms
                   ? Duration.zero
                   : data.clock?.lag ?? const Duration(milliseconds: 10);
@@ -668,12 +668,11 @@ class GameController extends _$GameController {
           );
 
           if (newState.game.clock != null) {
-            // TODO remove that
+            // we don't rely on these values to display the clock, but let's keep
+            // the game object in sync
             newState = newState.copyWith.game.clock!(
               white: data.clock!.white,
               black: data.clock!.black,
-              // lag: lagCompensation,
-              // at: data.clock!.at,
             );
           } else if (newState.game.correspondenceClock != null) {
             newState = newState.copyWith.game.correspondenceClock!(
@@ -1131,7 +1130,7 @@ class GameState with _$GameState {
       game.drawable && (lastDrawOfferAtPly ?? -99) < game.lastPly - 20;
 
   bool get canShowClaimWinCountdown =>
-      !game.isPlayerTurn &&
+      !game.isMyTurn &&
       game.resignable &&
       (game.meta.rules == null ||
           !game.meta.rules!.contains(GameRule.noClaimWin));
