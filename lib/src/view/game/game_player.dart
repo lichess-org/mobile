@@ -146,7 +146,6 @@ class GamePlayer extends StatelessWidget {
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
         else if (materialDiff != null &&
             materialDifferenceFormat?.visible == true)
-          //MaterialDifferenceDisplay
           MaterialDifferenceDisplay(
             materialDiff: materialDiff!,
             materialDifferenceFormat: materialDifferenceFormat!,
