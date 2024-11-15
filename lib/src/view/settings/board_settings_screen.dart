@@ -193,11 +193,13 @@ class _Body extends ConsumerWidget {
                     choices: MaterialDifferenceFormat.values,
                     selectedItem: boardPrefs.materialDifference,
                     labelBuilder: (t) => Text(t.label),
-                    onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
-                        .read(boardPreferencesProvider.notifier)
-                        .setMaterialDifferenceFormat(
-                          value ?? MaterialDifferenceFormat.materialDifference,
-                        ),
+                    onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setMaterialDifferenceFormat(
+                              value ??
+                                  MaterialDifferenceFormat.materialDifference,
+                            ),
                   );
                 },
               ),

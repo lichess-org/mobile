@@ -154,7 +154,8 @@ class GamePlayer extends StatelessWidget {
                       size: 13,
                       color: Colors.grey,
                     ),
-              if (materialDifference == MaterialDifferenceFormat.materialDifference)
+              if (materialDifference ==
+                  MaterialDifferenceFormat.materialDifference)
                 for (final role in Role.values)
                   for (int i = 0; i < materialDiff!.pieces[role]!; i++)
                     Icon(
