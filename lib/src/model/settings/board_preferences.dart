@@ -81,12 +81,6 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
-  // Future<void> toggleShowMaterialDifference() {
-  //   return save(
-  //     state.copyWith(showMaterialDifference: !state.showMaterialDifference),
-  //   );
-  // }
-
   Future<void> setMaterialDifferenceFormat(
     MaterialDifference materialDifference,
   ) {
@@ -119,9 +113,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    // required bool showMaterialDifference,
     required MaterialDifference materialDifference,
-    // required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -149,8 +141,6 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     materialDifference: MaterialDifference.materialDifference,
-    // showMaterialDifference: true,
-    // materialDifferenceFormat: MaterialDifferenceFormat.difference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
