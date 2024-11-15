@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/game/game_socket_example_data.dart';

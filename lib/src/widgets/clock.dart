@@ -5,158 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
-/// A countdown clock.
-///
-/// The clock starts only when [active] is `true`.
-class CountdownClock extends StatefulWidget {
-  const CountdownClock({
-    required this.timeLeft,
-    this.delay,
-    this.emergencyThreshold,
-    this.clockUpdatedAt,
-    required this.active,
-    this.clockStyle,
-    this.padLeft = false,
-    super.key,
-  });
-
-  /// The duration left on the clock.
-  final Duration timeLeft;
-
-  /// The delay before the clock starts counting down.
-  ///
-  /// This can be used to implement lag compensation.
-  final Duration? delay;
-
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
-  /// its background color to [ClockStyle.emergencyBackgroundColor].
-  final Duration? emergencyThreshold;
-
-  /// The time at which the clock was updated.
-  ///
-  /// Use this parameter to synchronize the clock with the time at which the clock
-  /// event was received from the server and to compensate for UI lag.
-  final DateTime? clockUpdatedAt;
-
-  /// If [active] is `true`, the clock starts counting down.
-  final bool active;
-
-  /// Custom color style
-  final ClockStyle? clockStyle;
-
-  /// Whether to pad with a leading zero (default is `false`).
-  final bool padLeft;
-
-  @override
-  State<CountdownClock> createState() => _CountdownClockState();
-}
-
-const _tickDelay = Duration(milliseconds: 100);
-const _showTenthsThreshold = Duration(seconds: 10);
-
-class _CountdownClockState extends State<CountdownClock> {
-  Timer? _timer;
-  Timer? _delayTimer;
-  Duration timeLeft = Duration.zero;
-
-  final _stopwatch = clock.stopwatch();
-
-  void startClock() {
-    final now = clock.now();
-    final delay = widget.delay ?? Duration.zero;
-    final clockUpdatedAt = widget.clockUpdatedAt ?? now;
-    // UI lag diff: the elapsed time between the time the clock should have started
-    // and the time the clock is actually started
-    final uiLag = now.difference(clockUpdatedAt);
-    final realDelay = delay - uiLag;
-
-    // real delay is negative, we need to adjust the timeLeft.
-    if (realDelay < Duration.zero) {
-      final newTimeLeft = timeLeft + realDelay;
-      timeLeft = newTimeLeft > Duration.zero ? newTimeLeft : Duration.zero;
-    }
-
-    if (realDelay > Duration.zero) {
-      _delayTimer?.cancel();
-      _delayTimer = Timer(realDelay, _scheduleTick);
-    } else {
-      _scheduleTick();
-    }
-  }
-
-  void _scheduleTick() {
-    _timer?.cancel();
-    _timer = Timer(_tickDelay, _tick);
-    _stopwatch.reset();
-    _stopwatch.start();
-  }
-
-  void _tick() {
-    final newTimeLeft = timeLeft - _stopwatch.elapsed;
-    setState(() {
-      timeLeft = newTimeLeft;
-      if (timeLeft <= Duration.zero) {
-        timeLeft = Duration.zero;
-      }
-    });
-    if (timeLeft > Duration.zero) {
-      _scheduleTick();
-    }
-  }
-
-  void stopClock() {
-    _delayTimer?.cancel();
-    _timer?.cancel();
-    _stopwatch.stop();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    timeLeft = widget.timeLeft;
-    if (widget.active) {
-      startClock();
-    }
-  }
-
-  @override
-  void didUpdateWidget(CountdownClock oldClock) {
-    super.didUpdateWidget(oldClock);
-
-    if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
-      timeLeft = widget.timeLeft;
-    }
-
-    if (widget.active != oldClock.active) {
-      if (widget.active) {
-        startClock();
-      } else {
-        stopClock();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _delayTimer?.cancel();
-    _timer?.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Clock(
-        padLeft: widget.padLeft,
-        emergencyThreshold: widget.emergencyThreshold,
-        timeLeft: timeLeft,
-        active: widget.active,
-        clockStyle: widget.clockStyle,
-      ),
-    );
-  }
-}
-
 const _kClockFontSize = 26.0;
 const _kClockTenthFontSize = 20.0;
 const _kClockHundredsFontSize = 18.0;
@@ -167,7 +15,7 @@ const _kClockHundredsFontSize = 18.0;
 class Clock extends StatelessWidget {
   const Clock({
     required this.timeLeft,
-    required this.active,
+    this.active = false,
     this.clockStyle,
     this.emergencyThreshold,
     this.padLeft = false,
@@ -312,4 +160,147 @@ class ClockStyle {
     activeBackgroundColor: Color(0xFFD0E0BD),
     emergencyBackgroundColor: Color(0xFFF2CCCC),
   );
+}
+
+typedef ClockWidgetBuilder = Widget Function(
+  BuildContext context,
+  Duration timeLeft,
+  bool isActive,
+);
+
+/// A widget that automatically starts a countdown.
+///
+/// The clock starts only when [active] is `true`.
+class CountdownClockBuilder extends StatefulWidget {
+  const CountdownClockBuilder({
+    required this.timeLeft,
+    this.delay,
+    this.clockUpdatedAt,
+    required this.active,
+    required this.builder,
+    super.key,
+  });
+
+  /// The duration left on the clock.
+  final Duration timeLeft;
+
+  /// The delay before the clock starts counting down.
+  ///
+  /// This can be used to implement lag compensation.
+  final Duration? delay;
+
+  /// The time at which the clock was updated.
+  ///
+  /// Use this parameter to synchronize the clock with the time at which the clock
+  /// event was received from the server and to compensate for UI lag.
+  final DateTime? clockUpdatedAt;
+
+  /// If [active] is `true`, the clock starts counting down.
+  final bool active;
+
+  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
+  final ClockWidgetBuilder builder;
+
+  @override
+  State<CountdownClockBuilder> createState() => _CountdownClockState();
+}
+
+const _tickDelay = Duration(milliseconds: 100);
+const _showTenthsThreshold = Duration(seconds: 10);
+
+class _CountdownClockState extends State<CountdownClockBuilder> {
+  Timer? _timer;
+  Timer? _delayTimer;
+  Duration timeLeft = Duration.zero;
+
+  final _stopwatch = clock.stopwatch();
+
+  void startClock() {
+    final now = clock.now();
+    final delay = widget.delay ?? Duration.zero;
+    final clockUpdatedAt = widget.clockUpdatedAt ?? now;
+    // UI lag diff: the elapsed time between the time the clock should have started
+    // and the time the clock is actually started
+    final uiLag = now.difference(clockUpdatedAt);
+    final realDelay = delay - uiLag;
+
+    // real delay is negative, we need to adjust the timeLeft.
+    if (realDelay < Duration.zero) {
+      final newTimeLeft = timeLeft + realDelay;
+      timeLeft = newTimeLeft > Duration.zero ? newTimeLeft : Duration.zero;
+    }
+
+    if (realDelay > Duration.zero) {
+      _delayTimer?.cancel();
+      _delayTimer = Timer(realDelay, _scheduleTick);
+    } else {
+      _scheduleTick();
+    }
+  }
+
+  void _scheduleTick() {
+    _timer?.cancel();
+    _timer = Timer(_tickDelay, _tick);
+    _stopwatch.reset();
+    _stopwatch.start();
+  }
+
+  void _tick() {
+    final newTimeLeft = timeLeft - _stopwatch.elapsed;
+    setState(() {
+      timeLeft = newTimeLeft;
+      if (timeLeft <= Duration.zero) {
+        timeLeft = Duration.zero;
+      }
+    });
+    if (timeLeft > Duration.zero) {
+      _scheduleTick();
+    }
+  }
+
+  void stopClock() {
+    _delayTimer?.cancel();
+    _timer?.cancel();
+    _stopwatch.stop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timeLeft = widget.timeLeft;
+    if (widget.active) {
+      startClock();
+    }
+  }
+
+  @override
+  void didUpdateWidget(CountdownClockBuilder oldClock) {
+    super.didUpdateWidget(oldClock);
+
+    if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
+      timeLeft = widget.timeLeft;
+    }
+
+    if (widget.active != oldClock.active) {
+      if (widget.active) {
+        startClock();
+      } else {
+        stopClock();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _delayTimer?.cancel();
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: widget.builder(context, timeLeft, widget.active),
+    );
+  }
 }

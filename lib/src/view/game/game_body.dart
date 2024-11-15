@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -147,18 +147,20 @@ class GameBody extends ConsumerWidget {
                   active: false,
                 )
               : gameState.liveClock != null
-                  ? ValueListenableBuilder(
-                      key: blackClockKey,
-                      valueListenable: gameState.liveClock!.black,
-                      builder: (context, value, _) {
-                        return Clock(
-                          timeLeft: value,
-                          active: gameState.activeClockSide == Side.black,
-                          emergencyThreshold: youAre == Side.black
-                              ? gameState.game.meta.clock?.emergency
-                              : null,
-                        );
-                      },
+                  ? RepaintBoundary(
+                      child: ValueListenableBuilder(
+                        key: blackClockKey,
+                        valueListenable: gameState.liveClock!.black,
+                        builder: (context, value, _) {
+                          return Clock(
+                            timeLeft: value,
+                            active: gameState.activeClockSide == Side.black,
+                            emergencyThreshold: youAre == Side.black
+                                ? gameState.game.meta.clock?.emergency
+                                : null,
+                          );
+                        },
+                      ),
                     )
                   : gameState.game.correspondenceClock != null
                       ? CorrespondenceClock(
@@ -196,18 +198,20 @@ class GameBody extends ConsumerWidget {
                   active: false,
                 )
               : gameState.liveClock != null
-                  ? ValueListenableBuilder(
-                      key: whiteClockKey,
-                      valueListenable: gameState.liveClock!.white,
-                      builder: (context, value, _) {
-                        return Clock(
-                          timeLeft: value,
-                          active: gameState.activeClockSide == Side.white,
-                          emergencyThreshold: youAre == Side.white
-                              ? gameState.game.meta.clock?.emergency
-                              : null,
-                        );
-                      },
+                  ? RepaintBoundary(
+                      child: ValueListenableBuilder(
+                        key: whiteClockKey,
+                        valueListenable: gameState.liveClock!.white,
+                        builder: (context, value, _) {
+                          return Clock(
+                            timeLeft: value,
+                            active: gameState.activeClockSide == Side.white,
+                            emergencyThreshold: youAre == Side.white
+                                ? gameState.game.meta.clock?.emergency
+                                : null,
+                          );
+                        },
+                      ),
                     )
                   : gameState.game.correspondenceClock != null
                       ? CorrespondenceClock(
