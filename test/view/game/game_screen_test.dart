@@ -5,9 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -17,6 +19,9 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
+  if (request.url.path == '/api/board/seek') {
+    return mockResponse('ok', 200);
+  }
   return mockResponse('', 404);
 });
 
@@ -47,8 +52,7 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
 
-      // now loads the game controller
-      // screen doesn't have changed yet
+      // now the game controller is loading and screen doesn't have changed yet
       await tester.pump(const Duration(milliseconds: 10));
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
@@ -69,6 +73,76 @@ void main() {
       expect(find.byType(PieceWidget), findsNWidgets(32));
       expect(find.text('Peter'), findsOneWidget);
       expect(find.text('Steven'), findsOneWidget);
+    });
+
+    testWidgets('a game from the pool with a seek',
+        (WidgetTester tester) async {
+      final fakeLobbySocket = FakeWebSocketChannel();
+      final fakeGameSocket = FakeWebSocketChannel();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(
+          seek: GameSeek(
+            clock: (Duration(minutes: 3), Duration(seconds: 2)),
+            rated: true,
+          ),
+        ),
+        overrides: [
+          lichessClientProvider
+              .overrideWith((ref) => LichessClient(client, ref)),
+          webSocketChannelFactoryProvider.overrideWith((ref) {
+            return FakeWebSocketChannelFactory(
+              (String url) =>
+                  url.contains('lobby') ? fakeLobbySocket : fakeGameSocket,
+            );
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNothing);
+      expect(find.text('Waiting for opponent to join...'), findsOneWidget);
+      expect(find.text('3+2'), findsOneWidget);
+      expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsOneWidget);
+
+      // waiting for the game
+      await tester.pump(const Duration(seconds: 2));
+
+      // when a seek is accepted, server sends a 'redirect' message with game id
+      fakeLobbySocket.addIncomingMessages([
+        '{"t": "redirect", "d": {"id": "qVChCOTcHSeW" }, "v": 1}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // now the game controller is loading
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNothing);
+      expect(find.text('Waiting for opponent to join...'), findsNothing);
+      expect(find.text('3+2'), findsNothing);
+      expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsNothing);
+
+      await fakeGameSocket.connectionEstablished;
+      // now that game socket is open, lobby socket should be closed
+      expect(fakeLobbySocket.closeCode, isNotNull);
+
+      fakeGameSocket.addIncomingMessages([
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          '',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+        ),
+      ]);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(find.text('Peter'), findsOneWidget);
+      expect(find.text('Steven'), findsOneWidget);
+      expect(find.text('Waiting for opponent to join...'), findsNothing);
+      expect(find.text('3+2'), findsNothing);
     });
   });
 
