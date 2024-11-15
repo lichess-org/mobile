@@ -31,16 +31,17 @@ class MaterialDiff with _$MaterialDiff {
     required MaterialDiffSide white,
   }) = _MaterialDiff;
 
-  factory MaterialDiff.fromBoard(Board board) {
+  factory MaterialDiff.fromBoard(Board board, {Board? startingPosition}) {
     int score = 0;
     final IMap<Role, int> blackCount = board.materialCount(Side.black);
     final IMap<Role, int> whiteCount = board.materialCount(Side.white);
 
     final IMap<Role, int> blackStartingCount =
-        Board.standard.materialCount(Side.black);
+        startingPosition?.materialCount(Side.black) ??
+            Board.standard.materialCount(Side.black);
     final IMap<Role, int> whiteStartingCount =
-        Board.standard.materialCount(Side.white);
-    // TODO: parameterise starting position maybe so it can be passed in
+        startingPosition?.materialCount(Side.white) ??
+            Board.standard.materialCount(Side.white);
 
     IMap<Role, int> subtractPieceCounts(
       IMap<Role, int> startingCount,
