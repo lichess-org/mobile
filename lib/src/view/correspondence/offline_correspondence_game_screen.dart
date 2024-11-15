@@ -144,7 +144,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final materialDifference = ref.watch(
       boardPreferencesProvider.select(
-        (prefs) => prefs.materialDifference,
+        (prefs) => prefs.materialDifferenceFormat,
       ),
     );
 
@@ -160,7 +160,7 @@ class _BodyState extends ConsumerState<_Body> {
       materialDiff: materialDifference.visible
           ? game.materialDiffAt(stepCursor, Side.black)
           : null,
-      materialDifference: materialDifference,
+      materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.black,
       confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
@@ -183,7 +183,7 @@ class _BodyState extends ConsumerState<_Body> {
       materialDiff: materialDifference.visible
           ? game.materialDiffAt(stepCursor, Side.white)
           : null,
-      materialDifference: materialDifference,
+      materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.white,
       confirmMoveCallbacks: youAre == Side.white && moveToConfirm != null

@@ -301,10 +301,10 @@ class _Player extends ConsumerWidget {
             name: side.name.capitalize(),
           ),
         ),
-        materialDiff: boardPreferences.materialDifference.visible
+        materialDiff: boardPreferences.materialDifferenceFormat.visible
             ? gameState.currentMaterialDiff(side)
             : null,
-        materialDifference: boardPreferences.materialDifference,
+        materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
         shouldLinkToUserProfile: false,
         clock: clock.timeIncrement.isInfinite
             ? null

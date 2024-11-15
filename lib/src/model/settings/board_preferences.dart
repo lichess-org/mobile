@@ -82,10 +82,10 @@ class BoardPreferences extends _$BoardPreferences
   }
 
   Future<void> setMaterialDifferenceFormat(
-    MaterialDifferenceFormat materialDifference,
+    MaterialDifferenceFormat materialDifferenceFormat,
   ) {
     return save(
-      state.copyWith(materialDifference: materialDifference),
+      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
     );
   }
 
@@ -113,7 +113,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    required MaterialDifferenceFormat materialDifference,
+    required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -140,7 +140,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
-    materialDifference: MaterialDifferenceFormat.materialDifference,
+    materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,

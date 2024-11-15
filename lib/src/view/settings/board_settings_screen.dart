@@ -185,13 +185,13 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                settingsLabel: const Text('Captured pieces'),
-                settingsValue: boardPrefs.materialDifference.label,
+                settingsLabel: const Text('Material'),
+                settingsValue: boardPrefs.materialDifferenceFormat.label,
                 onTap: () {
                   showChoicePicker(
                     context,
                     choices: MaterialDifferenceFormat.values,
-                    selectedItem: boardPrefs.materialDifference,
+                    selectedItem: boardPrefs.materialDifferenceFormat,
                     labelBuilder: (t) => Text(t.label),
                     onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
                         ref

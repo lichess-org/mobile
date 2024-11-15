@@ -128,13 +128,13 @@ class GameSettings extends ConsumerWidget {
           },
         ),
         SettingsListTile(
-          settingsLabel: const Text('Captured pieces'),
-          settingsValue: boardPrefs.materialDifference.label,
+          settingsLabel: const Text('Material'), //TODO: l10n
+          settingsValue: boardPrefs.materialDifferenceFormat.label,
           onTap: () {
             showChoicePicker(
               context,
               choices: MaterialDifferenceFormat.values,
-              selectedItem: boardPrefs.materialDifference,
+              selectedItem: boardPrefs.materialDifferenceFormat,
               labelBuilder: (t) => Text(t.label),
               onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
                   .read(boardPreferencesProvider.notifier)
