@@ -133,13 +133,13 @@ class GameSettings extends ConsumerWidget {
           onTap: () {
             showChoicePicker(
               context,
-              choices: MaterialDifference.values,
+              choices: MaterialDifferenceFormat.values,
               selectedItem: boardPrefs.materialDifference,
               labelBuilder: (t) => Text(t.label),
-              onSelectedItemChanged: (MaterialDifference? value) => ref
+              onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
                   .read(boardPreferencesProvider.notifier)
                   .setMaterialDifferenceFormat(
-                    value ?? MaterialDifference.materialDifference,
+                    value ?? MaterialDifferenceFormat.materialDifference,
                   ),
             );
           },

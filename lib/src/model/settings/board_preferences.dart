@@ -82,7 +82,7 @@ class BoardPreferences extends _$BoardPreferences
   }
 
   Future<void> setMaterialDifferenceFormat(
-    MaterialDifference materialDifference,
+    MaterialDifferenceFormat materialDifference,
   ) {
     return save(
       state.copyWith(materialDifference: materialDifference),
@@ -113,7 +113,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    required MaterialDifference materialDifference,
+    required MaterialDifferenceFormat materialDifference,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -140,7 +140,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
-    materialDifference: MaterialDifference.materialDifference,
+    materialDifference: MaterialDifferenceFormat.materialDifference,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -304,16 +304,16 @@ enum BoardTheme {
         );
 }
 
-enum MaterialDifference {
-  materialDifference(label: 'Material difference', visible: true),
-  capturedPieces(label: 'Captured pieces', visible: true),
-  hidden(label: 'Hidden', visible: false);
+enum MaterialDifferenceFormat {
+  materialDifference(label: 'Material difference'),
+  capturedPieces(label: 'Captured pieces'),
+  hidden(label: 'Hidden');
 
-  const MaterialDifference({
+  const MaterialDifferenceFormat({
     required this.label,
-    required this.visible,
   });
 
   final String label;
-  final bool visible;
+
+  bool get visible => this != MaterialDifferenceFormat.hidden;
 }

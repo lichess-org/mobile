@@ -38,7 +38,7 @@ class GamePlayer extends StatelessWidget {
   final Player player;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
-  final MaterialDifference? materialDifference;
+  final MaterialDifferenceFormat? materialDifference;
 
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
@@ -146,7 +146,7 @@ class GamePlayer extends StatelessWidget {
         else if (materialDiff != null && materialDifference?.visible == true)
           Row(
             children: [
-              if (materialDifference == MaterialDifference.capturedPieces)
+              if (materialDifference == MaterialDifferenceFormat.capturedPieces)
                 for (final role in Role.values)
                   for (int i = 0; i < materialDiff!.capturedPieces[role]!; i++)
                     Icon(
@@ -154,7 +154,7 @@ class GamePlayer extends StatelessWidget {
                       size: 13,
                       color: Colors.grey,
                     ),
-              if (materialDifference == MaterialDifference.materialDifference)
+              if (materialDifference == MaterialDifferenceFormat.materialDifference)
                 for (final role in Role.values)
                   for (int i = 0; i < materialDiff!.pieces[role]!; i++)
                     Icon(
