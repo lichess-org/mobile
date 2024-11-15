@@ -113,6 +113,13 @@ class GameController extends _$GameController {
 
         _socketEventVersion = fullEvent.socketEventVersion;
 
+        // Play "dong" sound when this is a new game and we're playing it (not spectating)
+        final isMyGame = game.youAre != null;
+        final noMovePlayed = game.steps.length == 1;
+        if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
+          ref.read(soundServiceProvider).play(Sound.dong);
+        }
+
         if (game.playable) {
           _appLifecycleListener = AppLifecycleListener(
             onResume: () {
