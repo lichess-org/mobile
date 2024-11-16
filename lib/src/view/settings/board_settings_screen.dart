@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -185,14 +186,16 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                settingsLabel: const Text('Material'),
-                settingsValue: boardPrefs.materialDifferenceFormat.label,
+                settingsLabel: const Text('Material'), //TODO: l10n
+                settingsValue: boardPrefs.materialDifferenceFormat
+                    .l10n(AppLocalizations.of(context)),
                 onTap: () {
                   showChoicePicker(
                     context,
                     choices: MaterialDifferenceFormat.values,
                     selectedItem: boardPrefs.materialDifferenceFormat,
-                    labelBuilder: (t) => Text(t.label),
+                    labelBuilder: (t) =>
+                        Text(t.l10n(AppLocalizations.of(context))),
                     onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
                         ref
                             .read(boardPreferencesProvider.notifier)

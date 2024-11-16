@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -129,13 +130,14 @@ class GameSettings extends ConsumerWidget {
         ),
         SettingsListTile(
           settingsLabel: const Text('Material'), //TODO: l10n
-          settingsValue: boardPrefs.materialDifferenceFormat.label,
+          settingsValue: boardPrefs.materialDifferenceFormat
+              .l10n(AppLocalizations.of(context)),
           onTap: () {
             showChoicePicker(
               context,
               choices: MaterialDifferenceFormat.values,
               selectedItem: boardPrefs.materialDifferenceFormat,
-              labelBuilder: (t) => Text(t.label),
+              labelBuilder: (t) => Text(t.l10n(AppLocalizations.of(context))),
               onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
                   .read(boardPreferencesProvider.notifier)
                   .setMaterialDifferenceFormat(

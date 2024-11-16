@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -316,4 +317,11 @@ enum MaterialDifferenceFormat {
   final String label;
 
   bool get visible => this != MaterialDifferenceFormat.hidden;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+        //TODO: Add l10n
+        MaterialDifferenceFormat.materialDifference => materialDifference.label,
+        MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
+        MaterialDifferenceFormat.hidden => hidden.label,
+      };
 }
