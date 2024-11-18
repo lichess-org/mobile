@@ -33,11 +33,14 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
   Timer? _startEngineEvalTimer;
 
+  Timer? _opponentFirstMoveTimer;
+
   @override
   Future<StudyState> build(StudyId id) async {
     final evaluationService = ref.watch(evaluationServiceProvider);
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
+      _opponentFirstMoveTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
     });
@@ -62,6 +65,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         chapterId: chapterId,
       ),
     );
+    _ensureItsOurTurnIfGamebook();
   }
 
   Future<StudyState> _fetchChapter(
@@ -95,6 +99,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         pov: orientation,
         isLocalEvaluationAllowed: false,
         isLocalEvaluationEnabled: false,
+        gamebookActive: false,
         pgn: pgn,
       );
     }
@@ -119,6 +124,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
       isLocalEvaluationAllowed:
           study.chapter.features.computer && !study.chapter.gamebook,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      gamebookActive: study.chapter.gamebook,
       pgn: pgn,
     );
 
@@ -144,6 +150,19 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     return studyState;
   }
 
+  // The PGNs of some gamebook studies start with the opponent's turn, so trigger their move after a delay
+  void _ensureItsOurTurnIfGamebook() {
+    _opponentFirstMoveTimer?.cancel();
+    if (state.requireValue.isAtStartOfChapter &&
+        state.requireValue.gamebookActive &&
+        state.requireValue.gamebookComment == null &&
+        state.requireValue.position!.turn != state.requireValue.pov) {
+      _opponentFirstMoveTimer = Timer(const Duration(milliseconds: 750), () {
+        userNext();
+      });
+    }
+  }
+
   EvaluationContext _evaluationContext(Variant variant) => EvaluationContext(
         variant: variant,
         initialPosition: _root.position,
@@ -167,6 +186,20 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         shouldRecomputeRootView: isNewNode,
         shouldForceShowVariation: true,
       );
+    }
+
+    if (state.requireValue.gamebookActive) {
+      final comment = state.requireValue.gamebookComment;
+      // If there's no explicit comment why the move was good/bad, trigger next/previous move automatically
+      if (comment == null) {
+        Timer(const Duration(milliseconds: 750), () {
+          if (state.requireValue.isOnMainline) {
+            userNext();
+          } else {
+            userPrevious();
+          }
+        });
+      }
     }
   }
 
@@ -237,6 +270,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   void reset() {
     if (state.hasValue) {
       _setPath(UciPath.empty);
+      _ensureItsOurTurnIfGamebook();
     }
   }
 
@@ -486,6 +520,14 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   }
 }
 
+enum GamebookState {
+  startLesson,
+  findTheMove,
+  correctMove,
+  incorrectMove,
+  lessonComplete
+}
+
 @freezed
 class StudyState with _$StudyState {
   const StudyState._();
@@ -518,6 +560,9 @@ class StudyState with _$StudyState {
 
     /// Whether local evaluation is allowed for this study.
     required bool isLocalEvaluationAllowed,
+
+    /// Whether we're currently in gamebook mode, where the user has to find the right moves.
+    required bool gamebookActive,
 
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
@@ -567,6 +612,37 @@ class StudyState with _$StudyState {
 
   bool get isAtStartOfChapter => currentPath.isEmpty;
 
+  String? get gamebookComment {
+    final comment =
+        (currentNode.isRoot ? pgnRootComments : currentNode.comments)
+            ?.map((comment) => comment.text)
+            .nonNulls
+            .join('\n');
+    return comment?.isNotEmpty == true
+        ? comment
+        : gamebookState == GamebookState.incorrectMove
+            ? gamebookDeviationComment
+            : null;
+  }
+
+  String? get gamebookHint => study.hints.getOrNull(currentPath.size);
+
+  String? get gamebookDeviationComment =>
+      study.deviationComments.getOrNull(currentPath.size);
+
+  GamebookState get gamebookState {
+    if (isAtEndOfChapter) return GamebookState.lessonComplete;
+
+    final bool myTurn = currentNode.position!.turn == pov;
+    if (isAtStartOfChapter && !myTurn) return GamebookState.startLesson;
+
+    return myTurn
+        ? GamebookState.findTheMove
+        : isOnMainline
+            ? GamebookState.correctMove
+            : GamebookState.incorrectMove;
+  }
+
   bool get isIntroductoryChapter =>
       currentNode.isRoot && currentNode.children.isEmpty;
 
@@ -576,7 +652,9 @@ class StudyState with _$StudyState {
             .flattened,
       );
 
-  PlayerSide get playerSide => PlayerSide.both;
+  PlayerSide get playerSide => gamebookActive
+      ? (pov == Side.white ? PlayerSide.white : PlayerSide.black)
+      : PlayerSide.both;
 }
 
 @freezed

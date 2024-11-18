@@ -237,5 +237,235 @@ void main() {
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
     });
+
+    testWidgets('Interactive study', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              gamebook: true,
+            ),
+          ),
+          '''
+[Event "Improve Your Chess Calculation: Candidates| Ex 1: Hard"]
+[Site "https://lichess.org/study/xgZOEizT/OfF4eLmN"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[Annotator "https://lichess.org/@/RushConnectedPawns"]
+[FEN "r1b2rk1/3pbppp/p3p3/1p6/2qBPP2/P1N2R2/1PPQ2PP/R6K w - - 0 1"]
+[SetUp "1"]
+[UTCDate "2024.10.23"]
+[UTCTime "02:04:11"]
+[ChapterMode "gamebook"]
+
+{ We begin our lecture with an 'easy but not easy' example. White to play and win. }
+1. Nd5!! { Brilliant! You noticed that the queen on c4 was kinda smothered. } (1. Ne2? { Not much to say after ...Qc7. }) 1... exd5 2. Rc3 Qa4 3. Rg3! { A fork, threatening Rg7 & b3. } { [%csl Gg7][%cal Gg3g7,Gd4g7,Gb2b3] } (3. Rxc8?? { Uh-oh! After Rc8, b3, there is the counter-sac Rxc2, which is winning for black!! } 3... Raxc8 4. b3 Rxc2!! 5. Qxc2 Qxd4 \$19) 3... g6 4. b3 \$18 { ...and the queen is trapped. GGs. If this was too hard for you, don't worry, there will be easier examples. } *
+          '''
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(id: testId),
+        overrides: [
+          studyRepositoryProvider.overrideWith(
+            (ref) => mockRepository,
+          ),
+        ],
+      );
+      await tester.pumpWidget(app);
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+
+      const introText =
+          "We begin our lecture with an 'easy but not easy' example. White to play and win.";
+
+      expect(find.text(introText), findsOneWidget);
+
+      expect(
+        find.text(
+          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
+        ),
+        findsNothing,
+      );
+
+      // Play a wrong move
+      await playMove(tester, boardRect, 'c3', 'a2');
+      expect(find.text("That's not the move!"), findsOneWidget);
+      expect(find.text(introText), findsNothing);
+
+      // Wrong move will be taken back automatically after a short delay
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text("That's not move!"), findsNothing);
+      expect(find.text(introText), findsOneWidget);
+
+      // Play another wrong move, but this one has an explicit comment
+      await playMove(tester, boardRect, 'c3', 'e2');
+
+      // If there's an explicit comment, the move is not taken back automatically
+      // Verify this by waiting the same duration as above
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Not much to say after ...Qc7.'), findsOneWidget);
+      expect(find.text(introText), findsNothing);
+
+      await tester.tap(find.byTooltip('Retry'));
+      await tester.pump(); // Wait for move to be taken back
+
+      expect(find.text(introText), findsOneWidget);
+
+      // Play the correct move
+      await playMove(tester, boardRect, 'c3', 'd5');
+
+      expect(
+        find.text(
+          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
+        ),
+        findsOneWidget,
+      );
+
+      // The move has an explicit feedback comment, so opponent move should not be played automatically
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(
+        find.text(
+          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byTooltip('Next'));
+      await tester.pump(); // Wait for opponent move to be played
+
+      expect(
+        find.text('What would you play in this position?'),
+        findsOneWidget,
+      );
+
+      await playMove(tester, boardRect, 'f3', 'c3');
+      expect(find.text('Good move'), findsOneWidget);
+
+      // No explicit feedback, so opponent move should be played automatically after delay
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(
+        find.text('What would you play in this position?'),
+        findsOneWidget,
+      );
+
+      await playMove(tester, boardRect, 'c3', 'g3');
+      expect(find.text('A fork, threatening Rg7 & b3.'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Next'));
+      await tester.pump(); // Wait for opponent move to be played
+
+      expect(
+        find.text('What would you play in this position?'),
+        findsOneWidget,
+      );
+
+      await playMove(tester, boardRect, 'b2', 'b3');
+
+      expect(
+        find.text(
+          "...and the queen is trapped. GGs. If this was too hard for you, don't worry, there will be easier examples.",
+        ),
+        findsOneWidget,
+      );
+
+      expect(find.byTooltip('Play again'), findsOneWidget);
+      expect(find.byTooltip('Next chapter'), findsOneWidget);
+      expect(find.byTooltip('Analysis board'), findsOneWidget);
+    });
+
+    testWidgets('Interactive study hints and deviation comments',
+        (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              gamebook: true,
+            ),
+            hints: [
+              'Hint 1',
+              null,
+              null,
+              null,
+            ].lock,
+            deviationComments: [
+              null,
+              'Shown if any move other than d4 is played',
+              null,
+              null,
+            ].lock,
+          ),
+          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3'
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(id: testId),
+        overrides: [
+          studyRepositoryProvider.overrideWith(
+            (ref) => mockRepository,
+          ),
+        ],
+      );
+      await tester.pumpWidget(app);
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      expect(find.text('Get a hint'), findsOneWidget);
+      expect(find.text('Hint 1'), findsNothing);
+
+      await tester.tap(find.text('Get a hint'));
+      await tester.pump(); // Wait for hint to be shown
+      expect(find.text('Hint 1'), findsOneWidget);
+      expect(find.text('Get a hint'), findsNothing);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await playMove(tester, boardRect, 'e2', 'e3');
+      expect(
+        find.text('Shown if any move other than d4 is played'),
+        findsOneWidget,
+      );
+      await tester.tap(find.byTooltip('Retry'));
+      await tester.pump(); // Wait for move to be taken back
+
+      await playMove(tester, boardRect, 'd2', 'd4');
+      expect(find.text('Shown if d4 is played'), findsOneWidget);
+      await tester.tap(find.byTooltip('Retry'));
+      await tester.pump(); // Wait for move to be taken back
+
+      expect(find.text('View the solution'), findsOneWidget);
+      await tester.tap(find.byTooltip('View the solution'));
+      // Wait for correct move and opponent's response to be played
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Get a hint'), findsNothing);
+
+      // Play a wrong move again - generic feedback should be shown
+      await playMove(tester, boardRect, 'a2', 'a3');
+      expect(find.text("That's not the move!"), findsOneWidget);
+      // Wait for wrong move to be taken back
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(
+        find.text('What would you play in this position?'),
+        findsOneWidget,
+      );
+      expect(find.text("That's not the move!"), findsNothing);
+    });
   });
 }
