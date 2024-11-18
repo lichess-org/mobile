@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_engine_depth.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -54,7 +53,6 @@ class BroadcastGameScreen extends ConsumerWidget {
       appBar: PlatformAppBar(
         title: Text(title),
         actions: [
-          if (state.hasValue) BroadcastGameEngineDepth(roundId, gameId),
           AppBarIconButton(
             onPressed: () => (state.hasValue)
                 ? showAdaptiveBottomSheet<void>(
