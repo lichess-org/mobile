@@ -6,9 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -32,11 +30,15 @@ class BroadcastGameBottomBar extends ConsumerWidget {
     return BottomBar(
       children: [
         BottomBarButton(
-          label: context.l10n.menu,
+          label: context.l10n.flipBoard,
           onTap: () {
-            _showAnalysisMenu(context, ref);
+            ref
+                .read(
+                  ctrlProvider.notifier,
+                )
+                .toggleBoard();
           },
-          icon: Icons.menu,
+          icon: CupertinoIcons.arrow_2_squarepath,
         ),
         BottomBarButton(
           label: context.l10n.openingExplorer,
@@ -85,38 +87,4 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   void _moveBackward(WidgetRef ref) => ref
       .read(broadcastGameControllerProvider(roundId, gameId).notifier)
       .userPrevious();
-
-  Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
-            ref
-                .read(
-                  broadcastGameControllerProvider(roundId, gameId).notifier,
-                )
-                .toggleBoard();
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.boardEditor),
-          onPressed: (context) {
-            final analysisState = ref
-                .read(broadcastGameControllerProvider(roundId, gameId))
-                .requireValue;
-            final boardFen = analysisState.position.fen;
-            pushPlatformRoute(
-              context,
-              title: context.l10n.boardEditor,
-              builder: (_) => BoardEditorScreen(
-                initialFen: boardFen,
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
 }

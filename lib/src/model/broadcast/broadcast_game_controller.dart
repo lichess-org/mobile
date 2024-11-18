@@ -424,16 +424,6 @@ class BroadcastGameController extends _$BroadcastGameController
     }
   }
 
-  /// Makes a full PGN string (including headers and comments) of the current game state.
-  String makeExportPgn() {
-    if (!state.hasValue) Exception('Cannot make a PGN');
-
-    return _root.makePgn(
-      state.requireValue.pgnHeaders,
-      state.requireValue.pgnRootComments,
-    );
-  }
-
   /// Makes a PGN string up to the current node only.
   String makeCurrentNodePgn() {
     if (!state.hasValue) Exception('Cannot make a PGN up to the current node');
@@ -641,7 +631,7 @@ class BroadcastGameState with _$BroadcastGameState {
     /// It can be either moves or opening explorer in this controller (summary will be added later).
     required DisplayMode displayMode,
 
-    /// Clocks if avaible. Only used by the broadcast analysis screen.
+    /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
 
     /// The last move played.
