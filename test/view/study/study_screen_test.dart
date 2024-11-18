@@ -282,8 +282,6 @@ void main() {
       // Wait for study to load
       await tester.pumpAndSettle();
 
-      final boardRect = tester.getRect(find.byType(Chessboard));
-
       const introText =
           "We begin our lecture with an 'easy but not easy' example. White to play and win.";
 
@@ -297,7 +295,7 @@ void main() {
       );
 
       // Play a wrong move
-      await playMove(tester, boardRect, 'c3', 'a2');
+      await playMove(tester, 'c3', 'a2');
       expect(find.text("That's not the move!"), findsOneWidget);
       expect(find.text(introText), findsNothing);
 
@@ -307,7 +305,7 @@ void main() {
       expect(find.text(introText), findsOneWidget);
 
       // Play another wrong move, but this one has an explicit comment
-      await playMove(tester, boardRect, 'c3', 'e2');
+      await playMove(tester, 'c3', 'e2');
 
       // If there's an explicit comment, the move is not taken back automatically
       // Verify this by waiting the same duration as above
@@ -322,7 +320,7 @@ void main() {
       expect(find.text(introText), findsOneWidget);
 
       // Play the correct move
-      await playMove(tester, boardRect, 'c3', 'd5');
+      await playMove(tester, 'c3', 'd5');
 
       expect(
         find.text(
@@ -349,7 +347,7 @@ void main() {
         findsOneWidget,
       );
 
-      await playMove(tester, boardRect, 'f3', 'c3');
+      await playMove(tester, 'f3', 'c3');
       expect(find.text('Good move'), findsOneWidget);
 
       // No explicit feedback, so opponent move should be played automatically after delay
@@ -360,7 +358,7 @@ void main() {
         findsOneWidget,
       );
 
-      await playMove(tester, boardRect, 'c3', 'g3');
+      await playMove(tester, 'c3', 'g3');
       expect(find.text('A fork, threatening Rg7 & b3.'), findsOneWidget);
 
       await tester.tap(find.byTooltip('Next'));
@@ -371,7 +369,7 @@ void main() {
         findsOneWidget,
       );
 
-      await playMove(tester, boardRect, 'b2', 'b3');
+      await playMove(tester, 'b2', 'b3');
 
       expect(
         find.text(
@@ -434,8 +432,7 @@ void main() {
       expect(find.text('Hint 1'), findsOneWidget);
       expect(find.text('Get a hint'), findsNothing);
 
-      final boardRect = tester.getRect(find.byType(Chessboard));
-      await playMove(tester, boardRect, 'e2', 'e3');
+      await playMove(tester, 'e2', 'e3');
       expect(
         find.text('Shown if any move other than d4 is played'),
         findsOneWidget,
@@ -443,7 +440,7 @@ void main() {
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
-      await playMove(tester, boardRect, 'd2', 'd4');
+      await playMove(tester, 'd2', 'd4');
       expect(find.text('Shown if d4 is played'), findsOneWidget);
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
@@ -456,7 +453,7 @@ void main() {
       expect(find.text('Get a hint'), findsNothing);
 
       // Play a wrong move again - generic feedback should be shown
-      await playMove(tester, boardRect, 'a2', 'a3');
+      await playMove(tester, 'a2', 'a3');
       expect(find.text("That's not the move!"), findsOneWidget);
       // Wait for wrong move to be taken back
       await tester.pump(const Duration(seconds: 1));
