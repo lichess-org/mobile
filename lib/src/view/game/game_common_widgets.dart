@@ -6,12 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -23,6 +27,31 @@ import 'game_settings.dart';
 import 'ping_rating.dart';
 
 final _gameTitledateFormat = DateFormat.yMMMd();
+
+void openGameScreen(
+  LightArchivedGame game,
+  Side orientation,
+  BuildContext context,
+) {
+  if (game.variant.isReadSupported) {
+    pushPlatformRoute(
+      context,
+      rootNavigator: true,
+      builder: (context) => game.fullId != null
+          ? GameScreen(initialGameId: game.fullId)
+          : ArchivedGameScreen(
+              gameData: game,
+              orientation: orientation,
+            ),
+    );
+  } else {
+    showPlatformSnackbar(
+      context,
+      'This variant is not supported yet.',
+      type: SnackBarType.info,
+    );
+  }
+}
 
 class GameAppBar extends ConsumerWidget {
   const GameAppBar({
