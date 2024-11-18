@@ -33,7 +33,7 @@ void main() {
   });
 
   group('CountdownClockBuilder', () {
-    Widget clockBuilder(BuildContext context, Duration timeLeft, bool active) {
+    Widget clockBuilder(BuildContext context, Duration timeLeft) {
       final mins = timeLeft.inMinutes.remainder(60);
       final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
       final tenths = timeLeft.inMilliseconds.remainder(1000) ~/ 100;

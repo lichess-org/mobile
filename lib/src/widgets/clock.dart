@@ -9,9 +9,11 @@ const _kClockFontSize = 26.0;
 const _kClockTenthFontSize = 20.0;
 const _kClockHundredsFontSize = 18.0;
 
+const _showTenthsThreshold = Duration(seconds: 10);
+
 /// A stateless widget that displays the time left on the clock.
 ///
-/// For a clock widget that automatically counts down, see [CountdownClock].
+/// For a clock widget that automatically counts down, see [CountdownClockBuilder].
 class Clock extends StatelessWidget {
   const Clock({
     required this.timeLeft,
@@ -162,22 +164,30 @@ class ClockStyle {
   );
 }
 
-typedef ClockWidgetBuilder = Widget Function(
-  BuildContext context,
-  Duration timeLeft,
-  bool isActive,
-);
+typedef ClockWidgetBuilder = Widget Function(BuildContext, Duration);
 
-/// A widget that automatically starts a countdown.
+/// A widget that automatically starts a countdown from [timeLeft] when [active] is `true`.
 ///
-/// The clock starts only when [active] is `true`.
+/// The clock will update the UI every [tickInterval], which defaults to 100ms,
+/// and the [builder] will be called with the new [timeLeft] value.
+///
+/// The clock can be synchronized with the time at which the clock event was received from the server
+/// by setting the [clockUpdatedAt] parameter.
+/// This widget will only update its internal clock when the [clockUpdatedAt] parameter changes.
+///
+/// The [delay] parameter can be used to delay the start of the clock.
+///
+/// The clock will stop counting down when [active] is set to `false`.
+///
+/// The clock will stop counting down when the time left reaches zero.
 class CountdownClockBuilder extends StatefulWidget {
   const CountdownClockBuilder({
     required this.timeLeft,
-    this.delay,
-    this.clockUpdatedAt,
     required this.active,
     required this.builder,
+    this.delay,
+    this.tickInterval = const Duration(milliseconds: 100),
+    this.clockUpdatedAt,
     super.key,
   });
 
@@ -189,13 +199,16 @@ class CountdownClockBuilder extends StatefulWidget {
   /// This can be used to implement lag compensation.
   final Duration? delay;
 
+  /// The interval at which the clock updates the UI.
+  final Duration tickInterval;
+
   /// The time at which the clock was updated.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
   /// event was received from the server and to compensate for UI lag.
   final DateTime? clockUpdatedAt;
 
-  /// If [active] is `true`, the clock starts counting down.
+  /// If `true`, the clock starts counting down.
   final bool active;
 
   /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
@@ -204,9 +217,6 @@ class CountdownClockBuilder extends StatefulWidget {
   @override
   State<CountdownClockBuilder> createState() => _CountdownClockState();
 }
-
-const _tickDelay = Duration(milliseconds: 100);
-const _showTenthsThreshold = Duration(seconds: 10);
 
 class _CountdownClockState extends State<CountdownClockBuilder> {
   Timer? _timer;
@@ -240,7 +250,7 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
 
   void _scheduleTick() {
     _timer?.cancel();
-    _timer = Timer(_tickDelay, _tick);
+    _timer = Timer(widget.tickInterval, _tick);
     _stopwatch.reset();
     _stopwatch.start();
   }
@@ -300,7 +310,7 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: widget.builder(context, timeLeft, widget.active),
+      child: widget.builder(context, timeLeft),
     );
   }
 }

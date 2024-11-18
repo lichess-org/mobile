@@ -99,8 +99,11 @@ class _Body extends ConsumerWidget {
                               const Duration(milliseconds: 10),
                           clockUpdatedAt: gameState.game.clock!.at,
                           active: gameState.activeClockSide == Side.black,
-                          builder: (context, timeLeft, active) {
-                            return Clock(timeLeft: timeLeft, active: active);
+                          builder: (context, timeLeft) {
+                            return Clock(
+                              timeLeft: timeLeft,
+                              active: gameState.activeClockSide == Side.black,
+                            );
                           },
                         )
                       : null,
@@ -116,8 +119,11 @@ class _Body extends ConsumerWidget {
                           delay: gameState.game.clock!.lag ??
                               const Duration(milliseconds: 10),
                           active: gameState.activeClockSide == Side.white,
-                          builder: (context, timeLeft, active) {
-                            return Clock(timeLeft: timeLeft, active: active);
+                          builder: (context, timeLeft) {
+                            return Clock(
+                              timeLeft: timeLeft,
+                              active: gameState.activeClockSide == Side.white,
+                            );
                           },
                         )
                       : null,
