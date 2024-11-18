@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -114,17 +115,18 @@ Offset squareOffset(
 /// Plays a move on the board.
 Future<void> playMove(
   WidgetTester tester,
-  Rect boardRect,
   String from,
   String to, {
+  Rect? boardRect,
   Side orientation = Side.white,
 }) async {
+  final rect = boardRect ?? tester.getRect(find.byType(Chessboard));
   await tester.tapAt(
-    squareOffset(Square.fromName(from), boardRect, orientation: orientation),
+    squareOffset(Square.fromName(from), rect, orientation: orientation),
   );
   await tester.pump();
   await tester.tapAt(
-    squareOffset(Square.fromName(to), boardRect, orientation: orientation),
+    squareOffset(Square.fromName(to), rect, orientation: orientation),
   );
   await tester.pump();
 }

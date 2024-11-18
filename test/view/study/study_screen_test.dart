@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
@@ -225,13 +224,12 @@ void main() {
       // Wait for study to load
       await tester.pumpAndSettle();
 
-      final boardRect = tester.getRect(find.byType(Chessboard));
-      await playMove(tester, boardRect, 'e2', 'e4', orientation: Side.black);
+      await playMove(tester, 'e2', 'e4', orientation: Side.black);
 
       expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
       expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
 
-      await playMove(tester, boardRect, 'e7', 'e5', orientation: Side.black);
+      await playMove(tester, 'e7', 'e5', orientation: Side.black);
 
       expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
       expect(find.byKey(const Key('e7-blackpawn')), findsNothing);

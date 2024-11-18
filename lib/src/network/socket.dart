@@ -563,9 +563,10 @@ class SocketPool {
     return client;
   }
 
-  /// Disposes the pool and all its clients.
+  /// Disposes the pool and all its clients and resources.
   void dispose() {
     _averageLag.dispose();
+    _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c._dispose());
   }
 }

@@ -96,11 +96,8 @@ void main() {
 
         expect(find.byKey(const Key('g8-blackking')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(Chessboard));
-
         await playMove(
           tester,
-          boardRect,
           'h5',
           'h7',
           orientation: Side.white,
@@ -113,7 +110,6 @@ void main() {
 
         await playMove(
           tester,
-          boardRect,
           'e3',
           'g1',
           orientation: Side.white,
@@ -143,11 +139,8 @@ void main() {
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));
 
-      final boardRect = tester.getRect(find.byType(Chessboard));
-
       await playMove(
         tester,
-        boardRect,
         'h5',
         'h7',
         orientation: Side.white,
@@ -156,7 +149,6 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       await playMove(
         tester,
-        boardRect,
         'e3',
         'g1',
         orientation: Side.white,
@@ -186,9 +178,8 @@ void main() {
       await tester.pumpWidget(app);
 
       await tester.pump(const Duration(seconds: 1));
-      final boardRect = tester.getRect(find.byType(Chessboard));
 
-      await playMove(tester, boardRect, 'h5', 'h6');
+      await playMove(tester, 'h5', 'h6');
 
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byKey(const Key('h6-blackking')), findsOneWidget);

@@ -280,7 +280,7 @@ class _BodyState extends ConsumerState<_Body> {
                 data: (games) {
                   final nextTurn = games
                       .whereNot((g) => g.$2.id == game.id)
-                      .firstWhereOrNull((g) => g.$2.isPlayerTurn);
+                      .firstWhereOrNull((g) => g.$2.isMyTurn);
                   return nextTurn != null
                       ? () {
                           widget.onGameChanged(nextTurn);
