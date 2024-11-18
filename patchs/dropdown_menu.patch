@@ -1,0 +1,64 @@
+diff --git a/packages/flutter/lib/src/material/dropdown_menu.dart b/packages/flutter/lib/src/material/dropdown_menu.dart
+index 7ae84b4fa0330..def4ea08a24c5 100644
+--- a/packages/flutter/lib/src/material/dropdown_menu.dart
++++ b/packages/flutter/lib/src/material/dropdown_menu.dart
+@@ -902,7 +902,6 @@ class _DropdownMenuState<T> extends State<DropdownMenu<T>> {
+       controller: _controller,
+       menuChildren: menu,
+       crossAxisUnconstrained: false,
+-      layerLink: LayerLink(),
+       builder: (BuildContext context, MenuController controller, Widget? child) {
+         assert(_initialMenu != null);
+         final Widget trailingButton = Padding(
+diff --git a/packages/flutter/test/material/dropdown_menu_test.dart b/packages/flutter/test/material/dropdown_menu_test.dart
+index 1156fe00a8635..d78f5f1488457 100644
+--- a/packages/flutter/test/material/dropdown_menu_test.dart
++++ b/packages/flutter/test/material/dropdown_menu_test.dart
+@@ -3366,47 +3366,6 @@ void main() {
+     expect(controller.offset, 0.0);
+   });
+ 
+-  // Regression test for https://github.com/flutter/flutter/issues/149037.
+-  testWidgets('Dropdown menu follows the text field when keyboard opens', (WidgetTester tester) async {
+-    Widget boilerplate(double bottomInsets) {
+-      return MaterialApp(
+-        home: MediaQuery(
+-          data: MediaQueryData(viewInsets: EdgeInsets.only(bottom: bottomInsets)),
+-          child: Scaffold(
+-            body: Center(
+-              child: DropdownMenu<TestMenu>(dropdownMenuEntries: menuChildren),
+-            ),
+-          ),
+-        ),
+-      );
+-    }
+-
+-    // Build once without bottom insets and open the menu.
+-    await tester.pumpWidget(boilerplate(0.0));
+-    await tester.tap(find.byType(TextField).first);
+-    await tester.pump();
+-
+-    Finder findMenuPanels() {
+-      return find.byWidgetPredicate((Widget widget) => widget.runtimeType.toString() == '_MenuPanel');
+-    }
+-
+-    // Menu vertical position is just under the text field.
+-    expect(
+-      tester.getRect(findMenuPanels()).top,
+-      tester.getRect(find.byType(TextField).first).bottom,
+-    );
+-
+-    // Simulate the keyboard opening resizing the view.
+-    await tester.pumpWidget(boilerplate(100.0));
+-    await tester.pump();
+-
+-    // Menu vertical position is just under the text field.
+-    expect(
+-      tester.getRect(findMenuPanels()).top,
+-      tester.getRect(find.byType(TextField).first).bottom,
+-    );
+-  });
+-
+   testWidgets('DropdownMenu with expandedInsets can be aligned', (WidgetTester tester) async {
+     Widget buildMenuAnchor({ AlignmentGeometry alignment = Alignment.topCenter }) {
+       return MaterialApp(
