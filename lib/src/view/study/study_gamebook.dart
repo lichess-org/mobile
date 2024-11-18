@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StudyGamebook extends ConsumerWidget {
+class StudyGamebook extends StatelessWidget {
   const StudyGamebook(
     this.id,
   );
@@ -15,7 +15,7 @@ class StudyGamebook extends ConsumerWidget {
   final StudyId id;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Column(
