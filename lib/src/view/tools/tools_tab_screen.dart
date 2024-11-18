@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
             title: context.l10n.clock,
             onTap: () => pushPlatformRoute(
               context,
-              builder: (context) => const ClockScreen(),
+              builder: (context) => const ClockToolScreen(),
               rootNavigator: true,
             ),
           ),

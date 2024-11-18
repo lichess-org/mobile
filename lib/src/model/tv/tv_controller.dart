@@ -212,6 +212,8 @@ class TvController extends _$TvController {
           newState = newState.copyWith.game.clock!(
             white: data.clock!.white,
             black: data.clock!.black,
+            lag: data.clock!.lag,
+            at: data.clock!.at,
           );
         }
         if (!curState.isReplaying) {
@@ -226,6 +228,25 @@ class TvController extends _$TvController {
           }
         }
 
+        state = AsyncData(newState);
+
+      case 'endData':
+        final endData =
+            GameEndEvent.fromJson(event.data as Map<String, dynamic>);
+        TvState newState = state.requireValue.copyWith(
+          game: state.requireValue.game.copyWith(
+            status: endData.status,
+            winner: endData.winner,
+          ),
+        );
+        if (endData.clock != null) {
+          newState = newState.copyWith.game.clock!(
+            white: endData.clock!.white,
+            black: endData.clock!.black,
+            at: DateTime.now(),
+            lag: null,
+          );
+        }
         state = AsyncData(newState);
 
       case 'tvSelect':

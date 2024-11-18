@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
@@ -92,10 +92,19 @@ class _Body extends ConsumerWidget {
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
                   clock: gameState.game.clock != null
-                      ? CountdownClock(
+                      ? CountdownClockBuilder(
                           key: blackClockKey,
-                          duration: gameState.game.clock!.black,
+                          timeLeft: gameState.game.clock!.black,
+                          delay: gameState.game.clock!.lag ??
+                              const Duration(milliseconds: 10),
+                          clockUpdatedAt: gameState.game.clock!.at,
                           active: gameState.activeClockSide == Side.black,
+                          builder: (context, timeLeft) {
+                            return Clock(
+                              timeLeft: timeLeft,
+                              active: gameState.activeClockSide == Side.black,
+                            );
+                          },
                         )
                       : null,
                   materialDiff: game.lastMaterialDiffAt(Side.black),
@@ -103,10 +112,19 @@ class _Body extends ConsumerWidget {
                 final whitePlayerWidget = GamePlayer(
                   player: game.white.setOnGame(true),
                   clock: gameState.game.clock != null
-                      ? CountdownClock(
+                      ? CountdownClockBuilder(
                           key: whiteClockKey,
-                          duration: gameState.game.clock!.white,
+                          timeLeft: gameState.game.clock!.white,
+                          clockUpdatedAt: gameState.game.clock!.at,
+                          delay: gameState.game.clock!.lag ??
+                              const Duration(milliseconds: 10),
                           active: gameState.activeClockSide == Side.white,
+                          builder: (context, timeLeft) {
+                            return Clock(
+                              timeLeft: timeLeft,
+                              active: gameState.activeClockSide == Side.white,
+                            );
+                          },
                         )
                       : null,
                   materialDiff: game.lastMaterialDiffAt(Side.white),

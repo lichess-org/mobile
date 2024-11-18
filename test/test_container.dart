@@ -68,7 +68,7 @@ Future<ProviderContainer> makeContainer({
         return db;
       }),
       webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+        return FakeWebSocketChannelFactory((_) => FakeWebSocketChannel());
       }),
       socketPoolProvider.overrideWith((ref) {
         final pool = SocketPool(ref);

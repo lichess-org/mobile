@@ -7,7 +7,7 @@ import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  final FutureOr<WebSocketChannel> Function() createFunction;
+  final FutureOr<WebSocketChannel> Function(String url) createFunction;
 
   const FakeWebSocketChannelFactory(this.createFunction);
 
@@ -17,7 +17,7 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
   }) async {
-    return createFunction();
+    return createFunction(url);
   }
 }
 
@@ -30,11 +30,19 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
 /// behavior can be changed by setting [shouldSendPong] to false.
 ///
 /// It also allows to increase the lag of the connection by setting the
-/// [connectionLag] property.
+/// [connectionLag] property. By default [connectionLag] is set to [Duration.zero]
+/// to simplify testing.
+/// When lag is 0, the pong response will be sent in the next microtask.
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
+  FakeWebSocketChannel({this.connectionLag = Duration.zero});
+
+  int _pongCount = 0;
+
+  final _connectionCompleter = Completer<void>();
+
   static bool isPing(dynamic data) {
     if (data is! String) {
       return false;
@@ -55,13 +63,19 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// The controller for outgoing (to server) messages.
   final _outcomingController = StreamController<dynamic>.broadcast();
 
+  /// The lag of the connection (duration before pong response) in milliseconds.
+  Duration connectionLag;
+
   /// Whether the server should send a pong response to a ping request.
   ///
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
-  /// The lag of the connection (duration before pong response) in milliseconds.
-  Duration connectionLag = const Duration(milliseconds: 10);
+  /// Number of pong response received
+  int get pongCount => _pongCount;
+
+  /// A Future that resolves when the first pong message is received
+  Future<void> get connectionEstablished => _connectionCompleter.future;
 
   /// The stream of all outgoing messages.
   Stream<dynamic> get sentMessages => _outcomingController.stream;
@@ -157,12 +171,22 @@ class FakeWebSocketSink implements WebSocketSink {
 
     // Simulates pong response if connection is not closed
     if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
-      Future<void>.delayed(_channel.connectionLag, () {
+      void sendPong() {
         if (_channel._incomingController.isClosed) {
           return;
         }
+        _channel._pongCount++;
+        if (_channel._pongCount == 1) {
+          _channel._connectionCompleter.complete();
+        }
         _channel._incomingController.add('0');
-      });
+      }
+
+      if (_channel.connectionLag > Duration.zero) {
+        Future<void>.delayed(_channel.connectionLag, sendPong);
+      } else {
+        scheduleMicrotask(sendPong);
+      }
     }
   }
 

@@ -183,7 +183,7 @@ Future<Widget> makeTestProviderScope(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+        return FakeWebSocketChannelFactory((_) => FakeWebSocketChannel());
       }),
       // ignore: scoped_providers_should_specify_dependencies
       socketPoolProvider.overrideWith((ref) {
