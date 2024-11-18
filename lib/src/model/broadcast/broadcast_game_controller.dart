@@ -6,7 +6,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -98,7 +97,6 @@ class BroadcastGameController extends _$BroadcastGameController
       lastMove: lastMove,
       pov: Side.white,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      displayMode: DisplayMode.moves,
       clocks: _makeClocks(currentPath),
     );
 
@@ -407,23 +405,6 @@ class BroadcastGameController extends _$BroadcastGameController
     _startEngineEval();
   }
 
-  void setDisplayMode(DisplayMode mode) {
-    if (!state.hasValue) return;
-
-    state = AsyncData(state.requireValue.copyWith(displayMode: mode));
-  }
-
-  /// Gets the node and maybe the associated branch opening at the given path.
-  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
-    if (path.isEmpty) return (node, opening);
-    final child = node.childById(path.head!);
-    if (child != null) {
-      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
-    } else {
-      return (node, opening);
-    }
-  }
-
   /// Makes a PGN string up to the current node only.
   String makeCurrentNodePgn() {
     if (!state.hasValue) Exception('Cannot make a PGN up to the current node');
@@ -442,7 +423,7 @@ class BroadcastGameController extends _$BroadcastGameController
     if (!state.hasValue) return;
 
     final pathChange = state.requireValue.currentPath != path;
-    final (currentNode, opening) = _nodeOpeningAt(_root, path);
+    final currentNode = _root.nodeAt(path);
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation &&
@@ -481,11 +462,6 @@ class BroadcastGameController extends _$BroadcastGameController
           soundService.play(Sound.move);
         }
       }
-
-      if (currentNode.opening == null && currentNode.position.ply <= 30) {
-        _fetchOpening(_root, path);
-      }
-
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
@@ -493,7 +469,6 @@ class BroadcastGameController extends _$BroadcastGameController
               isBroadcastMove ? path : state.requireValue.broadcastLivePath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
-          currentBranchOpening: opening,
           lastMove: currentNode.sanMove.move,
           promotionMove: null,
           root: rootView,
@@ -508,7 +483,6 @@ class BroadcastGameController extends _$BroadcastGameController
               isBroadcastMove ? path : state.requireValue.broadcastLivePath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
-          currentBranchOpening: opening,
           lastMove: null,
           promotionMove: null,
           root: rootView,
@@ -519,29 +493,6 @@ class BroadcastGameController extends _$BroadcastGameController
 
     if (pathChange && state.requireValue.isEngineAvailable) {
       _debouncedStartEngineEval();
-    }
-  }
-
-  Future<void> _fetchOpening(Node fromNode, UciPath path) async {
-    if (!state.hasValue) return;
-
-    final moves = fromNode.branchesOn(path).map((node) => node.sanMove.move);
-    if (moves.isEmpty) return;
-    if (moves.length > 40) return;
-
-    final opening =
-        await ref.read(openingServiceProvider).fetchFromMoves(moves);
-
-    if (opening != null) {
-      fromNode.updateAt(path, (node) => node.opening = opening);
-
-      if (state.requireValue.currentPath == path) {
-        state = AsyncData(
-          state.requireValue.copyWith(
-            currentNode: AnalysisCurrentNode.fromNode(fromNode.nodeAt(path)),
-          ),
-        );
-      }
     }
   }
 
@@ -626,11 +577,6 @@ class BroadcastGameState with _$BroadcastGameState {
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
-    /// The display mode of the analysis.
-    ///
-    /// It can be either moves or opening explorer in this controller (summary will be added later).
-    required DisplayMode displayMode,
-
     /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
 
@@ -640,9 +586,6 @@ class BroadcastGameState with _$BroadcastGameState {
     /// Possible promotion move to be played.
     NormalMove? promotionMove,
 
-    /// The opening of the current branch.
-    Opening? currentBranchOpening,
-
     /// The PGN headers of the game.
     required IMap<String, String> pgnHeaders,
 
@@ -650,7 +593,7 @@ class BroadcastGameState with _$BroadcastGameState {
     ///
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
-  }) = _AnalysisState;
+  }) = _BroadcastGameState;
 
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position);
@@ -666,13 +609,5 @@ class BroadcastGameState with _$BroadcastGameState {
         isLocalEngineAvailable: isEngineAvailable,
         position: position,
         savedEval: currentNode.eval ?? currentNode.serverEval,
-      );
-
-  AnalysisOptions get openingExplorerOptions => AnalysisOptions(
-        id: standaloneOpeningExplorerId,
-        isLocalEvaluationAllowed: false,
-        orientation: pov,
-        variant: Variant.standard,
-        initialMoveCursor: currentPath.size,
       );
 }

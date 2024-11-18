@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -24,8 +20,6 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
     final analysisState = ref.watch(ctrlProvider).requireValue;
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return BottomBar(
       children: [
@@ -39,22 +33,6 @@ class BroadcastGameBottomBar extends ConsumerWidget {
                 .toggleBoard();
           },
           icon: CupertinoIcons.arrow_2_squarepath,
-        ),
-        BottomBarButton(
-          label: context.l10n.openingExplorer,
-          onTap: isOnline
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.openingExplorer,
-                    builder: (_) => OpeningExplorerScreen(
-                      pgn: ref.read(ctrlProvider.notifier).makeCurrentNodePgn(),
-                      options: analysisState.openingExplorerOptions,
-                    ),
-                  );
-                }
-              : null,
-          icon: Icons.explore,
         ),
         RepeatButton(
           onLongPress:
