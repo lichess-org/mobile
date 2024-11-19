@@ -115,7 +115,7 @@ void main() {
       expect(find.text('0:00.0'), findsOneWidget);
     });
 
-    testWidgets('do not update if clockUpdatedAt is same',
+    testWidgets('do not update if timeLeft and clockUpdatedAt are same',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -138,7 +138,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
-            timeLeft: const Duration(seconds: 11),
+            timeLeft: const Duration(seconds: 10),
             active: true,
             builder: clockBuilder,
           ),
