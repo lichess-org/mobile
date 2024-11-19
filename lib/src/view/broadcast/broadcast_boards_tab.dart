@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -274,21 +275,19 @@ class _PlayerWidget extends StatelessWidget {
                       const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
-                if (side == playingSide)
-                  Text(
-                    (game.timeLeft!).toHoursMinutesSeconds(),
+                CountdownClockBuilder(
+                  timeLeft: player.clock!,
+                  active: side == playingSide,
+                  builder: (context, timeLeft) => Text(
+                    timeLeft.toHoursMinutesSeconds(),
                     style: TextStyle(
-                      color: Colors.orange[900],
+                      color: (side == playingSide) ? Colors.orange[900] : null,
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
-                  )
-                else
-                  Text(
-                    player.clock!.toHoursMinutesSeconds(),
-                    style: const TextStyle(
-                      fontFeatures: [FontFeature.tabularFigures()],
-                    ),
                   ),
+                  tickInterval: const Duration(seconds: 1),
+                  clockUpdatedAt: game.updatedClockAt,
+                ),
             ],
           ),
         ),

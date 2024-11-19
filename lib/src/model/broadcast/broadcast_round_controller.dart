@@ -22,8 +22,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   StreamSubscription<SocketEvent>? _subscription;
 
-  Timer? _timer;
-
   late SocketClient _socketClient;
 
   @override
@@ -36,30 +34,13 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     ref.onDispose(() {
       _subscription?.cancel();
-      _timer?.cancel();
     });
 
     final games = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) => _updateClocks(),
-    );
-
     return games;
-  }
-
-  void _updateClocks() {
-    state = AsyncData(
-      state.requireValue.map((gameId, game) {
-        if (!game.isPlaying) return MapEntry(gameId, game);
-        final thinkTime = game.thinkTime;
-        final newThinkTime = thinkTime + const Duration(seconds: 1);
-        return MapEntry(gameId, game.copyWith(thinkTime: newThinkTime));
-      }),
-    );
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -109,7 +90,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
           ),
           fen: fen,
           lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-          thinkTime: Duration.zero,
+          updatedClockAt: DateTime.now(),
         ),
       ),
     );

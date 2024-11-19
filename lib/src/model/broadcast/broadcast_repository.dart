@@ -165,6 +165,10 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
             )
         };
 
+  /// The amount of time that the player whose turn it is has been thinking since his last move
+  final thinkTime =
+      pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
+
   return MapEntry(
     pick('id').asBroadcastGameIdOrThrow(),
     BroadcastGame(
@@ -176,8 +180,7 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
       fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
       lastMove: pick('lastMove').asUciMoveOrNull(),
       status: status,
-      thinkTime:
-          pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero,
+      updatedClockAt: DateTime.now().subtract(thinkTime),
     ),
   );
 }

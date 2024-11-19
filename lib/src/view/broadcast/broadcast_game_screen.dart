@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -563,8 +564,7 @@ class _PlayerWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (((side == playingSide && playClock) && game.timeLeft != null) ||
-              (!(side == playingSide && playClock) && clock != null))
+          if (clock != null)
             Card(
               color: (side == playingSide)
                   ? playClock
@@ -585,28 +585,29 @@ class _PlayerWidget extends StatelessWidget {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: (side == playingSide && playClock)
-                    ? Text(
-                        game.timeLeft!.toHoursMinutesSeconds(),
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onTertiaryContainer,
-                          fontFeatures: const [
-                            FontFeature.tabularFigures(),
-                          ],
-                        ),
-                      )
-                    : Text(
-                        clock!.toHoursMinutesSeconds(),
-                        style: TextStyle(
-                          color: (side == playingSide)
+                child: CountdownClockBuilder(
+                  timeLeft: clock!,
+                  active: side == playingSide && playClock,
+                  builder: (context, timeLeft) => Text(
+                    timeLeft.toHoursMinutesSeconds(),
+                    style: TextStyle(
+                      color: (side == playingSide)
+                          ? playClock
                               ? Theme.of(context)
                                   .colorScheme
+                                  .onTertiaryContainer
+                              : Theme.of(context)
+                                  .colorScheme
                                   .onSecondaryContainer
-                              : null,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                        ),
-                      ),
+                          : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                  tickInterval: const Duration(seconds: 1),
+                  clockUpdatedAt: (side == playingSide && playClock)
+                      ? game.updatedClockAt
+                      : null,
+                ),
               ),
             ),
         ],
