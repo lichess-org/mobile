@@ -109,9 +109,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           onEnd: () {
             animationFinished.value = true;
           },
-          height: gameState.game.opponent?.offeringRematch ?? false
-              ? 40
-              : 0, //TODO handle nulls better?
+          height: gameState.game.opponent?.offeringRematch ?? false ? 105 : 0,
           child: ValueListenableBuilder<bool>(
             valueListenable: animationFinished,
             builder: (context, value, child) {
@@ -120,66 +118,77 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 maintainSize: true,
                 maintainState: true,
                 visible: animationFinished.value,
-                child: const Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    'Your opponent has offered a rematch',
-                    textAlign: TextAlign.center,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 15.0),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 15.0),
+                        child: Text(
+                          'Your opponent has offered a rematch',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      if (gameState.game.me?.offeringRematch == true)
+                        SecondaryButton(
+                          semanticsLabel: context.l10n.cancelRematchOffer,
+                          onPressed: () {
+                            ref.read(ctrlProvider.notifier).declineRematch();
+                          },
+                          child: Text(
+                            context.l10n.cancelRematchOffer,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      else if (gameState.game.opponent?.offeringRematch == true)
+                        ValueListenableBuilder(
+                          valueListenable: animationFinished,
+                          builder:
+                              (BuildContext context, value, Widget? child) {
+                            return Visibility(
+                              maintainAnimation: true,
+                              maintainSize: true,
+                              maintainState: true,
+                              visible: animationFinished.value,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FatButton(
+                                    semanticsLabel: context.l10n.rematch,
+                                    child: const Text('Accept rematch'),
+                                    onPressed: () {
+                                      ref
+                                          .read(ctrlProvider.notifier)
+                                          .proposeOrAcceptRematch();
+                                    },
+                                  ),
+                                  SecondaryButton(
+                                    semanticsLabel: context.l10n.rematch,
+                                    child: const Text('Decline'),
+                                    onPressed: () {
+                                      ref
+                                          .read(ctrlProvider.notifier)
+                                          .declineRematch();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                    ],
                   ),
                 ),
               );
             },
           ),
         ),
-        if (gameState.game.me?.offeringRematch == true)
-          SecondaryButton(
-            semanticsLabel: context.l10n.cancelRematchOffer,
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).declineRematch();
-            },
-            child: Text(
-              context.l10n.cancelRematchOffer,
-              textAlign: TextAlign.center,
-            ),
-          )
-        else if (gameState.game.opponent?.offeringRematch == true)
-          ValueListenableBuilder(
-            valueListenable: animationFinished,
-            builder: (BuildContext context, value, Widget? child) {
-              return Visibility(
-                maintainAnimation: true,
-                maintainSize: true,
-                maintainState: true,
-                visible: animationFinished.value,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FatButton(
-                      semanticsLabel: context.l10n.rematch,
-                      child: const Text('Accept rematch'),
-                      onPressed: () {
-                        ref
-                            .read(ctrlProvider.notifier)
-                            .proposeOrAcceptRematch();
-                      },
-                    ),
-                    SecondaryButton(
-                      semanticsLabel: context.l10n.rematch,
-                      child: const Text('Decline'),
-                      onPressed: () {
-                        ref.read(ctrlProvider.notifier).declineRematch();
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          )
-        else if (gameState.canOfferRematch)
+        if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
             onPressed: _activateButtons &&
-                    gameState.game.opponent?.onGame == true
+                    gameState.game.opponent?.onGame == true &&
+                    gameState.game.opponent?.offeringRematch != true
                 ? () {
                     ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                   }
