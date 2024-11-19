@@ -112,20 +112,20 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 maintainSize: true,
                 maintainState: true,
                 visible: animationFinished.value,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: Column(
-                    children: [
-                      if (gameState.game.opponent?.offeringRematch == true)
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 15.0),
-                          child: Text(
-                            'Your opponent has offered a rematch',
-                            textAlign: TextAlign.center,
-                          ),
+                child: Column(
+                  children: [
+                    if (gameState.game.opponent?.offeringRematch == true)
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 15.0),
+                        child: Text(
+                          'Your opponent has offered a rematch',
+                          textAlign: TextAlign.center,
                         ),
-                      if (gameState.game.opponent?.offeringRematch == true)
-                        Row(
+                      ),
+                    if (gameState.game.opponent?.offeringRematch == true)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FatButton(
@@ -148,8 +148,8 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                             ),
                           ],
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
               );
             },
