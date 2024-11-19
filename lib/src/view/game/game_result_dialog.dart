@@ -110,7 +110,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             animationFinished.value = true;
           },
           height: gameState.game.opponent?.offeringRematch ?? false
-              ? 50
+              ? 40
               : 0, //TODO handle nulls better?
           child: ValueListenableBuilder<bool>(
             valueListenable: animationFinished,
@@ -154,7 +154,6 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Text("Rematch offered"),
                     FatButton(
                       semanticsLabel: context.l10n.rematch,
                       child: const Text('Accept rematch'),
