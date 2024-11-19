@@ -104,12 +104,11 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: PlayerSummary(game: gameState.game),
           ),
-        AnimatedContainer(
+        AnimatedSize(
           duration: const Duration(milliseconds: 400),
           onEnd: () {
             animationFinished.value = true;
           },
-          height: gameState.game.opponent?.offeringRematch ?? false ? 105 : 0,
           child: ValueListenableBuilder<bool>(
             valueListenable: animationFinished,
             builder: (context, value, child) {
@@ -119,62 +118,40 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 maintainState: true,
                 visible: animationFinished.value,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 15.0),
+                  padding: const EdgeInsets.only(bottom: 15.0),
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 15.0),
-                        child: Text(
-                          'Your opponent has offered a rematch',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      if (gameState.game.me?.offeringRematch == true)
-                        SecondaryButton(
-                          semanticsLabel: context.l10n.cancelRematchOffer,
-                          onPressed: () {
-                            ref.read(ctrlProvider.notifier).declineRematch();
-                          },
+                      if (gameState.game.opponent?.offeringRematch == true)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 15.0),
                           child: Text(
-                            context.l10n.cancelRematchOffer,
+                            'Your opponent has offered a rematch',
                             textAlign: TextAlign.center,
                           ),
-                        )
-                      else if (gameState.game.opponent?.offeringRematch == true)
-                        ValueListenableBuilder(
-                          valueListenable: animationFinished,
-                          builder:
-                              (BuildContext context, value, Widget? child) {
-                            return Visibility(
-                              maintainAnimation: true,
-                              maintainSize: true,
-                              maintainState: true,
-                              visible: animationFinished.value,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FatButton(
-                                    semanticsLabel: context.l10n.rematch,
-                                    child: const Text('Accept rematch'),
-                                    onPressed: () {
-                                      ref
-                                          .read(ctrlProvider.notifier)
-                                          .proposeOrAcceptRematch();
-                                    },
-                                  ),
-                                  SecondaryButton(
-                                    semanticsLabel: context.l10n.rematch,
-                                    child: const Text('Decline'),
-                                    onPressed: () {
-                                      ref
-                                          .read(ctrlProvider.notifier)
-                                          .declineRematch();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                        ),
+                      if (gameState.game.opponent?.offeringRematch == true)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FatButton(
+                              semanticsLabel: context.l10n.rematch,
+                              child: const Text('Accept rematch'),
+                              onPressed: () {
+                                ref
+                                    .read(ctrlProvider.notifier)
+                                    .proposeOrAcceptRematch();
+                              },
+                            ),
+                            SecondaryButton(
+                              semanticsLabel: context.l10n.rematch,
+                              child: const Text('Decline'),
+                              onPressed: () {
+                                ref
+                                    .read(ctrlProvider.notifier)
+                                    .declineRematch();
+                              },
+                            ),
+                          ],
                         ),
                     ],
                   ),
@@ -183,7 +160,18 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             },
           ),
         ),
-        if (gameState.canOfferRematch)
+        if (gameState.game.me?.offeringRematch == true)
+          SecondaryButton(
+            semanticsLabel: context.l10n.cancelRematchOffer,
+            onPressed: () {
+              ref.read(ctrlProvider.notifier).declineRematch();
+            },
+            child: Text(
+              context.l10n.cancelRematchOffer,
+              textAlign: TextAlign.center,
+            ),
+          )
+        else if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
             onPressed: _activateButtons &&
