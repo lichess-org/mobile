@@ -83,29 +83,34 @@ class _Body extends ConsumerWidget {
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: chatStateAsync.when(
-              data: (chatState) => ListView.builder(
-                // remove the automatic bottom padding of the ListView, which on iOS
-                // corresponds to the safe area insets
-                // and which is here taken care of by the _ChatBottomBar
-                padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
-                reverse: true,
-                itemCount: chatState.messages.length,
-                itemBuilder: (context, index) {
-                  final message =
-                      chatState.messages[chatState.messages.length - index - 1];
-                  return (message.username == 'lichess')
-                      ? _MessageAction(message: message.message)
-                      : (message.username == me?.name)
-                          ? _MessageBubble(
-                              you: true,
-                              message: message.message,
-                            )
-                          : _MessageBubble(
-                              you: false,
-                              message: message.message,
-                            );
-                },
-              ),
+              data: (chatState) {
+                final selectedMessages = chatState.messages
+                    .where((m) => !m.troll && !m.deleted && !isSpam(m))
+                    .toList();
+                final messagesCount = selectedMessages.length;
+                return ListView.builder(
+                  // remove the automatic bottom padding of the ListView, which on iOS
+                  // corresponds to the safe area insets
+                  // and which is here taken care of by the _ChatBottomBar
+                  padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
+                  reverse: true,
+                  itemCount: messagesCount,
+                  itemBuilder: (context, index) {
+                    final message = selectedMessages[messagesCount - index - 1];
+                    return (message.username == 'lichess')
+                        ? _MessageAction(message: message.message)
+                        : (message.username == me?.name)
+                            ? _MessageBubble(
+                                you: true,
+                                message: message.message,
+                              )
+                            : _MessageBubble(
+                                you: false,
+                                message: message.message,
+                              );
+                  },
+                );
+              },
               loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),

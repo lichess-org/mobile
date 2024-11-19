@@ -45,7 +45,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       int sentPingCount = 0;
@@ -69,7 +69,7 @@ void main() {
     test('reconnects when connection attempt fails', () async {
       int numConnectionAttempts = 0;
 
-      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+      final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         numConnectionAttempts++;
         if (numConnectionAttempts == 1) {
           throw const SocketException('Connection failed');
@@ -95,7 +95,7 @@ void main() {
       // channels per connection attempt
       final Map<int, FakeWebSocketChannel> channels = {};
 
-      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+      final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         numConnectionAttempts++;
         final channel = FakeWebSocketChannel();
         int sentPingCount = 0;
@@ -133,10 +133,11 @@ void main() {
     });
 
     test('computes average lag', () async {
-      final fakeChannel = FakeWebSocketChannel();
+      final fakeChannel =
+          FakeWebSocketChannel(connectionLag: const Duration(milliseconds: 10));
 
       final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       // before the connection is ready the average lag is zero
@@ -188,7 +189,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       await socketClient.firstConnection;

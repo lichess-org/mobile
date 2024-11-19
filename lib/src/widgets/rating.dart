@@ -19,10 +19,8 @@ class RatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ratingStr =
-        rating is double ? rating.toStringAsFixed(2) : rating.toString();
     return Text(
-      '$ratingStr${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
+      '${rating.round()}${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
       style: style,
     );
   }
