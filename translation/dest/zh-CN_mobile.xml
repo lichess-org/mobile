@@ -29,7 +29,7 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">隐藏变着</string>
   <string name="showComments" comment="Shown in the analysis screen.">显示评论</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">你想结束这组吗？</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">没有显示，请更改过滤器</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">没有结果，请更改筛选条件</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋请求</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待对手加入...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">盲棋</string>
