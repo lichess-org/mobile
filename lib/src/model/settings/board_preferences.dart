@@ -80,6 +80,10 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
+  Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
+    return save(state.copyWith(dragTargetKind: dragTargetKind));
+  }
+
   Future<void> toggleShowMaterialDifference() {
     return save(
       state.copyWith(showMaterialDifference: !state.showMaterialDifference),
@@ -120,6 +124,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
+    @JsonKey(defaultValue: DragTargetKind.circle)
+    required DragTargetKind dragTargetKind,
     @JsonKey(
       defaultValue: ShapeColor.green,
       unknownEnumValue: ShapeColor.green,
@@ -141,6 +147,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
+    dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
   );
@@ -161,6 +168,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       animationDuration: pieceAnimationDuration,
       dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(
         enable: enableShapeDrawings,
@@ -300,3 +308,9 @@ enum BoardTheme {
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
 }
+
+String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
+      DragTargetKind.circle => 'Circle',
+      DragTargetKind.square => 'Square',
+      DragTargetKind.none => 'None',
+    };

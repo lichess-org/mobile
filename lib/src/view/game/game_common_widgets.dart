@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -64,6 +65,7 @@ class GameAppBar extends ConsumerWidget {
                   ? _ChallengeGameTitle(challenge: challenge!)
                   : const SizedBox.shrink(),
       actions: [
+        const ToggleSoundButton(),
         if (id != null)
           AppBarIconButton(
             onPressed: () => showAdaptiveBottomSheet<void>(

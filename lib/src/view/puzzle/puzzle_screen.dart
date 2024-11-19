@@ -31,6 +31,7 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -91,6 +92,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           actions: const [
+            ToggleSoundButton(),
             _PuzzleSettingsButton(),
           ],
           title: _Title(angle: widget.angle),
@@ -604,6 +606,9 @@ class _PuzzleSettingsButton extends StatelessWidget {
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.sizeOf(context).height * 0.5,
+        ),
         builder: (_) => const PuzzleSettingsScreen(),
       ),
       semanticsLabel: context.l10n.settingsSettings,

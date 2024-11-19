@@ -319,15 +319,6 @@ class GameMeta with _$GameMeta {
       _$GameMetaFromJson(json);
 }
 
-@freezed
-class PlayableClockData with _$PlayableClockData {
-  const factory PlayableClockData({
-    required bool running,
-    required Duration white,
-    required Duration black,
-  }) = _PlayableClockData;
-}
-
 @Freezed(fromJson: true, toJson: true)
 class CorrespondenceClockData with _$CorrespondenceClockData {
   const factory CorrespondenceClockData({

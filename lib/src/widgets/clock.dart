@@ -1,170 +1,23 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-
-/// A simple countdown clock.
-///
-/// The clock starts only when [active] is `true`.
-class CountdownClock extends ConsumerStatefulWidget {
-  const CountdownClock({
-    required this.duration,
-    required this.active,
-    this.emergencyThreshold,
-    this.emergencySoundEnabled = true,
-    this.onFlag,
-    this.onStop,
-    this.clockStyle,
-    this.padLeft = false,
-    super.key,
-  });
-
-  /// The duration left on the clock.
-  final Duration duration;
-
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will change
-  /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
-  /// If [emergencySoundEnabled] is `true`, the clock will also play a sound.
-  final Duration? emergencyThreshold;
-
-  /// Whether to play an emergency sound when the clock reaches the emergency
-  final bool emergencySoundEnabled;
-
-  /// If [active] is `true`, the clock starts counting down.
-  final bool active;
-
-  /// Callback when the clock reaches zero.
-  final VoidCallback? onFlag;
-
-  /// Callback with the remaining duration when the clock stops
-  final ValueSetter<Duration>? onStop;
-
-  /// Custom color style
-  final ClockStyle? clockStyle;
-
-  /// Whether to pad with a leading zero (default is `false`).
-  final bool padLeft;
-
-  @override
-  ConsumerState<CountdownClock> createState() => _CountdownClockState();
-}
-
-const _period = Duration(milliseconds: 100);
-const _emergencyDelay = Duration(seconds: 20);
-
-class _CountdownClockState extends ConsumerState<CountdownClock> {
-  Timer? _timer;
-  Duration timeLeft = Duration.zero;
-  bool _shouldPlayEmergencyFeedback = true;
-  DateTime? _nextEmergency;
-
-  final _stopwatch = Stopwatch();
-
-  void startClock() {
-    _timer?.cancel();
-    _stopwatch.reset();
-    _stopwatch.start();
-    _timer = Timer.periodic(_period, (timer) {
-      setState(() {
-        timeLeft = timeLeft - _stopwatch.elapsed;
-        _stopwatch.reset();
-        _playEmergencyFeedback();
-        if (timeLeft <= Duration.zero) {
-          widget.onFlag?.call();
-          timeLeft = Duration.zero;
-          stopClock();
-        }
-      });
-    });
-  }
-
-  void stopClock() {
-    setState(() {
-      timeLeft = timeLeft - _stopwatch.elapsed;
-      if (timeLeft < Duration.zero) {
-        timeLeft = Duration.zero;
-      }
-    });
-    _timer?.cancel();
-    _stopwatch.stop();
-    scheduleMicrotask(() {
-      widget.onStop?.call(timeLeft);
-    });
-  }
-
-  void _playEmergencyFeedback() {
-    if (widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold! &&
-        _shouldPlayEmergencyFeedback &&
-        (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
-      _shouldPlayEmergencyFeedback = false;
-      _nextEmergency = DateTime.now().add(_emergencyDelay);
-      if (widget.emergencySoundEnabled) {
-        ref.read(soundServiceProvider).play(Sound.lowTime);
-      }
-      HapticFeedback.heavyImpact();
-    } else if (widget.emergencyThreshold != null &&
-        timeLeft > widget.emergencyThreshold! * 1.5) {
-      _shouldPlayEmergencyFeedback = true;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    timeLeft = widget.duration;
-    if (widget.active) {
-      startClock();
-    }
-  }
-
-  @override
-  void didUpdateWidget(CountdownClock oldClock) {
-    super.didUpdateWidget(oldClock);
-    if (widget.duration != oldClock.duration) {
-      timeLeft = widget.duration;
-    }
-
-    if (widget.active != oldClock.active) {
-      widget.active ? startClock() : stopClock();
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Clock(
-        padLeft: widget.padLeft,
-        timeLeft: timeLeft,
-        active: widget.active,
-        emergencyThreshold: widget.emergencyThreshold,
-        clockStyle: widget.clockStyle,
-      ),
-    );
-  }
-}
 
 const _kClockFontSize = 26.0;
 const _kClockTenthFontSize = 20.0;
 const _kClockHundredsFontSize = 18.0;
 
+const _showTenthsThreshold = Duration(seconds: 10);
+
 /// A stateless widget that displays the time left on the clock.
 ///
-/// For a clock widget that automatically counts down, see [CountdownClock].
+/// For a clock widget that automatically counts down, see [CountdownClockBuilder].
 class Clock extends StatelessWidget {
   const Clock({
     required this.timeLeft,
-    required this.active,
+    this.active = false,
     this.clockStyle,
     this.emergencyThreshold,
     this.padLeft = false,
@@ -192,7 +45,7 @@ class Clock extends StatelessWidget {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final showTenths = timeLeft < const Duration(seconds: 10);
+    final showTenths = timeLeft < _showTenthsThreshold;
     final isEmergency =
         emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
@@ -309,4 +162,155 @@ class ClockStyle {
     activeBackgroundColor: Color(0xFFD0E0BD),
     emergencyBackgroundColor: Color(0xFFF2CCCC),
   );
+}
+
+typedef ClockWidgetBuilder = Widget Function(BuildContext, Duration);
+
+/// A widget that automatically starts a countdown from [timeLeft] when [active] is `true`.
+///
+/// The clock will update the UI every [tickInterval], which defaults to 100ms,
+/// and the [builder] will be called with the new [timeLeft] value.
+///
+/// The clock can be synchronized with the time at which the clock event was received from the server
+/// by setting the [clockUpdatedAt] parameter.
+/// This widget will only update its internal clock when the [clockUpdatedAt] parameter changes.
+///
+/// The [delay] parameter can be used to delay the start of the clock.
+///
+/// The clock will stop counting down when [active] is set to `false`.
+///
+/// The clock will stop counting down when the time left reaches zero.
+class CountdownClockBuilder extends StatefulWidget {
+  const CountdownClockBuilder({
+    required this.timeLeft,
+    required this.active,
+    required this.builder,
+    this.delay,
+    this.tickInterval = const Duration(milliseconds: 100),
+    this.clockUpdatedAt,
+    super.key,
+  });
+
+  /// The duration left on the clock.
+  final Duration timeLeft;
+
+  /// The delay before the clock starts counting down.
+  ///
+  /// This can be used to implement lag compensation.
+  final Duration? delay;
+
+  /// The interval at which the clock updates the UI.
+  final Duration tickInterval;
+
+  /// The time at which the clock was updated.
+  ///
+  /// Use this parameter to synchronize the clock with the time at which the clock
+  /// event was received from the server and to compensate for UI lag.
+  final DateTime? clockUpdatedAt;
+
+  /// If `true`, the clock starts counting down.
+  final bool active;
+
+  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
+  final ClockWidgetBuilder builder;
+
+  @override
+  State<CountdownClockBuilder> createState() => _CountdownClockState();
+}
+
+class _CountdownClockState extends State<CountdownClockBuilder> {
+  Timer? _timer;
+  Timer? _delayTimer;
+  Duration timeLeft = Duration.zero;
+
+  final _stopwatch = clock.stopwatch();
+
+  void startClock() {
+    final now = clock.now();
+    final delay = widget.delay ?? Duration.zero;
+    final clockUpdatedAt = widget.clockUpdatedAt ?? now;
+    // UI lag diff: the elapsed time between the time the clock should have started
+    // and the time the clock is actually started
+    final uiLag = now.difference(clockUpdatedAt);
+    final realDelay = delay - uiLag;
+
+    // real delay is negative, we need to adjust the timeLeft.
+    if (realDelay < Duration.zero) {
+      final newTimeLeft = timeLeft + realDelay;
+      timeLeft = newTimeLeft > Duration.zero ? newTimeLeft : Duration.zero;
+    }
+
+    if (realDelay > Duration.zero) {
+      _delayTimer?.cancel();
+      _delayTimer = Timer(realDelay, _scheduleTick);
+    } else {
+      _scheduleTick();
+    }
+  }
+
+  void _scheduleTick() {
+    _timer?.cancel();
+    _timer = Timer(widget.tickInterval, _tick);
+    _stopwatch.reset();
+    _stopwatch.start();
+  }
+
+  void _tick() {
+    final newTimeLeft = timeLeft - _stopwatch.elapsed;
+    setState(() {
+      timeLeft = newTimeLeft;
+      if (timeLeft <= Duration.zero) {
+        timeLeft = Duration.zero;
+      }
+    });
+    if (timeLeft > Duration.zero) {
+      _scheduleTick();
+    }
+  }
+
+  void stopClock() {
+    _delayTimer?.cancel();
+    _timer?.cancel();
+    _stopwatch.stop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timeLeft = widget.timeLeft;
+    if (widget.active) {
+      startClock();
+    }
+  }
+
+  @override
+  void didUpdateWidget(CountdownClockBuilder oldClock) {
+    super.didUpdateWidget(oldClock);
+
+    if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
+      timeLeft = widget.timeLeft;
+    }
+
+    if (widget.active != oldClock.active) {
+      if (widget.active) {
+        startClock();
+      } else {
+        stopClock();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _delayTimer?.cancel();
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: widget.builder(context, timeLeft),
+    );
+  }
 }
