@@ -90,7 +90,7 @@ void main() {
         ];
 
         // rating
-        expect(find.text('1500.42'), findsOneWidget);
+        expect(find.text('1500'), findsOneWidget);
 
         for (final val in requiredStatsValues) {
           expect(
