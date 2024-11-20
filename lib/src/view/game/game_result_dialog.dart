@@ -98,6 +98,51 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 400),
+          firstCurve: Curves.easeOutExpo,
+          secondCurve: Curves.easeInExpo,
+          sizeCurve: Curves.easeInOut,
+          firstChild: const SizedBox.shrink(),
+          secondChild: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(bottom: 15.0),
+                child: Text(
+                  'Your opponent has offered a rematch',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FatButton(
+                      semanticsLabel: context.l10n.rematch,
+                      child: const Text('Accept rematch'),
+                      onPressed: () {
+                        ref
+                            .read(ctrlProvider.notifier)
+                            .proposeOrAcceptRematch();
+                      },
+                    ),
+                    SecondaryButton(
+                      semanticsLabel: context.l10n.rematch,
+                      child: const Text('Decline'),
+                      onPressed: () {
+                        ref.read(ctrlProvider.notifier).declineRematch();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          crossFadeState: gameState.game.opponent?.offeringRematch ?? false
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+        ),
         if (gameState.game.me?.offeringRematch == true)
           SecondaryButton(
             semanticsLabel: context.l10n.cancelRematchOffer,
@@ -113,12 +158,12 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
             onPressed: _activateButtons &&
-                    gameState.game.opponent?.onGame == true
+                    gameState.game.opponent?.onGame == true &&
+                    gameState.game.opponent?.offeringRematch != true
                 ? () {
                     ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                   }
                 : null,
-            glowing: gameState.game.opponent?.offeringRematch == true,
             child: Text(
               context.l10n.rematch,
               textAlign: TextAlign.center,
