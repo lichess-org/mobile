@@ -55,15 +55,11 @@ class BroadcastGameController extends _$BroadcastGameController
 
     final evaluationService = ref.watch(evaluationServiceProvider);
 
-    const isEngineAllowed = true;
-
     ref.onDispose(() {
       _subscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      if (isEngineAllowed) {
-        evaluationService.disposeEngine();
-      }
+      evaluationService.disposeEngine();
     });
 
     Move? lastMove;
@@ -85,7 +81,7 @@ class BroadcastGameController extends _$BroadcastGameController
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    final analysisState = BroadcastGameState(
+    final broadcastState = BroadcastGameState(
       id: gameId,
       currentPath: currentPath,
       broadcastLivePath: pgnHeaders['Result'] == '*' ? currentPath : null,
@@ -100,7 +96,7 @@ class BroadcastGameController extends _$BroadcastGameController
       clocks: _makeClocks(currentPath),
     );
 
-    if (analysisState.isEngineAvailable) {
+    if (broadcastState.isEngineAvailable) {
       evaluationService
           .initEngine(
         _evaluationContext,
@@ -116,7 +112,7 @@ class BroadcastGameController extends _$BroadcastGameController
       });
     }
 
-    return analysisState;
+    return broadcastState;
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -405,14 +401,6 @@ class BroadcastGameController extends _$BroadcastGameController
     _startEngineEval();
   }
 
-  /// Makes a PGN string up to the current node only.
-  String makeCurrentNodePgn() {
-    if (!state.hasValue) Exception('Cannot make a PGN up to the current node');
-
-    final nodes = _root.branchesOn(state.requireValue.currentPath);
-    return nodes.map((node) => node.sanMove.san).join(' ');
-  }
-
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -520,7 +508,7 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   void _stopEngineEval() {
-    if (!state.hasValue) Exception('Cannot export PGN');
+    if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval

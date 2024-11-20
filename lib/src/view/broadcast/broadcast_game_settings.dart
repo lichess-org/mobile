@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dar
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -30,7 +29,6 @@ class BroadcastGameSettings extends ConsumerWidget {
     );
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
@@ -111,13 +109,6 @@ class BroadcastGameSettings extends ConsumerWidget {
                   .read(analysisPreferencesProvider.notifier)
                   .toggleShowBestMoveArrow()
               : null,
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.showVariationArrows),
-          value: studyPrefs.showVariationArrows,
-          onChanged: (value) => ref
-              .read(studyPreferencesProvider.notifier)
-              .toggleShowVariationArrows(),
         ),
         SwitchSettingTile(
           title: Text(context.l10n.evaluationGauge),
