@@ -112,45 +112,45 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 maintainSize: true,
                 maintainState: true,
                 visible: animationFinished.value,
-                child: Column(
-                  children: [
-                    if (gameState.game.opponent?.offeringRematch == true)
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 15.0),
-                        child: Text(
-                          'Your opponent has offered a rematch',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    if (gameState.game.opponent?.offeringRematch == true)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FatButton(
-                              semanticsLabel: context.l10n.rematch,
-                              child: const Text('Accept rematch'),
-                              onPressed: () {
-                                ref
-                                    .read(ctrlProvider.notifier)
-                                    .proposeOrAcceptRematch();
-                              },
+                child: gameState.game.opponent?.offeringRematch == true
+                    ? Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15.0),
+                            child: Text(
+                              'Your opponent has offered a rematch',
+                              textAlign: TextAlign.center,
                             ),
-                            SecondaryButton(
-                              semanticsLabel: context.l10n.rematch,
-                              child: const Text('Decline'),
-                              onPressed: () {
-                                ref
-                                    .read(ctrlProvider.notifier)
-                                    .declineRematch();
-                              },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FatButton(
+                                  semanticsLabel: context.l10n.rematch,
+                                  child: const Text('Accept rematch'),
+                                  onPressed: () {
+                                    ref
+                                        .read(ctrlProvider.notifier)
+                                        .proposeOrAcceptRematch();
+                                  },
+                                ),
+                                SecondaryButton(
+                                  semanticsLabel: context.l10n.rematch,
+                                  child: const Text('Decline'),
+                                  onPressed: () {
+                                    ref
+                                        .read(ctrlProvider.notifier)
+                                        .declineRematch();
+                                  },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
               );
             },
           ),
