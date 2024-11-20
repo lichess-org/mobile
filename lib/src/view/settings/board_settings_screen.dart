@@ -257,26 +257,6 @@ class _Body extends ConsumerWidget {
                       .toggleCoordinates();
                 },
               ),
-              SwitchSettingTile(
-                title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
-                value: boardPrefs.magnifyDraggedPiece,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleMagnifyDraggedPiece();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPieceAnimation,
-                ),
-                value: boardPrefs.pieceAnimation,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .togglePieceAnimation();
-                },
-              ),
               SettingsListTile(
                 settingsLabel: const Text('Material'), //TODO: l10n
                 settingsValue: boardPrefs.materialDifferenceFormat
