@@ -47,12 +47,9 @@ class MaterialDiff with _$MaterialDiff {
       IMap<Role, int> startingCount,
       IMap<Role, int> subtractCount,
     ) {
-      IMap<Role, int> capturedPieces = IMap();
-      startingCount.forEach((role, count) {
-        capturedPieces =
-            capturedPieces.add(role, count - (subtractCount.get(role) ?? 0));
-      });
-      return capturedPieces;
+      return startingCount.map(
+        (role, count) => MapEntry(role, count - (subtractCount.get(role) ?? 0)),
+      );
     }
 
     final IMap<Role, int> blackCapturedPieces =
