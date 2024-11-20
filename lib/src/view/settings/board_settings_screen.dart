@@ -197,7 +197,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                //TODO Add i10n
+                //TODO Add l10n
                 settingsLabel: const Text('Clock position'),
                 settingsValue: BoardClockPositionScreen.position(
                   context,
