@@ -81,14 +81,20 @@ class BoardPreferences extends _$BoardPreferences
       ),
     );
   }
-
-    Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
+  
+  Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
     return save(state.copyWith(dragTargetKind: dragTargetKind));
   }
   
   Future<void> setMaterialDifferenceFormat(
     MaterialDifferenceFormat materialDifferenceFormat) {
       return save(state.copyWith(materialDifferenceFormat: materialDifferenceFormat));
+  }
+
+  Future<void> setClockPosition(ClockPosition clockPosition) {
+    return save(
+      state.copyWith(clockPosition: clockPosition),
+    );
   }
 
   Future<void> setClockPosition(ClockPosition clockPosition) {
@@ -122,6 +128,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required MaterialDifferenceFormat materialDifferenceFormat,
+    required ClockPosition clockPosition,
+    required bool showMaterialDifference,
     required ClockPosition clockPosition,
 
     @JsonKey(
@@ -355,5 +363,4 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
       DragTargetKind.circle => 'Circle',
       DragTargetKind.square => 'Square',
       DragTargetKind.none => 'None',
-    }
-;
+    };
