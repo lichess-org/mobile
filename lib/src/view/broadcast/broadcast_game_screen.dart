@@ -110,17 +110,24 @@ class _Body extends ConsumerWidget {
                 final boardSize = isTablet || isSmallScreen
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
-
                 final landscape = constraints.biggest.aspectRatio > 1;
+                final ctrlProvider =
+                    broadcastGameControllerProvider(roundId, gameId);
 
                 final engineGaugeParams = ref.watch(
-                  broadcastGameControllerProvider(roundId, gameId)
-                      .select((state) => state.valueOrNull?.engineGaugeParams),
+                  ctrlProvider
+                      .select((state) => state.requireValue.engineGaugeParams),
                 );
 
                 final currentNode = ref.watch(
-                  broadcastGameControllerProvider(roundId, gameId)
+                  ctrlProvider
                       .select((state) => state.requireValue.currentNode),
+                );
+
+                final isLocalEvaluationEnabled = ref.watch(
+                  ctrlProvider.select(
+                    (state) => state.requireValue.isLocalEvaluationEnabled,
+                  ),
                 );
 
                 final engineLines = EngineLines(
@@ -140,7 +147,7 @@ class _Body extends ConsumerWidget {
                 );
 
                 final engineGauge =
-                    showEvaluationGauge && engineGaugeParams != null
+                    showEvaluationGauge && isLocalEvaluationEnabled
                         ? EngineGauge(
                             params: engineGaugeParams,
                             displayMode: landscape
@@ -177,7 +184,7 @@ class _Body extends ConsumerWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                if (engineGaugeParams != null) engineLines,
+                                if (isLocalEvaluationEnabled) engineLines,
                                 Expanded(
                                   child: PlatformCard(
                                     clipBehavior: Clip.hardEdge,
@@ -211,10 +218,8 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Column(
                               children: [
-                                if (engineGauge != null) ...[
-                                  engineGauge,
-                                  engineLines,
-                                ],
+                                if (engineGauge != null) engineGauge,
+                                if (isLocalEvaluationEnabled) engineLines,
                                 _BroadcastBoardWithHeaders(
                                   roundId,
                                   gameId,
@@ -353,7 +358,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final sanMove = currentNode.sanMove;
 
     final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
-            broadcastAnalysisState.isEngineAvailable &&
+            broadcastAnalysisState.isLocalEvaluationEnabled &&
             bestMoves != null
         ? computeBestMoveShapes(
             bestMoves,

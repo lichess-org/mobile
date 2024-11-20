@@ -96,7 +96,7 @@ class BroadcastGameController extends _$BroadcastGameController
       clocks: _makeClocks(currentPath),
     );
 
-    if (broadcastState.isEngineAvailable) {
+    if (broadcastState.isLocalEvaluationEnabled) {
       evaluationService
           .initEngine(
         _evaluationContext,
@@ -343,7 +343,7 @@ class BroadcastGameController extends _$BroadcastGameController
       ),
     );
 
-    if (state.requireValue.isEngineAvailable) {
+    if (state.requireValue.isLocalEvaluationEnabled) {
       final prefs = ref.read(analysisPreferencesProvider);
       await ref.read(evaluationServiceProvider).initEngine(
             _evaluationContext,
@@ -479,7 +479,7 @@ class BroadcastGameController extends _$BroadcastGameController
       );
     }
 
-    if (pathChange && state.requireValue.isEngineAvailable) {
+    if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
       _debouncedStartEngineEval();
     }
   }
@@ -487,7 +487,7 @@ class BroadcastGameController extends _$BroadcastGameController
   void _startEngineEval() {
     if (!state.hasValue) return;
 
-    if (!state.requireValue.isEngineAvailable) return;
+    if (!state.requireValue.isLocalEvaluationEnabled) return;
     ref
         .read(evaluationServiceProvider)
         .start(
@@ -586,15 +586,13 @@ class BroadcastGameState with _$BroadcastGameState {
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position);
 
-  bool get isEngineAvailable => isLocalEvaluationEnabled;
-
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
   EngineGaugeParams get engineGaugeParams => (
         orientation: pov,
-        isLocalEngineAvailable: isEngineAvailable,
+        isLocalEngineAvailable: isLocalEvaluationEnabled,
         position: position,
         savedEval: currentNode.eval ?? currentNode.serverEval,
       );

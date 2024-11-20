@@ -23,9 +23,9 @@ class BroadcastGameSettings extends ConsumerWidget {
     final broacdcastGameAnalysisController =
         broadcastGameControllerProvider(roundId, gameId);
 
-    final isEngineAvailable = ref.watch(
+    final isLocalEvaluationEnabled = ref.watch(
       broacdcastGameAnalysisController
-          .select((s) => s.requireValue.isEngineAvailable),
+          .select((s) => s.requireValue.isLocalEvaluationEnabled),
     );
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
@@ -65,7 +65,7 @@ class BroadcastGameSettings extends ConsumerWidget {
           subtitle: NonLinearSlider(
             value: analysisPrefs.numEvalLines,
             values: const [0, 1, 2, 3],
-            onChangeEnd: isEngineAvailable
+            onChangeEnd: isLocalEvaluationEnabled
                 ? (value) => ref
                     .read(broacdcastGameAnalysisController.notifier)
                     .setNumEvalLines(value.toInt())
@@ -94,7 +94,7 @@ class BroadcastGameSettings extends ConsumerWidget {
             subtitle: NonLinearSlider(
               value: analysisPrefs.numEngineCores,
               values: List.generate(maxEngineCores, (index) => index + 1),
-              onChangeEnd: isEngineAvailable
+              onChangeEnd: isLocalEvaluationEnabled
                   ? (value) => ref
                       .read(broacdcastGameAnalysisController.notifier)
                       .setEngineCores(value.toInt())
@@ -104,7 +104,7 @@ class BroadcastGameSettings extends ConsumerWidget {
         SwitchSettingTile(
           title: Text(context.l10n.bestMoveArrow),
           value: analysisPrefs.showBestMoveArrow,
-          onChanged: isEngineAvailable
+          onChanged: isLocalEvaluationEnabled
               ? (value) => ref
                   .read(analysisPreferencesProvider.notifier)
                   .toggleShowBestMoveArrow()
