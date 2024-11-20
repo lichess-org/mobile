@@ -317,7 +317,16 @@ enum BoardTheme {
         );
 }
 
-enum ClockPosition { left, right }
+enum ClockPosition {
+  left,
+  right;
+
+  // TODO: l10n
+  String get label => switch (this) {
+        ClockPosition.left => 'Left',
+        ClockPosition.right => 'Right',
+      };
+}
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
       DragTargetKind.circle => 'Circle',

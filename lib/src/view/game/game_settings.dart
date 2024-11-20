@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -13,8 +11,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-import '../../widgets/adaptive_choice_picker.dart';
-import '../settings/board_clock_position_screen.dart';
 import 'game_screen_providers.dart';
 
 class GameSettings extends ConsumerWidget {
@@ -26,7 +22,6 @@ class GameSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final userPrefsAsync = ref.watch(userGamePrefsProvider(id));
-    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return BottomSheetScrollableContainer(
       children: [
@@ -77,36 +72,9 @@ class GameSettings extends ConsumerWidget {
           onTap: () {
             pushPlatformRoute(
               context,
+              fullscreenDialog: true,
               screen: const BoardSettingsScreen(),
             );
-          },
-        ),
-        SettingsListTile(
-          //TODO Add l10n
-          settingsLabel: const Text('Clock position'),
-          settingsValue: BoardClockPositionScreen.position(
-            context,
-            boardPrefs.clockPosition,
-          ),
-          onTap: () {
-            if (Theme.of(context).platform == TargetPlatform.android) {
-              showChoicePicker(
-                context,
-                choices: ClockPosition.values,
-                selectedItem: boardPrefs.clockPosition,
-                labelBuilder: (t) =>
-                    Text(BoardClockPositionScreen.position(context, t)),
-                onSelectedItemChanged: (ClockPosition? value) => ref
-                    .read(boardPreferencesProvider.notifier)
-                    .setClockPosition(value ?? ClockPosition.right),
-              );
-            } else {
-              pushPlatformRoute(
-                context,
-                title: 'Clock position',
-                builder: (context) => const BoardClockPositionScreen(),
-              );
-            }
           },
         ),
         SwitchSettingTile(
