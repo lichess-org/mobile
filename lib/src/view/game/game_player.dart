@@ -4,7 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -186,7 +188,7 @@ class GamePlayer extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 16.0),
               child: ConfirmMove(
                 onConfirm: confirmMoveCallbacks!.confirm,
                 onCancel: confirmMoveCallbacks!.cancel,
@@ -197,7 +199,7 @@ class GamePlayer extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 16.0),
               child: shouldLinkToUserProfile
                   ? GestureDetector(
                       onTap: player.user != null
@@ -268,7 +270,7 @@ class ConfirmMove extends StatelessWidget {
   }
 }
 
-class MoveExpiration extends StatefulWidget {
+class MoveExpiration extends ConsumerStatefulWidget {
   const MoveExpiration({
     required this.timeToMove,
     required this.mePlaying,
@@ -279,13 +281,14 @@ class MoveExpiration extends StatefulWidget {
   final bool mePlaying;
 
   @override
-  State<MoveExpiration> createState() => _MoveExpirationState();
+  ConsumerState<MoveExpiration> createState() => _MoveExpirationState();
 }
 
-class _MoveExpirationState extends State<MoveExpiration> {
+class _MoveExpirationState extends ConsumerState<MoveExpiration> {
   static const _period = Duration(milliseconds: 1000);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
+  bool playedEmergencySound = false;
 
   Timer startTimer() {
     return Timer.periodic(_period, (timer) {
@@ -323,6 +326,14 @@ class _MoveExpirationState extends State<MoveExpiration> {
   Widget build(BuildContext context) {
     final secs = timeLeft.inSeconds.remainder(60);
     final emerg = timeLeft <= const Duration(seconds: 8);
+
+    if (emerg && widget.mePlaying && !playedEmergencySound) {
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      setState(() {
+        playedEmergencySound = true;
+      });
+    }
+
     return secs <= 20
         ? Text(
             context.l10n.nbSecondsToPlayTheFirstMove(secs),

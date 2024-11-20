@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -294,6 +295,13 @@ class NotificationService {
 
   /// Register the device for push notifications.
   Future<void> registerDevice() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken == null) {
+        _logger.warning('APNS token is null');
+        return;
+      }
+    }
     final token = await LichessBinding.instance.firebaseMessaging.getToken();
     if (token != null) {
       await _registerToken(token);

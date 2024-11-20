@@ -2,19 +2,34 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 enum GameStatus {
+  /// Unknown game status (not handled by the app).
   unknown(-1),
+
+  /// The game is created but not started yet.
   created(10),
   started(20),
+
+  /// From here on, the game is finished.
   aborted(25),
   mate(30),
   resign(31),
   stalemate(32),
+
+  /// When a player leaves the game.
   timeout(33),
   draw(34),
+
+  /// When a player runs out of time (clock flags).
   outoftime(35),
   cheat(36),
+
+  /// The player did not make the first move in time.
   noStart(37),
+
+  /// We don't know why the game ended.
   unknownFinish(38),
+
+  /// Chess variant special endings.
   variantEnd(60);
 
   static final nameMap = IMap(GameStatus.values.asNameMap());

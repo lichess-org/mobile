@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -53,6 +54,7 @@ class _Body extends ConsumerWidget {
       child: ListView(
         children: [
           ListSection(
+            header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
             hasLeading: false,
             showDivider: false,
             children: [
@@ -88,29 +90,80 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
-                // TODO: Add l10n
-                title: const Text('Shape drawing'),
-                subtitle: const Text(
-                  'Draw shapes using two fingers on game and puzzle boards.',
-                  maxLines: 5,
-                  textAlign: TextAlign.justify,
-                ),
-                value: boardPrefs.enableShapeDrawings,
+                title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
+                value: boardPrefs.magnifyDraggedPiece,
                 onChanged: (value) {
                   ref
                       .read(boardPreferencesProvider.notifier)
-                      .toggleEnableShapeDrawings();
+                      .toggleMagnifyDraggedPiece();
+                },
+              ),
+              SettingsListTile(
+                // TODO translate
+                settingsLabel: const Text('Drag target'),
+                explanation:
+                    // TODO translate
+                    'How the target square is highlighted when dragging a piece.',
+                settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
+                onTap: () {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: DragTargetKind.values,
+                      selectedItem: boardPrefs.dragTargetKind,
+                      labelBuilder: (t) => Text(dragTargetKindLabel(t)),
+                      onSelectedItemChanged: (DragTargetKind? value) {
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setDragTargetKind(
+                              value ?? DragTargetKind.circle,
+                            );
+                      },
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Dragged piece target',
+                      builder: (context) =>
+                          const DragTargetKindSettingsScreen(),
+                    );
+                  }
                 },
               ),
               SwitchSettingTile(
-                title: Text(context.l10n.mobileSettingsHapticFeedback),
+                // TODO translate
+                title: const Text('Touch feedback'),
                 value: boardPrefs.hapticFeedback,
+                subtitle: const Text(
+                  // TODO translate
+                  'Vibrate when moving pieces or capturing them.',
+                  maxLines: 5,
+                  textAlign: TextAlign.justify,
+                ),
                 onChanged: (value) {
                   ref
                       .read(boardPreferencesProvider.notifier)
                       .toggleHapticFeedback();
                 },
               ),
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesPieceAnimation,
+                ),
+                value: boardPrefs.pieceAnimation,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .togglePieceAnimation();
+                },
+              ),
+            ],
+          ),
+          ListSection(
+            header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+            hasLeading: false,
+            showDivider: false,
+            children: [
               if (Theme.of(context).platform == TargetPlatform.android &&
                   !isTabletOrLarger(context))
                 androidVersionAsync.maybeWhen(
@@ -156,37 +209,6 @@ class _Body extends ConsumerWidget {
               ),
               SwitchSettingTile(
                 title: Text(
-                  context.l10n.preferencesBoardCoordinates,
-                ),
-                value: boardPrefs.coordinates,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleCoordinates();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
-                value: boardPrefs.magnifyDraggedPiece,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleMagnifyDraggedPiece();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPieceAnimation,
-                ),
-                value: boardPrefs.pieceAnimation,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .togglePieceAnimation();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(
                   context.l10n.preferencesMaterialDifference,
                 ),
                 value: boardPrefs.showMaterialDifference,
@@ -194,6 +216,22 @@ class _Body extends ConsumerWidget {
                   ref
                       .read(boardPreferencesProvider.notifier)
                       .toggleShowMaterialDifference();
+                },
+              ),
+              SwitchSettingTile(
+                // TODO: Add l10n
+                title: const Text('Shape drawing'),
+                subtitle: const Text(
+                  // TODO: translate
+                  'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
+                  maxLines: 5,
+                  textAlign: TextAlign.justify,
+                ),
+                value: boardPrefs.enableShapeDrawings,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleEnableShapeDrawings();
                 },
               ),
               SettingsListTile(
@@ -231,3 +269,93 @@ class _Body extends ConsumerWidget {
     );
   }
 }
+
+class PieceShiftMethodSettingsScreen extends ConsumerWidget {
+  const PieceShiftMethodSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceShiftMethod = ref.watch(
+      boardPreferencesProvider.select(
+        (state) => state.pieceShiftMethod,
+      ),
+    );
+
+    void onChanged(PieceShiftMethod? value) {
+      ref
+          .read(boardPreferencesProvider.notifier)
+          .setPieceShiftMethod(value ?? PieceShiftMethod.either);
+    }
+
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              notchedTile: true,
+              choices: PieceShiftMethod.values,
+              selectedItem: pieceShiftMethod,
+              titleBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DragTargetKindSettingsScreen extends ConsumerWidget {
+  const DragTargetKindSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dragTargetKind = ref.watch(
+      boardPreferencesProvider.select(
+        (state) => state.dragTargetKind,
+      ),
+    );
+
+    void onChanged(DragTargetKind? value) {
+      ref
+          .read(boardPreferencesProvider.notifier)
+          .setDragTargetKind(value ?? DragTargetKind.circle);
+    }
+
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            Padding(
+              padding:
+                  Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+              child: const Text(
+                'How the target square is highlighted when dragging a piece.',
+              ),
+            ),
+            ChoicePicker(
+              notchedTile: true,
+              choices: DragTargetKind.values,
+              selectedItem: dragTargetKind,
+              titleBuilder: (t) => Text(dragTargetKindLabel(t)),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String pieceShiftMethodl10n(
+  BuildContext context,
+  PieceShiftMethod pieceShiftMethod,
+) =>
+    switch (pieceShiftMethod) {
+      // TODO add this to mobile translations
+      PieceShiftMethod.either => 'Either tap or drag',
+      PieceShiftMethod.drag => context.l10n.preferencesDragPiece,
+      PieceShiftMethod.tapTwoSquares => 'Tap two squares',
+    };

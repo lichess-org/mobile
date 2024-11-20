@@ -133,5 +133,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>FirebaseMessagingAutoInitEnabled</key>
+  <false/>
 </dict>
 </plist>

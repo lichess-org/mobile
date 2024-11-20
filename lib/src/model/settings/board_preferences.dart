@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -63,6 +64,10 @@ class BoardPreferences extends _$BoardPreferences
     return save(state.copyWith(coordinates: !state.coordinates));
   }
 
+  Future<void> toggleBorder() {
+    return save(state.copyWith(showBorder: !state.showBorder));
+  }
+
   Future<void> togglePieceAnimation() {
     return save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
@@ -73,6 +78,10 @@ class BoardPreferences extends _$BoardPreferences
         magnifyDraggedPiece: !state.magnifyDraggedPiece,
       ),
     );
+  }
+
+  Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
+    return save(state.copyWith(dragTargetKind: dragTargetKind));
   }
 
   Future<void> toggleShowMaterialDifference() {
@@ -122,11 +131,14 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
+    @JsonKey(defaultValue: DragTargetKind.circle)
+    required DragTargetKind dragTargetKind,
     @JsonKey(
       defaultValue: ShapeColor.green,
       unknownEnumValue: ShapeColor.green,
     )
     required ShapeColor shapeColor,
+    @JsonKey(defaultValue: false) required bool showBorder,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -143,19 +155,28 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
+    dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
+    showBorder: false,
   );
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
+      border: showBorder
+          ? BoardBorder(
+              color: darken(boardTheme.colors.darkSquare, 0.2),
+              width: 16.0,
+            )
+          : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
       animationDuration: pieceAnimationDuration,
       dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(
         enable: enableShapeDrawings,
@@ -297,3 +318,10 @@ enum BoardTheme {
 }
 
 enum ClockPosition { left, right }
+
+String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
+      DragTargetKind.circle => 'Circle',
+      DragTargetKind.square => 'Square',
+      DragTargetKind.none => 'None',
+    };
+

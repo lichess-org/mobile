@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,7 +16,7 @@ class ClockSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(clockControllerProvider);
+    final state = ref.watch(clockToolControllerProvider);
     final buttonsEnabled = !state.started || state.paused;
 
     final isSoundEnabled = ref.watch(
@@ -36,7 +36,7 @@ class ClockSettings extends ConsumerWidget {
             iconSize: _iconSize,
             onPressed: buttonsEnabled
                 ? () {
-                    ref.read(clockControllerProvider.notifier).reset();
+                    ref.read(clockToolControllerProvider.notifier).reset();
                   }
                 : null,
             icon: const Icon(Icons.refresh),
@@ -57,18 +57,18 @@ class ClockSettings extends ConsumerWidget {
                       ),
                       builder: (BuildContext context) {
                         final options = ref.watch(
-                          clockControllerProvider
+                          clockToolControllerProvider
                               .select((value) => value.options),
                         );
                         return TimeControlModal(
                           excludeUltraBullet: true,
                           value: TimeIncrement(
-                            options.timePlayerTop.inSeconds,
-                            options.incrementPlayerTop.inSeconds,
+                            options.whiteTime.inSeconds,
+                            options.whiteIncrement.inSeconds,
                           ),
                           onSelected: (choice) {
                             ref
-                                .read(clockControllerProvider.notifier)
+                                .read(clockToolControllerProvider.notifier)
                                 .updateOptions(choice);
                           },
                         );
@@ -107,8 +107,8 @@ class _PlayResumeButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(clockControllerProvider.notifier);
-    final state = ref.watch(clockControllerProvider);
+    final controller = ref.read(clockToolControllerProvider.notifier);
+    final state = ref.watch(clockToolControllerProvider);
 
     if (!state.started) {
       return IconButton(

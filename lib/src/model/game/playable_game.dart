@@ -95,7 +95,8 @@ class PlayableGame
 
   bool get imported => source == GameSource.import;
 
-  bool get isPlayerTurn => lastPosition.turn == youAre;
+  /// Whether it is the current player's turn.
+  bool get isMyTurn => lastPosition.turn == youAre;
 
   /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
@@ -125,7 +126,7 @@ class PlayableGame
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
-      !isPlayerTurn &&
+      !isMyTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 
@@ -169,6 +170,23 @@ class PlayableGame
       clocks: clocks,
     );
   }
+}
+
+@freezed
+class PlayableClockData with _$PlayableClockData {
+  const factory PlayableClockData({
+    required bool running,
+    required Duration white,
+    required Duration black,
+
+    /// The network lag of the clock.
+    ///
+    /// Will be sent along with move events.
+    required Duration? lag,
+
+    /// The time when the clock event was received.
+    required DateTime at,
+  }) = _PlayableClockData;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -296,6 +314,10 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    lag: pick('lag').letOrNull(
+      (it) => Duration(milliseconds: it.asIntOrThrow() * 10),
+    ),
+    at: DateTime.now(),
   );
 }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +11,7 @@ import 'package:http/http.dart' as http;
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;
 
-/// iPhone 14 screen size as default test surface size
+/// iPhone 14 screen size.
 const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant =
@@ -18,6 +19,30 @@ const kPlatformVariant =
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
+
+/// Mocks a surface with a given size.
+class TestSurface extends StatelessWidget {
+  const TestSurface({
+    required this.child,
+    required this.size,
+    super.key,
+  });
+
+  final Size size;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQueryData(size: size),
+      child: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: child,
+      ),
+    );
+  }
+}
 
 /// Mocks an http response
 Future<http.Response> mockResponse(
@@ -90,17 +115,18 @@ Offset squareOffset(
 /// Plays a move on the board.
 Future<void> playMove(
   WidgetTester tester,
-  Rect boardRect,
   String from,
   String to, {
+  Rect? boardRect,
   Side orientation = Side.white,
 }) async {
+  final rect = boardRect ?? tester.getRect(find.byType(Chessboard));
   await tester.tapAt(
-    squareOffset(Square.fromName(from), boardRect, orientation: orientation),
+    squareOffset(Square.fromName(from), rect, orientation: orientation),
   );
   await tester.pump();
   await tester.tapAt(
-    squareOffset(Square.fromName(to), boardRect, orientation: orientation),
+    squareOffset(Square.fromName(to), rect, orientation: orientation),
   );
   await tester.pump();
 }

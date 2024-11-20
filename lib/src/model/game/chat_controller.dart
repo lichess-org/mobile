@@ -125,14 +125,8 @@ class ChatController extends _$ChatController {
       }
     } else if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;
-      final message = data['t'] as String;
-      final username = data['u'] as String?;
-      _addMessage(
-        (
-          message: message,
-          username: username,
-        ),
-      );
+      final message = _messageFromPick(RequiredPick(data));
+      _addMessage(message);
     }
   }
 }
@@ -147,11 +141,58 @@ class ChatState with _$ChatState {
   }) = _ChatState;
 }
 
-typedef Message = ({String? username, String message});
+typedef Message = ({
+  String? username,
+  String message,
+  bool troll,
+  bool deleted,
+});
 
 Message _messageFromPick(RequiredPick pick) {
   return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrNull(),
+    troll: pick('r').asBoolOrNull() ?? false,
+    deleted: pick('d').asBoolOrNull() ?? false,
   );
 }
+
+bool isSpam(Message message) {
+  return spamRegex.hasMatch(message.message) ||
+      followMeRegex.hasMatch(message.message);
+}
+
+final RegExp spamRegex = RegExp(
+  [
+    'xcamweb.com',
+    '(^|[^i])chess-bot',
+    'chess-cheat',
+    'coolteenbitch',
+    'letcafa.webcam',
+    'tinyurl.com/',
+    'wooga.info/',
+    'bit.ly/',
+    'wbt.link/',
+    'eb.by/',
+    '001.rs/',
+    'shr.name/',
+    'u.to/',
+    '.3-a.net',
+    '.ssl443.org',
+    '.ns02.us',
+    '.myftp.info',
+    '.flinkup.com',
+    '.serveusers.com',
+    'badoogirls.com',
+    'hide.su',
+    'wyon.de',
+    'sexdatingcz.club',
+    'qps.ru',
+    'tiny.cc/',
+    'trasderk.blogspot.com',
+    't.ly/',
+    'shorturl.at/',
+  ].map((url) => url.replaceAll('.', '\\.').replaceAll('/', '\\/')).join('|'),
+);
+
+final followMeRegex = RegExp('follow me|join my team', caseSensitive: false);
