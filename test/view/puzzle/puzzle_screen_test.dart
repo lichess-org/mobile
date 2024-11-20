@@ -209,9 +209,7 @@ void main() {
         expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
         expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(Chessboard));
-
-        await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
+        await playMove(tester, 'g4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Best move!'), findsOneWidget);
@@ -222,7 +220,7 @@ void main() {
 
         expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
 
-        await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
+        await playMove(tester, 'b4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Success!'), findsOneWidget);
@@ -313,9 +311,7 @@ void main() {
 
         expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(Chessboard));
-
-        await playMove(tester, boardRect, 'g4', 'f4', orientation: orientation);
+        await playMove(tester, 'g4', 'f4', orientation: orientation);
 
         expect(
           find.text("That's not the move!"),
@@ -329,7 +325,7 @@ void main() {
         // can still play the puzzle
         expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
-        await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
+        await playMove(tester, 'g4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Best move!'), findsOneWidget);
@@ -338,7 +334,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 500));
         await tester.pumpAndSettle();
 
-        await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
+        await playMove(tester, 'b4', 'h4', orientation: orientation);
 
         expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(

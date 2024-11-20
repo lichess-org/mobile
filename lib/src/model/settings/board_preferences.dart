@@ -82,11 +82,18 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
+    Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
+    return save(state.copyWith(dragTargetKind: dragTargetKind));
+  }
+  
   Future<void> setMaterialDifferenceFormat(
-    MaterialDifferenceFormat materialDifferenceFormat,
-  ) {
+    MaterialDifferenceFormat materialDifferenceFormat) {
+      return save(state.copyWith(materialDifferenceFormat: materialDifferenceFormat));
+  }
+
+  Future<void> setClockPosition(ClockPosition clockPosition) {
     return save(
-      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
+      state.copyWith(clockPosition: clockPosition),
     );
   }
 
@@ -115,6 +122,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required MaterialDifferenceFormat materialDifferenceFormat,
+    required ClockPosition clockPosition,
+
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -124,6 +133,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
+    @JsonKey(defaultValue: DragTargetKind.circle)
+    required DragTargetKind dragTargetKind,
     @JsonKey(
       defaultValue: ShapeColor.green,
       unknownEnumValue: ShapeColor.green,
@@ -142,9 +153,11 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
+    clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
+    dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
   );
@@ -165,6 +178,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       animationDuration: pieceAnimationDuration,
       dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(
         enable: enableShapeDrawings,
@@ -325,3 +339,21 @@ enum MaterialDifferenceFormat {
         MaterialDifferenceFormat.hidden => hidden.label,
       };
 }
+
+enum ClockPosition {
+  left,
+  right;
+
+  // TODO: l10n
+  String get label => switch (this) {
+        ClockPosition.left => 'Left',
+        ClockPosition.right => 'Right',
+      };
+}
+
+String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
+      DragTargetKind.circle => 'Circle',
+      DragTargetKind.square => 'Square',
+      DragTargetKind.none => 'None',
+    }
+;

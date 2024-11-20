@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,28 +30,31 @@ typedef AccountPrefState = ({
 });
 
 /// A provider that tells if the user wants to see ratings in the app.
-final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> showRatingsPref(Ref ref) async {
   return ref.watch(
     accountPreferencesProvider
         .selectAsync((state) => state?.showRatings.value ?? true),
   );
-});
+}
 
-final clockSoundProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> clockSound(Ref ref) async {
   return ref.watch(
     accountPreferencesProvider
         .selectAsync((state) => state?.clockSound.value ?? true),
   );
-});
+}
 
-final pieceNotationProvider = FutureProvider<PieceNotation>((ref) async {
+@Riverpod(keepAlive: true)
+Future<PieceNotation> pieceNotation(Ref ref) async {
   return ref.watch(
     accountPreferencesProvider.selectAsync(
       (state) =>
           state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
     ),
   );
-});
+}
 
 final defaultAccountPreferences = (
   zenMode: Zen.no,

@@ -80,7 +80,6 @@ class _Body extends ConsumerWidget {
                       ),
                     }.lock,
                     settings: boardPrefs.toBoardSettings().copyWith(
-                          enableCoordinates: true,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(4.0)),
                           boxShadow: boardShadows,
@@ -149,6 +148,18 @@ class _Body extends ConsumerWidget {
                           .setShapeColor(value ?? ShapeColor.green);
                     },
                   );
+                },
+              ),
+              SwitchSettingTile(
+                leading: const Icon(Icons.location_on),
+                title: Text(
+                  context.l10n.preferencesBoardCoordinates,
+                ),
+                value: boardPrefs.coordinates,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleCoordinates();
                 },
               ),
               SwitchSettingTile(

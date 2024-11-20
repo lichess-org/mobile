@@ -5,7 +5,9 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -33,6 +35,7 @@ class GamePlayer extends StatelessWidget {
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
     this.zenMode = false,
+    this.clockPosition = ClockPosition.right,
     super.key,
   });
 
@@ -47,6 +50,7 @@ class GamePlayer extends StatelessWidget {
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
   final bool zenMode;
+  final ClockPosition clockPosition;
 
   /// Time left for the player to move at the start of the game.
   final Duration? timeToMove;
@@ -63,7 +67,9 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (!zenMode)
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (player.user != null) ...[
                 Icon(
@@ -147,9 +153,31 @@ class GamePlayer extends StatelessWidget {
         else if (materialDiff != null)
           MaterialDifferenceDisplay(
             materialDiff: materialDiff!,
-            materialDifferenceFormat: materialDifferenceFormat!,
-          )
-        else
+            materialDifferenceFormat: materialDifferenceFormat!,),
+          Row(
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
+            children: [
+              for (final role in Role.values)
+                for (int i = 0; i < materialDiff!.pieces[role]!; i++)
+                  Icon(
+                    _iconByRole[role],
+                    size: 13,
+                    color: Colors.grey,
+                  ),
+              const SizedBox(width: 3),
+              Text(
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+                materialDiff != null && materialDiff!.score > 0
+                    ? '+${materialDiff!.score}'
+                    : '',
+              ),
+            ],
+          ),
           // to avoid shifts use an empty text widget
           const Text('', style: TextStyle(fontSize: 13)),
       ],
@@ -159,6 +187,8 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (clock != null && clockPosition == ClockPosition.left)
+          Flexible(flex: 3, child: clock!),
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
             flex: 7,
@@ -194,7 +224,8 @@ class GamePlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-        if (clock != null) Flexible(flex: 3, child: clock!),
+        if (clock != null && clockPosition == ClockPosition.right)
+          Flexible(flex: 3, child: clock!),
       ],
     );
   }
@@ -244,7 +275,7 @@ class ConfirmMove extends StatelessWidget {
   }
 }
 
-class MoveExpiration extends StatefulWidget {
+class MoveExpiration extends ConsumerStatefulWidget {
   const MoveExpiration({
     required this.timeToMove,
     required this.mePlaying,
@@ -255,13 +286,14 @@ class MoveExpiration extends StatefulWidget {
   final bool mePlaying;
 
   @override
-  State<MoveExpiration> createState() => _MoveExpirationState();
+  ConsumerState<MoveExpiration> createState() => _MoveExpirationState();
 }
 
-class _MoveExpirationState extends State<MoveExpiration> {
+class _MoveExpirationState extends ConsumerState<MoveExpiration> {
   static const _period = Duration(milliseconds: 1000);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
+  bool playedEmergencySound = false;
 
   Timer startTimer() {
     return Timer.periodic(_period, (timer) {
@@ -299,6 +331,14 @@ class _MoveExpirationState extends State<MoveExpiration> {
   Widget build(BuildContext context) {
     final secs = timeLeft.inSeconds.remainder(60);
     final emerg = timeLeft <= const Duration(seconds: 8);
+
+    if (emerg && widget.mePlaying && !playedEmergencySound) {
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      setState(() {
+        playedEmergencySound = true;
+      });
+    }
+
     return secs <= 20
         ? Text(
             context.l10n.nbSecondsToPlayTheFirstMove(secs),

@@ -267,7 +267,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Flexible(child: widget.topTable),
+                          widget.topTable,
                           if (!widget.zenMode && slicedMoves != null)
                             Expanded(
                               child: Padding(
@@ -282,14 +282,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                               ),
                             )
                           else
-                            // same height as [MoveList]
-                            const Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: SizedBox(height: 40),
-                              ),
-                            ),
-                          Flexible(child: widget.bottomTable),
+                            const Spacer(),
+                          widget.bottomTable,
                         ],
                       ),
                     ),

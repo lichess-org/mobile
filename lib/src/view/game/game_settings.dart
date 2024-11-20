@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -7,9 +6,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 import '../../widgets/adaptive_choice_picker.dart';
@@ -22,31 +23,12 @@ class GameSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select(
-        (prefs) => prefs.isSoundEnabled,
-      ),
-    );
-    final boardPrefs = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final userPrefsAsync = ref.watch(userGamePrefsProvider(id));
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return BottomSheetScrollableContainer(
       children: [
-        SwitchSettingTile(
-          title: Text(context.l10n.sound),
-          value: isSoundEnabled,
-          onChanged: (value) {
-            ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-          },
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.mobileSettingsHapticFeedback),
-          value: boardPrefs.hapticFeedback,
-          onChanged: (value) {
-            ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
-          },
-        ),
         ...userPrefsAsync.maybeWhen(
           data: (data) {
             return [
@@ -109,6 +91,18 @@ class GameSettings extends ConsumerWidget {
           value: boardPrefs.pieceAnimation,
           onChanged: (value) {
             ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+          },
+        ),
+        PlatformListTile(
+          // TODO translate
+          title: const Text('Board settings'),
+          trailing: const Icon(CupertinoIcons.chevron_right),
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              fullscreenDialog: true,
+              screen: const BoardSettingsScreen(),
+            );
           },
         ),
         SwitchSettingTile(
