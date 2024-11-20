@@ -11,14 +11,13 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AnalysisSettings extends ConsumerWidget {
-  const AnalysisSettings(this.pgn, this.options);
+  const AnalysisSettings(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final isLocalEvaluationAllowed =
         ref.watch(ctrlProvider.select((s) => s.isLocalEvaluationAllowed));
     final isEngineAvailable = ref.watch(
@@ -35,7 +34,7 @@ class AnalysisSettings extends ConsumerWidget {
             isScrollControlled: true,
             showDragHandle: true,
             isDismissible: true,
-            builder: (_) => OpeningExplorerSettings(pgn, options),
+            builder: (_) => OpeningExplorerSettings(options),
           ),
           trailing: const Icon(CupertinoIcons.chevron_right),
         ),

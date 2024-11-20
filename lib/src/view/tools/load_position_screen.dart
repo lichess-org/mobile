@@ -132,7 +132,8 @@ class _BodyState extends State<_Body> {
       return (
         pgn: '[FEN "${pos.fen}"]',
         fen: pos.fen,
-        options: const AnalysisOptions(
+        options: AnalysisOptions(
+          pgn: '[FEN "${pos.fen}"]',
           isLocalEvaluationAllowed: true,
           variant: Variant.standard,
           orientation: Side.white,
@@ -164,6 +165,7 @@ class _BodyState extends State<_Body> {
         pgn: textInput!,
         fen: lastPosition.fen,
         options: AnalysisOptions(
+          pgn: textInput!,
           isLocalEvaluationAllowed: true,
           variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,

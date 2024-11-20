@@ -150,6 +150,7 @@ class _Body extends ConsumerWidget {
               builder: (context) => const AnalysisScreen(
                 pgnOrId: '',
                 options: AnalysisOptions(
+                  pgn: '',
                   isLocalEvaluationAllowed: true,
                   variant: Variant.standard,
                   orientation: Side.white,
@@ -166,8 +167,8 @@ class _Body extends ConsumerWidget {
                       context,
                       rootNavigator: true,
                       builder: (context) => const OpeningExplorerScreen(
-                        pgn: '',
                         options: AnalysisOptions(
+                          pgn: '',
                           isLocalEvaluationAllowed: false,
                           variant: Variant.standard,
                           orientation: Side.white,

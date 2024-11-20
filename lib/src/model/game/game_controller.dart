@@ -1183,6 +1183,7 @@ class GameState with _$GameState {
   String get analysisPgn => game.makePgn();
 
   AnalysisOptions get analysisOptions => AnalysisOptions(
+        pgn: analysisPgn,
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
         initialMoveCursor: stepCursor,

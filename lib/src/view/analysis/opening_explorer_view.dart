@@ -18,9 +18,8 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 
 class OpeningExplorerView extends ConsumerStatefulWidget {
-  const OpeningExplorerView({required this.pgn, required this.options});
+  const OpeningExplorerView({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -36,15 +35,13 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
   @override
   Widget build(BuildContext context) {
-    final analysisState =
-        ref.watch(analysisControllerProvider(widget.pgn, widget.options));
+    final analysisState = ref.watch(analysisControllerProvider(widget.options));
 
     if (analysisState.position.ply >= 50) {
       return _OpeningExplorerView(
         isLoading: false,
         children: [
           OpeningExplorerMoveTable.maxDepth(
-            pgn: widget.pgn,
             options: widget.options,
           ),
         ],
@@ -104,7 +101,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                     child: ShimmerLoading(
                       isLoading: true,
                       child: OpeningExplorerMoveTable.loading(
-                        pgn: widget.pgn,
                         options: widget.options,
                       ),
                     ),
@@ -123,7 +119,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               whiteWins: openingExplorer.entry.white,
               draws: openingExplorer.entry.draws,
               blackWins: openingExplorer.entry.black,
-              pgn: widget.pgn,
               options: widget.options,
             ),
             if (topGames != null && topGames.isNotEmpty) ...[
@@ -179,7 +174,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                 child: ShimmerLoading(
                   isLoading: true,
                   child: OpeningExplorerMoveTable.loading(
-                    pgn: widget.pgn,
                     options: widget.options,
                   ),
                 ),

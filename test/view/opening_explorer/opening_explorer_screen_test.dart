@@ -40,6 +40,7 @@ void main() {
   });
 
   const options = AnalysisOptions(
+    pgn: '',
     id: standaloneOpeningExplorerId,
     isLocalEvaluationAllowed: false,
     orientation: Side.white,
@@ -65,7 +66,6 @@ void main() {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
-            pgn: '',
             options: options,
           ),
           overrides: [
@@ -112,7 +112,6 @@ void main() {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
-            pgn: '',
             options: options,
           ),
           overrides: [
@@ -165,7 +164,6 @@ void main() {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
-            pgn: '',
             options: options,
           ),
           overrides: [

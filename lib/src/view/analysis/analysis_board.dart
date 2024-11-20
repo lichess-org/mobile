@@ -15,14 +15,12 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class AnalysisBoard extends ConsumerStatefulWidget {
   const AnalysisBoard(
-    this.pgn,
     this.options,
     this.boardSize, {
     this.borderRadius,
     this.enableDrawingShapes = true,
   });
 
-  final String pgn;
   final AnalysisOptions options;
   final double boardSize;
   final BorderRadiusGeometry? borderRadius;
@@ -38,7 +36,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final ctrlProvider = analysisControllerProvider(widget.options);
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(

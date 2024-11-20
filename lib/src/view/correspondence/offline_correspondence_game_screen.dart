@@ -261,6 +261,7 @@ class _BodyState extends ConsumerState<_Body> {
                   builder: (_) => AnalysisScreen(
                     pgnOrId: game.makePgn(),
                     options: AnalysisOptions(
+                      pgn: '',
                       isLocalEvaluationAllowed: false,
                       variant: game.variant,
                       initialMoveCursor: stepCursor,

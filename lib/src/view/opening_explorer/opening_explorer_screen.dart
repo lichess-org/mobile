@@ -33,9 +33,8 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
 
 class OpeningExplorerScreen extends ConsumerStatefulWidget {
-  const OpeningExplorerScreen({required this.pgn, required this.options});
+  const OpeningExplorerScreen({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -51,8 +50,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final analysisState =
-        ref.watch(analysisControllerProvider(widget.pgn, widget.options));
+    final analysisState = ref.watch(analysisControllerProvider(widget.options));
 
     final opening = analysisState.currentNode.isRoot
         ? LightOpening(
@@ -102,14 +100,12 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
 
     if (analysisState.position.ply >= 50) {
       return _OpeningExplorerView(
-        pgn: widget.pgn,
         options: widget.options,
         isLoading: false,
         isIndexing: false,
         children: [
           openingHeader,
           OpeningExplorerMoveTable.maxDepth(
-            pgn: widget.pgn,
             options: widget.options,
           ),
         ],
@@ -120,7 +116,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
       return _OpeningExplorerView(
-        pgn: widget.pgn,
         options: widget.options,
         isLoading: false,
         isIndexing: false,
@@ -163,7 +158,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
         openingExplorerAsync.isLoading || openingExplorerAsync.value == null;
 
     return _OpeningExplorerView(
-      pgn: widget.pgn,
       options: widget.options,
       isLoading: isLoading,
       isIndexing: openingExplorerAsync.value?.isIndexing ?? false,
@@ -176,7 +170,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
                     child: ShimmerLoading(
                       isLoading: true,
                       child: OpeningExplorerMoveTable.loading(
-                        pgn: widget.pgn,
                         options: widget.options,
                       ),
                     ),
@@ -196,7 +189,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
               whiteWins: openingExplorer.entry.white,
               draws: openingExplorer.entry.draws,
               blackWins: openingExplorer.entry.black,
-              pgn: widget.pgn,
               options: widget.options,
             ),
             if (topGames != null && topGames.isNotEmpty) ...[
@@ -252,7 +244,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
                 child: ShimmerLoading(
                   isLoading: true,
                   child: OpeningExplorerMoveTable.loading(
-                    pgn: widget.pgn,
                     options: widget.options,
                   ),
                 ),
@@ -278,14 +269,12 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
 
 class _OpeningExplorerView extends StatelessWidget {
   const _OpeningExplorerView({
-    required this.pgn,
     required this.options,
     required this.children,
     required this.isLoading,
     required this.isIndexing,
   });
 
-  final String pgn;
   final AnalysisOptions options;
   final List<Widget> children;
   final bool isLoading;
@@ -306,7 +295,7 @@ class _OpeningExplorerView extends StatelessWidget {
                       horizontal: kTabletBoardTableSidePadding,
                     )
                   : EdgeInsets.zero,
-              child: _MoveList(pgn: pgn, options: options),
+              child: _MoveList(options: options),
             ),
           Expanded(
             child: LayoutBuilder(
@@ -338,7 +327,6 @@ class _OpeningExplorerView extends StatelessWidget {
                           bottom: kTabletBoardTableSidePadding,
                         ),
                         child: AnalysisBoard(
-                          pgn,
                           options,
                           boardSize,
                           borderRadius: isTablet ? _kTabletBoardRadius : null,
@@ -389,7 +377,6 @@ class _OpeningExplorerView extends StatelessWidget {
                             // disable scrolling when dragging the board
                             onVerticalDragStart: (_) {},
                             child: AnalysisBoard(
-                              pgn,
                               options,
                               boardSize,
                             ),
@@ -404,7 +391,7 @@ class _OpeningExplorerView extends StatelessWidget {
               },
             ),
           ),
-          _BottomBar(pgn: pgn, options: options),
+          _BottomBar(options: options),
         ],
       ),
     );
@@ -414,7 +401,7 @@ class _OpeningExplorerView extends StatelessWidget {
         body: body,
         appBar: AppBar(
           title: Text(context.l10n.openingExplorer),
-          bottom: _MoveList(pgn: pgn, options: options),
+          bottom: _MoveList(options: options),
           actions: [
             if (isIndexing) const _IndexingIndicator(),
           ],
@@ -480,12 +467,8 @@ class _IndexingIndicatorState extends State<_IndexingIndicator>
 }
 
 class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
-  const _MoveList({
-    required this.pgn,
-    required this.options,
-  });
+  const _MoveList({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -493,7 +476,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final state = ref.watch(ctrlProvider);
     final slicedMoves = state.root.mainline
         .map((e) => e.sanMove.san)
@@ -526,19 +509,15 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.pgn,
-    required this.options,
-  });
+  const _BottomBar({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final db = ref
         .watch(openingExplorerPreferencesProvider.select((value) => value.db));
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final canGoBack =
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
@@ -560,7 +539,7 @@ class _BottomBar extends ConsumerWidget {
             isScrollControlled: true,
             showDragHandle: true,
             isDismissible: true,
-            builder: (_) => OpeningExplorerSettings(pgn, options),
+            builder: (_) => OpeningExplorerSettings(options),
           ),
           icon: Icons.tune,
         ),
@@ -596,8 +575,7 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
-  void _moveBackward(WidgetRef ref) => ref
-      .read(analysisControllerProvider(pgn, options).notifier)
-      .userPrevious();
+      ref.read(analysisControllerProvider(options).notifier).userNext();
+  void _moveBackward(WidgetRef ref) =>
+      ref.read(analysisControllerProvider(options).notifier).userPrevious();
 }

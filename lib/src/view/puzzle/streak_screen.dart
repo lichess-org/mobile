@@ -293,6 +293,7 @@ class _BottomBar extends ConsumerWidget {
                 builder: (context) => AnalysisScreen(
                   pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                   options: AnalysisOptions(
+                    pgn: '',
                     isLocalEvaluationAllowed: true,
                     variant: Variant.standard,
                     orientation: puzzleState.pov,

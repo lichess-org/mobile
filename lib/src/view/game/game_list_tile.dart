@@ -228,6 +228,7 @@ class _ContextMenu extends ConsumerWidget {
                     builder: (context) => AnalysisScreen(
                       pgnOrId: game.id.value,
                       options: AnalysisOptions(
+                        pgn: '',
                         isLocalEvaluationAllowed: true,
                         variant: game.variant,
                         orientation: orientation,

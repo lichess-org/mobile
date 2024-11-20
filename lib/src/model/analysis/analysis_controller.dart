@@ -39,6 +39,8 @@ bool _isStandaloneAnalysis(StringId id) =>
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
+    required String pgn,
+
     /// The ID of the analysis. Can be a game ID or a standalone ID.
     required StringId id,
     required bool isLocalEvaluationAllowed,
@@ -73,7 +75,7 @@ class AnalysisController extends _$AnalysisController
   Timer? _startEngineEvalTimer;
 
   @override
-  AnalysisState build(String pgn, AnalysisOptions options) {
+  AnalysisState build(AnalysisOptions options) {
     final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
@@ -97,7 +99,7 @@ class AnalysisController extends _$AnalysisController
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
-      pgn,
+      options.pgn,
       initHeaders: () => options.isLichessGameAnalysis
           ? {}
           : {

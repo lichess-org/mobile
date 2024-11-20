@@ -36,6 +36,7 @@ void main() {
         home: AnalysisScreen(
           pgnOrId: sanMoves,
           options: AnalysisOptions(
+            pgn: '',
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
             opening: opening,
@@ -70,6 +71,7 @@ void main() {
         home: AnalysisScreen(
           pgnOrId: sanMoves,
           options: AnalysisOptions(
+            pgn: '',
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
             opening: opening,
@@ -135,6 +137,7 @@ void main() {
           home: AnalysisScreen(
             pgnOrId: pgn,
             options: const AnalysisOptions(
+              pgn: '',
               isLocalEvaluationAllowed: false,
               variant: Variant.standard,
               orientation: Side.white,

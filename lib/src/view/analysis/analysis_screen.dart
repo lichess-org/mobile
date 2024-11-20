@@ -55,8 +55,9 @@ class AnalysisScreen extends StatelessWidget {
             enableDrawingShapes: enableDrawingShapes,
           )
         : _LoadedAnalysisScreen(
-            options: options,
-            pgn: pgnOrId,
+            options: options.copyWith(
+              pgn: pgnOrId,
+            ),
             enableDrawingShapes: enableDrawingShapes,
           );
   }
@@ -90,8 +91,8 @@ class _LoadGame extends ConsumerWidget {
             opening: game.meta.opening,
             division: game.meta.division,
             serverAnalysis: serverAnalysis,
+            pgn: game.makePgn(),
           ),
-          pgn: game.makePgn(),
           enableDrawingShapes: enableDrawingShapes,
         );
       },
@@ -108,12 +109,10 @@ class _LoadGame extends ConsumerWidget {
 class _LoadedAnalysisScreen extends ConsumerStatefulWidget {
   const _LoadedAnalysisScreen({
     required this.options,
-    required this.pgn,
     required this.enableDrawingShapes,
   });
 
   final AnalysisOptions options;
-  final String pgn;
 
   final bool enableDrawingShapes;
 
@@ -151,7 +150,7 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final ctrlProvider = analysisControllerProvider(widget.options);
     final currentNodeEval =
         ref.watch(ctrlProvider.select((value) => value.currentNode.eval));
 
@@ -171,7 +170,7 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
               isScrollControlled: true,
               showDragHandle: true,
               isDismissible: true,
-              builder: (_) => AnalysisSettings(widget.pgn, widget.options),
+              builder: (_) => AnalysisSettings(widget.options),
             ),
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
@@ -180,7 +179,6 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
       ),
       body: _Body(
         controller: _tabController,
-        pgn: widget.pgn,
         options: widget.options,
         enableDrawingShapes: widget.enableDrawingShapes,
       ),
@@ -212,13 +210,11 @@ class _Title extends StatelessWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.controller,
-    required this.pgn,
     required this.options,
     required this.enableDrawingShapes,
   });
 
   final TabController controller;
-  final String pgn;
   final AnalysisOptions options;
   final bool enableDrawingShapes;
 
@@ -228,7 +224,7 @@ class _Body extends ConsumerWidget {
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
 
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider);
 
     final isEngineAvailable = analysisState.isEngineAvailable;
@@ -238,7 +234,6 @@ class _Body extends ConsumerWidget {
     return AnalysisLayout(
       tabController: controller,
       boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
-        pgn,
         options,
         boardSize,
         borderRadius: borderRadius,
@@ -270,28 +265,24 @@ class _Body extends ConsumerWidget {
               isGameOver: currentNode.position.isGameOver,
             )
           : null,
-      bottomBar: _BottomBar(pgn: pgn, options: options),
+      bottomBar: _BottomBar(options: options),
       children: [
-        OpeningExplorerView(pgn: pgn, options: options),
-        AnalysisTreeView(pgn, options),
-        if (options.canShowGameSummary) ServerAnalysisSummary(pgn, options),
+        OpeningExplorerView(options: options),
+        AnalysisTreeView(options),
+        if (options.canShowGameSummary) ServerAnalysisSummary(options),
       ],
     );
   }
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.pgn,
-    required this.options,
-  });
+  const _BottomBar({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider);
 
     return BottomBar(
@@ -334,10 +325,9 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
-  void _moveBackward(WidgetRef ref) => ref
-      .read(analysisControllerProvider(pgn, options).notifier)
-      .userPrevious();
+      ref.read(analysisControllerProvider(options).notifier).userNext();
+  void _moveBackward(WidgetRef ref) =>
+      ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     return showAdaptiveActionSheet(
@@ -347,15 +337,14 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref
-                .read(analysisControllerProvider(pgn, options).notifier)
+                .read(analysisControllerProvider(options).notifier)
                 .toggleBoard();
           },
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.boardEditor),
           onPressed: (context) {
-            final analysisState =
-                ref.read(analysisControllerProvider(pgn, options));
+            final analysisState = ref.read(analysisControllerProvider(options));
             final boardFen = analysisState.position.fen;
             pushPlatformRoute(
               context,
@@ -372,15 +361,14 @@ class _BottomBar extends ConsumerWidget {
             pushPlatformRoute(
               context,
               title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
+              builder: (_) => AnalysisShareScreen(options: options),
             );
           },
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
           onPressed: (_) {
-            final analysisState =
-                ref.read(analysisControllerProvider(pgn, options));
+            final analysisState = ref.read(analysisControllerProvider(options));
             launchShareDialog(
               context,
               text: analysisState.position.fen,
@@ -394,7 +382,7 @@ class _BottomBar extends ConsumerWidget {
             onPressed: (_) async {
               final gameId = options.gameAnyId!.gameId;
               final analysisState =
-                  ref.read(analysisControllerProvider(pgn, options));
+                  ref.read(analysisControllerProvider(options));
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(

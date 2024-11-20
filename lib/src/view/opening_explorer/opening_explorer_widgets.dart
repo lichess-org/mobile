@@ -34,13 +34,11 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.whiteWins,
     required this.draws,
     required this.blackWins,
-    required this.pgn,
     required this.options,
   })  : _isLoading = false,
         _maxDepthReached = false;
 
   const OpeningExplorerMoveTable.loading({
-    required this.pgn,
     required this.options,
   })  : _isLoading = true,
         moves = const IListConst([]),
@@ -50,7 +48,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         _maxDepthReached = false;
 
   const OpeningExplorerMoveTable.maxDepth({
-    required this.pgn,
     required this.options,
   })  : _isLoading = false,
         moves = const IListConst([]),
@@ -63,7 +60,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final String pgn;
   final AnalysisOptions options;
 
   final bool _isLoading;
@@ -84,7 +80,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     }
 
     final games = whiteWins + draws + blackWins;
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
 
     const headerTextStyle = TextStyle(fontSize: 12);
 

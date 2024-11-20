@@ -16,14 +16,13 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.pgn, this.options);
+  const ServerAnalysisSummary(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
     final playersAnalysis =
         ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
     final pgnHeaders =
@@ -38,7 +37,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
-              AcplChart(pgn, options),
+              AcplChart(options),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -321,9 +320,8 @@ class _SummaryPlayerName extends StatelessWidget {
 }
 
 class AcplChart extends ConsumerWidget {
-  const AcplChart(this.pgn, this.options);
+  const AcplChart(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -359,23 +357,21 @@ class AcplChart extends ConsumerWidget {
         );
 
     final data = ref.watch(
-      analysisControllerProvider(pgn, options)
+      analysisControllerProvider(options)
           .select((value) => value.acplChartData),
     );
 
     final rootPly = ref.watch(
-      analysisControllerProvider(pgn, options)
+      analysisControllerProvider(options)
           .select((value) => value.root.position.ply),
     );
 
     final currentNode = ref.watch(
-      analysisControllerProvider(pgn, options)
-          .select((value) => value.currentNode),
+      analysisControllerProvider(options).select((value) => value.currentNode),
     );
 
     final isOnMainline = ref.watch(
-      analysisControllerProvider(pgn, options)
-          .select((value) => value.isOnMainline),
+      analysisControllerProvider(options).select((value) => value.isOnMainline),
     );
 
     if (data == null) {
@@ -450,7 +446,7 @@ class AcplChart extends ConsumerWidget {
                     );
                     final closestNodeIndex = closestSpot.x.round();
                     ref
-                        .read(analysisControllerProvider(pgn, options).notifier)
+                        .read(analysisControllerProvider(options).notifier)
                         .jumpToNthNodeOnMainline(closestNodeIndex);
                   }
                 },

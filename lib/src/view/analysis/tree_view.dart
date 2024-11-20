@@ -9,17 +9,13 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 const kOpeningHeaderHeight = 32.0;
 
 class AnalysisTreeView extends ConsumerWidget {
-  const AnalysisTreeView(
-    this.pgn,
-    this.options,
-  );
+  const AnalysisTreeView(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
 
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
