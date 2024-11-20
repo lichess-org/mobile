@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -32,6 +33,7 @@ class GamePlayer extends StatelessWidget {
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
     this.zenMode = false,
+    this.clockPosition = ClockPosition.right,
     super.key,
   });
 
@@ -45,6 +47,7 @@ class GamePlayer extends StatelessWidget {
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
   final bool zenMode;
+  final ClockPosition clockPosition;
 
   /// Time left for the player to move at the start of the game.
   final Duration? timeToMove;
@@ -61,7 +64,9 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (!zenMode)
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (player.user != null) ...[
                 Icon(
@@ -144,6 +149,9 @@ class GamePlayer extends StatelessWidget {
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
         else if (materialDiff != null)
           Row(
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               for (final role in Role.values)
                 for (int i = 0; i < materialDiff!.pieces[role]!; i++)
@@ -174,6 +182,8 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (clock != null && clockPosition == ClockPosition.left)
+          Flexible(flex: 3, child: clock!),
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
             flex: 7,
@@ -209,7 +219,8 @@ class GamePlayer extends StatelessWidget {
                   : playerWidget,
             ),
           ),
-        if (clock != null) Flexible(flex: 3, child: clock!),
+        if (clock != null && clockPosition == ClockPosition.right)
+          Flexible(flex: 3, child: clock!),
       ],
     );
   }

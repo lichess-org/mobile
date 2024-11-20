@@ -130,6 +130,7 @@ class GameBody extends ConsumerWidget {
               : null,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeActive,
+          clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
               youAre == Side.black && gameState.moveToConfirm != null
                   ? (
@@ -181,6 +182,7 @@ class GameBody extends ConsumerWidget {
               : null,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeActive,
+          clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
               youAre == Side.white && gameState.moveToConfirm != null
                   ? (

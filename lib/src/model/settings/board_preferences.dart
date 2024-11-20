@@ -90,6 +90,12 @@ class BoardPreferences extends _$BoardPreferences
     );
   }
 
+  Future<void> setClockPosition(ClockPosition clockPosition) {
+    return save(
+      state.copyWith(clockPosition: clockPosition),
+    );
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(
       state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
@@ -115,6 +121,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    required ClockPosition clockPosition,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -144,6 +151,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -307,6 +315,17 @@ enum BoardTheme {
           height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
+}
+
+enum ClockPosition {
+  left,
+  right;
+
+  // TODO: l10n
+  String get label => switch (this) {
+        ClockPosition.left => 'Left',
+        ClockPosition.right => 'Right',
+      };
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {

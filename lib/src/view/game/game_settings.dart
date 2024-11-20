@@ -72,6 +72,7 @@ class GameSettings extends ConsumerWidget {
           onTap: () {
             pushPlatformRoute(
               context,
+              fullscreenDialog: true,
               screen: const BoardSettingsScreen(),
             );
           },
