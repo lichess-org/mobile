@@ -69,30 +69,6 @@ class GameSettings extends ConsumerWidget {
           },
           orElse: () => [],
         ),
-        SwitchSettingTile(
-          // TODO: Add l10n
-          title: const Text('Shape drawing'),
-          subtitle: const Text(
-            'Draw shapes using two fingers.',
-            maxLines: 5,
-            textAlign: TextAlign.justify,
-          ),
-          value: boardPrefs.enableShapeDrawings,
-          onChanged: (value) {
-            ref
-                .read(boardPreferencesProvider.notifier)
-                .toggleEnableShapeDrawings();
-          },
-        ),
-        SwitchSettingTile(
-          title: Text(
-            context.l10n.preferencesPieceAnimation,
-          ),
-          value: boardPrefs.pieceAnimation,
-          onChanged: (value) {
-            ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
-          },
-        ),
         PlatformListTile(
           // TODO translate
           title: const Text('Board settings'),
@@ -120,24 +96,6 @@ class GameSettings extends ConsumerWidget {
           value: gamePrefs.blindfoldMode ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
-          },
-        ),
-        SettingsListTile(
-          settingsLabel: const Text('Material'), //TODO: l10n
-          settingsValue: boardPrefs.materialDifferenceFormat
-              .l10n(AppLocalizations.of(context)),
-          onTap: () {
-            showChoicePicker(
-              context,
-              choices: MaterialDifferenceFormat.values,
-              selectedItem: boardPrefs.materialDifferenceFormat,
-              labelBuilder: (t) => Text(t.l10n(AppLocalizations.of(context))),
-              onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
-                  .read(boardPreferencesProvider.notifier)
-                  .setMaterialDifferenceFormat(
-                    value ?? MaterialDifferenceFormat.materialDifference,
-                  ),
-            );
           },
         ),
       ],
