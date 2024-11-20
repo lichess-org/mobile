@@ -73,6 +73,9 @@ class GameAppBar extends ConsumerWidget {
               isDismissible: true,
               isScrollControlled: true,
               showDragHandle: true,
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.sizeOf(context).height * 0.5,
+              ),
               builder: (_) => GameSettings(id: id!),
             ),
             semanticsLabel: context.l10n.settingsSettings,

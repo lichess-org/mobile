@@ -155,6 +155,22 @@ class _Body extends ConsumerWidget {
                       .togglePieceAnimation();
                 },
               ),
+              SwitchSettingTile(
+                // TODO: Add l10n
+                title: const Text('Shape drawing'),
+                subtitle: const Text(
+                  // TODO: translate
+                  'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
+                  maxLines: 5,
+                  textAlign: TextAlign.justify,
+                ),
+                value: boardPrefs.enableShapeDrawings,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleEnableShapeDrawings();
+                },
+              ),
             ],
           ),
           ListSection(
@@ -183,6 +199,30 @@ class _Body extends ConsumerWidget {
                       : const SizedBox.shrink(),
                   orElse: () => const SizedBox.shrink(),
                 ),
+              SettingsListTile(
+                //TODO Add l10n
+                settingsLabel: const Text('Clock position'),
+                settingsValue: boardPrefs.clockPosition.label,
+                onTap: () {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: ClockPosition.values,
+                      selectedItem: boardPrefs.clockPosition,
+                      labelBuilder: (t) => Text(t.label),
+                      onSelectedItemChanged: (ClockPosition? value) => ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setClockPosition(value ?? ClockPosition.right),
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Clock position',
+                      builder: (context) => const BoardClockPositionScreen(),
+                    );
+                  }
+                },
+              ),
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPieceDestinations,
@@ -214,22 +254,6 @@ class _Body extends ConsumerWidget {
                   ref
                       .read(boardPreferencesProvider.notifier)
                       .toggleShowMaterialDifference();
-                },
-              ),
-              SwitchSettingTile(
-                // TODO: Add l10n
-                title: const Text('Shape drawing'),
-                subtitle: const Text(
-                  // TODO: translate
-                  'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
-                  maxLines: 5,
-                  textAlign: TextAlign.justify,
-                ),
-                value: boardPrefs.enableShapeDrawings,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleEnableShapeDrawings();
                 },
               ),
             ],
@@ -267,6 +291,35 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
               choices: PieceShiftMethod.values,
               selectedItem: pieceShiftMethod,
               titleBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BoardClockPositionScreen extends ConsumerWidget {
+  const BoardClockPositionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final clockPosition = ref.watch(
+      boardPreferencesProvider.select((state) => state.clockPosition),
+    );
+    void onChanged(ClockPosition? value) => ref
+        .read(boardPreferencesProvider.notifier)
+        .setClockPosition(value ?? ClockPosition.right);
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              choices: ClockPosition.values,
+              selectedItem: clockPosition,
+              titleBuilder: (t) => Text(t.label),
               onSelectedItemChanged: onChanged,
             ),
           ],
