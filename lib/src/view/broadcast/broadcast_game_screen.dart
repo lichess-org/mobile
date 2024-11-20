@@ -295,7 +295,7 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
             side: pov.opposite,
             boardSide: _PlayerWidgetSide.top,
             sideToPlay: playingSide,
-            cursorOnLiveMove: currentPath == broadcastLivePath,
+            isCursorOnLiveMove: currentPath == broadcastLivePath,
           ),
         _BroadcastBoard(roundId, gameId, size),
         if (game != null)
@@ -306,7 +306,7 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
             side: pov,
             boardSide: _PlayerWidgetSide.bottom,
             sideToPlay: playingSide,
-            cursorOnLiveMove: currentPath == broadcastLivePath,
+            isCursorOnLiveMove: currentPath == broadcastLivePath,
           ),
       ],
     );
@@ -438,7 +438,7 @@ class _PlayerWidget extends StatelessWidget {
     required this.side,
     required this.boardSide,
     required this.sideToPlay,
-    required this.cursorOnLiveMove,
+    required this.isCursorOnLiveMove,
   });
 
   final BroadcastGame game;
@@ -447,7 +447,7 @@ class _PlayerWidget extends StatelessWidget {
   final double width;
   final _PlayerWidgetSide boardSide;
   final Side sideToPlay;
-  final bool cursorOnLiveMove;
+  final bool isCursorOnLiveMove;
 
   @override
   Widget build(BuildContext context) {
@@ -572,7 +572,7 @@ class _PlayerWidget extends StatelessWidget {
           if (clock != null)
             Card(
               color: (side == sideToPlay)
-                  ? cursorOnLiveMove
+                  ? isCursorOnLiveMove
                       ? Theme.of(context).colorScheme.tertiaryContainer
                       : Theme.of(context).colorScheme.secondaryContainer
                   : null,
@@ -593,13 +593,13 @@ class _PlayerWidget extends StatelessWidget {
                 child: CountdownClockBuilder(
                   timeLeft: clock!,
                   active: side == sideToPlay &&
-                      cursorOnLiveMove &&
+                      isCursorOnLiveMove &&
                       game.status == BroadcastResult.ongoing,
                   builder: (context, timeLeft) => Text(
                     timeLeft.toHoursMinutesSeconds(),
                     style: TextStyle(
                       color: (side == sideToPlay)
-                          ? cursorOnLiveMove
+                          ? isCursorOnLiveMove
                               ? Theme.of(context)
                                   .colorScheme
                                   .onTertiaryContainer
@@ -611,7 +611,7 @@ class _PlayerWidget extends StatelessWidget {
                     ),
                   ),
                   tickInterval: const Duration(seconds: 1),
-                  clockUpdatedAt: (side == sideToPlay && cursorOnLiveMove)
+                  clockUpdatedAt: (side == sideToPlay && isCursorOnLiveMove)
                       ? game.updatedClockAt
                       : null,
                 ),
