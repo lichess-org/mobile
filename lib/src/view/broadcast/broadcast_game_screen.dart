@@ -294,8 +294,8 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
             game: game,
             side: pov.opposite,
             boardSide: _PlayerWidgetSide.top,
-            playingSide: playingSide,
-            playClock: currentPath == broadcastLivePath,
+            sideToPlay: playingSide,
+            cursorOnLiveMove: currentPath == broadcastLivePath,
           ),
         _BroadcastBoard(roundId, gameId, size),
         if (game != null)
@@ -305,8 +305,8 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
             game: game,
             side: pov,
             boardSide: _PlayerWidgetSide.bottom,
-            playingSide: playingSide,
-            playClock: currentPath == broadcastLivePath,
+            sideToPlay: playingSide,
+            cursorOnLiveMove: currentPath == broadcastLivePath,
           ),
       ],
     );
@@ -437,8 +437,8 @@ class _PlayerWidget extends StatelessWidget {
     required this.game,
     required this.side,
     required this.boardSide,
-    required this.playingSide,
-    required this.playClock,
+    required this.sideToPlay,
+    required this.cursorOnLiveMove,
   });
 
   final BroadcastGame game;
@@ -446,8 +446,8 @@ class _PlayerWidget extends StatelessWidget {
   final Side side;
   final double width;
   final _PlayerWidgetSide boardSide;
-  final Side playingSide;
-  final bool playClock;
+  final Side sideToPlay;
+  final bool cursorOnLiveMove;
 
   @override
   Widget build(BuildContext context) {
@@ -571,8 +571,8 @@ class _PlayerWidget extends StatelessWidget {
           ),
           if (clock != null)
             Card(
-              color: (side == playingSide)
-                  ? playClock
+              color: (side == sideToPlay)
+                  ? cursorOnLiveMove
                       ? Theme.of(context).colorScheme.tertiaryContainer
                       : Theme.of(context).colorScheme.secondaryContainer
                   : null,
@@ -592,12 +592,14 @@ class _PlayerWidget extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: CountdownClockBuilder(
                   timeLeft: clock!,
-                  active: side == playingSide && playClock,
+                  active: side == sideToPlay &&
+                      cursorOnLiveMove &&
+                      game.status == BroadcastResult.ongoing,
                   builder: (context, timeLeft) => Text(
                     timeLeft.toHoursMinutesSeconds(),
                     style: TextStyle(
-                      color: (side == playingSide)
-                          ? playClock
+                      color: (side == sideToPlay)
+                          ? cursorOnLiveMove
                               ? Theme.of(context)
                                   .colorScheme
                                   .onTertiaryContainer
@@ -609,7 +611,7 @@ class _PlayerWidget extends StatelessWidget {
                     ),
                   ),
                   tickInterval: const Duration(seconds: 1),
-                  clockUpdatedAt: (side == playingSide && playClock)
+                  clockUpdatedAt: (side == sideToPlay && cursorOnLiveMove)
                       ? game.updatedClockAt
                       : null,
                 ),
