@@ -153,33 +153,10 @@ class GamePlayer extends StatelessWidget {
         else if (materialDiff != null)
           MaterialDifferenceDisplay(
             materialDiff: materialDiff!,
-            materialDifferenceFormat: materialDifferenceFormat!,),
-          Row(
-            mainAxisAlignment: clockPosition == ClockPosition.right
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
-            children: [
-              for (final role in Role.values)
-                for (int i = 0; i < materialDiff!.pieces[role]!; i++)
-                  Icon(
-                    _iconByRole[role],
-                    size: 13,
-                    color: Colors.grey,
-                  ),
-              const SizedBox(width: 3),
-              Text(
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                ),
-                materialDiff != null && materialDiff!.score > 0
-                    ? '+${materialDiff!.score}'
-                    : '',
-              ),
-            ],
+            materialDifferenceFormat: materialDifferenceFormat!,
           ),
-          // to avoid shifts use an empty text widget
-          const Text('', style: TextStyle(fontSize: 13)),
+        // to avoid shifts use an empty text widget
+        const Text('', style: TextStyle(fontSize: 13)),
       ],
     );
 
