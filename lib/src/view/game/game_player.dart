@@ -153,7 +153,7 @@ class GamePlayer extends StatelessWidget {
         else if (materialDiff != null)
           MaterialDifferenceDisplay(
             materialDiff: materialDiff!,
-            materialDifferenceFormat: materialDifferenceFormat!,
+            materialDifferenceFormat: materialDifferenceFormat,
           ),
         // to avoid shifts use an empty text widget
         const Text('', style: TextStyle(fontSize: 13)),
@@ -336,7 +336,7 @@ class MaterialDifferenceDisplay extends StatelessWidget {
   });
 
   final MaterialDiffSide materialDiff;
-  final MaterialDifferenceFormat materialDifferenceFormat;
+  final MaterialDifferenceFormat? materialDifferenceFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -345,9 +345,8 @@ class MaterialDifferenceDisplay extends StatelessWidget {
             ? materialDiff.capturedPieces
             : materialDiff.pieces);
 
-    return !materialDifferenceFormat.visible
-        ? const SizedBox.shrink()
-        : Row(
+    return materialDifferenceFormat?.visible ?? true
+        ? Row(
             children: [
               for (final role in Role.values)
                 for (int i = 0; i < piecesToRender[role]!; i++)
@@ -365,7 +364,8 @@ class MaterialDifferenceDisplay extends StatelessWidget {
                 materialDiff.score > 0 ? '+${materialDiff.score}' : '',
               ),
             ],
-          );
+          )
+        : const SizedBox.shrink();
   }
 }
 
