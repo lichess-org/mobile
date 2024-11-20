@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -16,14 +19,27 @@ typedef EngineGaugeBuilder = Widget Function(
   Orientation orientation,
 );
 
-class AnalysisTab {
-  const AnalysisTab({
-    required this.title,
-    required this.icon,
-  });
+enum AnalysisTab {
+  opening(Icons.explore),
+  moves(LichessIcons.flow_cascade),
+  summary(Icons.area_chart);
 
-  final String title;
+  const AnalysisTab(this.icon);
+
   final IconData icon;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case AnalysisTab.opening:
+        return l10n.openingExplorer;
+      case AnalysisTab.moves:
+        // TODO: Add l10n
+        return 'Moves';
+      case AnalysisTab.summary:
+        // TODO: Add l10n
+        return 'Summary';
+    }
+  }
 }
 
 /// Indicator for the analysis tab, typically shown in the app bar.
@@ -69,17 +85,16 @@ class _AppBarAnalysisTabIndicatorState
   Widget build(BuildContext context) {
     return AppBarIconButton(
       icon: Icon(widget.tabs[widget.controller.index].icon),
-      semanticsLabel: widget.tabs[widget.controller.index].title,
+      semanticsLabel: widget.tabs[widget.controller.index].l10n(context.l10n),
       onPressed: () {
         showAdaptiveActionSheet<void>(
           context: context,
           actions: widget.tabs.map((tab) {
             return BottomSheetAction(
               leading: Icon(tab.icon),
-              makeLabel: (_) => Text(tab.title),
+              makeLabel: (context) => Text(tab.l10n(context.l10n)),
               onPressed: (_) {
                 widget.controller.animateTo(widget.tabs.indexOf(tab));
-                Navigator.of(context).pop();
               },
             );
           }).toList(),
@@ -101,12 +116,16 @@ class AnalysisLayout extends StatelessWidget {
     super.key,
   });
 
+  /// The tab controller for the tab view.
   final TabController tabController;
 
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;
 
-  /// The children of the tab bar view.
+  /// The children of the tab view.
+  ///
+  /// The length of this list must match the [controller]'s [TabController.length]
+  /// and the length of the [AppBarAnalysisTabIndicator.tabs] list.
   final List<Widget> children;
 
   final EngineGaugeBuilder? engineGaugeBuilder;

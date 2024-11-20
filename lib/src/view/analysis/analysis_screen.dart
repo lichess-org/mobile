@@ -8,11 +8,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
@@ -131,18 +131,16 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
   void initState() {
     super.initState();
     tabs = [
-      const AnalysisTab(
-        title: 'Moves',
-        icon: LichessIcons.flow_cascade,
-      ),
-      if (widget.options.canShowGameSummary)
-        const AnalysisTab(
-          title: 'Summary',
-          icon: Icons.area_chart,
-        ),
+      AnalysisTab.opening,
+      AnalysisTab.moves,
+      if (widget.options.canShowGameSummary) AnalysisTab.summary,
     ];
 
-    _tabController = TabController(vsync: this, length: tabs.length);
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: 1,
+      length: tabs.length,
+    );
   }
 
   @override
@@ -274,6 +272,7 @@ class _Body extends ConsumerWidget {
           : null,
       bottomBar: _BottomBar(pgn: pgn, options: options),
       children: [
+        OpeningExplorerView(pgn: pgn, options: options),
         AnalysisTreeView(pgn, options),
         if (options.canShowGameSummary) ServerAnalysisSummary(pgn, options),
       ],
@@ -303,6 +302,11 @@ class _BottomBar extends ConsumerWidget {
             _showAnalysisMenu(context, ref);
           },
           icon: Icons.menu,
+        ),
+        BottomBarButton(
+          label: context.l10n.flipBoard,
+          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+          icon: CupertinoIcons.arrow_2_squarepath,
         ),
         RepeatButton(
           onLongPress:

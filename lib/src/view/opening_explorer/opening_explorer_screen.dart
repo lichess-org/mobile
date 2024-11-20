@@ -86,7 +86,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
                   const SizedBox(width: 6.0),
                   Expanded(
                     child: Text(
-                      '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
+                      opening.name,
                       style: TextStyle(
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,

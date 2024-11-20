@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
-const _kTableRowVerticalPadding = 12.0;
+const _kTableRowVerticalPadding = 10.0;
 const _kTableRowHorizontalPadding = 8.0;
 const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
@@ -86,7 +86,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     final games = whiteWins + draws + blackWins;
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    const topPadding = EdgeInsets.only(top: _kTableRowVerticalPadding / 2);
     const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
@@ -98,15 +97,15 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           ),
           children: [
             Padding(
-              padding: _kTableRowPadding.subtract(topPadding),
+              padding: _kTableRowPadding,
               child: Text(context.l10n.move, style: headerTextStyle),
             ),
             Padding(
-              padding: _kTableRowPadding.subtract(topPadding),
+              padding: _kTableRowPadding,
               child: Text(context.l10n.games, style: headerTextStyle),
             ),
             Padding(
-              padding: _kTableRowPadding.subtract(topPadding),
+              padding: _kTableRowPadding,
               child: Text(context.l10n.whiteDrawBlack, style: headerTextStyle),
             ),
           ],

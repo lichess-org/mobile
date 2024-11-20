@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
@@ -26,12 +26,20 @@ class AnalysisSettings extends ConsumerWidget {
       ctrlProvider.select((s) => s.isEngineAvailable),
     );
     final prefs = ref.watch(analysisPreferencesProvider);
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
-    );
 
     return BottomSheetScrollableContainer(
       children: [
+        PlatformListTile(
+          title: Text(context.l10n.openingExplorer),
+          onTap: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            isDismissible: true,
+            builder: (_) => OpeningExplorerSettings(pgn, options),
+          ),
+          trailing: const Icon(CupertinoIcons.chevron_right),
+        ),
         SwitchSettingTile(
           title: Text(context.l10n.toggleLocalEvaluation),
           value: prefs.enableLocalEvaluation,
@@ -127,13 +135,6 @@ class AnalysisSettings extends ConsumerWidget {
           onChanged: (_) => ref
               .read(analysisPreferencesProvider.notifier)
               .togglePgnComments(),
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.sound),
-          value: isSoundEnabled,
-          onChanged: (value) {
-            ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-          },
         ),
       ],
     );
