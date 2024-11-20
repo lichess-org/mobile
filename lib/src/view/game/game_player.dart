@@ -144,8 +144,7 @@ class GamePlayer extends StatelessWidget {
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
-        else if (materialDiff != null &&
-            materialDifferenceFormat?.visible == true)
+        else if (materialDiff != null)
           MaterialDifferenceDisplay(
             materialDiff: materialDiff!,
             materialDifferenceFormat: materialDifferenceFormat!,
@@ -329,25 +328,27 @@ class MaterialDifferenceDisplay extends StatelessWidget {
             ? materialDiff.capturedPieces
             : materialDiff.pieces);
 
-    return Row(
-      children: [
-        for (final role in Role.values)
-          for (int i = 0; i < piecesToRender[role]!; i++)
-            Icon(
-              _iconByRole[role],
-              size: 13,
-              color: Colors.grey,
-            ),
-        const SizedBox(width: 3),
-        Text(
-          style: const TextStyle(
-            fontSize: 13,
-            color: Colors.grey,
-          ),
-          materialDiff.score > 0 ? '+${materialDiff.score}' : '',
-        ),
-      ],
-    );
+    return !materialDifferenceFormat.visible
+        ? const SizedBox.shrink()
+        : Row(
+            children: [
+              for (final role in Role.values)
+                for (int i = 0; i < piecesToRender[role]!; i++)
+                  Icon(
+                    _iconByRole[role],
+                    size: 13,
+                    color: Colors.grey,
+                  ),
+              const SizedBox(width: 3),
+              Text(
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+                materialDiff.score > 0 ? '+${materialDiff.score}' : '',
+              ),
+            ],
+          );
   }
 }
 
