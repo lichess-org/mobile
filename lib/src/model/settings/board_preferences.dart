@@ -324,4 +324,3 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
       DragTargetKind.square => 'Square',
       DragTargetKind.none => 'None',
     };
-
