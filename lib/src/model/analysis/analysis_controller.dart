@@ -163,7 +163,6 @@ class AnalysisController extends _$AnalysisController
       contextOpening: options.opening,
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      displayMode: DisplayMode.moves,
       playersAnalysis: options.serverAnalysis,
       acplChartData:
           options.serverAnalysis != null ? _makeAcplChartData() : null,
@@ -378,10 +377,6 @@ class AnalysisController extends _$AnalysisController
   void updatePgnHeader(String key, String value) {
     final headers = state.pgnHeaders.add(key, value);
     state = state.copyWith(pgnHeaders: headers);
-  }
-
-  void setDisplayMode(DisplayMode mode) {
-    state = state.copyWith(displayMode: mode);
   }
 
   Future<void> requestServerAnalysis() {
@@ -649,11 +644,6 @@ class AnalysisController extends _$AnalysisController
   }
 }
 
-enum DisplayMode {
-  moves,
-  summary,
-}
-
 @freezed
 class AnalysisState with _$AnalysisState {
   const AnalysisState._();
@@ -689,11 +679,6 @@ class AnalysisState with _$AnalysisState {
 
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
-
-    /// The display mode of the analysis.
-    ///
-    /// It can be either moves, summary or opening explorer.
-    required DisplayMode displayMode,
 
     /// The last move played.
     Move? lastMove,
@@ -743,8 +728,6 @@ class AnalysisState with _$AnalysisState {
       !hasServerAnalysis &&
       pgnHeaders['Result'] != '*';
 
-  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
-
   bool get hasServerAnalysis => playersAnalysis != null;
 
   /// Whether an evaluation can be available
@@ -770,14 +753,6 @@ class AnalysisState with _$AnalysisState {
         isLocalEngineAvailable: isEngineAvailable,
         position: position,
         savedEval: currentNode.eval ?? currentNode.serverEval,
-      );
-
-  AnalysisOptions get openingExplorerOptions => AnalysisOptions(
-        id: standaloneOpeningExplorerId,
-        isLocalEvaluationAllowed: false,
-        orientation: pov,
-        variant: variant,
-        initialMoveCursor: currentPath.size,
       );
 }
 
