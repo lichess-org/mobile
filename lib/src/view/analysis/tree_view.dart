@@ -12,12 +12,10 @@ class AnalysisTreeView extends ConsumerWidget {
   const AnalysisTreeView(
     this.pgn,
     this.options,
-    this.displayMode,
   );
 
   final String pgn;
   final AnalysisOptions options;
-  final Orientation displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,10 +31,7 @@ class AnalysisTreeView extends ConsumerWidget {
       slivers: [
         if (kOpeningAllowedVariants.contains(options.variant))
           SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: displayMode,
-            ),
+            delegate: _OpeningHeaderDelegate(ctrlProvider),
           ),
         SliverFillRemaining(
           hasScrollBody: false,
@@ -53,13 +48,9 @@ class AnalysisTreeView extends ConsumerWidget {
 }
 
 class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _OpeningHeaderDelegate(
-    this.ctrlProvider, {
-    required this.displayMode,
-  });
+  const _OpeningHeaderDelegate(this.ctrlProvider);
 
   final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
 
   @override
   Widget build(
@@ -67,7 +58,7 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return _Opening(ctrlProvider, displayMode);
+    return _Opening(ctrlProvider);
   }
 
   @override
@@ -82,10 +73,9 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class _Opening extends ConsumerWidget {
-  const _Opening(this.ctrlProvider, this.displayMode);
+  const _Opening(this.ctrlProvider);
 
   final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -7,7 +7,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -21,11 +20,10 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -38,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:popover/popover.dart';
 
@@ -121,7 +118,7 @@ class _LoadGame extends ConsumerWidget {
   }
 }
 
-class _LoadedAnalysisScreen extends ConsumerWidget {
+class _LoadedAnalysisScreen extends ConsumerStatefulWidget {
   const _LoadedAnalysisScreen({
     required this.options,
     required this.pgn,
@@ -134,30 +131,60 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   final bool enableDrawingShapes;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-      ref: ref,
-    );
+  ConsumerState<_LoadedAnalysisScreen> createState() =>
+      _LoadedAnalysisScreenState();
+}
+
+class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+  late final List<AnalysisTab> tabs;
+
+  @override
+  void initState() {
+    super.initState();
+    tabs = [
+      const AnalysisTab(
+        title: 'Moves',
+        icon: LichessIcons.flow_cascade,
+      ),
+      if (widget.options.canShowGameSummary)
+        const AnalysisTab(
+          title: 'Summary',
+          icon: Icons.area_chart,
+        ),
+    ];
+
+    _tabController = TabController(vsync: this, length: tabs.length);
   }
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
 
     return PlatformScaffold(
       resizeToAvoidBottomInset: false,
       appBar: PlatformAppBar(
-        title: _Title(options: options),
+        title: _Title(options: widget.options),
         actions: [
           _EngineDepth(ctrlProvider),
+          AppBarAnalysisTabIndicator(
+            tabs: tabs,
+            controller: _tabController,
+          ),
           AppBarIconButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
               showDragHandle: true,
               isDismissible: true,
-              builder: (_) => AnalysisSettings(pgn, options),
+              builder: (_) => AnalysisSettings(widget.pgn, widget.options),
             ),
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
@@ -165,43 +192,10 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
         ],
       ),
       body: _Body(
-        pgn: pgn,
-        options: options,
-        enableDrawingShapes: enableDrawingShapes,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
-
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(options: options),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _EngineDepth(ctrlProvider),
-            AppBarIconButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                isDismissible: true,
-                builder: (_) => AnalysisSettings(pgn, options),
-              ),
-              semanticsLabel: context.l10n.settingsSettings,
-              icon: const Icon(Icons.settings),
-            ),
-          ],
-        ),
-      ),
-      child: _Body(
-        pgn: pgn,
-        options: options,
-        enableDrawingShapes: enableDrawingShapes,
+        controller: _tabController,
+        pgn: widget.pgn,
+        options: widget.options,
+        enableDrawingShapes: widget.enableDrawingShapes,
       ),
     );
   }
@@ -230,11 +224,13 @@ class _Title extends StatelessWidget {
 
 class _Body extends ConsumerWidget {
   const _Body({
+    required this.controller,
     required this.pgn,
     required this.options,
     required this.enableDrawingShapes,
   });
 
+  final TabController controller;
   final String pgn;
   final AnalysisOptions options;
   final bool enableDrawingShapes;
@@ -255,156 +251,37 @@ class _Body extends ConsumerWidget {
     final hasEval =
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-
     final currentNode = ref.watch(
       ctrlProvider.select((value) => value.currentNode),
     );
 
-    return Column(
+    return AnalysisLayout(
+      tabController: controller,
+      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
+        pgn,
+        options,
+        boardSize,
+        borderRadius: borderRadius,
+        enableDrawingShapes: enableDrawingShapes,
+      ),
+      engineGaugeBuilder: hasEval && showEvaluationGauge
+          ? (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? _EngineGaugeHorizontal(ctrlProvider)
+                  : _EngineGaugeVertical(ctrlProvider);
+            }
+          : null,
+      engineLines: isEngineAvailable
+          ? EngineLines(
+              onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+              clientEval: currentNode.eval,
+              isGameOver: currentNode.position.isGameOver,
+            )
+          : null,
+      bottomBar: _BottomBar(pgn: pgn, options: options),
       children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final aspectRatio = constraints.biggest.aspectRatio;
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-
-                const tabletBoardRadius =
-                    BorderRadius.all(Radius.circular(4.0));
-
-                final display = switch (displayMode) {
-                  DisplayMode.summary => ServerAnalysisSummary(pgn, options),
-                  DisplayMode.moves => AnalysisTreeView(
-                      pgn,
-                      options,
-                      aspectRatio > 1
-                          ? Orientation.landscape
-                          : Orientation.portrait,
-                    ),
-                };
-
-                // If the aspect ratio is greater than 1, we are in landscape mode.
-                if (aspectRatio > 1) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: kTabletBoardTableSidePadding,
-                          top: kTabletBoardTableSidePadding,
-                          bottom: kTabletBoardTableSidePadding,
-                        ),
-                        child: Row(
-                          children: [
-                            AnalysisBoard(
-                              pgn,
-                              options,
-                              boardSize,
-                              borderRadius: isTablet ? tabletBoardRadius : null,
-                              enableDrawingShapes: enableDrawingShapes,
-                            ),
-                            if (hasEval && showEvaluationGauge) ...[
-                              const SizedBox(width: 4.0),
-                              _EngineGaugeVertical(ctrlProvider),
-                            ],
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            if (isEngineAvailable)
-                              Padding(
-                                padding: const EdgeInsets.all(
-                                  kTabletBoardTableSidePadding,
-                                ),
-                                child: EngineLines(
-                                  onTapMove: ref
-                                      .read(ctrlProvider.notifier)
-                                      .onUserMove,
-                                  clientEval: currentNode.eval,
-                                  isGameOver: currentNode.position.isGameOver,
-                                ),
-                              ),
-                            Expanded(
-                              child: PlatformCard(
-                                clipBehavior: Clip.hardEdge,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(4.0),
-                                ),
-                                margin: const EdgeInsets.all(
-                                  kTabletBoardTableSidePadding,
-                                ),
-                                semanticContainer: false,
-                                child: display,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                // If the aspect ratio is less than 1, we are in portrait mode.
-                else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _ColumnTopTable(ctrlProvider),
-                      if (isTablet)
-                        Padding(
-                          padding: const EdgeInsets.all(
-                            kTabletBoardTableSidePadding,
-                          ),
-                          child: AnalysisBoard(
-                            pgn,
-                            options,
-                            boardSize,
-                            borderRadius: isTablet ? tabletBoardRadius : null,
-                            enableDrawingShapes: enableDrawingShapes,
-                          ),
-                        )
-                      else
-                        AnalysisBoard(
-                          pgn,
-                          options,
-                          boardSize,
-                          borderRadius: isTablet ? tabletBoardRadius : null,
-                          enableDrawingShapes: enableDrawingShapes,
-                        ),
-                      Expanded(
-                        child: Padding(
-                          padding: isTablet
-                              ? const EdgeInsets.symmetric(
-                                  horizontal: kTabletBoardTableSidePadding,
-                                )
-                              : EdgeInsets.zero,
-                          child: display,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
-        ),
-        _BottomBar(pgn: pgn, options: options),
+        AnalysisTreeView(pgn, options),
+        if (options.canShowGameSummary) ServerAnalysisSummary(pgn, options),
       ],
     );
   }
@@ -432,37 +309,19 @@ class _EngineGaugeVertical extends ConsumerWidget {
   }
 }
 
-class _ColumnTopTable extends ConsumerWidget {
-  const _ColumnTopTable(this.ctrlProvider);
+class _EngineGaugeHorizontal extends ConsumerWidget {
+  const _EngineGaugeHorizontal(this.ctrlProvider);
 
   final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
-    final showEvaluationGauge = ref.watch(
-      analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
-    );
 
-    return analysisState.hasAvailableEval
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (showEvaluationGauge)
-                EngineGauge(
-                  displayMode: EngineGaugeDisplayMode.horizontal,
-                  params: analysisState.engineGaugeParams,
-                ),
-              if (analysisState.isEngineAvailable)
-                EngineLines(
-                  clientEval: analysisState.currentNode.eval,
-                  isGameOver: analysisState.currentNode.position.isGameOver,
-                  onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                ),
-            ],
-          )
-        : kEmptyWidget;
+    return EngineGauge(
+      displayMode: EngineGaugeDisplayMode.horizontal,
+      params: analysisState.engineGaugeParams,
+    );
   }
 }
 
@@ -491,22 +350,6 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        if (analysisState.canShowGameSummary)
-          BottomBarButton(
-            // TODO: l10n
-            label: analysisState.displayMode == DisplayMode.summary
-                ? 'Moves'
-                : 'Summary',
-            onTap: () {
-              final newMode = analysisState.displayMode == DisplayMode.summary
-                  ? DisplayMode.moves
-                  : DisplayMode.summary;
-              ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
-            },
-            icon: analysisState.displayMode == DisplayMode.summary
-                ? LichessIcons.flow_cascade
-                : Icons.area_chart,
-          ),
         BottomBarButton(
           label: context.l10n.openingExplorer,
           onTap: isOnline

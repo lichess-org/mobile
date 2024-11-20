@@ -52,6 +52,9 @@ class AnalysisOptions with _$AnalysisOptions {
     ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
   }) = _AnalysisOptions;
 
+  bool get canShowGameSummary =>
+      serverAnalysis != null || id != standaloneAnalysisId;
+
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameAnyId != null;
 
