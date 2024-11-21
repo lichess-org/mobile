@@ -211,17 +211,17 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
-    return tournament.when(
-      data: (tournament) {
-        return Row(
+    return switch (tournament) {
+     AsyncData(:final value) => 
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            if (tournament.group != null)
+            if (value.group != null)
               Flexible(
                 child: DropdownMenu<BroadcastTournamentId>(
                   label: const Text('Tournament'),
-                  initialSelection: tournament.data.id,
-                  dropdownMenuEntries: tournament.group!
+                  initialSelection: value.data.id,
+                  dropdownMenuEntries: value.group!
                       .map(
                         (tournament) =>
                             DropdownMenuEntry<BroadcastTournamentId>(
@@ -242,8 +242,8 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
             Flexible(
               child: DropdownMenu<BroadcastRoundId>(
                 label: const Text('Round'),
-                initialSelection: tournament.defaultRoundId,
-                dropdownMenuEntries: tournament.rounds
+                initialSelection: value.defaultRoundId,
+                dropdownMenuEntries: value.rounds
                     .map(
                       (BroadcastRound round) =>
                           DropdownMenuEntry<BroadcastRoundId>(
@@ -258,11 +258,9 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
               ),
             ),
           ],
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stackTrace) => Center(child: Text(error.toString())),
-    );
+        ),
+      AsyncError(:final error) => Center(child: Text(error.toString())),
+      _ => const SizedBox.shrink(),};
   }
 }
 
@@ -341,12 +339,12 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
     final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
-    return tournament.when(
-      data: (tournament) {
+    return switch(tournament) {
+       AsyncData(:final value) =>
         /// It should be replaced with a Flutter toolbar widget once it is implemented.
         /// See https://github.com/flutter/flutter/issues/134454
 
-        return _wrapWithBackground(
+         _wrapWithBackground(
           backgroundColor: backgroundColor,
           border: _kDefaultToolBarBorder,
           child: SafeArea(
@@ -357,11 +355,11 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
                 spacing: 16.0,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  if (tournament.group != null)
+                  if (value.group != null)
                     Flexible(
                       child: CupertinoButton.tinted(
                         child: Text(
-                          tournament.group!
+                          value.group!
                               .firstWhere(
                                 (tournament) => tournament.id == tournamentId,
                               )
@@ -371,11 +369,11 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
                         onPressed: () {
                           showChoicePicker<BroadcastTournamentId>(
                             context,
-                            choices: tournament.group!
+                            choices: value.group!
                                 .map((tournament) => tournament.id)
                                 .toList(),
                             labelBuilder: (tournamentId) => Text(
-                              tournament.group!
+                              value.group!
                                   .firstWhere(
                                     (tournament) =>
                                         tournament.id == tournamentId,
@@ -398,7 +396,7 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
                   Flexible(
                     child: CupertinoButton.tinted(
                       child: Text(
-                        tournament.rounds
+                        value.rounds
                             .firstWhere(
                               (round) => round.id == roundId,
                             )
@@ -408,13 +406,13 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
                       onPressed: () {
                         showChoicePicker<BroadcastRoundId>(
                           context,
-                          choices: tournament.rounds
+                          choices: value.rounds
                               .map(
                                 (round) => round.id,
                               )
                               .toList(),
                           labelBuilder: (roundId) => Text(
-                            tournament.rounds
+                            value.rounds
                                 .firstWhere((round) => round.id == roundId)
                                 .name,
                           ),
@@ -430,11 +428,10 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
               ),
             ),
           ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stackTrace) => Center(child: Text(error.toString())),
-    );
+        ),
+      AsyncError(:final error) => Center(child: Text(error.toString())),
+      _ => const SizedBox.shrink(),
+    };
   }
 }
 

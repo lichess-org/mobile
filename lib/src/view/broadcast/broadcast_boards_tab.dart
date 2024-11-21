@@ -44,30 +44,30 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
     return SafeArea(
       bottom: false,
-      child: games.when(
-        data: (games) => (games.isEmpty)
+      child: switch (games) {
+        AsyncData(:final value) => (value.isEmpty)
             ? const Padding(
                 padding: Styles.bodyPadding,
                 child: Text('No boards to show for now'),
               )
             : BroadcastPreview(
-                games: games.values.toIList(),
+                games: value.values.toIList(),
                 roundId: roundId,
                 title: title,
               ),
-        loading: () => const Shimmer(
-          child: ShimmerLoading(
-            isLoading: true,
-            child: BroadcastPreview(
-              roundId: BroadcastRoundId(''),
-              title: '',
+        AsyncError(:final error) => Center(
+            child: Text(error.toString()),
+          ),
+        _ => const Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: BroadcastPreview(
+                roundId: BroadcastRoundId(''),
+                title: '',
+              ),
             ),
           ),
-        ),
-        error: (error, stackTrace) => Center(
-          child: Text(error.toString()),
-        ),
-      ),
+      },
     );
   }
 }

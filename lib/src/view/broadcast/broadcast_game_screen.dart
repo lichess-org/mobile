@@ -31,9 +31,6 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:logging/logging.dart';
-
-final _logger = Logger('BroadcastGameScreen');
 
 class BroadcastGameScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
@@ -48,14 +45,15 @@ class BroadcastGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(broadcastGameControllerProvider(roundId, gameId));
+    final broadcastGameState =
+        ref.watch(broadcastGameControllerProvider(roundId, gameId));
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(title),
         actions: [
           AppBarIconButton(
-            onPressed: () => (state.hasValue)
+            onPressed: () => (broadcastGameState.hasValue)
                 ? showAdaptiveBottomSheet<void>(
                     context: context,
                     isScrollControlled: true,
@@ -72,17 +70,13 @@ class BroadcastGameScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: state.when(
-        data: (state) => _Body(roundId, gameId),
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
-        error: (error, stackTrace) {
-          _logger.severe('Cannot load broadcast game: $error', stackTrace);
-          return Center(
+      body: switch (broadcastGameState) {
+        AsyncData() => _Body(roundId, gameId),
+        AsyncError(:final error) => Center(
             child: Text('Cannot load broadcast game: $error'),
-          );
-        },
-      ),
+          ),
+        _ => const Center(child: CircularProgressIndicator.adaptive()),
+      },
     );
   }
 }
