@@ -116,25 +116,17 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     // We check that the clocks for the broadcast game preview have been updated else we do nothing
     if (relayClocks.value == null) return;
 
-    final newClocks = {
-      Side.white: relayClocks(0).asDurationFromCentiSecondsOrNull(),
-      Side.black: relayClocks(1).asDurationFromCentiSecondsOrNull(),
-    };
-
     state = AsyncData(
       state.requireValue.update(
         broadcastGameId,
         (broadcastsGame) => broadcastsGame.copyWith(
-          updatedClockAt: (newClocks[broadcastsGame.sideToMove] == null)
-              ? broadcastsGame.updatedClockAt
-              : DateTime.now(),
           players: IMap(
             {
               Side.white: broadcastsGame.players[Side.white]!.copyWith(
-                clock: newClocks[Side.white],
+                clock: relayClocks(0).asDurationFromCentiSecondsOrNull(),
               ),
               Side.black: broadcastsGame.players[Side.black]!.copyWith(
-                clock: newClocks[Side.black],
+                clock: relayClocks(1).asDurationFromCentiSecondsOrNull(),
               ),
             },
           ),

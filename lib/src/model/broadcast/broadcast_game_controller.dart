@@ -160,8 +160,13 @@ class BroadcastGameController extends _$BroadcastGameController
           isBroadcastMove: true,
         );
       } else {
+        final currentNode = _root.nodeAt(path);
         state = AsyncData(
-          state.requireValue.copyWith(broadcastPath: newPath, root: _root.view),
+          state.requireValue.copyWith(
+            broadcastPath: newPath,
+            root: _root.view,
+            currentNode: AnalysisCurrentNode.fromNode(currentNode),
+          ),
         );
       }
     }
