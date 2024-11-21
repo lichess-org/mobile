@@ -133,7 +133,7 @@ class _BodyState extends State<_Body> {
         options: AnalysisOptions(
           standalone: (
             pgn: '[FEN "${pos.fen}"]',
-            isLocalEvaluationAllowed: true,
+            isComputerAnalysisAllowed: true,
             variant: Variant.standard,
             orientation: Side.white,
           ),
@@ -165,7 +165,7 @@ class _BodyState extends State<_Body> {
         options: AnalysisOptions(
           standalone: (
             pgn: textInput!,
-            isLocalEvaluationAllowed: true,
+            isComputerAnalysisAllowed: true,
             variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
             orientation: Side.white,
           ),

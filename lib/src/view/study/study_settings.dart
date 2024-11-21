@@ -22,8 +22,8 @@ class StudySettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final studyController = studyControllerProvider(id);
 
-    final isLocalEvaluationAllowed = ref.watch(
-      studyController.select((s) => s.requireValue.isLocalEvaluationAllowed),
+    final isComputerAnalysisAllowed = ref.watch(
+      studyController.select((s) => s.requireValue.isComputerAnalysisAllowed),
     );
     final isEngineAvailable = ref.watch(
       studyController.select((s) => s.requireValue.isEngineAvailable),
@@ -40,7 +40,7 @@ class StudySettings extends ConsumerWidget {
         SwitchSettingTile(
           title: Text(context.l10n.toggleLocalEvaluation),
           value: analysisPrefs.enableLocalEvaluation,
-          onChanged: isLocalEvaluationAllowed
+          onChanged: isComputerAnalysisAllowed
               ? (_) {
                   ref.read(studyController.notifier).toggleLocalEvaluation();
                 }

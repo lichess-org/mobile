@@ -487,7 +487,7 @@ class _BottomBar extends ConsumerWidget {
                 options: AnalysisOptions(
                   standalone: (
                     pgn: ref.read(ctrlProvider.notifier).makePgn(),
-                    isLocalEvaluationAllowed: true,
+                    isComputerAnalysisAllowed: true,
                     variant: Variant.standard,
                     orientation: puzzleState.pov,
                   ),

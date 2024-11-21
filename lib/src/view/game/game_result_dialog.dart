@@ -263,7 +263,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
                 options: AnalysisOptions(
                   standalone: (
                     pgn: game.makePgn(),
-                    isLocalEvaluationAllowed: true,
+                    isComputerAnalysisAllowed: true,
                     variant: game.meta.variant,
                     orientation: Side.white,
                   ),

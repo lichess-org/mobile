@@ -42,7 +42,7 @@ void main() {
   const options = AnalysisOptions(
     standalone: (
       pgn: '',
-      isLocalEvaluationAllowed: false,
+      isComputerAnalysisAllowed: false,
       orientation: Side.white,
       variant: Variant.standard,
     ),

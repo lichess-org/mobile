@@ -338,7 +338,7 @@ class _BottomBar extends ConsumerWidget {
                       options: AnalysisOptions(
                         standalone: (
                           pgn: editorState.pgn!,
-                          isLocalEvaluationAllowed: true,
+                          isComputerAnalysisAllowed: true,
                           variant: Variant.fromPosition,
                           orientation: editorState.orientation,
                         ),

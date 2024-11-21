@@ -33,7 +33,7 @@ typedef StandaloneAnalysis = ({
   String pgn,
   Variant variant,
   Side orientation,
-  bool isLocalEvaluationAllowed,
+  bool isComputerAnalysisAllowed,
 });
 
 @freezed
@@ -112,9 +112,9 @@ class AnalysisController extends _$AnalysisController
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    final isLocalEvaluationAllowed = options.isLichessGameAnalysis
+    final isComputerAnalysisAllowed = options.isLichessGameAnalysis
         ? pgnHeaders['Result'] != '*'
-        : options.standalone!.isLocalEvaluationAllowed;
+        : options.standalone!.isComputerAnalysisAllowed;
 
     _root = Root.fromPgnGame(
       game,
@@ -166,7 +166,8 @@ class AnalysisController extends _$AnalysisController
       lastMove: lastMove,
       pov: _orientation,
       contextOpening: opening,
-      isLocalEvaluationAllowed: isLocalEvaluationAllowed,
+      isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
@@ -325,15 +326,28 @@ class AnalysisController extends _$AnalysisController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  /// Toggles the computer analysis on/off.
+  ///
+  /// Acts both on local evaluation and server analysis.
+  Future<void> toggleComputerAnalysis() async {
+    await ref
+        .read(analysisPreferencesProvider.notifier)
+        .toggleEnableComputerAnalysis();
+
+    await toggleLocalEvaluation();
+  }
+
+  /// Toggles the local evaluation on/off.
   Future<void> toggleLocalEvaluation() async {
-    ref
+    await ref
         .read(analysisPreferencesProvider.notifier)
         .toggleEnableLocalEvaluation();
 
-    final curState = state.requireValue;
+    final prefs = ref.read(analysisPreferencesProvider);
     state = AsyncData(
-      curState.copyWith(
-        isLocalEvaluationEnabled: !curState.isLocalEvaluationEnabled,
+      state.requireValue.copyWith(
+        isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+        isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       ),
     );
 
@@ -707,10 +721,19 @@ class AnalysisState with _$AnalysisState {
     /// The side to display the board from.
     required Side pov,
 
-    /// Whether local evaluation is allowed for this analysis.
-    required bool isLocalEvaluationAllowed,
+    /// Whether computer evaluation is allowed for this analysis.
+    ///
+    /// Acts on both local and server analysis.
+    required bool isComputerAnalysisAllowed,
+
+    /// Whether the user has enabled computer analysis.
+    ///
+    /// This is a user preference and acts both on local and server analysis.
+    required bool isComputerAnalysisEnabled,
 
     /// Whether the user has enabled local evaluation.
+    ///
+    /// This is a user preference and acts only on local analysis.
     required bool isLocalEvaluationEnabled,
 
     /// The last move played.
@@ -757,6 +780,7 @@ class AnalysisState with _$AnalysisState {
   bool get canRequestServerAnalysis =>
       gameId != null && !hasServerAnalysis && pgnHeaders['Result'] != '*';
 
+  /// Whether the server analysis is available.
   bool get hasServerAnalysis => playersAnalysis != null;
 
   bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
@@ -764,13 +788,17 @@ class AnalysisState with _$AnalysisState {
   /// Whether an evaluation can be available
   bool get hasAvailableEval =>
       isEngineAvailable ||
-      (isLocalEvaluationAllowed &&
+      (isComputerAnalysisEnabledAndAllowed &&
           acplChartData != null &&
           acplChartData!.isNotEmpty);
 
+  bool get isComputerAnalysisEnabledAndAllowed =>
+      isComputerAnalysisEnabled && isComputerAnalysisAllowed;
+
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
-      isLocalEvaluationAllowed && engineSupportedVariants.contains(variant);
+      isComputerAnalysisEnabledAndAllowed &&
+      engineSupportedVariants.contains(variant);
 
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;

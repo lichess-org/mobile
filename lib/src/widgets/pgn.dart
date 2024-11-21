@@ -196,11 +196,15 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   @override
   Widget build(BuildContext context) {
     final shouldShowComments = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showPgnComments),
+      analysisPreferencesProvider.select(
+        (value) => value.enableComputerAnalysis && value.showPgnComments,
+      ),
     );
 
     final shouldShowAnnotations = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
+      analysisPreferencesProvider.select(
+        (value) => value.enableComputerAnalysis && value.showAnnotations,
+      ),
     );
 
     return _PgnTreeView(

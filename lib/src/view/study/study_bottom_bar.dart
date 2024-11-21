@@ -168,7 +168,7 @@ class _GamebookBottomBar extends ConsumerWidget {
                       options: AnalysisOptions(
                         standalone: (
                           pgn: state.pgn,
-                          isLocalEvaluationAllowed: true,
+                          isComputerAnalysisAllowed: true,
                           variant: state.variant,
                           orientation: state.pov,
                         ),

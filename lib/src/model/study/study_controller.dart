@@ -97,7 +97,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         currentNode: StudyCurrentNode.illegalPosition(),
         pgnRootComments: rootComments,
         pov: orientation,
-        isLocalEvaluationAllowed: false,
+        isComputerAnalysisAllowed: false,
         isLocalEvaluationEnabled: false,
         gamebookActive: false,
         pgn: pgn,
@@ -121,7 +121,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: orientation,
-      isLocalEvaluationAllowed:
+      isComputerAnalysisAllowed:
           study.chapter.features.computer && !study.chapter.gamebook,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       gamebookActive: study.chapter.gamebook,
@@ -559,7 +559,7 @@ class StudyState with _$StudyState {
     required Side pov,
 
     /// Whether local evaluation is allowed for this study.
-    required bool isLocalEvaluationAllowed,
+    required bool isComputerAnalysisAllowed,
 
     /// Whether we're currently in gamebook mode, where the user has to find the right moves.
     required bool gamebookActive,
@@ -583,7 +583,7 @@ class StudyState with _$StudyState {
 
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable =>
-      isLocalEvaluationAllowed &&
+      isComputerAnalysisAllowed &&
       engineSupportedVariants.contains(variant) &&
       isLocalEvaluationEnabled;
 

@@ -151,7 +151,7 @@ class _Body extends ConsumerWidget {
                 options: AnalysisOptions(
                   standalone: (
                     pgn: '',
-                    isLocalEvaluationAllowed: true,
+                    isComputerAnalysisAllowed: true,
                     variant: Variant.standard,
                     orientation: Side.white,
                   ),
@@ -170,7 +170,7 @@ class _Body extends ConsumerWidget {
                         options: AnalysisOptions(
                           standalone: (
                             pgn: '',
-                            isLocalEvaluationAllowed: false,
+                            isComputerAnalysisAllowed: false,
                             variant: Variant.standard,
                             orientation: Side.white,
                           ),

@@ -26,7 +26,7 @@ void main() {
           options: AnalysisOptions(
             standalone: (
               pgn: sanMoves,
-              isLocalEvaluationAllowed: false,
+              isComputerAnalysisAllowed: false,
               orientation: Side.white,
               variant: Variant.standard,
             ),
@@ -62,7 +62,7 @@ void main() {
           options: AnalysisOptions(
             standalone: (
               pgn: sanMoves,
-              isLocalEvaluationAllowed: false,
+              isComputerAnalysisAllowed: false,
               variant: Variant.standard,
               orientation: Side.white,
             ),
@@ -129,7 +129,7 @@ void main() {
             options: AnalysisOptions(
               standalone: (
                 pgn: pgn,
-                isLocalEvaluationAllowed: false,
+                isComputerAnalysisAllowed: false,
                 variant: Variant.standard,
                 orientation: Side.white,
               ),

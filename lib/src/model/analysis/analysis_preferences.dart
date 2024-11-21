@@ -26,6 +26,14 @@ class AnalysisPreferences extends _$AnalysisPreferences
     return fetch();
   }
 
+  Future<void> toggleEnableComputerAnalysis() {
+    return save(
+      state.copyWith(
+        enableComputerAnalysis: !state.enableComputerAnalysis,
+      ),
+    );
+  }
+
   Future<void> toggleEnableLocalEvaluation() {
     return save(
       state.copyWith(
@@ -90,6 +98,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({
+    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
     required bool enableLocalEvaluation,
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
@@ -101,6 +110,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
+    enableComputerAnalysis: true,
     enableLocalEvaluation: true,
     showEvaluationGauge: true,
     showBestMoveArrow: true,
