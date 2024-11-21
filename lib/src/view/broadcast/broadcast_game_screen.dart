@@ -449,16 +449,7 @@ class _PlayerWidget extends ConsumerWidget {
           if (game.isOver)
             Card(
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.top ? 8 : 0,
-                  ),
-                  bottomLeft: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.bottom ? 8 : 0,
-                  ),
-                ),
-              ),
+              shape: const Border(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
@@ -482,32 +473,7 @@ class _PlayerWidget extends ConsumerWidget {
           Expanded(
             child: Card(
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.top && !game.isOver
-                        ? 8
-                        : 0,
-                  ),
-                  topRight: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.top && clock == null
-                        ? 8
-                        : 0,
-                  ),
-                  bottomLeft: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.bottom &&
-                            !game.isOver
-                        ? 8
-                        : 0,
-                  ),
-                  bottomRight: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.bottom &&
-                            clock == null
-                        ? 8
-                        : 0,
-                  ),
-                ),
-              ),
+              shape: const Border(),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -571,16 +537,7 @@ class _PlayerWidget extends ConsumerWidget {
                       : Theme.of(context).colorScheme.secondaryContainer
                   : null,
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.top ? 8 : 0,
-                  ),
-                  bottomRight: Radius.circular(
-                    widgetPosition == _PlayerWidgetPosition.bottom ? 8 : 0,
-                  ),
-                ),
-              ),
+              shape: const Border(),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
