@@ -270,44 +270,21 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref
-        .watch(broadcastGameControllerProvider(roundId, gameId))
-        .requireValue;
-    final clocks = gameState.clocks;
-    final currentPath = gameState.currentPath;
-    final broadcastLivePath = gameState.broadcastLivePath;
-    final playingSide = gameState.position.turn;
-    final pov = gameState.pov;
-    final game = ref.watch(
-      broadcastRoundControllerProvider(roundId)
-          .select((game) => game.value?[gameId]),
-    );
-
     return Column(
       children: [
-        if (game != null)
-          _PlayerWidget(
-            clock: (playingSide == pov.opposite)
-                ? clocks?.parentClock
-                : clocks?.clock,
-            width: size,
-            game: game,
-            side: pov.opposite,
-            boardSide: _PlayerWidgetSide.top,
-            sideToPlay: playingSide,
-            isCursorOnLiveMove: currentPath == broadcastLivePath,
-          ),
+        _PlayerWidget(
+          roundId: roundId,
+          gameId: gameId,
+          width: size,
+          widgetPosition: _PlayerWidgetPosition.top,
+        ),
         _BroadcastBoard(roundId, gameId, size),
-        if (game != null)
-          _PlayerWidget(
-            clock: (playingSide == pov) ? clocks?.parentClock : clocks?.clock,
-            width: size,
-            game: game,
-            side: pov,
-            boardSide: _PlayerWidgetSide.bottom,
-            sideToPlay: playingSide,
-            isCursorOnLiveMove: currentPath == broadcastLivePath,
-          ),
+        _PlayerWidget(
+          roundId: roundId,
+          gameId: gameId,
+          width: size,
+          widgetPosition: _PlayerWidgetPosition.bottom,
+        ),
       ],
     );
   }
@@ -428,29 +405,40 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
   }
 }
 
-enum _PlayerWidgetSide { bottom, top }
+enum _PlayerWidgetPosition { bottom, top }
 
-class _PlayerWidget extends StatelessWidget {
+class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
+    required this.roundId,
+    required this.gameId,
     required this.width,
-    required this.clock,
-    required this.game,
-    required this.side,
-    required this.boardSide,
-    required this.sideToPlay,
-    required this.isCursorOnLiveMove,
+    required this.widgetPosition,
   });
 
-  final BroadcastGame game;
-  final Duration? clock;
-  final Side side;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
   final double width;
-  final _PlayerWidgetSide boardSide;
-  final Side sideToPlay;
-  final bool isCursorOnLiveMove;
+  final _PlayerWidgetPosition widgetPosition;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameState = ref
+        .watch(broadcastGameControllerProvider(roundId, gameId))
+        .requireValue;
+    final clocks = gameState.clocks;
+    final isCursorOnLiveMove =
+        gameState.currentPath == gameState.broadcastLivePath;
+    final sideToMove = gameState.position.turn;
+    final side = switch (widgetPosition) {
+      _PlayerWidgetPosition.bottom => gameState.pov,
+      _PlayerWidgetPosition.top => gameState.pov.opposite,
+    };
+    final clock = (sideToMove == side) ? clocks?.parentClock : clocks?.clock;
+
+    final game = ref.watch(
+      broadcastRoundControllerProvider(roundId)
+          .select((game) => game.requireValue[gameId]!),
+    );
     final player = game.players[side]!;
     final gameStatus = game.status;
 
@@ -464,10 +452,10 @@ class _PlayerWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.top ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.top ? 8 : 0,
                   ),
                   bottomLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.bottom ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.bottom ? 8 : 0,
                   ),
                 ),
               ),
@@ -497,18 +485,24 @@ class _PlayerWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.top && !game.isOver ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.top && !game.isOver
+                        ? 8
+                        : 0,
                   ),
                   topRight: Radius.circular(
-                    boardSide == _PlayerWidgetSide.top && clock == null ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.top && clock == null
+                        ? 8
+                        : 0,
                   ),
                   bottomLeft: Radius.circular(
-                    boardSide == _PlayerWidgetSide.bottom && !game.isOver
+                    widgetPosition == _PlayerWidgetPosition.bottom &&
+                            !game.isOver
                         ? 8
                         : 0,
                   ),
                   bottomRight: Radius.circular(
-                    boardSide == _PlayerWidgetSide.bottom && clock == null
+                    widgetPosition == _PlayerWidgetPosition.bottom &&
+                            clock == null
                         ? 8
                         : 0,
                   ),
@@ -571,7 +565,7 @@ class _PlayerWidget extends StatelessWidget {
           ),
           if (clock != null)
             Card(
-              color: (side == sideToPlay)
+              color: (side == sideToMove)
                   ? isCursorOnLiveMove
                       ? Theme.of(context).colorScheme.tertiaryContainer
                       : Theme.of(context).colorScheme.secondaryContainer
@@ -580,10 +574,10 @@ class _PlayerWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(
-                    boardSide == _PlayerWidgetSide.top ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.top ? 8 : 0,
                   ),
                   bottomRight: Radius.circular(
-                    boardSide == _PlayerWidgetSide.bottom ? 8 : 0,
+                    widgetPosition == _PlayerWidgetPosition.bottom ? 8 : 0,
                   ),
                 ),
               ),
@@ -591,14 +585,14 @@ class _PlayerWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: CountdownClockBuilder(
-                  timeLeft: clock!,
-                  active: side == sideToPlay &&
+                  timeLeft: clock,
+                  active: side == sideToMove &&
                       isCursorOnLiveMove &&
                       game.status == BroadcastResult.ongoing,
                   builder: (context, timeLeft) => Text(
                     timeLeft.toHoursMinutesSeconds(),
                     style: TextStyle(
-                      color: (side == sideToPlay)
+                      color: (side == sideToMove)
                           ? isCursorOnLiveMove
                               ? Theme.of(context)
                                   .colorScheme
@@ -611,7 +605,7 @@ class _PlayerWidget extends StatelessWidget {
                     ),
                   ),
                   tickInterval: const Duration(seconds: 1),
-                  clockUpdatedAt: (side == sideToPlay && isCursorOnLiveMove)
+                  clockUpdatedAt: (side == sideToMove && isCursorOnLiveMove)
                       ? game.updatedClockAt
                       : null,
                 ),
