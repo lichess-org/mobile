@@ -47,9 +47,9 @@ class AnalysisScreen extends ConsumerStatefulWidget {
 }
 
 class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-  late final List<AnalysisTab> tabs;
+    with TickerProviderStateMixin {
+  late List<AnalysisTab> tabs;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -57,13 +57,34 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
     tabs = [
       AnalysisTab.opening,
       AnalysisTab.moves,
-      if (widget.options.isLichessGameAnalysis) AnalysisTab.summary,
     ];
 
     _tabController = TabController(
       vsync: this,
       initialIndex: 1,
       length: tabs.length,
+    );
+
+    ref.listenManual<AsyncValue<AnalysisState>>(
+      analysisControllerProvider(widget.options),
+      (_, state) {
+        if (state.valueOrNull?.canShowGameSummary == true) {
+          setState(() {
+            tabs = [
+              AnalysisTab.opening,
+              AnalysisTab.moves,
+              AnalysisTab.summary,
+            ];
+            final index = _tabController.index;
+            _tabController.dispose();
+            _tabController = TabController(
+              vsync: this,
+              initialIndex: index,
+              length: tabs.length,
+            );
+          });
+        }
+      },
     );
   }
 
@@ -76,8 +97,8 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final asyncState = ref.watch(ctrlProvider);
 
+    final asyncState = ref.watch(ctrlProvider);
     final appBarActions = [
       EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(
@@ -106,8 +127,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
             actions: appBarActions,
           ),
           body: _Body(
-            controller: _tabController,
             options: widget.options,
+            controller: _tabController,
+            tabs: tabs,
             enableDrawingShapes: widget.enableDrawingShapes,
           ),
         );
@@ -154,12 +176,14 @@ class _Title extends StatelessWidget {
 
 class _Body extends ConsumerWidget {
   const _Body({
-    required this.controller,
     required this.options,
+    required this.controller,
+    required this.tabs,
     required this.enableDrawingShapes,
   });
 
   final TabController controller;
+  final List<AnalysisTab> tabs;
   final AnalysisOptions options;
   final bool enableDrawingShapes;
 
@@ -211,11 +235,16 @@ class _Body extends ConsumerWidget {
             )
           : null,
       bottomBar: _BottomBar(options: options),
-      children: [
-        OpeningExplorerView(options: options),
-        AnalysisTreeView(options),
-        if (options.isLichessGameAnalysis) ServerAnalysisSummary(options),
-      ],
+      children: tabs.map((tab) {
+        switch (tab) {
+          case AnalysisTab.opening:
+            return OpeningExplorerView(options: options);
+          case AnalysisTab.moves:
+            return AnalysisTreeView(options);
+          case AnalysisTab.summary:
+            return ServerAnalysisSummary(options);
+        }
+      }).toList(),
     );
   }
 }
