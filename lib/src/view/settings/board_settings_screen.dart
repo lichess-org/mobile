@@ -271,8 +271,10 @@ class _Body extends ConsumerWidget {
                       onSelectedItemChanged:
                           (MaterialDifferenceFormat? value) => ref
                               .read(boardPreferencesProvider.notifier)
-                              .setMaterialDifferenceFormat(value ??
-                                  MaterialDifferenceFormat.materialDifference),
+                              .setMaterialDifferenceFormat(
+                                value ??
+                                    MaterialDifferenceFormat.materialDifference,
+                              ),
                     );
                   } else {
                     pushPlatformRoute(
@@ -368,7 +370,8 @@ class MaterialDifferenceFormatScreen extends ConsumerWidget {
     );
     void onChanged(MaterialDifferenceFormat? value) =>
         ref.read(boardPreferencesProvider.notifier).setMaterialDifferenceFormat(
-            value ?? MaterialDifferenceFormat.materialDifference);
+              value ?? MaterialDifferenceFormat.materialDifference,
+            );
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
       child: SafeArea(
