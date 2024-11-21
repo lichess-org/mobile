@@ -50,6 +50,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       // Sent when a node is recevied from the broadcast
       case 'addNode':
         _handleAddNodeEvent(event);
+      // Sent when a new board is added
+      case 'addChapter':
+        _handleAddChapterEvent(event);
       // Sent when the state of games changes
       case 'chapters':
         _handleChaptersEvent(event);
@@ -94,6 +97,10 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         ),
       ),
     );
+  }
+
+  void _handleAddChapterEvent(SocketEvent event) {
+    ref.invalidateSelf();
   }
 
   void _handleChaptersEvent(SocketEvent event) {
