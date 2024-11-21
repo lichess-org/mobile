@@ -262,20 +262,26 @@ class _Body extends ConsumerWidget {
                 settingsValue: boardPrefs.materialDifferenceFormat
                     .l10n(AppLocalizations.of(context)),
                 onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: MaterialDifferenceFormat.values,
-                    selectedItem: boardPrefs.materialDifferenceFormat,
-                    labelBuilder: (t) =>
-                        Text(t.l10n(AppLocalizations.of(context))),
-                    onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
-                        ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setMaterialDifferenceFormat(
-                              value ??
-                                  MaterialDifferenceFormat.materialDifference,
-                            ),
-                  );
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: MaterialDifferenceFormat.values,
+                      selectedItem: boardPrefs.materialDifferenceFormat,
+                      labelBuilder: (t) => Text(t.label),
+                      onSelectedItemChanged:
+                          (MaterialDifferenceFormat? value) => ref
+                              .read(boardPreferencesProvider.notifier)
+                              .setMaterialDifferenceFormat(value ??
+                                  MaterialDifferenceFormat.materialDifference),
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Clock position',
+                      builder: (context) =>
+                          const MaterialDifferenceFormatScreen(),
+                    );
+                  }
                 },
               ),
             ],
@@ -341,6 +347,36 @@ class BoardClockPositionScreen extends ConsumerWidget {
             ChoicePicker(
               choices: ClockPosition.values,
               selectedItem: clockPosition,
+              titleBuilder: (t) => Text(t.label),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MaterialDifferenceFormatScreen extends ConsumerWidget {
+  const MaterialDifferenceFormatScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final materialDifferenceFormat = ref.watch(
+      boardPreferencesProvider
+          .select((state) => state.materialDifferenceFormat),
+    );
+    void onChanged(MaterialDifferenceFormat? value) =>
+        ref.read(boardPreferencesProvider.notifier).setMaterialDifferenceFormat(
+            value ?? MaterialDifferenceFormat.materialDifference);
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              choices: MaterialDifferenceFormat.values,
+              selectedItem: materialDifferenceFormat,
               titleBuilder: (t) => Text(t.label),
               onSelectedItemChanged: onChanged,
             ),
