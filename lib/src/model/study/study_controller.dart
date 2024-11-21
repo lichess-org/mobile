@@ -289,9 +289,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         _root.isOnMainline(path) ? node.children.skip(1) : node.children;
 
     for (final child in childrenToShow) {
-      child.isHidden = false;
+      child.isCollapsed = false;
       for (final grandChild in child.children) {
-        grandChild.isHidden = false;
+        grandChild.isCollapsed = false;
       }
     }
     state = AsyncValue.data(state.requireValue.copyWith(root: _root.view));
@@ -304,7 +304,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     final node = _root.nodeAt(path);
 
     for (final child in node.children) {
-      child.isHidden = true;
+      child.isCollapsed = true;
     }
 
     state = AsyncValue.data(state.requireValue.copyWith(root: _root.view));
@@ -417,9 +417,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     // always show variation if the user plays a move
     if (shouldForceShowVariation &&
         currentNode is Branch &&
-        currentNode.isHidden) {
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
-        if (node is Branch) node.isHidden = false;
+        if (node is Branch) node.isCollapsed = false;
       });
     }
 

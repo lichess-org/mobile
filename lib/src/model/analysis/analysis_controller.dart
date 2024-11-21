@@ -289,9 +289,9 @@ class AnalysisController extends _$AnalysisController
         _root.isOnMainline(path) ? node.children.skip(1) : node.children;
 
     for (final child in childrenToShow) {
-      child.isHidden = false;
+      child.isCollapsed = false;
       for (final grandChild in child.children) {
-        grandChild.isHidden = false;
+        grandChild.isCollapsed = false;
       }
     }
     state = AsyncData(state.requireValue.copyWith(root: _root.view));
@@ -302,7 +302,7 @@ class AnalysisController extends _$AnalysisController
     final node = _root.nodeAt(path);
 
     for (final child in node.children) {
-      child.isHidden = true;
+      child.isCollapsed = true;
     }
 
     state = AsyncData(state.requireValue.copyWith(root: _root.view));
@@ -334,7 +334,19 @@ class AnalysisController extends _$AnalysisController
         .read(analysisPreferencesProvider.notifier)
         .toggleEnableComputerAnalysis();
 
-    await toggleLocalEvaluation();
+    final curState = state.requireValue;
+    final engineWasAvailable = curState.isEngineAvailable;
+
+    state = AsyncData(
+      curState.copyWith(
+        isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled,
+      ),
+    );
+
+    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
+    if (!computerAllowed && engineWasAvailable) {
+      toggleLocalEvaluation();
+    }
   }
 
   /// Toggles the local evaluation on/off.
@@ -343,11 +355,9 @@ class AnalysisController extends _$AnalysisController
         .read(analysisPreferencesProvider.notifier)
         .toggleEnableLocalEvaluation();
 
-    final prefs = ref.read(analysisPreferencesProvider);
     state = AsyncData(
       state.requireValue.copyWith(
-        isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-        isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
+        isLocalEvaluationEnabled: !state.requireValue.isLocalEvaluationEnabled,
       ),
     );
 
@@ -456,9 +466,9 @@ class AnalysisController extends _$AnalysisController
     // always show variation if the user plays a move
     if (shouldForceShowVariation &&
         currentNode is Branch &&
-        currentNode.isHidden) {
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
-        if (node is Branch) node.isHidden = false;
+        if (node is Branch) node.isCollapsed = false;
       });
     }
 
@@ -646,7 +656,7 @@ class AnalysisController extends _$AnalysisController
           Branch(
             position: n1.position.playUnchecked(move),
             sanMove: SanMove(san, move),
-            isHidden: children.length > 1,
+            isCollapsed: children.length > 1,
           ),
         );
       }

@@ -97,10 +97,12 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-
     final asyncState = ref.watch(ctrlProvider);
+    final prefs = ref.watch(analysisPreferencesProvider);
+
     final appBarActions = [
-      EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
+      if (prefs.enableComputerAnalysis)
+        EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(
         tabs: tabs,
         controller: _tabController,
@@ -137,7 +139,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
           ),
         );
       case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study: $error', stackTrace);
+        _logger.severe('Cannot load analysis: $error', stackTrace);
         return FullScreenRetryRequest(
           onRetry: () {
             ref.invalidate(ctrlProvider);
