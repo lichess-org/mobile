@@ -416,16 +416,16 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref
+    final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(roundId, gameId))
         .requireValue;
-    final clocks = gameState.clocks;
+    final clocks = broadcastGameState.clocks;
     final isCursorOnLiveMove =
-        gameState.currentPath == gameState.broadcastLivePath;
-    final sideToMove = gameState.position.turn;
+        broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
+    final sideToMove = broadcastGameState.position.turn;
     final side = switch (widgetPosition) {
-      _PlayerWidgetPosition.bottom => gameState.pov,
-      _PlayerWidgetPosition.top => gameState.pov.opposite,
+      _PlayerWidgetPosition.bottom => broadcastGameState.pov,
+      _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
     };
     final clock = (sideToMove == side) ? clocks?.parentClock : clocks?.clock;
 

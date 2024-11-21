@@ -84,7 +84,7 @@ class BroadcastGameController extends _$BroadcastGameController
     final broadcastState = BroadcastGameState(
       id: gameId,
       currentPath: currentPath,
-      broadcastLivePath: pgnHeaders['Result'] == '*' ? currentPath : null,
+      broadcastPath: currentPath,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -162,8 +162,7 @@ class BroadcastGameController extends _$BroadcastGameController
         );
       } else {
         state = AsyncData(
-          state.requireValue
-              .copyWith(broadcastLivePath: newPath, root: _root.view),
+          state.requireValue.copyWith(broadcastPath: newPath, root: _root.view),
         );
       }
     }
@@ -186,13 +185,7 @@ class BroadcastGameController extends _$BroadcastGameController
     final pgnHeaders =
         state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
     state = AsyncData(
-      state.requireValue.copyWith(
-        pgnHeaders: pgnHeaders,
-        // If the game is not ongoing, the [broadcastLivePath] should be null
-        broadcastLivePath: pgnHeaders['Result'] == '*'
-            ? state.requireValue.broadcastLivePath
-            : null,
-      ),
+      state.requireValue.copyWith(pgnHeaders: pgnHeaders),
     );
   }
 
@@ -458,8 +451,8 @@ class BroadcastGameController extends _$BroadcastGameController
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
-          broadcastLivePath:
-              isBroadcastMove ? path : state.requireValue.broadcastLivePath,
+          broadcastPath:
+              isBroadcastMove ? path : state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
@@ -472,8 +465,8 @@ class BroadcastGameController extends _$BroadcastGameController
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
-          broadcastLivePath:
-              isBroadcastMove ? path : state.requireValue.broadcastLivePath,
+          broadcastPath:
+              isBroadcastMove ? path : state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: null,
@@ -558,8 +551,8 @@ class BroadcastGameState with _$BroadcastGameState {
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
 
-    // The path to the current broadcast live move.
-    required UciPath? broadcastLivePath,
+    /// The path to the last broadcast move.
+    required UciPath broadcastPath,
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
@@ -594,6 +587,12 @@ class BroadcastGameState with _$BroadcastGameState {
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
+
+  /// Whether the game is still ongoing
+  bool get isOngoing => pgnHeaders['Result'] == '*';
+
+  /// The path to the current broadcast live move
+  UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
 
   EngineGaugeParams get engineGaugeParams => (
         orientation: pov,
