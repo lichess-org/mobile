@@ -152,8 +152,7 @@ class BroadcastGameController extends _$BroadcastGameController
 
     if (newPath != null) {
       _root.promoteAt(newPath, toMainline: true);
-      if (state.requireValue.broadcastLivePath ==
-          state.requireValue.currentPath) {
+      if (state.requireValue.broadcastPath == state.requireValue.currentPath) {
         _setPath(
           newPath,
           shouldRecomputeRootView: isNewNode,

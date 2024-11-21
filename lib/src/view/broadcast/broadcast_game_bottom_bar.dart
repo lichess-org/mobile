@@ -19,7 +19,7 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
-    final analysisState = ref.watch(ctrlProvider).requireValue;
+    final broadcastGameState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
       children: [
@@ -36,22 +36,25 @@ class BroadcastGameBottomBar extends ConsumerWidget {
         ),
         RepeatButton(
           onLongPress:
-              analysisState.canGoBack ? () => _moveBackward(ref) : null,
+              broadcastGameState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
-            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
+            onTap:
+                broadcastGameState.canGoBack ? () => _moveBackward(ref) : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
         ),
         RepeatButton(
-          onLongPress: analysisState.canGoNext ? () => _moveForward(ref) : null,
+          onLongPress:
+              broadcastGameState.canGoNext ? () => _moveForward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             label: context.l10n.next,
-            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
+            onTap:
+                broadcastGameState.canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,
           ),
         ),
