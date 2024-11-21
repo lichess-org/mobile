@@ -96,15 +96,15 @@ class BroadcastGame with _$BroadcastGame {
     required String fen,
     required Move? lastMove,
     required BroadcastResult status,
-    required DateTime? updatedClockAt,
+    required DateTime updatedClockAt,
   }) = _BroadcastGame;
 
-  bool get isPlaying => status == BroadcastResult.ongoing;
+  bool get isOngoing => status == BroadcastResult.ongoing;
   bool get isOver =>
       status == BroadcastResult.draw ||
       status == BroadcastResult.whiteWins ||
       status == BroadcastResult.blackWins;
-  Side get playingSide => Setup.parseFen(fen).turn;
+  Side get sideToMove => Setup.parseFen(fen).turn;
 }
 
 @freezed

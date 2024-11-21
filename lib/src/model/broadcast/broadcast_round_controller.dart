@@ -112,6 +112,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       state.requireValue.update(
         broadcastGameId,
         (broadcastsGame) => broadcastsGame.copyWith(
+          updatedClockAt: DateTime.now(),
           players: IMap(
             {
               Side.white: broadcastsGame.players[Side.white]!.copyWith(

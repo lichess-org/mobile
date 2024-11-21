@@ -151,6 +151,7 @@ class BroadcastGameController extends _$BroadcastGameController
     final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
 
     if (newPath != null) {
+      _root.promoteAt(newPath, toMainline: true);
       if (state.requireValue.broadcastLivePath ==
           state.requireValue.currentPath) {
         _setPath(
@@ -160,7 +161,6 @@ class BroadcastGameController extends _$BroadcastGameController
           isBroadcastMove: true,
         );
       } else {
-        _root.promoteAt(newPath, toMainline: true);
         state = AsyncData(
           state.requireValue
               .copyWith(broadcastLivePath: newPath, root: _root.view),

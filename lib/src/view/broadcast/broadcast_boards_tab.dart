@@ -72,20 +72,19 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends ConsumerWidget {
+class BroadcastPreview extends StatelessWidget {
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
   final String title;
 
   const BroadcastPreview({
-    super.key,
     required this.roundId,
     this.games,
     required this.title,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // TODO uncomment when eval bar is ready
     // final showEvaluationBar = ref.watch(
     //   broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
