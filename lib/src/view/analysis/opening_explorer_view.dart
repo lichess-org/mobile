@@ -35,7 +35,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
   @override
   Widget build(BuildContext context) {
-    final analysisState = ref.watch(analysisControllerProvider(widget.options));
+    final analysisState =
+        ref.watch(analysisControllerProvider(widget.options)).requireValue;
 
     if (analysisState.position.ply >= 50) {
       return _OpeningExplorerView(

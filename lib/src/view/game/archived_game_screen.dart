@@ -375,27 +375,10 @@ class _BottomBar extends ConsumerWidget {
           label: context.l10n.gameAnalysis,
           onTap: ref.read(gameCursorProvider(gameData.id)).hasValue
               ? () {
-                  final (game, cursor) = ref
-                      .read(
-                        gameCursorProvider(gameData.id),
-                      )
-                      .requireValue;
-
                   pushPlatformRoute(
                     context,
                     builder: (context) => AnalysisScreen(
-                      pgnOrId: game.makePgn(),
-                      options: AnalysisOptions(
-                        pgn: '',
-                        isLocalEvaluationAllowed: true,
-                        variant: gameData.variant,
-                        initialMoveCursor: cursor,
-                        orientation: orientation,
-                        id: gameData.id,
-                        opening: gameData.opening,
-                        serverAnalysis: game.serverAnalysis,
-                        division: game.meta.division,
-                      ),
+                      options: AnalysisOptions(gameId: gameData.id),
                     ),
                   );
                 }

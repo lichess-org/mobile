@@ -23,16 +23,17 @@ class ServerAnalysisSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    final playersAnalysis =
-        ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
-    final pgnHeaders =
-        ref.watch(ctrlProvider.select((value) => value.pgnHeaders));
+    final playersAnalysis = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.playersAnalysis),
+    );
+    final pgnHeaders = ref
+        .watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
     return playersAnalysis != null
         ? ListView(
             children: [
-              if (currentGameAnalysis == options.gameAnyId?.gameId)
+              if (currentGameAnalysis == options.gameId)
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
@@ -164,7 +165,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              if (currentGameAnalysis == options.gameAnyId?.gameId)
+              if (currentGameAnalysis == options.gameId)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -356,23 +357,11 @@ class AcplChart extends ConsumerWidget {
           ),
         );
 
-    final data = ref.watch(
-      analysisControllerProvider(options)
-          .select((value) => value.acplChartData),
-    );
-
-    final rootPly = ref.watch(
-      analysisControllerProvider(options)
-          .select((value) => value.root.position.ply),
-    );
-
-    final currentNode = ref.watch(
-      analysisControllerProvider(options).select((value) => value.currentNode),
-    );
-
-    final isOnMainline = ref.watch(
-      analysisControllerProvider(options).select((value) => value.isOnMainline),
-    );
+    final state = ref.watch(analysisControllerProvider(options)).requireValue;
+    final data = state.acplChartData;
+    final rootPly = state.root.position.ply;
+    final currentNode = state.currentNode;
+    final isOnMainline = state.isOnMainline;
 
     if (data == null) {
       return const SizedBox.shrink();
@@ -386,12 +375,12 @@ class AcplChart extends ConsumerWidget {
 
     final divisionLines = <VerticalLine>[];
 
-    if (options.division?.middlegame != null) {
-      if (options.division!.middlegame! > 0) {
+    if (state.division?.middlegame != null) {
+      if (state.division!.middlegame! > 0) {
         divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
         divisionLines.add(
           phaseVerticalBar(
-            options.division!.middlegame! - 1,
+            state.division!.middlegame! - 1,
             context.l10n.middlegame,
           ),
         );
@@ -400,11 +389,11 @@ class AcplChart extends ConsumerWidget {
       }
     }
 
-    if (options.division?.endgame != null) {
-      if (options.division!.endgame! > 0) {
+    if (state.division?.endgame != null) {
+      if (state.division!.endgame! > 0) {
         divisionLines.add(
           phaseVerticalBar(
-            options.division!.endgame! - 1,
+            state.division!.endgame! - 1,
             context.l10n.endgame,
           ),
         );

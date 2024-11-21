@@ -40,11 +40,9 @@ class ServerAnalysisService {
   ///
   /// This will return a future that completes when the server analysis is
   /// launched (but not when it is finished).
-  Future<void> requestAnalysis(GameAnyId id, [Side? side]) async {
+  Future<void> requestAnalysis(GameId id, [Side? side]) async {
     final socketPool = ref.read(socketPoolProvider);
-    final uri = id.isFullId
-        ? Uri(path: '/play/$id/v6')
-        : Uri(path: '/watch/$id/${side?.name ?? Side.white}/v6');
+    final uri = Uri(path: '/watch/$id/${side?.name ?? Side.white}/v6');
     final socketClient = socketPool.open(uri);
 
     _socketSubscription?.$2.cancel();

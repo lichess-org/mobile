@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -25,103 +23,30 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:logging/logging.dart';
 
 import '../../utils/share.dart';
 import 'analysis_board.dart';
 import 'analysis_settings.dart';
 import 'tree_view.dart';
 
-class AnalysisScreen extends StatelessWidget {
+final _logger = Logger('AnalysisScreen');
+
+class AnalysisScreen extends ConsumerStatefulWidget {
   const AnalysisScreen({
     required this.options,
-    required this.pgnOrId,
     this.enableDrawingShapes = true,
   });
 
-  /// The analysis options.
-  final AnalysisOptions options;
-
-  /// The PGN or game ID to load.
-  final String pgnOrId;
-
-  final bool enableDrawingShapes;
-
-  @override
-  Widget build(BuildContext context) {
-    return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(
-            GameId(pgnOrId),
-            options,
-            enableDrawingShapes: enableDrawingShapes,
-          )
-        : _LoadedAnalysisScreen(
-            options: options.copyWith(
-              pgn: pgnOrId,
-            ),
-            enableDrawingShapes: enableDrawingShapes,
-          );
-  }
-}
-
-class _LoadGame extends ConsumerWidget {
-  const _LoadGame(
-    this.gameId,
-    this.options, {
-    required this.enableDrawingShapes,
-  });
-
-  final AnalysisOptions options;
-  final GameId gameId;
-
-  final bool enableDrawingShapes;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameAsync = ref.watch(archivedGameProvider(id: gameId));
-
-    return gameAsync.when(
-      data: (game) {
-        final serverAnalysis =
-            game.white.analysis != null && game.black.analysis != null
-                ? (white: game.white.analysis!, black: game.black.analysis!)
-                : null;
-        return _LoadedAnalysisScreen(
-          options: options.copyWith(
-            id: game.id,
-            opening: game.meta.opening,
-            division: game.meta.division,
-            serverAnalysis: serverAnalysis,
-            pgn: game.makePgn(),
-          ),
-          enableDrawingShapes: enableDrawingShapes,
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, _) {
-        return Center(
-          child: Text('Cannot load game analysis: $error'),
-        );
-      },
-    );
-  }
-}
-
-class _LoadedAnalysisScreen extends ConsumerStatefulWidget {
-  const _LoadedAnalysisScreen({
-    required this.options,
-    required this.enableDrawingShapes,
-  });
-
   final AnalysisOptions options;
 
   final bool enableDrawingShapes;
 
   @override
-  ConsumerState<_LoadedAnalysisScreen> createState() =>
-      _LoadedAnalysisScreenState();
+  ConsumerState<AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
+class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late final List<AnalysisTab> tabs;
@@ -132,7 +57,7 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
     tabs = [
       AnalysisTab.opening,
       AnalysisTab.moves,
-      if (widget.options.canShowGameSummary) AnalysisTab.summary,
+      if (widget.options.isLichessGameAnalysis) AnalysisTab.summary,
     ];
 
     _tabController = TabController(
@@ -151,44 +76,64 @@ class _LoadedAnalysisScreenState extends ConsumerState<_LoadedAnalysisScreen>
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final currentNodeEval =
-        ref.watch(ctrlProvider.select((value) => value.currentNode.eval));
+    final asyncState = ref.watch(ctrlProvider);
 
-    return PlatformScaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: PlatformAppBar(
-        title: _Title(options: widget.options),
-        actions: [
-          EngineDepth(defaultEval: currentNodeEval),
-          AppBarAnalysisTabIndicator(
-            tabs: tabs,
-            controller: _tabController,
-          ),
-          AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              isDismissible: true,
-              builder: (_) => AnalysisSettings(widget.options),
-            ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: _Body(
+    final appBarActions = [
+      EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
+      AppBarAnalysisTabIndicator(
+        tabs: tabs,
         controller: _tabController,
-        options: widget.options,
-        enableDrawingShapes: widget.enableDrawingShapes,
       ),
-    );
+      AppBarIconButton(
+        onPressed: () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          showDragHandle: true,
+          isDismissible: true,
+          builder: (_) => AnalysisSettings(widget.options),
+        ),
+        semanticsLabel: context.l10n.settingsSettings,
+        icon: const Icon(Icons.settings),
+      ),
+    ];
+
+    switch (asyncState) {
+      case AsyncData(:final value):
+        return PlatformScaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: PlatformAppBar(
+            title: _Title(variant: value.variant),
+            actions: appBarActions,
+          ),
+          body: _Body(
+            controller: _tabController,
+            options: widget.options,
+            enableDrawingShapes: widget.enableDrawingShapes,
+          ),
+        );
+      case AsyncError(:final error, :final stackTrace):
+        _logger.severe('Cannot load study: $error', stackTrace);
+        return FullScreenRetryRequest(
+          onRetry: () {
+            ref.invalidate(ctrlProvider);
+          },
+        );
+      case _:
+        return PlatformScaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: PlatformAppBar(
+            title: const _Title(variant: Variant.standard),
+            actions: appBarActions,
+          ),
+          body: const Center(child: CircularProgressIndicator()),
+        );
+    }
   }
 }
 
 class _Title extends StatelessWidget {
-  const _Title({required this.options});
-  final AnalysisOptions options;
+  const _Title({required this.variant});
+  final Variant variant;
 
   static const excludedIcons = [Variant.standard, Variant.fromPosition];
 
@@ -197,8 +142,8 @@ class _Title extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!excludedIcons.contains(options.variant)) ...[
-          Icon(options.variant.icon),
+        if (!excludedIcons.contains(variant)) ...[
+          Icon(variant.icon),
           const SizedBox(width: 5.0),
         ],
         Text(context.l10n.analysis),
@@ -225,7 +170,7 @@ class _Body extends ConsumerWidget {
     );
 
     final ctrlProvider = analysisControllerProvider(options);
-    final analysisState = ref.watch(ctrlProvider);
+    final analysisState = ref.watch(ctrlProvider).requireValue;
 
     final isEngineAvailable = analysisState.isEngineAvailable;
     final hasEval = analysisState.hasAvailableEval;
@@ -269,7 +214,7 @@ class _Body extends ConsumerWidget {
       children: [
         OpeningExplorerView(options: options),
         AnalysisTreeView(options),
-        if (options.canShowGameSummary) ServerAnalysisSummary(options),
+        if (options.isLichessGameAnalysis) ServerAnalysisSummary(options),
       ],
     );
   }
@@ -283,7 +228,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    final analysisState = ref.watch(ctrlProvider);
+    final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
       children: [
@@ -344,7 +289,8 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.boardEditor),
           onPressed: (context) {
-            final analysisState = ref.read(analysisControllerProvider(options));
+            final analysisState =
+                ref.read(analysisControllerProvider(options)).requireValue;
             final boardFen = analysisState.position.fen;
             pushPlatformRoute(
               context,
@@ -368,26 +314,27 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
           onPressed: (_) {
-            final analysisState = ref.read(analysisControllerProvider(options));
+            final analysisState =
+                ref.read(analysisControllerProvider(options)).requireValue;
             launchShareDialog(
               context,
               text: analysisState.position.fen,
             );
           },
         ),
-        if (options.gameAnyId != null)
+        if (options.gameId != null)
           BottomSheetAction(
             makeLabel: (context) =>
                 Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
-              final gameId = options.gameAnyId!.gameId;
+              final gameId = options.gameId!;
               final analysisState =
-                  ref.read(analysisControllerProvider(options));
+                  ref.read(analysisControllerProvider(options)).requireValue;
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
                           gameId,
-                          options.orientation,
+                          analysisState.pov,
                           analysisState.position.fen,
                           analysisState.lastMove,
                         );

@@ -259,15 +259,14 @@ class _BodyState extends ConsumerState<_Body> {
                 pushPlatformRoute(
                   context,
                   builder: (_) => AnalysisScreen(
-                    pgnOrId: game.makePgn(),
                     options: AnalysisOptions(
-                      pgn: '',
-                      isLocalEvaluationAllowed: false,
-                      variant: game.variant,
+                      standalone: (
+                        pgn: game.makePgn(),
+                        isLocalEvaluationAllowed: false,
+                        variant: game.variant,
+                        orientation: game.youAre,
+                      ),
                       initialMoveCursor: stepCursor,
-                      orientation: game.youAre,
-                      id: game.id,
-                      division: game.meta.division,
                     ),
                   ),
                 );

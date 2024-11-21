@@ -191,7 +191,6 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               pushPlatformRoute(
                 context,
                 builder: (_) => AnalysisScreen(
-                  pgnOrId: gameState.analysisPgn,
                   options: gameState.analysisOptions,
                 ),
               );
@@ -261,13 +260,13 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
             pushPlatformRoute(
               context,
               builder: (_) => AnalysisScreen(
-                pgnOrId: game.makePgn(),
                 options: AnalysisOptions(
-                  pgn: '',
-                  isLocalEvaluationAllowed: true,
-                  variant: game.meta.variant,
-                  orientation: Side.white,
-                  id: standaloneAnalysisId,
+                  standalone: (
+                    pgn: game.makePgn(),
+                    isLocalEvaluationAllowed: true,
+                    variant: game.meta.variant,
+                    orientation: Side.white,
+                  ),
                 ),
               ),
             );

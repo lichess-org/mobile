@@ -17,15 +17,20 @@ class AnalysisTreeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
 
-    final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
-    final pgnRootComments =
-        ref.watch(ctrlProvider.select((value) => value.pgnRootComments));
+    final variant = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.variant),
+    );
+    final root =
+        ref.watch(ctrlProvider.select((value) => value.requireValue.root));
+    final currentPath = ref
+        .watch(ctrlProvider.select((value) => value.requireValue.currentPath));
+    final pgnRootComments = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.pgnRootComments),
+    );
 
     return CustomScrollView(
       slivers: [
-        if (kOpeningAllowedVariants.contains(options.variant))
+        if (kOpeningAllowedVariants.contains(variant))
           SliverPersistentHeader(
             delegate: _OpeningHeaderDelegate(ctrlProvider),
           ),
@@ -76,14 +81,14 @@ class _Opening extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRootNode = ref.watch(
-      ctrlProvider.select((s) => s.currentNode.isRoot),
+      ctrlProvider.select((s) => s.requireValue.currentNode.isRoot),
     );
-    final nodeOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
-    final branchOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
+    final nodeOpening = ref
+        .watch(ctrlProvider.select((s) => s.requireValue.currentNode.opening));
+    final branchOpening = ref
+        .watch(ctrlProvider.select((s) => s.requireValue.currentBranchOpening));
     final contextOpening =
-        ref.watch(ctrlProvider.select((s) => s.contextOpening));
+        ref.watch(ctrlProvider.select((s) => s.requireValue.contextOpening));
     final opening = isRootNode
         ? LightOpening(
             eco: '',

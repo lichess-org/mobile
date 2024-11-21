@@ -86,7 +86,6 @@ class _BodyState extends State<_Body> {
                             context,
                             rootNavigator: true,
                             builder: (context) => AnalysisScreen(
-                              pgnOrId: parsedInput!.pgn,
                               options: parsedInput!.options,
                             ),
                           )
@@ -121,7 +120,7 @@ class _BodyState extends State<_Body> {
     }
   }
 
-  ({String pgn, String fen, AnalysisOptions options})? get parsedInput {
+  ({String fen, AnalysisOptions options})? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
       return null;
     }
@@ -130,14 +129,14 @@ class _BodyState extends State<_Body> {
     try {
       final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
       return (
-        pgn: '[FEN "${pos.fen}"]',
         fen: pos.fen,
         options: AnalysisOptions(
-          pgn: '[FEN "${pos.fen}"]',
-          isLocalEvaluationAllowed: true,
-          variant: Variant.standard,
-          orientation: Side.white,
-          id: standaloneAnalysisId,
+          standalone: (
+            pgn: '[FEN "${pos.fen}"]',
+            isLocalEvaluationAllowed: true,
+            variant: Variant.standard,
+            orientation: Side.white,
+          ),
         )
       );
     } catch (_, __) {}
@@ -162,15 +161,15 @@ class _BodyState extends State<_Body> {
       );
 
       return (
-        pgn: textInput!,
         fen: lastPosition.fen,
         options: AnalysisOptions(
-          pgn: textInput!,
-          isLocalEvaluationAllowed: true,
-          variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
+          standalone: (
+            pgn: textInput!,
+            isLocalEvaluationAllowed: true,
+            variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
+            orientation: Side.white,
+          ),
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
-          orientation: Side.white,
-          id: standaloneAnalysisId,
         )
       );
     } catch (_, __) {}

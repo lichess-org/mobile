@@ -40,11 +40,12 @@ void main() {
   });
 
   const options = AnalysisOptions(
-    pgn: '',
-    id: standaloneOpeningExplorerId,
-    isLocalEvaluationAllowed: false,
-    orientation: Side.white,
-    variant: Variant.standard,
+    standalone: (
+      pgn: '',
+      isLocalEvaluationAllowed: false,
+      orientation: Side.white,
+      variant: Variant.standard,
+    ),
   );
 
   const name = 'John';
@@ -65,14 +66,14 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -111,9 +112,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
@@ -129,6 +128,8 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -163,9 +164,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
@@ -182,6 +181,8 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));

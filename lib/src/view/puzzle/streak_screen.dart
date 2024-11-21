@@ -291,13 +291,13 @@ class _BottomBar extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 builder: (context) => AnalysisScreen(
-                  pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                   options: AnalysisOptions(
-                    pgn: '',
-                    isLocalEvaluationAllowed: true,
-                    variant: Variant.standard,
-                    orientation: puzzleState.pov,
-                    id: standaloneAnalysisId,
+                    standalone: (
+                      pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                      isLocalEvaluationAllowed: true,
+                      variant: Variant.standard,
+                      orientation: puzzleState.pov,
+                    ),
                     initialMoveCursor: 0,
                   ),
                 ),

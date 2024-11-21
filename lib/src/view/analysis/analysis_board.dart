@@ -19,6 +19,7 @@ class AnalysisBoard extends ConsumerStatefulWidget {
     this.boardSize, {
     this.borderRadius,
     this.enableDrawingShapes = true,
+    this.shouldReplaceChildOnUserMove = false,
   });
 
   final AnalysisOptions options;
@@ -26,6 +27,7 @@ class AnalysisBoard extends ConsumerStatefulWidget {
   final BorderRadiusGeometry? borderRadius;
 
   final bool enableDrawingShapes;
+  final bool shouldReplaceChildOnUserMove;
 
   @override
   ConsumerState<AnalysisBoard> createState() => AnalysisBoardState();
@@ -37,7 +39,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final analysisState = ref.watch(ctrlProvider);
+    final analysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(
       analysisPreferencesProvider.select(
@@ -85,7 +87,10 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
         validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
         onMove: (move, {isDrop, captured}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(move),
+            ref.read(ctrlProvider.notifier).onUserMove(
+                  move,
+                  shouldReplace: widget.shouldReplaceChildOnUserMove,
+                ),
         onPromotionSelection: (role) =>
             ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),

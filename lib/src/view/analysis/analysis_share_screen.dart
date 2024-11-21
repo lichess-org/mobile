@@ -56,7 +56,7 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
   void initState() {
     super.initState();
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final pgnHeaders = ref.read(ctrlProvider).pgnHeaders;
+    final pgnHeaders = ref.read(ctrlProvider).requireValue.pgnHeaders;
 
     for (final entry in pgnHeaders.entries) {
       _controllers[entry.key] = TextEditingController(text: entry.value);
@@ -86,7 +86,8 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final pgnHeaders = ref.watch(ctrlProvider.select((c) => c.pgnHeaders));
+    final pgnHeaders =
+        ref.watch(ctrlProvider.select((c) => c.requireValue.pgnHeaders));
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
 
     void focusAndSelectNextField(int index, IMap<String, String> pgnHeaders) {
