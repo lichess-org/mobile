@@ -111,6 +111,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
           isScrollControlled: true,
           showDragHandle: true,
           isDismissible: true,
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.sizeOf(context).height * 0.5,
+          ),
           builder: (_) => AnalysisSettings(widget.options),
         ),
         semanticsLabel: context.l10n.settingsSettings,
