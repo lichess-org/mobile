@@ -176,19 +176,24 @@ class BroadcastGameController extends _$BroadcastGameController
     // We check if the event is for this game
     if (broadcastGameId != gameId) return;
 
-    final headers = Map.fromEntries(
-      pick(event.data, 'tags').asListOrThrow(
-        (header) => MapEntry(
-          header(0).asStringOrThrow(),
-          header(1).asStringOrThrow(),
-        ),
+    final pgnHeadersEntries = pick(event.data, 'tags').asListOrThrow(
+      (header) => MapEntry(
+        header(0).asStringOrThrow(),
+        header(1).asStringOrThrow(),
       ),
     );
 
-    for (final entry in headers.entries) {
-      final headers = state.requireValue.pgnHeaders.add(entry.key, entry.value);
-      state = AsyncData(state.requireValue.copyWith(pgnHeaders: headers));
-    }
+    final pgnHeaders =
+        state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
+    state = AsyncData(
+      state.requireValue.copyWith(
+        pgnHeaders: pgnHeaders,
+        // If the game is not ongoing, the [broadcastLivePath] should be null
+        broadcastLivePath: pgnHeaders['Result'] == '*'
+            ? state.requireValue.broadcastLivePath
+            : null,
+      ),
+    );
   }
 
   EvaluationContext get _evaluationContext => EvaluationContext(

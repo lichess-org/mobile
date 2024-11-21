@@ -543,9 +543,7 @@ class _PlayerWidget extends ConsumerWidget {
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: CountdownClockBuilder(
                   timeLeft: clock,
-                  active: side == sideToMove &&
-                      isCursorOnLiveMove &&
-                      game.status == BroadcastResult.ongoing,
+                  active: side == sideToMove && isCursorOnLiveMove,
                   builder: (context, timeLeft) => Text(
                     timeLeft.toHoursMinutesSeconds(),
                     style: TextStyle(
