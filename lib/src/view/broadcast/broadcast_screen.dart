@@ -212,8 +212,7 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
     return switch (tournament) {
-     AsyncData(:final value) => 
-        Row(
+      AsyncData(:final value) => Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             if (value.group != null)
@@ -260,7 +259,8 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
           ],
         ),
       AsyncError(:final error) => Center(child: Text(error.toString())),
-      _ => const SizedBox.shrink(),};
+      _ => const SizedBox.shrink(),
+    };
   }
 }
 
@@ -339,12 +339,13 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
     final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
-    return switch(tournament) {
-       AsyncData(:final value) =>
+    return switch (tournament) {
+      AsyncData(:final value) =>
+
         /// It should be replaced with a Flutter toolbar widget once it is implemented.
         /// See https://github.com/flutter/flutter/issues/134454
 
-         _wrapWithBackground(
+        _wrapWithBackground(
           backgroundColor: backgroundColor,
           border: _kDefaultToolBarBorder,
           child: SafeArea(
