@@ -41,23 +41,25 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select(
-        (value) => value.showBestMoveArrow,
-      ),
-    );
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
-
-    final evalBestMoves = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-    );
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
+    final showBestMoveArrow =
+        enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
+    final showAnnotationsOnBoard =
+        enableComputerAnalysis && analysisPrefs.showAnnotations;
+    final evalBestMoves = enableComputerAnalysis
+        ? ref.watch(
+            engineEvaluationProvider.select((s) => s.eval?.bestMoves),
+          )
+        : null;
 
     final currentNode = analysisState.currentNode;
-    final annotation = makeAnnotation(currentNode.nags);
+    final annotation =
+        showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
 
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+    final bestMoves = enableComputerAnalysis
+        ? evalBestMoves ?? currentNode.eval?.bestMoves
+        : null;
 
     final sanMove = currentNode.sanMove;
 

@@ -793,7 +793,9 @@ class AnalysisState with _$AnalysisState {
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => playersAnalysis != null;
 
-  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
+  bool get canShowGameSummary =>
+      isComputerAnalysisEnabledAndAllowed &&
+      (hasServerAnalysis || canRequestServerAnalysis);
 
   /// Whether an evaluation can be available
   bool get hasAvailableEval =>

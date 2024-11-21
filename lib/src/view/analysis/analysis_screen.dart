@@ -67,8 +67,12 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
 
     ref.listenManual<AsyncValue<AnalysisState>>(
       analysisControllerProvider(widget.options),
-      (_, state) {
-        if (state.valueOrNull?.canShowGameSummary == true) {
+      (prev, state) {
+        final canPrevShowGameSummary =
+            prev?.valueOrNull?.canShowGameSummary == true;
+        final canShowGameSummary =
+            state.valueOrNull?.canShowGameSummary == true;
+        if (!canPrevShowGameSummary && canShowGameSummary) {
           setState(() {
             tabs = [
               AnalysisTab.opening,
@@ -80,6 +84,20 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
             _tabController = TabController(
               vsync: this,
               initialIndex: index,
+              length: tabs.length,
+            );
+          });
+        } else if (canPrevShowGameSummary && !canShowGameSummary) {
+          setState(() {
+            tabs = [
+              AnalysisTab.opening,
+              AnalysisTab.moves,
+            ];
+            final index = _tabController.index;
+            _tabController.dispose();
+            _tabController = TabController(
+              vsync: this,
+              initialIndex: index == 2 ? 1 : index,
               length: tabs.length,
             );
           });
