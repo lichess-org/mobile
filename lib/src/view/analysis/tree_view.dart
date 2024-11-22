@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -27,6 +28,10 @@ class AnalysisTreeView extends ConsumerWidget {
     final pgnRootComments = ref.watch(
       ctrlProvider.select((value) => value.requireValue.pgnRootComments),
     );
+    final prefs = ref.watch(analysisPreferencesProvider);
+    // enable computer analysis takes effect here only if it's a lichess game
+    final enableComputerAnalysis =
+        !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
 
     return CustomScrollView(
       slivers: [
@@ -41,6 +46,10 @@ class AnalysisTreeView extends ConsumerWidget {
             currentPath: currentPath,
             pgnRootComments: pgnRootComments,
             notifier: ref.read(ctrlProvider.notifier),
+            shouldShowComputerVariations: enableComputerAnalysis,
+            shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
+            shouldShowAnnotations:
+                enableComputerAnalysis && prefs.showAnnotations,
           ),
         ),
       ],

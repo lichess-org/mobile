@@ -136,13 +136,6 @@ class StudySettings extends ConsumerWidget {
               .toggleAnnotations(),
         ),
         SwitchSettingTile(
-          title: Text(context.l10n.mobileShowComments),
-          value: analysisPrefs.showPgnComments,
-          onChanged: (_) => ref
-              .read(analysisPreferencesProvider.notifier)
-              .togglePgnComments(),
-        ),
-        SwitchSettingTile(
           title: Text(context.l10n.sound),
           value: isSoundEnabled,
           onChanged: (value) {

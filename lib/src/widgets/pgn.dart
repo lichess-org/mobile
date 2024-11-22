@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -113,6 +112,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     required this.currentPath,
     required this.pgnRootComments,
     required this.notifier,
+    this.shouldShowComputerVariations = true,
+    this.shouldShowAnnotations = true,
+    this.shouldShowComments = true,
   });
 
   /// Root of the PGN tree to display
@@ -126,6 +128,17 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
   final PgnTreeNotifier notifier;
+
+  /// Whether to show analysis variations.
+  ///
+  /// Only applied to lichess game analysis.
+  final bool shouldShowComputerVariations;
+
+  /// Whether to show NAG annotations like '!' and '??'.
+  final bool shouldShowAnnotations;
+
+  /// Whether to show comments associated with the moves.
+  final bool shouldShowComments;
 
   @override
   ConsumerState<DebouncedPgnTreeView> createState() =>
@@ -195,32 +208,13 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   // using the fast replay buttons.
   @override
   Widget build(BuildContext context) {
-    final withComputerAnalysis = ref.watch(
-      analysisPreferencesProvider
-          .select((value) => value.enableComputerAnalysis),
-    );
-
-    final shouldShowComments = withComputerAnalysis &&
-        ref.watch(
-          analysisPreferencesProvider.select(
-            (value) => value.showPgnComments,
-          ),
-        );
-
-    final shouldShowAnnotations = withComputerAnalysis &&
-        ref.watch(
-          analysisPreferencesProvider.select(
-            (value) => value.showAnnotations,
-          ),
-        );
-
     return _PgnTreeView(
       root: widget.root,
       rootComments: widget.pgnRootComments,
       params: (
-        withComputerAnalysis: withComputerAnalysis,
-        shouldShowAnnotations: shouldShowAnnotations,
-        shouldShowComments: shouldShowComments,
+        shouldShowComputerVariations: widget.shouldShowComputerVariations,
+        shouldShowAnnotations: widget.shouldShowAnnotations,
+        shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
         notifier: widget.notifier,
@@ -237,10 +231,8 @@ typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
 
-  /// Whether to show NAG, comments, and analysis variations.
-  ///
-  /// Takes precedence over [shouldShowAnnotations], and [shouldShowComments],
-  bool withComputerAnalysis,
+  /// Whether to show analysis variations.
+  bool shouldShowComputerVariations,
 
   /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
@@ -259,10 +251,10 @@ typedef _PgnTreeViewParams = ({
 /// Filter node children when computer analysis is disabled
 IList<ViewBranch> _filteredChildren(
   ViewNode node,
-  bool withComputerAnalysis,
+  bool shouldShowComputerVariations,
 ) {
   return node.children
-      .where((c) => withComputerAnalysis || !c.isComputerVariation)
+      .where((c) => shouldShowComputerVariations || !c.isComputerVariation)
       .toIList();
 }
 
@@ -279,7 +271,7 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 
 /// Returns whether this node has a sideline that should not be displayed inline.
 bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params) {
-  final children = _filteredChildren(node, params.withComputerAnalysis);
+  final children = _filteredChildren(node, params.shouldShowComputerVariations);
   return children.length > 2 ||
       (children.length == 2 && !_displaySideLineAsInline(children[1]));
 }
@@ -429,8 +421,8 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     super.didUpdateWidget(oldWidget);
     _updateLines(
       fullRebuild: oldWidget.root != widget.root ||
-          oldWidget.params.withComputerAnalysis !=
-              widget.params.withComputerAnalysis ||
+          oldWidget.params.shouldShowComputerVariations !=
+              widget.params.shouldShowComputerVariations ||
           oldWidget.params.shouldShowComments !=
               widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations !=
@@ -695,14 +687,15 @@ class _MainLinePart extends ConsumerWidget {
       TextSpan(
         children: nodes
             .takeWhile(
-              (node) => _filteredChildren(node, params.withComputerAnalysis)
-                  .isNotEmpty,
+              (node) =>
+                  _filteredChildren(node, params.shouldShowComputerVariations)
+                      .isNotEmpty,
             )
             .mapIndexed(
               (i, node) {
                 final children = _filteredChildren(
                   node,
-                  params.withComputerAnalysis,
+                  params.shouldShowComputerVariations,
                 );
                 final mainlineNode = children.first;
                 final moves = [
@@ -1248,7 +1241,6 @@ List<TextSpan> _comments(
             text: comment,
             style: textStyle.copyWith(
               fontSize: textStyle.fontSize! - 2.0,
-              fontStyle: FontStyle.italic,
             ),
           ),
         )
