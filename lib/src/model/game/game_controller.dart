@@ -109,6 +109,7 @@ class GameController extends _$GameController {
             _logger.warning('Could not get post game data: $e', e, s);
             return game;
           });
+          await _storeGame(game);
         }
 
         _socketEventVersion = fullEvent.socketEventVersion;
