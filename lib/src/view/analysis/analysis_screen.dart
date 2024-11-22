@@ -184,10 +184,10 @@ class _Body extends ConsumerWidget {
 
     return AnalysisLayout(
       tabController: controller,
-      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
+      boardBuilder: (context, boardSize, boardRadius) => AnalysisBoard(
         options,
         boardSize,
-        borderRadius: borderRadius,
+        radius: boardRadius,
         enableDrawingShapes: enableDrawingShapes,
       ),
       engineGaugeBuilder: hasEval && showEvaluationGauge

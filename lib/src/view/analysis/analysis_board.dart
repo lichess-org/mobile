@@ -17,14 +17,14 @@ class AnalysisBoard extends ConsumerStatefulWidget {
   const AnalysisBoard(
     this.options,
     this.boardSize, {
-    this.borderRadius,
+    this.radius,
     this.enableDrawingShapes = true,
     this.shouldReplaceChildOnUserMove = false,
   });
 
   final AnalysisOptions options;
   final double boardSize;
-  final BorderRadiusGeometry? borderRadius;
+  final Radius? radius;
 
   final bool enableDrawingShapes;
   final bool shouldReplaceChildOnUserMove;
@@ -106,10 +106,11 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
+            borderRadius: (widget.radius != null)
+                ? BorderRadius.all(widget.radius!)
+                : null,
+            boxShadow:
+                widget.radius != null ? boardShadows : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: widget.enableDrawingShapes,
               onCompleteShape: _onCompleteShape,

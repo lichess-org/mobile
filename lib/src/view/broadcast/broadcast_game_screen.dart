@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
@@ -149,13 +150,13 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double size;
-  final BorderRadiusGeometry? borderRadius;
+  final Radius? radius;
 
   const _BroadcastBoardWithHeaders(
     this.roundId,
     this.gameId,
     this.size,
-    this.borderRadius,
+    this.radius,
   );
 
   @override
@@ -168,13 +169,15 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
           gameId: gameId,
           width: size,
           widgetPosition: _PlayerWidgetPosition.top,
+          radius: radius ?? Radius.zero,
         ),
-        _BroadcastBoard(roundId, gameId, size),
+        _BroadcastBoard(roundId, gameId, size, radius != null),
         _PlayerWidget(
           roundId: roundId,
           gameId: gameId,
           width: size,
           widgetPosition: _PlayerWidgetPosition.bottom,
+          radius: radius ?? Radius.zero,
         ),
       ],
     );
@@ -186,11 +189,13 @@ class _BroadcastBoard extends ConsumerStatefulWidget {
     this.roundId,
     this.gameId,
     this.boardSize,
+    this.hasRadius,
   );
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double boardSize;
+  final bool hasRadius;
 
   @override
   ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
@@ -266,6 +271,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
+            boxShadow: widget.hasRadius ? boardShadows : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: boardPrefs.enableShapeDrawings,
               onCompleteShape: _onCompleteShape,
@@ -304,12 +310,14 @@ class _PlayerWidget extends ConsumerWidget {
     required this.gameId,
     required this.width,
     required this.widgetPosition,
+    required this.radius,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double width;
   final _PlayerWidgetPosition widgetPosition;
+  final Radius radius;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -340,7 +348,16 @@ class _PlayerWidget extends ConsumerWidget {
           if (game.isOver)
             Card(
               margin: EdgeInsets.zero,
-              shape: const Border(),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: (widgetPosition == _PlayerWidgetPosition.top)
+                      ? radius
+                      : Radius.zero,
+                  bottomLeft: (widgetPosition == _PlayerWidgetPosition.bottom)
+                      ? radius
+                      : Radius.zero,
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
@@ -364,7 +381,26 @@ class _PlayerWidget extends ConsumerWidget {
           Expanded(
             child: Card(
               margin: EdgeInsets.zero,
-              shape: const Border(),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: widgetPosition == _PlayerWidgetPosition.top &&
+                          !game.isOver
+                      ? radius
+                      : Radius.zero,
+                  topRight: widgetPosition == _PlayerWidgetPosition.top &&
+                          clock == null
+                      ? radius
+                      : Radius.zero,
+                  bottomLeft: widgetPosition == _PlayerWidgetPosition.bottom &&
+                          !game.isOver
+                      ? radius
+                      : Radius.zero,
+                  bottomRight: widgetPosition == _PlayerWidgetPosition.bottom &&
+                          clock == null
+                      ? radius
+                      : Radius.zero,
+                ),
+              ),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -428,7 +464,16 @@ class _PlayerWidget extends ConsumerWidget {
                       : Theme.of(context).colorScheme.secondaryContainer
                   : null,
               margin: EdgeInsets.zero,
-              shape: const Border(),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: widgetPosition == _PlayerWidgetPosition.top
+                      ? radius
+                      : Radius.zero,
+                  bottomRight: widgetPosition == _PlayerWidgetPosition.bottom
+                      ? radius
+                      : Radius.zero,
+                ),
+              ),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

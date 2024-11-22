@@ -192,10 +192,10 @@ class _Body extends ConsumerWidget {
     return DefaultTabController(
       length: 1,
       child: AnalysisLayout(
-        boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
+        boardBuilder: (context, boardSize, boardRadius) => _StudyBoard(
           id: id,
           boardSize: boardSize,
-          borderRadius: borderRadius,
+          radius: boardRadius,
         ),
         engineGaugeBuilder: isComputerAnalysisAllowed &&
                 showEvaluationGauge &&
@@ -260,14 +260,14 @@ class _StudyBoard extends ConsumerStatefulWidget {
   const _StudyBoard({
     required this.id,
     required this.boardSize,
-    this.borderRadius,
+    this.radius,
   });
 
   final StudyId id;
 
   final double boardSize;
 
-  final BorderRadiusGeometry? borderRadius;
+  final Radius? radius;
 
   @override
   ConsumerState<_StudyBoard> createState() => _StudyBoardState();
@@ -349,10 +349,11 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     return Chessboard(
       size: widget.boardSize,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
+            borderRadius: (widget.radius != null)
+                ? BorderRadius.all(widget.radius!)
+                : null,
+            boxShadow:
+                widget.radius != null ? boardShadows : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: true,
               onCompleteShape: _onCompleteShape,

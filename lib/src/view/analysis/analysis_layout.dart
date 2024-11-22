@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 typedef BoardBuilder = Widget Function(
   BuildContext context,
   double boardSize,
-  BorderRadiusGeometry? borderRadius,
+  Radius? boardRadius,
 );
 
 typedef EngineGaugeBuilder = Widget Function(
@@ -158,8 +158,7 @@ class AnalysisLayout extends StatelessWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
-                const tabletBoardRadius =
-                    BorderRadius.all(Radius.circular(4.0));
+                const tabletBoardRadius = Radius.circular(4.0);
 
                 // If the aspect ratio is greater than 1, we are in landscape mode.
                 if (aspectRatio > 1) {
