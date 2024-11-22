@@ -11,12 +11,10 @@ class BroadcastGameTreeView extends ConsumerWidget {
   const BroadcastGameTreeView(
     this.roundId,
     this.gameId,
-    this.displayMode,
   );
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final Orientation displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

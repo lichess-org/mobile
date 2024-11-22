@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
@@ -19,7 +18,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
@@ -29,7 +28,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BroadcastGameScreen extends ConsumerWidget {
@@ -89,161 +87,59 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-                final landscape = constraints.biggest.aspectRatio > 1;
-                final ctrlProvider =
-                    broadcastGameControllerProvider(roundId, gameId);
+    final broadcastState = ref
+        .watch(broadcastGameControllerProvider(roundId, gameId))
+        .requireValue;
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+    final numEvalLines = analysisPrefs.numEvalLines;
 
-                final engineGaugeParams = ref.watch(
-                  ctrlProvider
-                      .select((state) => state.requireValue.engineGaugeParams),
-                );
+    final engineGaugeParams = broadcastState.engineGaugeParams;
+    final isLocalEvaluationEnabled = broadcastState.isLocalEvaluationEnabled;
+    final currentNode = broadcastState.currentNode;
 
-                final currentNode = ref.watch(
-                  ctrlProvider
-                      .select((state) => state.requireValue.currentNode),
-                );
-
-                final isLocalEvaluationEnabled = ref.watch(
-                  ctrlProvider.select(
-                    (state) => state.requireValue.isLocalEvaluationEnabled,
-                  ),
-                );
-
-                final engineLines = EngineLines(
-                  clientEval: currentNode.eval,
-                  isGameOver: currentNode.position.isGameOver,
-                  onTapMove: ref
-                      .read(
-                        broadcastGameControllerProvider(roundId, gameId)
-                            .notifier,
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        boardBuilder: (context, boardSize, borderRadius) =>
+            _BroadcastBoardWithHeaders(
+          roundId,
+          gameId,
+          boardSize,
+          borderRadius,
+        ),
+        engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
+            ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.horizontal,
+                        params: engineGaugeParams,
                       )
-                      .onUserMove,
-                );
-
-                final showEvaluationGauge = ref.watch(
-                  analysisPreferencesProvider
-                      .select((value) => value.showEvaluationGauge),
-                );
-
-                final engineGauge =
-                    showEvaluationGauge && isLocalEvaluationEnabled
-                        ? EngineGauge(
-                            params: engineGaugeParams,
-                            displayMode: landscape
-                                ? EngineGaugeDisplayMode.vertical
-                                : EngineGaugeDisplayMode.horizontal,
-                          )
-                        : null;
-
-                return landscape
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                              isTablet ? kTabletBoardTableSidePadding : 0.0,
-                            ),
-                            child: Row(
-                              children: [
-                                _BroadcastBoardWithHeaders(
-                                  roundId,
-                                  gameId,
-                                  boardSize,
-                                  isTablet,
-                                ),
-                                if (engineGauge != null) ...[
-                                  const SizedBox(width: 4.0),
-                                  engineGauge,
-                                ],
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (isLocalEvaluationEnabled) engineLines,
-                                Expanded(
-                                  child: PlatformCard(
-                                    clipBehavior: Clip.hardEdge,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(4.0),
-                                    ),
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: BroadcastGameTreeView(
-                                      roundId,
-                                      gameId,
-                                      Orientation.landscape,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                              isTablet ? kTabletBoardTableSidePadding : 0.0,
-                            ),
-                            child: Column(
-                              children: [
-                                if (engineGauge != null) engineGauge,
-                                if (isLocalEvaluationEnabled) engineLines,
-                                _BroadcastBoardWithHeaders(
-                                  roundId,
-                                  gameId,
-                                  boardSize,
-                                  isTablet,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: isTablet
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: kTabletBoardTableSidePadding,
-                                    )
-                                  : EdgeInsets.zero,
-                              child: BroadcastGameTreeView(
-                                roundId,
-                                gameId,
-                                Orientation.portrait,
-                              ),
-                            ),
-                          ),
-                        ],
+                    : Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.vertical,
+                          params: engineGaugeParams,
+                        ),
                       );
-              },
-            ),
-          ),
-          BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
-        ],
+              }
+            : null,
+        engineLines: isLocalEvaluationEnabled && numEvalLines > 0
+            ? EngineLines(
+                clientEval: currentNode.eval,
+                isGameOver: currentNode.position.isGameOver,
+                onTapMove: ref
+                    .read(
+                      broadcastGameControllerProvider(roundId, gameId).notifier,
+                    )
+                    .onUserMove,
+              )
+            : null,
+        bottomBar: BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
+        children: [BroadcastGameTreeView(roundId, gameId)],
       ),
     );
   }
@@ -253,17 +149,18 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double size;
-  final bool isTablet;
+  final BorderRadiusGeometry? borderRadius;
 
   const _BroadcastBoardWithHeaders(
     this.roundId,
     this.gameId,
     this.size,
-    this.isTablet,
+    this.borderRadius,
   );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO use borderRadius with players widget
     return Column(
       children: [
         _PlayerWidget(
