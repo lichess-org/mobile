@@ -106,11 +106,14 @@ class _AppBarAnalysisTabIndicatorState
 ///
 /// The layout is responsive and adapts to the screen size and orientation.
 ///
+/// It includes a [TabBarView] with the [children] widgets. If a [TabController]
+/// is not provided, then there must be a [DefaultTabController] ancestor.
+///
 /// The length of the [children] list must match the [tabController]'s
 /// [TabController.length] and the length of the [AppBarAnalysisTabIndicator.tabs]
 class AnalysisLayout extends StatelessWidget {
   const AnalysisLayout({
-    required this.tabController,
+    this.tabController,
     required this.boardBuilder,
     required this.children,
     this.engineGaugeBuilder,
@@ -120,7 +123,7 @@ class AnalysisLayout extends StatelessWidget {
   });
 
   /// The tab controller for the tab view.
-  final TabController tabController;
+  final TabController? tabController;
 
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;

@@ -167,7 +167,7 @@ class _StudyChaptersMenu extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body({
     required this.id,
   });
@@ -175,46 +175,22 @@ class _Body extends ConsumerStatefulWidget {
   final StudyId id;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _tabController = TabController(
-      vsync: this,
-      length: 1,
-    );
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gamebookActive = ref.watch(
-      studyControllerProvider(widget.id)
+      studyControllerProvider(id)
           .select((state) => state.requireValue.gamebookActive),
     );
     final engineGaugeParams = ref.watch(
-      studyControllerProvider(widget.id)
+      studyControllerProvider(id)
           .select((state) => state.valueOrNull?.engineGaugeParams),
     );
     final isComputerAnalysisAllowed = ref.watch(
-      studyControllerProvider(widget.id)
+      studyControllerProvider(id)
           .select((s) => s.requireValue.isComputerAnalysisAllowed),
     );
 
     final currentNode = ref.watch(
-      studyControllerProvider(widget.id)
+      studyControllerProvider(id)
           .select((state) => state.requireValue.currentNode),
     );
 
@@ -222,50 +198,51 @@ class _BodyState extends ConsumerState<_Body>
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
 
-    final bottomChild =
-        gamebookActive ? StudyGamebook(widget.id) : StudyTreeView(widget.id);
+    final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
-    return AnalysisLayout(
-      tabController: _tabController,
-      boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
-        id: widget.id,
-        boardSize: boardSize,
-        borderRadius: borderRadius,
-      ),
-      engineGaugeBuilder: isComputerAnalysisAllowed &&
-              showEvaluationGauge &&
-              engineGaugeParams != null
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: engineGaugeParams,
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
+          id: id,
+          boardSize: boardSize,
+          borderRadius: borderRadius,
+        ),
+        engineGaugeBuilder: isComputerAnalysisAllowed &&
+                showEvaluationGauge &&
+                engineGaugeParams != null
+            ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.horizontal,
                         params: engineGaugeParams,
-                      ),
-                    );
-            }
-          : null,
-      engineLines: isComputerAnalysisAllowed && numEvalLines > 0
-          ? EngineLines(
-              clientEval: currentNode.eval,
-              isGameOver: currentNode.position?.isGameOver ?? false,
-              onTapMove: ref
-                  .read(
-                    studyControllerProvider(widget.id).notifier,
-                  )
-                  .onUserMove,
-            )
-          : null,
-      bottomBar: StudyBottomBar(id: widget.id),
-      children: [bottomChild],
+                      )
+                    : Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.vertical,
+                          params: engineGaugeParams,
+                        ),
+                      );
+              }
+            : null,
+        engineLines: isComputerAnalysisAllowed && numEvalLines > 0
+            ? EngineLines(
+                clientEval: currentNode.eval,
+                isGameOver: currentNode.position?.isGameOver ?? false,
+                onTapMove: ref
+                    .read(
+                      studyControllerProvider(id).notifier,
+                    )
+                    .onUserMove,
+              )
+            : null,
+        bottomBar: StudyBottomBar(id: id),
+        children: [bottomChild],
+      ),
     );
   }
 }
