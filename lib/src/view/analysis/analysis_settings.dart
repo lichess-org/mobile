@@ -122,11 +122,9 @@ class AnalysisSettings extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(context.l10n.bestMoveArrow),
                     value: prefs.showBestMoveArrow,
-                    onChanged: value.isEngineAvailable
-                        ? (value) => ref
-                            .read(analysisPreferencesProvider.notifier)
-                            .toggleShowBestMoveArrow()
-                        : null,
+                    onChanged: (value) => ref
+                        .read(analysisPreferencesProvider.notifier)
+                        .toggleShowBestMoveArrow(),
                   ),
                   SwitchSettingTile(
                     title: Text(context.l10n.evaluationGauge),
