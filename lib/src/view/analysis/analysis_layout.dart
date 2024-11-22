@@ -103,6 +103,11 @@ class _AppBarAnalysisTabIndicatorState
 }
 
 /// Layout for the analysis and similar screens (study, broadcast, etc.).
+///
+/// The layout is responsive and adapts to the screen size and orientation.
+///
+/// The length of the [children] list must match the [tabController]'s
+/// [TabController.length] and the length of the [AppBarAnalysisTabIndicator.tabs]
 class AnalysisLayout extends StatelessWidget {
   const AnalysisLayout({
     required this.tabController,
@@ -122,7 +127,7 @@ class AnalysisLayout extends StatelessWidget {
 
   /// The children of the tab view.
   ///
-  /// The length of this list must match the [controller]'s [TabController.length]
+  /// The length of this list must match the [tabController]'s [TabController.length]
   /// and the length of the [AppBarAnalysisTabIndicator.tabs] list.
   final List<Widget> children;
 
