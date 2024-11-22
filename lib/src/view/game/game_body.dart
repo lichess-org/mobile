@@ -130,6 +130,7 @@ class GameBody extends ConsumerWidget {
               : null,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeActive,
+          clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
               youAre == Side.black && gameState.moveToConfirm != null
                   ? (
@@ -181,6 +182,7 @@ class GameBody extends ConsumerWidget {
               : null,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeActive,
+          clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
               youAre == Side.white && gameState.moveToConfirm != null
                   ? (
@@ -567,7 +569,6 @@ class _GameBottomBar extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     builder: (_) => AnalysisScreen(
-                      pgnOrId: gameState.analysisPgn,
                       options: gameState.analysisOptions,
                     ),
                   );
@@ -700,9 +701,8 @@ class _GameBottomBar extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 builder: (_) => AnalysisScreen(
-                  pgnOrId: gameState.analysisPgn,
                   options: gameState.analysisOptions.copyWith(
-                    isLocalEvaluationAllowed: false,
+                    gameId: gameState.game.id,
                   ),
                 ),
               );

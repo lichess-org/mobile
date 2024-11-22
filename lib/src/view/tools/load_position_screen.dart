@@ -86,7 +86,6 @@ class _BodyState extends State<_Body> {
                             context,
                             rootNavigator: true,
                             builder: (context) => AnalysisScreen(
-                              pgnOrId: parsedInput!.pgn,
                               options: parsedInput!.options,
                             ),
                           )
@@ -121,7 +120,7 @@ class _BodyState extends State<_Body> {
     }
   }
 
-  ({String pgn, String fen, AnalysisOptions options})? get parsedInput {
+  ({String fen, AnalysisOptions options})? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
       return null;
     }
@@ -130,13 +129,14 @@ class _BodyState extends State<_Body> {
     try {
       final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
       return (
-        pgn: '[FEN "${pos.fen}"]',
         fen: pos.fen,
-        options: const AnalysisOptions(
-          isLocalEvaluationAllowed: true,
-          variant: Variant.standard,
+        options: AnalysisOptions(
           orientation: Side.white,
-          id: standaloneAnalysisId,
+          standalone: (
+            pgn: '[FEN "${pos.fen}"]',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
         )
       );
     } catch (_, __) {}
@@ -161,14 +161,15 @@ class _BodyState extends State<_Body> {
       );
 
       return (
-        pgn: textInput!,
         fen: lastPosition.fen,
         options: AnalysisOptions(
-          isLocalEvaluationAllowed: true,
-          variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
-          initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
           orientation: Side.white,
-          id: standaloneAnalysisId,
+          standalone: (
+            pgn: textInput!,
+            isComputerAnalysisAllowed: true,
+            variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
+          ),
+          initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
         )
       );
     } catch (_, __) {}

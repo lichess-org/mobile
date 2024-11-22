@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -36,6 +37,8 @@ class StudyTreeView extends ConsumerWidget {
           .select((value) => value.requireValue.pgnRootComments),
     );
 
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+
     return CustomScrollView(
       slivers: [
         SliverFillRemaining(
@@ -49,6 +52,7 @@ class StudyTreeView extends ConsumerWidget {
                   currentPath: currentPath,
                   pgnRootComments: pgnRootComments,
                   notifier: ref.read(studyControllerProvider(id).notifier),
+                  shouldShowAnnotations: analysisPrefs.showAnnotations,
                 ),
               ),
             ],

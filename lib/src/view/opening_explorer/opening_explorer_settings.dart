@@ -14,9 +14,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
-  const OpeningExplorerSettings(this.pgn, this.options);
+  const OpeningExplorerSettings(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override

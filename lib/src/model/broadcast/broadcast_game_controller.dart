@@ -292,9 +292,9 @@ class BroadcastGameController extends _$BroadcastGameController
 
     final node = _root.nodeAt(path);
     for (final child in node.children) {
-      child.isHidden = false;
+      child.isCollapsed = false;
       for (final grandChild in child.children) {
-        grandChild.isHidden = false;
+        grandChild.isCollapsed = false;
       }
     }
     state = AsyncData(state.requireValue.copyWith(root: _root.view));
@@ -307,7 +307,7 @@ class BroadcastGameController extends _$BroadcastGameController
     final node = _root.nodeAt(path);
 
     for (final child in node.children) {
-      child.isHidden = true;
+      child.isCollapsed = true;
     }
 
     state = AsyncData(state.requireValue.copyWith(root: _root.view));
@@ -418,9 +418,9 @@ class BroadcastGameController extends _$BroadcastGameController
     // always show variation if the user plays a move
     if (shouldForceShowVariation &&
         currentNode is Branch &&
-        currentNode.isHidden) {
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
-        if (node is Branch) node.isHidden = false;
+        if (node is Branch) node.isCollapsed = false;
       });
     }
 

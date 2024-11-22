@@ -148,12 +148,13 @@ class _Body extends ConsumerWidget {
               context,
               rootNavigator: true,
               builder: (context) => const AnalysisScreen(
-                pgnOrId: '',
                 options: AnalysisOptions(
-                  isLocalEvaluationAllowed: true,
-                  variant: Variant.standard,
                   orientation: Side.white,
-                  id: standaloneAnalysisId,
+                  standalone: (
+                    pgn: '',
+                    isComputerAnalysisAllowed: true,
+                    variant: Variant.standard,
+                  ),
                 ),
               ),
             ),
@@ -166,12 +167,13 @@ class _Body extends ConsumerWidget {
                       context,
                       rootNavigator: true,
                       builder: (context) => const OpeningExplorerScreen(
-                        pgn: '',
                         options: AnalysisOptions(
-                          isLocalEvaluationAllowed: false,
-                          variant: Variant.standard,
                           orientation: Side.white,
-                          id: standaloneOpeningExplorerId,
+                          standalone: (
+                            pgn: '',
+                            isComputerAnalysisAllowed: false,
+                            variant: Variant.standard,
+                          ),
                         ),
                       ),
                     )

@@ -169,7 +169,6 @@ class FullScreenRetryRequest extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // TODO translate
           Text(
             context.l10n.mobileSomethingWentWrong,
             style: Styles.sectionTitle,

@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.12.5+001205 # See README.md for details about versioning
+version: 0.13.2+001302 # See README.md for details about versioning
 
 environment:
   sdk: ">=3.5.0 <4.0.0"

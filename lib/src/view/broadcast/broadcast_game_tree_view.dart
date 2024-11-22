@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -23,14 +24,19 @@ class BroadcastGameTreeView extends ConsumerWidget {
 
     final root =
         ref.watch(ctrlProvider.select((value) => value.requireValue.root));
+
     final currentPath = ref
         .watch(ctrlProvider.select((value) => value.requireValue.currentPath));
+
     final broadcastLivePath = ref.watch(
       ctrlProvider.select((value) => value.requireValue.broadcastLivePath),
     );
+
     final pgnRootComments = ref.watch(
       ctrlProvider.select((value) => value.requireValue.pgnRootComments),
     );
+
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
     return SingleChildScrollView(
       child: DebouncedPgnTreeView(
@@ -38,6 +44,7 @@ class BroadcastGameTreeView extends ConsumerWidget {
         currentPath: currentPath,
         broadcastLivePath: broadcastLivePath,
         pgnRootComments: pgnRootComments,
+        shouldShowAnnotations: analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
       ),
     );

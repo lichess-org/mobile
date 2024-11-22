@@ -97,7 +97,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         currentNode: StudyCurrentNode.illegalPosition(),
         pgnRootComments: rootComments,
         pov: orientation,
-        isLocalEvaluationAllowed: false,
+        isComputerAnalysisAllowed: false,
         isLocalEvaluationEnabled: false,
         gamebookActive: false,
         pgn: pgn,
@@ -121,7 +121,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: orientation,
-      isLocalEvaluationAllowed:
+      isComputerAnalysisAllowed:
           study.chapter.features.computer && !study.chapter.gamebook,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       gamebookActive: study.chapter.gamebook,
@@ -289,9 +289,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         _root.isOnMainline(path) ? node.children.skip(1) : node.children;
 
     for (final child in childrenToShow) {
-      child.isHidden = false;
+      child.isCollapsed = false;
       for (final grandChild in child.children) {
-        grandChild.isHidden = false;
+        grandChild.isCollapsed = false;
       }
     }
     state = AsyncValue.data(state.requireValue.copyWith(root: _root.view));
@@ -304,7 +304,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     final node = _root.nodeAt(path);
 
     for (final child in node.children) {
-      child.isHidden = true;
+      child.isCollapsed = true;
     }
 
     state = AsyncValue.data(state.requireValue.copyWith(root: _root.view));
@@ -417,9 +417,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     // always show variation if the user plays a move
     if (shouldForceShowVariation &&
         currentNode is Branch &&
-        currentNode.isHidden) {
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
-        if (node is Branch) node.isHidden = false;
+        if (node is Branch) node.isCollapsed = false;
       });
     }
 
@@ -559,7 +559,7 @@ class StudyState with _$StudyState {
     required Side pov,
 
     /// Whether local evaluation is allowed for this study.
-    required bool isLocalEvaluationAllowed,
+    required bool isComputerAnalysisAllowed,
 
     /// Whether we're currently in gamebook mode, where the user has to find the right moves.
     required bool gamebookActive,
@@ -583,7 +583,7 @@ class StudyState with _$StudyState {
 
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable =>
-      isLocalEvaluationAllowed &&
+      isComputerAnalysisAllowed &&
       engineSupportedVariants.contains(variant) &&
       isLocalEvaluationEnabled;
 

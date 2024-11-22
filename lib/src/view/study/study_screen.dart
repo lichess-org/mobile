@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:logging/logging.dart';
 
@@ -177,153 +176,63 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gamebookActive = ref.watch(
-      studyControllerProvider(id)
-          .select((state) => state.requireValue.gamebookActive),
-    );
+    final studyState = ref.watch(studyControllerProvider(id)).requireValue;
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+    final numEvalLines = analysisPrefs.numEvalLines;
 
-    return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
+    final gamebookActive = studyState.gamebookActive;
+    final engineGaugeParams = studyState.engineGaugeParams;
+    final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
+    final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
+    final currentNode = studyState.currentNode;
 
-                final landscape = constraints.biggest.aspectRatio > 1;
+    final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
-                final engineGaugeParams = ref.watch(
-                  studyControllerProvider(id)
-                      .select((state) => state.valueOrNull?.engineGaugeParams),
-                );
-
-                final currentNode = ref.watch(
-                  studyControllerProvider(id)
-                      .select((state) => state.requireValue.currentNode),
-                );
-
-                final engineLines = EngineLines(
-                  clientEval: currentNode.eval,
-                  isGameOver: currentNode.position?.isGameOver ?? false,
-                  onTapMove: ref
-                      .read(
-                        studyControllerProvider(id).notifier,
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
+          id: id,
+          boardSize: boardSize,
+          borderRadius: borderRadius,
+        ),
+        engineGaugeBuilder: isComputerAnalysisAllowed &&
+                showEvaluationGauge &&
+                engineGaugeParams != null
+            ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.horizontal,
+                        params: engineGaugeParams,
                       )
-                      .onUserMove,
-                );
-
-                final showEvaluationGauge = ref.watch(
-                  analysisPreferencesProvider
-                      .select((value) => value.showEvaluationGauge),
-                );
-
-                final engineGauge =
-                    showEvaluationGauge && engineGaugeParams != null
-                        ? EngineGauge(
-                            params: engineGaugeParams,
-                            displayMode: landscape
-                                ? EngineGaugeDisplayMode.vertical
-                                : EngineGaugeDisplayMode.horizontal,
-                          )
-                        : null;
-
-                final bottomChild =
-                    gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
-
-                return landscape
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                              isTablet ? kTabletBoardTableSidePadding : 0.0,
-                            ),
-                            child: Row(
-                              children: [
-                                _StudyBoard(
-                                  id: id,
-                                  boardSize: boardSize,
-                                  isTablet: isTablet,
-                                ),
-                                if (engineGauge != null) ...[
-                                  const SizedBox(width: 4.0),
-                                  engineGauge,
-                                ],
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (engineGaugeParams != null) engineLines,
-                                Expanded(
-                                  child: PlatformCard(
-                                    clipBehavior: Clip.hardEdge,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(4.0),
-                                    ),
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: bottomChild,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                              isTablet ? kTabletBoardTableSidePadding : 0.0,
-                            ),
-                            child: Column(
-                              children: [
-                                if (engineGauge != null) ...[
-                                  engineGauge,
-                                  engineLines,
-                                ],
-                                _StudyBoard(
-                                  id: id,
-                                  boardSize: boardSize,
-                                  isTablet: isTablet,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: isTablet
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: kTabletBoardTableSidePadding,
-                                    )
-                                  : EdgeInsets.zero,
-                              child: bottomChild,
-                            ),
-                          ),
-                        ],
+                    : Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.vertical,
+                          params: engineGaugeParams,
+                        ),
                       );
-              },
-            ),
-          ),
-          StudyBottomBar(id: id),
-        ],
+              }
+            : null,
+        engineLines: isComputerAnalysisAllowed &&
+                isLocalEvaluationEnabled &&
+                numEvalLines > 0
+            ? EngineLines(
+                clientEval: currentNode.eval,
+                isGameOver: currentNode.position?.isGameOver ?? false,
+                onTapMove: ref
+                    .read(
+                      studyControllerProvider(id).notifier,
+                    )
+                    .onUserMove,
+              )
+            : null,
+        bottomBar: StudyBottomBar(id: id),
+        children: [bottomChild],
       ),
     );
   }
@@ -351,14 +260,14 @@ class _StudyBoard extends ConsumerStatefulWidget {
   const _StudyBoard({
     required this.id,
     required this.boardSize,
-    required this.isTablet,
+    this.borderRadius,
   });
 
   final StudyId id;
 
   final double boardSize;
 
-  final bool isTablet;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   ConsumerState<_StudyBoard> createState() => _StudyBoardState();
@@ -440,10 +349,10 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     return Chessboard(
       size: widget.boardSize,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.isTablet
-                ? const BorderRadius.all(Radius.circular(4.0))
-                : BorderRadius.zero,
-            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+            borderRadius: widget.borderRadius,
+            boxShadow: widget.borderRadius != null
+                ? boardShadows
+                : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: true,
               onCompleteShape: _onCompleteShape,
