@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -22,13 +23,41 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final ctrlProvider = analysisControllerProvider(options);
     final playersAnalysis = ref.watch(
       ctrlProvider.select((value) => value.requireValue.playersAnalysis),
     );
+    final canShowGameSummary = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.canShowGameSummary),
+    );
     final pgnHeaders = ref
         .watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
+
+    if (analysisPrefs.enableComputerAnalysis == false) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Spacer(),
+              Text(context.l10n.computerAnalysisDisabled),
+              if (canShowGameSummary)
+                SecondaryButton(
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
+                  },
+                  semanticsLabel: context.l10n.enable,
+                  child: Text(context.l10n.enable),
+                ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      );
+    }
 
     return playersAnalysis != null
         ? ListView(

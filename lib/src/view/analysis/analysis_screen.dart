@@ -47,62 +47,24 @@ class AnalysisScreen extends ConsumerStatefulWidget {
 }
 
 class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
-    with TickerProviderStateMixin {
-  late List<AnalysisTab> tabs;
-  late TabController _tabController;
+    with SingleTickerProviderStateMixin {
+  late final List<AnalysisTab> tabs;
+  late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+
     tabs = [
       AnalysisTab.opening,
       AnalysisTab.moves,
+      if (widget.options.gameId != null) AnalysisTab.summary,
     ];
 
     _tabController = TabController(
       vsync: this,
       initialIndex: 1,
       length: tabs.length,
-    );
-
-    ref.listenManual<AsyncValue<AnalysisState>>(
-      analysisControllerProvider(widget.options),
-      (prev, state) {
-        final canPrevShowGameSummary =
-            prev?.valueOrNull?.canShowGameSummary == true;
-        final canShowGameSummary =
-            state.valueOrNull?.canShowGameSummary == true;
-        if (!canPrevShowGameSummary && canShowGameSummary) {
-          setState(() {
-            tabs = [
-              AnalysisTab.opening,
-              AnalysisTab.moves,
-              AnalysisTab.summary,
-            ];
-            final index = _tabController.index;
-            _tabController.dispose();
-            _tabController = TabController(
-              vsync: this,
-              initialIndex: index,
-              length: tabs.length,
-            );
-          });
-        } else if (canPrevShowGameSummary && !canShowGameSummary) {
-          setState(() {
-            tabs = [
-              AnalysisTab.opening,
-              AnalysisTab.moves,
-            ];
-            final index = _tabController.index;
-            _tabController.dispose();
-            _tabController = TabController(
-              vsync: this,
-              initialIndex: index == 2 ? 1 : index,
-              length: tabs.length,
-            );
-          });
-        }
-      },
     );
   }
 
@@ -152,7 +114,6 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
           body: _Body(
             options: widget.options,
             controller: _tabController,
-            tabs: tabs,
             enableDrawingShapes: widget.enableDrawingShapes,
           ),
         );
@@ -201,12 +162,10 @@ class _Body extends ConsumerWidget {
   const _Body({
     required this.options,
     required this.controller,
-    required this.tabs,
     required this.enableDrawingShapes,
   });
 
   final TabController controller;
-  final List<AnalysisTab> tabs;
   final AnalysisOptions options;
   final bool enableDrawingShapes;
 
@@ -258,16 +217,11 @@ class _Body extends ConsumerWidget {
             )
           : null,
       bottomBar: _BottomBar(options: options),
-      children: tabs.map((tab) {
-        switch (tab) {
-          case AnalysisTab.opening:
-            return OpeningExplorerView(options: options);
-          case AnalysisTab.moves:
-            return AnalysisTreeView(options);
-          case AnalysisTab.summary:
-            return ServerAnalysisSummary(options);
-        }
-      }).toList(),
+      children: [
+        OpeningExplorerView(options: options),
+        AnalysisTreeView(options),
+        if (options.gameId != null) ServerAnalysisSummary(options),
+      ],
     );
   }
 }

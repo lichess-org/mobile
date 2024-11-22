@@ -47,7 +47,7 @@ class AnalysisSettings extends ConsumerWidget {
               ),
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 300),
-              crossFadeState: value.isComputerAnalysisEnabledAndAllowed
+              crossFadeState: value.isComputerAnalysisAllowedAndEnabled
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               firstChild: const SizedBox.shrink(),

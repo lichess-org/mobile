@@ -790,23 +790,21 @@ class AnalysisState with _$AnalysisState {
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => playersAnalysis != null;
 
-  bool get canShowGameSummary =>
-      isComputerAnalysisEnabledAndAllowed &&
-      (hasServerAnalysis || canRequestServerAnalysis);
+  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
 
   /// Whether an evaluation can be available
   bool get hasAvailableEval =>
       isEngineAvailable ||
-      (isComputerAnalysisEnabledAndAllowed &&
+      (isComputerAnalysisAllowedAndEnabled &&
           acplChartData != null &&
           acplChartData!.isNotEmpty);
 
-  bool get isComputerAnalysisEnabledAndAllowed =>
-      isComputerAnalysisEnabled && isComputerAnalysisAllowed;
+  bool get isComputerAnalysisAllowedAndEnabled =>
+      isComputerAnalysisAllowed && isComputerAnalysisEnabled;
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
-      isComputerAnalysisEnabledAndAllowed &&
+      isComputerAnalysisAllowedAndEnabled &&
       engineSupportedVariants.contains(variant);
 
   /// Whether the engine is available for evaluation

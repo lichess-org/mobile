@@ -33,11 +33,9 @@ enum AnalysisTab {
       case AnalysisTab.opening:
         return l10n.openingExplorer;
       case AnalysisTab.moves:
-        // TODO: Add l10n
-        return 'Moves';
+        return l10n.movesPlayed;
       case AnalysisTab.summary:
-        // TODO: Add l10n
-        return 'Summary';
+        return l10n.computerAnalysis;
     }
   }
 }
