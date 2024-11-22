@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -21,6 +22,9 @@ class AnalysisSettings extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final prefs = ref.watch(analysisPreferencesProvider);
     final asyncState = ref.watch(ctrlProvider);
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
+    );
 
     switch (asyncState) {
       case AsyncData(:final value):
@@ -149,6 +153,15 @@ class AnalysisSettings extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.sound),
+              value: isSoundEnabled,
+              onChanged: (value) {
+                ref
+                    .read(generalPreferencesProvider.notifier)
+                    .toggleSoundEnabled();
+              },
             ),
           ],
         );

@@ -37,48 +37,20 @@ class StudySettings extends ConsumerWidget {
 
     return BottomSheetScrollableContainer(
       children: [
-        SwitchSettingTile(
-          title: Text(context.l10n.toggleLocalEvaluation),
-          value: analysisPrefs.enableLocalEvaluation,
-          onChanged: isComputerAnalysisAllowed
-              ? (_) {
-                  ref.read(studyController.notifier).toggleLocalEvaluation();
-                }
-              : null,
-        ),
-        PlatformListTile(
-          title: Text.rich(
-            TextSpan(
-              text: '${context.l10n.multipleLines}: ',
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-              ),
-              children: [
-                TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                  text: analysisPrefs.numEvalLines.toString(),
-                ),
-              ],
-            ),
-          ),
-          subtitle: NonLinearSlider(
-            value: analysisPrefs.numEvalLines,
-            values: const [0, 1, 2, 3],
-            onChangeEnd: isEngineAvailable
-                ? (value) => ref
-                    .read(studyController.notifier)
-                    .setNumEvalLines(value.toInt())
+        if (isComputerAnalysisAllowed) ...[
+          SwitchSettingTile(
+            title: Text(context.l10n.toggleLocalEvaluation),
+            value: analysisPrefs.enableLocalEvaluation,
+            onChanged: isComputerAnalysisAllowed
+                ? (_) {
+                    ref.read(studyController.notifier).toggleLocalEvaluation();
+                  }
                 : null,
           ),
-        ),
-        if (maxEngineCores > 1)
           PlatformListTile(
             title: Text.rich(
               TextSpan(
-                text: '${context.l10n.cpus}: ',
+                text: '${context.l10n.multipleLines}: ',
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
                 ),
@@ -88,43 +60,73 @@ class StudySettings extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
-                    text: analysisPrefs.numEngineCores.toString(),
+                    text: analysisPrefs.numEvalLines.toString(),
                   ),
                 ],
               ),
             ),
             subtitle: NonLinearSlider(
-              value: analysisPrefs.numEngineCores,
-              values: List.generate(maxEngineCores, (index) => index + 1),
+              value: analysisPrefs.numEvalLines,
+              values: const [0, 1, 2, 3],
               onChangeEnd: isEngineAvailable
                   ? (value) => ref
                       .read(studyController.notifier)
-                      .setEngineCores(value.toInt())
+                      .setNumEvalLines(value.toInt())
                   : null,
             ),
           ),
-        SwitchSettingTile(
-          title: Text(context.l10n.bestMoveArrow),
-          value: analysisPrefs.showBestMoveArrow,
-          onChanged: isEngineAvailable
-              ? (value) => ref
-                  .read(analysisPreferencesProvider.notifier)
-                  .toggleShowBestMoveArrow()
-              : null,
-        ),
+          if (maxEngineCores > 1)
+            PlatformListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.cpus}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      text: analysisPrefs.numEngineCores.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: analysisPrefs.numEngineCores,
+                values: List.generate(maxEngineCores, (index) => index + 1),
+                onChangeEnd: isEngineAvailable
+                    ? (value) => ref
+                        .read(studyController.notifier)
+                        .setEngineCores(value.toInt())
+                    : null,
+              ),
+            ),
+          SwitchSettingTile(
+            title: Text(context.l10n.bestMoveArrow),
+            value: analysisPrefs.showBestMoveArrow,
+            onChanged: isEngineAvailable
+                ? (value) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleShowBestMoveArrow()
+                : null,
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.evaluationGauge),
+            value: analysisPrefs.showEvaluationGauge,
+            onChanged: (value) => ref
+                .read(analysisPreferencesProvider.notifier)
+                .toggleShowEvaluationGauge(),
+          ),
+        ],
         SwitchSettingTile(
           title: Text(context.l10n.showVariationArrows),
           value: studyPrefs.showVariationArrows,
           onChanged: (value) => ref
               .read(studyPreferencesProvider.notifier)
               .toggleShowVariationArrows(),
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.evaluationGauge),
-          value: analysisPrefs.showEvaluationGauge,
-          onChanged: (value) => ref
-              .read(analysisPreferencesProvider.notifier)
-              .toggleShowEvaluationGauge(),
         ),
         SwitchSettingTile(
           title: Text(context.l10n.toggleGlyphAnnotations),
