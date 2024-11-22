@@ -53,8 +53,8 @@ class AnalysisOptions with _$AnalysisOptions {
 @riverpod
 class AnalysisController extends _$AnalysisController
     implements PgnTreeNotifier {
-  late final Root _root;
-  late final Variant _variant;
+  late Root _root;
+  late Variant _variant;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
