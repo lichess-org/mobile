@@ -165,12 +165,13 @@ class _GamebookBottomBar extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                     builder: (context) => AnalysisScreen(
-                      pgnOrId: state.pgn,
                       options: AnalysisOptions(
-                        isLocalEvaluationAllowed: true,
-                        variant: state.variant,
                         orientation: state.pov,
-                        id: standaloneAnalysisId,
+                        standalone: (
+                          pgn: state.pgn,
+                          isComputerAnalysisAllowed: true,
+                          variant: state.variant,
+                        ),
                       ),
                     ),
                   ),

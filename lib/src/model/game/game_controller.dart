@@ -12,7 +12,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -422,21 +421,6 @@ class GameController extends _$GameController {
 
   void declineRematch() {
     _socketClient.send('rematch-no', null);
-  }
-
-  Future<void> requestServerAnalysis() {
-    return state.mapOrNull(
-          data: (d) {
-            if (!d.value.game.finished) {
-              return Future<void>.error(
-                'Cannot request server analysis on a non finished game',
-              );
-            }
-            final service = ref.read(serverAnalysisServiceProvider);
-            return service.requestAnalysis(gameFullId);
-          },
-        ) ??
-        Future<void>.value();
   }
 
   /// Gets the live game clock if available.
@@ -1183,13 +1167,8 @@ class GameState with _$GameState {
   String get analysisPgn => game.makePgn();
 
   AnalysisOptions get analysisOptions => AnalysisOptions(
-        isLocalEvaluationAllowed: true,
-        variant: game.meta.variant,
-        initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
-        id: gameFullId,
-        opening: game.meta.opening,
-        serverAnalysis: game.serverAnalysis,
-        division: game.meta.division,
+        initialMoveCursor: stepCursor,
+        gameId: gameFullId.gameId,
       );
 }

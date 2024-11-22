@@ -17,9 +17,8 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
 class AnalysisShareScreen extends StatelessWidget {
-  const AnalysisShareScreen({required this.pgn, required this.options});
+  const AnalysisShareScreen({required this.options});
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -28,7 +27,7 @@ class AnalysisShareScreen extends StatelessWidget {
       appBar: PlatformAppBar(
         title: Text(context.l10n.studyShareAndExport),
       ),
-      body: _EditPgnTagsForm(pgn, options),
+      body: _EditPgnTagsForm(options),
     );
   }
 }
@@ -41,9 +40,8 @@ const Set<String> _ratingHeaders = {
 };
 
 class _EditPgnTagsForm extends ConsumerStatefulWidget {
-  const _EditPgnTagsForm(this.pgn, this.options);
+  const _EditPgnTagsForm(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -57,8 +55,8 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
   @override
   void initState() {
     super.initState();
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final pgnHeaders = ref.read(ctrlProvider).pgnHeaders;
+    final ctrlProvider = analysisControllerProvider(widget.options);
+    final pgnHeaders = ref.read(ctrlProvider).requireValue.pgnHeaders;
 
     for (final entry in pgnHeaders.entries) {
       _controllers[entry.key] = TextEditingController(text: entry.value);
@@ -87,8 +85,9 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final pgnHeaders = ref.watch(ctrlProvider.select((c) => c.pgnHeaders));
+    final ctrlProvider = analysisControllerProvider(widget.options);
+    final pgnHeaders =
+        ref.watch(ctrlProvider.select((c) => c.requireValue.pgnHeaders));
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
 
     void focusAndSelectNextField(int index, IMap<String, String> pgnHeaders) {
@@ -181,7 +180,6 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                             text: ref
                                 .read(
                                   analysisControllerProvider(
-                                    widget.pgn,
                                     widget.options,
                                   ).notifier,
                                 )
@@ -207,7 +205,7 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
     required BuildContext context,
     required void Function() onEntryChanged,
   }) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final ctrlProvider = analysisControllerProvider(widget.options);
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return showCupertinoModalPopup<void>(
         context: context,
@@ -272,7 +270,7 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
       onSelectedItemChanged: (choice) {
         ref
             .read(
-              analysisControllerProvider(widget.pgn, widget.options).notifier,
+              analysisControllerProvider(widget.options).notifier,
             )
             .updatePgnHeader(
               entry.key,

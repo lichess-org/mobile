@@ -195,18 +195,30 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   // using the fast replay buttons.
   @override
   Widget build(BuildContext context) {
-    final shouldShowComments = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showPgnComments),
+    final withComputerAnalysis = ref.watch(
+      analysisPreferencesProvider
+          .select((value) => value.enableComputerAnalysis),
     );
 
-    final shouldShowAnnotations = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
+    final shouldShowComments = withComputerAnalysis &&
+        ref.watch(
+          analysisPreferencesProvider.select(
+            (value) => value.showPgnComments,
+          ),
+        );
+
+    final shouldShowAnnotations = withComputerAnalysis &&
+        ref.watch(
+          analysisPreferencesProvider.select(
+            (value) => value.showAnnotations,
+          ),
+        );
 
     return _PgnTreeView(
       root: widget.root,
       rootComments: widget.pgnRootComments,
       params: (
+        withComputerAnalysis: withComputerAnalysis,
         shouldShowAnnotations: shouldShowAnnotations,
         shouldShowComments: shouldShowComments,
         currentMoveKey: currentMoveKey,
@@ -225,6 +237,11 @@ typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
 
+  /// Whether to show NAG, comments, and analysis variations.
+  ///
+  /// Takes precedence over [shouldShowAnnotations], and [shouldShowComments],
+  bool withComputerAnalysis,
+
   /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
 
@@ -239,6 +256,16 @@ typedef _PgnTreeViewParams = ({
   PgnTreeNotifier notifier,
 });
 
+/// Filter node children when computer analysis is disabled
+IList<ViewBranch> _filteredChildren(
+  ViewNode node,
+  bool withComputerAnalysis,
+) {
+  return node.children
+      .where((c) => withComputerAnalysis || !c.isComputerVariation)
+      .toIList();
+}
+
 /// Whether to display the sideline inline.
 ///
 /// Sidelines are usually rendered on a new line and indented.
@@ -251,16 +278,21 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 }
 
 /// Returns whether this node has a sideline that should not be displayed inline.
-bool _hasNonInlineSideLine(ViewNode node) =>
-    node.children.length > 2 ||
-    (node.children.length == 2 && !_displaySideLineAsInline(node.children[1]));
+bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params) {
+  final children = _filteredChildren(node, params.withComputerAnalysis);
+  return children.length > 2 ||
+      (children.length == 2 && !_displaySideLineAsInline(children[1]));
+}
 
 /// Splits the mainline into parts, where each part is a sequence of moves that are displayed on the same line.
 ///
 /// A part ends when a mainline node has a sideline that should not be displayed inline.
-Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
+Iterable<List<ViewNode>> _mainlineParts(
+  ViewRoot root,
+  _PgnTreeViewParams params,
+) =>
     [root, ...root.mainline]
-        .splitAfter(_hasNonInlineSideLine)
+        .splitAfter((n) => _hasNonInlineSideLine(n, params))
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
 
 class _PgnTreeView extends StatefulWidget {
@@ -378,7 +410,8 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   void _updateLines({required bool fullRebuild}) {
     setState(() {
       if (fullRebuild) {
-        mainlineParts = _mainlineParts(widget.root).toList(growable: false);
+        mainlineParts =
+            _mainlineParts(widget.root, widget.params).toList(growable: false);
       }
 
       subtrees = _buildChangedSubtrees(fullRebuild: fullRebuild);
@@ -396,6 +429,8 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     super.didUpdateWidget(oldWidget);
     _updateLines(
       fullRebuild: oldWidget.root != widget.root ||
+          oldWidget.params.withComputerAnalysis !=
+              widget.params.withComputerAnalysis ||
           oldWidget.params.shouldShowComments !=
               widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations !=
@@ -472,7 +507,9 @@ List<InlineSpan> _buildInlineSideLine({
             node,
             lineInfo: (
               type: _LineType.inlineSideline,
-              startLine: i == 0 || sidelineNodes[i - 1].hasTextComment,
+              startLine: i == 0 ||
+                  (params.shouldShowComments &&
+                      sidelineNodes[i - 1].hasTextComment),
               pathToLine: initialPath,
             ),
             pathToNode: pathToNode,
@@ -593,7 +630,7 @@ class _SideLinePart extends ConsumerWidget {
               node.children.first,
               lineInfo: (
                 type: _LineType.sideline,
-                startLine: node.hasTextComment,
+                startLine: params.shouldShowComments && node.hasTextComment,
                 pathToLine: initialPath,
               ),
               pathToNode: path,
@@ -628,6 +665,12 @@ class _SideLinePart extends ConsumerWidget {
 /// A widget that renders part of the mainline.
 ///
 /// A part of the mainline is rendered on a single line. See [_mainlineParts].
+///
+/// For example:
+/// 1. e4 e5                      <-- mainline part
+/// |- 1... d5                    <-- sideline part
+/// |- 1... Nc6                   <-- sideline part
+/// 2. Nf3 Nc6 (2... a5) 3. Bc4   <-- mainline part
 class _MainLinePart extends ConsumerWidget {
   const _MainLinePart({
     required this.initialPath,
@@ -651,27 +694,36 @@ class _MainLinePart extends ConsumerWidget {
     return Text.rich(
       TextSpan(
         children: nodes
-            .takeWhile((node) => node.children.isNotEmpty)
+            .takeWhile(
+              (node) => _filteredChildren(node, params.withComputerAnalysis)
+                  .isNotEmpty,
+            )
             .mapIndexed(
               (i, node) {
-                final mainlineNode = node.children.first;
+                final children = _filteredChildren(
+                  node,
+                  params.withComputerAnalysis,
+                );
+                final mainlineNode = children.first;
                 final moves = [
                   _moveWithComment(
                     mainlineNode,
                     lineInfo: (
                       type: _LineType.mainline,
-                      startLine: i == 0 || (node as ViewBranch).hasTextComment,
+                      startLine: i == 0 ||
+                          (params.shouldShowComments &&
+                              (node as ViewBranch).hasTextComment),
                       pathToLine: initialPath,
                     ),
                     pathToNode: path,
                     textStyle: textStyle,
                     params: params,
                   ),
-                  if (node.children.length == 2 &&
-                      _displaySideLineAsInline(node.children[1])) ...[
+                  if (children.length == 2 &&
+                      _displaySideLineAsInline(children[1])) ...[
                     _buildInlineSideLine(
                       followsComment: mainlineNode.hasTextComment,
-                      firstNode: node.children[1],
+                      firstNode: children[1],
                       parent: node,
                       initialPath: path,
                       textStyle: textStyle,
@@ -715,7 +767,7 @@ class _SideLine extends StatelessWidget {
   List<ViewBranch> _getSidelinePartNodes() {
     final sidelineNodes = [firstNode];
     while (sidelineNodes.last.children.isNotEmpty &&
-        !_hasNonInlineSideLine(sidelineNodes.last)) {
+        !_hasNonInlineSideLine(sidelineNodes.last, params)) {
       sidelineNodes.add(sidelineNodes.last.children.first);
     }
     return sidelineNodes.toList(growable: false);
@@ -844,7 +896,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
   /// calculate the position of the indents in a post-frame callback.
   void _redrawIndents() {
     _sideLinesStartKeys = List.generate(
-      _visibleSideLines.length + (_hasHiddenLines ? 1 : 0),
+      _expandedSidelines.length + (_hasCollapsedLines ? 1 : 0),
       (_) => GlobalKey(),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -867,10 +919,11 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
     });
   }
 
-  bool get _hasHiddenLines => widget.sideLines.any((node) => node.isHidden);
+  bool get _hasCollapsedLines =>
+      widget.sideLines.any((node) => node.isCollapsed);
 
-  Iterable<ViewBranch> get _visibleSideLines =>
-      widget.sideLines.whereNot((node) => node.isHidden);
+  Iterable<ViewBranch> get _expandedSidelines =>
+      widget.sideLines.whereNot((node) => node.isCollapsed);
 
   @override
   void initState() {
@@ -888,7 +941,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
   @override
   Widget build(BuildContext context) {
-    final sideLineWidgets = _visibleSideLines
+    final sideLineWidgets = _expandedSidelines
         .mapIndexed(
           (i, firstSidelineNode) => _SideLine(
             firstNode: firstSidelineNode,
@@ -916,7 +969,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...sideLineWidgets,
-            if (_hasHiddenLines)
+            if (_hasCollapsedLines)
               GestureDetector(
                 child: Icon(
                   Icons.add_box,

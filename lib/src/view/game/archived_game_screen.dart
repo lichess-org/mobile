@@ -354,46 +354,31 @@ class _BottomBar extends ConsumerWidget {
           onTap: showGameMenu,
           icon: Icons.menu,
         ),
-        gameCursor.when(
-          data: (data) {
-            return BottomBarButton(
-              label: context.l10n.mobileShowResult,
-              icon: Icons.info_outline,
-              onTap: () {
-                showAdaptiveDialog<void>(
-                  context: context,
-                  builder: (context) => ArchivedGameResultDialog(game: data.$1),
-                  barrierDismissible: true,
-                );
-              },
-            );
-          },
-          loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
-        ),
+        if (gameCursor.hasValue)
+          BottomBarButton(
+            label: context.l10n.mobileShowResult,
+            icon: Icons.info_outline,
+            onTap: () {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) =>
+                    ArchivedGameResultDialog(game: gameCursor.requireValue.$1),
+                barrierDismissible: true,
+              );
+            },
+          ),
         BottomBarButton(
           label: context.l10n.gameAnalysis,
-          onTap: ref.read(gameCursorProvider(gameData.id)).hasValue
+          onTap: gameCursor.hasValue
               ? () {
-                  final (game, cursor) = ref
-                      .read(
-                        gameCursorProvider(gameData.id),
-                      )
-                      .requireValue;
-
+                  final cursor = gameCursor.requireValue.$2;
                   pushPlatformRoute(
                     context,
                     builder: (context) => AnalysisScreen(
-                      pgnOrId: game.makePgn(),
                       options: AnalysisOptions(
-                        isLocalEvaluationAllowed: true,
-                        variant: gameData.variant,
-                        initialMoveCursor: cursor,
                         orientation: orientation,
-                        id: gameData.id,
-                        opening: gameData.opening,
-                        serverAnalysis: game.serverAnalysis,
-                        division: game.meta.division,
+                        gameId: gameData.id,
+                        initialMoveCursor: cursor,
                       ),
                     ),
                   );

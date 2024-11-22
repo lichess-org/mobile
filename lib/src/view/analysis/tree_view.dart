@@ -9,34 +9,30 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 const kOpeningHeaderHeight = 32.0;
 
 class AnalysisTreeView extends ConsumerWidget {
-  const AnalysisTreeView(
-    this.pgn,
-    this.options,
-    this.displayMode,
-  );
+  const AnalysisTreeView(this.options);
 
-  final String pgn;
   final AnalysisOptions options;
-  final Orientation displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(options);
 
-    final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final currentPath =
-        ref.watch(ctrlProvider.select((value) => value.currentPath));
-    final pgnRootComments =
-        ref.watch(ctrlProvider.select((value) => value.pgnRootComments));
+    final variant = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.variant),
+    );
+    final root =
+        ref.watch(ctrlProvider.select((value) => value.requireValue.root));
+    final currentPath = ref
+        .watch(ctrlProvider.select((value) => value.requireValue.currentPath));
+    final pgnRootComments = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.pgnRootComments),
+    );
 
     return CustomScrollView(
       slivers: [
-        if (kOpeningAllowedVariants.contains(options.variant))
+        if (kOpeningAllowedVariants.contains(variant))
           SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: displayMode,
-            ),
+            delegate: _OpeningHeaderDelegate(ctrlProvider),
           ),
         SliverFillRemaining(
           hasScrollBody: false,
@@ -53,13 +49,9 @@ class AnalysisTreeView extends ConsumerWidget {
 }
 
 class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _OpeningHeaderDelegate(
-    this.ctrlProvider, {
-    required this.displayMode,
-  });
+  const _OpeningHeaderDelegate(this.ctrlProvider);
 
   final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
 
   @override
   Widget build(
@@ -67,7 +59,7 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return _Opening(ctrlProvider, displayMode);
+    return _Opening(ctrlProvider);
   }
 
   @override
@@ -82,22 +74,21 @@ class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class _Opening extends ConsumerWidget {
-  const _Opening(this.ctrlProvider, this.displayMode);
+  const _Opening(this.ctrlProvider);
 
   final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRootNode = ref.watch(
-      ctrlProvider.select((s) => s.currentNode.isRoot),
+      ctrlProvider.select((s) => s.requireValue.currentNode.isRoot),
     );
-    final nodeOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
-    final branchOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
+    final nodeOpening = ref
+        .watch(ctrlProvider.select((s) => s.requireValue.currentNode.opening));
+    final branchOpening = ref
+        .watch(ctrlProvider.select((s) => s.requireValue.currentBranchOpening));
     final contextOpening =
-        ref.watch(ctrlProvider.select((s) => s.contextOpening));
+        ref.watch(ctrlProvider.select((s) => s.requireValue.contextOpening));
     final opening = isRootNode
         ? LightOpening(
             eco: '',
