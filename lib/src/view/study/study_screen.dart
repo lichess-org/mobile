@@ -208,25 +208,19 @@ class _BodyState extends ConsumerState<_Body>
       studyControllerProvider(widget.id)
           .select((state) => state.valueOrNull?.engineGaugeParams),
     );
+    final isComputerAnalysisAllowed = ref.watch(
+      studyControllerProvider(widget.id)
+          .select((s) => s.requireValue.isComputerAnalysisAllowed),
+    );
 
     final currentNode = ref.watch(
       studyControllerProvider(widget.id)
           .select((state) => state.requireValue.currentNode),
     );
 
-    final engineLines = EngineLines(
-      clientEval: currentNode.eval,
-      isGameOver: currentNode.position?.isGameOver ?? false,
-      onTapMove: ref
-          .read(
-            studyControllerProvider(widget.id).notifier,
-          )
-          .onUserMove,
-    );
-
-    final showEvaluationGauge = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
-    );
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+    final numEvalLines = analysisPrefs.numEvalLines;
 
     final bottomChild =
         gamebookActive ? StudyGamebook(widget.id) : StudyTreeView(widget.id);
@@ -238,7 +232,9 @@ class _BodyState extends ConsumerState<_Body>
         boardSize: boardSize,
         borderRadius: borderRadius,
       ),
-      engineGaugeBuilder: showEvaluationGauge && engineGaugeParams != null
+      engineGaugeBuilder: isComputerAnalysisAllowed &&
+              showEvaluationGauge &&
+              engineGaugeParams != null
           ? (context, orientation) {
               return orientation == Orientation.portrait
                   ? EngineGauge(
@@ -257,7 +253,17 @@ class _BodyState extends ConsumerState<_Body>
                     );
             }
           : null,
-      engineLines: engineLines,
+      engineLines: isComputerAnalysisAllowed && numEvalLines > 0
+          ? EngineLines(
+              clientEval: currentNode.eval,
+              isGameOver: currentNode.position?.isGameOver ?? false,
+              onTapMove: ref
+                  .read(
+                    studyControllerProvider(widget.id).notifier,
+                  )
+                  .onUserMove,
+            )
+          : null,
       bottomBar: StudyBottomBar(id: widget.id),
       children: [bottomChild],
     );

@@ -193,8 +193,10 @@ class AnalysisLayout extends StatelessWidget {
                           children: [
                             if (engineLines != null)
                               Padding(
-                                padding: const EdgeInsets.all(
-                                  kTabletBoardTableSidePadding,
+                                padding: const EdgeInsets.only(
+                                  top: kTabletBoardTableSidePadding,
+                                  left: kTabletBoardTableSidePadding,
+                                  right: kTabletBoardTableSidePadding,
                                 ),
                                 child: engineLines,
                               ),

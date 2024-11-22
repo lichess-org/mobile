@@ -231,21 +231,13 @@ class _OpeningExplorerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = isTabletOrLarger(context);
     final loadingOverlay = Positioned.fill(
       child: IgnorePointer(ignoring: !isLoading),
     );
 
     return Stack(
       children: [
-        ListView(
-          padding: isTablet
-              ? const EdgeInsets.symmetric(
-                  horizontal: kTabletBoardTableSidePadding,
-                )
-              : EdgeInsets.zero,
-          children: children,
-        ),
+        ListView(children: children),
         loadingOverlay,
       ],
     );

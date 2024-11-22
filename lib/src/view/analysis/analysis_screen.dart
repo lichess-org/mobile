@@ -171,9 +171,9 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showEvaluationGauge = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
-    );
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+    final numEvalLines = analysisPrefs.numEvalLines;
 
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
                     );
             }
           : null,
-      engineLines: isEngineAvailable
+      engineLines: isEngineAvailable && numEvalLines > 0
           ? EngineLines(
               onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
               clientEval: currentNode.eval,
