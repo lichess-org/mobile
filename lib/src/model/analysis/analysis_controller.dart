@@ -32,7 +32,6 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 typedef StandaloneAnalysis = ({
   String pgn,
   Variant variant,
-  Side orientation,
   bool isComputerAnalysisAllowed,
 });
 
@@ -42,6 +41,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
   @Assert('standalone != null || gameId != null')
   const factory AnalysisOptions({
+    required Side orientation,
     StandaloneAnalysis? standalone,
     GameId? gameId,
     int? initialMoveCursor,
@@ -55,7 +55,6 @@ class AnalysisController extends _$AnalysisController
     implements PgnTreeNotifier {
   late final Root _root;
   late final Variant _variant;
-  late final Side _orientation;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
@@ -75,14 +74,12 @@ class AnalysisController extends _$AnalysisController
       final game =
           await ref.watch(archivedGameProvider(id: options.gameId!).future);
       _variant = game.meta.variant;
-      _orientation = game.youAre ?? Side.white;
       pgn = game.makePgn();
       opening = game.data.opening;
       serverAnalysis = game.serverAnalysis;
       division = game.meta.division;
     } else {
       _variant = options.standalone!.variant;
-      _orientation = options.standalone!.orientation;
       pgn = options.standalone!.pgn;
       opening = null;
       serverAnalysis = null;
@@ -164,7 +161,7 @@ class AnalysisController extends _$AnalysisController
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
-      pov: _orientation,
+      pov: options.orientation,
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
@@ -425,7 +422,7 @@ class AnalysisController extends _$AnalysisController
   Future<void> requestServerAnalysis() {
     if (state.requireValue.canRequestServerAnalysis) {
       final service = ref.read(serverAnalysisServiceProvider);
-      return service.requestAnalysis(options.gameId!, _orientation);
+      return service.requestAnalysis(options.gameId!, options.orientation);
     }
     return Future.error('Cannot request server analysis');
   }

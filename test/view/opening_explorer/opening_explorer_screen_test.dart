@@ -40,10 +40,10 @@ void main() {
   });
 
   const options = AnalysisOptions(
+    orientation: Side.white,
     standalone: (
       pgn: '',
       isComputerAnalysisAllowed: false,
-      orientation: Side.white,
       variant: Variant.standard,
     ),
   );

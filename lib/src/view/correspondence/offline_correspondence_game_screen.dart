@@ -260,11 +260,11 @@ class _BodyState extends ConsumerState<_Body> {
                   context,
                   builder: (_) => AnalysisScreen(
                     options: AnalysisOptions(
+                      orientation: game.youAre,
                       standalone: (
                         pgn: game.makePgn(),
                         isComputerAnalysisAllowed: false,
                         variant: game.variant,
-                        orientation: game.youAre,
                       ),
                       initialMoveCursor: stepCursor,
                     ),

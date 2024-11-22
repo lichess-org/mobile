@@ -24,10 +24,10 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions(
+            orientation: Side.white,
             standalone: (
               pgn: sanMoves,
               isComputerAnalysisAllowed: false,
-              orientation: Side.white,
               variant: Variant.standard,
             ),
           ),
@@ -60,11 +60,11 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions(
+            orientation: Side.white,
             standalone: (
               pgn: sanMoves,
               isComputerAnalysisAllowed: false,
               variant: Variant.standard,
-              orientation: Side.white,
             ),
           ),
         ),
@@ -127,11 +127,11 @@ void main() {
           },
           home: AnalysisScreen(
             options: AnalysisOptions(
+              orientation: Side.white,
               standalone: (
                 pgn: pgn,
                 isComputerAnalysisAllowed: false,
                 variant: Variant.standard,
-                orientation: Side.white,
               ),
             ),
             enableDrawingShapes: false,

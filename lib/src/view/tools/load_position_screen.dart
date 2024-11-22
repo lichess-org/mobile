@@ -131,11 +131,11 @@ class _BodyState extends State<_Body> {
       return (
         fen: pos.fen,
         options: AnalysisOptions(
+          orientation: Side.white,
           standalone: (
             pgn: '[FEN "${pos.fen}"]',
             isComputerAnalysisAllowed: true,
             variant: Variant.standard,
-            orientation: Side.white,
           ),
         )
       );
@@ -163,11 +163,11 @@ class _BodyState extends State<_Body> {
       return (
         fen: lastPosition.fen,
         options: AnalysisOptions(
+          orientation: Side.white,
           standalone: (
             pgn: textInput!,
             isComputerAnalysisAllowed: true,
             variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
-            orientation: Side.white,
           ),
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
         )

@@ -261,11 +261,11 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
               context,
               builder: (_) => AnalysisScreen(
                 options: AnalysisOptions(
+                  orientation: Side.white,
                   standalone: (
                     pgn: game.makePgn(),
                     isComputerAnalysisAllowed: true,
                     variant: game.meta.variant,
-                    orientation: Side.white,
                   ),
                 ),
               ),

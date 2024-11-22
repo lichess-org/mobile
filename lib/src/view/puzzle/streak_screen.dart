@@ -292,11 +292,11 @@ class _BottomBar extends ConsumerWidget {
                 context,
                 builder: (context) => AnalysisScreen(
                   options: AnalysisOptions(
+                    orientation: puzzleState.pov,
                     standalone: (
                       pgn: ref.read(ctrlProvider.notifier).makePgn(),
                       isComputerAnalysisAllowed: true,
                       variant: Variant.standard,
-                      orientation: puzzleState.pov,
                     ),
                     initialMoveCursor: 0,
                   ),

@@ -149,11 +149,11 @@ class _Body extends ConsumerWidget {
               rootNavigator: true,
               builder: (context) => const AnalysisScreen(
                 options: AnalysisOptions(
+                  orientation: Side.white,
                   standalone: (
                     pgn: '',
                     isComputerAnalysisAllowed: true,
                     variant: Variant.standard,
-                    orientation: Side.white,
                   ),
                 ),
               ),
@@ -168,11 +168,11 @@ class _Body extends ConsumerWidget {
                       rootNavigator: true,
                       builder: (context) => const OpeningExplorerScreen(
                         options: AnalysisOptions(
+                          orientation: Side.white,
                           standalone: (
                             pgn: '',
                             isComputerAnalysisAllowed: false,
                             variant: Variant.standard,
-                            orientation: Side.white,
                           ),
                         ),
                       ),

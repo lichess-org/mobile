@@ -1167,6 +1167,7 @@ class GameState with _$GameState {
   String get analysisPgn => game.makePgn();
 
   AnalysisOptions get analysisOptions => AnalysisOptions(
+        orientation: game.youAre ?? Side.white,
         initialMoveCursor: stepCursor,
         gameId: gameFullId.gameId,
       );

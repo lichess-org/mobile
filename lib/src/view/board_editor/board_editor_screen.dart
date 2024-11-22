@@ -336,11 +336,11 @@ class _BottomBar extends ConsumerWidget {
                     rootNavigator: true,
                     builder: (context) => AnalysisScreen(
                       options: AnalysisOptions(
+                        orientation: editorState.orientation,
                         standalone: (
                           pgn: editorState.pgn!,
                           isComputerAnalysisAllowed: true,
                           variant: Variant.fromPosition,
-                          orientation: editorState.orientation,
                         ),
                       ),
                     ),

@@ -380,6 +380,7 @@ class _BottomBar extends ConsumerWidget {
                     context,
                     builder: (context) => AnalysisScreen(
                       options: AnalysisOptions(
+                        orientation: orientation,
                         gameId: gameData.id,
                         initialMoveCursor: cursor,
                       ),

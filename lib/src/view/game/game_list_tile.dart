@@ -226,7 +226,10 @@ class _ContextMenu extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     builder: (context) => AnalysisScreen(
-                      options: AnalysisOptions(gameId: game.id),
+                      options: AnalysisOptions(
+                        orientation: orientation,
+                        gameId: game.id,
+                      ),
                     ),
                   );
                 }
