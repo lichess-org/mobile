@@ -256,7 +256,8 @@ typedef _PgnTreeViewParams = ({
   PgnTreeNotifier notifier,
 });
 
-IList<ViewBranch> _computerPrefAwareChildren(
+/// Filter node children when computer analysis is disabled
+IList<ViewBranch> _filteredChildren(
   ViewNode node,
   bool withComputerAnalysis,
 ) {
@@ -278,8 +279,7 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 
 /// Returns whether this node has a sideline that should not be displayed inline.
 bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params) {
-  final children =
-      _computerPrefAwareChildren(node, params.withComputerAnalysis);
+  final children = _filteredChildren(node, params.withComputerAnalysis);
   return children.length > 2 ||
       (children.length == 2 && !_displaySideLineAsInline(children[1]));
 }
@@ -507,7 +507,9 @@ List<InlineSpan> _buildInlineSideLine({
             node,
             lineInfo: (
               type: _LineType.inlineSideline,
-              startLine: i == 0 || sidelineNodes[i - 1].hasTextComment,
+              startLine: i == 0 ||
+                  (params.shouldShowComments &&
+                      sidelineNodes[i - 1].hasTextComment),
               pathToLine: initialPath,
             ),
             pathToNode: pathToNode,
@@ -628,7 +630,7 @@ class _SideLinePart extends ConsumerWidget {
               node.children.first,
               lineInfo: (
                 type: _LineType.sideline,
-                startLine: node.hasTextComment,
+                startLine: params.shouldShowComments && node.hasTextComment,
                 pathToLine: initialPath,
               ),
               pathToNode: path,
@@ -693,13 +695,12 @@ class _MainLinePart extends ConsumerWidget {
       TextSpan(
         children: nodes
             .takeWhile(
-              (node) =>
-                  _computerPrefAwareChildren(node, params.withComputerAnalysis)
-                      .isNotEmpty,
+              (node) => _filteredChildren(node, params.withComputerAnalysis)
+                  .isNotEmpty,
             )
             .mapIndexed(
               (i, node) {
-                final children = _computerPrefAwareChildren(
+                final children = _filteredChildren(
                   node,
                   params.withComputerAnalysis,
                 );
