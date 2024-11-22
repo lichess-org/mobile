@@ -176,27 +176,16 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gamebookActive = ref.watch(
-      studyControllerProvider(id)
-          .select((state) => state.requireValue.gamebookActive),
-    );
-    final engineGaugeParams = ref.watch(
-      studyControllerProvider(id)
-          .select((state) => state.valueOrNull?.engineGaugeParams),
-    );
-    final isComputerAnalysisAllowed = ref.watch(
-      studyControllerProvider(id)
-          .select((s) => s.requireValue.isComputerAnalysisAllowed),
-    );
-
-    final currentNode = ref.watch(
-      studyControllerProvider(id)
-          .select((state) => state.requireValue.currentNode),
-    );
-
+    final studyState = ref.watch(studyControllerProvider(id)).requireValue;
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
+
+    final gamebookActive = studyState.gamebookActive;
+    final engineGaugeParams = studyState.engineGaugeParams;
+    final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
+    final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
+    final currentNode = studyState.currentNode;
 
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
@@ -229,7 +218,9 @@ class _Body extends ConsumerWidget {
                       );
               }
             : null,
-        engineLines: isComputerAnalysisAllowed && numEvalLines > 0
+        engineLines: isComputerAnalysisAllowed &&
+                isLocalEvaluationEnabled &&
+                numEvalLines > 0
             ? EngineLines(
                 clientEval: currentNode.eval,
                 isGameOver: currentNode.position?.isGameOver ?? false,
