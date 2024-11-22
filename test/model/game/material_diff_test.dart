@@ -38,6 +38,32 @@ void main() {
           }),
         ),
       );
+      expect(
+        diff.bySide(Side.black).capturedPieces,
+        equals(
+          IMap<Role, int>(const {
+            Role.king: 0,
+            Role.queen: 0,
+            Role.rook: 0,
+            Role.bishop: 2,
+            Role.knight: 2,
+            Role.pawn: 4,
+          }),
+        ),
+      );
+      expect(
+        diff.bySide(Side.white).capturedPieces,
+        equals(
+          IMap<Role, int>(const {
+            Role.king: 0,
+            Role.queen: 1,
+            Role.rook: 1,
+            Role.bishop: 1,
+            Role.knight: 2,
+            Role.pawn: 3,
+          }),
+        ),
+      );
     });
   });
 }

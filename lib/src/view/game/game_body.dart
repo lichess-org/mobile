@@ -122,9 +122,10 @@ class GameBody extends ConsumerWidget {
 
         final black = GamePlayer(
           player: gameState.game.black,
-          materialDiff: boardPreferences.showMaterialDifference
+          materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
+          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.black
               ? gameState.timeToMove
               : null,
@@ -174,9 +175,10 @@ class GameBody extends ConsumerWidget {
         );
         final white = GamePlayer(
           player: gameState.game.white,
-          materialDiff: boardPreferences.showMaterialDifference
+          materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
+          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.white
               ? gameState.timeToMove
               : null,
