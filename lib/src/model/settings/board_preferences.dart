@@ -121,6 +121,10 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    @JsonKey(
+      defaultValue: ClockPosition.right,
+      unknownEnumValue: ClockPosition.right,
+    )
     required ClockPosition clockPosition,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
@@ -131,7 +135,10 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
-    @JsonKey(defaultValue: DragTargetKind.circle)
+    @JsonKey(
+      defaultValue: DragTargetKind.circle,
+      unknownEnumValue: DragTargetKind.circle,
+    )
     required DragTargetKind dragTargetKind,
     @JsonKey(
       defaultValue: ShapeColor.green,
