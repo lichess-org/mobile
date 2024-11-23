@@ -19,29 +19,16 @@ class BroadcastGameTreeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
-
-    final root =
-        ref.watch(ctrlProvider.select((value) => value.requireValue.root));
-
-    final currentPath = ref
-        .watch(ctrlProvider.select((value) => value.requireValue.currentPath));
-
-    final broadcastLivePath = ref.watch(
-      ctrlProvider.select((value) => value.requireValue.broadcastLivePath),
-    );
-
-    final pgnRootComments = ref.watch(
-      ctrlProvider.select((value) => value.requireValue.pgnRootComments),
-    );
+    final broadcastGameState = ref.watch(ctrlProvider).requireValue;
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
     return SingleChildScrollView(
       child: DebouncedPgnTreeView(
-        root: root,
-        currentPath: currentPath,
-        broadcastLivePath: broadcastLivePath,
-        pgnRootComments: pgnRootComments,
+        root: broadcastGameState.root,
+        currentPath: broadcastGameState.currentPath,
+        broadcastLivePath: broadcastGameState.broadcastLivePath,
+        pgnRootComments: broadcastGameState.pgnRootComments,
         shouldShowAnnotations: analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
       ),

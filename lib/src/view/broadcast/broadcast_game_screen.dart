@@ -210,14 +210,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
         broadcastGameControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select(
-        (value) => value.showBestMoveArrow,
-      ),
-    );
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
     final evalBestMoves = ref.watch(
       engineEvaluationProvider.select((s) => s.eval?.bestMoves),
@@ -230,7 +223,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
     final sanMove = currentNode.sanMove;
 
-    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
+    final ISet<Shape> bestMoveShapes = analysisPrefs.showBestMoveArrow &&
             broadcastAnalysisState.isLocalEvaluationEnabled &&
             bestMoves != null
         ? computeBestMoveShapes(
@@ -263,7 +256,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
-          showAnnotationsOnBoard && sanMove != null && annotation != null
+          analysisPrefs.showAnnotations && sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
                   ? IMap({
                       Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
