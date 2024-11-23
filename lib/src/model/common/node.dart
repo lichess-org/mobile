@@ -5,8 +5,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:logging/logging.dart';
 
 part 'node.freezed.dart';
+
+final _logger = Logger('Node');
 
 /// A node in a game tree.
 ///
@@ -519,6 +522,10 @@ class Root extends Node {
           );
 
           onVisitNode?.call(root, branch, isMainline);
+        } else {
+          _logger.warning(
+            'Invalid move: ${childFrom.data.san}, on position: ${frame.to.position}',
+          );
         }
       }
     }
