@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-// TODO remove when eval bar is ready
-// ignore: unused_import
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -18,7 +15,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
@@ -85,12 +81,6 @@ class BroadcastPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO uncomment when eval bar is ready
-    // final showEvaluationBar = ref.watch(
-    //   broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
-    // );
-    // TODO remove when eval bar is ready
-    const showEvaluationBar = false;
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -100,7 +90,7 @@ class BroadcastPreview extends StatelessWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 4 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWithMaybeEvalBarWidth = (screenWidth -
+    final boardWidth = (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
@@ -112,23 +102,14 @@ class BroadcastPreview extends StatelessWidget {
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
         mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
-        childAspectRatio: 1 + evaluationBarAspectRatio,
+        mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
       ),
       itemBuilder: (context, index) {
-        final boardSize = boardWithMaybeEvalBarWidth -
-            (showEvaluationBar
-                // TODO remove when eval bar is ready
-                // ignore: dead_code
-                ? evaluationBarAspectRatio * boardWithMaybeEvalBarWidth
-                : 0);
-
         if (games == null) {
           return BoardThumbnail.loading(
-            size: boardSize,
-            header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-            footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-            showEvaluationBar: showEvaluationBar,
+            size: boardWidth,
+            header: _PlayerWidgetLoading(width: boardWidth),
+            footer: _PlayerWidgetLoading(width: boardWidth),
           );
         }
 
@@ -149,17 +130,16 @@ class BroadcastPreview extends StatelessWidget {
           },
           orientation: Side.white,
           fen: game.fen,
-          showEvaluationBar: showEvaluationBar,
           lastMove: game.lastMove,
-          size: boardSize,
+          size: boardWidth,
           header: _PlayerWidget(
-            width: boardWithMaybeEvalBarWidth,
+            width: boardWidth,
             game: game,
             side: Side.black,
             playingSide: playingSide,
           ),
           footer: _PlayerWidget(
-            width: boardWithMaybeEvalBarWidth,
+            width: boardWidth,
             game: game,
             side: Side.white,
             playingSide: playingSide,

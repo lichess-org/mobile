@@ -5,19 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastScreen extends StatelessWidget {
   final Broadcast broadcast;
@@ -89,8 +83,6 @@ class _AndroidScreenState extends State<_AndroidScreen>
             Tab(text: context.l10n.broadcastBoards),
           ],
         ),
-        // TODO uncomment when eval bar is ready
-        // actions: [_BroadcastSettingsButton()],
       ),
       body: TabBarView(
         controller: _tabController,
@@ -172,7 +164,6 @@ class _CupertinoScreenState extends State<_CupertinoScreen> {
             }
           },
         ),
-        trailing: _BroadcastSettingsButton(),
       ),
       child: Column(
         children: [
@@ -433,54 +424,5 @@ class _IOSTournamentAndRoundSelector extends ConsumerWidget {
       AsyncError(:final error) => Center(child: Text(error.toString())),
       _ => const SizedBox.shrink(),
     };
-  }
-}
-
-class _BroadcastSettingsButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => AppBarIconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isDismissible: true,
-          isScrollControlled: true,
-          showDragHandle: true,
-          builder: (_) => const _BroadcastSettingsBottomSheet(),
-        ),
-        semanticsLabel: context.l10n.settingsSettings,
-      );
-}
-
-class _BroadcastSettingsBottomSheet extends ConsumerWidget {
-  const _BroadcastSettingsBottomSheet();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
-
-    return DraggableScrollableSheet(
-      initialChildSize: .6,
-      expand: false,
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          PlatformListTile(
-            title:
-                Text(context.l10n.settingsSettings, style: Styles.sectionTitle),
-            subtitle: const SizedBox.shrink(),
-          ),
-          const SizedBox(height: 8.0),
-          SwitchSettingTile(
-            title: const Text('Evaluation bar'),
-            value: broadcastPreferences.showEvaluationBar,
-            onChanged: (value) {
-              ref
-                  .read(broadcastPreferencesProvider.notifier)
-                  .toggleEvaluationBar();
-            },
-          ),
-        ],
-      ),
-    );
   }
 }
