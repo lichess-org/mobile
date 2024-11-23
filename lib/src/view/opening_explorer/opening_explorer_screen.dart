@@ -31,7 +31,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
-const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
+const _kTabletBoardRadius = Radius.circular(4.0);
 
 class OpeningExplorerScreen extends ConsumerStatefulWidget {
   const OpeningExplorerScreen({required this.options});
@@ -352,7 +352,7 @@ class _OpeningExplorerView extends StatelessWidget {
                         child: AnalysisBoard(
                           options,
                           boardSize,
-                          borderRadius: isTablet ? _kTabletBoardRadius : null,
+                          radius: isTablet ? _kTabletBoardRadius : null,
                           shouldReplaceChildOnUserMove: true,
                         ),
                       ),
