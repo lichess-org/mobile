@@ -73,14 +73,11 @@ class BroadcastGameController extends _$BroadcastGameController
     _root = Root.fromPgnGame(game);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
-    final lastMove = (_root.mainlinePath.last != null)
-        ? Move.parse(_root.mainlinePath.last.toString())
-        : null;
+    final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
-
     final broadcastState = BroadcastGameState(
       id: gameId,
       currentPath: currentPath,
