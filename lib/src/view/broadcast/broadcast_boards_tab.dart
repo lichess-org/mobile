@@ -136,6 +136,7 @@ class BroadcastPreview extends StatelessWidget {
         final playingSide = Setup.parseFen(game.fen).turn;
 
         return BoardThumbnail(
+          animationDuration: const Duration(milliseconds: 150),
           onTap: () {
             pushPlatformRoute(
               context,
