@@ -84,9 +84,9 @@ class _AndroidScreenState extends State<_AndroidScreen>
         title: Text(widget.broadcast.title),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const <Widget>[
-            Tab(text: 'Overview'),
-            Tab(text: 'Boards'),
+          tabs: <Widget>[
+            Tab(text: context.l10n.broadcastOverview),
+            Tab(text: context.l10n.broadcastBoards),
           ],
         ),
         // TODO uncomment when eval bar is ready
