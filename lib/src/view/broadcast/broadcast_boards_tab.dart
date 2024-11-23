@@ -3,7 +3,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -14,6 +16,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
 // to calculate the height of the header and footer of the board
@@ -77,7 +80,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends StatelessWidget {
+class BroadcastPreview extends ConsumerWidget {
   const BroadcastPreview({
     required this.tournamentId,
     required this.roundId,
@@ -104,7 +107,10 @@ class BroadcastPreview extends StatelessWidget {
   final String roundSlug;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showEvaluationBar = ref.watch(
+      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+    );
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -114,7 +120,7 @@ class BroadcastPreview extends StatelessWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWidth =
+    final boardWithMaybeEvalBarWidth =
         (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
@@ -125,16 +131,21 @@ class BroadcastPreview extends StatelessWidget {
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
         mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
+        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+        childAspectRatio: 1 + evaluationBarAspectRatio,
       ),
       delegate: SliverChildBuilderDelegate(
         childCount: games == null ? numberLoadingBoards : games!.length,
         (context, index) {
+          final boardSize =
+              boardWithMaybeEvalBarWidth -
+              (showEvaluationBar ? evaluationBarAspectRatio * boardWithMaybeEvalBarWidth : 0);
+
           if (games == null) {
             return BoardThumbnail.loading(
-              size: boardWidth,
-              header: _PlayerWidgetLoading(width: boardWidth),
-              footer: _PlayerWidgetLoading(width: boardWidth),
+              size: boardSize,
+              header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+              footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
             );
           }
 
@@ -160,16 +171,21 @@ class BroadcastPreview extends StatelessWidget {
             },
             orientation: Side.white,
             fen: game.fen,
+            showEvaluationBar: showEvaluationBar,
+            whiteWinningChances:
+                (game.cp != null || game.mate != null)
+                    ? ExternalEval(cp: game.cp, mate: game.mate).winningChances(Side.white)
+                    : null,
             lastMove: game.lastMove,
-            size: boardWidth,
+            size: boardSize,
             header: _PlayerWidget(
-              width: boardWidth,
+              width: boardWithMaybeEvalBarWidth,
               game: game,
               side: Side.black,
               playingSide: playingSide,
             ),
             footer: _PlayerWidget(
-              width: boardWidth,
+              width: boardWithMaybeEvalBarWidth,
               game: game,
               side: Side.white,
               playingSide: playingSide,
