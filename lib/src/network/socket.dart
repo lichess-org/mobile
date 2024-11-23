@@ -306,7 +306,7 @@ class SocketClient {
         _sink
             ?.close()
             .then((_) {
-              _logger.fine('WebSocket connection to $route was properly closed.');
+              _logger.fine('WebSocket connection to $route was properly closed');
               if (isDisposed) {
                 return;
               }
@@ -330,6 +330,8 @@ class SocketClient {
   }
 
   void _handleEvent(SocketEvent event) {
+    _logger.fine('WebSocket received ${event.topic} event');
+
     switch (event.topic) {
       case '_pong':
         _handlePong(pingDelay);

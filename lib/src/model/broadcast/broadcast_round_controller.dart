@@ -30,7 +30,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   late SocketClient _socketClient;
 
-  final _debouncer = Debouncer(const Duration(milliseconds: 150));
+  final _syncRoundDebouncer = Debouncer(const Duration(milliseconds: 150));
+  final _evalRequestDebouncer = Debouncer(const Duration(milliseconds: 200));
 
   Object? _key = Object();
 
@@ -46,7 +47,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       if (state.valueOrNull?.round.status == RoundStatus.live) {
-        _debouncer(() {
+        _syncRoundDebouncer(() {
           _syncRound();
         });
       }
@@ -55,7 +56,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
         if (state.valueOrNull?.round.status == RoundStatus.live) {
-          _debouncer(() {
+          _syncRoundDebouncer(() {
             _syncRound();
           });
         }
@@ -67,22 +68,20 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _appLifecycleListener?.dispose();
-      _debouncer.dispose();
+      _syncRoundDebouncer.dispose();
+      _evalRequestDebouncer.dispose();
     });
 
     final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    return BroadcastRoundState(
-      round: round.round,
-      games: round.games,
-      observedGames: IList(round.games.keys),
-    );
+    return BroadcastRoundState(round: round.round, games: round.games, observedGames: IList());
   }
 
   Future<void> _syncRound() async {
     if (state.hasValue == false) return;
+
     final key = _key;
     final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
@@ -97,6 +96,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         ),
       );
     }
+
+    _sendEvalMultiGet();
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -132,11 +133,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
 
-    // If the game was observed we ask the sever for new evaluations
-    if (state.requireValue.observedGames.contains(broadcastGameId)) {
-      _sendEvalMultiGet();
-    }
-
     final playingSide = Setup.parseFen(fen).turn;
 
     state = AsyncData(
@@ -154,10 +150,17 @@ class BroadcastRoundController extends _$BroadcastRoundController {
             fen: fen,
             lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
             updatedClockAt: DateTime.now(),
+            cp: null,
+            mate: null,
           ),
         ),
       ),
     );
+
+    // If the game was observed we ask the sever for new evaluations
+    if (state.requireValue.observedGames.contains(broadcastGameId)) {
+      _sendEvalMultiGet();
+    }
   }
 
   void _handleAddChapterEvent(SocketEvent event) {
@@ -227,7 +230,25 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
   }
 
-  void updateObservedGames() {}
+  void addObservedGame(BroadcastGameId gameId) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(
+      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
+    );
+
+    _evalRequestDebouncer(_sendEvalMultiGet);
+  }
+
+  void removeObservedGame(BroadcastGameId gameId) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(
+      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.remove(gameId)),
+    );
+
+    _evalRequestDebouncer(_sendEvalMultiGet);
+  }
 
   void _sendEvalMultiGet() {
     final round = state.requireValue;
