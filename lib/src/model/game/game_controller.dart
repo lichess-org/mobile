@@ -979,8 +979,10 @@ class GameController extends _$GameController {
 
   Future<void> _storeGame(PlayableGame game) async {
     if (game.finished) {
-      (await ref.read(gameStorageProvider.future))
-          .save(game.toArchivedGame(finishedAt: DateTime.now()));
+      final gameStorage = await ref.read(gameStorageProvider.future);
+      final existing = await gameStorage.fetch(gameId: gameFullId.gameId);
+      final finishedAt = existing?.data.lastMoveAt ?? DateTime.now();
+      await gameStorage.save(game.toArchivedGame(finishedAt: finishedAt));
     }
   }
 
