@@ -62,8 +62,6 @@ class BroadcastGameController extends _$BroadcastGameController
       evaluationService.disposeEngine();
     });
 
-    Move? lastMove;
-
     final pgn = await ref.withClient(
       (client) => BroadcastRepository(client).getGame(roundId, gameId),
     );
@@ -73,9 +71,11 @@ class BroadcastGameController extends _$BroadcastGameController
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
     _root = Root.fromPgnGame(game);
-
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
+    final lastMove = (_root.mainlinePath.last != null)
+        ? Move.parse(_root.mainlinePath.last.toString())
+        : null;
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
