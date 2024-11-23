@@ -199,15 +199,17 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
           }
         });
         if (oldWidget.currentPath != widget.currentPath) {
-          if (currentMoveKey.currentContext != null) {
-            Scrollable.ensureVisible(
-              currentMoveKey.currentContext!,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeIn,
-              alignment: 0.5,
-              alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-            );
-          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (currentMoveKey.currentContext != null) {
+              Scrollable.ensureVisible(
+                currentMoveKey.currentContext!,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+                alignment: 0.5,
+                alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+              );
+            }
+          });
         }
       });
     }
