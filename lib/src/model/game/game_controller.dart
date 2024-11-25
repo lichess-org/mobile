@@ -1169,9 +1169,19 @@ class GameState with _$GameState {
 
   String get analysisPgn => game.makePgn();
 
-  AnalysisOptions get analysisOptions => AnalysisOptions(
-        orientation: game.youAre ?? Side.white,
-        initialMoveCursor: stepCursor,
-        gameId: gameFullId.gameId,
-      );
+  AnalysisOptions get analysisOptions => game.finished
+      ? AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameId: gameFullId.gameId,
+        )
+      : AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          standalone: (
+            pgn: game.makePgn(),
+            variant: game.meta.variant,
+            isComputerAnalysisAllowed: false,
+          ),
+        );
 }
