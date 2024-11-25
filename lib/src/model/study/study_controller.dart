@@ -58,7 +58,6 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   }
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
-    state = const AsyncValue.loading();
     state = AsyncValue.data(
       await _fetchChapter(
         state.requireValue.study.id,
