@@ -177,6 +177,24 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
+    final variant = studyState.variant;
+    if (!variant.isReadSupported) {
+      return DefaultTabController(
+        length: 1,
+        child: AnalysisLayout(
+          boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
+            dimension: boardSize,
+            child: Center(
+              child: Text(
+                '${variant.label} is not supported yet.',
+              ),
+            ),
+          ),
+          children: const [SizedBox.shrink()],
+        ),
+      );
+    }
+
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
