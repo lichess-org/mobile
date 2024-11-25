@@ -146,7 +146,9 @@ class AnalysisController extends _$AnalysisController
       return hasOpening;
     }).then((hasOpening) {
       if (hasOpening) {
-        _setPath(state.requireValue.currentPath);
+        scheduleMicrotask(() {
+          _setPath(state.requireValue.currentPath);
+        });
       }
     });
 
