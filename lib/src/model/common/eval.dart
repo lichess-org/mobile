@@ -72,7 +72,7 @@ class ClientEval with _$ClientEval implements Eval {
     required int nodes,
     required IList<PvData> pvs,
     required int millis,
-    required int maxDepth,
+    required Duration searchTime,
     int? cp,
     int? mate,
   }) = _ClientEval;

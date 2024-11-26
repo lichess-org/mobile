@@ -202,6 +202,7 @@ class AnalysisController extends _$AnalysisController
         options: EvaluationOptions(
           multiPv: prefs.numEvalLines,
           cores: prefs.numEngineCores,
+          searchTime: prefs.engineSearchTime,
         ),
       )
           .then((_) {
@@ -389,6 +390,7 @@ class AnalysisController extends _$AnalysisController
             options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
               cores: prefs.numEngineCores,
+              searchTime: prefs.engineSearchTime,
             ),
           );
       _startEngineEval();
@@ -407,6 +409,7 @@ class AnalysisController extends _$AnalysisController
           EvaluationOptions(
             multiPv: numEvalLines,
             cores: ref.read(analysisPreferencesProvider).numEngineCores,
+            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
           ),
         );
 
@@ -432,6 +435,23 @@ class AnalysisController extends _$AnalysisController
           EvaluationOptions(
             multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
             cores: numEngineCores,
+            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
+          ),
+        );
+
+    _startEngineEval();
+  }
+
+  void setEngineSearchTime(Duration searchTime) {
+    ref
+        .read(analysisPreferencesProvider.notifier)
+        .setEngineSearchTime(searchTime);
+
+    ref.read(evaluationServiceProvider).setOptions(
+          EvaluationOptions(
+            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
+            cores: ref.read(analysisPreferencesProvider).numEngineCores,
+            searchTime: searchTime,
           ),
         );
 

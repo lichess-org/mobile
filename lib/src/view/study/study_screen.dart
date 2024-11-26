@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -54,13 +55,12 @@ class StudyScreen extends ConsumerWidget {
             ),
             actions: [
               AppBarIconButton(
-                onPressed: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  isDismissible: true,
-                  builder: (_) => StudySettings(id),
-                ),
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    screen: StudySettings(id),
+                  );
+                },
                 semanticsLabel: context.l10n.settingsSettings,
                 icon: const Icon(Icons.settings),
               ),

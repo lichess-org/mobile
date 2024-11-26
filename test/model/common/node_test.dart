@@ -194,7 +194,7 @@ void main() {
 
       final eval = ClientEval(
         position: branch.position,
-        maxDepth: 20,
+        searchTime: const Duration(seconds: 10),
         cp: 100,
         depth: 10,
         nodes: 1000,
@@ -227,7 +227,7 @@ void main() {
 
       final eval = ClientEval(
         position: root.position,
-        maxDepth: 20,
+        searchTime: const Duration(seconds: 10),
         cp: 100,
         depth: 10,
         nodes: 1000,
