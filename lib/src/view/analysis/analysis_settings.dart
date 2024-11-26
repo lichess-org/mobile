@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -95,106 +94,19 @@ class AnalysisSettings extends ConsumerWidget {
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
-                secondChild: ListSection(
-                  header: const SettingsSectionTitle('Stockfish 16'),
-                  children: [
-                    SwitchSettingTile(
-                      title: Text(context.l10n.toggleLocalEvaluation),
-                      value: prefs.enableLocalEvaluation,
-                      onChanged: (_) {
-                        ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                      },
-                    ),
-                    PlatformListTile(
-                      title: Text.rich(
-                        TextSpan(
-                          text: 'Search time: ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                          ),
-                          children: [
-                            TextSpan(
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                              text: prefs.engineSearchTime.inSeconds == 3600
-                                  ? '∞'
-                                  : '${prefs.engineSearchTime.inSeconds}s',
-                            ),
-                          ],
-                        ),
-                      ),
-                      subtitle: NonLinearSlider(
-                        labelBuilder: (value) =>
-                            value == 3600 ? '∞' : '${value}s',
-                        value: prefs.engineSearchTime.inSeconds,
-                        values: kAvailableEngineSearchTimes
-                            .map((e) => e.inSeconds)
-                            .toList(),
-                        onChangeEnd: (value) =>
-                            ref.read(ctrlProvider.notifier).setEngineSearchTime(
-                                  Duration(seconds: value.toInt()),
-                                ),
-                      ),
-                    ),
-                    PlatformListTile(
-                      title: Text.rich(
-                        TextSpan(
-                          text: '${context.l10n.multipleLines}: ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                          ),
-                          children: [
-                            TextSpan(
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                              text: prefs.numEvalLines.toString(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      subtitle: NonLinearSlider(
-                        value: prefs.numEvalLines,
-                        values: const [0, 1, 2, 3],
-                        onChangeEnd: (value) => ref
-                            .read(ctrlProvider.notifier)
-                            .setNumEvalLines(value.toInt()),
-                      ),
-                    ),
-                    if (maxEngineCores > 1)
-                      PlatformListTile(
-                        title: Text.rich(
-                          TextSpan(
-                            text: '${context.l10n.cpus}: ',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                            ),
-                            children: [
-                              TextSpan(
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                                text: prefs.numEngineCores.toString(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        subtitle: NonLinearSlider(
-                          value: prefs.numEngineCores,
-                          values: List.generate(
-                            maxEngineCores,
-                            (index) => index + 1,
-                          ),
-                          onChangeEnd: (value) => ref
-                              .read(ctrlProvider.notifier)
-                              .setEngineCores(value.toInt()),
-                        ),
-                      ),
-                  ],
+                secondChild: StockfishSettingsWidget(
+                  onToggleLocalEvaluation: () {
+                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                  },
+                  onSetEngineSearchTime: (value) {
+                    ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
+                  },
+                  onSetEngineCores: (value) {
+                    ref.read(ctrlProvider.notifier).setEngineCores(value);
+                  },
+                  onSetNumEvalLines: (value) {
+                    ref.read(ctrlProvider.notifier).setNumEvalLines(value);
+                  },
                 ),
               ),
               ListSection(
