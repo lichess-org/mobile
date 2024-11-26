@@ -10,6 +10,12 @@ typedef FullEventTestClock = ({
   Duration black,
 });
 
+typedef FullEventTestCorrespondenceClock = ({
+  Duration white,
+  Duration black,
+  int daysPerTurn,
+});
+
 String makeFullEvent(
   GameId id,
   String pgn, {
@@ -17,7 +23,7 @@ String makeFullEvent(
   required String blackUserName,
   int socketVersion = 0,
   Side? youAre,
-  FullEventTestClock clock = const (
+  FullEventTestClock? clock = const (
     running: false,
     initial: Duration(minutes: 3),
     increment: Duration(seconds: 2),
@@ -25,8 +31,33 @@ String makeFullEvent(
     white: Duration(minutes: 3),
     black: Duration(minutes: 3),
   ),
+  FullEventTestCorrespondenceClock? correspondenceClock,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
+  final clockStr = clock != null
+      ? '''
+    "clock": {
+      "running": ${clock.running},
+      "initial": ${clock.initial.inSeconds},
+      "increment": ${clock.increment.inSeconds},
+      "white": ${(clock.white.inMilliseconds / 1000).toStringAsFixed(2)},
+      "black": ${(clock.black.inMilliseconds / 1000).toStringAsFixed(2)},
+      "emerg": 30,
+      "moretime": 15
+    },
+'''
+      : '';
+
+  final correspondenceClockStr = correspondenceClock != null
+      ? '''
+    "correspondence": {
+      "daysPerTurn": ${correspondenceClock.daysPerTurn},
+      "white": ${(correspondenceClock.white.inMilliseconds / 1000).toStringAsFixed(2)},
+      "black": ${(correspondenceClock.black.inMilliseconds / 1000).toStringAsFixed(2)}
+    },
+'''
+      : '';
+
   return '''
 {
   "t": "full",
@@ -38,8 +69,8 @@ String makeFullEvent(
           "name": "Standard",
           "short": "Std"
         },
-        "speed": "blitz",
-        "perf": "blitz",
+        "speed": "${clock != null ? 'blitz' : 'correspondence'}",
+        "perf": "${clock != null ? 'blitz' : 'correspondence'}",
         "rated": false,
         "source": "lobby",
         "status": {
@@ -67,17 +98,10 @@ String makeFullEvent(
       },
       "onGame": true
     },
+    $clockStr
+    $correspondenceClockStr
     $youAreStr
     "socket": $socketVersion,
-    "clock": {
-      "running": ${clock.running},
-      "initial": ${clock.initial.inSeconds},
-      "increment": ${clock.increment.inSeconds},
-      "white": ${(clock.white.inMilliseconds / 1000).toStringAsFixed(2)},
-      "black": ${(clock.black.inMilliseconds / 1000).toStringAsFixed(2)},
-      "emerg": 30,
-      "moretime": 15
-    },
     "expiration": {
       "idleMillis": 245,
       "millisToMove": 30000

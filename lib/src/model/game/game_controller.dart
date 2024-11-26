@@ -12,7 +12,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -110,6 +109,7 @@ class GameController extends _$GameController {
             _logger.warning('Could not get post game data: $e', e, s);
             return game;
           });
+          await _storeGame(game);
         }
 
         _socketEventVersion = fullEvent.socketEventVersion;
@@ -422,21 +422,6 @@ class GameController extends _$GameController {
 
   void declineRematch() {
     _socketClient.send('rematch-no', null);
-  }
-
-  Future<void> requestServerAnalysis() {
-    return state.mapOrNull(
-          data: (d) {
-            if (!d.value.game.finished) {
-              return Future<void>.error(
-                'Cannot request server analysis on a non finished game',
-              );
-            }
-            final service = ref.read(serverAnalysisServiceProvider);
-            return service.requestAnalysis(gameFullId);
-          },
-        ) ??
-        Future<void>.value();
   }
 
   /// Gets the live game clock if available.
@@ -994,8 +979,10 @@ class GameController extends _$GameController {
 
   Future<void> _storeGame(PlayableGame game) async {
     if (game.finished) {
-      (await ref.read(gameStorageProvider.future))
-          .save(game.toArchivedGame(finishedAt: DateTime.now()));
+      final gameStorage = await ref.read(gameStorageProvider.future);
+      final existing = await gameStorage.fetch(gameId: gameFullId.gameId);
+      final finishedAt = existing?.data.lastMoveAt ?? DateTime.now();
+      await gameStorage.save(game.toArchivedGame(finishedAt: finishedAt));
     }
   }
 
@@ -1185,14 +1172,19 @@ class GameState with _$GameState {
 
   String get analysisPgn => game.makePgn();
 
-  AnalysisOptions get analysisOptions => AnalysisOptions(
-        isLocalEvaluationAllowed: true,
-        variant: game.meta.variant,
-        initialMoveCursor: stepCursor,
-        orientation: game.youAre ?? Side.white,
-        id: gameFullId,
-        opening: game.meta.opening,
-        serverAnalysis: game.serverAnalysis,
-        division: game.meta.division,
-      );
+  AnalysisOptions get analysisOptions => game.finished
+      ? AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameId: gameFullId.gameId,
+        )
+      : AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          standalone: (
+            pgn: game.makePgn(),
+            variant: game.meta.variant,
+            isComputerAnalysisAllowed: false,
+          ),
+        );
 }

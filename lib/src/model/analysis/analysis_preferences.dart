@@ -26,6 +26,14 @@ class AnalysisPreferences extends _$AnalysisPreferences
     return fetch();
   }
 
+  Future<void> toggleEnableComputerAnalysis() {
+    return save(
+      state.copyWith(
+        enableComputerAnalysis: !state.enableComputerAnalysis,
+      ),
+    );
+  }
+
   Future<void> toggleEnableLocalEvaluation() {
     return save(
       state.copyWith(
@@ -83,6 +91,14 @@ class AnalysisPreferences extends _$AnalysisPreferences
       ),
     );
   }
+
+  Future<void> setEngineSearchTime(Duration engineSearchTime) {
+    return save(
+      state.copyWith(
+        engineSearchTime: engineSearchTime,
+      ),
+    );
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -90,6 +106,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({
+    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
     required bool enableLocalEvaluation,
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
@@ -98,9 +115,16 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     @Assert('numEvalLines >= 0 && numEvalLines <= 3') required int numEvalLines,
     @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
     required int numEngineCores,
+    @JsonKey(
+      defaultValue: _searchTimeDefault,
+      fromJson: _searchTimeFromJson,
+      toJson: _searchTimeToJson,
+    )
+    required Duration engineSearchTime,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
+    enableComputerAnalysis: true,
     enableLocalEvaluation: true,
     showEvaluationGauge: true,
     showBestMoveArrow: true,
@@ -108,9 +132,34 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     showPgnComments: true,
     numEvalLines: 2,
     numEngineCores: 1,
+    engineSearchTime: Duration(seconds: 10),
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
     return _$AnalysisPrefsFromJson(json);
   }
 }
+
+Duration _searchTimeDefault() {
+  return const Duration(seconds: 10);
+}
+
+Duration _searchTimeFromJson(int seconds) {
+  return Duration(seconds: seconds);
+}
+
+int _searchTimeToJson(Duration duration) {
+  return duration.inSeconds;
+}
+
+const kAvailableEngineSearchTimes = [
+  Duration(seconds: 4),
+  Duration(seconds: 6),
+  Duration(seconds: 8),
+  Duration(seconds: 10),
+  Duration(seconds: 12),
+  Duration(seconds: 15),
+  Duration(seconds: 20),
+  Duration(seconds: 30),
+  Duration(hours: 1),
+];

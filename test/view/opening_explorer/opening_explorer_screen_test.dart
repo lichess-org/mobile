@@ -40,10 +40,12 @@ void main() {
   });
 
   const options = AnalysisOptions(
-    id: standaloneOpeningExplorerId,
-    isLocalEvaluationAllowed: false,
     orientation: Side.white,
-    variant: Variant.standard,
+    standalone: (
+      pgn: '',
+      isComputerAnalysisAllowed: false,
+      variant: Variant.standard,
+    ),
   );
 
   const name = 'John';
@@ -64,18 +66,17 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            pgn: '',
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
-        // wait for opening explorer data to load
-        await tester.pump(const Duration(milliseconds: 50));
+        // wait for opening explorer data to load (taking debounce delay into account)
+        await tester.pump(const Duration(milliseconds: 350));
 
         final moves = [
           'e4',
@@ -102,8 +103,6 @@ void main() {
         //   find.byType(OpeningExplorerGameTile),
         //   findsNWidgets(2),
         // );
-
-        await tester.pump(const Duration(milliseconds: 50));
       },
       variant: kPlatformVariant,
     );
@@ -113,10 +112,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            pgn: '',
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
@@ -132,9 +128,11 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
-        // wait for opening explorer data to load
-        await tester.pump(const Duration(milliseconds: 50));
+        // wait for opening explorer data to load (taking debounce delay into account)
+        await tester.pump(const Duration(milliseconds: 350));
 
         final moves = [
           'd4',
@@ -157,8 +155,6 @@ void main() {
         //   find.byType(OpeningExplorerGameTile),
         //   findsOneWidget,
         // );
-
-        await tester.pump(const Duration(milliseconds: 50));
       },
       variant: kPlatformVariant,
     );
@@ -168,10 +164,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const OpeningExplorerScreen(
-            pgn: '',
-            options: options,
-          ),
+          home: const OpeningExplorerScreen(options: options),
           overrides: [
             defaultClientProvider.overrideWithValue(mockClient),
           ],
@@ -188,9 +181,11 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
 
-        // wait for opening explorer data to load
-        await tester.pump(const Duration(milliseconds: 50));
+        // wait for opening explorer data to load (taking debounce delay into account)
+        await tester.pump(const Duration(milliseconds: 350));
 
         final moves = [
           'c4',
@@ -213,8 +208,6 @@ void main() {
         //   find.byType(OpeningExplorerGameTile),
         //   findsOneWidget,
         // );
-
-        await tester.pump(const Duration(milliseconds: 50));
       },
       variant: kPlatformVariant,
     );

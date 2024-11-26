@@ -18,6 +18,7 @@ class ListSection extends StatelessWidget {
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
     this.cupertinoBackgroundColor,
+    this.cupertinoBorderRadius,
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
@@ -36,6 +37,7 @@ class ListSection extends StatelessWidget {
         dense = false,
         cupertinoAdditionalDividerMargin = null,
         cupertinoBackgroundColor = null,
+        cupertinoBorderRadius = null,
         cupertinoClipBehavior = Clip.hardEdge,
         _isLoading = true;
 
@@ -66,6 +68,8 @@ class ListSection extends StatelessWidget {
   final double? cupertinoAdditionalDividerMargin;
 
   final Color? cupertinoBackgroundColor;
+
+  final BorderRadiusGeometry? cupertinoBorderRadius;
 
   final Clip cupertinoClipBehavior;
 
@@ -193,7 +197,7 @@ class ListSection extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: cupertinoBackgroundColor ??
                             Styles.cupertinoCardColor.resolveFrom(context),
-                        borderRadius:
+                        borderRadius: cupertinoBorderRadius ??
                             const BorderRadius.all(Radius.circular(10.0)),
                       ),
                       separatorColor:

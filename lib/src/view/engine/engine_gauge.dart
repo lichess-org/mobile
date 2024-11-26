@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-const double kEvalGaugeSize = 26.0;
+const double kEvalGaugeSize = 24.0;
 const double kEvalGaugeFontSize = 11.0;
 const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
 const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);

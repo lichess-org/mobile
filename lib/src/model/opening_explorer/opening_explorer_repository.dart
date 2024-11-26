@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_repository.g.dart';
@@ -20,6 +21,7 @@ class OpeningExplorer extends _$OpeningExplorer {
   Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({
     required String fen,
   }) async {
+    await ref.debounce(const Duration(milliseconds: 300));
     ref.onDispose(() {
       _openingExplorerSubscription?.cancel();
     });

@@ -570,10 +570,8 @@ class _GameBottomBar extends ConsumerWidget {
                 onTap: () {
                   pushPlatformRoute(
                     context,
-                    builder: (_) => AnalysisScreen(
-                      pgnOrId: gameState.analysisPgn,
-                      options: gameState.analysisOptions,
-                    ),
+                    builder: (_) =>
+                        AnalysisScreen(options: gameState.analysisOptions),
                   );
                 },
               )
@@ -703,12 +701,8 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: (context) {
               pushPlatformRoute(
                 context,
-                builder: (_) => AnalysisScreen(
-                  pgnOrId: gameState.analysisPgn,
-                  options: gameState.analysisOptions.copyWith(
-                    isLocalEvaluationAllowed: false,
-                  ),
-                ),
+                builder: (_) =>
+                    AnalysisScreen(options: gameState.analysisOptions),
               );
             },
           ),
