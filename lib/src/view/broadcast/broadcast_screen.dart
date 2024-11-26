@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/dropdown_menu.dart' as fixed;
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -208,13 +209,15 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
           children: [
             if (value.group != null)
               Flexible(
-                child: DropdownMenu<BroadcastTournamentId>(
+                child: // TODO replace with the Flutter framework DropdownMenu when next beta channel is released
+                    fixed.DropdownMenu<BroadcastTournamentId>(
                   label: const Text('Tournament'),
                   initialSelection: value.data.id,
                   dropdownMenuEntries: value.group!
                       .map(
                         (tournament) =>
-                            DropdownMenuEntry<BroadcastTournamentId>(
+                            // TODO replace with the Flutter framework DropdownMenuEntry when next beta channel is released
+                            fixed.DropdownMenuEntry<BroadcastTournamentId>(
                           value: tournament.id,
                           label: tournament.name,
                         ),
@@ -230,13 +233,15 @@ class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
                 ),
               ),
             Flexible(
-              child: DropdownMenu<BroadcastRoundId>(
+              child: // TODO replace with the Flutter framework DropdownMenu when next beta channel is released
+                  fixed.DropdownMenu<BroadcastRoundId>(
                 label: const Text('Round'),
                 initialSelection: value.defaultRoundId,
                 dropdownMenuEntries: value.rounds
                     .map(
                       (BroadcastRound round) =>
-                          DropdownMenuEntry<BroadcastRoundId>(
+                          // TODO replace with the Flutter framework DropdownMenuEntry when next beta channel is released
+                          fixed.DropdownMenuEntry<BroadcastRoundId>(
                         value: round.id,
                         label: round.name,
                       ),
