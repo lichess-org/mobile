@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -122,6 +123,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool pieceAnimation,
     required bool showMaterialDifference,
     required ClockPosition clockPosition,
+    required CastlingMethod castlingMethod,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -158,6 +160,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    castlingMethod: CastlingMethod.kingTwoSquares, //TODO: Default for now, update to use board/user prefs
   );
 
   ChessboardSettings toBoardSettings() {

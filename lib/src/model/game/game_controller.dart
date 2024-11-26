@@ -1093,11 +1093,14 @@ class GameState with _$GameState {
   }) = _GameState;
 
   /// The [Position] and its legal moves at the current cursor.
-  (Position, IMap<Square, ISet<Square>>) get currentPosition {
+  (Position, IMap<Square, ISet<Square>>) getCurrentPosition(
+    CastlingMethod castlingMethod,
+  ) {
     final position = game.positionAt(stepCursor);
     final legalMoves = makeLegalMoves(
       position,
       isChess960: game.meta.variant == Variant.chess960,
+      castlingMethod: castlingMethod,
     );
     return (position, legalMoves);
   }
