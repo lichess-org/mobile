@@ -1,4 +1,5 @@
 import 'package:deep_pick/deep_pick.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 
 extension UciExtension on Pick {

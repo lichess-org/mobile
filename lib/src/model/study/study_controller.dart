@@ -137,6 +137,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         options: EvaluationOptions(
           multiPv: prefs.numEvalLines,
           cores: prefs.numEngineCores,
+          searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
         ),
       )
           .then((_) {
@@ -350,6 +351,8 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
             options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
               cores: prefs.numEngineCores,
+              searchTime:
+                  ref.read(analysisPreferencesProvider).engineSearchTime,
             ),
           );
       _startEngineEval();
@@ -370,6 +373,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
           EvaluationOptions(
             multiPv: numEvalLines,
             cores: ref.read(analysisPreferencesProvider).numEngineCores,
+            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
           ),
         );
 
@@ -395,6 +399,23 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
           EvaluationOptions(
             multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
             cores: numEngineCores,
+            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
+          ),
+        );
+
+    _startEngineEval();
+  }
+
+  void setEngineSearchTime(Duration searchTime) {
+    ref
+        .read(analysisPreferencesProvider.notifier)
+        .setEngineSearchTime(searchTime);
+
+    ref.read(evaluationServiceProvider).setOptions(
+          EvaluationOptions(
+            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
+            cores: ref.read(analysisPreferencesProvider).numEngineCores,
+            searchTime: searchTime,
           ),
         );
 

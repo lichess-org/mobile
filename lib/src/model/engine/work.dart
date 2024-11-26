@@ -20,7 +20,7 @@ class Work with _$Work {
     required int threads,
     int? hashSize,
     required UciPath path,
-    required int maxDepth,
+    required Duration searchTime,
     required int multiPv,
     bool? threatMode,
     required Position initialPosition,
