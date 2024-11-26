@@ -229,8 +229,19 @@ class _OpeningExplorerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
     final loadingOverlay = Positioned.fill(
-      child: IgnorePointer(ignoring: !isLoading),
+      child: IgnorePointer(
+        ignoring: !isLoading,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastOutSlowIn,
+          opacity: isLoading ? 0.20 : 0.0,
+          child: ColoredBox(
+            color: brightness == Brightness.dark ? Colors.black : Colors.white,
+          ),
+        ),
+      ),
     );
 
     return Stack(
