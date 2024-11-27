@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastGameSettings extends ConsumerWidget {
@@ -23,122 +22,62 @@ class BroadcastGameSettings extends ConsumerWidget {
     final broacdcastGameAnalysisController =
         broadcastGameControllerProvider(roundId, gameId);
 
-    final isLocalEvaluationEnabled = ref.watch(
-      broacdcastGameAnalysisController
-          .select((s) => s.requireValue.isLocalEvaluationEnabled),
-    );
-
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return BottomSheetScrollableContainer(
-      children: [
-        SwitchSettingTile(
-          title: Text(context.l10n.toggleLocalEvaluation),
-          value: analysisPrefs.enableLocalEvaluation,
-          onChanged: (_) {
-            ref
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      body: ListView(
+        children: [
+          StockfishSettingsWidget(
+            onToggleLocalEvaluation: () => ref
                 .read(broacdcastGameAnalysisController.notifier)
-                .toggleLocalEvaluation();
-          },
-        ),
-        PlatformListTile(
-          title: Text.rich(
-            TextSpan(
-              text: '${context.l10n.multipleLines}: ',
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
+                .toggleLocalEvaluation(),
+            onSetEngineSearchTime: (value) => ref
+                .read(broacdcastGameAnalysisController.notifier)
+                .setEngineSearchTime(value),
+            onSetNumEvalLines: (value) => ref
+                .read(broacdcastGameAnalysisController.notifier)
+                .setNumEvalLines(value),
+            onSetEngineCores: (value) => ref
+                .read(broacdcastGameAnalysisController.notifier)
+                .setEngineCores(value),
+          ),
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.toggleGlyphAnnotations),
+                value: analysisPrefs.showAnnotations,
+                onChanged: (_) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .toggleAnnotations(),
               ),
-              children: [
-                TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                  text: analysisPrefs.numEvalLines.toString(),
-                ),
-              ],
-            ),
-          ),
-          subtitle: NonLinearSlider(
-            value: analysisPrefs.numEvalLines,
-            values: const [0, 1, 2, 3],
-            onChangeEnd: isLocalEvaluationEnabled
-                ? (value) => ref
-                    .read(broacdcastGameAnalysisController.notifier)
-                    .setNumEvalLines(value.toInt())
-                : null,
-          ),
-        ),
-        if (maxEngineCores > 1)
-          PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.cpus}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-                children: [
-                  TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                    text: analysisPrefs.numEngineCores.toString(),
-                  ),
-                ],
+              SwitchSettingTile(
+                title: Text(context.l10n.mobileShowComments),
+                value: analysisPrefs.showPgnComments,
+                onChanged: (_) => ref
+                    .read(analysisPreferencesProvider.notifier)
+                    .togglePgnComments(),
               ),
-            ),
-            subtitle: NonLinearSlider(
-              value: analysisPrefs.numEngineCores,
-              values: List.generate(maxEngineCores, (index) => index + 1),
-              onChangeEnd: isLocalEvaluationEnabled
-                  ? (value) => ref
-                      .read(broacdcastGameAnalysisController.notifier)
-                      .setEngineCores(value.toInt())
-                  : null,
-            ),
+            ],
           ),
-        SwitchSettingTile(
-          title: Text(context.l10n.bestMoveArrow),
-          value: analysisPrefs.showBestMoveArrow,
-          onChanged: isLocalEvaluationEnabled
-              ? (value) => ref
-                  .read(analysisPreferencesProvider.notifier)
-                  .toggleShowBestMoveArrow()
-              : null,
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.evaluationGauge),
-          value: analysisPrefs.showEvaluationGauge,
-          onChanged: (value) => ref
-              .read(analysisPreferencesProvider.notifier)
-              .toggleShowEvaluationGauge(),
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.toggleGlyphAnnotations),
-          value: analysisPrefs.showAnnotations,
-          onChanged: (_) => ref
-              .read(analysisPreferencesProvider.notifier)
-              .toggleAnnotations(),
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.mobileShowComments),
-          value: analysisPrefs.showPgnComments,
-          onChanged: (_) => ref
-              .read(analysisPreferencesProvider.notifier)
-              .togglePgnComments(),
-        ),
-        SwitchSettingTile(
-          title: Text(context.l10n.sound),
-          value: isSoundEnabled,
-          onChanged: (value) {
-            ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-          },
-        ),
-      ],
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.sound),
+                value: isSoundEnabled,
+                onChanged: (value) {
+                  ref
+                      .read(generalPreferencesProvider.notifier)
+                      .toggleSoundEnabled();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

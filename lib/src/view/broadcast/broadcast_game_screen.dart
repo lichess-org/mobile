@@ -19,13 +19,13 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -52,17 +52,16 @@ class BroadcastGameScreen extends ConsumerWidget {
         title: Text(title),
         actions: [
           AppBarIconButton(
-            onPressed: () => (broadcastGameState.hasValue)
-                ? showAdaptiveBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    isDismissible: true,
-                    builder: (_) => BroadcastGameSettings(
-                      roundId,
-                      gameId,
-                    ),
-                  )
+            onPressed: (broadcastGameState.hasValue)
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      screen: BroadcastGameSettings(
+                        roundId,
+                        gameId,
+                      ),
+                    );
+                  }
                 : null,
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),

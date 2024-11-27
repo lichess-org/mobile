@@ -108,349 +108,349 @@ void main() {
         isTrue,
       );
     });
+  });
 
-    group('Analysis Tree View', () {
-      Future<void> buildTree(
-        WidgetTester tester,
-        String pgn,
-      ) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          defaultPreferences: {
-            PrefCategory.analysis.storageKey: jsonEncode(
-              AnalysisPrefs.defaults
-                  .copyWith(
-                    enableLocalEvaluation: false,
-                  )
-                  .toJson(),
-            ),
-          },
-          home: AnalysisScreen(
-            options: AnalysisOptions(
-              orientation: Side.white,
-              standalone: (
-                pgn: pgn,
-                isComputerAnalysisAllowed: false,
-                variant: Variant.standard,
-              ),
-            ),
-            enableDrawingShapes: false,
+  group('Analysis Tree View', () {
+    Future<void> buildTree(
+      WidgetTester tester,
+      String pgn,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(
+                  enableLocalEvaluation: false,
+                )
+                .toJson(),
           ),
-        );
-
-        await tester.pumpWidget(app);
-        await tester.pump(const Duration(milliseconds: 1));
-      }
-
-      Text parentText(WidgetTester tester, String move) {
-        return tester.widget<Text>(
-          find.ancestor(
-            of: find.text(move),
-            matching: find.byType(Text),
+        },
+        home: AnalysisScreen(
+          options: AnalysisOptions(
+            orientation: Side.white,
+            standalone: (
+              pgn: pgn,
+              isComputerAnalysisAllowed: false,
+              variant: Variant.standard,
+            ),
           ),
+          enableDrawingShapes: false,
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 1));
+    }
+
+    Text parentText(WidgetTester tester, String move) {
+      return tester.widget<Text>(
+        find.ancestor(
+          of: find.text(move),
+          matching: find.byType(Text),
+        ),
+      );
+    }
+
+    void expectSameLine(WidgetTester tester, Iterable<String> moves) {
+      final line = parentText(tester, moves.first);
+
+      for (final move in moves.skip(1)) {
+        final moveText = find.text(move);
+        expect(moveText, findsOneWidget);
+        expect(
+          parentText(tester, move),
+          line,
         );
       }
+    }
 
-      void expectSameLine(WidgetTester tester, Iterable<String> moves) {
-        final line = parentText(tester, moves.first);
-
-        for (final move in moves.skip(1)) {
-          final moveText = find.text(move);
-          expect(moveText, findsOneWidget);
+    void expectDifferentLines(
+      WidgetTester tester,
+      List<String> moves,
+    ) {
+      for (int i = 0; i < moves.length; i++) {
+        for (int j = i + 1; j < moves.length; j++) {
           expect(
-            parentText(tester, move),
-            line,
+            parentText(tester, moves[i]),
+            isNot(parentText(tester, moves[j])),
           );
         }
       }
+    }
 
-      void expectDifferentLines(
-        WidgetTester tester,
-        List<String> moves,
-      ) {
-        for (int i = 0; i < moves.length; i++) {
-          for (int j = i + 1; j < moves.length; j++) {
-            expect(
-              parentText(tester, moves[i]),
-              isNot(parentText(tester, moves[j])),
-            );
-          }
-        }
-      }
+    testWidgets('displays short sideline as inline', (tester) async {
+      await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) 2. Nf3 *');
 
-      testWidgets('displays short sideline as inline', (tester) async {
-        await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) 2. Nf3 *');
+      final mainline = find.ancestor(
+        of: find.text('1. e4'),
+        matching: find.byType(Text),
+      );
+      expect(mainline, findsOneWidget);
 
-        final mainline = find.ancestor(
-          of: find.text('1. e4'),
-          matching: find.byType(Text),
-        );
-        expect(mainline, findsOneWidget);
+      expectSameLine(tester, ['1. e4', 'e5', '1… d5', '2. exd5', '2. Nf3']);
+    });
 
-        expectSameLine(tester, ['1. e4', 'e5', '1… d5', '2. exd5', '2. Nf3']);
-      });
+    testWidgets('displays long sideline on its own line', (tester) async {
+      await buildTree(
+        tester,
+        '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *',
+      );
 
-      testWidgets('displays long sideline on its own line', (tester) async {
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *',
-        );
+      expectSameLine(tester, ['1. e4', 'e5']);
+      expectSameLine(
+        tester,
+        ['1… d5', '2. exd5', 'Qxd5', '3. Nc3', 'Qd8', '4. d4', 'Nf6'],
+      );
+      expectSameLine(tester, ['2. Nc3']);
 
-        expectSameLine(tester, ['1. e4', 'e5']);
-        expectSameLine(
-          tester,
-          ['1… d5', '2. exd5', 'Qxd5', '3. Nc3', 'Qd8', '4. d4', 'Nf6'],
-        );
-        expectSameLine(tester, ['2. Nc3']);
+      expectDifferentLines(tester, ['1. e4', '1… d5', '2. Nc3']);
+    });
 
-        expectDifferentLines(tester, ['1. e4', '1… d5', '2. Nc3']);
-      });
+    testWidgets('displays sideline with branching on its own line',
+        (tester) async {
+      await buildTree(tester, '1. e4 e5 (1... d5 2. exd5 (2. Nc3)) *');
 
-      testWidgets('displays sideline with branching on its own line',
-          (tester) async {
-        await buildTree(tester, '1. e4 e5 (1... d5 2. exd5 (2. Nc3)) *');
+      expectSameLine(tester, ['1. e4', 'e5']);
 
-        expectSameLine(tester, ['1. e4', 'e5']);
+      // 2nd branch is rendered inline again
+      expectSameLine(tester, ['1… d5', '2. exd5', '2. Nc3']);
 
-        // 2nd branch is rendered inline again
-        expectSameLine(tester, ['1… d5', '2. exd5', '2. Nc3']);
+      expectDifferentLines(tester, ['1. e4', '1… d5']);
+    });
 
-        expectDifferentLines(tester, ['1. e4', '1… d5']);
-      });
+    testWidgets('multiple sidelines', (tester) async {
+      await buildTree(
+        tester,
+        '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
+      );
 
-      testWidgets('multiple sidelines', (tester) async {
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
-        );
+      expectSameLine(tester, ['1. e4', 'e5']);
+      expectSameLine(tester, ['1… d5', '2. exd5']);
+      expectSameLine(tester, ['1… Nf6', '2. e5']);
+      expectSameLine(tester, ['2. Nf3', 'Nc6', '2… a5']);
 
-        expectSameLine(tester, ['1. e4', 'e5']);
-        expectSameLine(tester, ['1… d5', '2. exd5']);
-        expectSameLine(tester, ['1… Nf6', '2. e5']);
-        expectSameLine(tester, ['2. Nf3', 'Nc6', '2… a5']);
+      expectDifferentLines(tester, ['1. e4', '1… d5', '1… Nf6', '2. Nf3']);
+    });
 
-        expectDifferentLines(tester, ['1. e4', '1… d5', '1… Nf6', '2. Nf3']);
-      });
+    testWidgets('collapses lines with nesting > 2', (tester) async {
+      await buildTree(
+        tester,
+        '1. e4 e5 (1... d5 2. Nc3 (2. h4 h5 (2... Nc6 3. d3) (2... Qd7))) *',
+      );
 
-      testWidgets('collapses lines with nesting > 2', (tester) async {
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. Nc3 (2. h4 h5 (2... Nc6 3. d3) (2... Qd7))) *',
-        );
+      expectSameLine(tester, ['1. e4', 'e5']);
+      expectSameLine(tester, ['1… d5']);
+      expectSameLine(tester, ['2. Nc3']);
+      expectSameLine(tester, ['2. h4']);
 
-        expectSameLine(tester, ['1. e4', 'e5']);
-        expectSameLine(tester, ['1… d5']);
-        expectSameLine(tester, ['2. Nc3']);
-        expectSameLine(tester, ['2. h4']);
+      expect(find.text('2… h5'), findsNothing);
+      expect(find.text('2… Nc6'), findsNothing);
+      expect(find.text('3. d3'), findsNothing);
+      expect(find.text('2… Qd7'), findsNothing);
 
-        expect(find.text('2… h5'), findsNothing);
-        expect(find.text('2… Nc6'), findsNothing);
-        expect(find.text('3. d3'), findsNothing);
-        expect(find.text('2… Qd7'), findsNothing);
+      // sidelines with nesting > 2 are collapsed -> expand them
+      expect(find.byIcon(Icons.add_box), findsOneWidget);
 
-        // sidelines with nesting > 2 are collapsed -> expand them
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.add_box));
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.add_box));
-        await tester.pumpAndSettle();
+      expectSameLine(tester, ['2… h5']);
+      expectSameLine(tester, ['2… Nc6', '3. d3']);
+      expectSameLine(tester, ['2… Qd7']);
 
-        expectSameLine(tester, ['2… h5']);
-        expectSameLine(tester, ['2… Nc6', '3. d3']);
-        expectSameLine(tester, ['2… Qd7']);
+      final d3 = find.text('3. d3');
+      await tester.longPress(d3);
+      await tester.pumpAndSettle();
 
-        final d3 = find.text('3. d3');
-        await tester.longPress(d3);
-        await tester.pumpAndSettle();
+      await tester.tap(find.text('Collapse variations'));
 
-        await tester.tap(find.text('Collapse variations'));
+      // need to wait for current move change debounce delay
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      // Sidelines should be collapsed again
+      expect(find.byIcon(Icons.add_box), findsOneWidget);
 
-        // Sidelines should be collapsed again
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
+      expect(find.text('2… h5'), findsNothing);
+      expect(find.text('2… Nc6'), findsNothing);
+      expect(find.text('3. d3'), findsNothing);
+      expect(find.text('2… Qd7'), findsNothing);
+    });
 
-        expect(find.text('2… h5'), findsNothing);
-        expect(find.text('2… Nc6'), findsNothing);
-        expect(find.text('3. d3'), findsNothing);
-        expect(find.text('2… Qd7'), findsNothing);
-      });
+    testWidgets(
+        'Expanding one line does not expand the following one (regression test)',
+        (tester) async {
+      /// Will be rendered as:
+      /// -------------------
+      /// 1. e4 e5
+      /// |- 1... d5 2. Nf3 (2.Nc3)
+      /// 2. Nf3
+      /// |- 2. a4 d5 (2... f5)
+      /// -------------------
+      await buildTree(
+        tester,
+        '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))',
+      );
 
-      testWidgets(
-          'Expanding one line does not expand the following one (regression test)',
-          (tester) async {
-        /// Will be rendered as:
-        /// -------------------
-        /// 1. e4 e5
-        /// |- 1... d5 2. Nf3 (2.Nc3)
-        /// 2. Nf3
-        /// |- 2. a4 d5 (2... f5)
-        /// -------------------
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))',
-        );
+      expect(find.byIcon(Icons.add_box), findsNothing);
 
-        expect(find.byIcon(Icons.add_box), findsNothing);
+      // Collapse both lines
+      await tester.longPress(find.text('1… d5'));
+      await tester.pumpAndSettle(); // wait for context menu to appear
+      await tester.tap(find.text('Collapse variations'));
 
-        // Collapse both lines
-        await tester.longPress(find.text('1… d5'));
-        await tester.pumpAndSettle(); // wait for context menu to appear
-        await tester.tap(find.text('Collapse variations'));
+      // wait for dialog to close and tree to refresh
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        // wait for dialog to close and tree to refresh
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      await tester.longPress(find.text('2. a4'));
+      await tester.pumpAndSettle(); // wait for context menu to appear
+      await tester.tap(find.text('Collapse variations'));
 
-        await tester.longPress(find.text('2. a4'));
-        await tester.pumpAndSettle(); // wait for context menu to appear
-        await tester.tap(find.text('Collapse variations'));
+      // wait for dialog to close and tree to refresh
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        // wait for dialog to close and tree to refresh
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      // In this state, there used to be a bug where expanding the first line would
+      // also expand the second line.
+      expect(find.byIcon(Icons.add_box), findsNWidgets(2));
+      await tester.tap(find.byIcon(Icons.add_box).first);
 
-        // In this state, there used to be a bug where expanding the first line would
-        // also expand the second line.
-        expect(find.byIcon(Icons.add_box), findsNWidgets(2));
-        await tester.tap(find.byIcon(Icons.add_box).first);
+      // need to wait for current move change debounce delay
+      await tester.pumpAndSettle();
 
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.add_box), findsOneWidget);
 
-        expect(find.byIcon(Icons.add_box), findsOneWidget);
+      // Second sideline should still be collapsed
+      expect(find.text('2. a4'), findsNothing);
+    });
 
-        // Second sideline should still be collapsed
-        expect(find.text('2. a4'), findsNothing);
-      });
+    testWidgets('subtrees not part of the current mainline part are cached',
+        (tester) async {
+      await buildTree(
+        tester,
+        '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
+      );
 
-      testWidgets('subtrees not part of the current mainline part are cached',
-          (tester) async {
-        await buildTree(
-          tester,
-          '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
-        );
+      // will be rendered as:
+      // -------------------
+      // 1. e4 e5              <-- first mainline part
+      // |- 1... d5 2. exd5
+      // |- 1... Nf6 2. e5
+      // 2. Nf3 Nc6 (2... a5)  <-- second mainline part
+      //         ^
+      //         |
+      //         current move
 
-        // will be rendered as:
-        // -------------------
-        // 1. e4 e5              <-- first mainline part
-        // |- 1... d5 2. exd5
-        // |- 1... Nf6 2. e5
-        // 2. Nf3 Nc6 (2... a5)  <-- second mainline part
-        //         ^
-        //         |
-        //         current move
+      final firstMainlinePart = parentText(tester, '1. e4');
+      final secondMainlinePart = parentText(tester, '2. Nf3');
 
-        final firstMainlinePart = parentText(tester, '1. e4');
-        final secondMainlinePart = parentText(tester, '2. Nf3');
+      expect(
+        tester
+            .widgetList<InlineMove>(
+              find.ancestor(
+                of: find.textContaining('Nc6'),
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .last
+            .isCurrentMove,
+        isTrue,
+      );
 
-        expect(
-          tester
-              .widgetList<InlineMove>(
-                find.ancestor(
-                  of: find.textContaining('Nc6'),
-                  matching: find.byType(InlineMove),
-                ),
-              )
-              .last
-              .isCurrentMove,
-          isTrue,
-        );
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      // need to wait for current move change debounce delay
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        await tester.tap(find.byKey(const Key('goto-previous')));
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      expect(
+        tester
+            .widgetList<InlineMove>(
+              find.ancestor(
+                of: find.textContaining('Nf3'),
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .last
+            .isCurrentMove,
+        isTrue,
+      );
 
-        expect(
-          tester
-              .widgetList<InlineMove>(
-                find.ancestor(
-                  of: find.textContaining('Nf3'),
-                  matching: find.byType(InlineMove),
-                ),
-              )
-              .last
-              .isCurrentMove,
-          isTrue,
-        );
+      // first mainline part has not changed since the current move is
+      // not part of it
+      expect(
+        identical(firstMainlinePart, parentText(tester, '1. e4')),
+        isTrue,
+      );
 
-        // first mainline part has not changed since the current move is
-        // not part of it
-        expect(
-          identical(firstMainlinePart, parentText(tester, '1. e4')),
-          isTrue,
-        );
+      final secondMainlinePartOnMoveNf3 = parentText(tester, '2. Nf3');
 
-        final secondMainlinePartOnMoveNf3 = parentText(tester, '2. Nf3');
+      // second mainline part has changed since the current move is part of it
+      expect(
+        secondMainlinePart,
+        isNot(secondMainlinePartOnMoveNf3),
+      );
 
-        // second mainline part has changed since the current move is part of it
-        expect(
-          secondMainlinePart,
-          isNot(secondMainlinePartOnMoveNf3),
-        );
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      // need to wait for current move change debounce delay
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        await tester.tap(find.byKey(const Key('goto-previous')));
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      expect(
+        tester
+            .widgetList<InlineMove>(
+              find.ancestor(
+                of: find.textContaining('e5'),
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .first
+            .isCurrentMove,
+        isTrue,
+      );
 
-        expect(
-          tester
-              .widgetList<InlineMove>(
-                find.ancestor(
-                  of: find.textContaining('e5'),
-                  matching: find.byType(InlineMove),
-                ),
-              )
-              .first
-              .isCurrentMove,
-          isTrue,
-        );
+      final firstMainlinePartOnMoveE5 = parentText(tester, '1. e4');
+      final secondMainlinePartOnMoveE5 = parentText(tester, '2. Nf3');
 
-        final firstMainlinePartOnMoveE5 = parentText(tester, '1. e4');
-        final secondMainlinePartOnMoveE5 = parentText(tester, '2. Nf3');
+      // first mainline part has changed since the current move is part of it
+      expect(
+        firstMainlinePart,
+        isNot(firstMainlinePartOnMoveE5),
+      );
 
-        // first mainline part has changed since the current move is part of it
-        expect(
-          firstMainlinePart,
-          isNot(firstMainlinePartOnMoveE5),
-        );
+      // second mainline part has changed since the current move is not part of it
+      // anymore
+      expect(
+        secondMainlinePartOnMoveNf3,
+        isNot(secondMainlinePartOnMoveE5),
+      );
 
-        // second mainline part has changed since the current move is not part of it
-        // anymore
-        expect(
-          secondMainlinePartOnMoveNf3,
-          isNot(secondMainlinePartOnMoveE5),
-        );
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      // need to wait for current move change debounce delay
+      await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
-        await tester.tap(find.byKey(const Key('goto-previous')));
-        // need to wait for current move change debounce delay
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      expect(
+        tester
+            .firstWidget<InlineMove>(
+              find.ancestor(
+                of: find.textContaining('e4'),
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .isCurrentMove,
+        isTrue,
+      );
 
-        expect(
-          tester
-              .firstWidget<InlineMove>(
-                find.ancestor(
-                  of: find.textContaining('e4'),
-                  matching: find.byType(InlineMove),
-                ),
-              )
-              .isCurrentMove,
-          isTrue,
-        );
+      final firstMainlinePartOnMoveE4 = parentText(tester, '1. e4');
+      final secondMainlinePartOnMoveE4 = parentText(tester, '2. Nf3');
 
-        final firstMainlinePartOnMoveE4 = parentText(tester, '1. e4');
-        final secondMainlinePartOnMoveE4 = parentText(tester, '2. Nf3');
+      // first mainline part has changed since the current move is part of it
+      expect(
+        firstMainlinePartOnMoveE4,
+        isNot(firstMainlinePartOnMoveE5),
+      );
 
-        // first mainline part has changed since the current move is part of it
-        expect(
-          firstMainlinePartOnMoveE4,
-          isNot(firstMainlinePartOnMoveE5),
-        );
-
-        // second mainline part has not changed since the current move is not part of it
-        expect(
-          identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4),
-          isTrue,
-        );
-      });
+      // second mainline part has not changed since the current move is not part of it
+      expect(
+        identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4),
+        isTrue,
+      );
     });
   });
 }

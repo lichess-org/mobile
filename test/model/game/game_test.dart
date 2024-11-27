@@ -29,6 +29,7 @@ void main() {
 ''',
       );
     });
+
     test('makePgn, finished game', () {
       final game = PlayableGame.fromServerJson(
         jsonDecode(_playableGameJson) as Map<String, dynamic>,
@@ -53,6 +54,54 @@ void main() {
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 Bb6 7. Ba3 Nf6 8. Qb3 d6 9. Bxf7+ Kf8 10. O-O Qe7 11. Nxe5 Nxe5 12. dxe5 Be6 13. Bxe6 Nxe4 14. Re1 Nc5 15. Bxc5 Bxc5 16. Qxb7 Re8 17. Bh3 dxe5 18. Qf3+ Kg8 19. Nd2 Rf8 20. Qd5+ Rf7 21. Be6 Qxe6 22. Qxe6 1-0
 ''',
       );
+    });
+
+    test('toArchivedGame', () {
+      for (final game in [_playableGameJson, _playable960GameJson]) {
+        final playableGame = PlayableGame.fromServerJson(
+          jsonDecode(game) as Map<String, dynamic>,
+        );
+        final now = DateTime.now();
+        final archivedGame = playableGame.toArchivedGame(finishedAt: now);
+
+        expect(archivedGame.id, playableGame.id);
+        expect(archivedGame.meta, playableGame.meta);
+        expect(archivedGame.source, playableGame.source);
+        expect(archivedGame.data.id, playableGame.id);
+        expect(archivedGame.data.lastMoveAt, now);
+        expect(archivedGame.data.createdAt, playableGame.meta.createdAt);
+        expect(archivedGame.data.lastFen, playableGame.lastPosition.fen);
+        expect(archivedGame.data.variant, playableGame.meta.variant);
+        expect(archivedGame.data.perf, playableGame.meta.perf);
+        expect(archivedGame.data.speed, playableGame.meta.speed);
+        expect(archivedGame.data.rated, playableGame.meta.rated);
+        expect(archivedGame.data.winner, playableGame.winner);
+        expect(archivedGame.data.white, playableGame.white);
+        expect(archivedGame.data.black, playableGame.black);
+        expect(archivedGame.data.opening, playableGame.meta.opening);
+        expect(
+          archivedGame.data.clock,
+          playableGame.meta.clock != null
+              ? (
+                  initial: playableGame.meta.clock!.initial,
+                  increment: playableGame.meta.clock!.increment,
+                )
+              : null,
+        );
+        expect(archivedGame.initialFen, playableGame.initialFen);
+        expect(
+          archivedGame.isThreefoldRepetition,
+          playableGame.isThreefoldRepetition,
+        );
+        expect(archivedGame.status, playableGame.status);
+        expect(archivedGame.winner, playableGame.winner);
+        expect(archivedGame.white, playableGame.white);
+        expect(archivedGame.black, playableGame.black);
+        expect(archivedGame.steps, playableGame.steps);
+        expect(archivedGame.clocks, playableGame.clocks);
+        expect(archivedGame.evals, playableGame.evals);
+        expect(archivedGame.youAre, playableGame.youAre);
+      }
     });
   });
 
@@ -119,6 +168,10 @@ const _unfinishedGameJson = '''
 
 const _playableGameJson = '''
 {"game":{"id":"CCW6EEru","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"6kr/p1p2rpp/4Q3/2b1p3/8/2P5/P2N1PPP/R3R1K1 b - - 0 22","turns":43,"source":"lobby","status":{"id":31,"name":"resign"},"createdAt":1706185945680,"winner":"white","pgn":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6"},"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9},"socket":0,"clock":{"running":false,"initial":120,"increment":1,"white":31.2,"black":27.42,"emerg":15,"moretime":15},"takebackable":true,"youAre":"white","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}
+''';
+
+const _playable960GameJson = '''
+{"game":{"id":"sfqnC9ZK","variant":{"key":"chess960","name":"Chess960","short":"960"},"speed":"blitz","perf":"chess960","rated":false,"fen":"1k2rb1n/pp4pp/1n3p2/2Npr3/5N2/5PP1/1PPBP2P/q1KRR1Q1 w - - 1 15","turns":28,"source":"lobby","status":{"id":30,"name":"mate"},"createdAt":1686125895867,"initialFen":"nrbkrbqn/pppppppp/8/8/8/8/PPPPPPPP/NRBKRBQN w KQkq - 0 1","winner":"black","pgn":"f3 Nb6 d3 d6 Be3 c5 d4 Bf5 O-O-O O-O-O Nf2 e5 dxe5 Rxe5 g3 Kb8 Bh3 Bxh3 Nxh3 f6 Nf4 Qxa2 Nb3 Rde8 Bd2 d5 Nxc5 Qa1#"},"white":{"user":{"name":"MinBorn","id":"minborn"},"rating":1500,"provisional":true},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1292,"provisional":true,"onGame":true},"socket":0,"clock":{"running":false,"initial":180,"increment":2,"white":145.34,"black":118.8,"emerg":22,"moretime":15},"youAre":"black","prefs":{"autoQueen":2,"zen":0,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}
 ''';
 
 const _archivedGameJson = '''

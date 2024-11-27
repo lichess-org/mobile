@@ -93,7 +93,6 @@ class _StockfishInfo extends ConsumerWidget {
         ? ', ${eval?.knps.round()}kn/s'
         : '';
     final depth = currentEval?.depth ?? 0;
-    final maxDepth = math.max(depth, kMaxEngineDepth);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -106,9 +105,7 @@ class _StockfishInfo extends ConsumerWidget {
           ),
           title: Text(engineName),
           subtitle: Text(
-            context.l10n.depthX(
-              '$depth/$maxDepth$knps',
-            ),
+            context.l10n.depthX('$depth$knps'),
           ),
         ),
       ],

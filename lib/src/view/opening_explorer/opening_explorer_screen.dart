@@ -334,9 +334,21 @@ class _OpeningExplorerView extends StatelessWidget {
                     : defaultBoardSize;
 
                 final isLandscape = aspectRatio > 1;
-
+                final brightness = Theme.of(context).brightness;
                 final loadingOverlay = Positioned.fill(
-                  child: IgnorePointer(ignoring: !isLoading),
+                  child: IgnorePointer(
+                    ignoring: !isLoading,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.fastOutSlowIn,
+                      opacity: isLoading ? 0.2 : 0.0,
+                      child: ColoredBox(
+                        color: brightness == Brightness.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                  ),
                 );
 
                 if (isLandscape) {
@@ -388,28 +400,28 @@ class _OpeningExplorerView extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return Stack(
+                  return ListView(
+                    padding: isTablet
+                        ? const EdgeInsets.symmetric(
+                            horizontal: kTabletBoardTableSidePadding,
+                          )
+                        : EdgeInsets.zero,
                     children: [
-                      ListView(
-                        padding: isTablet
-                            ? const EdgeInsets.symmetric(
-                                horizontal: kTabletBoardTableSidePadding,
-                              )
-                            : EdgeInsets.zero,
+                      GestureDetector(
+                        // disable scrolling when dragging the board
+                        onVerticalDragStart: (_) {},
+                        child: AnalysisBoard(
+                          options,
+                          boardSize,
+                          shouldReplaceChildOnUserMove: true,
+                        ),
+                      ),
+                      Stack(
                         children: [
-                          GestureDetector(
-                            // disable scrolling when dragging the board
-                            onVerticalDragStart: (_) {},
-                            child: AnalysisBoard(
-                              options,
-                              boardSize,
-                              shouldReplaceChildOnUserMove: true,
-                            ),
-                          ),
-                          ...children,
+                          ListBody(children: children),
+                          if (isLoading) loadingOverlay,
                         ],
                       ),
-                      loadingOverlay,
                     ],
                   );
                 }

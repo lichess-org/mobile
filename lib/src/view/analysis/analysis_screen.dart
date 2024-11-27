@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -88,16 +87,13 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
         controller: _tabController,
       ),
       AppBarIconButton(
-        onPressed: () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          showDragHandle: true,
-          isDismissible: true,
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.sizeOf(context).height * 0.5,
-          ),
-          builder: (_) => AnalysisSettings(widget.options),
-        ),
+        onPressed: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.settingsSettings,
+            builder: (_) => AnalysisSettings(widget.options),
+          );
+        },
         semanticsLabel: context.l10n.settingsSettings,
         icon: const Icon(Icons.settings),
       ),

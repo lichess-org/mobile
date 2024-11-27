@@ -20,7 +20,6 @@ import 'work.dart';
 part 'evaluation_service.g.dart';
 part 'evaluation_service.freezed.dart';
 
-const kMaxEngineDepth = 22;
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 final defaultEngineCores =
     min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
@@ -45,6 +44,7 @@ class EvaluationService {
   EvaluationOptions _options = EvaluationOptions(
     multiPv: 1,
     cores: defaultEngineCores,
+    searchTime: const Duration(seconds: 10),
   );
 
   static const _defaultState =
@@ -133,17 +133,17 @@ class EvaluationService {
       variant: context.variant,
       threads: _options.cores,
       hashSize: maxMemory,
-      maxDepth: kMaxEngineDepth,
+      searchTime: _options.searchTime,
       multiPv: _options.multiPv,
       path: path,
       initialPosition: context.initialPosition,
       steps: IList(steps),
     );
 
-    // cancel evaluation if we already have a cached eval at max depth
+    // cancel evaluation if we already have a cached eval at max search time
     final cachedEval =
         work.steps.isEmpty ? initialPositionEval : work.evalCache;
-    if (cachedEval != null && cachedEval.depth >= kMaxEngineDepth) {
+    if (cachedEval != null && cachedEval.searchTime >= _options.searchTime) {
       _state.value = (
         engineName: _state.value.engineName,
         state: _state.value.state,
@@ -231,5 +231,6 @@ class EvaluationOptions with _$EvaluationOptions {
   const factory EvaluationOptions({
     required int multiPv,
     required int cores,
+    required Duration searchTime,
   }) = _EvaluationOptions;
 }

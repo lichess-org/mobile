@@ -64,13 +64,10 @@ class _AnalysisBottomBar extends ConsumerWidget {
             showTooltip: false,
           ),
         ),
-        BottomBarButton(
-          onTap: state.hasNextChapter
-              ? ref.read(studyControllerProvider(id).notifier).nextChapter
-              : null,
-          icon: Icons.play_arrow,
-          label: context.l10n.studyNextChapter,
-          showLabel: true,
+        _NextChapterButton(
+          id: id,
+          chapterId: state.study.chapter.id,
+          hasNextChapter: state.hasNextChapter,
           blink: !state.isIntroductoryChapter &&
               state.isAtEndOfChapter &&
               state.hasNextChapter,
@@ -150,13 +147,10 @@ class _GamebookBottomBar extends ConsumerWidget {
                   label: context.l10n.studyPlayAgain,
                   showLabel: true,
                 ),
-              BottomBarButton(
-                onTap: state.hasNextChapter
-                    ? ref.read(studyControllerProvider(id).notifier).nextChapter
-                    : null,
-                icon: Icons.play_arrow,
-                label: context.l10n.studyNextChapter,
-                showLabel: true,
+              _NextChapterButton(
+                id: id,
+                chapterId: state.study.chapter.id,
+                hasNextChapter: state.hasNextChapter,
                 blink: !state.isIntroductoryChapter && state.hasNextChapter,
               ),
               if (!state.isIntroductoryChapter)
@@ -183,5 +177,54 @@ class _GamebookBottomBar extends ConsumerWidget {
         },
       ],
     );
+  }
+}
+
+class _NextChapterButton extends ConsumerStatefulWidget {
+  const _NextChapterButton({
+    required this.id,
+    required this.chapterId,
+    required this.hasNextChapter,
+    required this.blink,
+  });
+
+  final StudyId id;
+  final StudyChapterId chapterId;
+  final bool hasNextChapter;
+  final bool blink;
+
+  @override
+  ConsumerState<_NextChapterButton> createState() => _NextChapterButtonState();
+}
+
+class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
+  bool isLoading = false;
+
+  @override
+  void didUpdateWidget(_NextChapterButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.chapterId != widget.chapterId) {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : BottomBarButton(
+            onTap: widget.hasNextChapter
+                ? () {
+                    ref
+                        .read(studyControllerProvider(widget.id).notifier)
+                        .nextChapter();
+                    setState(() => isLoading = true);
+                  }
+                : null,
+            icon: Icons.play_arrow,
+            label: context.l10n.studyNextChapter,
+            showLabel: true,
+            blink: widget.blink,
+          );
   }
 }

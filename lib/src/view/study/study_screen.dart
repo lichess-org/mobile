@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -54,13 +55,12 @@ class StudyScreen extends ConsumerWidget {
             ),
             actions: [
               AppBarIconButton(
-                onPressed: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  isDismissible: true,
-                  builder: (_) => StudySettings(id),
-                ),
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    screen: StudySettings(id),
+                  );
+                },
                 semanticsLabel: context.l10n.settingsSettings,
                 icon: const Icon(Icons.settings),
               ),
@@ -177,6 +177,24 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
+    final variant = studyState.variant;
+    if (!variant.isReadSupported) {
+      return DefaultTabController(
+        length: 1,
+        child: AnalysisLayout(
+          boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
+            dimension: boardSize,
+            child: Center(
+              child: Text(
+                '${variant.label} is not supported yet.',
+              ),
+            ),
+          ),
+          children: const [SizedBox.shrink()],
+        ),
+      );
+    }
+
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;

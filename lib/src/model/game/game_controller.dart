@@ -979,8 +979,10 @@ class GameController extends _$GameController {
 
   Future<void> _storeGame(PlayableGame game) async {
     if (game.finished) {
-      (await ref.read(gameStorageProvider.future))
-          .save(game.toArchivedGame(finishedAt: DateTime.now()));
+      final gameStorage = await ref.read(gameStorageProvider.future);
+      final existing = await gameStorage.fetch(gameId: gameFullId.gameId);
+      final finishedAt = existing?.data.lastMoveAt ?? DateTime.now();
+      await gameStorage.save(game.toArchivedGame(finishedAt: finishedAt));
     }
   }
 
@@ -1167,9 +1169,19 @@ class GameState with _$GameState {
 
   String get analysisPgn => game.makePgn();
 
-  AnalysisOptions get analysisOptions => AnalysisOptions(
-        orientation: game.youAre ?? Side.white,
-        initialMoveCursor: stepCursor,
-        gameId: gameFullId.gameId,
-      );
+  AnalysisOptions get analysisOptions => game.finished
+      ? AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameId: gameFullId.gameId,
+        )
+      : AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          standalone: (
+            pgn: game.makePgn(),
+            variant: game.meta.variant,
+            isComputerAnalysisAllowed: false,
+          ),
+        );
 }
