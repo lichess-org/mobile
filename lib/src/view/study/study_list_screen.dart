@@ -197,10 +197,15 @@ class _BodyState extends ConsumerState<_Body> {
           controller: _scrollController,
           separatorBuilder: (context, index) => index == 0
               ? const SizedBox.shrink()
-              : const PlatformDivider(
-                  height: 1,
-                  cupertinoHasLeading: true,
-                ),
+              : Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(
+                      height: 1,
+                      cupertinoHasLeading: true,
+                    )
+                  : const PlatformDivider(
+                      height: 1,
+                      color: Colors.transparent,
+                    ),
           itemBuilder: (context, index) => index == 0
               ? searchBar
               : _StudyListItem(study: studies.studies[index - 1]),
@@ -234,60 +239,65 @@ class _StudyListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      padding: Styles.bodyPadding,
-      title: Row(
+      padding: Theme.of(context).platform == TargetPlatform.iOS
+          ? const EdgeInsets.symmetric(
+              horizontal: 14.0,
+              vertical: 12.0,
+            )
+          : null,
+      leading: _StudyFlair(
+        flair: study.flair,
+        size: 30,
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _StudyFlair(
-            flair: study.flair,
-            size: 30,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  study.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                _StudySubtitle(
-                  study: study,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+          Text(
+            study.name,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
         ],
       ),
-      subtitle: DefaultTextStyle.merge(
-        style: const TextStyle(
-          fontSize: 12,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 4,
-              child: _StudyChapters(study: study),
-            ),
-            Expanded(
-              flex: 3,
-              child: _StudyMembers(
-                study: study,
-              ),
-            ),
-          ],
-        ),
-      ),
+      subtitle: _StudySubtitle(study: study),
       onTap: () => pushPlatformRoute(
         context,
         rootNavigator: true,
         builder: (context) => StudyScreen(id: study.id),
       ),
+      onLongPress: () {
+        showAdaptiveBottomSheet<void>(
+          context: context,
+          useRootNavigator: true,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.sizeOf(context).height * 0.5,
+          ),
+          builder: (context) => _ContextMenu(study: study),
+        );
+      },
+    );
+  }
+}
+
+class _ContextMenu extends ConsumerWidget {
+  const _ContextMenu({
+    required this.study,
+  });
+
+  final StudyPageData study;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        _StudyChapters(study: study),
+        const SizedBox(height: 10.0),
+        _StudyMembers(study: study),
+      ],
     );
   }
 }
@@ -398,14 +408,9 @@ class _StudyFlair extends StatelessWidget {
 }
 
 class _StudySubtitle extends StatelessWidget {
-  const _StudySubtitle({
-    required this.study,
-    required this.style,
-  });
+  const _StudySubtitle({required this.study});
 
   final StudyPageData study;
-
-  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -415,28 +420,26 @@ class _StudySubtitle extends StatelessWidget {
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: Icon(
-              Icons.favorite_outline,
-              size: style.fontSize,
+              study.liked ? Icons.favorite : Icons.favorite_outline,
+              size: 14,
             ),
           ),
-          TextSpan(text: ' ${study.likes}', style: style),
-          TextSpan(text: ' • ', style: style),
+          TextSpan(text: ' ${study.likes}'),
+          const TextSpan(text: ' • '),
           if (study.owner != null) ...[
             WidgetSpan(
-              alignment: PlaceholderAlignment.bottom,
+              alignment: PlaceholderAlignment.middle,
               child: UserFullNameWidget(
                 user: study.owner,
-                style: style,
                 showFlair: false,
               ),
             ),
-            TextSpan(text: ' • ', style: style),
+            const TextSpan(text: ' • '),
           ],
           TextSpan(
             text: timeago.format(
               study.updatedAt,
             ),
-            style: style,
           ),
         ],
       ),
