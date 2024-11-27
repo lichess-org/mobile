@@ -148,7 +148,9 @@ class _Title extends StatelessWidget {
           Icon(variant.icon),
           const SizedBox(width: 5.0),
         ],
-        Text(context.l10n.analysis),
+        Flexible(
+          child: Text(context.l10n.analysis, overflow: TextOverflow.ellipsis),
+        ),
       ],
     );
   }
