@@ -87,12 +87,14 @@ class _StudyMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
-    return MenuAnchor(
-      menuChildren: [
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.settings),
-          semanticsLabel: context.l10n.settingsSettings,
-          child: Text(context.l10n.settingsSettings),
+
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Study menu',
+      icon: const Icon(Icons.more_horiz),
+      actions: [
+        AppBarMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
           onPressed: () {
             pushPlatformRoute(
               context,
@@ -100,34 +102,16 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
-        MenuItemButton(
-          leadingIcon:
-              Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
-          semanticsLabel: context.l10n.studyLike,
-          child: Text(
-            state.study.liked
-                ? context.l10n.studyUnlike
-                : context.l10n.studyLike,
-          ),
+        AppBarMenuAction(
+          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+          label: state.study.liked
+              ? context.l10n.studyUnlike
+              : context.l10n.studyLike,
           onPressed: () {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },
         ),
       ],
-      builder:
-          (BuildContext context, MenuController controller, Widget? child) {
-        return AppBarIconButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          semanticsLabel: 'Study menu',
-          icon: const Icon(Icons.more_horiz),
-        );
-      },
     );
   }
 }
