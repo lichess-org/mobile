@@ -38,8 +38,9 @@ class Study with _$Study {
   StudyChapterMeta get currentChapterMeta =>
       chapters.firstWhere((c) => c.id == chapter.id);
 
-  factory Study.fromServerJson(Map<String, Object?> json) =>
-      _studyFromPick(pick(json).required());
+  factory Study.fromServerJson(Map<String, Object?> json) {
+    return _studyFromPick(pick(json).required());
+  }
 }
 
 Study _studyFromPick(RequiredPick pick) {

@@ -54,17 +54,8 @@ class StudyScreen extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
             actions: [
-              AppBarIconButton(
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    screen: StudySettings(id),
-                  );
-                },
-                semanticsLabel: context.l10n.settingsSettings,
-                icon: const Icon(Icons.settings),
-              ),
               _ChapterButton(id: id),
+              _StudyMenu(id: id),
             ],
           ),
           body: _Body(id: id),
@@ -88,6 +79,43 @@ class StudyScreen extends ConsumerWidget {
   }
 }
 
+class _StudyMenu extends ConsumerWidget {
+  const _StudyMenu({required this.id});
+
+  final StudyId id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(studyControllerProvider(id)).requireValue;
+
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Study menu',
+      icon: const Icon(Icons.more_horiz),
+      actions: [
+        AppBarMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
+          onPressed: () {
+            pushPlatformRoute(
+              context,
+              screen: StudySettings(id),
+            );
+          },
+        ),
+        AppBarMenuAction(
+          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+          label: state.study.liked
+              ? context.l10n.studyUnlike
+              : context.l10n.studyLike,
+          onPressed: () {
+            ref.read(studyControllerProvider(id).notifier).toggleLike();
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class _ChapterButton extends ConsumerWidget {
   const _ChapterButton({required this.id});
 
@@ -104,10 +132,18 @@ class _ChapterButton extends ConsumerWidget {
               showDragHandle: true,
               isScrollControlled: true,
               isDismissible: true,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.sizeOf(context).height * 0.5,
+              builder: (_) => DraggableScrollableSheet(
+                initialChildSize: 0.5,
+                maxChildSize: 0.95,
+                snap: true,
+                expand: false,
+                builder: (context, scrollController) {
+                  return _StudyChaptersMenu(
+                    id: id,
+                    scrollController: scrollController,
+                  );
+                },
               ),
-              builder: (_) => _StudyChaptersMenu(id: id),
             ),
             semanticsLabel:
                 context.l10n.studyNbChapters(state.study.chapters.length),
@@ -119,9 +155,11 @@ class _ChapterButton extends ConsumerWidget {
 class _StudyChaptersMenu extends ConsumerWidget {
   const _StudyChaptersMenu({
     required this.id,
+    required this.scrollController,
   });
 
   final StudyId id;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,6 +178,7 @@ class _StudyChaptersMenu extends ConsumerWidget {
     });
 
     return BottomSheetScrollableContainer(
+      scrollController: scrollController,
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),

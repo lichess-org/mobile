@@ -50,15 +50,18 @@ class BottomSheetScrollableContainer extends StatelessWidget {
   const BottomSheetScrollableContainer({
     required this.children,
     this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.scrollController,
   });
 
   final List<Widget> children;
   final EdgeInsetsGeometry? padding;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
+        controller: scrollController,
         padding: padding,
         child: ListBody(
           children: children,

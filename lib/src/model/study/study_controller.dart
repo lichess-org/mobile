@@ -12,11 +12,13 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -32,19 +34,31 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
-
   Timer? _opponentFirstMoveTimer;
+  StreamSubscription<SocketEvent>? _socketSubscription;
+  final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
+
+  late final SocketClient _socketClient;
 
   @override
   Future<StudyState> build(StudyId id) async {
+    final socketPool = ref.watch(socketPoolProvider);
     final evaluationService = ref.watch(evaluationServiceProvider);
+    _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _opponentFirstMoveTimer?.cancel();
       _engineEvalDebounce.dispose();
+      _socketSubscription?.cancel();
+      _likeDebouncer.dispose();
       evaluationService.disposeEngine();
     });
-    return _fetchChapter(id);
+    final chapter = await _fetchChapter(id);
+
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    return chapter;
   }
 
   Future<void> nextChapter() async {
@@ -148,6 +162,39 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     }
 
     return studyState;
+  }
+
+  void toggleLike() {
+    _likeDebouncer(() {
+      if (!state.hasValue) return;
+      final liked = state.requireValue.study.liked;
+      _socketClient.send('like', {'liked': !liked});
+      state = AsyncValue.data(
+        state.requireValue.copyWith(
+          study: state.requireValue.study.copyWith(liked: !liked),
+        ),
+      );
+    });
+  }
+
+  void _handleSocketEvent(SocketEvent event) {
+    if (!state.hasValue) {
+      assert(false, 'received a game SocketEvent while StudyState is null');
+      return;
+    }
+    switch (event.topic) {
+      case 'liking':
+        final data =
+            (event.data as Map<String, dynamic>)['l'] as Map<String, dynamic>;
+        final likes = data['likes'] as int;
+        final bool meLiked = data['me'] as bool;
+        state = AsyncValue.data(
+          state.requireValue.copyWith(
+            study:
+                state.requireValue.study.copyWith(liked: meLiked, likes: likes),
+          ),
+        );
+    }
   }
 
   // The PGNs of some gamebook studies start with the opponent's turn, so trigger their move after a delay

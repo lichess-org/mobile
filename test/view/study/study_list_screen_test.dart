@@ -123,6 +123,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Magnus Carlsen Games'), findsOneWidget);
+
+      // loads context menu
+      await tester.longPress(find.text('Magnus Carlsen Games'));
+      await tester.pumpAndSettle();
+
       expect(find.textContaining('Chapter 1'), findsOneWidget);
       expect(find.textContaining('Chapter 2'), findsOneWidget);
       expect(find.textContaining('tom-anders'), findsOneWidget);
