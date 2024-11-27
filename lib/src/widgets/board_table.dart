@@ -384,8 +384,6 @@ class _BoardWidget extends StatelessWidget {
       settings: settings,
     );
 
-    final boardWidget = board;
-
     if (boardOverlay != null) {
       return SizedBox.square(
         dimension: size,
@@ -420,7 +418,7 @@ class _BoardWidget extends StatelessWidget {
       );
     }
 
-    return boardWidget;
+    return board;
   }
 }
 
