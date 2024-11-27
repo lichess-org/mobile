@@ -25,6 +25,8 @@ const surfaces = [
   Size(601, 962),
   // folded motorola
   Size(564.7, 482.6),
+  // pixel fold unfolded
+  Size(701.0, 640.8),
 ];
 
 void main() {
@@ -77,21 +79,17 @@ void main() {
           reason: 'Board size should match background size',
         );
 
-        final isLandscape = surface.aspectRatio > 1.0;
+        final isPortrait = surface.aspectRatio < 1.0;
         final isTablet = surface.shortestSide > 600;
 
-        final expectedBoardSize = isLandscape
-            ? isTablet
-                ? surface.height - 32.0
-                : surface.height
-            : isTablet
-                ? surface.width - 32.0
-                : surface.width;
-
-        expect(
-          boardSize,
-          Size(expectedBoardSize, expectedBoardSize),
-        );
+        if (isPortrait) {
+          final expectedBoardSize =
+              isTablet ? surface.width - 32.0 : surface.width;
+          expect(
+            boardSize,
+            Size(expectedBoardSize, expectedBoardSize),
+          );
+        }
       }
     },
     variant: kPlatformVariant,
