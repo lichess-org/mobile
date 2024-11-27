@@ -41,6 +41,12 @@ class BoardPreferences extends _$BoardPreferences
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(
+      state.copyWith(castlingMethod: castlingMethod),
+    );
+  }
+
   Future<void> toggleHapticFeedback() {
     return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
@@ -106,6 +112,8 @@ class BoardPreferences extends _$BoardPreferences
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
+
+  
 }
 
 @Freezed(fromJson: true, toJson: true)

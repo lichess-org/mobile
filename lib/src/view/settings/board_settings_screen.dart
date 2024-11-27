@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,6 +84,34 @@ class _Body extends ConsumerWidget {
                       title: context.l10n.preferencesHowDoYouMovePieces,
                       builder: (context) =>
                           const PieceShiftMethodSettingsScreen(),
+                    );
+                  }
+                },
+              ),
+              SettingsListTile(
+                settingsLabel: const Text('Castling method'),
+                settingsValue: boardPrefs.castlingMethod.name,
+                onTap: () {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: CastlingMethod.values,
+                      selectedItem: boardPrefs.castlingMethod,
+                      labelBuilder: (t) => Text(t.name),
+                      onSelectedItemChanged: (CastlingMethod? value) {
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setCastlingMethod(
+                              value ?? CastlingMethod.both,
+                            );
+                      },
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: 'Castling Method',
+                      builder: (context) =>
+                          const CastlingMethodSettingsScreen(),
                     );
                   }
                 },
@@ -291,6 +320,42 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
               choices: PieceShiftMethod.values,
               selectedItem: pieceShiftMethod,
               titleBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CastlingMethodSettingsScreen extends ConsumerWidget {
+  const CastlingMethodSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final castlingMethod = ref.watch(
+      boardPreferencesProvider.select(
+        (state) => state.castlingMethod,
+      ),
+    );
+
+    void onChanged(CastlingMethod? value) {
+      ref
+          .read(boardPreferencesProvider.notifier)
+          .setCastlingMethod(value ?? CastlingMethod.both);
+    }
+
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              notchedTile: true,
+              choices: CastlingMethod.values,
+              selectedItem: castlingMethod,
+              titleBuilder: (t) => Text(t.name),
               onSelectedItemChanged: onChanged,
             ),
           ],
