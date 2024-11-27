@@ -150,23 +150,14 @@ class BroadcastGameController extends _$BroadcastGameController
 
     if (newPath != null) {
       _root.promoteAt(newPath, toMainline: true);
-      if (state.requireValue.broadcastPath == state.requireValue.currentPath) {
-        _setPath(
-          newPath,
-          shouldRecomputeRootView: isNewNode,
-          shouldForceShowVariation: true,
-          isBroadcastMove: true,
-        );
-      } else {
-        final currentNode = _root.nodeAt(path);
-        state = AsyncData(
-          state.requireValue.copyWith(
-            broadcastPath: newPath,
-            root: _root.view,
-            currentNode: AnalysisCurrentNode.fromNode(currentNode),
-          ),
-        );
-      }
+      _setPath(
+        (state.requireValue.broadcastPath == state.requireValue.currentPath)
+            ? newPath
+            : state.requireValue.currentPath,
+        shouldRecomputeRootView: isNewNode,
+        shouldForceShowVariation: true,
+        isBroadcastMove: true,
+      );
     }
   }
 
