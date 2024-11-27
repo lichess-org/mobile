@@ -186,7 +186,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                                 lastMove: widget.lastMove,
                                 shapes: shapes,
                                 settings: settings,
-                                boardKey: widget.boardKey ?? GlobalKey(),
+                                boardKey: widget.boardKey,
                                 boardOverlay: widget.boardOverlay,
                                 error: widget.errorMessage,
                               ),
@@ -302,7 +302,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                           lastMove: widget.lastMove,
                           shapes: shapes,
                           settings: settings,
-                          boardKey: widget.boardKey ?? GlobalKey(),
+                          boardKey: widget.boardKey,
                           boardOverlay: widget.boardOverlay,
                           error: widget.errorMessage,
                         ),
@@ -354,9 +354,9 @@ class _BoardWidget extends StatelessWidget {
     required this.lastMove,
     required this.shapes,
     required this.settings,
-    required this.boardKey,
     required this.boardOverlay,
     required this.error,
+    this.boardKey,
   });
 
   final double size;
@@ -369,7 +369,7 @@ class _BoardWidget extends StatelessWidget {
   final ChessboardSettings settings;
   final String? error;
   final Widget? boardOverlay;
-  final GlobalKey boardKey;
+  final GlobalKey? boardKey;
 
   @override
   Widget build(BuildContext context) {
@@ -384,10 +384,10 @@ class _BoardWidget extends StatelessWidget {
       settings: settings,
     );
 
-    Widget boardWidget = board;
+    final boardWidget = board;
 
     if (boardOverlay != null) {
-      boardWidget = SizedBox.square(
+      return SizedBox.square(
         dimension: size,
         child: Stack(
           children: [
@@ -406,7 +406,7 @@ class _BoardWidget extends StatelessWidget {
         ),
       );
     } else if (error != null) {
-      boardWidget = SizedBox.square(
+      return SizedBox.square(
         dimension: size,
         child: Stack(
           children: [
