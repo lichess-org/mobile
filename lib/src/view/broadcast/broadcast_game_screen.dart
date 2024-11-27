@@ -160,7 +160,6 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO use borderRadius with players widget
     return Column(
       children: [
         _PlayerWidget(
@@ -188,13 +187,13 @@ class _BroadcastBoard extends ConsumerStatefulWidget {
     this.roundId,
     this.gameId,
     this.boardSize,
-    this.hasRadius,
+    this.hasShadow,
   );
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double boardSize;
-  final bool hasRadius;
+  final bool hasShadow;
 
   @override
   ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
@@ -263,7 +262,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            boxShadow: widget.hasRadius ? boardShadows : const <BoxShadow>[],
+            boxShadow: widget.hasShadow ? boardShadows : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: boardPrefs.enableShapeDrawings,
               onCompleteShape: _onCompleteShape,
