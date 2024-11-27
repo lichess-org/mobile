@@ -62,7 +62,6 @@ Widget _buildMainListItem(
   int index,
   Animation<double> animation,
   PuzzleAngle Function(int index) getAngle,
-  VoidCallback? onGoingBackFromPuzzleScreen,
 ) {
   switch (index) {
     case 0:
@@ -91,7 +90,7 @@ Widget _buildMainListItem(
             builder: (context) => const PuzzleScreen(
               angle: PuzzleTheme(PuzzleThemeKey.mix),
             ),
-          ).then((_) => onGoingBackFromPuzzleScreen?.call());
+          );
         },
       );
     default:
@@ -103,7 +102,7 @@ Widget _buildMainListItem(
             context,
             rootNavigator: true,
             builder: (context) => PuzzleScreen(angle: angle),
-          ).then((_) => onGoingBackFromPuzzleScreen?.call());
+          );
         },
       );
   }
@@ -187,12 +186,6 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
           index,
           animation,
           (index) => _angles[index],
-          isTablet
-              ? () {
-                  ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.home;
-                }
-              : null,
         );
 
     if (isTablet) {
@@ -352,12 +345,6 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           index,
           animation,
           (index) => _angles[index],
-          isTablet
-              ? () {
-                  ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.home;
-                }
-              : null,
         );
 
     return PopScope(

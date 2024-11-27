@@ -145,8 +145,6 @@ class _LoadNextPuzzle extends ConsumerWidget {
         if (data == null) {
           return const Center(
             child: BoardTable(
-              topTable: kEmptyWidget,
-              bottomTable: kEmptyWidget,
               fen: kEmptyFen,
               orientation: Side.white,
               errorMessage: 'No more puzzles. Go online to get more.',
@@ -165,8 +163,6 @@ class _LoadNextPuzzle extends ConsumerWidget {
         );
         return Center(
           child: BoardTable(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
             fen: kEmptyFen,
             orientation: Side.white,
             errorMessage: e.toString(),
@@ -203,15 +199,12 @@ class _LoadPuzzleFromId extends ConsumerWidget {
           Expanded(
             child: SafeArea(
               bottom: false,
-              child: BoardTable(
-                fen: kEmptyFen,
-                orientation: Side.white,
-                topTable: kEmptyWidget,
-                bottomTable: kEmptyWidget,
+              child: BoardTable.empty(
+                showEngineGaugePlaceholder: true,
               ),
             ),
           ),
-          SizedBox(height: kBottomBarHeight),
+          BottomBar.empty(),
         ],
       ),
       error: (e, s) {
@@ -226,8 +219,6 @@ class _LoadPuzzleFromId extends ConsumerWidget {
                 child: BoardTable(
                   fen: kEmptyFen,
                   orientation: Side.white,
-                  topTable: kEmptyWidget,
-                  bottomTable: kEmptyWidget,
                   errorMessage: e.toString(),
                 ),
               ),
