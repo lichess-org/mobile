@@ -49,7 +49,7 @@ class BroadcastGameScreen extends ConsumerWidget {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(title),
+        title: Text(title, overflow: TextOverflow.ellipsis, maxLines: 1),
         actions: [
           AppBarIconButton(
             onPressed: (broadcastGameState.hasValue)
