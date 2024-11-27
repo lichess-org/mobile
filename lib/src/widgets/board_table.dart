@@ -195,6 +195,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
           lastMove: widget.lastMove,
           shapes: userShapes.union(widget.shapes ?? ISet()),
           settings: settings,
+          castlingMethod: boardPrefs.castlingMethod,
         );
 
         Widget boardWidget = board;
