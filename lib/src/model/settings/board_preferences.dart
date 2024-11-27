@@ -112,8 +112,6 @@ class BoardPreferences extends _$BoardPreferences
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
-
-  
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -175,7 +173,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
-    castlingMethod: CastlingMethod.kingTwoSquares, //TODO: Default for now, update to use board/user prefs
+    castlingMethod: CastlingMethod
+        .kingTwoSquares, //TODO: Default for now, update to use board/user prefs
   );
 
   ChessboardSettings toBoardSettings() {
