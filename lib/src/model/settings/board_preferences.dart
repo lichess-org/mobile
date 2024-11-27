@@ -174,7 +174,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     shapeColor: ShapeColor.green,
     showBorder: false,
     castlingMethod: CastlingMethod
-        .kingTwoSquares, //TODO: Default for now, update to use board/user prefs
+        .both,
   );
 
   ChessboardSettings toBoardSettings() {
