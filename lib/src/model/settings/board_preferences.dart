@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -38,6 +39,12 @@ class BoardPreferences extends _$BoardPreferences
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(
+      state.copyWith(castlingMethod: castlingMethod),
+    );
   }
 
   Future<void> toggleHapticFeedback() {
@@ -126,6 +133,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: ClockPosition.right,
     )
     required ClockPosition clockPosition,
+    required CastlingMethod castlingMethod,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
       unknownEnumValue: PieceShiftMethod.either,
@@ -165,6 +173,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    castlingMethod: CastlingMethod
+        .both,
   );
 
   ChessboardSettings toBoardSettings() {
