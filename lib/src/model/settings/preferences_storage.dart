@@ -25,7 +25,8 @@ enum PrefCategory {
   game('preferences.game'),
   coordinateTraining('preferences.coordinateTraining'),
   openingExplorer('preferences.opening_explorer'),
-  puzzle('preferences.puzzle');
+  puzzle('preferences.puzzle'),
+  broadcast('preferences.broadcast');
 
   const PrefCategory(this.storageKey);
 

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 typedef BoardBuilder = Widget Function(
   BuildContext context,
   double boardSize,
-  BorderRadiusGeometry? borderRadius,
+  BorderRadius? boardRadius,
 );
 
 typedef EngineGaugeBuilder = Widget Function(

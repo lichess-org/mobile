@@ -110,6 +110,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   const DebouncedPgnTreeView({
     required this.root,
     required this.currentPath,
+    this.broadcastLivePath,
     required this.pgnRootComments,
     required this.notifier,
     this.shouldShowComputerVariations = true,
@@ -122,6 +123,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Path to the currently selected move in the tree
   final UciPath currentPath;
+
+  /// Path to the last live move in the tree if it is a broadcast game
+  final UciPath? broadcastLivePath;
 
   /// Comments associated with the root node
   final IList<PgnComment>? pgnRootComments;
@@ -149,13 +153,17 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
 
-  /// Path to the currently selected move in the tree. When widget.currentPath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every move.
+  /// Path to the currently selected move in the tree. When widget.currentPath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every played move.
   late UciPath pathToCurrentMove;
+
+  /// Path to the last live move in the tree if it is a broadcast game. When widget.broadcastLivePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
+  late UciPath? pathToBroadcastLiveMove;
 
   @override
   void initState() {
     super.initState();
     pathToCurrentMove = widget.currentPath;
+    pathToBroadcastLiveMove = widget.broadcastLivePath;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
@@ -177,24 +185,32 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   void didUpdateWidget(covariant DebouncedPgnTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.currentPath != widget.currentPath) {
-      // debouncing the current path change to avoid rebuilding when using
-      // the fast replay buttons
+    if (oldWidget.currentPath != widget.currentPath ||
+        oldWidget.broadcastLivePath != widget.broadcastLivePath) {
+      // debouncing the current and broadcast live path changes to avoid rebuilding when using
+      // the fast replay buttons or when receiving a lot of broadcast moves in a short time
       _debounce(() {
         setState(() {
-          pathToCurrentMove = widget.currentPath;
-        });
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (currentMoveKey.currentContext != null) {
-            Scrollable.ensureVisible(
-              currentMoveKey.currentContext!,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeIn,
-              alignment: 0.5,
-              alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-            );
+          if (oldWidget.currentPath != widget.currentPath) {
+            pathToCurrentMove = widget.currentPath;
+          }
+          if (oldWidget.broadcastLivePath != widget.broadcastLivePath) {
+            pathToBroadcastLiveMove = widget.broadcastLivePath;
           }
         });
+        if (oldWidget.currentPath != widget.currentPath) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (currentMoveKey.currentContext != null) {
+              Scrollable.ensureVisible(
+                currentMoveKey.currentContext!,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+                alignment: 0.5,
+                alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+              );
+            }
+          });
+        }
       });
     }
   }
@@ -217,6 +233,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
+        pathToBroadcastLiveMove: pathToBroadcastLiveMove,
         notifier: widget.notifier,
       ),
     );
@@ -230,6 +247,9 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
 typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
+
+  /// Path to the last live move in the tree if it is a broadcast game
+  UciPath? pathToBroadcastLiveMove,
 
   /// Whether to show analysis variations.
   bool shouldShowComputerVariations,
@@ -1026,6 +1046,28 @@ class InlineMove extends ConsumerWidget {
 
   bool get isCurrentMove => params.pathToCurrentMove == path;
 
+  bool get isBroadcastLiveMove => params.pathToBroadcastLiveMove == path;
+
+  BoxDecoration? _boxDecoration(
+    BuildContext context,
+    bool isCurrentMove,
+    bool isLiveMove,
+  ) {
+    return (isCurrentMove || isLiveMove)
+        ? BoxDecoration(
+            color: isCurrentMove
+                ? Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoColors.systemGrey3.resolveFrom(context)
+                    : Theme.of(context).focusColor
+                : null,
+            shape: BoxShape.rectangle,
+            borderRadius: borderRadius,
+            border:
+                isLiveMove ? Border.all(width: 2, color: Colors.orange) : null,
+          )
+        : null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
@@ -1091,15 +1133,7 @@ class InlineMove extends ConsumerWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-        decoration: isCurrentMove
-            ? BoxDecoration(
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoColors.systemGrey3.resolveFrom(context)
-                    : Theme.of(context).focusColor,
-                shape: BoxShape.rectangle,
-                borderRadius: borderRadius,
-              )
-            : null,
+        decoration: _boxDecoration(context, isCurrentMove, isBroadcastLiveMove),
         child: Text.rich(
           TextSpan(
             children: [

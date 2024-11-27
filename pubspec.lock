@@ -608,6 +608,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_markdown:
+    dependency: "direct main"
+    description:
+      name: flutter_markdown
+      sha256: f0e599ba89c9946c8e051780f0ec99aba4ba15895e0380a7ab68f420046fc44e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.4+1"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -907,6 +915,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3-main.0"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: ef2a1298144e3f985cc736b22e0ccdaf188b5b3970648f2d9dc13efd1d9df051
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.2"
   matcher:
     dependency: transitive
     description:

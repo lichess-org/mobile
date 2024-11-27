@@ -204,6 +204,7 @@ abstract class Node {
     Move move, {
     bool prepend = false,
     bool replace = false,
+    Duration? clock,
   }) {
     final pos = nodeAt(path).position;
 
@@ -218,6 +219,7 @@ abstract class Node {
     final newNode = Branch(
       sanMove: SanMove(newSan, convertedMove),
       position: newPos,
+      comments: (clock != null) ? [PgnComment(clock: clock)] : null,
     );
     return addNodeAt(path, newNode, prepend: prepend, replace: replace);
   }

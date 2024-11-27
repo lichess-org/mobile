@@ -30,8 +30,7 @@ void main() {
     expect(
       game.meta,
       GameMeta(
-        createdAt:
-            DateTime.fromMillisecondsSinceEpoch(1685698678928, isUtc: true),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(1685698678928),
         rated: false,
         variant: Variant.standard,
         speed: Speed.classical,
