@@ -156,7 +156,7 @@ class BroadcastGameController extends _$BroadcastGameController
             : state.requireValue.currentPath,
         shouldRecomputeRootView: isNewNode,
         shouldForceShowVariation: true,
-        isBroadcastMove: true,
+        broadcastPath: newPath,
       );
     }
   }
@@ -417,7 +417,7 @@ class BroadcastGameController extends _$BroadcastGameController
     bool shouldForceShowVariation = false,
     bool shouldRecomputeRootView = false,
     bool replaying = false,
-    bool isBroadcastMove = false,
+    UciPath? broadcastPath,
   }) {
     if (!state.hasValue) return;
 
@@ -464,8 +464,7 @@ class BroadcastGameController extends _$BroadcastGameController
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
-          broadcastPath:
-              isBroadcastMove ? path : state.requireValue.broadcastPath,
+          broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
@@ -478,8 +477,7 @@ class BroadcastGameController extends _$BroadcastGameController
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
-          broadcastPath:
-              isBroadcastMove ? path : state.requireValue.broadcastPath,
+          broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: null,
