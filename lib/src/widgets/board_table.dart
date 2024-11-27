@@ -29,8 +29,8 @@ class BoardTable extends ConsumerStatefulWidget {
     this.gameData,
     this.lastMove,
     this.boardSettingsOverrides,
-    required this.topTable,
-    required this.bottomTable,
+    this.topTable = const SizedBox.shrink(),
+    this.bottomTable = const SizedBox.shrink(),
     this.shapes,
     this.engineGauge,
     this.moves,
@@ -135,7 +135,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
         final isTablet = isTabletOrLarger(context);
-        final boardSize = isTablet
+
+        final double boardSize = isTablet
             ? defaultBoardSize - kTabletBoardTableSidePadding * 2
             : defaultBoardSize;
 
@@ -143,6 +144,25 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         // move list
         final verticalSpaceLeftBoardOnPortrait =
             constraints.biggest.height - boardSize;
+
+        final defaultSettings = boardPrefs.toBoardSettings().copyWith(
+              borderRadius: isTablet
+                  ? const BorderRadius.all(Radius.circular(4.0))
+                  : BorderRadius.zero,
+              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+              drawShape: DrawShapeOptions(
+                enable: boardPrefs.enableShapeDrawings,
+                onCompleteShape: _onCompleteShape,
+                onClearShapes: _onClearShapes,
+                newShapeColor: boardPrefs.shapeColor.color,
+              ),
+            );
+
+        final settings = widget.boardSettingsOverrides != null
+            ? widget.boardSettingsOverrides!.merge(defaultSettings)
+            : defaultSettings;
+
+        final shapes = userShapes.union(widget.shapes ?? ISet());
 
         final error = widget.errorMessage != null
             ? SizedBox.square(
@@ -169,95 +189,59 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               )
             : null;
 
-        final defaultSettings = boardPrefs.toBoardSettings().copyWith(
-              borderRadius: isTablet
-                  ? const BorderRadius.all(Radius.circular(4.0))
-                  : BorderRadius.zero,
-              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-              drawShape: DrawShapeOptions(
-                enable: boardPrefs.enableShapeDrawings,
-                onCompleteShape: _onCompleteShape,
-                onClearShapes: _onClearShapes,
-                newShapeColor: boardPrefs.shapeColor.color,
-              ),
-            );
-
-        final settings = widget.boardSettingsOverrides != null
-            ? widget.boardSettingsOverrides!.merge(defaultSettings)
-            : defaultSettings;
-
-        final board = Chessboard(
-          key: widget.boardKey,
-          size: boardSize,
-          fen: widget.fen,
-          orientation: widget.orientation,
-          game: widget.gameData,
-          lastMove: widget.lastMove,
-          shapes: userShapes.union(widget.shapes ?? ISet()),
-          settings: settings,
-        );
-
-        Widget boardWidget = board;
-
-        if (widget.boardOverlay != null) {
-          boardWidget = SizedBox.square(
-            dimension: boardSize,
-            child: Stack(
-              children: [
-                board,
-                SizedBox.square(
-                  dimension: boardSize,
-                  child: Center(
-                    child: SizedBox(
-                      width: (boardSize / 8) * 6.6,
-                      height: (boardSize / 8) * 4.6,
-                      child: widget.boardOverlay,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (error != null) {
-          boardWidget = SizedBox.square(
-            dimension: boardSize,
-            child: Stack(
-              children: [
-                board,
-                error,
-              ],
-            ),
-          );
-        }
-
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
-        return aspectRatio > 1
+        return aspectRatio >= 1.0
             ? Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                    padding: isTablet
-                        ? const EdgeInsets.only(
-                            left: kTabletBoardTableSidePadding,
-                            top: kTabletBoardTableSidePadding,
-                            bottom: kTabletBoardTableSidePadding,
-                          )
-                        : EdgeInsets.zero,
-                    child: Row(
-                      children: [
-                        boardWidget,
-                        if (widget.engineGauge != null)
-                          EngineGauge(
-                            params: widget.engineGauge!,
-                            displayMode: EngineGaugeDisplayMode.vertical,
-                          )
-                        else if (widget.showEngineGaugePlaceholder)
-                          const SizedBox(width: kEvalGaugeSize),
-                      ],
+                  Expanded(
+                    flex: kFlexGoldenRatio,
+                    child: Padding(
+                      padding: isTablet
+                          ? const EdgeInsets.only(
+                              left: kTabletBoardTableSidePadding,
+                              top: kTabletBoardTableSidePadding,
+                              bottom: kTabletBoardTableSidePadding,
+                            )
+                          : EdgeInsets.zero,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final boardSize = constraints.biggest.shortestSide -
+                              (widget.engineGauge != null ||
+                                      widget.showEngineGaugePlaceholder
+                                  ? kEvalGaugeSize
+                                  : 0);
+                          return Row(
+                            children: [
+                              _BoardWidget(
+                                size: boardSize,
+                                boardPrefs: boardPrefs,
+                                fen: widget.fen,
+                                orientation: widget.orientation,
+                                gameData: widget.gameData,
+                                lastMove: widget.lastMove,
+                                shapes: shapes,
+                                settings: settings,
+                                boardKey: widget.boardKey ?? GlobalKey(),
+                                boardOverlay: widget.boardOverlay,
+                                error: error,
+                              ),
+                              if (widget.engineGauge != null)
+                                EngineGauge(
+                                  params: widget.engineGauge!,
+                                  displayMode: EngineGaugeDisplayMode.vertical,
+                                )
+                              else if (widget.showEngineGaugePlaceholder)
+                                const SizedBox(width: kEvalGaugeSize),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Flexible(
+                    flex: kFlexGoldenRatioBase,
                     fit: FlexFit.loose,
                     child: Padding(
                       padding: isTablet
@@ -329,7 +313,19 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                     )
                   else if (widget.showEngineGaugePlaceholder)
                     const SizedBox(height: kEvalGaugeSize),
-                  boardWidget,
+                  _BoardWidget(
+                    size: boardSize,
+                    boardPrefs: boardPrefs,
+                    fen: widget.fen,
+                    orientation: widget.orientation,
+                    gameData: widget.gameData,
+                    lastMove: widget.lastMove,
+                    shapes: shapes,
+                    settings: settings,
+                    boardKey: widget.boardKey ?? GlobalKey(),
+                    boardOverlay: widget.boardOverlay,
+                    error: error,
+                  ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -362,6 +358,83 @@ class _BoardTableState extends ConsumerState<BoardTable> {
     setState(() {
       userShapes = ISet();
     });
+  }
+}
+
+class _BoardWidget extends StatelessWidget {
+  const _BoardWidget({
+    required this.size,
+    required this.boardPrefs,
+    required this.fen,
+    required this.orientation,
+    required this.gameData,
+    required this.lastMove,
+    required this.shapes,
+    required this.settings,
+    required this.boardKey,
+    required this.boardOverlay,
+    required this.error,
+  });
+
+  final double size;
+  final BoardPrefs boardPrefs;
+  final String fen;
+  final Side orientation;
+  final GameData? gameData;
+  final Move? lastMove;
+  final ISet<Shape> shapes;
+  final ChessboardSettings settings;
+  final Widget? error;
+  final Widget? boardOverlay;
+  final GlobalKey boardKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final board = Chessboard(
+      key: boardKey,
+      size: size,
+      fen: fen,
+      orientation: orientation,
+      game: gameData,
+      lastMove: lastMove,
+      shapes: shapes,
+      settings: settings,
+    );
+
+    Widget boardWidget = board;
+
+    if (boardOverlay != null) {
+      boardWidget = SizedBox.square(
+        dimension: size,
+        child: Stack(
+          children: [
+            board,
+            SizedBox.square(
+              dimension: size,
+              child: Center(
+                child: SizedBox(
+                  width: (size / 8) * 6.6,
+                  height: (size / 8) * 4.6,
+                  child: boardOverlay,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (error != null) {
+      boardWidget = SizedBox.square(
+        dimension: size,
+        child: Stack(
+          children: [
+            board,
+            error!,
+          ],
+        ),
+      );
+    }
+
+    return boardWidget;
   }
 }
 

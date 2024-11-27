@@ -12,6 +12,11 @@ class BottomBar extends StatelessWidget {
     this.expandChildren = true,
   });
 
+  const BottomBar.empty()
+      : children = const [],
+        expandChildren = true,
+        mainAxisAlignment = MainAxisAlignment.spaceAround;
+
   /// Children to display in the bottom bar's [Row]. Typically instances of [BottomBarButton].
   final List<Widget> children;
 
