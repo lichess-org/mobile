@@ -9,13 +9,14 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.MMMd().add_Hm();
+final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastsListScreen extends StatelessWidget {
@@ -72,7 +73,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator.adaptive(),
       );
     }
 
@@ -173,7 +174,21 @@ class BroadcastGridItem extends StatelessWidget {
 
   BroadcastGridItem.loading()
       : broadcast = Broadcast(
-          tour: const (name: '', imageUrl: null),
+          tour: BroadcastTournamentData(
+            id: const BroadcastTournamentId(''),
+            name: '',
+            imageUrl: null,
+            description: '',
+            information: (
+              format: '',
+              timeControl: '',
+              players: '',
+              dates: (
+                startsAt: DateTime.now(),
+                endsAt: DateTime.now(),
+              ),
+            ),
+          ),
           round: BroadcastRound(
             id: const BroadcastRoundId(''),
             name: '',
@@ -191,10 +206,9 @@ class BroadcastGridItem extends StatelessWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => BroadcastRoundScreen(
-            broadCastTitle: broadcast.tour.name,
-            roundId: broadcast.roundToLinkId,
-          ),
+          title: context.l10n.broadcastBroadcasts,
+          rootNavigator: true,
+          builder: (context) => BroadcastScreen(broadcast: broadcast),
         );
       },
       child: Container(
@@ -231,7 +245,6 @@ class BroadcastGridItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -245,6 +258,7 @@ class BroadcastGridItem extends StatelessWidget {
                                 ?.copyWith(
                                   color: textShade(context, 0.5),
                                 ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: 4.0),
                         ],
@@ -256,16 +270,11 @@ class BroadcastGridItem extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Colors.red,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           )
-                        else
-                          Text(
-                            _dateFormatter.format(broadcast.round.startsAt),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: textShade(context, 0.5),
-                                ),
+                        else if (broadcast.round.startsAt != null)
+                          StartsRoundDate(
+                            startsAt: broadcast.round.startsAt!,
                           ),
                       ],
                     ),
@@ -287,6 +296,31 @@ class BroadcastGridItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class StartsRoundDate extends ConsumerWidget {
+  final DateTime startsAt;
+
+  const StartsRoundDate({required this.startsAt});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timeBeforeRound = startsAt.difference(DateTime.now());
+
+    return Text(
+      (!timeBeforeRound.isNegative && timeBeforeRound.inDays == 0)
+          ? timeBeforeRound.inHours == 0
+              ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
+              : 'In ${timeBeforeRound.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
+          : timeBeforeRound.inDays < 365
+              ? _dateFormatter.format(startsAt)
+              : _dateFormatterWithYear.format(startsAt),
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: textShade(context, 0.5),
+          ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

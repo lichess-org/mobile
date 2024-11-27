@@ -85,9 +85,11 @@ class ListSection extends StatelessWidget {
                 child: Column(
                   children: [
                     if (header != null)
-                      // ignore: avoid-wrapping-in-padding
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 16.0,
+                        ),
                         child: Container(
                           width: double.infinity,
                           height: 25,
@@ -98,9 +100,11 @@ class ListSection extends StatelessWidget {
                         ),
                       ),
                     for (int i = 0; i < children.length; i++)
-                      // ignore: avoid-wrapping-in-padding
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 16.0,
+                        ),
                         child: Container(
                           width: double.infinity,
                           height: 50,

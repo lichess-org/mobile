@@ -12,12 +12,14 @@ typedef BroadcastsList = ({
   int? nextPage,
 });
 
+enum BroadcastResult { whiteWins, blackWins, draw, ongoing, noResultPgnTag }
+
 @freezed
 class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
-    required BroadcastTournament tour,
+    required BroadcastTournamentData tour,
     required BroadcastRound round,
     required String? group,
 
@@ -32,9 +34,42 @@ class Broadcast with _$Broadcast {
   String get title => group ?? tour.name;
 }
 
-typedef BroadcastTournament = ({
+@freezed
+class BroadcastTournament with _$BroadcastTournament {
+  const factory BroadcastTournament({
+    required BroadcastTournamentData data,
+    required IList<BroadcastRound> rounds,
+    required BroadcastRoundId defaultRoundId,
+    required IList<BroadcastTournamentGroup>? group,
+  }) = _BroadcastTournament;
+}
+
+@freezed
+class BroadcastTournamentData with _$BroadcastTournamentData {
+  const factory BroadcastTournamentData({
+    required BroadcastTournamentId id,
+    required String name,
+    required String? imageUrl,
+    required String? description,
+    required BroadcastTournamentInformation information,
+  }) = _BroadcastTournamentData;
+}
+
+typedef BroadcastTournamentInformation = ({
+  String? format,
+  String? timeControl,
+  String? players,
+  BroadcastTournamentDates? dates,
+});
+
+typedef BroadcastTournamentDates = ({
+  DateTime startsAt,
+  DateTime? endsAt,
+});
+
+typedef BroadcastTournamentGroup = ({
+  BroadcastTournamentId id,
   String name,
-  String? imageUrl,
 });
 
 @freezed
@@ -45,25 +80,31 @@ class BroadcastRound with _$BroadcastRound {
     required BroadcastRoundId id,
     required String name,
     required RoundStatus status,
-    required DateTime startsAt,
+    required DateTime? startsAt,
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
+typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
-  const BroadcastGameSnapshot._();
+class BroadcastGame with _$BroadcastGame {
+  const BroadcastGame._();
 
-  const factory BroadcastGameSnapshot({
+  const factory BroadcastGame({
+    required BroadcastGameId id,
     required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
-    required String status,
+    required BroadcastResult status,
+    required DateTime updatedClockAt,
+  }) = _BroadcastGame;
 
-    /// The amount of time that the player whose turn it is has been thinking since his last move
-    required Duration? thinkTime,
-  }) = _BroadcastGameSnapshot;
+  bool get isOngoing => status == BroadcastResult.ongoing;
+  bool get isOver =>
+      status == BroadcastResult.draw ||
+      status == BroadcastResult.whiteWins ||
+      status == BroadcastResult.blackWins;
+  Side get sideToMove => Setup.parseFen(fen).turn;
 }
 
 @freezed

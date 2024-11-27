@@ -27,7 +27,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   @override
   Future<BroadcastRoundGames> build(BroadcastRoundId broadcastRoundId) async {
     _socketClient = ref
-        .read(socketPoolProvider)
+        .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
@@ -36,9 +36,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
     });
 
-    return await ref.withClient(
+    final games = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
+
+    return games;
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -48,7 +50,10 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       // Sent when a node is recevied from the broadcast
       case 'addNode':
         _handleAddNodeEvent(event);
-      // Sent when a game ends
+      // Sent when a new board is added
+      case 'addChapter':
+        _handleAddChapterEvent(event);
+      // Sent when the state of games changes
       case 'chapters':
         _handleChaptersEvent(event);
       // Sent when clocks are updated from the broadcast
@@ -59,41 +64,43 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _handleAddNodeEvent(SocketEvent event) {
     // The path of the last and current move of the broadcasted game
+    // Its value is "!" if the path is identical to one of the node that was received
     final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
-    // The path for the node that was received
-    final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
-    final nodeId = pick(event.data, 'n', 'id').asUciCharPairOrThrow();
 
     // We check that the event we received is for the last move of the game
-    if (currentPath != path + nodeId) return;
+    if (currentPath.value != '!') return;
 
     final broadcastGameId =
         pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
 
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
 
-    final playingSide = Setup.parseFen(fen).turn.opposite;
+    final playingSide = Setup.parseFen(fen).turn;
 
     state = AsyncData(
       state.requireValue.update(
         broadcastGameId,
-        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+        (broadcastGame) => broadcastGame.copyWith(
           players: IMap(
             {
-              playingSide: broadcastGameSnapshot.players[playingSide]!.copyWith(
+              playingSide: broadcastGame.players[playingSide]!,
+              playingSide.opposite:
+                  broadcastGame.players[playingSide.opposite]!.copyWith(
                 clock: pick(event.data, 'n', 'clock')
                     .asDurationFromCentiSecondsOrNull(),
               ),
-              playingSide.opposite:
-                  broadcastGameSnapshot.players[playingSide.opposite]!,
             },
           ),
           fen: fen,
           lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-          thinkTime: null,
+          updatedClockAt: DateTime.now(),
         ),
       ),
     );
+  }
+
+  void _handleAddChapterEvent(SocketEvent event) {
+    ref.invalidateSelf();
   }
 
   void _handleChaptersEvent(SocketEvent event) {
@@ -104,21 +111,22 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   void _handleClockEvent(SocketEvent event) {
     final broadcastGameId =
         pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
-    final whiteClock = pick(event.data, 'p', 'relayClocks', 0)
-        .asDurationFromCentiSecondsOrNull();
-    final blackClock = pick(event.data, 'p', 'relayClocks', 1)
-        .asDurationFromCentiSecondsOrNull();
+    final relayClocks = pick(event.data, 'p', 'relayClocks');
+
+    // We check that the clocks for the broadcast game preview have been updated else we do nothing
+    if (relayClocks.value == null) return;
+
     state = AsyncData(
       state.requireValue.update(
         broadcastGameId,
-        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+        (broadcastsGame) => broadcastsGame.copyWith(
           players: IMap(
             {
-              Side.white: broadcastGameSnapshot.players[Side.white]!.copyWith(
-                clock: whiteClock,
+              Side.white: broadcastsGame.players[Side.white]!.copyWith(
+                clock: relayClocks(0).asDurationFromCentiSecondsOrNull(),
               ),
-              Side.black: broadcastGameSnapshot.players[Side.black]!.copyWith(
-                clock: blackClock,
+              Side.black: broadcastsGame.players[Side.black]!.copyWith(
+                clock: relayClocks(1).asDurationFromCentiSecondsOrNull(),
               ),
             },
           ),
