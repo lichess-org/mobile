@@ -443,32 +443,54 @@ class _PlayerWidget extends ConsumerWidget {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: CountdownClockBuilder(
-                  timeLeft: clock,
-                  active: side == sideToMove && isCursorOnLiveMove,
-                  builder: (context, timeLeft) => Text(
-                    timeLeft.toHoursMinutesSeconds(),
-                    style: TextStyle(
-                      color: (side == sideToMove)
-                          ? isCursorOnLiveMove
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onTertiaryContainer
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
-                          : null,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
-                  tickInterval: const Duration(seconds: 1),
-                  clockUpdatedAt: (side == sideToMove && isCursorOnLiveMove)
-                      ? game.updatedClockAt
-                      : null,
-                ),
+                child: isCursorOnLiveMove
+                    ? CountdownClockBuilder(
+                        timeLeft: clock,
+                        active: side == sideToMove,
+                        builder: (context, timeLeft) => _Clock(
+                          timeLeft: timeLeft,
+                          isSideToMove: side == sideToMove,
+                          isLive: true,
+                        ),
+                        tickInterval: const Duration(seconds: 1),
+                        clockUpdatedAt:
+                            side == sideToMove ? game.updatedClockAt : null,
+                      )
+                    : _Clock(
+                        timeLeft: clock,
+                        isSideToMove: side == sideToMove,
+                        isLive: false,
+                      ),
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _Clock extends StatelessWidget {
+  const _Clock({
+    required this.timeLeft,
+    required this.isSideToMove,
+    required this.isLive,
+  });
+
+  final Duration timeLeft;
+  final bool isSideToMove;
+  final bool isLive;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      timeLeft.toHoursMinutesSeconds(),
+      style: TextStyle(
+        color: isSideToMove
+            ? isLive
+                ? Theme.of(context).colorScheme.onTertiaryContainer
+                : Theme.of(context).colorScheme.onSecondaryContainer
+            : null,
+        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }
