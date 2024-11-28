@@ -258,7 +258,7 @@ class AnalysisLayout extends StatelessWidget {
                             child: boardBuilder(
                               context,
                               boardSize,
-                              tabletBoardRadius,
+                              isTablet ? tabletBoardRadius : null,
                             ),
                           ),
                           Expanded(
