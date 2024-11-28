@@ -477,7 +477,7 @@ class GameController extends _$GameController {
     final animationDuration =
         ref.read(boardPreferencesProvider).pieceAnimationDuration;
 
-    final delay = animationDuration - const Duration(milliseconds: 10);
+    final delay = animationDuration ~/ 2;
 
     if (skipAnimationDelay || delay <= Duration.zero) {
       _moveFeedback(sanMove);
