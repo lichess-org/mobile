@@ -314,7 +314,7 @@ class _PlayerWidget extends ConsumerWidget {
   final BroadcastGameId gameId;
   final double width;
   final _PlayerWidgetPosition widgetPosition;
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -345,8 +345,10 @@ class _PlayerWidget extends ConsumerWidget {
           if (game.isOver)
             Card(
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: borderRadius ?? BorderRadius.zero,
+              shape: _makePlayerWidgetBorder(
+                position: widgetPosition,
+                borderRadius: borderRadius,
+                hasLeftBorderRadius: true,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -371,8 +373,11 @@ class _PlayerWidget extends ConsumerWidget {
           Expanded(
             child: Card(
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: borderRadius ?? BorderRadius.zero,
+              shape: _makePlayerWidgetBorder(
+                position: widgetPosition,
+                borderRadius: borderRadius,
+                hasLeftBorderRadius: !game.isOver,
+                hasRightBorderRadius: clock == null,
               ),
               child: Padding(
                 padding:
@@ -437,8 +442,10 @@ class _PlayerWidget extends ConsumerWidget {
                       : Theme.of(context).colorScheme.secondaryContainer
                   : null,
               margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: borderRadius ?? BorderRadius.zero,
+              shape: _makePlayerWidgetBorder(
+                position: widgetPosition,
+                borderRadius: borderRadius,
+                hasRightBorderRadius: true,
               ),
               child: Padding(
                 padding:
@@ -494,4 +501,32 @@ class _Clock extends StatelessWidget {
       ),
     );
   }
+}
+
+ShapeBorder _makePlayerWidgetBorder({
+  required BorderRadius? borderRadius,
+  required _PlayerWidgetPosition position,
+  bool hasLeftBorderRadius = false,
+  bool hasRightBorderRadius = false,
+}) {
+  if (borderRadius == null) return const Border();
+
+  if (!hasLeftBorderRadius && !hasRightBorderRadius) return const Border();
+
+  return RoundedRectangleBorder(
+    borderRadius: switch (position) {
+      _PlayerWidgetPosition.top => borderRadius.copyWith(
+          topLeft: hasLeftBorderRadius ? null : Radius.zero,
+          topRight: hasRightBorderRadius ? null : Radius.zero,
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+        ),
+      _PlayerWidgetPosition.bottom => borderRadius.copyWith(
+          topLeft: Radius.zero,
+          topRight: Radius.zero,
+          bottomLeft: hasLeftBorderRadius ? null : Radius.zero,
+          bottomRight: hasRightBorderRadius ? null : Radius.zero,
+        ),
+    },
+  );
 }
