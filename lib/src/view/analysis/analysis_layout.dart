@@ -176,7 +176,7 @@ class AnalysisLayout extends StatelessWidget {
                                   boardBuilder(
                                     context,
                                     boardSize,
-                                    isTablet ? tabletBoardRadius : null,
+                                    tabletBoardRadius,
                                   ),
                                   if (engineGaugeBuilder != null) ...[
                                     const SizedBox(width: 4.0),
