@@ -101,12 +101,13 @@ class _Body extends ConsumerWidget {
     return DefaultTabController(
       length: 1,
       child: AnalysisLayout(
-        boardBuilder: (context, boardSize, borderRadius) =>
+        boardBuilder: (context, boardSize, borderRadius, orientation) =>
             _BroadcastBoardWithHeaders(
           roundId,
           gameId,
           boardSize,
           borderRadius,
+          orientation,
         ),
         engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
             ? (context, orientation) {
@@ -150,12 +151,14 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
   final BroadcastGameId gameId;
   final double size;
   final BorderRadius? borderRadius;
+  final Orientation orientation;
 
   const _BroadcastBoardWithHeaders(
     this.roundId,
     this.gameId,
     this.size,
     this.borderRadius,
+    this.orientation,
   );
 
   @override
@@ -172,7 +175,8 @@ class _BroadcastBoardWithHeaders extends ConsumerWidget {
             bottomRight: Radius.zero,
           ),
         ),
-        _BroadcastBoard(roundId, gameId, size, borderRadius != null),
+        _BroadcastBoard(
+            roundId, gameId, size, borderRadius != null, orientation),
         _PlayerWidget(
           roundId: roundId,
           gameId: gameId,
@@ -194,12 +198,14 @@ class _BroadcastBoard extends ConsumerStatefulWidget {
     this.gameId,
     this.boardSize,
     this.hasShadow,
+    this.orientation,
   );
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double boardSize;
   final bool hasShadow;
+  final Orientation orientation;
 
   @override
   ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
@@ -238,7 +244,10 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
         : ISet();
 
     return Chessboard(
-      size: widget.boardSize,
+      size: switch (widget.orientation) {
+        Orientation.portrait => widget.boardSize,
+        Orientation.landscape => widget.boardSize - 2 * 30,
+      },
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,

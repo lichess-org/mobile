@@ -13,6 +13,7 @@ typedef BoardBuilder = Widget Function(
   BuildContext context,
   double boardSize,
   BorderRadius? boardRadius,
+  Orientation orientation,
 );
 
 typedef EngineGaugeBuilder = Widget Function(
@@ -177,6 +178,7 @@ class AnalysisLayout extends StatelessWidget {
                                     context,
                                     boardSize,
                                     isTablet ? tabletBoardRadius : null,
+                                    Orientation.landscape,
                                   ),
                                   if (engineGaugeBuilder != null) ...[
                                     const SizedBox(width: 4.0),
@@ -259,6 +261,7 @@ class AnalysisLayout extends StatelessWidget {
                               context,
                               boardSize,
                               isTablet ? tabletBoardRadius : null,
+                              Orientation.portrait,
                             ),
                           ),
                           Expanded(

@@ -221,7 +221,8 @@ class _Body extends ConsumerWidget {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
-          boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
+          boardBuilder: (context, boardSize, borderRadius, orientation) =>
+              SizedBox.square(
             dimension: boardSize,
             child: Center(
               child: Text(
@@ -249,7 +250,8 @@ class _Body extends ConsumerWidget {
     return DefaultTabController(
       length: 1,
       child: AnalysisLayout(
-        boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
+        boardBuilder: (context, boardSize, borderRadius, orientation) =>
+            _StudyBoard(
           id: id,
           boardSize: boardSize,
           borderRadius: borderRadius,

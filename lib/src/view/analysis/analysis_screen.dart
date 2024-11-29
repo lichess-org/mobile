@@ -182,7 +182,8 @@ class _Body extends ConsumerWidget {
 
     return AnalysisLayout(
       tabController: controller,
-      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
+      boardBuilder: (context, boardSize, borderRadius, orientation) =>
+          AnalysisBoard(
         options,
         boardSize,
         borderRadius: borderRadius,
