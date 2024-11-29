@@ -346,7 +346,7 @@ class _PlayerWidget extends ConsumerWidget {
             Card(
               margin: EdgeInsets.zero,
               shape: _makePlayerWidgetBorder(
-                position: widgetPosition,
+                widgetPosition: widgetPosition,
                 borderRadius: borderRadius,
                 hasLeftBorderRadius: true,
               ),
@@ -374,7 +374,7 @@ class _PlayerWidget extends ConsumerWidget {
             child: Card(
               margin: EdgeInsets.zero,
               shape: _makePlayerWidgetBorder(
-                position: widgetPosition,
+                widgetPosition: widgetPosition,
                 borderRadius: borderRadius,
                 hasLeftBorderRadius: !game.isOver,
                 hasRightBorderRadius: clock == null,
@@ -443,7 +443,7 @@ class _PlayerWidget extends ConsumerWidget {
                   : null,
               margin: EdgeInsets.zero,
               shape: _makePlayerWidgetBorder(
-                position: widgetPosition,
+                widgetPosition: widgetPosition,
                 borderRadius: borderRadius,
                 hasRightBorderRadius: true,
               ),
@@ -505,7 +505,7 @@ class _Clock extends StatelessWidget {
 
 ShapeBorder _makePlayerWidgetBorder({
   required BorderRadius? borderRadius,
-  required _PlayerWidgetPosition position,
+  required _PlayerWidgetPosition widgetPosition,
   bool hasLeftBorderRadius = false,
   bool hasRightBorderRadius = false,
 }) {
@@ -514,7 +514,7 @@ ShapeBorder _makePlayerWidgetBorder({
   if (!hasLeftBorderRadius && !hasRightBorderRadius) return const Border();
 
   return RoundedRectangleBorder(
-    borderRadius: switch (position) {
+    borderRadius: switch (widgetPosition) {
       _PlayerWidgetPosition.top => borderRadius.copyWith(
           topLeft: hasLeftBorderRadius ? null : Radius.zero,
           topRight: hasRightBorderRadius ? null : Radius.zero,
