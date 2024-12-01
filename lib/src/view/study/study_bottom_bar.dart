@@ -53,6 +53,14 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        _NextChapterButton(
+          id: id,
+          chapterId: state.study.chapter.id,
+          hasNextChapter: state.hasNextChapter,
+          blink: !state.isIntroductoryChapter &&
+              state.isAtEndOfChapter &&
+              state.hasNextChapter,
+        ),
         RepeatButton(
           onLongPress: onGoBack,
           child: BottomBarButton(
@@ -63,14 +71,6 @@ class _AnalysisBottomBar extends ConsumerWidget {
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
-        ),
-        _NextChapterButton(
-          id: id,
-          chapterId: state.study.chapter.id,
-          hasNextChapter: state.hasNextChapter,
-          blink: !state.isIntroductoryChapter &&
-              state.isAtEndOfChapter &&
-              state.hasNextChapter,
         ),
         RepeatButton(
           onLongPress: onGoForward,
