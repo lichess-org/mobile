@@ -5,10 +5,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 
-import '../test_helpers.dart';
-import '../test_provider_scope.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   testWidgets(
@@ -18,22 +18,20 @@ void main() {
         final app = await makeTestProviderScope(
           key: ValueKey(surface),
           tester,
-          child: const MaterialApp(
-            home: BoardTable(
-              orientation: Side.white,
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
-              topTable: Row(
-                mainAxisSize: MainAxisSize.max,
-                key: ValueKey('top_table'),
-                children: [
-                  Text('Top table'),
-                ],
-              ),
-              bottomTable: Row(
-                mainAxisSize: MainAxisSize.max,
-                key: ValueKey('bottom_table'),
-                children: [
-                  Text('Bottom table'),
+          child: MaterialApp(
+            home: DefaultTabController(
+              length: 1,
+              child: AnalysisLayout(
+                boardBuilder: (context, boardSize, boardRadius) {
+                  return Chessboard.fixed(
+                    size: boardSize,
+                    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+                    orientation: Side.white,
+                  );
+                },
+                bottomBar: const SizedBox(height: kBottomBarHeight),
+                children: const [
+                  Center(child: Text('Analysis tab')),
                 ],
               ),
             ),
@@ -77,22 +75,20 @@ void main() {
         final app = await makeTestProviderScope(
           key: ValueKey(surface),
           tester,
-          child: const MaterialApp(
-            home: BoardTable(
-              orientation: Side.white,
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
-              topTable: Row(
-                mainAxisSize: MainAxisSize.max,
-                key: ValueKey('top_table'),
-                children: [
-                  Text('Top table'),
-                ],
-              ),
-              bottomTable: Row(
-                mainAxisSize: MainAxisSize.max,
-                key: ValueKey('bottom_table'),
-                children: [
-                  Text('Bottom table'),
+          child: MaterialApp(
+            home: DefaultTabController(
+              length: 1,
+              child: AnalysisLayout(
+                boardBuilder: (context, boardSize, boardRadius) {
+                  return Chessboard.fixed(
+                    size: boardSize,
+                    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+                    orientation: Side.white,
+                  );
+                },
+                bottomBar: const SizedBox(height: kBottomBarHeight),
+                children: const [
+                  Center(child: Text('Analysis tab')),
                 ],
               ),
             ),
@@ -114,16 +110,18 @@ void main() {
             reason: 'Board size should match surface width on $surface',
           );
         } else {
-          final topTableSize =
-              tester.getSize(find.byKey(const ValueKey('top_table')));
-          final bottomTableSize =
-              tester.getSize(find.byKey(const ValueKey('bottom_table')));
+          final tabBarViewSize = tester.getSize(find.byType(TabBarView));
           final goldenBoardSize = (surface.longestSide / kGoldenRatio) - 32.0;
-          final defaultBoardSize = surface.shortestSide - 32.0;
+          final defaultBoardSize =
+              surface.shortestSide - kBottomBarHeight - 32.0;
           final minBoardSize = min(goldenBoardSize, defaultBoardSize);
           final maxBoardSize = max(goldenBoardSize, defaultBoardSize);
-          final minSideWidth =
-              min(surface.longestSide - goldenBoardSize - 16.0 * 3, 250.0);
+          // TabBarView is inside a Card so we need to account for its padding
+          const cardPadding = 8.0;
+          final minSideWidth = min(
+            surface.longestSide - goldenBoardSize - 16.0 * 3 - cardPadding,
+            250.0,
+          );
           expect(
             boardSize.width,
             greaterThanOrEqualTo(minBoardSize),
@@ -135,16 +133,10 @@ void main() {
             reason: 'Board size should be at most $maxBoardSize on $surface',
           );
           expect(
-            bottomTableSize.width,
+            tabBarViewSize.width,
             greaterThanOrEqualTo(minSideWidth),
             reason:
-                'Bottom table width should be at least $minSideWidth on $surface',
-          );
-          expect(
-            topTableSize.width,
-            greaterThanOrEqualTo(minSideWidth),
-            reason:
-                'Top table width should be at least $minSideWidth on $surface',
+                'Tab bar view width should be at least $minSideWidth on $surface',
           );
         }
       }

@@ -4,7 +4,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -146,137 +145,114 @@ class AnalysisLayout extends StatelessWidget {
         Expanded(
           child: SafeArea(
             bottom: false,
-            child: OrientationBuilder(
-              builder: (context, orientation) {
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final orientation = constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
                 final isTablet = isTabletOrLarger(context);
                 const tabletBoardRadius =
                     BorderRadius.all(Radius.circular(4.0));
 
                 if (orientation == Orientation.landscape) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        flex: kFlexGoldenRatio,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: kTabletBoardTableSidePadding,
-                            top: kTabletBoardTableSidePadding,
-                            bottom: kTabletBoardTableSidePadding,
+                  final sideWidth = constraints.biggest.longestSide -
+                      constraints.biggest.shortestSide;
+                  final defaultBoardSize = constraints.biggest.shortestSide -
+                      (kTabletBoardTableSidePadding * 2);
+                  final boardSize = sideWidth >= 250
+                      ? defaultBoardSize
+                      : constraints.biggest.longestSide / kGoldenRatio -
+                          (kTabletBoardTableSidePadding * 2);
+                  return Padding(
+                    padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        boardBuilder(
+                          context,
+                          boardSize,
+                          isTablet ? tabletBoardRadius : null,
+                        ),
+                        if (engineGaugeBuilder != null) ...[
+                          const SizedBox(width: 4.0),
+                          engineGaugeBuilder!(
+                            context,
+                            Orientation.landscape,
                           ),
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              final boardSize =
-                                  constraints.biggest.shortestSide -
-                                      (engineGaugeBuilder != null
-                                          ? kEvalGaugeSize + 4.0
-                                          : 0);
-                              return Row(
-                                children: [
-                                  boardBuilder(
-                                    context,
-                                    boardSize,
-                                    isTablet ? tabletBoardRadius : null,
+                        ],
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (engineLines != null) engineLines!,
+                              Expanded(
+                                child: PlatformCard(
+                                  clipBehavior: Clip.hardEdge,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(4.0),
                                   ),
-                                  if (engineGaugeBuilder != null) ...[
-                                    const SizedBox(width: 4.0),
-                                    engineGaugeBuilder!(
-                                      context,
-                                      Orientation.landscape,
-                                    ),
-                                  ],
-                                ],
-                              );
-                            },
+                                  semanticContainer: false,
+                                  child: TabBarView(
+                                    controller: tabController,
+                                    children: children,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                      ],
+                    ),
+                  );
+                } else {
+                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final remainingHeight =
+                      constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen =
+                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final boardSize = isTablet || isSmallScreen
+                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize;
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (engineGaugeBuilder != null)
+                        engineGaugeBuilder!(
+                          context,
+                          Orientation.portrait,
+                        ),
+                      if (engineLines != null) engineLines!,
+                      Padding(
+                        padding: isTablet
+                            ? const EdgeInsets.all(
+                                kTabletBoardTableSidePadding,
+                              )
+                            : EdgeInsets.zero,
+                        child: boardBuilder(
+                          context,
+                          boardSize,
+                          isTablet ? tabletBoardRadius : null,
+                        ),
                       ),
-                      Flexible(
-                        flex: kFlexGoldenRatioBase,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            if (engineLines != null)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: kTabletBoardTableSidePadding,
-                                  left: kTabletBoardTableSidePadding,
-                                  right: kTabletBoardTableSidePadding,
-                                ),
-                                child: engineLines,
-                              ),
-                            Expanded(
-                              child: PlatformCard(
-                                clipBehavior: Clip.hardEdge,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(4.0),
-                                ),
-                                margin: const EdgeInsets.all(
-                                  kTabletBoardTableSidePadding,
-                                ),
-                                semanticContainer: false,
-                                child: TabBarView(
-                                  controller: tabController,
-                                  children: children,
-                                ),
-                              ),
-                            ),
-                          ],
+                      Expanded(
+                        child: Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          child: TabBarView(
+                            controller: tabController,
+                            children: children,
+                          ),
                         ),
                       ),
                     ],
-                  );
-                } else {
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      final defaultBoardSize = constraints.biggest.shortestSide;
-                      final remainingHeight =
-                          constraints.maxHeight - defaultBoardSize;
-                      final isSmallScreen = remainingHeight <
-                          kSmallRemainingHeightLeftBoardThreshold;
-                      final boardSize = isTablet || isSmallScreen
-                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                          : defaultBoardSize;
-
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (engineGaugeBuilder != null)
-                            engineGaugeBuilder!(
-                              context,
-                              Orientation.portrait,
-                            ),
-                          if (engineLines != null) engineLines!,
-                          Padding(
-                            padding: isTablet
-                                ? const EdgeInsets.all(
-                                    kTabletBoardTableSidePadding,
-                                  )
-                                : EdgeInsets.zero,
-                            child: boardBuilder(
-                              context,
-                              boardSize,
-                              isTablet ? tabletBoardRadius : null,
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: isTablet
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: kTabletBoardTableSidePadding,
-                                    )
-                                  : EdgeInsets.zero,
-                              child: TabBarView(
-                                controller: tabController,
-                                children: children,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
                   );
                 }
               },

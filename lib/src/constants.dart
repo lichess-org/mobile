@@ -41,6 +41,8 @@ const kClueLessDeviation = 230;
 
 // UI
 
+const kGoldenRatio = 1.61803398875;
+
 /// Flex golden ratio base (flex has to be an int).
 const kFlexGoldenRatioBase = 100000000000;
 
