@@ -17,23 +17,35 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   vertical: _kTableRowVerticalPadding,
 );
 
-/// An analysis tab view that displays the opening explorer for the current position.
-class OpeningExplorerView extends ConsumerStatefulWidget {
-  const OpeningExplorerView({
+/// A view that displays the opening explorer for the given position.
+///
+/// All the required data is fetched from the [OpeningExplorerRepository] and
+/// displayed in a table view. Responses are cached to avoid unnecessary
+/// network requests.
+class OpeningExplorerViewBuilder extends ConsumerStatefulWidget {
+  const OpeningExplorerViewBuilder({
     required this.ply,
     required this.fen,
+    required this.builder,
     this.onMoveSelected,
   });
 
   final int ply;
   final String fen;
   final void Function(NormalMove)? onMoveSelected;
+  final Widget Function(
+    BuildContext context,
+    List<Widget> children, {
+    required bool isLoading,
+    required bool isIndexing,
+  }) builder;
 
   @override
-  ConsumerState<OpeningExplorerView> createState() => _OpeningExplorerState();
+  ConsumerState<OpeningExplorerViewBuilder> createState() =>
+      _OpeningExplorerState();
 }
 
-class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
+class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
   final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
   /// Last explorer content that was successfully loaded. This is used to
@@ -54,11 +66,13 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       ),
       online: () {
         if (widget.ply >= 50) {
-          return const _OpeningExplorerView(
-            isLoading: false,
-            children: [
-              OpeningExplorerMoveTable.maxDepth(),
+          return widget.builder(
+            context,
+            [
+              const OpeningExplorerMoveTable.maxDepth(),
             ],
+            isLoading: false,
+            isIndexing: false,
           );
         }
 
@@ -66,10 +80,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
         if (prefs.db == OpeningDatabase.player &&
             prefs.playerDb.username == null) {
-          return const _OpeningExplorerView(
-            isLoading: false,
-            children: [
-              Padding(
+          return widget.builder(
+            context,
+            [
+              const Padding(
                 padding: _kTableRowPadding,
                 child: Center(
                   // TODO: l10n
@@ -77,6 +91,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                 ),
               ),
             ],
+            isLoading: false,
+            isIndexing: false,
           );
         }
 
@@ -106,9 +122,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         final isLoading = openingExplorerAsync.isLoading ||
             openingExplorerAsync.value == null;
 
-        return _OpeningExplorerView(
-          isLoading: isLoading,
-          children: openingExplorerAsync.when(
+        return widget.builder(
+          context,
+          openingExplorerAsync.when(
             data: (openingExplorer) {
               if (openingExplorer == null) {
                 return lastExplorerWidgets ??
@@ -209,43 +225,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               ];
             },
           ),
+          isLoading: isLoading,
+          isIndexing: openingExplorerAsync.value?.isIndexing ?? false,
         );
       },
-    );
-  }
-}
-
-class _OpeningExplorerView extends StatelessWidget {
-  const _OpeningExplorerView({
-    required this.children,
-    required this.isLoading,
-  });
-
-  final List<Widget> children;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final loadingOverlay = Positioned.fill(
-      child: IgnorePointer(
-        ignoring: !isLoading,
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.fastOutSlowIn,
-          opacity: isLoading ? 0.20 : 0.0,
-          child: ColoredBox(
-            color: brightness == Brightness.dark ? Colors.black : Colors.white,
-          ),
-        ),
-      ),
-    );
-
-    return Stack(
-      children: [
-        ListView(children: children),
-        loadingOverlay,
-      ],
     );
   }
 }

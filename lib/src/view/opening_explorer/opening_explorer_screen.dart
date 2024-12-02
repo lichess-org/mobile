@@ -108,9 +108,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
             isIndexing: false,
             children: [
               openingHeader,
-              OpeningExplorerMoveTable.maxDepth(
-                options: widget.options,
-              ),
+              const OpeningExplorerMoveTable.maxDepth(),
             ],
           );
         }
@@ -172,12 +170,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
               if (openingExplorer == null) {
                 return lastExplorerWidgets ??
                     [
-                      Shimmer(
+                      const Shimmer(
                         child: ShimmerLoading(
                           isLoading: true,
-                          child: OpeningExplorerMoveTable.loading(
-                            options: widget.options,
-                          ),
+                          child: OpeningExplorerMoveTable.loading(),
                         ),
                       ),
                     ];
@@ -195,7 +191,13 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
                   whiteWins: openingExplorer.entry.white,
                   draws: openingExplorer.entry.draws,
                   blackWins: openingExplorer.entry.black,
-                  options: widget.options,
+                  onMoveSelected: (move) {
+                    ref
+                        .read(
+                          analysisControllerProvider(widget.options).notifier,
+                        )
+                        .onUserMove(move);
+                  },
                 ),
                 if (topGames != null && topGames.isNotEmpty) ...[
                   OpeningExplorerHeaderTile(
@@ -250,12 +252,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
             loading: () =>
                 lastExplorerWidgets ??
                 [
-                  Shimmer(
+                  const Shimmer(
                     child: ShimmerLoading(
                       isLoading: true,
-                      child: OpeningExplorerMoveTable.loading(
-                        options: widget.options,
-                      ),
+                      child: OpeningExplorerMoveTable.loading(),
                     ),
                   ),
                 ],

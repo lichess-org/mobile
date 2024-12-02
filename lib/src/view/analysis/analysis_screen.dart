@@ -216,10 +216,28 @@ class _Body extends ConsumerWidget {
           : null,
       bottomBar: _BottomBar(options: options),
       children: [
-        OpeningExplorerView(options: options),
+        _OpeningExplorerTab(options: options),
         AnalysisTreeView(options),
         if (options.gameId != null) ServerAnalysisSummary(options),
       ],
+    );
+  }
+}
+
+class _OpeningExplorerTab extends ConsumerWidget {
+  const _OpeningExplorerTab({required this.options});
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(options);
+    final analysisState = ref.watch(ctrlProvider).requireValue;
+
+    return OpeningExplorerView(
+      ply: analysisState.currentNode.position.ply,
+      fen: analysisState.currentNode.position.fen,
+      onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -34,33 +33,33 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.whiteWins,
     required this.draws,
     required this.blackWins,
-    required this.options,
+    this.onMoveSelected,
   })  : _isLoading = false,
         _maxDepthReached = false;
 
-  const OpeningExplorerMoveTable.loading({
-    required this.options,
-  })  : _isLoading = true,
+  const OpeningExplorerMoveTable.loading()
+      : _isLoading = true,
         moves = const IListConst([]),
         whiteWins = 0,
         draws = 0,
         blackWins = 0,
-        _maxDepthReached = false;
+        _maxDepthReached = false,
+        onMoveSelected = null;
 
-  const OpeningExplorerMoveTable.maxDepth({
-    required this.options,
-  })  : _isLoading = false,
+  const OpeningExplorerMoveTable.maxDepth()
+      : _isLoading = false,
         moves = const IListConst([]),
         whiteWins = 0,
         draws = 0,
         blackWins = 0,
-        _maxDepthReached = true;
+        _maxDepthReached = true,
+        onMoveSelected = null;
 
   final IList<OpeningMove> moves;
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final AnalysisOptions options;
+  final void Function(NormalMove)? onMoveSelected;
 
   final bool _isLoading;
   final bool _maxDepthReached;
@@ -80,8 +79,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     }
 
     final games = whiteWins + draws + blackWins;
-    final ctrlProvider = analysisControllerProvider(options);
-
     const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
@@ -119,27 +116,24 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
               ),
               children: [
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text(move.san),
                   ),
                 ),
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
                   ),
                 ),
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: _WinPercentageChart(
