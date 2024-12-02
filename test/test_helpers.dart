@@ -11,6 +11,29 @@ import 'package:http/http.dart' as http;
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;
 
+const kTestSurfaces = [
+  // https://www.browserstack.com/guide/common-screen-resolutions
+  // phones
+  Size(360, 800),
+  Size(390, 844),
+  Size(393, 873),
+  Size(412, 915),
+  Size(414, 896),
+  Size(360, 780),
+  // tablets
+  Size(600, 1024),
+  Size(810, 1080),
+  Size(820, 1180),
+  Size(1280, 800),
+  Size(800, 1280),
+  Size(601, 962),
+  // folded motorola
+  Size(564.7, 482.6),
+  // pixel fold unfolded
+  Size(701.0, 841.1),
+  Size(841.1, 701.0),
+];
+
 /// iPhone 14 screen size.
 const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 

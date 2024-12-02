@@ -184,6 +184,7 @@ class AnalysisLayout extends StatelessWidget {
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               if (engineLines != null) engineLines!,
                               Expanded(
