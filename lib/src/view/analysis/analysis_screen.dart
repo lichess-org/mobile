@@ -10,12 +10,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view_builder.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -234,10 +234,34 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
-    return OpeningExplorerView(
+    return OpeningExplorerViewBuilder(
       ply: analysisState.currentNode.position.ply,
       fen: analysisState.currentNode.position.fen,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
+      builder: (context, children, {required isLoading, required isIndexing}) {
+        final brightness = Theme.of(context).brightness;
+        final loadingOverlay = Positioned.fill(
+          child: IgnorePointer(
+            ignoring: !isLoading,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.fastOutSlowIn,
+              opacity: isLoading ? 0.20 : 0.0,
+              child: ColoredBox(
+                color:
+                    brightness == Brightness.dark ? Colors.black : Colors.white,
+              ),
+            ),
+          ),
+        );
+
+        return Stack(
+          children: [
+            ListView(children: children),
+            loadingOverlay,
+          ],
+        );
+      },
     );
   }
 }

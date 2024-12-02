@@ -654,6 +654,8 @@ class StudyState with _$StudyState {
       engineSupportedVariants.contains(variant) &&
       isLocalEvaluationEnabled;
 
+  bool get isOpeningExplorerAvailable => study.chapter.features.explorer;
+
   EngineGaugeParams? get engineGaugeParams => isEngineAvailable
       ? (
           orientation: pov,

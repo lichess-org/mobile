@@ -17,11 +17,9 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   vertical: _kTableRowVerticalPadding,
 );
 
-/// A view that displays the opening explorer for the given position.
+/// A widget that displays the opening explorer moves and games for the given position.
 ///
-/// All the required data is fetched from the [OpeningExplorerRepository] and
-/// displayed in a table view. Responses are cached to avoid unnecessary
-/// network requests.
+/// Network requests are debounced and cached to avoid unnecessary requests.
 class OpeningExplorerViewBuilder extends ConsumerStatefulWidget {
   const OpeningExplorerViewBuilder({
     required this.ply,
