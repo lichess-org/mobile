@@ -141,14 +141,15 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
 }
 
 BroadcastRoundWithGames _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
-  final roundPick = pick(json).required();
-  return (round: _roundFromPick(roundPick), games: _gamesFromPick(roundPick));
+  final round = pick(json, 'round').required();
+  final games = pick(json, 'games').required();
+  return (round: _roundFromPick(round), games: _gamesFromPick(games));
 }
 
 BroadcastRoundGames _gamesFromPick(
   RequiredPick pick,
 ) =>
-    IMap.fromEntries(pick('games').asListOrThrow(gameFromPick));
+    IMap.fromEntries(pick.asListOrThrow(gameFromPick));
 
 MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
   RequiredPick pick,
