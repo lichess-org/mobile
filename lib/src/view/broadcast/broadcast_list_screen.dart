@@ -19,8 +19,8 @@ final _dateFormatter = DateFormat.MMMd().add_Hm();
 final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastsListScreen extends StatelessWidget {
-  const BroadcastsListScreen({super.key});
+class BroadcastListScreen extends StatelessWidget {
+  const BroadcastListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
