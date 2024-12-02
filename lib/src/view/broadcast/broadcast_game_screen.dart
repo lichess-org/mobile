@@ -199,34 +199,9 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
-    return OpeningExplorerViewBuilder(
-      ply: state.currentNode.position.ply,
-      fen: state.currentNode.position.fen,
+    return OpeningExplorer(
+      position: state.currentNode.position,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
-      builder: (context, children, {required isLoading, required isIndexing}) {
-        final brightness = Theme.of(context).brightness;
-        final loadingOverlay = Positioned.fill(
-          child: IgnorePointer(
-            ignoring: !isLoading,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.fastOutSlowIn,
-              opacity: isLoading ? 0.20 : 0.0,
-              child: ColoredBox(
-                color:
-                    brightness == Brightness.dark ? Colors.black : Colors.white,
-              ),
-            ),
-          ),
-        );
-
-        return Stack(
-          children: [
-            ListView(children: children),
-            loadingOverlay,
-          ],
-        );
-      },
     );
   }
 }

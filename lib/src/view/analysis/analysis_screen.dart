@@ -216,52 +216,15 @@ class _Body extends ConsumerWidget {
           : null,
       bottomBar: _BottomBar(options: options),
       children: [
-        _OpeningExplorerTab(options: options),
+        OpeningExplorer(
+          position: currentNode.position,
+          onMoveSelected: (move) {
+            ref.read(ctrlProvider.notifier).onUserMove(move);
+          },
+        ),
         AnalysisTreeView(options),
         if (options.gameId != null) ServerAnalysisSummary(options),
       ],
-    );
-  }
-}
-
-class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab({required this.options});
-
-  final AnalysisOptions options;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
-    final analysisState = ref.watch(ctrlProvider).requireValue;
-
-    return OpeningExplorerViewBuilder(
-      ply: analysisState.currentNode.position.ply,
-      fen: analysisState.currentNode.position.fen,
-      onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
-      builder: (context, children, {required isLoading, required isIndexing}) {
-        final brightness = Theme.of(context).brightness;
-        final loadingOverlay = Positioned.fill(
-          child: IgnorePointer(
-            ignoring: !isLoading,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.fastOutSlowIn,
-              opacity: isLoading ? 0.20 : 0.0,
-              child: ColoredBox(
-                color:
-                    brightness == Brightness.dark ? Colors.black : Colors.white,
-              ),
-            ),
-          ),
-        );
-
-        return Stack(
-          children: [
-            ListView(children: children),
-            loadingOverlay,
-          ],
-        );
-      },
     );
   }
 }

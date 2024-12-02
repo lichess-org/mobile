@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view_builder.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
@@ -33,32 +34,18 @@ import 'package:logging/logging.dart';
 final _logger = Logger('StudyScreen');
 
 class StudyScreen extends ConsumerWidget {
-  const StudyScreen({
-    required this.id,
-  });
+  const StudyScreen({required this.id});
 
   final StudyId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id));
-
     return state.when(
       data: (state) {
-        return PlatformScaffold(
-          appBar: PlatformAppBar(
-            title: AutoSizeText(
-              state.currentChapterTitle,
-              maxLines: 2,
-              minFontSize: 14,
-              overflow: TextOverflow.ellipsis,
-            ),
-            actions: [
-              _ChapterButton(id: id),
-              _StudyMenu(id: id),
-            ],
-          ),
-          body: _Body(id: id),
+        return _StudyScreen(
+          id: id,
+          studyState: state,
         );
       },
       loading: () {
@@ -75,6 +62,92 @@ class StudyScreen extends ConsumerWidget {
           child: Text('Cannot load study: $error'),
         );
       },
+    );
+  }
+}
+
+class _StudyScreen extends ConsumerStatefulWidget {
+  const _StudyScreen({
+    required this.id,
+    required this.studyState,
+  });
+
+  final StudyId id;
+  final StudyState studyState;
+
+  @override
+  ConsumerState<_StudyScreen> createState() => _StudyScreenState();
+}
+
+class _StudyScreenState extends ConsumerState<_StudyScreen>
+    with TickerProviderStateMixin {
+  late List<AnalysisTab> tabs;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabs = [
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.opening,
+      AnalysisTab.moves,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.length - 1,
+      length: tabs.length,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _StudyScreen oldWidget) {
+    // If the study has not yet loaded the opening explorer and it is now available
+    // with this chapter, add the opening tab.
+    // We don't want to remove a tab, so if the opening explorer is not available
+    // anymore, we keep the tabs as they are.
+    // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
+    if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
+      tabs = [
+        AnalysisTab.opening,
+        AnalysisTab.moves,
+      ];
+      _tabController = TabController(
+        vsync: this,
+        initialIndex: tabs.length - 1,
+        length: tabs.length,
+      );
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: AutoSizeText(
+          widget.studyState.currentChapterTitle,
+          maxLines: 2,
+          minFontSize: 14,
+          overflow: TextOverflow.ellipsis,
+        ),
+        actions: [
+          if (tabs.length > 1)
+            AppBarAnalysisTabIndicator(
+              tabs: tabs,
+              controller: _tabController,
+            ),
+          _ChapterButton(id: widget.id),
+          _StudyMenu(id: widget.id),
+        ],
+      ),
+      body: _Body(id: widget.id, tabController: _tabController, tabs: tabs),
     );
   }
 }
@@ -209,9 +282,13 @@ class _StudyChaptersMenu extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body({
     required this.id,
+    required this.tabController,
+    required this.tabs,
   });
 
   final StudyId id;
+  final TabController tabController;
+  final List<AnalysisTab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -246,51 +323,70 @@ class _Body extends ConsumerWidget {
 
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
-    return DefaultTabController(
-      length: 1,
-      child: AnalysisLayout(
-        boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
-          id: id,
-          boardSize: boardSize,
-          borderRadius: borderRadius,
-        ),
-        engineGaugeBuilder: isComputerAnalysisAllowed &&
-                showEvaluationGauge &&
-                engineGaugeParams != null
-            ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                        params: engineGaugeParams,
-                      )
-                    : Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.vertical,
-                          params: engineGaugeParams,
-                        ),
-                      );
-              }
-            : null,
-        engineLines: isComputerAnalysisAllowed &&
-                isLocalEvaluationEnabled &&
-                numEvalLines > 0
-            ? EngineLines(
-                clientEval: currentNode.eval,
-                isGameOver: currentNode.position?.isGameOver ?? false,
-                onTapMove: ref
-                    .read(
-                      studyControllerProvider(id).notifier,
-                    )
-                    .onUserMove,
-              )
-            : null,
-        bottomBar: StudyBottomBar(id: id),
-        children: [bottomChild],
+    return AnalysisLayout(
+      tabController: tabController,
+      boardBuilder: (context, boardSize, borderRadius) => _StudyBoard(
+        id: id,
+        boardSize: boardSize,
+        borderRadius: borderRadius,
       ),
+      engineGaugeBuilder: isComputerAnalysisAllowed &&
+              showEvaluationGauge &&
+              engineGaugeParams != null
+          ? (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? EngineGauge(
+                      displayMode: EngineGaugeDisplayMode.horizontal,
+                      params: engineGaugeParams,
+                    )
+                  : Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.vertical,
+                        params: engineGaugeParams,
+                      ),
+                    );
+            }
+          : null,
+      engineLines: isComputerAnalysisAllowed &&
+              isLocalEvaluationEnabled &&
+              numEvalLines > 0
+          ? EngineLines(
+              clientEval: currentNode.eval,
+              isGameOver: currentNode.position?.isGameOver ?? false,
+              onTapMove: ref
+                  .read(
+                    studyControllerProvider(id).notifier,
+                  )
+                  .onUserMove,
+            )
+          : null,
+      bottomBar: StudyBottomBar(id: id),
+      children: tabs.map((tab) {
+        switch (tab) {
+          case AnalysisTab.opening:
+            if (studyState.isOpeningExplorerAvailable &&
+                studyState.currentNode.position != null) {
+              return OpeningExplorer(
+                position: studyState.currentNode.position!,
+                onMoveSelected: (move) {
+                  ref
+                      .read(studyControllerProvider(id).notifier)
+                      .onUserMove(move);
+                },
+              );
+            } else {
+              return const Center(
+                child: Text('Opening explorer not available.'),
+              );
+            }
+          case _:
+            return bottomChild;
+        }
+      }).toList(),
     );
   }
 }

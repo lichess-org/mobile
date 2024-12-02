@@ -34,8 +34,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
     switch (ref.watch(ctrlProvider)) {
       case AsyncData(value: final state):
         return OpeningExplorerViewBuilder(
-          ply: state.currentNode.position.ply,
-          fen: state.currentNode.position.fen,
+          position: state.currentNode.position,
           onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
           builder: (
             context,

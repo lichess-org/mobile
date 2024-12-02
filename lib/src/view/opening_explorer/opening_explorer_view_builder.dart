@@ -17,20 +17,70 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   vertical: _kTableRowVerticalPadding,
 );
 
-/// A widget that displays the opening explorer moves and games for the given position.
+/// Displays an opening explorer for the given position.
+///
+/// It shows the top moves, games, and recent games for the given position, in a scrollable list.
+///
+/// This widget is meant to be embedded in the analysis, broadcast, and study screens.
+class OpeningExplorer extends ConsumerWidget {
+  const OpeningExplorer({
+    required this.position,
+    required this.onMoveSelected,
+  });
+
+  final Position position;
+  final void Function(NormalMove) onMoveSelected;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return OpeningExplorerViewBuilder(
+      position: position,
+      onMoveSelected: onMoveSelected,
+      builder: (context, children, {required isLoading, required isIndexing}) {
+        final brightness = Theme.of(context).brightness;
+        final loadingOverlay = Positioned.fill(
+          child: IgnorePointer(
+            ignoring: !isLoading,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.fastOutSlowIn,
+              opacity: isLoading ? 0.20 : 0.0,
+              child: ColoredBox(
+                color:
+                    brightness == Brightness.dark ? Colors.black : Colors.white,
+              ),
+            ),
+          ),
+        );
+
+        return Stack(
+          children: [
+            ListView(padding: EdgeInsets.zero, children: children),
+            loadingOverlay,
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// A widget that builds the opening explorer moves and games for the given position.
+///
+/// The [builder] function is called with the list of children to display in the
+/// opening explorer view. The [isLoading] and [isIndexing] parameters are used to
+/// display a loading indicator and a message when the opening explorer is
+/// indexing the games.
 ///
 /// Network requests are debounced and cached to avoid unnecessary requests.
 class OpeningExplorerViewBuilder extends ConsumerStatefulWidget {
   const OpeningExplorerViewBuilder({
-    required this.ply,
-    required this.fen,
+    required this.position,
     required this.builder,
-    this.onMoveSelected,
+    required this.onMoveSelected,
   });
 
-  final int ply;
-  final String fen;
-  final void Function(NormalMove)? onMoveSelected;
+  final Position position;
+  final void Function(NormalMove) onMoveSelected;
   final Widget Function(
     BuildContext context,
     List<Widget> children, {
@@ -63,7 +113,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
         ),
       ),
       online: () {
-        if (widget.ply >= 50) {
+        if (widget.position.ply >= 50) {
           return widget.builder(
             context,
             [
@@ -95,7 +145,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
         }
 
         final cacheKey = OpeningExplorerCacheKey(
-          fen: widget.fen,
+          fen: widget.position.fen,
           prefs: prefs,
         );
         final cacheOpeningExplorer = cache[cacheKey];
@@ -104,11 +154,12 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
                 (entry: cacheOpeningExplorer, isIndexing: false),
               )
             : ref.watch(
-                openingExplorerProvider(fen: widget.fen),
+                openingExplorerProvider(fen: widget.position.fen),
               );
 
         if (cacheOpeningExplorer == null) {
-          ref.listen(openingExplorerProvider(fen: widget.fen), (_, curAsync) {
+          ref.listen(openingExplorerProvider(fen: widget.position.fen),
+              (_, curAsync) {
             curAsync.whenData((cur) {
               if (cur != null && !cur.isIndexing) {
                 cache[cacheKey] = cur.entry;
@@ -139,7 +190,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
               final topGames = openingExplorer.entry.topGames;
               final recentGames = openingExplorer.entry.recentGames;
 
-              final ply = widget.ply;
+              final ply = widget.position.ply;
 
               final children = [
                 OpeningExplorerMoveTable(
