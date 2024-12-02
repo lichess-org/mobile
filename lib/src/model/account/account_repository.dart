@@ -165,6 +165,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
       pick('submitMove').asIntOrThrow(),
     ),
     follow: BooleanPref(pick('follow').asBoolOrThrow()),
+    challenge: Challenge.fromInt(pick('challenge').asIntOrThrow()),
   );
 }
 

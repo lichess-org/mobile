@@ -27,6 +27,7 @@ typedef AccountPrefState = ({
   BooleanPref clockSound,
   // privacy
   BooleanPref follow,
+  Challenge challenge,
 });
 
 /// A provider that tells if the user wants to see ratings in the app.
@@ -71,6 +72,7 @@ final defaultAccountPreferences = (
     SubmitMoveChoice.correspondence,
   }),
   follow: const BooleanPref(true),
+  challenge: Challenge.registered,
 );
 
 /// Get the account preferences for the current user.
@@ -116,6 +118,7 @@ class AccountPreferences extends _$AccountPreferences {
       _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
   Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
+  Future<void> setChallenge(Challenge value) => _setPref('challenge', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -371,6 +374,54 @@ enum Moretime implements AccountPref<int> {
         return Moretime.always;
       default:
         throw Exception('Invalid value for Moretime');
+    }
+  }
+}
+
+enum Challenge implements AccountPref<int> {
+  never(1),
+  rating(2),
+  friends(3),
+  registered(4),
+  always(5);
+
+  const Challenge(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    switch (this) {
+      case Challenge.never:
+        return context.l10n.never;
+      case Challenge.rating:
+        return context.l10n.ifRatingIsPlusMinusX('300');
+      case Challenge.friends:
+        return context.l10n.onlyFriends;
+      case Challenge.registered:
+        return context.l10n.ifRegistered;
+      case Challenge.always:
+        return context.l10n.always;
+    }
+  }
+
+  static Challenge fromInt(int value) {
+    switch (value) {
+      case 1:
+        return Challenge.never;
+      case 2:
+        return Challenge.rating;
+      case 3:
+        return Challenge.friends;
+      case 4:
+        return Challenge.registered;
+      case 5:
+        return Challenge.always;
+      default:
+        throw Exception('Invalid value for Challenge');
     }
   }
 }
