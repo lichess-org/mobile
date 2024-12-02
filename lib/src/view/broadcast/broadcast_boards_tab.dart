@@ -26,30 +26,25 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final String title;
 
-  const BroadcastBoardsTab({
-    super.key,
-    required this.roundId,
-    required this.title,
-  });
+  const BroadcastBoardsTab(this.roundId);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(broadcastRoundControllerProvider(roundId));
+    final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return SafeArea(
       bottom: false,
-      child: switch (games) {
-        AsyncData(:final value) => (value.isEmpty)
+      child: switch (round) {
+        AsyncData(:final value) => (value.games.isEmpty)
             ? const Padding(
                 padding: Styles.bodyPadding,
                 child: Text('No boards to show for now'),
               )
             : BroadcastPreview(
-                games: value.values.toIList(),
+                games: value.games.values.toIList(),
                 roundId: roundId,
-                title: title,
+                title: value.round.name,
               ),
         AsyncError(:final error) => Center(
             child: Text(error.toString()),

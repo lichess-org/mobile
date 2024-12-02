@@ -89,10 +89,7 @@ class _AndroidScreenState extends State<_AndroidScreen>
         controller: _tabController,
         children: <Widget>[
           BroadcastOverviewTab(tournamentId: _selectedTournamentId),
-          BroadcastBoardsTab(
-            roundId: _selectedRoundId,
-            title: widget.broadcast.title,
-          ),
+          BroadcastBoardsTab(_selectedRoundId),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -171,10 +168,7 @@ class _CupertinoScreenState extends State<_CupertinoScreen> {
           Expanded(
             child: _selectedSegment == _ViewMode.overview
                 ? BroadcastOverviewTab(tournamentId: _selectedTournamentId)
-                : BroadcastBoardsTab(
-                    roundId: _selectedRoundId,
-                    title: widget.broadcast.title,
-                  ),
+                : BroadcastBoardsTab(_selectedRoundId),
           ),
           _IOSTournamentAndRoundSelector(
             tournamentId: _selectedTournamentId,
