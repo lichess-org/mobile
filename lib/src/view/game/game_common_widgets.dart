@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -387,15 +388,29 @@ class _StandaloneGameTitle extends ConsumerWidget {
             ),
             const SizedBox(width: 4.0),
             if (meta.clock != null)
-              Text(
-                '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
+              Expanded(
+                child: AutoSizeText(
+                  '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                ),
               )
             else if (meta.daysPerTurn != null)
-              Text(
-                '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
+              Expanded(
+                child: AutoSizeText(
+                  '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                ),
               )
             else
-              Text('${meta.perf.title}$info'),
+              Expanded(
+                child: AutoSizeText(
+                  '${meta.perf.title}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                ),
+              ),
           ],
         );
       },
