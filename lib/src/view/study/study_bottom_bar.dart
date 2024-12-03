@@ -247,8 +247,9 @@ class _ChapterButton extends ConsumerWidget {
         isScrollControlled: true,
         isDismissible: true,
         builder: (_) => DraggableScrollableSheet(
-          initialChildSize: 0.5,
-          maxChildSize: 0.95,
+          initialChildSize: 0.6,
+          maxChildSize: 0.6,
+          minChildSize: 0.0,
           snap: true,
           expand: false,
           builder: (context, scrollController) {
@@ -300,12 +301,13 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       scrollController: widget.scrollController,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             context.l10n.studyNbChapters(state.study.chapters.length),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
+        const SizedBox(height: 16),
         for (final chapter in state.study.chapters)
           PlatformListTile(
             key: chapter.id == state.currentChapter.id
