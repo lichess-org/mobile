@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -84,8 +85,11 @@ class _BodyState extends ConsumerState<_Body> {
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
 
-    final itemsCount =
-        broadcasts.requireValue.past.length + (broadcasts.isLoading ? 10 : 0);
+    final isTablet = isTabletOrLarger(context);
+    final itemsByRow = isTablet ? 6 : 2;
+    final loadingItems = isTablet ? 36 : 12;
+    final itemsCount = broadcasts.requireValue.past.length +
+        (broadcasts.isLoading ? loadingItems : 0);
 
     return SafeArea(
       child: CustomScrollView(
@@ -94,8 +98,8 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -116,8 +120,8 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -139,13 +143,13 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) => (broadcasts.isLoading &&
-                      index >= itemsCount - 10)
+                      index >= itemsCount - loadingItems)
                   ? Shimmer(
                       child: ShimmerLoading(
                         isLoading: true,
@@ -154,11 +158,6 @@ class _BodyState extends ConsumerState<_Body> {
                     )
                   : BroadcastGridItem(broadcast: broadcasts.value!.past[index]),
               itemCount: itemsCount,
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
             ),
           ),
         ],
