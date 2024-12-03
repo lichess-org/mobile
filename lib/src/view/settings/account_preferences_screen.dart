@@ -426,7 +426,8 @@ class _AccountPreferencesScreenState
                         pushPlatformRoute(
                           context,
                           title: context.l10n.letOtherPlayersChallengeYou,
-                          builder: (context) => const AutoQueenSettingsScreen(),
+                          builder: (context) =>
+                              const _ChallengeSettingsScreen(),
                         );
                       }
                     },
@@ -836,16 +837,16 @@ class _MoretimeSettingsScreenState
   }
 }
 
-class ChallengeSettingsScreen extends ConsumerStatefulWidget {
-  const ChallengeSettingsScreen({super.key});
+class _ChallengeSettingsScreen extends ConsumerStatefulWidget {
+  const _ChallengeSettingsScreen();
 
   @override
-  ConsumerState<ChallengeSettingsScreen> createState() =>
+  ConsumerState<_ChallengeSettingsScreen> createState() =>
       _ChallengeSettingsScreenState();
 }
 
 class _ChallengeSettingsScreenState
-    extends ConsumerState<ChallengeSettingsScreen> {
+    extends ConsumerState<_ChallengeSettingsScreen> {
   Future<void>? _pendingSetChallenge;
 
   @override
