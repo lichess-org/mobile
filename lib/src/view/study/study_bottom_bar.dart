@@ -7,9 +7,11 @@ import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({
@@ -53,6 +55,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        _ChapterButton(state: state),
         _NextChapterButton(
           id: id,
           chapterId: state.study.chapter.id,
@@ -101,6 +104,7 @@ class _GamebookBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        _ChapterButton(state: state),
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [
               if (!state.currentNode.isRoot)
@@ -226,5 +230,99 @@ class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
             showLabel: true,
             blink: widget.blink,
           );
+  }
+}
+
+class _ChapterButton extends ConsumerWidget {
+  const _ChapterButton({required this.state});
+
+  final StudyState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return BottomBarButton(
+      onTap: () => showAdaptiveBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        builder: (_) => DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          maxChildSize: 0.6,
+          minChildSize: 0.0,
+          snap: true,
+          expand: false,
+          builder: (context, scrollController) {
+            return _StudyChaptersMenu(
+              id: state.study.id,
+              scrollController: scrollController,
+            );
+          },
+        ),
+      ),
+      label: context.l10n.studyNbChapters(state.study.chapters.length),
+      showLabel: true,
+      icon: Icons.menu_book,
+    );
+  }
+}
+
+class _StudyChaptersMenu extends ConsumerStatefulWidget {
+  const _StudyChaptersMenu({
+    required this.id,
+    required this.scrollController,
+  });
+
+  final StudyId id;
+  final ScrollController scrollController;
+
+  @override
+  ConsumerState<_StudyChaptersMenu> createState() => _StudyChaptersMenuState();
+}
+
+class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
+  final currentChapterKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(studyControllerProvider(widget.id)).requireValue;
+
+    // Scroll to the current chapter
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentChapterKey.currentContext != null) {
+        Scrollable.ensureVisible(
+          currentChapterKey.currentContext!,
+          alignment: 0.5,
+        );
+      }
+    });
+
+    return BottomSheetScrollableContainer(
+      scrollController: widget.scrollController,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            context.l10n.studyNbChapters(state.study.chapters.length),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 16),
+        for (final chapter in state.study.chapters)
+          PlatformListTile(
+            key: chapter.id == state.currentChapter.id
+                ? currentChapterKey
+                : null,
+            title: Text(chapter.name, maxLines: 2),
+            onTap: () {
+              ref.read(studyControllerProvider(widget.id).notifier).goToChapter(
+                    chapter.id,
+                  );
+              Navigator.of(context).pop();
+            },
+            selected: chapter.id == state.currentChapter.id,
+          ),
+      ],
+    );
   }
 }

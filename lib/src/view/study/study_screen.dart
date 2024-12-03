@@ -3,6 +3,7 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -11,11 +12,15 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
+import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -24,9 +29,9 @@ import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:logging/logging.dart';
@@ -40,29 +45,67 @@ class StudyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id));
-    return state.when(
-      data: (state) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    switch (ref.watch(studyControllerProvider(id))) {
+      case AsyncData(:final value):
         return _StudyScreen(
           id: id,
-          studyState: state,
+          studyState: value,
         );
-      },
-      loading: () {
-        return const PlatformScaffold(
-          appBar: PlatformAppBar(
+      case AsyncError(:final error, :final stackTrace):
+        _logger.severe('Cannot load study: $error', stackTrace);
+        return PlatformScaffold(
+          appBar: const PlatformAppBar(
             title: Text(''),
           ),
-          body: Center(child: CircularProgressIndicator()),
+          body: DefaultTabController(
+            length: 1,
+            child: AnalysisLayout(
+              boardBuilder: (context, boardSize, borderRadius) =>
+                  Chessboard.fixed(
+                size: boardSize,
+                settings: boardPrefs.toBoardSettings().copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null
+                          ? boardShadows
+                          : const <BoxShadow>[],
+                    ),
+                orientation: Side.white,
+                fen: kEmptyFEN,
+              ),
+              children: const [
+                Center(
+                  child: Text('Failed to load study.'),
+                ),
+              ],
+            ),
+          ),
         );
-      },
-      error: (error, st) {
-        _logger.severe('Cannot load study: $error', st);
-        return Center(
-          child: Text('Cannot load study: $error'),
+      case _:
+        return PlatformScaffold(
+          appBar: const PlatformAppBar(
+            title: Text(''),
+          ),
+          body: DefaultTabController(
+            length: 1,
+            child: AnalysisLayout(
+              boardBuilder: (context, boardSize, borderRadius) =>
+                  Chessboard.fixed(
+                size: boardSize,
+                settings: boardPrefs.toBoardSettings().copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null
+                          ? boardShadows
+                          : const <BoxShadow>[],
+                    ),
+                orientation: Side.white,
+                fen: kEmptyFEN,
+              ),
+              children: const [SizedBox.shrink()],
+            ),
+          ),
         );
-      },
-    );
+    }
   }
 }
 
@@ -143,7 +186,6 @@ class _StudyScreenState extends ConsumerState<_StudyScreen>
               tabs: tabs,
               controller: _tabController,
             ),
-          _ChapterButton(id: widget.id),
           _StudyMenu(id: widget.id),
         ],
       ),
@@ -184,96 +226,141 @@ class _StudyMenu extends ConsumerWidget {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },
         ),
-      ],
-    );
-  }
-}
-
-class _ChapterButton extends ConsumerWidget {
-  const _ChapterButton({required this.id});
-
-  final StudyId id;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).valueOrNull;
-    return state == null
-        ? const SizedBox.shrink()
-        : AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
+        AppBarMenuAction(
+          icon: Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoIcons.share
+              : Icons.share,
+          label: context.l10n.studyShareAndExport,
+          onPressed: () {
+            showAdaptiveActionSheet<void>(
               context: context,
-              showDragHandle: true,
-              isScrollControlled: true,
-              isDismissible: true,
-              builder: (_) => DraggableScrollableSheet(
-                initialChildSize: 0.5,
-                maxChildSize: 0.95,
-                snap: true,
-                expand: false,
-                builder: (context, scrollController) {
-                  return _StudyChaptersMenu(
-                    id: id,
-                    scrollController: scrollController,
-                  );
-                },
-              ),
-            ),
-            semanticsLabel:
-                context.l10n.studyNbChapters(state.study.chapters.length),
-            icon: const Icon(Icons.menu_book),
-          );
-  }
-}
-
-class _StudyChaptersMenu extends ConsumerWidget {
-  const _StudyChaptersMenu({
-    required this.id,
-    required this.scrollController,
-  });
-
-  final StudyId id;
-  final ScrollController scrollController;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).requireValue;
-
-    final currentChapterKey = GlobalKey();
-
-    // Scroll to the current chapter
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentChapterKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentChapterKey.currentContext!,
-          alignment: 0.5,
-        );
-      }
-    });
-
-    return BottomSheetScrollableContainer(
-      scrollController: scrollController,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            context.l10n.studyNbChapters(state.study.chapters.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+              actions: [
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.studyStudyUrl),
+                  onPressed: (context) async {
+                    launchShareDialog(
+                      context,
+                      uri: lichessUri('/study/${state.study.id}'),
+                    );
+                  },
+                ),
+                BottomSheetAction(
+                  makeLabel: (context) =>
+                      Text(context.l10n.studyCurrentChapterUrl),
+                  onPressed: (context) async {
+                    launchShareDialog(
+                      context,
+                      uri: lichessUri(
+                        '/study/${state.study.id}/${state.study.chapter.id}',
+                      ),
+                    );
+                  },
+                ),
+                if (!state.gamebookActive) ...[
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.studyStudyPgn),
+                    onPressed: (context) async {
+                      try {
+                        final pgn =
+                            await ref.read(studyRepositoryProvider).getStudyPgn(
+                                  state.study.id,
+                                );
+                        if (context.mounted) {
+                          launchShareDialog(
+                            context,
+                            text: pgn,
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            'Failed to get PGN',
+                            type: SnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.studyChapterPgn),
+                    onPressed: (context) async {
+                      launchShareDialog(
+                        context,
+                        text: state.pgn,
+                      );
+                    },
+                  ),
+                  if (state.position != null)
+                    BottomSheetAction(
+                      makeLabel: (context) =>
+                          Text(context.l10n.screenshotCurrentPosition),
+                      onPressed: (_) async {
+                        try {
+                          final image = await ref
+                              .read(gameShareServiceProvider)
+                              .screenshotPosition(
+                                state.pov,
+                                state.position!.fen,
+                                state.lastMove,
+                              );
+                          if (context.mounted) {
+                            launchShareDialog(
+                              context,
+                              files: [image],
+                              subject: context.l10n.puzzleFromGameLink(
+                                lichessUri('/study/${state.study.id}')
+                                    .toString(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            showPlatformSnackbar(
+                              context,
+                              'Failed to get GIF',
+                              type: SnackBarType.error,
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  BottomSheetAction(
+                    makeLabel: (context) => const Text('GIF'),
+                    onPressed: (_) async {
+                      try {
+                        final gif =
+                            await ref.read(studyRepositoryProvider).chapterGif(
+                                  state.study.id,
+                                  state.study.chapter.id,
+                                  state.pov,
+                                );
+                        if (context.mounted) {
+                          launchShareDialog(
+                            context,
+                            files: [gif],
+                            subject: context.l10n.studyChapterX(
+                              state.study.currentChapterMeta.name,
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        debugPrint(e.toString());
+                        if (context.mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            'Failed to get GIF',
+                            type: SnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ],
+            );
+          },
         ),
-        for (final chapter in state.study.chapters)
-          PlatformListTile(
-            key: chapter.id == state.currentChapter.id
-                ? currentChapterKey
-                : null,
-            title: Text(chapter.name, maxLines: 2),
-            onTap: () {
-              ref.read(studyControllerProvider(id).notifier).goToChapter(
-                    chapter.id,
-                  );
-              Navigator.of(context).pop();
-            },
-            selected: chapter.id == state.currentChapter.id,
-          ),
       ],
     );
   }

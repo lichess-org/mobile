@@ -308,7 +308,6 @@ class _ContextMenu extends ConsumerWidget {
                     final image = await ref
                         .read(gameShareServiceProvider)
                         .screenshotPosition(
-                          game.id,
                           orientation,
                           game.lastFen!,
                           game.lastMove,

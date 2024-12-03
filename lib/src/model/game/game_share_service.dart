@@ -57,9 +57,8 @@ class GameShareService {
     return utf8.decode(resp.bodyBytes);
   }
 
-  /// Fetches the GIF screenshot of a game and launches the share dialog.
+  /// Fetches the GIF screenshot of a position and launches the share dialog.
   Future<XFile> screenshotPosition(
-    GameId id,
     Side orientation,
     String fen,
     Move? lastMove,
@@ -80,7 +79,7 @@ class GameShareService {
     return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }
 
-  /// Fetches the GIF animation of a game and launches the share dialog.
+  /// Fetches the GIF animation of a game.
   Future<XFile> gameGif(GameId id, Side orientation) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
