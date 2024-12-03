@@ -279,447 +279,453 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
       data: (account) {
         final timeControl = preferences.timeControl;
 
-        return Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: Theme.of(context).platform == TargetPlatform.iOS
-                ? Styles.sectionBottomPadding
-                : Styles.verticalBodyPadding,
-            children: [
-              if (!isSpecialBot) ...[
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.timeControl),
-                  trailing: AdaptiveTextButton(
-                    onPressed: () {
-                      showChoicePicker(
-                        context,
-                        choices: [
-                          ChallengeTimeControlType.clock,
-                          ChallengeTimeControlType.correspondence,
-                        ],
-                        selectedItem: preferences.timeControl,
-                        labelBuilder: (ChallengeTimeControlType timeControl) =>
-                            Text(
-                          switch (timeControl) {
-                            ChallengeTimeControlType.clock =>
-                              context.l10n.realTime,
-                            ChallengeTimeControlType.correspondence =>
-                              context.l10n.correspondence,
-                            ChallengeTimeControlType.unlimited =>
-                              context.l10n.unlimited,
-                          },
-                        ),
-                        onSelectedItemChanged:
-                            (ChallengeTimeControlType value) {
-                          ref
-                              .read(challengePreferencesProvider.notifier)
-                              .setTimeControl(value);
-                        },
-                      );
-                    },
-                    child: Text(
-                      preferences.timeControl == ChallengeTimeControlType.clock
-                          ? context.l10n.realTime
-                          : context.l10n.correspondence,
-                    ),
-                  ),
-                ),
-              ],
-              if (timeControl == ChallengeTimeControlType.clock) ...[
-                Builder(
-                  builder: (context) {
-                    //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
-                    int seconds = isSpecialBot &&
-                            (preferences.clock.time.inSeconds < 60 ||
-                                preferences.clock.time.inSeconds > 15 * 60)
-                        ? 300
-                        : preferences.clock.time.inSeconds;
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.minutesPerSide}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                  text: clockLabelInMinutes(seconds),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: seconds,
-                            values: isSpecialBot
-                                ? List.generate(15, (i) => (i + 1) * 60)
-                                : kAvailableTimesInSeconds,
-                            labelBuilder: clockLabelInMinutes,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                        setState(() {
-                                          seconds = value.toInt();
-                                        });
-                                      }
-                                    : null,
-                            onChangeEnd: (num value) {
-                              setState(() {
-                                seconds = value.toInt();
-                              });
-                              ref
-                                  .read(challengePreferencesProvider.notifier)
-                                  .setClock(
-                                    Duration(seconds: value.toInt()),
-                                    preferences.clock.increment,
-                                  );
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-                Builder(
-                  builder: (context) {
-                    int incrementSeconds = isSpecialBot &&
-                            preferences.clock.increment.inSeconds > 10
-                        ? 10
-                        : preferences.clock.increment.inSeconds;
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.incrementInSeconds}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                  text: incrementSeconds.toString(),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: incrementSeconds,
-                            values: isSpecialBot
-                                ? List.generate(11, (i) => i)
-                                : kAvailableIncrementsInSeconds,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                        setState(() {
-                                          incrementSeconds = value.toInt();
-                                        });
-                                      }
-                                    : null,
-                            onChangeEnd: (num value) {
-                              setState(() {
-                                incrementSeconds = value.toInt();
-                              });
-                              ref
-                                  .read(challengePreferencesProvider.notifier)
-                                  .setClock(
-                                    preferences.clock.time,
-                                    Duration(seconds: value.toInt()),
-                                  );
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ] else ...[
-                Builder(
-                  builder: (context) {
-                    int daysPerTurn = preferences.days;
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.daysPerTurn}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                  text: _daysLabel(daysPerTurn),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: daysPerTurn,
-                            values: kAvailableDaysPerTurn,
-                            labelBuilder: _daysLabel,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                        setState(() {
-                                          daysPerTurn = value.toInt();
-                                        });
-                                      }
-                                    : null,
-                            onChangeEnd: (num value) {
-                              setState(() {
-                                daysPerTurn = value.toInt();
-                              });
-                              ref
-                                  .read(challengePreferencesProvider.notifier)
-                                  .setDays(value.toInt());
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-              if (!isSpecialBot) ...[
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.variant),
-                  trailing: AdaptiveTextButton(
-                    onPressed: () {
-                      showChoicePicker(
-                        context,
-                        choices: [
-                          Variant.standard,
-                          Variant.chess960,
-                          Variant.fromPosition,
-                        ],
-                        selectedItem: preferences.variant,
-                        labelBuilder: (Variant variant) => Text(variant.label),
-                        onSelectedItemChanged: (Variant variant) {
-                          ref
-                              .read(challengePreferencesProvider.notifier)
-                              .setVariant(variant);
-                        },
-                      );
-                    },
-                    child: Text(preferences.variant.label),
-                  ),
-                ),
-                ExpandedSection(
-                  expand: preferences.variant == Variant.fromPosition,
-                  child: SmallBoardPreview(
-                    orientation: preferences.sideChoice == SideChoice.black
-                        ? Side.black
-                        : Side.white,
-                    fen: fromPositionFenInput ?? kEmptyFen,
-                    description: AdaptiveTextField(
-                      maxLines: 5,
-                      placeholder: context.l10n.pasteTheFenStringHere,
-                      controller: _controller,
-                      readOnly: true,
-                      onTap: _getClipboardData,
-                    ),
-                  ),
-                ),
-                ExpandedSection(
-                  expand: preferences.rated == false ||
-                      preferences.variant == Variant.fromPosition,
-                  child: PlatformListTile(
+        return SafeArea(
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              padding: Theme.of(context).platform == TargetPlatform.iOS
+                  ? Styles.sectionBottomPadding
+                  : Styles.verticalBodyPadding,
+              children: [
+                if (!isSpecialBot) ...[
+                  PlatformListTile(
                     harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.side),
+                    title: Text(context.l10n.timeControl),
                     trailing: AdaptiveTextButton(
                       onPressed: () {
-                        showChoicePicker<SideChoice>(
+                        showChoicePicker(
                           context,
-                          choices: SideChoice.values,
-                          selectedItem: preferences.sideChoice,
-                          labelBuilder: (SideChoice side) =>
-                              Text(side.label(context.l10n)),
-                          onSelectedItemChanged: (SideChoice side) {
+                          choices: [
+                            ChallengeTimeControlType.clock,
+                            ChallengeTimeControlType.correspondence,
+                          ],
+                          selectedItem: preferences.timeControl,
+                          labelBuilder:
+                              (ChallengeTimeControlType timeControl) => Text(
+                            switch (timeControl) {
+                              ChallengeTimeControlType.clock =>
+                                context.l10n.realTime,
+                              ChallengeTimeControlType.correspondence =>
+                                context.l10n.correspondence,
+                              ChallengeTimeControlType.unlimited =>
+                                context.l10n.unlimited,
+                            },
+                          ),
+                          onSelectedItemChanged:
+                              (ChallengeTimeControlType value) {
                             ref
                                 .read(challengePreferencesProvider.notifier)
-                                .setSideChoice(side);
+                                .setTimeControl(value);
                           },
                         );
                       },
                       child: Text(
-                        preferences.sideChoice.label(context.l10n),
+                        preferences.timeControl ==
+                                ChallengeTimeControlType.clock
+                            ? context.l10n.realTime
+                            : context.l10n.correspondence,
                       ),
                     ),
                   ),
-                ),
-              ],
-              if (isSpecialBot) ...[
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final crossAxisCount = constraints.maxWidth > 600
-                        ? 4
-                        : constraints.maxWidth > 450
-                            ? 3
-                            : 2;
-                    const sidePadding = 16.0;
-                    const double borderWidth = 3.0;
-                    final boardWidth = (constraints.maxWidth -
-                            (sidePadding * (crossAxisCount - 1)) -
-                            (2 * sidePadding) -
-                            (2 * borderWidth * crossAxisCount)) /
-                        crossAxisCount;
-                    const borderRadius = 4.0 + borderWidth;
-
-                    final userBotFens =
-                        _botFens[widget.user.name.toLowerCase()] ?? [];
-                    final rowCount =
-                        (userBotFens.length / crossAxisCount).ceil();
-
-                    return Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: sidePadding),
-                      child: LayoutGrid(
-                        columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-                        rowSizes: List.generate(rowCount, (_) => auto),
-                        rowGap: 16,
-                        columnGap: sidePadding,
-                        children: userBotFens.map((botFen) {
-                          final fen = botFen.fen;
-                          final side = botFen.side;
-
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                fromPositionFenInput = fen;
-                              });
-                              ref
-                                  .read(challengePreferencesProvider.notifier)
-                                  .setSideChoice(
-                                    side == Side.white
-                                        ? SideChoice.white
-                                        : SideChoice.black,
-                                  );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: fromPositionFenInput == fen
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Colors.transparent,
-                                  width: borderWidth,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(borderRadius),
-                              ),
-                              child: BoardThumbnail(
-                                size: boardWidth,
-                                orientation: side,
-                                fen: fen,
+                ],
+                if (timeControl == ChallengeTimeControlType.clock) ...[
+                  Builder(
+                    builder: (context) {
+                      //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
+                      int seconds = isSpecialBot &&
+                              (preferences.clock.time.inSeconds < 60 ||
+                                  preferences.clock.time.inSeconds > 15 * 60)
+                          ? 300
+                          : preferences.clock.time.inSeconds;
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return PlatformListTile(
+                            harmonizeCupertinoTitleStyle: true,
+                            title: Text.rich(
+                              TextSpan(
+                                text: '${context.l10n.minutesPerSide}: ',
+                                children: [
+                                  TextSpan(
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    text: clockLabelInMinutes(seconds),
+                                  ),
+                                ],
                               ),
                             ),
+                            subtitle: NonLinearSlider(
+                              value: seconds,
+                              values: isSpecialBot
+                                  ? List.generate(15, (i) => (i + 1) * 60)
+                                  : kAvailableTimesInSeconds,
+                              labelBuilder: clockLabelInMinutes,
+                              onChange: Theme.of(context).platform ==
+                                      TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                    }
+                                  : null,
+                              onChangeEnd: (num value) {
+                                setState(() {
+                                  seconds = value.toInt();
+                                });
+                                ref
+                                    .read(challengePreferencesProvider.notifier)
+                                    .setClock(
+                                      Duration(seconds: value.toInt()),
+                                      preferences.clock.increment,
+                                    );
+                              },
+                            ),
                           );
-                        }).toList(),
+                        },
+                      );
+                    },
+                  ),
+                  Builder(
+                    builder: (context) {
+                      int incrementSeconds = isSpecialBot &&
+                              preferences.clock.increment.inSeconds > 10
+                          ? 10
+                          : preferences.clock.increment.inSeconds;
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return PlatformListTile(
+                            harmonizeCupertinoTitleStyle: true,
+                            title: Text.rich(
+                              TextSpan(
+                                text: '${context.l10n.incrementInSeconds}: ',
+                                children: [
+                                  TextSpan(
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    text: incrementSeconds.toString(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            subtitle: NonLinearSlider(
+                              value: incrementSeconds,
+                              values: isSpecialBot
+                                  ? List.generate(11, (i) => i)
+                                  : kAvailableIncrementsInSeconds,
+                              onChange: Theme.of(context).platform ==
+                                      TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                    }
+                                  : null,
+                              onChangeEnd: (num value) {
+                                setState(() {
+                                  incrementSeconds = value.toInt();
+                                });
+                                ref
+                                    .read(challengePreferencesProvider.notifier)
+                                    .setClock(
+                                      preferences.clock.time,
+                                      Duration(seconds: value.toInt()),
+                                    );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ] else ...[
+                  Builder(
+                    builder: (context) {
+                      int daysPerTurn = preferences.days;
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return PlatformListTile(
+                            harmonizeCupertinoTitleStyle: true,
+                            title: Text.rich(
+                              TextSpan(
+                                text: '${context.l10n.daysPerTurn}: ',
+                                children: [
+                                  TextSpan(
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    text: _daysLabel(daysPerTurn),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            subtitle: NonLinearSlider(
+                              value: daysPerTurn,
+                              values: kAvailableDaysPerTurn,
+                              labelBuilder: _daysLabel,
+                              onChange: Theme.of(context).platform ==
+                                      TargetPlatform.iOS
+                                  ? (num value) {
+                                      setState(() {
+                                        daysPerTurn = value.toInt();
+                                      });
+                                    }
+                                  : null,
+                              onChangeEnd: (num value) {
+                                setState(() {
+                                  daysPerTurn = value.toInt();
+                                });
+                                ref
+                                    .read(challengePreferencesProvider.notifier)
+                                    .setDays(value.toInt());
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+                if (!isSpecialBot) ...[
+                  PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text(context.l10n.variant),
+                    trailing: AdaptiveTextButton(
+                      onPressed: () {
+                        showChoicePicker(
+                          context,
+                          choices: [
+                            Variant.standard,
+                            Variant.chess960,
+                            Variant.fromPosition,
+                          ],
+                          selectedItem: preferences.variant,
+                          labelBuilder: (Variant variant) =>
+                              Text(variant.label),
+                          onSelectedItemChanged: (Variant variant) {
+                            ref
+                                .read(challengePreferencesProvider.notifier)
+                                .setVariant(variant);
+                          },
+                        );
+                      },
+                      child: Text(preferences.variant.label),
+                    ),
+                  ),
+                  ExpandedSection(
+                    expand: preferences.variant == Variant.fromPosition,
+                    child: SmallBoardPreview(
+                      orientation: preferences.sideChoice == SideChoice.black
+                          ? Side.black
+                          : Side.white,
+                      fen: fromPositionFenInput ?? kEmptyFen,
+                      description: AdaptiveTextField(
+                        maxLines: 5,
+                        placeholder: context.l10n.pasteTheFenStringHere,
+                        controller: _controller,
+                        readOnly: true,
+                        onTap: _getClipboardData,
+                      ),
+                    ),
+                  ),
+                  ExpandedSection(
+                    expand: preferences.rated == false ||
+                        preferences.variant == Variant.fromPosition,
+                    child: PlatformListTile(
+                      harmonizeCupertinoTitleStyle: true,
+                      title: Text(context.l10n.side),
+                      trailing: AdaptiveTextButton(
+                        onPressed: () {
+                          showChoicePicker<SideChoice>(
+                            context,
+                            choices: SideChoice.values,
+                            selectedItem: preferences.sideChoice,
+                            labelBuilder: (SideChoice side) =>
+                                Text(side.label(context.l10n)),
+                            onSelectedItemChanged: (SideChoice side) {
+                              ref
+                                  .read(challengePreferencesProvider.notifier)
+                                  .setSideChoice(side);
+                            },
+                          );
+                        },
+                        child: Text(
+                          preferences.sideChoice.label(context.l10n),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                if (isSpecialBot) ...[
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final crossAxisCount = constraints.maxWidth > 600
+                          ? 4
+                          : constraints.maxWidth > 450
+                              ? 3
+                              : 2;
+                      const sidePadding = 16.0;
+                      const double borderWidth = 3.0;
+                      final boardWidth = (constraints.maxWidth -
+                              (sidePadding * (crossAxisCount - 1)) -
+                              (2 * sidePadding) -
+                              (2 * borderWidth * crossAxisCount)) /
+                          crossAxisCount;
+                      const borderRadius = 4.0 + borderWidth;
+
+                      final userBotFens =
+                          _botFens[widget.user.name.toLowerCase()] ?? [];
+                      final rowCount =
+                          (userBotFens.length / crossAxisCount).ceil();
+
+                      return Padding(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: sidePadding),
+                        child: LayoutGrid(
+                          columnSizes:
+                              List.generate(crossAxisCount, (_) => 1.fr),
+                          rowSizes: List.generate(rowCount, (_) => auto),
+                          rowGap: 16,
+                          columnGap: sidePadding,
+                          children: userBotFens.map((botFen) {
+                            final fen = botFen.fen;
+                            final side = botFen.side;
+
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  fromPositionFenInput = fen;
+                                });
+                                ref
+                                    .read(challengePreferencesProvider.notifier)
+                                    .setSideChoice(
+                                      side == Side.white
+                                          ? SideChoice.white
+                                          : SideChoice.black,
+                                    );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: fromPositionFenInput == fen
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.transparent,
+                                    width: borderWidth,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.circular(borderRadius),
+                                ),
+                                child: BoardThumbnail(
+                                  size: boardWidth,
+                                  orientation: side,
+                                  fen: fen,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                if (account != null && !isSpecialBot)
+                  ExpandedSection(
+                    expand: preferences.variant != Variant.fromPosition,
+                    child: PlatformListTile(
+                      harmonizeCupertinoTitleStyle: true,
+                      title: Text(context.l10n.rated),
+                      trailing: Switch.adaptive(
+                        applyCupertinoTheme: true,
+                        value: preferences.rated,
+                        onChanged: (bool value) {
+                          ref
+                              .read(challengePreferencesProvider.notifier)
+                              .setRated(value);
+                        },
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 20),
+                FutureBuilder(
+                  future: _pendingCorrespondenceChallenge,
+                  builder: (context, snapshot) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: FatButton(
+                        semanticsLabel: context.l10n.challengeChallengeToPlay,
+                        onPressed: timeControl == ChallengeTimeControlType.clock
+                            ? isValidTimeControl && isValidPosition
+                                ? () {
+                                    pushPlatformRoute(
+                                      context,
+                                      rootNavigator: true,
+                                      builder: (BuildContext context) {
+                                        return GameScreen(
+                                          challenge: preferences.makeRequest(
+                                            widget.user,
+                                            preferences.variant !=
+                                                    Variant.fromPosition
+                                                ? null
+                                                : fromPositionFenInput,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                : null
+                            : timeControl ==
+                                        ChallengeTimeControlType
+                                            .correspondence &&
+                                    snapshot.connectionState !=
+                                        ConnectionState.waiting
+                                ? () async {
+                                    final createGameService =
+                                        ref.read(createGameServiceProvider);
+                                    _pendingCorrespondenceChallenge =
+                                        createGameService
+                                            .newCorrespondenceChallenge(
+                                      preferences.makeRequest(
+                                        widget.user,
+                                        preferences.variant !=
+                                                Variant.fromPosition
+                                            ? null
+                                            : fromPositionFenInput,
+                                      ),
+                                    );
+
+                                    await _pendingCorrespondenceChallenge!;
+
+                                    if (!context.mounted) return;
+
+                                    Navigator.of(context).pop();
+
+                                    // Switch to the home tab
+                                    ref
+                                        .read(currentBottomTabProvider.notifier)
+                                        .state = BottomTab.home;
+
+                                    // Navigate to the challenges screen where
+                                    // the new correspondence challenge will be
+                                    // displayed
+                                    pushPlatformRoute(
+                                      context,
+                                      screen: const ChallengeRequestsScreen(),
+                                    );
+                                  }
+                                : null,
+                        child: Text(
+                          context.l10n.challengeChallengeToPlay,
+                          style: Styles.bold,
+                        ),
                       ),
                     );
                   },
                 ),
               ],
-              if (account != null && !isSpecialBot)
-                ExpandedSection(
-                  expand: preferences.variant != Variant.fromPosition,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.rated),
-                    trailing: Switch.adaptive(
-                      applyCupertinoTheme: true,
-                      value: preferences.rated,
-                      onChanged: (bool value) {
-                        ref
-                            .read(challengePreferencesProvider.notifier)
-                            .setRated(value);
-                      },
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 20),
-              FutureBuilder(
-                future: _pendingCorrespondenceChallenge,
-                builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: FatButton(
-                      semanticsLabel: context.l10n.challengeChallengeToPlay,
-                      onPressed: timeControl == ChallengeTimeControlType.clock
-                          ? isValidTimeControl && isValidPosition
-                              ? () {
-                                  pushPlatformRoute(
-                                    context,
-                                    rootNavigator: true,
-                                    builder: (BuildContext context) {
-                                      return GameScreen(
-                                        challenge: preferences.makeRequest(
-                                          widget.user,
-                                          preferences.variant !=
-                                                  Variant.fromPosition
-                                              ? null
-                                              : fromPositionFenInput,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                              : null
-                          : timeControl ==
-                                      ChallengeTimeControlType.correspondence &&
-                                  snapshot.connectionState !=
-                                      ConnectionState.waiting
-                              ? () async {
-                                  final createGameService =
-                                      ref.read(createGameServiceProvider);
-                                  _pendingCorrespondenceChallenge =
-                                      createGameService
-                                          .newCorrespondenceChallenge(
-                                    preferences.makeRequest(
-                                      widget.user,
-                                      preferences.variant !=
-                                              Variant.fromPosition
-                                          ? null
-                                          : fromPositionFenInput,
-                                    ),
-                                  );
-
-                                  await _pendingCorrespondenceChallenge!;
-
-                                  if (!context.mounted) return;
-
-                                  Navigator.of(context).pop();
-
-                                  // Switch to the home tab
-                                  ref
-                                      .read(currentBottomTabProvider.notifier)
-                                      .state = BottomTab.home;
-
-                                  // Navigate to the challenges screen where
-                                  // the new correspondence challenge will be
-                                  // displayed
-                                  pushPlatformRoute(
-                                    context,
-                                    screen: const ChallengeRequestsScreen(),
-                                  );
-                                }
-                              : null,
-                      child: Text(
-                        context.l10n.challengeChallengeToPlay,
-                        style: Styles.bold,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
         );
       },
