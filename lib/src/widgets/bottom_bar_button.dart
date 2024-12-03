@@ -89,6 +89,8 @@ class BottomBarButton extends StatelessWidget {
                         fontSize: labelFontSize,
                         color: highlighted ? primary : null,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
               ],

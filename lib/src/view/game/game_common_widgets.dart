@@ -202,7 +202,6 @@ class GameShareBottomSheet extends ConsumerWidget {
                     final image = await ref
                         .read(gameShareServiceProvider)
                         .screenshotPosition(
-                          game.id,
                           orientation,
                           currentGamePosition.fen,
                           lastMove,

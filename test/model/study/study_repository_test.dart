@@ -1,15 +1,28 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
+import '../../test_container.dart';
 import '../../test_helpers.dart';
 
 void main() {
+  Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
+    return makeContainer(
+      overrides: [
+        lichessClientProvider.overrideWith((ref) {
+          return LichessClient(mockClient, ref);
+        }),
+      ],
+    );
+  }
+
   group('StudyRepository.getStudy', () {
     test('correctly parse study JSON', () async {
       // curl -X GET https://lichess.org/study/JbWtuaeK/7OJXp679\?chapters\=1 -H "Accept: application/json" | sed "s/\\\\n/ /g" | jq 'del(.study.chat)'
@@ -326,7 +339,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = StudyRepository(mockClient);
+      final container = await makeTestContainer(mockClient);
+      final repo = container.read(studyRepositoryProvider);
 
       final (study, pgn) = await repo.getStudy(
         id: const StudyId('JbWtuaeK'),

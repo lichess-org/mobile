@@ -348,7 +348,6 @@ class _BottomBar extends ConsumerWidget {
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
-                          gameId,
                           analysisState.pov,
                           analysisState.position.fen,
                           analysisState.lastMove,

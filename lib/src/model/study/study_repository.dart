@@ -1,27 +1,31 @@
 import 'dart:convert';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'study_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 StudyRepository studyRepository(Ref ref) {
-  return StudyRepository(ref.read(lichessClientProvider));
+  return StudyRepository(ref, ref.read(lichessClientProvider));
 }
 
 class StudyRepository {
-  StudyRepository(this.client);
+  StudyRepository(this.ref, this.client);
 
   final Client client;
+  final Ref ref;
 
   Future<StudyList> getStudies({
     required StudyCategory category,
@@ -91,5 +95,39 @@ class StudyRepository {
     );
 
     return (study, utf8.decode(pgnBytes));
+  }
+
+  Future<String> getStudyPgn(StudyId id) async {
+    final pgnBytes = await client.readBytes(
+      Uri(path: '/api/study/$id.pgn'),
+      headers: {'Accept': 'application/x-chess-pgn'},
+    );
+
+    return utf8.decode(pgnBytes);
+  }
+
+  /// Fetches the GIF animation of a study chapter.
+  Future<XFile> chapterGif(
+    StudyId id,
+    StudyChapterId chapterId,
+    Side orientation,
+  ) async {
+    final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
+    final pieceTheme = ref.read(boardPreferencesProvider).pieceSet;
+    final resp = await client
+        .get(
+          lichessUri(
+            '/study/$id/$chapterId.gif',
+            {
+              'theme': boardTheme.name,
+              'piece': pieceTheme.name,
+            },
+          ),
+        )
+        .timeout(const Duration(seconds: 1));
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to get GIF');
+    }
+    return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }
 }

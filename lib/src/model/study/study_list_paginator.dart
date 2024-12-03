@@ -2,7 +2,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_list_paginator.g.dart';
@@ -37,17 +36,16 @@ class StudyListPaginator extends _$StudyListPaginator {
   Future<StudyList> _nextPage() async {
     final nextPage = state.value?.nextPage ?? 1;
 
-    return await ref.withClient(
-      (client) => search == null
-          ? StudyRepository(client).getStudies(
-              category: filter.category,
-              order: filter.order,
-              page: nextPage,
-            )
-          : StudyRepository(client).searchStudies(
-              query: search!,
-              page: nextPage,
-            ),
-    );
+    final repo = ref.read(studyRepositoryProvider);
+    return search == null
+        ? repo.getStudies(
+            category: filter.category,
+            order: filter.order,
+            page: nextPage,
+          )
+        : repo.searchStudies(
+            query: search!,
+            page: nextPage,
+          );
   }
 }
