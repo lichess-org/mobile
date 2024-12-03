@@ -233,15 +233,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
+  app_settings: 3507c575c2b18a462c99948f61d5de21d4420999
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
-  connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
-  cupertino_http: 947a233f40cfea55167a49f2facc18434ea117ba
-  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
+  connectivity_plus: b21496ab28d1324eb59885d888a4d83b98531f01
+  cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
+  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_core: 9efc3ecf689cdbc90f13f4dc58108c83ea46b266
-  firebase_crashlytics: 72a8b504422ba8bb435a7a0c0a9341320cbcbe29
-  firebase_messaging: 6bf60adb4b33a848d135e16bc363fb4924f98fba
+  firebase_core: 84a16d041be8bc166b6e00350f89849e06daf9d1
+  firebase_crashlytics: 9fae6688e634a062ba57bd22d2b762b87fdcd1ec
+  firebase_messaging: 48ce5cf82b70ac47ed9cb9277f97bb77d1d01a38
   FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
   FirebaseCoreExtension: f1bc67a4702931a7caa097d8e4ac0a1b0d16720e
   FirebaseCoreInternal: f47dd28ae7782e6a4738aad3106071a8fe0af604
@@ -251,25 +251,25 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 7a7aebb9342d53913a5c890efa88e289d9e5c1bc
   FirebaseSessions: 3f56f177d9e53a85021d16b31f9a111849d1dd8b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: 408f4cda69a4ad59bdf696e04cd9e13e1449b44e
-  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
-  flutter_native_splash: e8a1e01082d97a8099d973f919f57904c925008a
-  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  flutter_appauth: a84b3dade5e072175e13b68af5b827ca76efb1f8
+  flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
+  flutter_native_splash: 576fbd69b830a63594ae678396fa17e43abbc5f8
+  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  objective_c: 77e887b5ba1827970907e10e832eec1683f3431d
-  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
+  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  sound_effect: 5280cfa89d4a576032186f15600dc948ca6d39ce
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  stockfish: d00cf6b95579f1d7032cbfd8e4fe874972fe2ff9
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  sound_effect: 7d4273d90e6c3357ca7951ea227c993723c20485
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  stockfish: 3125c5e5fdd6789c398bb2d1a29a58ba3c9e5577
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  wakelock_plus: fd58c82b1388f4afe3fe8aa2c856503a262a5b03
 
 PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
 

@@ -612,10 +612,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: f0e599ba89c9946c8e051780f0ec99aba4ba15895e0380a7ab68f420046fc44e
+      sha256: "255b00afa1a7bad19727da6a7780cf3db6c3c12e68d302d85e0ff1fdf173db9e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.4+1"
+    version: "0.7.4+3"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -701,10 +701,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "936d9c1c010d3e234d1672574636f3352b4941ca3decaddd3cafaeb9ad49c471"
+      sha256: "54900a1a1243f3c4a5506d853a2b5c2dbc38d5f27e52a52618a8054401431123"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.15"
+    version: "2.0.16"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1055,10 +1055,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a
+      sha256: "8c4967f8b7cb46dc914e178daa29813d83ae502e0529d7b0478330616a691ef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.12"
+    version: "2.2.14"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -1239,10 +1239,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3b9febd815c9ca29c9e3520d50ec32f49157711e143b7a4ca039eb87e8ade5ab"
+      sha256: "7f172d1b06de5da47b6264c2692ee2ead20bbbc246690427cdb4fc301cd0c549"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.3"
+    version: "2.3.4"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -1295,10 +1295,10 @@ packages:
     dependency: transitive
     description:
       name: shelf_web_socket
-      sha256: "073c147238594ecd0d193f3456a5fe91c4b0abbcc68bf5cd95b36c4e194ac611"
+      sha256: cc36c297b52866d203dbf9332263c94becc2fe0ceaa9681d07b6ef9807023b67
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   signal_strength_indicator:
     dependency: "direct main"
     description:
@@ -1404,10 +1404,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: bb174b3ec2527f9c5f680f73a89af8149dd99782fbb56ea88ad0807c5638f2ed
+      sha256: cb7f4e9dc1b52b1fa350f7b3d41c662e75fc3d399555fa4e5efcf267e9a4fbb5
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.5.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1613,10 +1613,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: ab9ff38fc771e9ee1139320adbe3d18a60327370c218c60752068ebee4b49ab1
+      sha256: "1b4b9e706a10294258727674a340ae0d6e64a7231980f9f9a3d12e4b42407aad"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.15"
+    version: "1.1.16"
   vector_math:
     dependency: transitive
     description:
@@ -1693,10 +1693,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
+      sha256: "8b338d4486ab3fbc0ba0db9f9b4f5239b6697fcee427939a40e720cbb9ee0a69"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.0"
+    version: "5.9.0"
   win32_registry:
     dependency: transitive
     description:
