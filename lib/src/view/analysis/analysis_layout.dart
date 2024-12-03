@@ -145,7 +145,16 @@ class AnalysisLayout extends StatelessWidget {
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;
 
+  /// A widget to show above the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
   final Widget? boardHeader;
+
+  /// A widget to show below the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
   final Widget? boardFooter;
 
   /// The children of the tab view.

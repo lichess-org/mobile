@@ -90,7 +90,7 @@ class BroadcastGameController extends _$BroadcastGameController
       lastMove: lastMove,
       pov: Side.white,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      clocks: _makeClocks(currentPath),
+      clocks: _getClocks(currentPath),
     );
 
     if (broadcastState.isLocalEvaluationEnabled) {
@@ -470,7 +470,7 @@ class BroadcastGameController extends _$BroadcastGameController
           lastMove: currentNode.sanMove.move,
           promotionMove: null,
           root: rootView,
-          clocks: _makeClocks(path),
+          clocks: _getClocks(path),
         ),
       );
     } else {
@@ -483,7 +483,7 @@ class BroadcastGameController extends _$BroadcastGameController
           lastMove: null,
           promotionMove: null,
           root: rootView,
-          clocks: _makeClocks(path),
+          clocks: _getClocks(path),
         ),
       );
     }
@@ -530,13 +530,13 @@ class BroadcastGameController extends _$BroadcastGameController
     );
   }
 
-  ({Duration? parentClock, Duration? clock}) _makeClocks(UciPath path) {
-    final nodeView = _root.nodeAt(path).view;
-    final parentView = _root.parentAt(path).view;
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
 
     return (
-      parentClock: (parentView is ViewBranch) ? parentView.clock : null,
-      clock: (nodeView is ViewBranch) ? nodeView.clock : null,
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
     );
   }
 }

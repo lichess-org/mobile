@@ -7,7 +7,7 @@ extension DurationExtensions on Duration {
   /// representation is H:MM:SS.mm, otherwise it is H:MM:SS.
   String toHoursMinutesSeconds({bool showTenths = false}) {
     if (inHours == 0) {
-      return '${inMinutes.remainder(60)}:${inSeconds.remainder(60).toString().padLeft(2, '0')}${showTenths ? '.${inMilliseconds.remainder(1000) ~/ 10 % 10}' : ''}';
+      return '${inMinutes.remainder(60).toString().padLeft(2, '0')}:${inSeconds.remainder(60).toString().padLeft(2, '0')}${showTenths ? '.${inMilliseconds.remainder(1000) ~/ 10 % 10}' : ''}';
     } else {
       return '$inHours:${inMinutes.remainder(60).toString().padLeft(2, '0')}:${inSeconds.remainder(60).toString().padLeft(2, '0')}';
     }
