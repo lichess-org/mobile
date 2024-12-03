@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view_builder.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
@@ -370,7 +370,7 @@ class _Body extends ConsumerWidget {
           case AnalysisTab.opening:
             if (studyState.isOpeningExplorerAvailable &&
                 studyState.currentNode.position != null) {
-              return OpeningExplorer(
+              return OpeningExplorerView(
                 position: studyState.currentNode.position!,
                 onMoveSelected: (move) {
                   ref

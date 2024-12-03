@@ -19,81 +19,28 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 
 /// Displays an opening explorer for the given position.
 ///
-/// It shows the top moves, games, and recent games for the given position, in a scrollable list.
+/// It shows the top moves, games, and recent games for the given position in a list view.
+/// By default, the view is scrollable, but it can be disabled by setting [scrollable] to false.
 ///
 /// This widget is meant to be embedded in the analysis, broadcast, and study screens.
-class OpeningExplorer extends ConsumerWidget {
-  const OpeningExplorer({
-    required this.position,
-    required this.onMoveSelected,
-  });
-
-  final Position position;
-  final void Function(NormalMove) onMoveSelected;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return OpeningExplorerViewBuilder(
-      position: position,
-      onMoveSelected: onMoveSelected,
-      builder: (context, children, {required isLoading, required isIndexing}) {
-        final brightness = Theme.of(context).brightness;
-        final loadingOverlay = Positioned.fill(
-          child: IgnorePointer(
-            ignoring: !isLoading,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.fastOutSlowIn,
-              opacity: isLoading ? 0.20 : 0.0,
-              child: ColoredBox(
-                color:
-                    brightness == Brightness.dark ? Colors.black : Colors.white,
-              ),
-            ),
-          ),
-        );
-
-        return Stack(
-          children: [
-            ListView(padding: EdgeInsets.zero, children: children),
-            loadingOverlay,
-          ],
-        );
-      },
-    );
-  }
-}
-
-/// A widget that builds the opening explorer moves and games for the given position.
-///
-/// The [builder] function is called with the list of children to display in the
-/// opening explorer view. The [isLoading] and [isIndexing] parameters are used to
-/// display a loading indicator and a message when the opening explorer is
-/// indexing the games.
 ///
 /// Network requests are debounced and cached to avoid unnecessary requests.
-class OpeningExplorerViewBuilder extends ConsumerStatefulWidget {
-  const OpeningExplorerViewBuilder({
+class OpeningExplorerView extends ConsumerStatefulWidget {
+  const OpeningExplorerView({
     required this.position,
-    required this.builder,
     required this.onMoveSelected,
+    this.scrollable = true,
   });
 
   final Position position;
   final void Function(NormalMove) onMoveSelected;
-  final Widget Function(
-    BuildContext context,
-    List<Widget> children, {
-    required bool isLoading,
-    required bool isIndexing,
-  }) builder;
+  final bool scrollable;
 
   @override
-  ConsumerState<OpeningExplorerViewBuilder> createState() =>
-      _OpeningExplorerState();
+  ConsumerState<OpeningExplorerView> createState() => _OpeningExplorerState();
 }
 
-class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
+class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
   /// Last explorer content that was successfully loaded. This is used to
@@ -114,13 +61,12 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
       ),
       online: () {
         if (widget.position.ply >= 50) {
-          return widget.builder(
-            context,
-            [
-              const OpeningExplorerMoveTable.maxDepth(),
-            ],
+          return _ExplorerListView(
+            scrollable: widget.scrollable,
             isLoading: false,
-            isIndexing: false,
+            children: const [
+              OpeningExplorerMoveTable.maxDepth(),
+            ],
           );
         }
 
@@ -128,10 +74,11 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
 
         if (prefs.db == OpeningDatabase.player &&
             prefs.playerDb.username == null) {
-          return widget.builder(
-            context,
-            [
-              const Padding(
+          return _ExplorerListView(
+            scrollable: widget.scrollable,
+            isLoading: false,
+            children: const [
+              Padding(
                 padding: _kTableRowPadding,
                 child: Center(
                   // TODO: l10n
@@ -139,8 +86,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
                 ),
               ),
             ],
-            isLoading: false,
-            isIndexing: false,
           );
         }
 
@@ -171,9 +116,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
         final isLoading = openingExplorerAsync.isLoading ||
             openingExplorerAsync.value == null;
 
-        return widget.builder(
-          context,
-          openingExplorerAsync.when(
+        return _ExplorerListView(
+          scrollable: widget.scrollable,
+          isLoading: isLoading,
+          children: openingExplorerAsync.when(
             data: (openingExplorer) {
               if (openingExplorer == null) {
                 return lastExplorerWidgets ??
@@ -199,6 +145,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
                   draws: openingExplorer.entry.draws,
                   blackWins: openingExplorer.entry.black,
                   onMoveSelected: widget.onMoveSelected,
+                  isIndexing: openingExplorer.isIndexing,
                 ),
                 if (topGames != null && topGames.isNotEmpty) ...[
                   OpeningExplorerHeaderTile(
@@ -274,10 +221,48 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerViewBuilder> {
               ];
             },
           ),
-          isLoading: isLoading,
-          isIndexing: openingExplorerAsync.value?.isIndexing ?? false,
         );
       },
+    );
+  }
+}
+
+class _ExplorerListView extends StatelessWidget {
+  const _ExplorerListView({
+    required this.children,
+    required this.isLoading,
+    required this.scrollable,
+  });
+
+  final List<Widget> children;
+  final bool isLoading;
+  final bool scrollable;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final loadingOverlay = Positioned.fill(
+      child: IgnorePointer(
+        ignoring: !isLoading,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastOutSlowIn,
+          opacity: isLoading ? 0.20 : 0.0,
+          child: ColoredBox(
+            color: brightness == Brightness.dark ? Colors.black : Colors.white,
+          ),
+        ),
+      ),
+    );
+
+    return Stack(
+      children: [
+        if (scrollable)
+          ListView(padding: EdgeInsets.zero, children: children)
+        else
+          ListBody(children: children),
+        loadingOverlay,
+      ],
     );
   }
 }

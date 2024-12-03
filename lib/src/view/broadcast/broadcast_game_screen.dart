@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view_builder.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -199,7 +199,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
-    return OpeningExplorer(
+    return OpeningExplorerView(
       position: state.currentNode.position,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
     );

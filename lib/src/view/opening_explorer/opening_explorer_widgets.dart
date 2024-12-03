@@ -15,6 +15,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
+const _kHeaderTextStyle = TextStyle(fontSize: 12);
 
 Color _whiteBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
@@ -34,6 +35,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.draws,
     required this.blackWins,
     this.onMoveSelected,
+    this.isIndexing = false,
   })  : _isLoading = false,
         _maxDepthReached = false;
 
@@ -44,6 +46,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         draws = 0,
         blackWins = 0,
         _maxDepthReached = false,
+        isIndexing = false,
         onMoveSelected = null;
 
   const OpeningExplorerMoveTable.maxDepth()
@@ -53,6 +56,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         draws = 0,
         blackWins = 0,
         _maxDepthReached = true,
+        isIndexing = false,
         onMoveSelected = null;
 
   final IList<OpeningMove> moves;
@@ -60,6 +64,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   final int draws;
   final int blackWins;
   final void Function(NormalMove)? onMoveSelected;
+  final bool isIndexing;
 
   final bool _isLoading;
   final bool _maxDepthReached;
@@ -79,7 +84,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     }
 
     final games = whiteWins + draws + blackWins;
-    const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
       columnWidths: columnWidths,
@@ -91,15 +95,28 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           children: [
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.move, style: headerTextStyle),
+              child: Text(context.l10n.move, style: _kHeaderTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.games, style: headerTextStyle),
+              child: Text(context.l10n.games, style: _kHeaderTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.whiteDrawBlack, style: headerTextStyle),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.l10n.whiteDrawBlack,
+                      style: _kHeaderTextStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isIndexing) const IndexingIndicator(),
+                ],
+              ),
             ),
           ],
         ),
@@ -271,6 +288,50 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       ),
     ),
   );
+}
+
+class IndexingIndicator extends StatefulWidget {
+  const IndexingIndicator();
+
+  @override
+  State<IndexingIndicator> createState() => _IndexingIndicatorState();
+}
+
+class _IndexingIndicatorState extends State<IndexingIndicator>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 12.0,
+      height: 12.0,
+      child: CircularProgressIndicator(
+        strokeWidth: 1.5,
+        value: controller.value,
+        // TODO: l10n
+        semanticsLabel: 'Indexing',
+      ),
+    );
+  }
 }
 
 class OpeningExplorerHeaderTile extends StatelessWidget {

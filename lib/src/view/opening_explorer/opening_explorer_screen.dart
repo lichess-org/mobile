@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view_builder.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -31,59 +31,52 @@ class OpeningExplorerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    switch (ref.watch(ctrlProvider)) {
-      case AsyncData(value: final state):
-        return OpeningExplorerViewBuilder(
-          position: state.currentNode.position,
-          onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
-          builder: (
-            context,
-            children, {
-            required isLoading,
-            required isIndexing,
-          }) {
-            return _OpeningExplorerView(
-              options: options,
-              isLoading: isLoading,
-              isIndexing: isIndexing,
-              children: children,
-            );
-          },
-        );
-      case AsyncError(:final error):
-        debugPrint(
-          'SEVERE: [OpeningExplorerScreen] could not load analysis data; $error',
-        );
-        return Center(
+
+    final body = switch (ref.watch(ctrlProvider)) {
+      AsyncData(value: final state) => _Body(options: options, state: state),
+      AsyncError(:final error) => Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(error.toString()),
           ),
-        );
-      case _:
-        return const CenterLoadingIndicator();
-    }
+        ),
+      _ => const CenterLoadingIndicator(),
+    };
+
+    return PlatformWidget(
+      androidBuilder: (_) => Scaffold(
+        body: body,
+        appBar: AppBar(
+          title: Text(context.l10n.openingExplorer),
+          bottom: _MoveList(options: options),
+        ),
+      ),
+      iosBuilder: (_) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(context.l10n.openingExplorer),
+          automaticBackgroundVisibility: false,
+          border: null,
+        ),
+        child: body,
+      ),
+    );
   }
 }
 
-class _OpeningExplorerView extends StatelessWidget {
-  const _OpeningExplorerView({
+class _Body extends ConsumerWidget {
+  const _Body({
     required this.options,
-    required this.children,
-    required this.isLoading,
-    required this.isIndexing,
+    required this.state,
   });
 
   final AnalysisOptions options;
-  final List<Widget> children;
-  final bool isLoading;
-  final bool isIndexing;
+  final AnalysisState state;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isTablet = isTabletOrLarger(context);
 
-    final body = SafeArea(
+    return SafeArea(
       bottom: false,
       child: Column(
         children: [
@@ -99,35 +92,18 @@ class _OpeningExplorerView extends StatelessWidget {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final aspectRatio = constraints.biggest.aspectRatio;
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-
-                final isLandscape = aspectRatio > 1;
-                final brightness = Theme.of(context).brightness;
-                final loadingOverlay = Positioned.fill(
-                  child: IgnorePointer(
-                    ignoring: !isLoading,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.fastOutSlowIn,
-                      opacity: isLoading ? 0.2 : 0.0,
-                      child: ColoredBox(
-                        color: brightness == Brightness.dark
-                            ? Colors.black
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-
-                if (isLandscape) {
+                final orientation = constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
+                if (orientation == Orientation.landscape) {
+                  final sideWidth = constraints.biggest.longestSide -
+                      constraints.biggest.shortestSide;
+                  final defaultBoardSize = constraints.biggest.shortestSide -
+                      (kTabletBoardTableSidePadding * 2);
+                  final boardSize = sideWidth >= 250
+                      ? defaultBoardSize
+                      : constraints.biggest.longestSide / kGoldenRatio -
+                          (kTabletBoardTableSidePadding * 2);
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -159,14 +135,16 @@ class _OpeningExplorerView extends StatelessWidget {
                                   kTabletBoardTableSidePadding,
                                 ),
                                 semanticContainer: false,
-                                child: Stack(
-                                  children: [
-                                    ListView(
-                                      padding: EdgeInsets.zero,
-                                      children: children,
-                                    ),
-                                    loadingOverlay,
-                                  ],
+                                child: OpeningExplorerView(
+                                  position: state.position,
+                                  onMoveSelected: (move) {
+                                    ref
+                                        .read(
+                                          analysisControllerProvider(options)
+                                              .notifier,
+                                        )
+                                        .onUserMove(move);
+                                  },
                                 ),
                               ),
                             ),
@@ -176,6 +154,15 @@ class _OpeningExplorerView extends StatelessWidget {
                     ],
                   );
                 } else {
+                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final remainingHeight =
+                      constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen =
+                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final boardSize = isTablet || isSmallScreen
+                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize;
+
                   return ListView(
                     padding: isTablet
                         ? const EdgeInsets.symmetric(
@@ -192,11 +179,16 @@ class _OpeningExplorerView extends StatelessWidget {
                           shouldReplaceChildOnUserMove: true,
                         ),
                       ),
-                      Stack(
-                        children: [
-                          ListBody(children: children),
-                          if (isLoading) loadingOverlay,
-                        ],
+                      OpeningExplorerView(
+                        position: state.position,
+                        onMoveSelected: (move) {
+                          ref
+                              .read(
+                                analysisControllerProvider(options).notifier,
+                              )
+                              .onUserMove(move);
+                        },
+                        scrollable: false,
                       ),
                     ],
                   );
@@ -206,74 +198,6 @@ class _OpeningExplorerView extends StatelessWidget {
           ),
           _BottomBar(options: options),
         ],
-      ),
-    );
-
-    return PlatformWidget(
-      androidBuilder: (_) => Scaffold(
-        body: body,
-        appBar: AppBar(
-          title: Text(context.l10n.openingExplorer),
-          bottom: _MoveList(options: options),
-          actions: [
-            if (isIndexing) const _IndexingIndicator(),
-          ],
-        ),
-      ),
-      iosBuilder: (_) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(context.l10n.openingExplorer),
-          automaticBackgroundVisibility: false,
-          border: null,
-          trailing: isIndexing ? const _IndexingIndicator() : null,
-        ),
-        child: body,
-      ),
-    );
-  }
-}
-
-class _IndexingIndicator extends StatefulWidget {
-  const _IndexingIndicator();
-
-  @override
-  State<_IndexingIndicator> createState() => _IndexingIndicatorState();
-}
-
-class _IndexingIndicatorState extends State<_IndexingIndicator>
-    with TickerProviderStateMixin {
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        width: 16,
-        height: 16,
-        child: CircularProgressIndicator.adaptive(
-          value: controller.value,
-          // TODO: l10n
-          semanticsLabel: 'Indexing',
-        ),
       ),
     );
   }
@@ -290,34 +214,39 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    final state = ref.watch(ctrlProvider).requireValue;
-    final slicedMoves = state.root.mainline
-        .map((e) => e.sanMove.san)
-        .toList()
-        .asMap()
-        .entries
-        .slices(2);
-    final currentMoveIndex = state.currentNode.position.ply;
 
-    return MoveList(
-      inlineDecoration: Theme.of(context).platform == TargetPlatform.iOS
-          ? BoxDecoration(
-              color: Styles.cupertinoAppBarColor.resolveFrom(context),
-              border: const Border(
-                bottom: BorderSide(
-                  color: Color(0x4D000000),
-                  width: 0.0,
-                ),
-              ),
-            )
-          : null,
-      type: MoveListType.inline,
-      slicedMoves: slicedMoves,
-      currentMoveIndex: currentMoveIndex,
-      onSelectMove: (index) {
-        ref.read(ctrlProvider.notifier).jumpToNthNodeOnMainline(index - 1);
-      },
-    );
+    switch (ref.watch(ctrlProvider)) {
+      case AsyncData(value: final state):
+        final slicedMoves = state.root.mainline
+            .map((e) => e.sanMove.san)
+            .toList()
+            .asMap()
+            .entries
+            .slices(2);
+        final currentMoveIndex = state.currentNode.position.ply;
+
+        return MoveList(
+          inlineDecoration: Theme.of(context).platform == TargetPlatform.iOS
+              ? BoxDecoration(
+                  color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                  border: const Border(
+                    bottom: BorderSide(
+                      color: Color(0x4D000000),
+                      width: 0.0,
+                    ),
+                  ),
+                )
+              : null,
+          type: MoveListType.inline,
+          slicedMoves: slicedMoves,
+          currentMoveIndex: currentMoveIndex,
+          onSelectMove: (index) {
+            ref.read(ctrlProvider.notifier).jumpToNthNodeOnMainline(index - 1);
+          },
+        );
+      case _:
+        return const SizedBox.shrink();
+    }
   }
 }
 
