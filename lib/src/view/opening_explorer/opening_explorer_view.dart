@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repos
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widgets.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const _kTableRowVerticalPadding = 12.0;
@@ -49,156 +48,58 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
   @override
   Widget build(BuildContext context) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    return connectivity.whenIsLoading(
-      loading: () => const CenterLoadingIndicator(),
-      offline: () => const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          // TODO l10n
-          child: Text('Opening explorer is not available offline.'),
+    if (widget.position.ply >= 50) {
+      return Padding(
+        padding: _kTableRowPadding,
+        child: Center(
+          child: Text(context.l10n.maxDepthReached),
         ),
-      ),
-      online: () {
-        if (widget.position.ply >= 50) {
+      );
+    }
+
+    final prefs = ref.watch(openingExplorerPreferencesProvider);
+
+    if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
+      return const Padding(
+        padding: _kTableRowPadding,
+        child: Center(
+          // TODO: l10n
+          child: Text('Select a Lichess player in the settings.'),
+        ),
+      );
+    }
+
+    final cacheKey = OpeningExplorerCacheKey(
+      fen: widget.position.fen,
+      prefs: prefs,
+    );
+    final cacheOpeningExplorer = cache[cacheKey];
+    final openingExplorerAsync = cacheOpeningExplorer != null
+        ? AsyncValue.data(
+            (entry: cacheOpeningExplorer, isIndexing: false),
+          )
+        : ref.watch(
+            openingExplorerProvider(fen: widget.position.fen),
+          );
+
+    if (cacheOpeningExplorer == null) {
+      ref.listen(openingExplorerProvider(fen: widget.position.fen),
+          (_, curAsync) {
+        curAsync.whenData((cur) {
+          if (cur != null && !cur.isIndexing) {
+            cache[cacheKey] = cur.entry;
+          }
+        });
+      });
+    }
+
+    switch (openingExplorerAsync) {
+      case AsyncData(:final value):
+        if (value == null) {
           return _ExplorerListView(
             scrollable: widget.scrollable,
-            isLoading: false,
-            children: const [
-              OpeningExplorerMoveTable.maxDepth(),
-            ],
-          );
-        }
-
-        final prefs = ref.watch(openingExplorerPreferencesProvider);
-
-        if (prefs.db == OpeningDatabase.player &&
-            prefs.playerDb.username == null) {
-          return _ExplorerListView(
-            scrollable: widget.scrollable,
-            isLoading: false,
-            children: const [
-              Padding(
-                padding: _kTableRowPadding,
-                child: Center(
-                  // TODO: l10n
-                  child: Text('Select a Lichess player in the settings.'),
-                ),
-              ),
-            ],
-          );
-        }
-
-        final cacheKey = OpeningExplorerCacheKey(
-          fen: widget.position.fen,
-          prefs: prefs,
-        );
-        final cacheOpeningExplorer = cache[cacheKey];
-        final openingExplorerAsync = cacheOpeningExplorer != null
-            ? AsyncValue.data(
-                (entry: cacheOpeningExplorer, isIndexing: false),
-              )
-            : ref.watch(
-                openingExplorerProvider(fen: widget.position.fen),
-              );
-
-        if (cacheOpeningExplorer == null) {
-          ref.listen(openingExplorerProvider(fen: widget.position.fen),
-              (_, curAsync) {
-            curAsync.whenData((cur) {
-              if (cur != null && !cur.isIndexing) {
-                cache[cacheKey] = cur.entry;
-              }
-            });
-          });
-        }
-
-        final isLoading = openingExplorerAsync.isLoading ||
-            openingExplorerAsync.value == null;
-
-        return _ExplorerListView(
-          scrollable: widget.scrollable,
-          isLoading: isLoading,
-          children: openingExplorerAsync.when(
-            data: (openingExplorer) {
-              if (openingExplorer == null) {
-                return lastExplorerWidgets ??
-                    [
-                      const Shimmer(
-                        child: ShimmerLoading(
-                          isLoading: true,
-                          child: OpeningExplorerMoveTable.loading(),
-                        ),
-                      ),
-                    ];
-              }
-
-              final topGames = openingExplorer.entry.topGames;
-              final recentGames = openingExplorer.entry.recentGames;
-
-              final ply = widget.position.ply;
-
-              final children = [
-                OpeningExplorerMoveTable(
-                  moves: openingExplorer.entry.moves,
-                  whiteWins: openingExplorer.entry.white,
-                  draws: openingExplorer.entry.draws,
-                  blackWins: openingExplorer.entry.black,
-                  onMoveSelected: widget.onMoveSelected,
-                  isIndexing: openingExplorer.isIndexing,
-                ),
-                if (topGames != null && topGames.isNotEmpty) ...[
-                  OpeningExplorerHeaderTile(
-                    key: const Key('topGamesHeader'),
-                    child: Text(context.l10n.topGames),
-                  ),
-                  ...List.generate(
-                    topGames.length,
-                    (int index) {
-                      return OpeningExplorerGameTile(
-                        key: Key('top-game-${topGames.get(index).id}'),
-                        game: topGames.get(index),
-                        color: index.isEven
-                            ? Theme.of(context).colorScheme.surfaceContainerLow
-                            : Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHigh,
-                        ply: ply,
-                      );
-                    },
-                    growable: false,
-                  ),
-                ],
-                if (recentGames != null && recentGames.isNotEmpty) ...[
-                  OpeningExplorerHeaderTile(
-                    key: const Key('recentGamesHeader'),
-                    child: Text(context.l10n.recentGames),
-                  ),
-                  ...List.generate(
-                    recentGames.length,
-                    (int index) {
-                      return OpeningExplorerGameTile(
-                        key: Key('recent-game-${recentGames.get(index).id}'),
-                        game: recentGames.get(index),
-                        color: index.isEven
-                            ? Theme.of(context).colorScheme.surfaceContainerLow
-                            : Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHigh,
-                        ply: ply,
-                      );
-                    },
-                    growable: false,
-                  ),
-                ],
-              ];
-
-              lastExplorerWidgets = children;
-
-              return children;
-            },
-            loading: () =>
-                lastExplorerWidgets ??
+            isLoading: true,
+            children: lastExplorerWidgets ??
                 [
                   const Shimmer(
                     child: ShimmerLoading(
@@ -207,23 +108,103 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                     ),
                   ),
                 ],
-            error: (e, s) {
-              debugPrint(
-                'SEVERE: [OpeningExplorerView] could not load opening explorer data; $e\n$s',
-              );
-              return [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(e.toString()),
-                  ),
-                ),
-              ];
-            },
+          );
+        }
+
+        final topGames = value.entry.topGames;
+        final recentGames = value.entry.recentGames;
+
+        final ply = widget.position.ply;
+
+        final children = [
+          OpeningExplorerMoveTable(
+            moves: value.entry.moves,
+            whiteWins: value.entry.white,
+            draws: value.entry.draws,
+            blackWins: value.entry.black,
+            onMoveSelected: widget.onMoveSelected,
+            isIndexing: value.isIndexing,
+          ),
+          if (topGames != null && topGames.isNotEmpty) ...[
+            OpeningExplorerHeaderTile(
+              key: const Key('topGamesHeader'),
+              child: Text(context.l10n.topGames),
+            ),
+            ...List.generate(
+              topGames.length,
+              (int index) {
+                return OpeningExplorerGameTile(
+                  key: Key('top-game-${topGames.get(index).id}'),
+                  game: topGames.get(index),
+                  color: index.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  ply: ply,
+                );
+              },
+              growable: false,
+            ),
+          ],
+          if (recentGames != null && recentGames.isNotEmpty) ...[
+            OpeningExplorerHeaderTile(
+              key: const Key('recentGamesHeader'),
+              child: Text(context.l10n.recentGames),
+            ),
+            ...List.generate(
+              recentGames.length,
+              (int index) {
+                return OpeningExplorerGameTile(
+                  key: Key('recent-game-${recentGames.get(index).id}'),
+                  game: recentGames.get(index),
+                  color: index.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  ply: ply,
+                );
+              },
+              growable: false,
+            ),
+          ],
+        ];
+
+        lastExplorerWidgets = children;
+
+        return _ExplorerListView(
+          scrollable: widget.scrollable,
+          isLoading: false,
+          children: children,
+        );
+      case AsyncError(:final error):
+        debugPrint(
+          'SEVERE: [OpeningExplorerView] could not load opening explorer data; $error',
+        );
+        final connectivity = ref.watch(connectivityChangesProvider);
+        // TODO l10n
+        final message = connectivity.whenIs(
+          online: () => 'Could not load opening explorer data.',
+          offline: () => 'Opening Explorer is not available offline.',
+        );
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(message),
           ),
         );
-      },
-    );
+      case _:
+        return _ExplorerListView(
+          scrollable: widget.scrollable,
+          isLoading: true,
+          children: lastExplorerWidgets ??
+              [
+                const Shimmer(
+                  child: ShimmerLoading(
+                    isLoading: true,
+                    child: OpeningExplorerMoveTable.loading(),
+                  ),
+                ),
+              ],
+        );
+    }
   }
 }
 

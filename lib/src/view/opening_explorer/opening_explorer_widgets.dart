@@ -36,8 +36,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.blackWins,
     this.onMoveSelected,
     this.isIndexing = false,
-  })  : _isLoading = false,
-        _maxDepthReached = false;
+  }) : _isLoading = false;
 
   const OpeningExplorerMoveTable.loading()
       : _isLoading = true,
@@ -45,17 +44,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         whiteWins = 0,
         draws = 0,
         blackWins = 0,
-        _maxDepthReached = false,
-        isIndexing = false,
-        onMoveSelected = null;
-
-  const OpeningExplorerMoveTable.maxDepth()
-      : _isLoading = false,
-        moves = const IListConst([]),
-        whiteWins = 0,
-        draws = 0,
-        blackWins = 0,
-        _maxDepthReached = true,
         isIndexing = false,
         onMoveSelected = null;
 
@@ -67,7 +55,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   final bool isIndexing;
 
   final bool _isLoading;
-  final bool _maxDepthReached;
 
   String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 
@@ -164,32 +151,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             );
           },
         ),
-        if (_maxDepthReached)
-          TableRow(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-            ),
-            children: [
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text(
-                  String.fromCharCode(Icons.not_interested_outlined.codePoint),
-                  style: TextStyle(
-                    fontFamily: Icons.not_interested_outlined.fontFamily,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text(context.l10n.maxDepthReached),
-              ),
-              const Padding(
-                padding: _kTableRowPadding,
-                child: SizedBox.shrink(),
-              ),
-            ],
-          )
-        else if (moves.isNotEmpty)
+        if (moves.isNotEmpty)
           TableRow(
             decoration: BoxDecoration(
               color: moves.length.isEven

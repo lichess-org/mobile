@@ -75,9 +75,6 @@ void main() {
         // wait for analysis controller to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump(const Duration(milliseconds: 10));
-        // wait for connectivity provider to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -135,9 +132,6 @@ void main() {
         // wait for analysis controller to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump(const Duration(milliseconds: 10));
-        // wait for connectivity provider to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -190,9 +184,6 @@ void main() {
         );
         await tester.pumpWidget(app);
         // wait for analysis controller to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
-        // wait for connectivity provider to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pump(const Duration(milliseconds: 10));
 
