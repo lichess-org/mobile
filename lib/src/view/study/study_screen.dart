@@ -45,29 +45,67 @@ class StudyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id));
-    return state.when(
-      data: (state) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    switch (ref.watch(studyControllerProvider(id))) {
+      case AsyncData(:final value):
         return _StudyScreen(
           id: id,
-          studyState: state,
+          studyState: value,
         );
-      },
-      loading: () {
-        return const PlatformScaffold(
-          appBar: PlatformAppBar(
+      case AsyncError(:final error, :final stackTrace):
+        _logger.severe('Cannot load study: $error', stackTrace);
+        return PlatformScaffold(
+          appBar: const PlatformAppBar(
             title: Text(''),
           ),
-          body: Center(child: CircularProgressIndicator()),
+          body: DefaultTabController(
+            length: 1,
+            child: AnalysisLayout(
+              boardBuilder: (context, boardSize, borderRadius) =>
+                  Chessboard.fixed(
+                size: boardSize,
+                settings: boardPrefs.toBoardSettings().copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null
+                          ? boardShadows
+                          : const <BoxShadow>[],
+                    ),
+                orientation: Side.white,
+                fen: kEmptyFEN,
+              ),
+              children: const [
+                Center(
+                  child: Text('Failed to load study.'),
+                ),
+              ],
+            ),
+          ),
         );
-      },
-      error: (error, st) {
-        _logger.severe('Cannot load study: $error', st);
-        return Center(
-          child: Text('Cannot load study: $error'),
+      case _:
+        return PlatformScaffold(
+          appBar: const PlatformAppBar(
+            title: Text(''),
+          ),
+          body: DefaultTabController(
+            length: 1,
+            child: AnalysisLayout(
+              boardBuilder: (context, boardSize, borderRadius) =>
+                  Chessboard.fixed(
+                size: boardSize,
+                settings: boardPrefs.toBoardSettings().copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null
+                          ? boardShadows
+                          : const <BoxShadow>[],
+                    ),
+                orientation: Side.white,
+                fen: kEmptyFEN,
+              ),
+              children: const [SizedBox.shrink()],
+            ),
+          ),
         );
-      },
-    );
+    }
   }
 }
 
