@@ -58,8 +58,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
