@@ -143,19 +143,17 @@ class _Body extends ConsumerWidget {
         roundId,
         gameId,
         boardSize,
-        borderRadius != null,
+        borderRadius,
       ),
       boardHeader: _PlayerWidget(
         roundId: roundId,
         gameId: gameId,
         widgetPosition: _PlayerWidgetPosition.top,
-        borderRadius: BorderRadius.zero,
       ),
       boardFooter: _PlayerWidget(
         roundId: roundId,
         gameId: gameId,
         widgetPosition: _PlayerWidgetPosition.bottom,
-        borderRadius: BorderRadius.zero,
       ),
       engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
           ? (context, orientation) {
@@ -222,13 +220,13 @@ class _BroadcastBoard extends ConsumerStatefulWidget {
     this.roundId,
     this.gameId,
     this.boardSize,
-    this.hasShadow,
+    this.borderRadius,
   );
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final double boardSize;
-  final bool hasShadow;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
@@ -297,7 +295,10 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            boxShadow: widget.hasShadow ? boardShadows : const <BoxShadow>[],
+            borderRadius: widget.borderRadius,
+            boxShadow: widget.borderRadius != null
+                ? boardShadows
+                : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: boardPrefs.enableShapeDrawings,
               onCompleteShape: _onCompleteShape,
@@ -335,13 +336,11 @@ class _PlayerWidget extends ConsumerWidget {
     required this.roundId,
     required this.gameId,
     required this.widgetPosition,
-    required this.borderRadius,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final _PlayerWidgetPosition widgetPosition;
-  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -365,8 +364,11 @@ class _PlayerWidget extends ConsumerWidget {
     final player = game.players[side]!;
     final gameStatus = game.status;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    return Container(
+      color: Theme.of(context).platform == TargetPlatform.iOS
+          ? Styles.cupertinoCardColor.resolveFrom(context)
+          : Theme.of(context).colorScheme.surfaceContainer,
+      padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
           if (game.isOver) ...[
@@ -382,76 +384,73 @@ class _PlayerWidget extends ConsumerWidget {
                           : '0',
               style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(width: 5.0),
+            const SizedBox(width: 16.0),
           ],
-          Expanded(
-            child: Row(
-              children: [
-                if (player.federation != null) ...[
-                  Consumer(
-                    builder: (context, widgetRef, _) {
-                      return SvgPicture.network(
-                        lichessFideFedSrc(player.federation!),
-                        height: 12,
-                        httpClient: widgetRef.read(defaultClientProvider),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 5),
-                ],
-                if (player.title != null) ...[
-                  Text(
-                    player.title!,
-                    style: const TextStyle().copyWith(
-                      color: context.lichessColors.brag,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                ],
-                Text(
-                  player.name,
-                  style: const TextStyle().copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (player.rating != null) ...[
-                  const SizedBox(width: 5),
-                  Text(
-                    player.rating.toString(),
-                    style: const TextStyle(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
+          if (player.federation != null) ...[
+            SvgPicture.network(
+              lichessFideFedSrc(player.federation!),
+              height: 12,
+              httpClient: ref.read(defaultClientProvider),
             ),
+            const SizedBox(width: 5),
+          ],
+          if (player.title != null) ...[
+            Text(
+              player.title!,
+              style: const TextStyle().copyWith(
+                color: context.lichessColors.brag,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 5),
+          ],
+          Text(
+            player.name,
+            style: const TextStyle().copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
+          if (player.rating != null) ...[
+            const SizedBox(width: 5),
+            Text(
+              player.rating.toString(),
+              style: const TextStyle(),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+          const Spacer(),
           if (clock != null)
-            ColoredBox(
+            Container(
+              height: kAnalysisBoardHeaderOrFooterHeight,
               color: (side == sideToMove)
                   ? isCursorOnLiveMove
                       ? Theme.of(context).colorScheme.tertiaryContainer
                       : Theme.of(context).colorScheme.secondaryContainer
                   : Colors.transparent,
-              child: isCursorOnLiveMove
-                  ? CountdownClockBuilder(
-                      timeLeft: clock,
-                      active: side == sideToMove,
-                      builder: (context, timeLeft) => _Clock(
-                        timeLeft: timeLeft,
-                        isSideToMove: side == sideToMove,
-                        isLive: true,
-                      ),
-                      tickInterval: const Duration(seconds: 1),
-                      clockUpdatedAt:
-                          side == sideToMove ? game.updatedClockAt : null,
-                    )
-                  : _Clock(
-                      timeLeft: clock,
-                      isSideToMove: side == sideToMove,
-                      isLive: false,
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                child: Center(
+                  child: isCursorOnLiveMove
+                      ? CountdownClockBuilder(
+                          timeLeft: clock,
+                          active: side == sideToMove,
+                          builder: (context, timeLeft) => _Clock(
+                            timeLeft: timeLeft,
+                            isSideToMove: side == sideToMove,
+                            isLive: true,
+                          ),
+                          tickInterval: const Duration(seconds: 1),
+                          clockUpdatedAt:
+                              side == sideToMove ? game.updatedClockAt : null,
+                        )
+                      : _Clock(
+                          timeLeft: clock,
+                          isSideToMove: side == sideToMove,
+                          isLive: false,
+                        ),
+                ),
+              ),
             ),
         ],
       ),
