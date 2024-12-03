@@ -139,12 +139,23 @@ class _Body extends ConsumerWidget {
 
     return AnalysisLayout(
       tabController: tabController,
-      boardBuilder: (context, boardSize, borderRadius) =>
-          _BroadcastBoardWithHeaders(
+      boardBuilder: (context, boardSize, borderRadius) => _BroadcastBoard(
         roundId,
         gameId,
         boardSize,
-        borderRadius,
+        borderRadius != null,
+      ),
+      boardHeader: _PlayerWidget(
+        roundId: roundId,
+        gameId: gameId,
+        widgetPosition: _PlayerWidgetPosition.top,
+        borderRadius: BorderRadius.zero,
+      ),
+      boardFooter: _PlayerWidget(
+        roundId: roundId,
+        gameId: gameId,
+        widgetPosition: _PlayerWidgetPosition.bottom,
+        borderRadius: BorderRadius.zero,
       ),
       engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
           ? (context, orientation) {
@@ -202,49 +213,6 @@ class _OpeningExplorerTab extends ConsumerWidget {
     return OpeningExplorerView(
       position: state.currentNode.position,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
-    );
-  }
-}
-
-class _BroadcastBoardWithHeaders extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final double size;
-  final BorderRadius? borderRadius;
-
-  const _BroadcastBoardWithHeaders(
-    this.roundId,
-    this.gameId,
-    this.size,
-    this.borderRadius,
-  );
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        _PlayerWidget(
-          roundId: roundId,
-          gameId: gameId,
-          width: size,
-          widgetPosition: _PlayerWidgetPosition.top,
-          borderRadius: borderRadius?.copyWith(
-            bottomLeft: Radius.zero,
-            bottomRight: Radius.zero,
-          ),
-        ),
-        _BroadcastBoard(roundId, gameId, size, borderRadius != null),
-        _PlayerWidget(
-          roundId: roundId,
-          gameId: gameId,
-          width: size,
-          widgetPosition: _PlayerWidgetPosition.bottom,
-          borderRadius: borderRadius?.copyWith(
-            topLeft: Radius.zero,
-            topRight: Radius.zero,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -366,14 +334,12 @@ class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
     required this.roundId,
     required this.gameId,
-    required this.width,
     required this.widgetPosition,
     required this.borderRadius,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final double width;
   final _PlayerWidgetPosition widgetPosition;
   final BorderRadius? borderRadius;
 
@@ -399,137 +365,93 @@ class _PlayerWidget extends ConsumerWidget {
     final player = game.players[side]!;
     final gameStatus = game.status;
 
-    return SizedBox(
-      width: width,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         children: [
-          if (game.isOver)
-            Card(
-              margin: EdgeInsets.zero,
-              shape: _makePlayerWidgetBorder(
-                widgetPosition: widgetPosition,
-                borderRadius: borderRadius,
-                hasLeftBorderRadius: true,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                child: Text(
-                  (gameStatus == BroadcastResult.draw)
-                      ? '½'
-                      : (gameStatus == BroadcastResult.whiteWins)
-                          ? side == Side.white
-                              ? '1'
-                              : '0'
-                          : side == Side.black
-                              ? '1'
-                              : '0',
-                  style:
-                      const TextStyle().copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
+          if (game.isOver) ...[
+            Text(
+              (gameStatus == BroadcastResult.draw)
+                  ? '½'
+                  : (gameStatus == BroadcastResult.whiteWins)
+                      ? side == Side.white
+                          ? '1'
+                          : '0'
+                      : side == Side.black
+                          ? '1'
+                          : '0',
+              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
+            const SizedBox(width: 5.0),
+          ],
           Expanded(
-            child: Card(
-              margin: EdgeInsets.zero,
-              shape: _makePlayerWidgetBorder(
-                widgetPosition: widgetPosition,
-                borderRadius: borderRadius,
-                hasLeftBorderRadius: !game.isOver,
-                hasRightBorderRadius: clock == null,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          if (player.federation != null) ...[
-                            Consumer(
-                              builder: (context, widgetRef, _) {
-                                return SvgPicture.network(
-                                  lichessFideFedSrc(player.federation!),
-                                  height: 12,
-                                  httpClient:
-                                      widgetRef.read(defaultClientProvider),
-                                );
-                              },
-                            ),
-                            const SizedBox(width: 5),
-                          ],
-                          if (player.title != null) ...[
-                            Text(
-                              player.title!,
-                              style: const TextStyle().copyWith(
-                                color: context.lichessColors.brag,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                          ],
-                          Text(
-                            player.name,
-                            style: const TextStyle().copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          if (player.rating != null) ...[
-                            const SizedBox(width: 5),
-                            Text(
-                              player.rating.toString(),
-                              style: const TextStyle(),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ],
-                      ),
+            child: Row(
+              children: [
+                if (player.federation != null) ...[
+                  Consumer(
+                    builder: (context, widgetRef, _) {
+                      return SvgPicture.network(
+                        lichessFideFedSrc(player.federation!),
+                        height: 12,
+                        httpClient: widgetRef.read(defaultClientProvider),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 5),
+                ],
+                if (player.title != null) ...[
+                  Text(
+                    player.title!,
+                    style: const TextStyle().copyWith(
+                      color: context.lichessColors.brag,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
+                  ),
+                  const SizedBox(width: 5),
+                ],
+                Text(
+                  player.name,
+                  style: const TextStyle().copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
+                if (player.rating != null) ...[
+                  const SizedBox(width: 5),
+                  Text(
+                    player.rating.toString(),
+                    style: const TextStyle(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
             ),
           ),
           if (clock != null)
-            Card(
+            ColoredBox(
               color: (side == sideToMove)
                   ? isCursorOnLiveMove
                       ? Theme.of(context).colorScheme.tertiaryContainer
                       : Theme.of(context).colorScheme.secondaryContainer
-                  : null,
-              margin: EdgeInsets.zero,
-              shape: _makePlayerWidgetBorder(
-                widgetPosition: widgetPosition,
-                borderRadius: borderRadius,
-                hasRightBorderRadius: true,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: isCursorOnLiveMove
-                    ? CountdownClockBuilder(
-                        timeLeft: clock,
-                        active: side == sideToMove,
-                        builder: (context, timeLeft) => _Clock(
-                          timeLeft: timeLeft,
-                          isSideToMove: side == sideToMove,
-                          isLive: true,
-                        ),
-                        tickInterval: const Duration(seconds: 1),
-                        clockUpdatedAt:
-                            side == sideToMove ? game.updatedClockAt : null,
-                      )
-                    : _Clock(
-                        timeLeft: clock,
+                  : Colors.transparent,
+              child: isCursorOnLiveMove
+                  ? CountdownClockBuilder(
+                      timeLeft: clock,
+                      active: side == sideToMove,
+                      builder: (context, timeLeft) => _Clock(
+                        timeLeft: timeLeft,
                         isSideToMove: side == sideToMove,
-                        isLive: false,
+                        isLive: true,
                       ),
-              ),
+                      tickInterval: const Duration(seconds: 1),
+                      clockUpdatedAt:
+                          side == sideToMove ? game.updatedClockAt : null,
+                    )
+                  : _Clock(
+                      timeLeft: clock,
+                      isSideToMove: side == sideToMove,
+                      isLive: false,
+                    ),
             ),
         ],
       ),
@@ -562,32 +484,4 @@ class _Clock extends StatelessWidget {
       ),
     );
   }
-}
-
-ShapeBorder _makePlayerWidgetBorder({
-  required BorderRadius? borderRadius,
-  required _PlayerWidgetPosition widgetPosition,
-  bool hasLeftBorderRadius = false,
-  bool hasRightBorderRadius = false,
-}) {
-  if (borderRadius == null) return const Border();
-
-  if (!hasLeftBorderRadius && !hasRightBorderRadius) return const Border();
-
-  return RoundedRectangleBorder(
-    borderRadius: switch (widgetPosition) {
-      _PlayerWidgetPosition.top => borderRadius.copyWith(
-          topLeft: hasLeftBorderRadius ? null : Radius.zero,
-          topRight: hasRightBorderRadius ? null : Radius.zero,
-          bottomLeft: Radius.zero,
-          bottomRight: Radius.zero,
-        ),
-      _PlayerWidgetPosition.bottom => borderRadius.copyWith(
-          topLeft: Radius.zero,
-          topRight: Radius.zero,
-          bottomLeft: hasLeftBorderRadius ? null : Radius.zero,
-          bottomRight: hasRightBorderRadius ? null : Radius.zero,
-        ),
-    },
-  );
 }
