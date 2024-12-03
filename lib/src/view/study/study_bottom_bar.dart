@@ -266,7 +266,7 @@ class _ChapterButton extends ConsumerWidget {
   }
 }
 
-class _StudyChaptersMenu extends ConsumerWidget {
+class _StudyChaptersMenu extends ConsumerStatefulWidget {
   const _StudyChaptersMenu({
     required this.id,
     required this.scrollController,
@@ -276,10 +276,15 @@ class _StudyChaptersMenu extends ConsumerWidget {
   final ScrollController scrollController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).requireValue;
+  ConsumerState<_StudyChaptersMenu> createState() => _StudyChaptersMenuState();
+}
 
-    final currentChapterKey = GlobalKey();
+class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
+  final currentChapterKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
     // Scroll to the current chapter
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -292,7 +297,7 @@ class _StudyChaptersMenu extends ConsumerWidget {
     });
 
     return BottomSheetScrollableContainer(
-      scrollController: scrollController,
+      scrollController: widget.scrollController,
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -308,7 +313,7 @@ class _StudyChaptersMenu extends ConsumerWidget {
                 : null,
             title: Text(chapter.name, maxLines: 2),
             onTap: () {
-              ref.read(studyControllerProvider(id).notifier).goToChapter(
+              ref.read(studyControllerProvider(widget.id).notifier).goToChapter(
                     chapter.id,
                   );
               Navigator.of(context).pop();
