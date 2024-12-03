@@ -394,7 +394,7 @@ class _PlayerWidget extends ConsumerWidget {
 
     final game = ref.watch(
       broadcastRoundControllerProvider(roundId)
-          .select((game) => game.requireValue[gameId]!),
+          .select((round) => round.requireValue.games[gameId]!),
     );
     final player = game.players[side]!;
     final gameStatus = game.status;
