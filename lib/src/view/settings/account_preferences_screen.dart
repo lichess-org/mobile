@@ -396,6 +396,41 @@ class _AccountPreferencesScreenState
                             );
                           },
                   ),
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.letOtherPlayersChallengeYou,
+                    ),
+                    settingsValue: data.challenge.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: Challenge.values,
+                          selectedItem: data.challenge,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (Challenge? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setChallenge(value ?? data.challenge),
+                                  );
+                                },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.letOtherPlayersChallengeYou,
+                          builder: (context) => const AutoQueenSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ],
@@ -787,6 +822,70 @@ class _MoretimeSettingsScreenState
                                     .setMoretime(v ?? data.moretime);
                               });
                             },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class ChallengeSettingsScreen extends ConsumerStatefulWidget {
+  const ChallengeSettingsScreen({super.key});
+
+  @override
+  ConsumerState<ChallengeSettingsScreen> createState() =>
+      _ChallengeSettingsScreenState();
+}
+
+class _ChallengeSettingsScreenState
+    extends ConsumerState<ChallengeSettingsScreen> {
+  Future<void>? _pendingSetChallenge;
+
+  @override
+  Widget build(BuildContext context) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
+          );
+        }
+
+        return FutureBuilder(
+          future: _pendingSetChallenge,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                trailing: snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator.adaptive()
+                    : null,
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: Challenge.values,
+                      selectedItem: data.challenge,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (Challenge? v) {
+                                  final future = ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setChallenge(v ?? data.challenge);
+                                  setState(() {
+                                    _pendingSetChallenge = future;
+                                  });
+                                },
                     ),
                   ],
                 ),
