@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -149,7 +150,12 @@ class _Title extends StatelessWidget {
           const SizedBox(width: 5.0),
         ],
         Flexible(
-          child: Text(context.l10n.analysis, overflow: TextOverflow.ellipsis),
+          child: AutoSizeText(
+            context.l10n.analysis,
+            minFontSize: 14,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

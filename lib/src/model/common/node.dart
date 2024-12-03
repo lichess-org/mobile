@@ -419,6 +419,13 @@ class Branch extends Node {
   @override
   Branch branchAt(UciPath path) => nodeAt(path) as Branch;
 
+  /// Gets the clock information from the comments.
+  Duration? get clock {
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.clock != null);
+    return clockComment?.clock;
+  }
+
   @override
   String toString() {
     return 'Branch(id: $id, fen: ${position.fen}, sanMove: $sanMove, eval: $eval, children: $children)';
