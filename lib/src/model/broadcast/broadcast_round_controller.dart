@@ -25,7 +25,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   late SocketClient _socketClient;
 
   @override
-  Future<BroadcastRoundGames> build(BroadcastRoundId broadcastRoundId) async {
+  Future<BroadcastRoundWithGames> build(
+    BroadcastRoundId broadcastRoundId,
+  ) async {
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
@@ -36,11 +38,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
     });
 
-    final games = await ref.withClient(
+    final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    return games;
+    return round;
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -78,22 +80,25 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final playingSide = Setup.parseFen(fen).turn;
 
     state = AsyncData(
-      state.requireValue.update(
-        broadcastGameId,
-        (broadcastGame) => broadcastGame.copyWith(
-          players: IMap(
-            {
-              playingSide: broadcastGame.players[playingSide]!,
-              playingSide.opposite:
-                  broadcastGame.players[playingSide.opposite]!.copyWith(
-                clock: pick(event.data, 'n', 'clock')
-                    .asDurationFromCentiSecondsOrNull(),
-              ),
-            },
+      (
+        round: state.requireValue.round,
+        games: state.requireValue.games.update(
+          broadcastGameId,
+          (broadcastGame) => broadcastGame.copyWith(
+            players: IMap(
+              {
+                playingSide: broadcastGame.players[playingSide]!,
+                playingSide.opposite:
+                    broadcastGame.players[playingSide.opposite]!.copyWith(
+                  clock: pick(event.data, 'n', 'clock')
+                      .asDurationFromCentiSecondsOrNull(),
+                ),
+              },
+            ),
+            fen: fen,
+            lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
+            updatedClockAt: DateTime.now(),
           ),
-          fen: fen,
-          lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-          updatedClockAt: DateTime.now(),
         ),
       ),
     );
@@ -105,7 +110,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _handleChaptersEvent(SocketEvent event) {
     final games = pick(event.data).asListOrThrow(gameFromPick);
-    state = AsyncData(IMap.fromEntries(games));
+    state = AsyncData(
+      (round: state.requireValue.round, games: IMap.fromEntries(games)),
+    );
   }
 
   void _handleClockEvent(SocketEvent event) {
@@ -117,18 +124,21 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     if (relayClocks.value == null) return;
 
     state = AsyncData(
-      state.requireValue.update(
-        broadcastGameId,
-        (broadcastsGame) => broadcastsGame.copyWith(
-          players: IMap(
-            {
-              Side.white: broadcastsGame.players[Side.white]!.copyWith(
-                clock: relayClocks(0).asDurationFromCentiSecondsOrNull(),
-              ),
-              Side.black: broadcastsGame.players[Side.black]!.copyWith(
-                clock: relayClocks(1).asDurationFromCentiSecondsOrNull(),
-              ),
-            },
+      (
+        round: state.requireValue.round,
+        games: state.requireValue.games.update(
+          broadcastGameId,
+          (broadcastsGame) => broadcastsGame.copyWith(
+            players: IMap(
+              {
+                Side.white: broadcastsGame.players[Side.white]!.copyWith(
+                  clock: relayClocks(0).asDurationFromCentiSecondsOrNull(),
+                ),
+                Side.black: broadcastsGame.players[Side.black]!.copyWith(
+                  clock: relayClocks(1).asDurationFromCentiSecondsOrNull(),
+                ),
+              },
+            ),
           ),
         ),
       ),

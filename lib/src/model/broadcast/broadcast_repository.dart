@@ -33,13 +33,15 @@ class BroadcastRepository {
     );
   }
 
-  Future<BroadcastRoundGames> getRound(BroadcastRoundId broadcastRoundId) {
+  Future<BroadcastRoundWithGames> getRound(
+    BroadcastRoundId broadcastRoundId,
+  ) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slugs
       // They are only used for SEO, so we can safely use - for these parameters
       headers: {'Accept': 'application/x-ndjson'},
-      mapper: _makeGamesFromJson,
+      mapper: _makeRoundWithGamesFromJson,
     );
   }
 
@@ -135,13 +137,16 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastRoundGames _makeGamesFromJson(Map<String, dynamic> json) =>
-    _gamesFromPick(pick(json).required());
+BroadcastRoundWithGames _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
+  final round = pick(json, 'round').required();
+  final games = pick(json, 'games').required();
+  return (round: _roundFromPick(round), games: _gamesFromPick(games));
+}
 
 BroadcastRoundGames _gamesFromPick(
   RequiredPick pick,
 ) =>
-    IMap.fromEntries(pick('games').asListOrThrow(gameFromPick));
+    IMap.fromEntries(pick.asListOrThrow(gameFromPick));
 
 MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
   RequiredPick pick,
