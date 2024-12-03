@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -16,6 +15,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
+const _kHeaderTextStyle = TextStyle(fontSize: 12);
 
 Color _whiteBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
@@ -34,36 +34,27 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.whiteWins,
     required this.draws,
     required this.blackWins,
-    required this.options,
-  })  : _isLoading = false,
-        _maxDepthReached = false;
+    this.onMoveSelected,
+    this.isIndexing = false,
+  }) : _isLoading = false;
 
-  const OpeningExplorerMoveTable.loading({
-    required this.options,
-  })  : _isLoading = true,
+  const OpeningExplorerMoveTable.loading()
+      : _isLoading = true,
         moves = const IListConst([]),
         whiteWins = 0,
         draws = 0,
         blackWins = 0,
-        _maxDepthReached = false;
-
-  const OpeningExplorerMoveTable.maxDepth({
-    required this.options,
-  })  : _isLoading = false,
-        moves = const IListConst([]),
-        whiteWins = 0,
-        draws = 0,
-        blackWins = 0,
-        _maxDepthReached = true;
+        isIndexing = false,
+        onMoveSelected = null;
 
   final IList<OpeningMove> moves;
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final AnalysisOptions options;
+  final void Function(NormalMove)? onMoveSelected;
+  final bool isIndexing;
 
   final bool _isLoading;
-  final bool _maxDepthReached;
 
   String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 
@@ -80,9 +71,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     }
 
     final games = whiteWins + draws + blackWins;
-    final ctrlProvider = analysisControllerProvider(options);
-
-    const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
       columnWidths: columnWidths,
@@ -94,15 +82,28 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           children: [
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.move, style: headerTextStyle),
+              child: Text(context.l10n.move, style: _kHeaderTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.games, style: headerTextStyle),
+              child: Text(context.l10n.games, style: _kHeaderTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding,
-              child: Text(context.l10n.whiteDrawBlack, style: headerTextStyle),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.l10n.whiteDrawBlack,
+                      style: _kHeaderTextStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isIndexing) const IndexingIndicator(),
+                ],
+              ),
             ),
           ],
         ),
@@ -119,27 +120,24 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
               ),
               children: [
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text(move.san),
                   ),
                 ),
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
                   ),
                 ),
                 TableRowInkWell(
-                  onTap: () => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(NormalMove.fromUci(move.uci)),
+                  onTap: () =>
+                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: _WinPercentageChart(
@@ -153,32 +151,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             );
           },
         ),
-        if (_maxDepthReached)
-          TableRow(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-            ),
-            children: [
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text(
-                  String.fromCharCode(Icons.not_interested_outlined.codePoint),
-                  style: TextStyle(
-                    fontFamily: Icons.not_interested_outlined.fontFamily,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text(context.l10n.maxDepthReached),
-              ),
-              const Padding(
-                padding: _kTableRowPadding,
-                child: SizedBox.shrink(),
-              ),
-            ],
-          )
-        else if (moves.isNotEmpty)
+        if (moves.isNotEmpty)
           TableRow(
             decoration: BoxDecoration(
               color: moves.length.isEven
@@ -277,6 +250,50 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       ),
     ),
   );
+}
+
+class IndexingIndicator extends StatefulWidget {
+  const IndexingIndicator();
+
+  @override
+  State<IndexingIndicator> createState() => _IndexingIndicatorState();
+}
+
+class _IndexingIndicatorState extends State<IndexingIndicator>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 12.0,
+      height: 12.0,
+      child: CircularProgressIndicator(
+        strokeWidth: 1.5,
+        value: controller.value,
+        // TODO: l10n
+        semanticsLabel: 'Indexing',
+      ),
+    );
+  }
 }
 
 class OpeningExplorerHeaderTile extends StatelessWidget {

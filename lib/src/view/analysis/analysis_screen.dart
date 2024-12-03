@@ -10,12 +10,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -216,7 +216,12 @@ class _Body extends ConsumerWidget {
           : null,
       bottomBar: _BottomBar(options: options),
       children: [
-        OpeningExplorerView(options: options),
+        OpeningExplorerView(
+          position: currentNode.position,
+          onMoveSelected: (move) {
+            ref.read(ctrlProvider.notifier).onUserMove(move);
+          },
+        ),
         AnalysisTreeView(options),
         if (options.gameId != null) ServerAnalysisSummary(options),
       ],

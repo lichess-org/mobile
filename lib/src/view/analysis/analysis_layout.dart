@@ -66,17 +66,29 @@ class _AppBarAnalysisTabIndicatorState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.controller.addListener(_listener);
+    widget.controller.animation?.addListener(_handleTabAnimationTick);
+    widget.controller.addListener(_handleTabChange);
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_listener);
+    widget.controller.animation?.removeListener(_handleTabAnimationTick);
+    widget.controller.removeListener(_handleTabChange);
     super.dispose();
   }
 
-  void _listener() {
-    setState(() {});
+  void _handleTabAnimationTick() {
+    if (widget.controller.indexIsChanging) {
+      setState(() {
+        // Rebuild the widget when the tab index is changing.
+      });
+    }
+  }
+
+  void _handleTabChange() {
+    setState(() {
+      // Rebuild the widget when the tab changes.
+    });
   }
 
   @override

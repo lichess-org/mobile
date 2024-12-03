@@ -26,12 +26,13 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class BroadcastGameScreen extends ConsumerWidget {
+class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String title;
@@ -43,22 +44,58 @@ class BroadcastGameScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastGameState =
-        ref.watch(broadcastGameControllerProvider(roundId, gameId));
+  ConsumerState<BroadcastGameScreen> createState() =>
+      _BroadcastGameScreenState();
+}
+
+class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
+    with SingleTickerProviderStateMixin {
+  late final List<AnalysisTab> tabs;
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabs = [
+      AnalysisTab.opening,
+      AnalysisTab.moves,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: 1,
+      length: tabs.length,
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final broadcastGameState = ref
+        .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(title, overflow: TextOverflow.ellipsis, maxLines: 1),
+        title: Text(widget.title, overflow: TextOverflow.ellipsis, maxLines: 1),
         actions: [
+          AppBarAnalysisTabIndicator(
+            tabs: tabs,
+            controller: _tabController,
+          ),
           AppBarIconButton(
             onPressed: (broadcastGameState.hasValue)
                 ? () {
                     pushPlatformRoute(
                       context,
                       screen: BroadcastGameSettings(
-                        roundId,
-                        gameId,
+                        widget.roundId,
+                        widget.gameId,
                       ),
                     );
                   }
@@ -69,7 +106,8 @@ class BroadcastGameScreen extends ConsumerWidget {
         ],
       ),
       body: switch (broadcastGameState) {
-        AsyncData() => _Body(roundId, gameId),
+        AsyncData() =>
+          _Body(widget.roundId, widget.gameId, tabController: _tabController),
         AsyncError(:final error) => Center(
             child: Text('Cannot load broadcast game: $error'),
           ),
@@ -80,10 +118,11 @@ class BroadcastGameScreen extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
+  const _Body(this.roundId, this.gameId, {required this.tabController});
+
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-
-  const _Body(this.roundId, this.gameId);
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,49 +137,71 @@ class _Body extends ConsumerWidget {
     final isLocalEvaluationEnabled = broadcastState.isLocalEvaluationEnabled;
     final currentNode = broadcastState.currentNode;
 
-    return DefaultTabController(
-      length: 1,
-      child: AnalysisLayout(
-        boardBuilder: (context, boardSize, borderRadius) =>
-            _BroadcastBoardWithHeaders(
-          roundId,
-          gameId,
-          boardSize,
-          borderRadius,
-        ),
-        engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
-            ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                        params: engineGaugeParams,
-                      )
-                    : Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.vertical,
-                          params: engineGaugeParams,
-                        ),
-                      );
-              }
-            : null,
-        engineLines: isLocalEvaluationEnabled && numEvalLines > 0
-            ? EngineLines(
-                clientEval: currentNode.eval,
-                isGameOver: currentNode.position.isGameOver,
-                onTapMove: ref
-                    .read(
-                      broadcastGameControllerProvider(roundId, gameId).notifier,
-                    )
-                    .onUserMove,
-              )
-            : null,
-        bottomBar: BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
-        children: [BroadcastGameTreeView(roundId, gameId)],
+    return AnalysisLayout(
+      tabController: tabController,
+      boardBuilder: (context, boardSize, borderRadius) =>
+          _BroadcastBoardWithHeaders(
+        roundId,
+        gameId,
+        boardSize,
+        borderRadius,
       ),
+      engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
+          ? (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? EngineGauge(
+                      displayMode: EngineGaugeDisplayMode.horizontal,
+                      params: engineGaugeParams,
+                    )
+                  : Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.vertical,
+                        params: engineGaugeParams,
+                      ),
+                    );
+            }
+          : null,
+      engineLines: isLocalEvaluationEnabled && numEvalLines > 0
+          ? EngineLines(
+              clientEval: currentNode.eval,
+              isGameOver: currentNode.position.isGameOver,
+              onTapMove: ref
+                  .read(
+                    broadcastGameControllerProvider(roundId, gameId).notifier,
+                  )
+                  .onUserMove,
+            )
+          : null,
+      bottomBar: BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
+      children: [
+        _OpeningExplorerTab(roundId, gameId),
+        BroadcastGameTreeView(roundId, gameId),
+      ],
+    );
+  }
+}
+
+class _OpeningExplorerTab extends ConsumerWidget {
+  const _OpeningExplorerTab(
+    this.roundId,
+    this.gameId,
+  );
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
+    final state = ref.watch(ctrlProvider).requireValue;
+
+    return OpeningExplorerView(
+      position: state.currentNode.position,
+      onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
     );
   }
 }

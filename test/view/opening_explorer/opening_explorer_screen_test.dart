@@ -72,8 +72,9 @@ void main() {
           ],
         );
         await tester.pumpWidget(app);
+        // wait for analysis controller to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -128,8 +129,9 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        // wait for analysis controller to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));
@@ -181,8 +183,9 @@ void main() {
           },
         );
         await tester.pumpWidget(app);
+        // wait for analysis controller to load
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump(const Duration(milliseconds: 10));
 
         // wait for opening explorer data to load (taking debounce delay into account)
         await tester.pump(const Duration(milliseconds: 350));

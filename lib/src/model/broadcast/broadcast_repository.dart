@@ -33,9 +33,7 @@ class BroadcastRepository {
     );
   }
 
-  Future<BroadcastRoundGames> getRound(
-    BroadcastRoundId broadcastRoundId,
-  ) {
+  Future<BroadcastRoundGames> getRound(BroadcastRoundId broadcastRoundId) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slugs
@@ -45,14 +43,11 @@ class BroadcastRepository {
     );
   }
 
-  Future<String> getGame(
+  Future<String> getGamePgn(
     BroadcastRoundId roundId,
     BroadcastGameId gameId,
   ) {
-    return client.read(
-      Uri(path: 'api/study/$roundId/$gameId.pgn'),
-      headers: {'Accept': 'application/json'},
-    );
+    return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
   }
 }
 

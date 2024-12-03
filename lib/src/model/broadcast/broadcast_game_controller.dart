@@ -63,7 +63,7 @@ class BroadcastGameController extends _$BroadcastGameController
     });
 
     final pgn = await ref.withClient(
-      (client) => BroadcastRepository(client).getGame(roundId, gameId),
+      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
     );
 
     final game = PgnGame.parsePgn(pgn);
