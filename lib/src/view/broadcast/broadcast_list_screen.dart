@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -166,7 +167,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class BroadcastGridItem extends StatelessWidget {
+class BroadcastGridItem extends StatefulWidget {
   final Broadcast broadcast;
 
   const BroadcastGridItem({required this.broadcast});
@@ -198,7 +199,43 @@ class BroadcastGridItem extends StatelessWidget {
         );
 
   @override
+  State<BroadcastGridItem> createState() => _BroadcastGridItemState();
+}
+
+class _BroadcastGridItemState extends State<BroadcastGridItem> {
+  ColorScheme? _colorScheme;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.broadcast.tour.imageUrl != null) {
+      _fetchColorScheme(widget.broadcast.tour.imageUrl!);
+    }
+  }
+
+  Future<void> _fetchColorScheme(String url) async {
+    final colorScheme = await ColorScheme.fromImageProvider(
+      provider: NetworkImage(url),
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+    );
+    if (mounted) {
+      setState(() {
+        _colorScheme = colorScheme;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final titleColor = _colorScheme?.onPrimaryContainer;
+    final subTitleColor =
+        _colorScheme?.onPrimaryContainer.withValues(alpha: 0.7) ??
+            textShade(context, 0.7);
+    final red = _colorScheme != null
+        ? LichessColors.red.harmonizeWith(_colorScheme!.primary)
+        : LichessColors.red;
+
     return AdaptiveInkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: () {
@@ -206,24 +243,25 @@ class BroadcastGridItem extends StatelessWidget {
           context,
           title: context.l10n.broadcastBroadcasts,
           rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+          builder: (context) =>
+              BroadcastRoundScreen(broadcast: widget.broadcast),
         );
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
+          color: _colorScheme?.primaryContainer,
+          boxShadow: const [
             BoxShadow(
-              color: LichessColors.grey.withValues(alpha: 0.5),
-              blurRadius: 5,
+              blurRadius: 3,
               spreadRadius: 1,
             ),
           ],
         ),
         foregroundDecoration: BoxDecoration(
-          border: (broadcast.isLive)
-              ? Border.all(color: LichessColors.red, width: 2)
+          border: (widget.broadcast.isLive)
+              ? Border.all(color: red.withValues(alpha: 0.8), width: 3.0)
               : Border.all(color: LichessColors.grey),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -231,32 +269,34 @@ class BroadcastGridItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (broadcast.tour.imageUrl != null)
+            if (widget.broadcast.tour.imageUrl != null)
               AspectRatio(
                 aspectRatio: 2.0,
                 child: FadeInImage.memoryNetwork(
                   placeholder: transparentImage,
-                  image: broadcast.tour.imageUrl!,
+                  image: widget.broadcast.tour.imageUrl!,
                 ),
               )
             else
               const DefaultBroadcastImage(aspectRatio: 2.0),
             const SizedBox(height: 4.0),
-            if (broadcast.round.startsAt != null || broadcast.isLive)
+            if (widget.broadcast.round.startsAt != null ||
+                widget.broadcast.isLive)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _formatDate(broadcast.round.startsAt!),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: textShade(context, 0.5),
-                          ),
+                      _formatDate(widget.broadcast.round.startsAt!),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: subTitleColor,
+                      ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    if (broadcast.isLive) ...[
+                    if (widget.broadcast.isLive) ...[
                       const SizedBox(width: 4.0),
                       const Text(
                         'LIVE',
@@ -274,10 +314,10 @@ class BroadcastGridItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                broadcast.round.name,
+                widget.broadcast.round.name,
                 style: TextStyle(
                   fontSize: 11,
-                  color: textShade(context, 0.5),
+                  color: subTitleColor,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -287,10 +327,11 @@ class BroadcastGridItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                broadcast.title,
+                widget.broadcast.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
+                  color: titleColor,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),

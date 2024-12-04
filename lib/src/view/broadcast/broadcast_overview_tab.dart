@@ -16,99 +16,98 @@ final _dateFormatter = DateFormat.MMMd();
 
 /// A tab that displays the overview of a broadcast.
 class BroadcastOverviewTab extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
+  const BroadcastOverviewTab({
+    required this.broadcast,
+    required this.tournamentId,
+    super.key,
+  });
 
-  const BroadcastOverviewTab({super.key, required this.tournamentId});
+  final Broadcast broadcast;
+  final BroadcastTournamentId tournamentId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
-    return SafeArea(
-      bottom: false,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: Styles.bodyPadding,
-          child: switch (tournament) {
-            AsyncData(:final value) => BroadcastOverviewBody(value),
-            AsyncError(:final error) => Center(
-                child: Text('Cannot load broadcast data: $error'),
+    switch (tournament) {
+      case AsyncData(value: final tournament):
+        final information = tournament.data.information;
+        final description = tournament.data.description;
+        return SafeArea(
+          bottom: false,
+          child: ListView(
+            padding: Styles.bodyPadding,
+            children: [
+              if (Theme.of(context).platform == TargetPlatform.iOS) ...[
+                Text(
+                  broadcast.title,
+                  style: Styles.title,
+                ),
+                const SizedBox(height: 16.0),
+              ],
+              if (tournament.data.imageUrl != null) ...[
+                Image.network(tournament.data.imageUrl!),
+                const SizedBox(height: 16.0),
+              ],
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  if (information.dates != null)
+                    _BroadcastOverviewCard(
+                      CupertinoIcons.calendar,
+                      information.dates!.endsAt == null
+                          ? _dateFormatter.format(information.dates!.startsAt)
+                          : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
+                    ),
+                  if (information.format != null)
+                    _BroadcastOverviewCard(
+                      Icons.emoji_events,
+                      '${information.format}',
+                    ),
+                  if (information.timeControl != null)
+                    _BroadcastOverviewCard(
+                      CupertinoIcons.stopwatch_fill,
+                      '${information.timeControl}',
+                    ),
+                  if (information.location != null)
+                    _BroadcastOverviewCard(
+                      Icons.public,
+                      '${information.location}',
+                    ),
+                  if (information.players != null)
+                    _BroadcastOverviewCard(
+                      Icons.person,
+                      '${information.players}',
+                    ),
+                  if (information.website != null)
+                    _BroadcastOverviewCard(
+                      Icons.link,
+                      context.l10n.broadcastOfficialWebsite,
+                      information.website,
+                    ),
+                ],
               ),
-            _ => const Center(child: CircularProgressIndicator.adaptive()),
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class BroadcastOverviewBody extends StatelessWidget {
-  final BroadcastTournament tournament;
-
-  const BroadcastOverviewBody(this.tournament);
-
-  @override
-  Widget build(BuildContext context) {
-    final information = tournament.data.information;
-    final description = tournament.data.description;
-
-    return Column(
-      children: [
-        if (tournament.data.imageUrl != null) ...[
-          Image.network(tournament.data.imageUrl!),
-          const SizedBox(height: 16.0),
-        ],
-        Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            if (information.dates != null)
-              _BroadcastOverviewCard(
-                CupertinoIcons.calendar,
-                information.dates!.endsAt == null
-                    ? _dateFormatter.format(information.dates!.startsAt)
-                    : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
-              ),
-            if (information.format != null)
-              _BroadcastOverviewCard(
-                Icons.emoji_events,
-                '${information.format}',
-              ),
-            if (information.timeControl != null)
-              _BroadcastOverviewCard(
-                CupertinoIcons.stopwatch_fill,
-                '${information.timeControl}',
-              ),
-            if (information.location != null)
-              _BroadcastOverviewCard(
-                Icons.public,
-                '${information.location}',
-              ),
-            if (information.players != null)
-              _BroadcastOverviewCard(
-                Icons.person,
-                '${information.players}',
-              ),
-            if (information.website != null)
-              _BroadcastOverviewCard(
-                Icons.link,
-                context.l10n.broadcastOfficialWebsite,
-                information.website,
-              ),
-          ],
-        ),
-        if (description != null)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: MarkdownBody(
-              data: description,
-              onTapLink: (text, url, title) {
-                if (url == null) return;
-                launchUrl(Uri.parse(url));
-              },
-            ),
+              if (description != null)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: MarkdownBody(
+                    data: description,
+                    onTapLink: (text, url, title) {
+                      if (url == null) return;
+                      launchUrl(Uri.parse(url));
+                    },
+                  ),
+                ),
+            ],
           ),
-      ],
-    );
+        );
+      case AsyncError(:final error):
+        return Center(
+          child: Text('Cannot load broadcast data: $error'),
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
   }
 }
 
