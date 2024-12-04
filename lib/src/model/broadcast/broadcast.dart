@@ -83,6 +83,7 @@ class BroadcastRound with _$BroadcastRound {
     required String name,
     required RoundStatus status,
     required DateTime? startsAt,
+    DateTime? finishedAt,
   }) = _BroadcastRound;
 }
 

@@ -137,6 +137,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
     name: pick('name').asStringOrThrow(),
     status: status,
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
+    finishedAt: pick('finishedAt').asDateTimeFromMillisecondsOrNull(),
   );
 }
 
