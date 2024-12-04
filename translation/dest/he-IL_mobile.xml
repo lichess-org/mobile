@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">בית</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">חידות</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">כלים</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">צפייה</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">הגדרות</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">יש להתחבר כדי לצפות בדף זה.</string>
-  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">צבעי מערכת ההפעלה</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">כל המשחקים</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">בטוח?</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">משחק עיוור</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ביטול ההצעה להחזיר את המהלך האחרון</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ניקוי</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ניקוי המהלך השמור</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">הצטרפות למשחק</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">משוב</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">שלום, %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">שלום</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">הסתרת וריאציות</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">בית</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">שדרנים בשידור חי</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">יש להתחבר כדי לצפות בדף זה.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">אין תוצאות</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">אינכם עוקבים אחר אף אחד.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">בסדר</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">שחקנים עם ״%s״</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">הגדלת הכלי הנגרר</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">האם לסיים את הסבב?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">אין מה להראות. ניתן לשנות את חתכי הסינון</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">אין מה להראות. שחקו כמה סיבובים של Puzzle Storm קודם.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">פתרו כמה שיותר חידות ב־3 דקות.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">הרצף הנוכחי שלך ייאבד אך הניקוד יישמר.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">פתרו חידות עם הפתיחות האהובות עליכם או בחרו ממגוון נושאים.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">חידות</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">חיפושים אחרונים</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">רטט בכל מהלך</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">מצב ריכוז</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">הסתירו את שאר הממשק במהלך המשחק. מומלץ להפעיל הגדרה זו אם אפשרויות הניווט בקצות הלוח מפריעות לכם לשחק. רלוונטי למשחקים ול־Puzzle Storm.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">אינכם עוקבים אחר אף אחד.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">כל המשחקים</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">חיפושים אחרונים</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ניקוי</string>
-  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">שחקנים עם ״%s״</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">אין תוצאות</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">בטוח?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">הרצף הנוכחי שלך ייאבד אך הניקוד יישמר.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">אין מה להראות. שחקו כמה סיבובים של Puzzle Storm קודם.</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">שיתוף החידה</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">שיתוף הקישור למשחק</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">הגדרות</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">שיתוף ה־PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">שיתוף הקישור למשחק</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">שיתוף העמדה כ־FEN</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">הצגת וריאציות</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">הסתרת וריאציות</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">שיתוף החידה</string>
   <string name="showComments" comment="Shown in the analysis screen.">הצגת הערות</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">האם לסיים את הסבב?</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">אין מה להראות. ניתן לשנות את חתכי הסינון</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ביטול ההצעה להחזיר את המהלך האחרון</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ממתין שיריב יצטרף...</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">משחק עיוור</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">שדרנים בשידור חי</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">הצטרפות למשחק</string>
-  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ניקוי המהלך השמור</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">משהו השתבש.</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">הצגת תוצאת המשחק</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">פתרו חידות עם הפתיחות האהובות עליכם או בחרו ממגוון נושאים.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">פתרו כמה שיותר חידות ב־3 דקות.</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">שלום, %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">שלום</string>
-  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">הגדלת הכלי הנגרר</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">הצגת וריאציות</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">משהו השתבש.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">צבעי מערכת ההפעלה</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">כלים</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ממתין שיריב יצטרף...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">צפייה</string>
 </resources>
