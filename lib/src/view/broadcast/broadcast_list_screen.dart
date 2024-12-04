@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -204,23 +207,34 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
   ColorScheme? _colorScheme;
 
   @override
-  void initState() {
-    super.initState();
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     if (widget.broadcast.tour.imageUrl != null) {
       _fetchColorScheme(widget.broadcast.tour.imageUrl!);
     }
   }
 
   Future<void> _fetchColorScheme(String url) async {
-    final colorScheme = await ColorScheme.fromImageProvider(
-      provider: NetworkImage(url),
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    );
-    if (mounted) {
-      setState(() {
-        _colorScheme = colorScheme;
+    if (!mounted) return;
+
+    if (Scrollable.recommendDeferredLoadingForContext(context)) {
+      SchedulerBinding.instance.scheduleFrameCallback((_) {
+        scheduleMicrotask(() => _fetchColorScheme(url));
       });
+    } else {
+      try {
+        final colorScheme = await ColorScheme.fromImageProvider(
+          provider: NetworkImage(url),
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        );
+        if (mounted) {
+          setState(() {
+            _colorScheme = colorScheme;
+          });
+        }
+      } catch (_) {
+        // ignore
+      }
     }
   }
 
@@ -277,6 +291,8 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                       child: FadeInImage.memoryNetwork(
                         placeholder: transparentImage,
                         image: widget.broadcast.tour.imageUrl!,
+                        imageErrorBuilder: (context, error, stackTrace) =>
+                            const DefaultBroadcastImage(aspectRatio: 2.0),
                       ),
                     )
                   : const DefaultBroadcastImage(aspectRatio: 2.0),

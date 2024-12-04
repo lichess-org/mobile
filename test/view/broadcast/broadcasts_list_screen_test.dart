@@ -24,23 +24,27 @@ void main() {
       'Displays broadcast tournament screen',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const BroadcastListScreen(),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+        mockNetworkImagesFor(() async {
+          final app = await makeTestProviderScopeApp(
+            tester,
+            home: const BroadcastListScreen(),
+            overrides: [
+              lichessClientProvider
+                  .overrideWith((ref) => LichessClient(client, ref)),
+            ],
+          );
 
-        await tester.pumpWidget(app);
+          await tester.pumpWidget(app);
 
-        // let time for request to complete
-        await mockNetworkImagesFor(
-          () => tester.pump(const Duration(milliseconds: 50)),
-        );
+          // wait for broadcast tournaments to load
+          await tester.pump(const Duration(milliseconds: 100));
 
-        expect(find.byType(BroadcastGridItem), findsAtLeast(1));
+          expect(find.byType(BroadcastGridItem), findsAtLeast(1));
+
+          // ColorScheme.fromImageProvider creates a Timer of 5s which is not automatically
+          // disposed
+          await tester.pump(const Duration(seconds: 10));
+        });
       },
     );
 
@@ -48,23 +52,29 @@ void main() {
       'Scroll broadcast tournament screen',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const BroadcastListScreen(),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+        mockNetworkImagesFor(() async {
+          final app = await makeTestProviderScopeApp(
+            tester,
+            home: const BroadcastListScreen(),
+            overrides: [
+              lichessClientProvider
+                  .overrideWith((ref) => LichessClient(client, ref)),
+            ],
+          );
 
-        await tester.pumpWidget(app);
+          await tester.pumpWidget(app);
 
-        // let time for request to complete
-        await mockNetworkImagesFor(
-          () => tester.pump(const Duration(milliseconds: 50)),
-        );
+          // wait for broadcast tournaments to load
+          await tester.pump(const Duration(milliseconds: 100));
 
-        tester.scrollUntilVisible(find.text('Past broadcasts'), 200.0);
+          await tester.scrollUntilVisible(find.text('Past broadcasts'), 200.0);
+
+          await tester.pumpAndSettle();
+
+          // ColorScheme.fromImageProvider creates a Timer of 5s which is not automatically
+          // disposed
+          await tester.pump(const Duration(seconds: 10));
+        });
       },
     );
   });
