@@ -1,11 +1,9 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -228,13 +226,12 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor =
+        _colorScheme?.primaryContainer ?? Colors.transparent;
     final titleColor = _colorScheme?.onPrimaryContainer;
     final subTitleColor =
         _colorScheme?.onPrimaryContainer.withValues(alpha: 0.7) ??
             textShade(context, 0.7);
-    final red = _colorScheme != null
-        ? LichessColors.red.harmonizeWith(_colorScheme!.primary)
-        : LichessColors.red;
 
     return AdaptiveInkWell(
       borderRadius: BorderRadius.circular(20),
@@ -251,35 +248,39 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: _colorScheme?.primaryContainer,
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 3,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        foregroundDecoration: BoxDecoration(
-          border: (widget.broadcast.isLive)
-              ? Border.all(color: red.withValues(alpha: 0.8), width: 3.0)
-              : Border.all(color: LichessColors.grey),
-          borderRadius: BorderRadius.circular(20),
+          color: backgroundColor,
+          boxShadow: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : kElevationToShadow[1],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.broadcast.tour.imageUrl != null)
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: FadeInImage.memoryNetwork(
-                  placeholder: transparentImage,
-                  image: widget.broadcast.tour.imageUrl!,
-                ),
-              )
-            else
-              const DefaultBroadcastImage(aspectRatio: 2.0),
-            const SizedBox(height: 4.0),
+            ShaderMask(
+              blendMode: BlendMode.dstOut,
+              shaderCallback: (bounds) {
+                return LinearGradient(
+                  begin: Alignment.center,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    backgroundColor.withValues(alpha: 0.10),
+                    backgroundColor.withValues(alpha: 1.0),
+                  ],
+                  stops: const [0.5, 1.00],
+                  tileMode: TileMode.clamp,
+                ).createShader(bounds);
+              },
+              child: widget.broadcast.tour.imageUrl != null
+                  ? AspectRatio(
+                      aspectRatio: 2.0,
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: transparentImage,
+                        image: widget.broadcast.tour.imageUrl!,
+                      ),
+                    )
+                  : const DefaultBroadcastImage(aspectRatio: 2.0),
+            ),
             if (widget.broadcast.round.startsAt != null ||
                 widget.broadcast.isLive)
               Padding(
