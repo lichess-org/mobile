@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">መነሻ ገጽ</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">እንቆቅልሽ</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">መሣሪያ</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ተመልከት</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ማስተካከያዎች</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ይህን ገጽ ለማየት መግባት አለብዎት።</string>
-  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">የሲስተሙ ቀለም</string>
-  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ትችት</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">እሺ</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">መሳጭ ሞድ</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ምንም ተጠቃሚ እየተከተሉ አይደለም።</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ሁሉም ጨዋታ</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">የቅርብ ጊዜ ፍለጋዎች</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ሰርዝ</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">ውጤት የለም</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">እርግጠኛ ነዎት?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">በተከታታይ ያሸነፉት ቀርቶ ነጥብዎት ይያዛል።</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ይህን እንቆቅልሽ አጋራ</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">የጨዋታውን ሊንክ አጋራ</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ባለጋራ እስኪቀላቀል በመጠበቅ ላይ...</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">የቀጥታ ስርጭት አስተላላፊዎች</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ሰርዝ</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ጨዋታ ይቀላቀሉ</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ትችት</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">መነሻ ገጽ</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">የቀጥታ ስርጭት አስተላላፊዎች</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ይህን ገጽ ለማየት መግባት አለብዎት።</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">ውጤት የለም</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ምንም ተጠቃሚ እየተከተሉ አይደለም።</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">እሺ</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">በተከታታይ ያሸነፉት ቀርቶ ነጥብዎት ይያዛል።</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">እንቆቅልሽ</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">የቅርብ ጊዜ ፍለጋዎች</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">መሳጭ ሞድ</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ማስተካከያዎች</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">የጨዋታውን ሊንክ አጋራ</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ይህን እንቆቅልሽ አጋራ</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">የሆነ ችግር ተፈጥሯል።</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">የሲስተሙ ቀለም</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">መሣሪያ</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ባለጋራ እስኪቀላቀል በመጠበቅ ላይ...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ተመልከት</string>
 </resources>
