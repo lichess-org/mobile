@@ -14,10 +14,10 @@ import 'package:lichess_mobile/src/view/broadcast/dropdown_menu.dart' as fixed;
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class BroadcastScreen extends StatelessWidget {
+class BroadcastRoundScreen extends StatelessWidget {
   final Broadcast broadcast;
 
-  const BroadcastScreen({required this.broadcast});
+  const BroadcastRoundScreen({required this.broadcast});
 
   @override
   Widget build(BuildContext context) {
