@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcasts_list_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
 import '../../test_helpers.dart';
@@ -19,14 +19,14 @@ final client = MockClient((request) {
 });
 
 void main() {
-  group('BroadcastsListScreen', () {
+  group('BroadcastListScreen', () {
     testWidgets(
       'Displays broadcast tournament screen',
       variant: kPlatformVariant,
       (tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const BroadcastsListScreen(),
+          home: const BroadcastListScreen(),
           overrides: [
             lichessClientProvider
                 .overrideWith((ref) => LichessClient(client, ref)),
@@ -50,7 +50,7 @@ void main() {
       (tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const BroadcastsListScreen(),
+          home: const BroadcastListScreen(),
           overrides: [
             lichessClientProvider
                 .overrideWith((ref) => LichessClient(client, ref)),

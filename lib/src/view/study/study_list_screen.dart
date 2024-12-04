@@ -143,7 +143,7 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (!requestedNextPage &&
         _scrollController.position.pixels >=
-            0.75 * _scrollController.position.maxScrollExtent) {
+            _scrollController.position.maxScrollExtent - 300) {
       final studiesList = ref.read(paginatorProvider);
 
       if (!studiesList.isLoading) {

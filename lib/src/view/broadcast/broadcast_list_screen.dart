@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -19,8 +20,8 @@ final _dateFormatter = DateFormat.MMMd().add_Hm();
 final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastsListScreen extends StatelessWidget {
-  const BroadcastsListScreen({super.key});
+class BroadcastListScreen extends StatelessWidget {
+  const BroadcastListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +58,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
@@ -84,8 +85,11 @@ class _BodyState extends ConsumerState<_Body> {
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
 
-    final itemsCount =
-        broadcasts.requireValue.past.length + (broadcasts.isLoading ? 10 : 0);
+    final isTablet = isTabletOrLarger(context);
+    final itemsByRow = isTablet ? 6 : 2;
+    final loadingItems = isTablet ? 36 : 12;
+    final itemsCount = broadcasts.requireValue.past.length +
+        (broadcasts.isLoading ? loadingItems : 0);
 
     return SafeArea(
       child: CustomScrollView(
@@ -94,8 +98,8 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -116,8 +120,8 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -139,13 +143,13 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsByRow,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) => (broadcasts.isLoading &&
-                      index >= itemsCount - 10)
+                      index >= itemsCount - loadingItems)
                   ? Shimmer(
                       child: ShimmerLoading(
                         isLoading: true,
@@ -154,11 +158,6 @@ class _BodyState extends ConsumerState<_Body> {
                     )
                   : BroadcastGridItem(broadcast: broadcasts.value!.past[index]),
               itemCount: itemsCount,
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
             ),
           ),
         ],
@@ -229,6 +228,8 @@ class BroadcastGridItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (broadcast.tour.imageUrl != null)
               AspectRatio(
@@ -240,55 +241,58 @@ class BroadcastGridItem extends StatelessWidget {
               )
             else
               const DefaultBroadcastImage(aspectRatio: 2.0),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 4.0),
+            if (broadcast.round.startsAt != null || broadcast.isLive)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        if (!broadcast.isFinished) ...[
-                          Text(
-                            broadcast.round.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                  color: textShade(context, 0.5),
-                                ),
-                            overflow: TextOverflow.ellipsis,
+                    Text(
+                      _formatDate(broadcast.round.startsAt!),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: textShade(context, 0.5),
                           ),
-                          const SizedBox(width: 4.0),
-                        ],
-                        if (broadcast.isLive)
-                          const Text(
-                            'LIVE',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        else if (broadcast.round.startsAt != null)
-                          StartsRoundDate(
-                            startsAt: broadcast.round.startsAt!,
-                          ),
-                      ],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
-                    const SizedBox(height: 4.0),
-                    Flexible(
-                      child: Text(
-                        broadcast.title,
-                        maxLines: 2,
+                    if (broadcast.isLive) ...[
+                      const SizedBox(width: 4.0),
+                      const Text(
+                        'LIVE',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
                       ),
-                    ),
+                    ],
                   ],
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                broadcast.round.name,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: textShade(context, 0.5),
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            const SizedBox(height: 4.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                broadcast.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -299,27 +303,14 @@ class BroadcastGridItem extends StatelessWidget {
   }
 }
 
-class StartsRoundDate extends ConsumerWidget {
-  final DateTime startsAt;
+String _formatDate(DateTime date) {
+  final diff = date.difference(DateTime.now());
 
-  const StartsRoundDate({required this.startsAt});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final timeBeforeRound = startsAt.difference(DateTime.now());
-
-    return Text(
-      (!timeBeforeRound.isNegative && timeBeforeRound.inDays == 0)
-          ? timeBeforeRound.inHours == 0
-              ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
-              : 'In ${timeBeforeRound.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
-          : timeBeforeRound.inDays < 365
-              ? _dateFormatter.format(startsAt)
-              : _dateFormatterWithYear.format(startsAt),
-      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: textShade(context, 0.5),
-          ),
-      overflow: TextOverflow.ellipsis,
-    );
-  }
+  return (!diff.isNegative && diff.inDays == 0)
+      ? diff.inHours == 0
+          ? 'In ${diff.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
+          : 'In ${diff.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
+      : diff.inDays < 365
+          ? _dateFormatter.format(date)
+          : _dateFormatterWithYear.format(date);
 }
