@@ -91,12 +91,15 @@ BroadcastTournamentData _tournamentDataFromPick(
         format: pick('info', 'format').asStringOrNull(),
         timeControl: pick('info', 'tc').asStringOrNull(),
         players: pick('info', 'players').asStringOrNull(),
+        location: pick('info', 'location').asStringOrNull(),
         dates: pick('dates').letOrNull(
           (pick) => (
             startsAt: pick(0).asDateTimeFromMillisecondsOrThrow(),
             endsAt: pick(1).asDateTimeFromMillisecondsOrNull(),
           ),
         ),
+        website: pick('info', 'website')
+            .letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
       ),
     );
 

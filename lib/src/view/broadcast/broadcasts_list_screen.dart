@@ -174,19 +174,18 @@ class BroadcastGridItem extends StatelessWidget {
 
   BroadcastGridItem.loading()
       : broadcast = Broadcast(
-          tour: BroadcastTournamentData(
-            id: const BroadcastTournamentId(''),
+          tour: const BroadcastTournamentData(
+            id: BroadcastTournamentId(''),
             name: '',
             imageUrl: null,
             description: '',
             information: (
-              format: '',
-              timeControl: '',
-              players: '',
-              dates: (
-                startsAt: DateTime.now(),
-                endsAt: DateTime.now(),
-              ),
+              format: null,
+              timeControl: null,
+              players: null,
+              website: null,
+              location: null,
+              dates: null,
             ),
           ),
           round: BroadcastRound(

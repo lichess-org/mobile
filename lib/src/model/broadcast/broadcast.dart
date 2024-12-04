@@ -59,7 +59,9 @@ typedef BroadcastTournamentInformation = ({
   String? format,
   String? timeControl,
   String? players,
+  String? location,
   BroadcastTournamentDates? dates,
+  Uri? website,
 });
 
 typedef BroadcastTournamentDates = ({
