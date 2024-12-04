@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">홈</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">퍼즐</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">도구</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">관람</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">설정</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">이 페이지를 보려면 로그인해야 합니다.</string>
-  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">시스템 색상</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">모든 대국</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">기물 가리기</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">지우기</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">저장된 수 삭제</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">게임 참가</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">피드백</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">안녕하세요, %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">안녕하세요</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">바리에이션 숨기기</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">홈</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">이 페이지를 보려면 로그인해야 합니다.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">결과 없음</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">팔로우한 사용자가 없습니다.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">확인</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">닉네임에 \"%s\"가 포함된 플레이어</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">드래그한 기물 확대하기</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3분 이내에 최대한 많은 퍼즐을 해결하십시오.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">현재 연속 해결 기록을 잃고 점수는 저장됩니다.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하십시오.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">퍼즐</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">최근 검색어</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">터치 시 진동</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">전체 화면 모드</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">플레이 중 시스템 UI를 숨깁니다. 화면 가장자리의 시스템 내비게이션 제스처가 불편하다면 사용하세요. 대국과 퍼즐 스톰 화면에서 적용됩니다.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">팔로우한 사용자가 없습니다.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">모든 대국</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">최근 검색어</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">지우기</string>
-  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">닉네임에 \"%s\"가 포함된 플레이어</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">결과 없음</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">현재 연속 해결 기록을 잃고 점수는 저장됩니다.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">이 퍼즐 공유</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">설정</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN 공유</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN으로 공유</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">바리에이션 보이기</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">바리에이션 숨기기</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">이 퍼즐 공유</string>
   <string name="showComments" comment="Shown in the analysis screen.">댓글 보기</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">기물 가리기</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">게임 참가</string>
-  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">저장된 수 삭제</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">문제가 발생했습니다.</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">결과 표시</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하십시오.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3분 이내에 최대한 많은 퍼즐을 해결하십시오.</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">안녕하세요, %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">안녕하세요</string>
-  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">드래그한 기물 확대하기</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">바리에이션 보이기</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">문제가 발생했습니다.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">시스템 색상</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">도구</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">관람</string>
 </resources>
