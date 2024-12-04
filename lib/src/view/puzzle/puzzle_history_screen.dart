@@ -105,7 +105,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.7) {
+        _scrollController.position.maxScrollExtent - 300) {
       final currentState = ref.read(puzzleActivityProvider).valueOrNull;
       if (currentState != null && !currentState.isLoading) {
         ref.read(puzzleActivityProvider.notifier).getNext();
