@@ -9,31 +9,89 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'خانه';
+  String get mobileAllGames => 'همه بازی‌ها';
 
   @override
-  String get mobilePuzzlesTab => 'معماها';
+  String get mobileAreYouSure => 'مطمئنید؟';
 
   @override
-  String get mobileToolsTab => 'ابزارها';
+  String get mobileBlindfoldMode => 'چشم‌بسته';
 
   @override
-  String get mobileWatchTab => 'تماشا';
+  String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
 
   @override
-  String get mobileSettingsTab => 'تنظیمات';
+  String get mobileClearButton => 'پاکسازی';
 
   @override
-  String get mobileMustBeLoggedIn => 'برای دیدن این برگه باید وارد شده باشید.';
+  String get mobileCorrespondenceClearSavedMove => 'پاک کردن حرکت ذخیره شده';
 
   @override
-  String get mobileSystemColors => 'رنگ‌های دستگاه';
+  String get mobileCustomGameJoinAGame => 'به بازی بپیوندید';
 
   @override
   String get mobileFeedbackButton => 'بازخورد';
 
   @override
+  String mobileGreeting(String param) {
+    return 'درود، $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'درود';
+
+  @override
+  String get mobileHideVariation => 'بستن شاخه‌ها';
+
+  @override
+  String get mobileHomeTab => 'خانه';
+
+  @override
+  String get mobileLiveStreamers => 'بَرخَط-محتواسازان زنده';
+
+  @override
+  String get mobileMustBeLoggedIn => 'برای دیدن این برگه باید وارد شده باشید.';
+
+  @override
+  String get mobileNoSearchResults => 'بدون پیامد';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'شما هیچ کاربری را دنبال نمی‌کنید.';
+
+  @override
   String get mobileOkButton => 'باشه';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'کاربران با پیوند «$param»';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'بزرگ‌نمودن مهره‌ی کشیده';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را به پایان برسانید؟';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'چیزی برای نمایش نیست، خواهشمندیم پالایه‌ها را دگرسان کنید.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'چیزی برای نمایش نیست، چند دور معماباران بازی کنید.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'هر چند تا معما را که می‌توانید در ۳ دقیقه حل کنید.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'معماهایی را از گشایش دلخواه‌تان بازی کنید، یا جستاری را برگزینید.';
+
+  @override
+  String get mobilePuzzlesTab => 'معماها';
+
+  @override
+  String get mobileRecentSearches => 'واپسین جستجوها';
 
   @override
   String get mobileSettingsHapticFeedback => 'بازخورد لمسی';
@@ -45,101 +103,46 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'رابط کاربری را هنگام بازی پنهان کنید. اگر ناوبری لمسی در لبه‌های دستگاه اذیتتان می‌کند از این استفاده کنید. کارساز برای برگه‌های بازی و معماباران.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'شما هیچ کاربری را دنبال نمی‌کنید.';
-
-  @override
-  String get mobileAllGames => 'همه بازی‌ها';
-
-  @override
-  String get mobileRecentSearches => 'واپسین جستجوها';
-
-  @override
-  String get mobileClearButton => 'پاکسازی';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'کاربران با پیوند «$param»';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'بدون پیامد';
-
-  @override
-  String get mobileAreYouSure => 'مطمئنید؟';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'چیزی برای نمایش نیست، چند دور معماباران بازی کنید.';
-
-  @override
-  String get mobileSharePuzzle => 'همرسانی این معما';
-
-  @override
-  String get mobileShareGameURL => 'همرسانی وب‌نشانی بازی';
+  String get mobileSettingsTab => 'تنظیمات';
 
   @override
   String get mobileShareGamePGN => 'همرسانی PGN';
 
   @override
+  String get mobileShareGameURL => 'همرسانی وب‌نشانی بازی';
+
+  @override
   String get mobileSharePositionAsFEN => 'همرسانی وضعیت، به شکل FEN';
 
   @override
-  String get mobileShowVariations => 'باز کردن شاخه‌ها';
-
-  @override
-  String get mobileHideVariation => 'بستن شاخه‌ها';
+  String get mobileSharePuzzle => 'همرسانی این معما';
 
   @override
   String get mobileShowComments => 'نمایش دیدگاه‌ها';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را به پایان برسانید؟';
+  String get mobileShowResult => 'نمایش پیامد';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'چیزی برای نمایش نیست، خواهشمندیم پالایه‌ها را دگرسان کنید.';
-
-  @override
-  String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'شکیبا برای پیوستن حریف...';
-
-  @override
-  String get mobileBlindfoldMode => 'چشم‌بسته';
-
-  @override
-  String get mobileLiveStreamers => 'بَرخَط-محتواسازان زنده';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'به بازی بپیوندید';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'پاک کردن حرکت ذخیره شده';
+  String get mobileShowVariations => 'باز کردن شاخه‌ها';
 
   @override
   String get mobileSomethingWentWrong => 'مشکلی پیش آمد.';
 
   @override
-  String get mobileShowResult => 'نمایش پیامد';
+  String get mobileSystemColors => 'رنگ‌های دستگاه';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'معماهایی را از گشایش دلخواه‌تان بازی کنید، یا جستاری را برگزینید.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'هر چند تا معما را که می‌توانید در ۳ دقیقه حل کنید.';
+  String get mobileToolsTab => 'ابزارها';
 
   @override
-  String mobileGreeting(String param) {
-    return 'درود، $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'شکیبا برای پیوستن حریف...';
 
   @override
-  String get mobileGreetingWithoutName => 'درود';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'بزرگ‌نمودن مهره‌ی کشیده';
+  String get mobileWatchTab => 'تماشا';
 
   @override
   String get activityActivity => 'فعالیت';
@@ -536,6 +539,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'امتیاز';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get byCPL => 'درنگ هنگام اشتباه';
 
   @override
-  String get openStudy => 'گشودن مطالعه';
-
-  @override
   String get enable => 'فعال سازی';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get unblock => 'لغو انسداد';
-
-  @override
-  String get followsYou => 'شما را می‌دنبالد';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'تبریک! شما این درس را کامل کردید.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

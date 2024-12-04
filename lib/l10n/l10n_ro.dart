@@ -9,31 +9,89 @@ class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Acasă';
+  String get mobileAllGames => 'Toate jocurile';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzle-uri';
+  String get mobileAreYouSure => 'Ești sigur?';
 
   @override
-  String get mobileToolsTab => 'Unelte';
+  String get mobileBlindfoldMode => 'Legat la ochi';
 
   @override
-  String get mobileWatchTab => 'Vizionează';
+  String get mobileCancelTakebackOffer => 'Anulați propunerea de revanșă';
 
   @override
-  String get mobileSettingsTab => 'Setări';
+  String get mobileClearButton => 'Resetare';
 
   @override
-  String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
+  String get mobileCorrespondenceClearSavedMove => 'Șterge mutarea salvată';
 
   @override
-  String get mobileSystemColors => 'Culori sistem';
+  String get mobileCustomGameJoinAGame => 'Alătură-te unui joc';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Salut, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Salut';
+
+  @override
+  String get mobileHideVariation => 'Ascunde variațiile';
+
+  @override
+  String get mobileHomeTab => 'Acasă';
+
+  @override
+  String get mobileLiveStreamers => 'Fluxuri live';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
+
+  @override
+  String get mobileNoSearchResults => 'Niciun rezultat';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Nu urmărești niciun utilizator.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Jucători cu \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Mărește piesa trasă';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nimic de afișat, vă rugăm să schimbați filtrele';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nimic de arătat. Jucați câteva partide de Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Rezolvă cât mai multe puzzle-uri în 3 minute.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Îți vei pierde streak-ul actual iar scorul va fi salvat.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Joacă puzzle-uri din deschiderile tale preferate sau alege o temă.';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzle-uri';
+
+  @override
+  String get mobileRecentSearches => 'Căutări recente';
 
   @override
   String get mobileSettingsHapticFeedback => 'Control tactil';
@@ -45,101 +103,46 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Ascunde interfața de utilizator a sistemului în timpul jocului. Folosește această opțiune dacă ești deranjat de gesturile de navigare ale sistemului la marginile ecranului. Se aplică pentru ecranele de joc și Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Nu urmărești niciun utilizator.';
-
-  @override
-  String get mobileAllGames => 'Toate jocurile';
-
-  @override
-  String get mobileRecentSearches => 'Căutări recente';
-
-  @override
-  String get mobileClearButton => 'Resetare';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Jucători cu \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Niciun rezultat';
-
-  @override
-  String get mobileAreYouSure => 'Ești sigur?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Îți vei pierde streak-ul actual iar scorul va fi salvat.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nimic de arătat. Jucați câteva partide de Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Distribuie acest puzzle';
-
-  @override
-  String get mobileShareGameURL => 'Distribuie URL-ul jocului';
+  String get mobileSettingsTab => 'Setări';
 
   @override
   String get mobileShareGamePGN => 'Distribuie PGN';
 
   @override
+  String get mobileShareGameURL => 'Distribuie URL-ul jocului';
+
+  @override
   String get mobileSharePositionAsFEN => 'Distribuie poziția ca FEN';
 
   @override
-  String get mobileShowVariations => 'Arată variațiile';
-
-  @override
-  String get mobileHideVariation => 'Ascunde variațiile';
+  String get mobileSharePuzzle => 'Distribuie acest puzzle';
 
   @override
   String get mobileShowComments => 'Afişează сomentarii';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';
+  String get mobileShowResult => 'Arată rezultatul';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nimic de afișat, vă rugăm să schimbați filtrele';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Anulați propunerea de revanșă';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'În așteptarea unui jucător...';
-
-  @override
-  String get mobileBlindfoldMode => 'Legat la ochi';
-
-  @override
-  String get mobileLiveStreamers => 'Fluxuri live';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Alătură-te unui joc';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Șterge mutarea salvată';
+  String get mobileShowVariations => 'Arată variațiile';
 
   @override
   String get mobileSomethingWentWrong => 'Ceva nu a mers bine. :(';
 
   @override
-  String get mobileShowResult => 'Arată rezultatul';
+  String get mobileSystemColors => 'Culori sistem';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Joacă puzzle-uri din deschiderile tale preferate sau alege o temă.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Rezolvă cât mai multe puzzle-uri în 3 minute.';
+  String get mobileToolsTab => 'Unelte';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Salut, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'În așteptarea unui jucător...';
 
   @override
-  String get mobileGreetingWithoutName => 'Salut';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Mărește piesa trasă';
+  String get mobileWatchTab => 'Vizionează';
 
   @override
   String get activityActivity => 'Activitate';
@@ -554,6 +557,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastStandings => 'Clasament';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -582,6 +588,36 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Scor';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2017,9 +2053,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get byCPL => 'După CPL';
 
   @override
-  String get openStudy => 'Studiu deschis';
-
-  @override
   String get enable => 'Activează';
 
   @override
@@ -2685,9 +2718,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get unblock => 'Deblocare';
-
-  @override
-  String get followsYou => 'Vă urmărește';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5491,6 +5521,11 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Felicitări! Ai terminat această lecție.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

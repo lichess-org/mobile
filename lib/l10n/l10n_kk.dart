@@ -9,31 +9,89 @@ class AppLocalizationsKk extends AppLocalizations {
   AppLocalizationsKk([String locale = 'kk']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Үйге';
+  String get mobileAllGames => 'Барлық ойындар';
 
   @override
-  String get mobilePuzzlesTab => 'Жұмбақ';
+  String get mobileAreYouSure => 'Растайсыз ба?';
 
   @override
-  String get mobileToolsTab => 'Құрал';
+  String get mobileBlindfoldMode => 'Blindfold';
 
   @override
-  String get mobileWatchTab => 'Бақылау';
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
-  String get mobileSettingsTab => 'Баптау';
+  String get mobileClearButton => 'Өшіру';
 
   @override
-  String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileSystemColors => 'Жүйе түстері';
+  String get mobileCustomGameJoinAGame => 'Join a game';
 
   @override
   String get mobileFeedbackButton => 'Пікір айту';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Ассаламу ғалейкүм, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Ассаламу ғалейкүм';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileHomeTab => 'Үйге';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
+
+  @override
+  String get mobileNoSearchResults => 'Нәтиже жоқ';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Сіз әзір ешкіге серік емессіз.';
+
+  @override
   String get mobileOkButton => 'Иә';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Атауында \"$param\" бар ойыншылар';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '3 минутта барынша көп жұмбақ шешіп көр.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Қазіргі тізбектен айрыласыз, нәтиже сақталады.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Өз бастауларыңызға негізделген жұмбақтар, не кез-келген тақырып.';
+
+  @override
+  String get mobilePuzzlesTab => 'Жұмбақ';
+
+  @override
+  String get mobileRecentSearches => 'Кейінгі іздеулер';
 
   @override
   String get mobileSettingsHapticFeedback => 'Дірілмен білдіру';
@@ -45,101 +103,46 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Ойын кезінде жүйенің элементтерін жасыру. Экран жиегіндегі жүйенің навигация қимыл белгілері сізге кедергі келтірсе - қолданарлық жағдай. Ойын мен Жұмбақ Дауылы кезінде жұмыс істейді.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Сіз әзір ешкіге серік емессіз.';
-
-  @override
-  String get mobileAllGames => 'Барлық ойындар';
-
-  @override
-  String get mobileRecentSearches => 'Кейінгі іздеулер';
-
-  @override
-  String get mobileClearButton => 'Өшіру';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Атауында \"$param\" бар ойыншылар';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Нәтиже жоқ';
-
-  @override
-  String get mobileAreYouSure => 'Растайсыз ба?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Қазіргі тізбектен айрыласыз, нәтиже сақталады.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.';
-
-  @override
-  String get mobileSharePuzzle => 'Бұл жұмбақты тарату';
-
-  @override
-  String get mobileShareGameURL => 'Ойын сілтемесін тарату';
+  String get mobileSettingsTab => 'Баптау';
 
   @override
   String get mobileShareGamePGN => 'PGN тарату';
 
   @override
+  String get mobileShareGameURL => 'Ойын сілтемесін тарату';
+
+  @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileSharePuzzle => 'Бұл жұмбақты тарату';
 
   @override
   String get mobileShowComments => 'Show comments';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobileShowResult => 'Нәтижесін көру';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
-
-  @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileShowVariations => 'Show variations';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Нәтижесін көру';
+  String get mobileSystemColors => 'Жүйе түстері';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Өз бастауларыңызға негізделген жұмбақтар, не кез-келген тақырып.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => '3 минутта барынша көп жұмбақ шешіп көр.';
+  String get mobileToolsTab => 'Құрал';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Ассаламу ғалейкүм, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileGreetingWithoutName => 'Ассаламу ғалейкүм';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Бақылау';
 
   @override
   String get activityActivity => 'Белсенділігі';
@@ -536,6 +539,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get byCPL => 'CPL сәйкес';
 
   @override
-  String get openStudy => 'Зерттеуді ашу';
-
-  @override
   String get enable => 'Қосу';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get unblock => 'Бұғаттан шығару';
-
-  @override
-  String get followsYou => 'Сізге серік';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Құтты болсын! Сіз бұл сабақты бітірдіңіз.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

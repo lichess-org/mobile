@@ -9,31 +9,89 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileAllGames => 'All games';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobileAreYouSure => 'Jste si jistý?';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileBlindfoldMode => 'Páska přes oči';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileCancelTakebackOffer => 'Zrušit nabídnutí vrácení tahu';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileClearButton => 'Vymazat';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileCorrespondenceClearSavedMove => 'Vymazat uložené tahy';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileCustomGameJoinAGame => 'Připojit se ke hře';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Ahoj, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Ahoj';
+
+  @override
+  String get mobileHideVariation => 'Schovej variace';
+
+  @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobileLiveStreamers => 'Živé vysílání';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileNoSearchResults => 'Žádné výsledky';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Hráči s \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Chceš ukončit tento běh?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nic k zobrazení, prosím změn filtry';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy Bouřky úloh.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Vyřeš co nejvíce úloh co dokážeš za 3 minuty.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Hrej úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
 
   @override
   String get mobileSettingsHapticFeedback => 'Haptic feedback';
@@ -45,101 +103,46 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
-
-  @override
-  String get mobileAllGames => 'All games';
-
-  @override
-  String get mobileRecentSearches => 'Recent searches';
-
-  @override
-  String get mobileClearButton => 'Vymazat';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Hráči s \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Žádné výsledky';
-
-  @override
-  String get mobileAreYouSure => 'Jste si jistý?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy Bouřky úloh.';
-
-  @override
-  String get mobileSharePuzzle => 'Sdílej tuto úlohu';
-
-  @override
-  String get mobileShareGameURL => 'Sdílet URL hry';
+  String get mobileSettingsTab => 'Settings';
 
   @override
   String get mobileShareGamePGN => 'Sdílet PGN';
 
   @override
+  String get mobileShareGameURL => 'Sdílet URL hry';
+
+  @override
   String get mobileSharePositionAsFEN => 'Sdílet pozici jako FEN';
 
   @override
-  String get mobileShowVariations => 'Zobraz variace';
-
-  @override
-  String get mobileHideVariation => 'Schovej variace';
+  String get mobileSharePuzzle => 'Sdílej tuto úlohu';
 
   @override
   String get mobileShowComments => 'Zobraz komentáře';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Chceš ukončit tento běh?';
+  String get mobileShowResult => 'Zobrazit výsledky';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nic k zobrazení, prosím změn filtry';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Zrušit nabídnutí vrácení tahu';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
-
-  @override
-  String get mobileBlindfoldMode => 'Páska přes oči';
-
-  @override
-  String get mobileLiveStreamers => 'Živé vysílání';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Připojit se ke hře';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Vymazat uložené tahy';
+  String get mobileShowVariations => 'Zobraz variace';
 
   @override
   String get mobileSomethingWentWrong => 'Něco se pokazilo.';
 
   @override
-  String get mobileShowResult => 'Zobrazit výsledky';
+  String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Hrej úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Vyřeš co nejvíce úloh co dokážeš za 3 minuty.';
+  String get mobileToolsTab => 'Tools';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Ahoj, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
 
   @override
-  String get mobileGreetingWithoutName => 'Ahoj';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Watch';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -572,6 +575,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -600,6 +606,36 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2041,9 +2077,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get byCPL => 'Dle CPL';
 
   @override
-  String get openStudy => 'Otevřít studii';
-
-  @override
   String get enable => 'Povolit analýzu';
 
   @override
@@ -2709,9 +2742,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get unblock => 'Odblokovat';
-
-  @override
-  String get followsYou => 'Vás sleduje';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5559,6 +5589,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Blahopřejeme! Dokončili jste tuto lekci.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

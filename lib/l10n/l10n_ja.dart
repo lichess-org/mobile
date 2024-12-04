@@ -9,31 +9,89 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'ホーム';
+  String get mobileAllGames => 'すべて';
 
   @override
-  String get mobilePuzzlesTab => '問題';
+  String get mobileAreYouSure => '本当にいいですか？';
 
   @override
-  String get mobileToolsTab => 'ツール';
+  String get mobileBlindfoldMode => 'めかくしモード';
 
   @override
-  String get mobileWatchTab => '見る';
+  String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
-  String get mobileSettingsTab => '設定';
+  String get mobileClearButton => 'クリア';
 
   @override
-  String get mobileMustBeLoggedIn => 'このページを見るにはログインが必要です。';
+  String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
 
   @override
-  String get mobileSystemColors => 'OS と同じ色設定';
+  String get mobileCustomGameJoinAGame => 'ゲームに参加';
 
   @override
   String get mobileFeedbackButton => 'フィードバック';
 
   @override
+  String mobileGreeting(String param) {
+    return 'こんにちは $param さん';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'こんにちは';
+
+  @override
+  String get mobileHideVariation => '変化手順を隠す';
+
+  @override
+  String get mobileHomeTab => 'ホーム';
+
+  @override
+  String get mobileLiveStreamers => 'ライブ配信者';
+
+  @override
+  String get mobileMustBeLoggedIn => 'このページを見るにはログインが必要です。';
+
+  @override
+  String get mobileNoSearchResults => '検索結果なし';
+
+  @override
+  String get mobileNotFollowingAnyUser => '誰もフォローしていません。';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '「$param」を含むプレイヤー';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => '条件に合う問題がありません。フィルターを変更してください';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'データがありません。まず問題ストームをプレイして。';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '3 分間でできるだけ多くの問題を解いてください。';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => '現在の連続正解が終わり、スコアが保存されます。';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'お気に入りのオープニングやテーマの問題が選べます。';
+
+  @override
+  String get mobilePuzzlesTab => '問題';
+
+  @override
+  String get mobileRecentSearches => '最近の検索';
 
   @override
   String get mobileSettingsHapticFeedback => '振動フィードバック';
@@ -45,101 +103,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => '対局中にシステム用の UI を隠します。画面端のナビゲーションなどがじゃまな人はこれを使ってください。対局と問題ストームの画面に適用されます。';
 
   @override
-  String get mobileNotFollowingAnyUser => '誰もフォローしていません。';
-
-  @override
-  String get mobileAllGames => 'すべて';
-
-  @override
-  String get mobileRecentSearches => '最近の検索';
-
-  @override
-  String get mobileClearButton => 'クリア';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '「$param」を含むプレイヤー';
-  }
-
-  @override
-  String get mobileNoSearchResults => '検索結果なし';
-
-  @override
-  String get mobileAreYouSure => '本当にいいですか？';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '現在の連続正解が終わり、スコアが保存されます。';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'データがありません。まず問題ストームをプレイして。';
-
-  @override
-  String get mobileSharePuzzle => 'この問題を共有する';
-
-  @override
-  String get mobileShareGameURL => 'ゲーム URLを共有';
+  String get mobileSettingsTab => '設定';
 
   @override
   String get mobileShareGamePGN => 'PGN を共有';
 
   @override
+  String get mobileShareGameURL => 'ゲーム URLを共有';
+
+  @override
   String get mobileSharePositionAsFEN => '局面を FEN で共有';
 
   @override
-  String get mobileShowVariations => '変化手順を表示';
-
-  @override
-  String get mobileHideVariation => '変化手順を隠す';
+  String get mobileSharePuzzle => 'この問題を共有する';
 
   @override
   String get mobileShowComments => 'コメントを表示';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';
+  String get mobileShowResult => '結果を表示';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '条件に合う問題がありません。フィルターを変更してください';
-
-  @override
-  String get mobileCancelTakebackOffer => '待ったをキャンセル';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
-
-  @override
-  String get mobileBlindfoldMode => 'めかくしモード';
-
-  @override
-  String get mobileLiveStreamers => 'ライブ配信者';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'ゲームに参加';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
+  String get mobileShowVariations => '変化手順を表示';
 
   @override
   String get mobileSomethingWentWrong => '問題が発生しました。';
 
   @override
-  String get mobileShowResult => '結果を表示';
+  String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'お気に入りのオープニングやテーマの問題が選べます。';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => '3 分間でできるだけ多くの問題を解いてください。';
+  String get mobileToolsTab => 'ツール';
 
   @override
-  String mobileGreeting(String param) {
-    return 'こんにちは $param さん';
-  }
+  String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
 
   @override
-  String get mobileGreetingWithoutName => 'こんにちは';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
+  String get mobileWatchTab => '見る';
 
   @override
   String get activityActivity => '活動';
@@ -518,6 +521,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastStandings => '順位';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '他のオプションは $param にあります';
   }
@@ -546,6 +552,36 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'スコア';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1969,9 +2005,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get byCPL => '評価値で';
 
   @override
-  String get openStudy => '研究を開く';
-
-  @override
   String get enable => '解析する';
 
   @override
@@ -2637,9 +2670,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get unblock => 'ブロックを外す';
-
-  @override
-  String get followsYou => 'あなたをフォローしています';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5385,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'おめでとう ！　このレッスンを修了しました。';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

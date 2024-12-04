@@ -9,31 +9,89 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Trang chủ';
+  String get mobileAllGames => 'Tất cả ván đấu';
 
   @override
-  String get mobilePuzzlesTab => 'Câu đố';
+  String get mobileAreYouSure => 'Bạn chắc chứ?';
 
   @override
-  String get mobileToolsTab => 'Công cụ';
+  String get mobileBlindfoldMode => 'Bịt mắt';
 
   @override
-  String get mobileWatchTab => 'Xem';
+  String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
-  String get mobileSettingsTab => 'Cài đặt';
+  String get mobileClearButton => 'Xóa';
 
   @override
-  String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
+  String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
 
   @override
-  String get mobileSystemColors => 'Màu hệ thống';
+  String get mobileCustomGameJoinAGame => 'Tham gia một ván cờ';
 
   @override
   String get mobileFeedbackButton => 'Phản hồi';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Xin chào, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Xin chào';
+
+  @override
+  String get mobileHideVariation => 'Ẩn các biến';
+
+  @override
+  String get mobileHomeTab => 'Trang chủ';
+
+  @override
+  String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
+
+  @override
+  String get mobileNoSearchResults => 'Không có kết quả';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'chơi với \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Không có gì để hiển thị, vui lòng thay đổi bộ lọc';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Không có gì để xem. Chơi một vài ván Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Giải càng nhiều câu đố càng tốt trong 3 phút.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Giải câu đố từ những khai cuộc yêu thích của bạn hoặc chọn một chủ đề.';
+
+  @override
+  String get mobilePuzzlesTab => 'Câu đố';
+
+  @override
+  String get mobileRecentSearches => 'Tìm kiếm gần đây';
 
   @override
   String get mobileSettingsHapticFeedback => 'Rung phản hồi';
@@ -45,101 +103,46 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Ẩn UI hệ thống trong khi chơi. Sử dụng điều này nếu bạn bị làm phiền bởi các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình. Áp dụng cho màn hình ván đấu và Puzzle Strom.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
-
-  @override
-  String get mobileAllGames => 'Tất cả ván đấu';
-
-  @override
-  String get mobileRecentSearches => 'Tìm kiếm gần đây';
-
-  @override
-  String get mobileClearButton => 'Xóa';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'chơi với \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Không có kết quả';
-
-  @override
-  String get mobileAreYouSure => 'Bạn chắc chứ?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Không có gì để xem. Chơi một vài ván Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Chia sẻ câu đố này';
-
-  @override
-  String get mobileShareGameURL => 'Chia sẻ URL ván cờ';
+  String get mobileSettingsTab => 'Cài đặt';
 
   @override
   String get mobileShareGamePGN => 'Chia sẻ tập tin PGN';
 
   @override
+  String get mobileShareGameURL => 'Chia sẻ URL ván cờ';
+
+  @override
   String get mobileSharePositionAsFEN => 'Chia sẻ thế cờ dạng FEN';
 
   @override
-  String get mobileShowVariations => 'Hiện các biến';
-
-  @override
-  String get mobileHideVariation => 'Ẩn các biến';
+  String get mobileSharePuzzle => 'Chia sẻ câu đố này';
 
   @override
   String get mobileShowComments => 'Hiển thị bình luận';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
+  String get mobileShowResult => 'Xem kết quả';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Không có gì để hiển thị, vui lòng thay đổi bộ lọc';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
-
-  @override
-  String get mobileBlindfoldMode => 'Bịt mắt';
-
-  @override
-  String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Tham gia một ván cờ';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
+  String get mobileShowVariations => 'Hiện các biến';
 
   @override
   String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
 
   @override
-  String get mobileShowResult => 'Xem kết quả';
+  String get mobileSystemColors => 'Màu hệ thống';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Giải câu đố từ những khai cuộc yêu thích của bạn hoặc chọn một chủ đề.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Giải càng nhiều câu đố càng tốt trong 3 phút.';
+  String get mobileToolsTab => 'Công cụ';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Xin chào, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
 
   @override
-  String get mobileGreetingWithoutName => 'Xin chào';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
+  String get mobileWatchTab => 'Xem';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -518,6 +521,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastStandings => 'Bảng xếp hạng';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Thêm tùy chọn trên $param';
   }
@@ -546,6 +552,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Điểm số';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1969,9 +2005,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get byCPL => 'Theo phần trăm mất tốt (CPL)';
 
   @override
-  String get openStudy => 'Mở nghiên cứu';
-
-  @override
   String get enable => 'Bật';
 
   @override
@@ -2637,9 +2670,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get unblock => 'Bỏ chặn';
-
-  @override
-  String get followsYou => 'Theo dõi bạn';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5385,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Chúc mừng! Bạn đã hoàn thành bài học này.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

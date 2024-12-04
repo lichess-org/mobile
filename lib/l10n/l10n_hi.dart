@@ -9,31 +9,89 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'होम';
+  String get mobileAllGames => 'सारे गेम्स';
 
   @override
-  String get mobilePuzzlesTab => 'पज़ल';
+  String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
 
   @override
-  String get mobileToolsTab => 'टूल्स';
+  String get mobileBlindfoldMode => 'Blindfold';
 
   @override
-  String get mobileWatchTab => 'देखें';
+  String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
 
   @override
-  String get mobileSettingsTab => 'सेटिंग';
+  String get mobileClearButton => 'Clear';
 
   @override
-  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको login करना होगा';
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileCustomGameJoinAGame => 'Join a game';
 
   @override
   String get mobileFeedbackButton => 'फीडबैक';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobileHideVariation => 'वेरिएशन छुपाए';
+
+  @override
+  String get mobileHomeTab => 'होम';
+
+  @override
+  String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
+
+  @override
+  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको login करना होगा';
+
+  @override
+  String get mobileNoSearchResults => 'कोई परिणाम नहीं';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
   String get mobileOkButton => 'ओके';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzlesTab => 'पज़ल';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
 
   @override
   String get mobileSettingsHapticFeedback => 'कंपन फीडबैक';
@@ -45,101 +103,46 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
-
-  @override
-  String get mobileAllGames => 'सारे गेम्स';
-
-  @override
-  String get mobileRecentSearches => 'Recent searches';
-
-  @override
-  String get mobileClearButton => 'Clear';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'कोई परिणाम नहीं';
-
-  @override
-  String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'पज़ल शरीर करें';
-
-  @override
-  String get mobileShareGameURL => 'गेम URL शेयर करें';
+  String get mobileSettingsTab => 'सेटिंग';
 
   @override
   String get mobileShareGamePGN => 'PGN शेयर करें';
 
   @override
+  String get mobileShareGameURL => 'गेम URL शेयर करें';
+
+  @override
   String get mobileSharePositionAsFEN => 'पोजीशन FEN के रूप में शेयर करें';
 
   @override
-  String get mobileShowVariations => 'वेरिएशन देखें';
-
-  @override
-  String get mobileHideVariation => 'वेरिएशन छुपाए';
+  String get mobileSharePuzzle => 'पज़ल शरीर करें';
 
   @override
   String get mobileShowComments => 'कमेंट्स देखें';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobileShowResult => 'Show result';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
-
-  @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
-  String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileShowVariations => 'वेरिएशन देखें';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobileToolsTab => 'टूल्स';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hello, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'देखें';
 
   @override
   String get activityActivity => 'कार्यकलाप';
@@ -536,6 +539,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1991,9 +2027,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get byCPL => 'CPL द्वारा';
 
   @override
-  String get openStudy => 'अध्ययन खोलो';
-
-  @override
   String get enable => 'सक्षम करें';
 
   @override
@@ -2659,9 +2692,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get unblock => 'अवस्र्द्ध (ब्लॉक) न करें';
-
-  @override
-  String get followsYou => 'आपका अनुसरण कर रहे हैं';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5421,6 +5451,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'बधाई हो! आपने यह सबक पूरा कर लिया है।';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

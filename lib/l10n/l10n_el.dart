@@ -9,31 +9,89 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Αρχική';
+  String get mobileAllGames => 'Όλα τα παιχνίδια';
 
   @override
-  String get mobilePuzzlesTab => 'Γρίφοι';
+  String get mobileAreYouSure => 'Είστε σίγουροι;';
 
   @override
-  String get mobileToolsTab => 'Εργαλεία';
+  String get mobileBlindfoldMode => 'Τυφλό';
 
   @override
-  String get mobileWatchTab => 'Δείτε';
+  String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
 
   @override
-  String get mobileSettingsTab => 'Ρυθμίσεις';
+  String get mobileClearButton => 'Εκκαθάριση';
 
   @override
-  String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
+  String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
 
   @override
-  String get mobileSystemColors => 'Χρώματα συστήματος';
+  String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παιχνίδι';
 
   @override
   String get mobileFeedbackButton => 'Πείτε μας τη γνώμη σας';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Καλωσορίσατε, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Καλωσορίσατε';
+
+  @override
+  String get mobileHideVariation => 'Απόκρυψη παραλλαγής';
+
+  @override
+  String get mobileHomeTab => 'Αρχική';
+
+  @override
+  String get mobileLiveStreamers => 'Streamers ζωντανά αυτή τη στιγμή';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
+
+  @override
+  String get mobileNoSearchResults => 'Δεν βρέθηκαν αποτελέσματα';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Δεν ακολουθείτε κανέναν χρήστη.';
+
+  @override
   String get mobileOkButton => 'ΟΚ';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Παίκτες με \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Μεγέθυνση του επιλεγμένου κομματιού';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Θέλετε να τερματίσετε αυτόν τον γύρο;';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Δεν υπάρχουν γρίφοι για τις συγκεκριμένες επιλογές φίλτρων, παρακαλώ δοκιμάστε κάποιες άλλες';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Δεν υπάρχουν στοιχεία. Παίξτε κάποιους γύρους Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Παίξτε γρίφους από τα αγαπημένα σας ανοίγματα, ή επιλέξτε θέμα.';
+
+  @override
+  String get mobilePuzzlesTab => 'Γρίφοι';
+
+  @override
+  String get mobileRecentSearches => 'Πρόσφατες αναζητήσεις';
 
   @override
   String get mobileSettingsHapticFeedback => 'Απόκριση δόνησης';
@@ -45,101 +103,46 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Αποκρύπτει τη διεπαφή του συστήματος όσο παίζεται. Ενεργοποιήστε εάν σας ενοχλούν οι χειρονομίες πλοήγησης του συστήματος στα άκρα της οθόνης. Ισχύει για την προβολή παιχνιδιού και το Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Δεν ακολουθείτε κανέναν χρήστη.';
-
-  @override
-  String get mobileAllGames => 'Όλα τα παιχνίδια';
-
-  @override
-  String get mobileRecentSearches => 'Πρόσφατες αναζητήσεις';
-
-  @override
-  String get mobileClearButton => 'Εκκαθάριση';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Παίκτες με \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Δεν βρέθηκαν αποτελέσματα';
-
-  @override
-  String get mobileAreYouSure => 'Είστε σίγουροι;';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Δεν υπάρχουν στοιχεία. Παίξτε κάποιους γύρους Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Κοινοποίηση γρίφου';
-
-  @override
-  String get mobileShareGameURL => 'Κοινοποίηση URL παιχνιδιού';
+  String get mobileSettingsTab => 'Ρυθμίσεις';
 
   @override
   String get mobileShareGamePGN => 'Κοινοποίηση PGN';
 
   @override
+  String get mobileShareGameURL => 'Κοινοποίηση URL παιχνιδιού';
+
+  @override
   String get mobileSharePositionAsFEN => 'Κοινοποίηση θέσης ως FEN';
 
   @override
-  String get mobileShowVariations => 'Εμφάνιση παραλλαγών';
-
-  @override
-  String get mobileHideVariation => 'Απόκρυψη παραλλαγής';
+  String get mobileSharePuzzle => 'Κοινοποίηση γρίφου';
 
   @override
   String get mobileShowComments => 'Εμφάνιση σχολίων';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Θέλετε να τερματίσετε αυτόν τον γύρο;';
+  String get mobileShowResult => 'Εμφάνιση αποτελέσματος';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Δεν υπάρχουν γρίφοι για τις συγκεκριμένες επιλογές φίλτρων, παρακαλώ δοκιμάστε κάποιες άλλες';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Αναμονή για αντίπαλο...';
-
-  @override
-  String get mobileBlindfoldMode => 'Τυφλό';
-
-  @override
-  String get mobileLiveStreamers => 'Streamers ζωντανά αυτή τη στιγμή';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παιχνίδι';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
+  String get mobileShowVariations => 'Εμφάνιση παραλλαγών';
 
   @override
   String get mobileSomethingWentWrong => 'Κάτι πήγε στραβά.';
 
   @override
-  String get mobileShowResult => 'Εμφάνιση αποτελέσματος';
+  String get mobileSystemColors => 'Χρώματα συστήματος';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Παίξτε γρίφους από τα αγαπημένα σας ανοίγματα, ή επιλέξτε θέμα.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.';
+  String get mobileToolsTab => 'Εργαλεία';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Καλωσορίσατε, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Αναμονή για αντίπαλο...';
 
   @override
-  String get mobileGreetingWithoutName => 'Καλωσορίσατε';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Μεγέθυνση του επιλεγμένου κομματιού';
+  String get mobileWatchTab => 'Δείτε';
 
   @override
   String get activityActivity => 'Δραστηριότητα';
@@ -536,6 +539,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastStandings => 'Κατάταξη';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Βαθμολογία';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get byCPL => 'Με CPL';
 
   @override
-  String get openStudy => 'Άνοιγμα μελέτης';
-
-  @override
   String get enable => 'Ενεργοποίηση';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get unblock => 'Κατάργηση απόκλεισης';
-
-  @override
-  String get followsYou => 'Σας ακολουθεί';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Συγχαρητήρια! Ολοκληρώσατε αυτό το μάθημα.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

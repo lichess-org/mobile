@@ -9,31 +9,89 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileHomeTab => '主页';
+  String get mobileAllGames => '所有对局';
 
   @override
-  String get mobilePuzzlesTab => '谜题';
+  String get mobileAreYouSure => '你确定吗？';
 
   @override
-  String get mobileToolsTab => '工具';
+  String get mobileBlindfoldMode => '盲棋';
 
   @override
-  String get mobileWatchTab => '观看';
+  String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
-  String get mobileSettingsTab => '设置';
+  String get mobileClearButton => '清空';
 
   @override
-  String get mobileMustBeLoggedIn => '您必须登录才能浏览此页面。';
+  String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
 
   @override
-  String get mobileSystemColors => '系统颜色';
+  String get mobileCustomGameJoinAGame => '加入一局游戏';
 
   @override
   String get mobileFeedbackButton => '问题反馈';
 
   @override
+  String mobileGreeting(String param) {
+    return '你好，$param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => '你好！';
+
+  @override
+  String get mobileHideVariation => '隐藏变着';
+
+  @override
+  String get mobileHomeTab => '主页';
+
+  @override
+  String get mobileLiveStreamers => '主播';
+
+  @override
+  String get mobileMustBeLoggedIn => '您必须登录才能浏览此页面。';
+
+  @override
+  String get mobileNoSearchResults => '无结果';
+
+  @override
+  String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
+
+  @override
   String get mobileOkButton => '好';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '包含\"$param\"名称的棋手';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => '你想结束这组吗？';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => '没有显示，请更改过滤器';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => '没有记录。 请下几组 Puzzle Storm。';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '在3分钟内解决尽可能多的谜题。';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => '你将失去你目前的连胜，你的分数将被保存。';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => '从你最喜欢的开局解决谜题，或选择一个主题。';
+
+  @override
+  String get mobilePuzzlesTab => '谜题';
+
+  @override
+  String get mobileRecentSearches => '最近搜索';
 
   @override
   String get mobileSettingsHapticFeedback => '震动反馈';
@@ -45,101 +103,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => '下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和 Puzzle Storm 界面。';
 
   @override
-  String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
-
-  @override
-  String get mobileAllGames => '所有对局';
-
-  @override
-  String get mobileRecentSearches => '最近搜索';
-
-  @override
-  String get mobileClearButton => '清空';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '包含\"$param\"名称的棋手';
-  }
-
-  @override
-  String get mobileNoSearchResults => '无结果';
-
-  @override
-  String get mobileAreYouSure => '你确定吗？';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '你将失去你目前的连胜，你的分数将被保存。';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => '没有记录。 请下几组 Puzzle Storm。';
-
-  @override
-  String get mobileSharePuzzle => '分享这个谜题';
-
-  @override
-  String get mobileShareGameURL => '分享棋局链接';
+  String get mobileSettingsTab => '设置';
 
   @override
   String get mobileShareGamePGN => '分享 PGN';
 
   @override
+  String get mobileShareGameURL => '分享棋局链接';
+
+  @override
   String get mobileSharePositionAsFEN => '保存局面为 FEN';
 
   @override
-  String get mobileShowVariations => '显示变着';
-
-  @override
-  String get mobileHideVariation => '隐藏变着';
+  String get mobileSharePuzzle => '分享这个谜题';
 
   @override
   String get mobileShowComments => '显示评论';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => '你想结束这组吗？';
+  String get mobileShowResult => '显示结果';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '没有显示，请更改过滤器';
-
-  @override
-  String get mobileCancelTakebackOffer => '取消悔棋请求';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '正在等待对手加入...';
-
-  @override
-  String get mobileBlindfoldMode => '盲棋';
-
-  @override
-  String get mobileLiveStreamers => '主播';
-
-  @override
-  String get mobileCustomGameJoinAGame => '加入一局游戏';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
+  String get mobileShowVariations => '显示变着';
 
   @override
   String get mobileSomethingWentWrong => '出了一些问题。';
 
   @override
-  String get mobileShowResult => '显示结果';
+  String get mobileSystemColors => '系统颜色';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '从你最喜欢的开局解决谜题，或选择一个主题。';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => '在3分钟内解决尽可能多的谜题。';
+  String get mobileToolsTab => '工具';
 
   @override
-  String mobileGreeting(String param) {
-    return '你好，$param';
-  }
+  String get mobileWaitingForOpponentToJoin => '正在等待对手加入...';
 
   @override
-  String get mobileGreetingWithoutName => '你好！';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
+  String get mobileWatchTab => '观看';
 
   @override
   String get activityActivity => '动态';
@@ -519,6 +522,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -547,6 +553,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1970,9 +2006,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get byCPL => '按厘兵损失';
 
   @override
-  String get openStudy => '进入研讨室';
-
-  @override
   String get enable => '启用';
 
   @override
@@ -2638,9 +2671,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get unblock => '移出黑名单';
-
-  @override
-  String get followsYou => '关注了你';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5358,6 +5388,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyYouCompletedThisLesson => '恭喜！你完成了这个课程！';
 
   @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5403,31 +5438,89 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw(): super('zh_TW');
 
   @override
-  String get mobileHomeTab => '首頁';
+  String get mobileAllGames => '所有棋局';
 
   @override
-  String get mobilePuzzlesTab => '謎題';
+  String get mobileAreYouSure => '您確定嗎？';
 
   @override
-  String get mobileToolsTab => '工具';
+  String get mobileBlindfoldMode => '盲棋';
 
   @override
-  String get mobileWatchTab => '觀戰';
+  String get mobileCancelTakebackOffer => '取消悔棋請求';
 
   @override
-  String get mobileSettingsTab => '設定';
+  String get mobileClearButton => '清除';
 
   @override
-  String get mobileMustBeLoggedIn => '你必須登入才能查看此頁面。';
+  String get mobileCorrespondenceClearSavedMove => '清除已儲存移動';
 
   @override
-  String get mobileSystemColors => '系統顏色';
+  String get mobileCustomGameJoinAGame => '加入棋局';
 
   @override
   String get mobileFeedbackButton => '問題反饋';
 
   @override
+  String mobileGreeting(String param) {
+    return '您好， $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => '您好';
+
+  @override
+  String get mobileHideVariation => '隱藏變體';
+
+  @override
+  String get mobileHomeTab => '首頁';
+
+  @override
+  String get mobileLiveStreamers => 'Lichess 實況主';
+
+  @override
+  String get mobileMustBeLoggedIn => '你必須登入才能查看此頁面。';
+
+  @override
+  String get mobileNoSearchResults => '沒有任何搜尋結果';
+
+  @override
+  String get mobileNotFollowingAnyUser => '您未被任何使用者追蹤。';
+
+  @override
   String get mobileOkButton => '確認';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '名稱包含「$param」的玩家';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => '放大被拖曳的棋子';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => '是否中斷於此？';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => '沒有內容可顯示，請更改篩選條件';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => '沒有內容可顯示。您可以進行一些 Puzzle Storm 。';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '在三分鐘內解開盡可能多的謎題';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => '這將失去目前的連勝並且將儲存目前成績。';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => '從您喜歡的開局進行謎題，或選擇一個主題。';
+
+  @override
+  String get mobilePuzzlesTab => '謎題';
+
+  @override
+  String get mobileRecentSearches => '搜尋紀錄';
 
   @override
   String get mobileSettingsHapticFeedback => '震動回饋';
@@ -5439,101 +5532,43 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileSettingsImmersiveModeSubtitle => '在下棋和 Puzzle Storm 時隱藏系統界面。如果您受到螢幕邊緣的系統導航手勢干擾，可以使用此功能。';
 
   @override
-  String get mobileNotFollowingAnyUser => '您未被任何使用者追蹤。';
-
-  @override
-  String get mobileAllGames => '所有棋局';
-
-  @override
-  String get mobileRecentSearches => '搜尋紀錄';
-
-  @override
-  String get mobileClearButton => '清除';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '名稱包含「$param」的玩家';
-  }
-
-  @override
-  String get mobileNoSearchResults => '沒有任何搜尋結果';
-
-  @override
-  String get mobileAreYouSure => '您確定嗎？';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '這將失去目前的連勝並且將儲存目前成績。';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => '沒有內容可顯示。您可以進行一些 Puzzle Storm 。';
-
-  @override
-  String get mobileSharePuzzle => '分享這個謎題';
-
-  @override
-  String get mobileShareGameURL => '分享對局網址';
+  String get mobileSettingsTab => '設定';
 
   @override
   String get mobileShareGamePGN => '分享 PGN';
 
   @override
+  String get mobileShareGameURL => '分享對局網址';
+
+  @override
   String get mobileSharePositionAsFEN => '以 FEN 分享棋局位置';
 
   @override
-  String get mobileShowVariations => '顯示變體';
-
-  @override
-  String get mobileHideVariation => '隱藏變體';
+  String get mobileSharePuzzle => '分享這個謎題';
 
   @override
   String get mobileShowComments => '顯示留言';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => '是否中斷於此？';
+  String get mobileShowResult => '顯示結果';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '沒有內容可顯示，請更改篩選條件';
-
-  @override
-  String get mobileCancelTakebackOffer => '取消悔棋請求';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '正在等待對手加入...';
-
-  @override
-  String get mobileBlindfoldMode => '盲棋';
-
-  @override
-  String get mobileLiveStreamers => 'Lichess 實況主';
-
-  @override
-  String get mobileCustomGameJoinAGame => '加入棋局';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => '清除已儲存移動';
+  String get mobileShowVariations => '顯示變體';
 
   @override
   String get mobileSomethingWentWrong => '發生了一些問題。';
 
   @override
-  String get mobileShowResult => '顯示結果';
+  String get mobileSystemColors => '系統顏色';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '從您喜歡的開局進行謎題，或選擇一個主題。';
+  String get mobileToolsTab => '工具';
 
   @override
-  String get mobilePuzzleStormSubtitle => '在三分鐘內解開盡可能多的謎題';
+  String get mobileWaitingForOpponentToJoin => '正在等待對手加入...';
 
   @override
-  String mobileGreeting(String param) {
-    return '您好， $param';
-  }
-
-  @override
-  String get mobileGreetingWithoutName => '您好';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => '放大被拖曳的棋子';
+  String get mobileWatchTab => '觀戰';
 
   @override
   String get activityActivity => '活動';
@@ -7353,9 +7388,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get byCPL => '以厘兵損失';
 
   @override
-  String get openStudy => '開啟研究';
-
-  @override
   String get enable => '啟用';
 
   @override
@@ -8018,9 +8050,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get unblock => '移除出黑名單';
-
-  @override
-  String get followsYou => '關注您';
 
   @override
   String xStartedFollowingY(String param1, String param2) {

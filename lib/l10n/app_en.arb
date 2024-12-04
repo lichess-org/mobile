@@ -1,51 +1,12 @@
 {
-  "mobileHomeTab": "Home",
-  "mobilePuzzlesTab": "Puzzles",
-  "mobileToolsTab": "Tools",
-  "mobileWatchTab": "Watch",
-  "mobileSettingsTab": "Settings",
-  "mobileMustBeLoggedIn": "You must be logged in to view this page.",
-  "mobileSystemColors": "System colors",
-  "mobileFeedbackButton": "Feedback",
-  "mobileOkButton": "OK",
-  "mobileSettingsHapticFeedback": "Haptic feedback",
-  "mobileSettingsImmersiveMode": "Immersive mode",
-  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.",
-  "mobileNotFollowingAnyUser": "You are not following any user.",
   "mobileAllGames": "All games",
-  "mobileRecentSearches": "Recent searches",
-  "mobileClearButton": "Clear",
-  "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
-  "@mobilePlayersMatchingSearchTerm": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "mobileNoSearchResults": "No results",
   "mobileAreYouSure": "Are you sure?",
-  "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
-  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
-  "mobileSharePuzzle": "Share this puzzle",
-  "mobileShareGameURL": "Share game URL",
-  "mobileShareGamePGN": "Share PGN",
-  "mobileSharePositionAsFEN": "Share position as FEN",
-  "mobileShowVariations": "Show variations",
-  "mobileHideVariation": "Hide variation",
-  "mobileShowComments": "Show comments",
-  "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
-  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
-  "mobileCancelTakebackOffer": "Cancel takeback offer",
-  "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
   "mobileBlindfoldMode": "Blindfold",
-  "mobileLiveStreamers": "Live streamers",
-  "mobileCustomGameJoinAGame": "Join a game",
+  "mobileCancelTakebackOffer": "Cancel takeback offer",
+  "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
-  "mobileSomethingWentWrong": "Something went wrong.",
-  "mobileShowResult": "Show result",
-  "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
-  "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
+  "mobileCustomGameJoinAGame": "Join a game",
+  "mobileFeedbackButton": "Feedback",
   "mobileGreeting": "Hello, {param}",
   "@mobileGreeting": {
     "placeholders": {
@@ -55,7 +16,47 @@
     }
   },
   "mobileGreetingWithoutName": "Hello",
+  "mobileHideVariation": "Hide variation",
+  "mobileHomeTab": "Home",
+  "mobileLiveStreamers": "Live streamers",
+  "mobileMustBeLoggedIn": "You must be logged in to view this page.",
+  "mobileNoSearchResults": "No results",
+  "mobileNotFollowingAnyUser": "You are not following any user.",
+  "mobileOkButton": "OK",
+  "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
+  "@mobilePlayersMatchingSearchTerm": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
+  "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
+  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
+  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
+  "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
+  "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
+  "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
+  "mobilePuzzlesTab": "Puzzles",
+  "mobileRecentSearches": "Recent searches",
+  "mobileSettingsHapticFeedback": "Haptic feedback",
+  "mobileSettingsImmersiveMode": "Immersive mode",
+  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.",
+  "mobileSettingsTab": "Settings",
+  "mobileShareGamePGN": "Share PGN",
+  "mobileShareGameURL": "Share game URL",
+  "mobileSharePositionAsFEN": "Share position as FEN",
+  "mobileSharePuzzle": "Share this puzzle",
+  "mobileShowComments": "Show comments",
+  "mobileShowResult": "Show result",
+  "mobileShowVariations": "Show variations",
+  "mobileSomethingWentWrong": "Something went wrong.",
+  "mobileSystemColors": "System colors",
+  "mobileTheme": "Theme",
+  "mobileToolsTab": "Tools",
+  "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
+  "mobileWatchTab": "Watch",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
@@ -327,6 +328,7 @@
   "broadcastNotYetStarted": "The broadcast has not yet started.",
   "broadcastOfficialWebsite": "Official website",
   "broadcastStandings": "Standings",
+  "broadcastOfficialStandings": "Official Standings",
   "broadcastIframeHelp": "More options on the {param}",
   "@broadcastIframeHelp": {
     "placeholders": {
@@ -356,6 +358,16 @@
   "broadcastRatingDiff": "Rating diff",
   "broadcastGamesThisTournament": "Games in this tournament",
   "broadcastScore": "Score",
+  "broadcastAllTeams": "All teams",
+  "broadcastTournamentFormat": "Tournament format",
+  "broadcastTournamentLocation": "Tournament Location",
+  "broadcastTopPlayers": "Top players",
+  "broadcastTimezone": "Time zone",
+  "broadcastFideRatingCategory": "FIDE rating category",
+  "broadcastOptionalDetails": "Optional details",
+  "broadcastUpcomingBroadcasts": "Upcoming broadcasts",
+  "broadcastPastBroadcasts": "Past broadcasts",
+  "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -1059,7 +1071,6 @@
   "replayMode": "Replay mode",
   "realtimeReplay": "Realtime",
   "byCPL": "By CPL",
-  "openStudy": "Open study",
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
   "showVariationArrows": "Show variation arrows",
@@ -1452,7 +1463,6 @@
   "block": "Block",
   "blocked": "Blocked",
   "unblock": "Unblock",
-  "followsYou": "Follows you",
   "xStartedFollowingY": "{param1} started following {param2}",
   "@xStartedFollowingY": {
     "placeholders": {
@@ -3116,6 +3126,14 @@
   "studyPlayAgain": "Play again",
   "studyWhatWouldYouPlay": "What would you play in this position?",
   "studyYouCompletedThisLesson": "Congratulations! You completed this lesson.",
+  "studyPerPage": "{param} per page",
+  "@studyPerPage": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
   "@studyNbChapters": {
     "placeholders": {

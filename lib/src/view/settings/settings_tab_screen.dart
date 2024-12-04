@@ -254,7 +254,7 @@ class _Body extends ConsumerWidget {
           ),
           SettingsListTile(
             icon: const Icon(Icons.palette_outlined),
-            settingsLabel: const Text('Theme'),
+            settingsLabel: Text(context.l10n.mobileTheme),
             settingsValue:
                 '${boardPrefs.boardTheme.label} / ${boardPrefs.pieceSet.label}',
             onTap: () {

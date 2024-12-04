@@ -9,31 +9,89 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Hjem';
+  String get mobileAllGames => 'Alle partier';
 
   @override
-  String get mobilePuzzlesTab => 'Opgaver';
+  String get mobileAreYouSure => 'Er du sikker?';
 
   @override
-  String get mobileToolsTab => 'Værktøjer';
+  String get mobileBlindfoldMode => 'Bind for øjnene';
 
   @override
-  String get mobileWatchTab => 'Se';
+  String get mobileCancelTakebackOffer => 'Annuller tilbud om tilbagetagelse';
 
   @override
-  String get mobileSettingsTab => 'Indstillinger';
+  String get mobileClearButton => 'Ryd';
 
   @override
-  String get mobileMustBeLoggedIn => 'Du skal være logget ind for at se denne side.';
+  String get mobileCorrespondenceClearSavedMove => 'Ryd gemt træk';
 
   @override
-  String get mobileSystemColors => 'Systemfarver';
+  String get mobileCustomGameJoinAGame => 'Deltag i et parti';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hej, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hej';
+
+  @override
+  String get mobileHideVariation => 'Skjul variation';
+
+  @override
+  String get mobileHomeTab => 'Hjem';
+
+  @override
+  String get mobileLiveStreamers => 'Live-streamere';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Du skal være logget ind for at se denne side.';
+
+  @override
+  String get mobileNoSearchResults => 'Ingen resultater';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Du følger ikke nogen brugere.';
+
+  @override
   String get mobileOkButton => 'Ok';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Spillere med \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Forstør brik, som trækkes';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Vil du afslutte dette løb?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Intet at vise, ændr venligst filtre';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Intet at vise. Spil nogle runder af Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Løs så mange opgaver som muligt på 3 minutter.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Du vil miste din nuværende stime og din score vil blive gemt.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Spil opgaver fra dine foretrukne åbninger, eller vælg et tema.';
+
+  @override
+  String get mobilePuzzlesTab => 'Opgaver';
+
+  @override
+  String get mobileRecentSearches => 'Seneste søgninger';
 
   @override
   String get mobileSettingsHapticFeedback => 'Haptisk feedback';
@@ -45,101 +103,46 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Skjul systemets brugergrænseflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du følger ikke nogen brugere.';
-
-  @override
-  String get mobileAllGames => 'Alle partier';
-
-  @override
-  String get mobileRecentSearches => 'Seneste søgninger';
-
-  @override
-  String get mobileClearButton => 'Ryd';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Spillere med \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Ingen resultater';
-
-  @override
-  String get mobileAreYouSure => 'Er du sikker?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Du vil miste din nuværende stime og din score vil blive gemt.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Intet at vise. Spil nogle runder af Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Del denne opgave';
-
-  @override
-  String get mobileShareGameURL => 'Del partiets URL';
+  String get mobileSettingsTab => 'Indstillinger';
 
   @override
   String get mobileShareGamePGN => 'Del PGN';
 
   @override
+  String get mobileShareGameURL => 'Del partiets URL';
+
+  @override
   String get mobileSharePositionAsFEN => 'Del position som FEN';
 
   @override
-  String get mobileShowVariations => 'Vis variationer';
-
-  @override
-  String get mobileHideVariation => 'Skjul variation';
+  String get mobileSharePuzzle => 'Del denne opgave';
 
   @override
   String get mobileShowComments => 'Vis kommentarer';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Vil du afslutte dette løb?';
+  String get mobileShowResult => 'Vis resultat';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Intet at vise, ændr venligst filtre';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Annuller tilbud om tilbagetagelse';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Venter på at modstander slutter sig til...';
-
-  @override
-  String get mobileBlindfoldMode => 'Bind for øjnene';
-
-  @override
-  String get mobileLiveStreamers => 'Live-streamere';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Deltag i et parti';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Ryd gemt træk';
+  String get mobileShowVariations => 'Vis variationer';
 
   @override
   String get mobileSomethingWentWrong => 'Noget gik galt.';
 
   @override
-  String get mobileShowResult => 'Vis resultat';
+  String get mobileSystemColors => 'Systemfarver';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Spil opgaver fra dine foretrukne åbninger, eller vælg et tema.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Løs så mange opgaver som muligt på 3 minutter.';
+  String get mobileToolsTab => 'Værktøjer';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hej, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Venter på at modstander slutter sig til...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hej';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Forstør brik, som trækkes';
+  String get mobileWatchTab => 'Se';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -536,6 +539,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastStandings => 'Stillinger';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Flere muligheder på $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get byCPL => 'CBT';
 
   @override
-  String get openStudy => 'Åben studie';
-
-  @override
   String get enable => 'Aktivér';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get unblock => 'Stop blokering';
-
-  @override
-  String get followsYou => 'Følger dig';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Tillykke! Du har fuldført denne lektion.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

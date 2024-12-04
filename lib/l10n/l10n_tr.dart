@@ -9,31 +9,89 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Ana sayfa';
+  String get mobileAllGames => 'Tüm oyunlar';
 
   @override
-  String get mobilePuzzlesTab => 'Bulmacalar';
+  String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
-  String get mobileToolsTab => 'Araçlar';
+  String get mobileBlindfoldMode => 'Körleme modu';
 
   @override
-  String get mobileWatchTab => 'İzle';
+  String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override
-  String get mobileSettingsTab => 'Ayarlar';
+  String get mobileClearButton => 'Temizle';
 
   @override
-  String get mobileMustBeLoggedIn => 'Bu sayfayı görüntülemek için giriş yapmalısınız.';
+  String get mobileCorrespondenceClearSavedMove => 'Kayıtlı hamleyi sil';
 
   @override
-  String get mobileSystemColors => 'Sistem renkleri';
+  String get mobileCustomGameJoinAGame => 'Bir oyuna katıl';
 
   @override
   String get mobileFeedbackButton => 'Geri bildirimde bulun';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Merhaba, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Merhaba';
+
+  @override
+  String get mobileHideVariation => 'Varyasyonu gizle';
+
+  @override
+  String get mobileHomeTab => 'Ana sayfa';
+
+  @override
+  String get mobileLiveStreamers => 'Canlı yayıncılar';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Bu sayfayı görüntülemek için giriş yapmalısınız.';
+
+  @override
+  String get mobileNoSearchResults => 'Sonuç bulunamadı';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
+
+  @override
   String get mobileOkButton => 'Tamam';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '\"$param\" ile başlayan oyuncularla';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen parçayı büyüt';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Gösterilecek bir şey yok, lütfen filtreleri değiştirin';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Gösterilcek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '3 dakika içerisinde mümkün olduğunca çok bulmaca çözün.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'En sevdiğiniz açılışlardan bulmacalar oynayın veya bir tema seçin.';
+
+  @override
+  String get mobilePuzzlesTab => 'Bulmacalar';
+
+  @override
+  String get mobileRecentSearches => 'Son aramalar';
 
   @override
   String get mobileSettingsHapticFeedback => 'Titreşimli geri bildirim';
@@ -45,101 +103,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Oynarken sistem arayüzünü gizle. Ekranın kenarlarındaki sistemin gezinme hareketlerinden rahatsızsan bunu kullan. Bu ayar, oyun ve Bulmaca Fırtınası ekranlarına uygulanır.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
-
-  @override
-  String get mobileAllGames => 'Tüm oyunlar';
-
-  @override
-  String get mobileRecentSearches => 'Son aramalar';
-
-  @override
-  String get mobileClearButton => 'Temizle';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '\"$param\" ile başlayan oyuncularla';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Sonuç bulunamadı';
-
-  @override
-  String get mobileAreYouSure => 'Emin misiniz?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Gösterilcek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.';
-
-  @override
-  String get mobileSharePuzzle => 'Bulmacayı paylaş';
-
-  @override
-  String get mobileShareGameURL => 'Oyun linkini paylaş';
+  String get mobileSettingsTab => 'Ayarlar';
 
   @override
   String get mobileShareGamePGN => 'PGN\'yi paylaş';
 
   @override
+  String get mobileShareGameURL => 'Oyun linkini paylaş';
+
+  @override
   String get mobileSharePositionAsFEN => 'Konumu FEN olarak paylaş';
 
   @override
-  String get mobileShowVariations => 'Varyasyonları göster';
-
-  @override
-  String get mobileHideVariation => 'Varyasyonu gizle';
+  String get mobileSharePuzzle => 'Bulmacayı paylaş';
 
   @override
   String get mobileShowComments => 'Yorumları göster';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
+  String get mobileShowResult => 'Sonucu göster';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Gösterilecek bir şey yok, lütfen filtreleri değiştirin';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Rakip bekleniyor...';
-
-  @override
-  String get mobileBlindfoldMode => 'Körleme modu';
-
-  @override
-  String get mobileLiveStreamers => 'Canlı yayıncılar';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Bir oyuna katıl';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Kayıtlı hamleyi sil';
+  String get mobileShowVariations => 'Varyasyonları göster';
 
   @override
   String get mobileSomethingWentWrong => 'Birşeyler ters gitti.';
 
   @override
-  String get mobileShowResult => 'Sonucu göster';
+  String get mobileSystemColors => 'Sistem renkleri';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'En sevdiğiniz açılışlardan bulmacalar oynayın veya bir tema seçin.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => '3 dakika içerisinde mümkün olduğunca çok bulmaca çözün.';
+  String get mobileToolsTab => 'Araçlar';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Merhaba, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Rakip bekleniyor...';
 
   @override
-  String get mobileGreetingWithoutName => 'Merhaba';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen parçayı büyüt';
+  String get mobileWatchTab => 'İzle';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -536,6 +539,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastStandings => 'Sıralamalar';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '${param}nda daha fazla seçenek';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Skor';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get byCPL => 'CPL ile';
 
   @override
-  String get openStudy => 'Çalışma oluştur';
-
-  @override
   String get enable => 'Etkinleştir';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get unblock => 'Engeli kaldır';
-
-  @override
-  String get followsYou => 'Sizi takip ediyor';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Tebrikler! Bu dersi tamamlandınız.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

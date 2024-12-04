@@ -9,31 +9,89 @@ class AppLocalizationsGsw extends AppLocalizations {
   AppLocalizationsGsw([String locale = 'gsw']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Afangssite';
+  String get mobileAllGames => 'All Schpiel';
 
   @override
-  String get mobilePuzzlesTab => 'Ufgabe';
+  String get mobileAreYouSure => 'Bisch sicher?';
 
   @override
-  String get mobileToolsTab => 'Werchzüg';
+  String get mobileBlindfoldMode => 'Blind schpille';
 
   @override
-  String get mobileWatchTab => 'Luege';
+  String get mobileCancelTakebackOffer => 'Zugsrücknam-Offerte zruggzieh';
 
   @override
-  String get mobileSettingsTab => 'Ischtelle';
+  String get mobileClearButton => 'Leere';
 
   @override
-  String get mobileMustBeLoggedIn => 'Muesch iglogt si, zum die Site z\'gseh.';
+  String get mobileCorrespondenceClearSavedMove => 'Lösch die gschpeicherete Züg';
 
   @override
-  String get mobileSystemColors => 'Syschtem-Farbe';
+  String get mobileCustomGameJoinAGame => 'Es Schpiel mitschpille';
 
   @override
   String get mobileFeedbackButton => 'Rückmäldig';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hoi, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hoi';
+
+  @override
+  String get mobileHideVariation => 'Variante verberge';
+
+  @override
+  String get mobileHomeTab => 'Afangssite';
+
+  @override
+  String get mobileLiveStreamers => 'Live Streamer';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Muesch iglogt si, zum die Site z\'gseh.';
+
+  @override
+  String get mobileNoSearchResults => 'Nüt g\'funde';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Schpiller mit \"$param%';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Vegrösserig vu de zogene Figur';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nüt zum Zeige, bitte d\'Filter ändere';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Es git nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Lös i 3 Minute so vill Ufgabe wie möglich.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.';
+
+  @override
+  String get mobilePuzzlesTab => 'Ufgabe';
+
+  @override
+  String get mobileRecentSearches => 'Kürzlich Gsuechts';
 
   @override
   String get mobileSettingsHapticFeedback => 'Rückmäldig mit Vibration';
@@ -45,101 +103,46 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'UI-Syschtem während em schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte, vum Sysychtem, am Bildschirmrand störed. Das gilt für Schpiel- und Puzzle Storm-Bildschirm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
-
-  @override
-  String get mobileAllGames => 'All Schpiel';
-
-  @override
-  String get mobileRecentSearches => 'Kürzlich Gsuechts';
-
-  @override
-  String get mobileClearButton => 'Leere';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Schpiller mit \"$param%';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Nüt g\'funde';
-
-  @override
-  String get mobileAreYouSure => 'Bisch sicher?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Es git nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Teil die Ufgab';
-
-  @override
-  String get mobileShareGameURL => 'Teil d\'Schpiel-URL';
+  String get mobileSettingsTab => 'Ischtelle';
 
   @override
   String get mobileShareGamePGN => 'Teil s\'PGN';
 
   @override
+  String get mobileShareGameURL => 'Teil d\'Schpiel-URL';
+
+  @override
   String get mobileSharePositionAsFEN => 'Teil d\'Position als FEN';
 
   @override
-  String get mobileShowVariations => 'Zeig Variante';
-
-  @override
-  String get mobileHideVariation => 'Variante verberge';
+  String get mobileSharePuzzle => 'Teil die Ufgab';
 
   @override
   String get mobileShowComments => 'Zeig Kommentär';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
+  String get mobileShowResult => 'Resultat zeige';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nüt zum Zeige, bitte d\'Filter ändere';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Zugsrücknam-Offerte zruggzieh';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Warte bis en Gegner erschint...';
-
-  @override
-  String get mobileBlindfoldMode => 'Blind schpille';
-
-  @override
-  String get mobileLiveStreamers => 'Live Streamer';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Es Schpiel mitschpille';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Lösch die gschpeicherete Züg';
+  String get mobileShowVariations => 'Zeig Variante';
 
   @override
   String get mobileSomethingWentWrong => 'Es isch öppis schief gange.';
 
   @override
-  String get mobileShowResult => 'Resultat zeige';
+  String get mobileSystemColors => 'Syschtem-Farbe';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Lös i 3 Minute so vill Ufgabe wie möglich.';
+  String get mobileToolsTab => 'Werchzüg';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hoi, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Warte bis en Gegner erschint...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hoi';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Vegrösserig vu de zogene Figur';
+  String get mobileWatchTab => 'Luege';
 
   @override
   String get activityActivity => 'Aktivitäte';
@@ -536,6 +539,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastStandings => 'Tabälle';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Meh Optionen uf $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Resultat';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get byCPL => 'Nach CPL';
 
   @override
-  String get openStudy => 'Schtudie eröffne';
-
-  @override
   String get enable => 'Ischalte';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get unblock => 'Blockierig ufhebe';
-
-  @override
-  String get followsYou => 'Folgt dir';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulation! Du häsch die Lektion abgschlosse.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

@@ -9,31 +9,89 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Kezdőlap';
+  String get mobileAllGames => 'Összes játszma';
 
   @override
-  String get mobilePuzzlesTab => 'Feladvány';
+  String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
-  String get mobileToolsTab => 'Eszközök';
+  String get mobileBlindfoldMode => 'Vakjátszma mód';
 
   @override
-  String get mobileWatchTab => 'Néznivaló';
+  String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
-  String get mobileSettingsTab => 'Beállítás';
+  String get mobileClearButton => 'Törlés';
 
   @override
-  String get mobileMustBeLoggedIn => 'Az oldal megtekintéséhez be kell jelentkezned.';
+  String get mobileCorrespondenceClearSavedMove => 'Mentett lépés törlése';
 
   @override
-  String get mobileSystemColors => 'Rendszerszínek';
+  String get mobileCustomGameJoinAGame => 'Csatlakozás játszmához';
 
   @override
   String get mobileFeedbackButton => 'Visszajelzés';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Üdv $param!';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Üdv';
+
+  @override
+  String get mobileHideVariation => 'Változatok elrejtése';
+
+  @override
+  String get mobileHomeTab => 'Kezdőlap';
+
+  @override
+  String get mobileLiveStreamers => 'Lichess streamerek';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Az oldal megtekintéséhez be kell jelentkezned.';
+
+  @override
+  String get mobileNoSearchResults => 'Nincs találat';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Játékosok $param felhasználónévvel';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Mozdított bábu nagyítása';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Befejezed a futamot?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nincs megjeleníthető elem, változtasd meg a szűrőket';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Oldd meg a lehető legtöbb feladványt 3 perc alatt.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'A jelenlegi sorozatod elveszik és az eredményedet rögzítjük.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Oldj feladványokat kedvenc megnyitásaid kapcsán vagy válassz egy tematikát.';
+
+  @override
+  String get mobilePuzzlesTab => 'Feladvány';
+
+  @override
+  String get mobileRecentSearches => 'Keresési előzmények';
 
   @override
   String get mobileSettingsHapticFeedback => 'Érintésalapú visszajelzés';
@@ -45,101 +103,46 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'A rendszer gombjainak elrejtése játék közben. Kapcsold be, ha zavarnak a rendszer navigációs mozdulatai a képernyő sarkainál. A játszmaképernyőn és a Puzzle Storm képernyőjén működik.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
-
-  @override
-  String get mobileAllGames => 'Összes játszma';
-
-  @override
-  String get mobileRecentSearches => 'Keresési előzmények';
-
-  @override
-  String get mobileClearButton => 'Törlés';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Játékosok $param felhasználónévvel';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Nincs találat';
-
-  @override
-  String get mobileAreYouSure => 'Biztos vagy benne?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'A jelenlegi sorozatod elveszik és az eredményedet rögzítjük.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Feladvány megosztása';
-
-  @override
-  String get mobileShareGameURL => 'Játszma URL megosztása';
+  String get mobileSettingsTab => 'Beállítás';
 
   @override
   String get mobileShareGamePGN => 'PGN megosztása';
 
   @override
+  String get mobileShareGameURL => 'Játszma URL megosztása';
+
+  @override
   String get mobileSharePositionAsFEN => 'Állás megosztása FEN-ként';
 
   @override
-  String get mobileShowVariations => 'Változatok megjelenítése';
-
-  @override
-  String get mobileHideVariation => 'Változatok elrejtése';
+  String get mobileSharePuzzle => 'Feladvány megosztása';
 
   @override
   String get mobileShowComments => 'Megjegyzések megjelenítése';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Befejezed a futamot?';
+  String get mobileShowResult => 'Eredmény mutatása';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nincs megjeleníthető elem, változtasd meg a szűrőket';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
-
-  @override
-  String get mobileBlindfoldMode => 'Vakjátszma mód';
-
-  @override
-  String get mobileLiveStreamers => 'Lichess streamerek';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Csatlakozás játszmához';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Mentett lépés törlése';
+  String get mobileShowVariations => 'Változatok megjelenítése';
 
   @override
   String get mobileSomethingWentWrong => 'Hiba történt.';
 
   @override
-  String get mobileShowResult => 'Eredmény mutatása';
+  String get mobileSystemColors => 'Rendszerszínek';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Oldj feladványokat kedvenc megnyitásaid kapcsán vagy válassz egy tematikát.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Oldd meg a lehető legtöbb feladványt 3 perc alatt.';
+  String get mobileToolsTab => 'Eszközök';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Üdv $param!';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
 
   @override
-  String get mobileGreetingWithoutName => 'Üdv';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Mozdított bábu nagyítása';
+  String get mobileWatchTab => 'Néznivaló';
 
   @override
   String get activityActivity => 'Aktivitás';
@@ -536,6 +539,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get byCPL => 'CPL';
 
   @override
-  String get openStudy => 'Tanulmány megnyitása';
-
-  @override
   String get enable => 'Engedélyezve';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get unblock => 'Letiltás feloldása';
-
-  @override
-  String get followsYou => 'Követ téged';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Gratulálok! A fejezet végére értél.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

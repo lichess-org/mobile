@@ -9,31 +9,89 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'בית';
+  String get mobileAllGames => 'כל המשחקים';
 
   @override
-  String get mobilePuzzlesTab => 'חידות';
+  String get mobileAreYouSure => 'בטוח?';
 
   @override
-  String get mobileToolsTab => 'כלים';
+  String get mobileBlindfoldMode => 'משחק עיוור';
 
   @override
-  String get mobileWatchTab => 'צפייה';
+  String get mobileCancelTakebackOffer => 'ביטול ההצעה להחזיר את המהלך האחרון';
 
   @override
-  String get mobileSettingsTab => 'הגדרות';
+  String get mobileClearButton => 'ניקוי';
 
   @override
-  String get mobileMustBeLoggedIn => 'יש להתחבר כדי לצפות בדף זה.';
+  String get mobileCorrespondenceClearSavedMove => 'ניקוי המהלך השמור';
 
   @override
-  String get mobileSystemColors => 'צבעי מערכת ההפעלה';
+  String get mobileCustomGameJoinAGame => 'הצטרפות למשחק';
 
   @override
   String get mobileFeedbackButton => 'משוב';
 
   @override
+  String mobileGreeting(String param) {
+    return 'שלום, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'שלום';
+
+  @override
+  String get mobileHideVariation => 'הסתרת וריאציות';
+
+  @override
+  String get mobileHomeTab => 'בית';
+
+  @override
+  String get mobileLiveStreamers => 'שדרנים בשידור חי';
+
+  @override
+  String get mobileMustBeLoggedIn => 'יש להתחבר כדי לצפות בדף זה.';
+
+  @override
+  String get mobileNoSearchResults => 'אין תוצאות';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'אינכם עוקבים אחר אף אחד.';
+
+  @override
   String get mobileOkButton => 'בסדר';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'שחקנים עם ״$param״';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'הגדלת הכלי הנגרר';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'האם לסיים את הסבב?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'אין מה להראות. ניתן לשנות את חתכי הסינון';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'אין מה להראות. שחקו כמה סיבובים של Puzzle Storm קודם.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'פתרו כמה שיותר חידות ב־3 דקות.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'הרצף הנוכחי שלך ייאבד אך הניקוד יישמר.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'פתרו חידות עם הפתיחות האהובות עליכם או בחרו ממגוון נושאים.';
+
+  @override
+  String get mobilePuzzlesTab => 'חידות';
+
+  @override
+  String get mobileRecentSearches => 'חיפושים אחרונים';
 
   @override
   String get mobileSettingsHapticFeedback => 'רטט בכל מהלך';
@@ -45,101 +103,46 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'הסתירו את שאר הממשק במהלך המשחק. מומלץ להפעיל הגדרה זו אם אפשרויות הניווט בקצות הלוח מפריעות לכם לשחק. רלוונטי למשחקים ול־Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'אינכם עוקבים אחר אף אחד.';
-
-  @override
-  String get mobileAllGames => 'כל המשחקים';
-
-  @override
-  String get mobileRecentSearches => 'חיפושים אחרונים';
-
-  @override
-  String get mobileClearButton => 'ניקוי';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'שחקנים עם ״$param״';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'אין תוצאות';
-
-  @override
-  String get mobileAreYouSure => 'בטוח?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'הרצף הנוכחי שלך ייאבד אך הניקוד יישמר.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'אין מה להראות. שחקו כמה סיבובים של Puzzle Storm קודם.';
-
-  @override
-  String get mobileSharePuzzle => 'שיתוף החידה';
-
-  @override
-  String get mobileShareGameURL => 'שיתוף הקישור למשחק';
+  String get mobileSettingsTab => 'הגדרות';
 
   @override
   String get mobileShareGamePGN => 'שיתוף ה־PGN';
 
   @override
+  String get mobileShareGameURL => 'שיתוף הקישור למשחק';
+
+  @override
   String get mobileSharePositionAsFEN => 'שיתוף העמדה כ־FEN';
 
   @override
-  String get mobileShowVariations => 'הצגת וריאציות';
-
-  @override
-  String get mobileHideVariation => 'הסתרת וריאציות';
+  String get mobileSharePuzzle => 'שיתוף החידה';
 
   @override
   String get mobileShowComments => 'הצגת הערות';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'האם לסיים את הסבב?';
+  String get mobileShowResult => 'הצגת תוצאת המשחק';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'אין מה להראות. ניתן לשנות את חתכי הסינון';
-
-  @override
-  String get mobileCancelTakebackOffer => 'ביטול ההצעה להחזיר את המהלך האחרון';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'ממתין שיריב יצטרף...';
-
-  @override
-  String get mobileBlindfoldMode => 'משחק עיוור';
-
-  @override
-  String get mobileLiveStreamers => 'שדרנים בשידור חי';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'הצטרפות למשחק';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'ניקוי המהלך השמור';
+  String get mobileShowVariations => 'הצגת וריאציות';
 
   @override
   String get mobileSomethingWentWrong => 'משהו השתבש.';
 
   @override
-  String get mobileShowResult => 'הצגת תוצאת המשחק';
+  String get mobileSystemColors => 'צבעי מערכת ההפעלה';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'פתרו חידות עם הפתיחות האהובות עליכם או בחרו ממגוון נושאים.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'פתרו כמה שיותר חידות ב־3 דקות.';
+  String get mobileToolsTab => 'כלים';
 
   @override
-  String mobileGreeting(String param) {
-    return 'שלום, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'ממתין שיריב יצטרף...';
 
   @override
-  String get mobileGreetingWithoutName => 'שלום';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'הגדלת הכלי הנגרר';
+  String get mobileWatchTab => 'צפייה';
 
   @override
   String get activityActivity => 'פעילות';
@@ -572,6 +575,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastStandings => 'תוצאות';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'ישנן אפשרויות נוספות ב$param';
   }
@@ -600,6 +606,36 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastScore => 'ניקוד';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2041,9 +2077,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get byCPL => 'עפ\"י CPL';
 
   @override
-  String get openStudy => 'פתח לוח למידה';
-
-  @override
   String get enable => 'הפעלה';
 
   @override
@@ -2709,9 +2742,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get unblock => 'בטל חסימה';
-
-  @override
-  String get followsYou => 'עוקב/ת אחריך';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5559,6 +5589,11 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'מזל טוב! סיימתם את השיעור.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

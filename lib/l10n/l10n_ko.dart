@@ -9,31 +9,89 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get mobileHomeTab => '홈';
+  String get mobileAllGames => '모든 대국';
 
   @override
-  String get mobilePuzzlesTab => '퍼즐';
+  String get mobileAreYouSure => '확실하십니까?';
 
   @override
-  String get mobileToolsTab => '도구';
+  String get mobileBlindfoldMode => '기물 가리기';
 
   @override
-  String get mobileWatchTab => '관람';
+  String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
-  String get mobileSettingsTab => '설정';
+  String get mobileClearButton => '지우기';
 
   @override
-  String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
+  String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
 
   @override
-  String get mobileSystemColors => '시스템 색상';
+  String get mobileCustomGameJoinAGame => '게임 참가';
 
   @override
   String get mobileFeedbackButton => '피드백';
 
   @override
+  String mobileGreeting(String param) {
+    return '안녕하세요, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => '안녕하세요';
+
+  @override
+  String get mobileHideVariation => '바리에이션 숨기기';
+
+  @override
+  String get mobileHomeTab => '홈';
+
+  @override
+  String get mobileLiveStreamers => '방송 중인 스트리머';
+
+  @override
+  String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
+
+  @override
+  String get mobileNoSearchResults => '결과 없음';
+
+  @override
+  String get mobileNotFollowingAnyUser => '팔로우한 사용자가 없습니다.';
+
+  @override
   String get mobileOkButton => '확인';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '닉네임에 \"$param\"가 포함된 플레이어';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => '드래그한 기물 확대하기';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => '표시할 것이 없습니다. 필터를 변경해 주세요';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => '표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '3분 이내에 최대한 많은 퍼즐을 해결하십시오.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => '현재 연속 해결 기록을 잃고 점수는 저장됩니다.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => '당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하십시오.';
+
+  @override
+  String get mobilePuzzlesTab => '퍼즐';
+
+  @override
+  String get mobileRecentSearches => '최근 검색어';
 
   @override
   String get mobileSettingsHapticFeedback => '터치 시 진동';
@@ -45,101 +103,46 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => '플레이 중 시스템 UI를 숨깁니다. 화면 가장자리의 시스템 내비게이션 제스처가 불편하다면 사용하세요. 대국과 퍼즐 스톰 화면에서 적용됩니다.';
 
   @override
-  String get mobileNotFollowingAnyUser => '팔로우한 사용자가 없습니다.';
-
-  @override
-  String get mobileAllGames => '모든 대국';
-
-  @override
-  String get mobileRecentSearches => '최근 검색어';
-
-  @override
-  String get mobileClearButton => '지우기';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '닉네임에 \"$param\"가 포함된 플레이어';
-  }
-
-  @override
-  String get mobileNoSearchResults => '결과 없음';
-
-  @override
-  String get mobileAreYouSure => '확실하십니까?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '현재 연속 해결 기록을 잃고 점수는 저장됩니다.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => '표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.';
-
-  @override
-  String get mobileSharePuzzle => '이 퍼즐 공유';
-
-  @override
-  String get mobileShareGameURL => '게임 URL 공유';
+  String get mobileSettingsTab => '설정';
 
   @override
   String get mobileShareGamePGN => 'PGN 공유';
 
   @override
+  String get mobileShareGameURL => '게임 URL 공유';
+
+  @override
   String get mobileSharePositionAsFEN => 'FEN으로 공유';
 
   @override
-  String get mobileShowVariations => '바리에이션 보이기';
-
-  @override
-  String get mobileHideVariation => '바리에이션 숨기기';
+  String get mobileSharePuzzle => '이 퍼즐 공유';
 
   @override
   String get mobileShowComments => '댓글 보기';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';
+  String get mobileShowResult => '결과 표시';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '표시할 것이 없습니다. 필터를 변경해 주세요';
-
-  @override
-  String get mobileCancelTakebackOffer => '무르기 요청 취소';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '상대 참가를 기다리는 중...';
-
-  @override
-  String get mobileBlindfoldMode => '기물 가리기';
-
-  @override
-  String get mobileLiveStreamers => '방송 중인 스트리머';
-
-  @override
-  String get mobileCustomGameJoinAGame => '게임 참가';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
+  String get mobileShowVariations => '바리에이션 보이기';
 
   @override
   String get mobileSomethingWentWrong => '문제가 발생했습니다.';
 
   @override
-  String get mobileShowResult => '결과 표시';
+  String get mobileSystemColors => '시스템 색상';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하십시오.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => '3분 이내에 최대한 많은 퍼즐을 해결하십시오.';
+  String get mobileToolsTab => '도구';
 
   @override
-  String mobileGreeting(String param) {
-    return '안녕하세요, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => '상대 참가를 기다리는 중...';
 
   @override
-  String get mobileGreetingWithoutName => '안녕하세요';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => '드래그한 기물 확대하기';
+  String get mobileWatchTab => '관람';
 
   @override
   String get activityActivity => '활동';
@@ -518,6 +521,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastStandings => '순위';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '$param에서 더 많은 정보를 확인하실 수 있습니다';
   }
@@ -546,6 +552,36 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastScore => '점수';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1969,9 +2005,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get byCPL => '센티폰 손실';
 
   @override
-  String get openStudy => '연구를 시작하기';
-
-  @override
   String get enable => '활성화';
 
   @override
@@ -2637,9 +2670,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get unblock => '차단 해제';
-
-  @override
-  String get followsYou => '팔로워';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5355,6 +5385,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => '축하합니다! 이 레슨을 완료했습니다.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {

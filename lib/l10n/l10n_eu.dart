@@ -9,31 +9,89 @@ class AppLocalizationsEu extends AppLocalizations {
   AppLocalizationsEu([String locale = 'eu']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Hasiera';
+  String get mobileAllGames => 'Partida guztiak';
 
   @override
-  String get mobilePuzzlesTab => 'Ariketak';
+  String get mobileAreYouSure => 'Ziur zaude?';
 
   @override
-  String get mobileToolsTab => 'Tresnak';
+  String get mobileBlindfoldMode => 'Itsuka';
 
   @override
-  String get mobileWatchTab => 'Ikusi';
+  String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
 
   @override
-  String get mobileSettingsTab => 'Ezarpenak';
+  String get mobileClearButton => 'Garbitu';
 
   @override
-  String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
+  String get mobileCorrespondenceClearSavedMove => 'Garbitu gordetako jokaldia';
 
   @override
-  String get mobileSystemColors => 'Sistemaren koloreak';
+  String get mobileCustomGameJoinAGame => 'Sartu partida baten';
 
   @override
   String get mobileFeedbackButton => 'Iritzia';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Kaixo $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Kaixo';
+
+  @override
+  String get mobileHideVariation => 'Ezkutatu aukera';
+
+  @override
+  String get mobileHomeTab => 'Hasiera';
+
+  @override
+  String get mobileLiveStreamers => 'Zuzeneko streamerrak';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
+
+  @override
+  String get mobileNoSearchResults => 'Emaitzarik ez';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
+
+  @override
   String get mobileOkButton => 'Ados';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return '\"$param\" duten jokalariak';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Handitu arrastatutako pieza';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Saiakera hau amaitu nahi duzu?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Ez dago erakusteko ezer, aldatu filtroak';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Ez dago ezer erakusteko. Jokatu Ariketa zaparrada batzuk.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Ebatzi ahalik eta ariketa gehien 3 minututan.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Zure uneko bolada galduko duzu eta zure puntuazioa gorde egingo da.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Jokatu zure irekiera gogokoenen ariketak, edo aukeratu gai bat.';
+
+  @override
+  String get mobilePuzzlesTab => 'Ariketak';
+
+  @override
+  String get mobileRecentSearches => 'Azken bilaketak';
 
   @override
   String get mobileSettingsHapticFeedback => 'Ukipen-erantzuna';
@@ -45,101 +103,46 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Ezkutatu sistemaren menuak jokatzen ari zaren artean. Erabili hau zure telefonoaren nabigatzeko aukerek traba egiten badizute. Partida bati eta ariketen zaparradan aplikatu daiteke.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
-
-  @override
-  String get mobileAllGames => 'Partida guztiak';
-
-  @override
-  String get mobileRecentSearches => 'Azken bilaketak';
-
-  @override
-  String get mobileClearButton => 'Garbitu';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return '\"$param\" duten jokalariak';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Emaitzarik ez';
-
-  @override
-  String get mobileAreYouSure => 'Ziur zaude?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Zure uneko bolada galduko duzu eta zure puntuazioa gorde egingo da.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Ez dago ezer erakusteko. Jokatu Ariketa zaparrada batzuk.';
-
-  @override
-  String get mobileSharePuzzle => 'Partekatu ariketa hau';
-
-  @override
-  String get mobileShareGameURL => 'Partekatu partidaren URLa';
+  String get mobileSettingsTab => 'Ezarpenak';
 
   @override
   String get mobileShareGamePGN => 'Partekatu PGNa';
 
   @override
+  String get mobileShareGameURL => 'Partekatu partidaren URLa';
+
+  @override
   String get mobileSharePositionAsFEN => 'Partekatu posizioa FEN gisa';
 
   @override
-  String get mobileShowVariations => 'Erakutsi aukerak';
-
-  @override
-  String get mobileHideVariation => 'Ezkutatu aukera';
+  String get mobileSharePuzzle => 'Partekatu ariketa hau';
 
   @override
   String get mobileShowComments => 'Erakutsi iruzkinak';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Saiakera hau amaitu nahi duzu?';
+  String get mobileShowResult => 'Erakutsi emaitza';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Ez dago erakusteko ezer, aldatu filtroak';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Aurkaria sartzeko zain...';
-
-  @override
-  String get mobileBlindfoldMode => 'Itsuka';
-
-  @override
-  String get mobileLiveStreamers => 'Zuzeneko streamerrak';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Sartu partida baten';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Garbitu gordetako jokaldia';
+  String get mobileShowVariations => 'Erakutsi aukerak';
 
   @override
   String get mobileSomethingWentWrong => 'Zerbait gaizki joan da.';
 
   @override
-  String get mobileShowResult => 'Erakutsi emaitza';
+  String get mobileSystemColors => 'Sistemaren koloreak';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Jokatu zure irekiera gogokoenen ariketak, edo aukeratu gai bat.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Ebatzi ahalik eta ariketa gehien 3 minututan.';
+  String get mobileToolsTab => 'Tresnak';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Kaixo $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Aurkaria sartzeko zain...';
 
   @override
-  String get mobileGreetingWithoutName => 'Kaixo';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Handitu arrastatutako pieza';
+  String get mobileWatchTab => 'Ikusi';
 
   @override
   String get activityActivity => 'Jarduera';
@@ -536,6 +539,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -564,6 +570,36 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1993,9 +2029,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get byCPL => 'CPL';
 
   @override
-  String get openStudy => 'Ikerketa ireki';
-
-  @override
   String get enable => 'Aktibatu';
 
   @override
@@ -2661,9 +2694,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get unblock => 'Desblokeatu';
-
-  @override
-  String get followsYou => 'Zu jarraitzen';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
@@ -5423,6 +5453,11 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyYouCompletedThisLesson => 'Zorionak! Ikasgai hau osatu duzu.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
 
   @override
   String studyNbChapters(int count) {
