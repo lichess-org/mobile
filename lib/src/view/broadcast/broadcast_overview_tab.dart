@@ -122,8 +122,10 @@ class _BroadcastOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformCard(
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
       margin: const EdgeInsets.all(4.0),
       child: AdaptiveInkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         onTap: website != null ? () => launchUrl(website!) : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
