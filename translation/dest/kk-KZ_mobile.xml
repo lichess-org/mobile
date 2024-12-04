@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Үйге</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Жұмбақ</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Құрал</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Бақылау</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Баптау</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Бұл бетті көру үшін тіркелгіге кіріңіз.</string>
-  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Жүйе түстері</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Барлық ойындар</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Растайсыз ба?</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Өшіру</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Пікір айту</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Ассаламу ғалейкүм, %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Ассаламу ғалейкүм</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Үйге</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Бұл бетті көру үшін тіркелгіге кіріңіз.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нәтиже жоқ</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Сіз әзір ешкіге серік емессіз.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Иә</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Атауында \"%s\" бар ойыншылар</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 минутта барынша көп жұмбақ шешіп көр.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Қазіргі тізбектен айрыласыз, нәтиже сақталады.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Өз бастауларыңызға негізделген жұмбақтар, не кез-келген тақырып.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Жұмбақ</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Кейінгі іздеулер</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Дірілмен білдіру</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Оқшау көрініс</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ойын кезінде жүйенің элементтерін жасыру. Экран жиегіндегі жүйенің навигация қимыл белгілері сізге кедергі келтірсе - қолданарлық жағдай. Ойын мен Жұмбақ Дауылы кезінде жұмыс істейді.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Сіз әзір ешкіге серік емессіз.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Барлық ойындар</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Кейінгі іздеулер</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Өшіру</string>
-  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Атауында \"%s\" бар ойыншылар</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нәтиже жоқ</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Растайсыз ба?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Қазіргі тізбектен айрыласыз, нәтиже сақталады.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Бұл жұмбақты тарату</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ойын сілтемесін тарату</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Баптау</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN тарату</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ойын сілтемесін тарату</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Бұл жұмбақты тарату</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Нәтижесін көру</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Өз бастауларыңызға негізделген жұмбақтар, не кез-келген тақырып.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 минутта барынша көп жұмбақ шешіп көр.</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Ассаламу ғалейкүм, %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Ассаламу ғалейкүм</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Жүйе түстері</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Құрал</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Бақылау</string>
 </resources>
