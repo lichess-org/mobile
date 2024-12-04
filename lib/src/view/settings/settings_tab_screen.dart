@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_screen.dart';
@@ -96,8 +95,6 @@ class _Body extends ConsumerWidget {
     final packageInfo =
         ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
-
-    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     final Widget? donateButton =
         userSession == null || userSession.user.isPatron != true
@@ -208,22 +205,6 @@ class _Body extends ConsumerWidget {
               );
             },
           ),
-          if (Theme.of(context).platform == TargetPlatform.android)
-            androidVersionAsync.maybeWhen(
-              data: (version) => version != null && version.sdkInt >= 31
-                  ? SwitchSettingTile(
-                      leading: const Icon(Icons.colorize_outlined),
-                      title: Text(context.l10n.mobileSystemColors),
-                      value: generalPrefs.systemColors,
-                      onChanged: (value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .toggleSystemColors();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              orElse: () => const SizedBox.shrink(),
-            ),
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium_outlined),
             settingsLabel: Text(context.l10n.background),

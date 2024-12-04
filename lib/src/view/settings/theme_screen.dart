@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -43,7 +45,9 @@ String shapeColorL10n(
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     const horizontalPadding = 16.0;
 
@@ -92,6 +96,22 @@ class _Body extends ConsumerWidget {
           ListSection(
             hasLeading: true,
             children: [
+              if (Theme.of(context).platform == TargetPlatform.android)
+                androidVersionAsync.maybeWhen(
+                  data: (version) => version != null && version.sdkInt >= 31
+                      ? SwitchSettingTile(
+                          leading: const Icon(Icons.colorize_outlined),
+                          title: Text(context.l10n.mobileSystemColors),
+                          value: generalPrefs.systemColors,
+                          onChanged: (value) {
+                            ref
+                                .read(generalPreferencesProvider.notifier)
+                                .toggleSystemColors();
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  orElse: () => const SizedBox.shrink(),
+                ),
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_board),
                 settingsLabel: Text(context.l10n.board),
