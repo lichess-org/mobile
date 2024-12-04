@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Allar skákir</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ertu viss?</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Hreinsa</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Endurgjöf</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Fela afbrigði</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Heim</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Þú þarft að vera innskráð(ur) til að skoða þessa síðu.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Engar niðurstöður</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Þrautir</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nýlegar leitir</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Stillingar</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deila PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deila vefslóð skákar</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Deila stöðu sem FEN</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Deila þessari þraut</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Sýna athugasemdir</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Sýna afbrigði</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Eitthvað fór úrskeiðis.</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tól</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Horfa</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Stillingar</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Þú þarft að vera innskráð(ur) til að skoða þessa síðu.</string>
-  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Endurgjöf</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Allar skákir</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nýlegar leitir</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Hreinsa</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Engar niðurstöður</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ertu viss?</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Deila þessari þraut</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deila vefslóð skákar</string>
-  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deila PGN</string>
-  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Deila stöðu sem FEN</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Sýna afbrigði</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Fela afbrigði</string>
-  <string name="showComments" comment="Shown in the analysis screen.">Sýna athugasemdir</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Eitthvað fór úrskeiðis.</string>
 </resources>
