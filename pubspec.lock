@@ -972,7 +972,7 @@ packages:
     source: hosted
     version: "1.0.4"
   network_image_mock:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: network_image_mock
       sha256: "855cdd01d42440e0cffee0d6c2370909fc31b3bcba308a59829f24f64be42db7"

@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -166,7 +168,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class BroadcastGridItem extends StatelessWidget {
+class BroadcastGridItem extends StatefulWidget {
   final Broadcast broadcast;
 
   const BroadcastGridItem({required this.broadcast});
@@ -198,7 +200,53 @@ class BroadcastGridItem extends StatelessWidget {
         );
 
   @override
+  State<BroadcastGridItem> createState() => _BroadcastGridItemState();
+}
+
+class _BroadcastGridItemState extends State<BroadcastGridItem> {
+  ColorScheme? _colorScheme;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.broadcast.tour.imageUrl != null) {
+      _fetchColorScheme(widget.broadcast.tour.imageUrl!);
+    }
+  }
+
+  Future<void> _fetchColorScheme(String url) async {
+    if (!mounted) return;
+
+    if (Scrollable.recommendDeferredLoadingForContext(context)) {
+      SchedulerBinding.instance.scheduleFrameCallback((_) {
+        scheduleMicrotask(() => _fetchColorScheme(url));
+      });
+    } else {
+      try {
+        final colorScheme = await ColorScheme.fromImageProvider(
+          provider: NetworkImage(url),
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        );
+        if (mounted) {
+          setState(() {
+            _colorScheme = colorScheme;
+          });
+        }
+      } catch (_) {
+        // ignore
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final backgroundColor =
+        _colorScheme?.primaryContainer ?? Colors.transparent;
+    final titleColor = _colorScheme?.onPrimaryContainer;
+    final subTitleColor =
+        _colorScheme?.onPrimaryContainer.withValues(alpha: 0.7) ??
+            textShade(context, 0.7);
+
     return AdaptiveInkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: () {
@@ -206,57 +254,66 @@ class BroadcastGridItem extends StatelessWidget {
           context,
           title: context.l10n.broadcastBroadcasts,
           rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+          builder: (context) =>
+              BroadcastRoundScreen(broadcast: widget.broadcast),
         );
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: LichessColors.grey.withValues(alpha: 0.5),
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        foregroundDecoration: BoxDecoration(
-          border: (broadcast.isLive)
-              ? Border.all(color: LichessColors.red, width: 2)
-              : Border.all(color: LichessColors.grey),
-          borderRadius: BorderRadius.circular(20),
+          color: backgroundColor,
+          boxShadow: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : kElevationToShadow[1],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (broadcast.tour.imageUrl != null)
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: FadeInImage.memoryNetwork(
-                  placeholder: transparentImage,
-                  image: broadcast.tour.imageUrl!,
-                ),
-              )
-            else
-              const DefaultBroadcastImage(aspectRatio: 2.0),
-            const SizedBox(height: 4.0),
-            if (broadcast.round.startsAt != null || broadcast.isLive)
+            ShaderMask(
+              blendMode: BlendMode.dstOut,
+              shaderCallback: (bounds) {
+                return LinearGradient(
+                  begin: Alignment.center,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    backgroundColor.withValues(alpha: 0.10),
+                    backgroundColor.withValues(alpha: 1.0),
+                  ],
+                  stops: const [0.5, 1.00],
+                  tileMode: TileMode.clamp,
+                ).createShader(bounds);
+              },
+              child: widget.broadcast.tour.imageUrl != null
+                  ? AspectRatio(
+                      aspectRatio: 2.0,
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: transparentImage,
+                        image: widget.broadcast.tour.imageUrl!,
+                        imageErrorBuilder: (context, error, stackTrace) =>
+                            const DefaultBroadcastImage(aspectRatio: 2.0),
+                      ),
+                    )
+                  : const DefaultBroadcastImage(aspectRatio: 2.0),
+            ),
+            if (widget.broadcast.round.startsAt != null ||
+                widget.broadcast.isLive)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _formatDate(broadcast.round.startsAt!),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: textShade(context, 0.5),
-                          ),
+                      _formatDate(widget.broadcast.round.startsAt!),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: subTitleColor,
+                      ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    if (broadcast.isLive) ...[
+                    if (widget.broadcast.isLive) ...[
                       const SizedBox(width: 4.0),
                       const Text(
                         'LIVE',
@@ -274,10 +331,10 @@ class BroadcastGridItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                broadcast.round.name,
+                widget.broadcast.round.name,
                 style: TextStyle(
                   fontSize: 11,
-                  color: textShade(context, 0.5),
+                  color: subTitleColor,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -287,10 +344,11 @@ class BroadcastGridItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                broadcast.title,
+                widget.broadcast.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
+                  color: titleColor,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),

@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -16,7 +17,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -194,7 +195,6 @@ class _BroadcastWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           header: Text(context.l10n.broadcastBroadcasts),
-          hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
               pushPlatformRoute(
@@ -209,7 +209,7 @@ class _BroadcastWidget extends ConsumerWidget {
           children: [
             ...CombinedIterableView([data.active, data.upcoming, data.past])
                 .take(numberOfItems)
-                .map((broadcast) => BroadcastTile(broadcast: broadcast)),
+                .map((broadcast) => _BroadcastTile(broadcast: broadcast)),
           ],
         );
       },
@@ -231,6 +231,62 @@ class _BroadcastWidget extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BroadcastTile extends ConsumerWidget {
+  const _BroadcastTile({
+    required this.broadcast,
+  });
+
+  final Broadcast broadcast;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PlatformListTile(
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          title: context.l10n.broadcastBroadcasts,
+          rootNavigator: true,
+          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+        );
+      },
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Row(
+          children: [
+            Flexible(
+              child: Text(
+                broadcast.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+      trailing: (broadcast.isLive)
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.circle,
+                  color: context.lichessColors.error,
+                  size: 20,
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'LIVE',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: context.lichessColors.error,
+                  ),
+                ),
+              ],
+            )
+          : null,
     );
   }
 }

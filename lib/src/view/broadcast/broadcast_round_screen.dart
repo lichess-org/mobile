@@ -97,6 +97,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 Expanded(
                   child: _selectedSegment == _ViewMode.overview
                       ? BroadcastOverviewTab(
+                          broadcast: widget.broadcast,
                           tournamentId: _selectedTournamentId,
                         )
                       : BroadcastBoardsTab(
@@ -132,7 +133,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             body: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                BroadcastOverviewTab(tournamentId: _selectedTournamentId),
+                BroadcastOverviewTab(
+                  broadcast: widget.broadcast,
+                  tournamentId: _selectedTournamentId,
+                ),
                 BroadcastBoardsTab(_selectedRoundId ?? value.defaultRoundId),
               ],
             ),
