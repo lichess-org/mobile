@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -31,7 +31,7 @@ class BroadcastTile extends ConsumerWidget {
           context,
           title: context.l10n.broadcastBroadcasts,
           rootNavigator: true,
-          builder: (context) => BroadcastScreen(broadcast: broadcast),
+          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
         );
       },
       title: Padding(

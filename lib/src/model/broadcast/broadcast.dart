@@ -59,7 +59,9 @@ typedef BroadcastTournamentInformation = ({
   String? format,
   String? timeControl,
   String? players,
+  String? location,
   BroadcastTournamentDates? dates,
+  Uri? website,
 });
 
 typedef BroadcastTournamentDates = ({
@@ -81,6 +83,7 @@ class BroadcastRound with _$BroadcastRound {
     required String name,
     required RoundStatus status,
     required DateTime? startsAt,
+    DateTime? finishedAt,
   }) = _BroadcastRound;
 }
 

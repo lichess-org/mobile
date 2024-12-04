@@ -249,7 +249,6 @@ class _ChapterButton extends ConsumerWidget {
         builder: (_) => DraggableScrollableSheet(
           initialChildSize: 0.6,
           maxChildSize: 0.6,
-          minChildSize: 0.0,
           snap: true,
           expand: false,
           builder: (context, scrollController) {

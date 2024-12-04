@@ -328,7 +328,7 @@ class CupertinoIconButton extends StatelessWidget {
 /// InkWell that adapts to the iOS platform.
 ///
 /// Used to create a button that shows a ripple on Android and a highlight on iOS.
-class AdaptiveInkWell extends StatefulWidget {
+class AdaptiveInkWell extends StatelessWidget {
   const AdaptiveInkWell({
     required this.child,
     this.onTap,
@@ -351,65 +351,22 @@ class AdaptiveInkWell extends StatefulWidget {
   final Color? splashColor;
 
   @override
-  State<AdaptiveInkWell> createState() => _AdaptiveInkWellState();
-}
-
-class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
-  bool _isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return InkWell(
-          onTap: widget.onTap,
-          onTapDown: widget.onTapDown,
-          onTapUp: widget.onTapUp,
-          onTapCancel: widget.onTapCancel,
-          onLongPress: widget.onLongPress,
-          borderRadius: widget.borderRadius,
-          splashColor: widget.splashColor,
-          child: widget.child,
-        );
-      case TargetPlatform.iOS:
-        return GestureDetector(
-          onLongPress: widget.onLongPress,
-          onTap: widget.onTap,
-          onTapDown: (details) {
-            widget.onTapDown?.call(details);
-            if (widget.onTap == null) return;
-            setState(() => _isPressed = true);
-          },
-          onTapCancel: () {
-            widget.onTapCancel?.call();
-            setState(() => _isPressed = false);
-          },
-          onTapUp: (details) {
-            widget.onTapUp?.call(details);
-            Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
-              if (mounted) {
-                setState(() => _isPressed = false);
-              }
-            });
-          },
-          child: Semantics(
-            button: true,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: widget.borderRadius,
-                color: _isPressed
-                    ? widget.splashColor ??
-                        CupertinoColors.systemGrey5.resolveFrom(context)
-                    : null,
-              ),
-              child: widget.child,
-            ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
+    final platform = Theme.of(context).platform;
+    return InkWell(
+      onTap: onTap,
+      onTapDown: onTapDown,
+      onTapUp: onTapUp,
+      onTapCancel: onTapCancel,
+      onLongPress: onLongPress,
+      borderRadius: borderRadius,
+      splashColor: platform == TargetPlatform.iOS
+          ? splashColor ?? CupertinoColors.systemGrey5.resolveFrom(context)
+          : splashColor,
+      splashFactory:
+          platform == TargetPlatform.iOS ? NoSplash.splashFactory : null,
+      child: child,
+    );
   }
 }
 

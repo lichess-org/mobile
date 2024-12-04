@@ -83,7 +83,7 @@ class PerfCards extends StatelessWidget {
                 width: 100,
                 child: PlatformCard(
                   child: AdaptiveInkWell(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     onTap: isPerfWithoutStats
                         ? null
                         : () => _handlePerfCardTap(context, perf),
