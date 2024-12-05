@@ -7,13 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/styles/transparent_image.dart';
+import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -45,18 +45,30 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
+  ImageColorWorker? _worker;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _initWorker();
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _worker?.close();
     super.dispose();
+  }
+
+  Future<void> _initWorker() async {
+    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    if (mounted) {
+      setState(() {
+        _worker = worker;
+      });
+    }
   }
 
   void _scrollListener() {
@@ -74,7 +86,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
-    if (!broadcasts.hasValue && broadcasts.isLoading) {
+    if (_worker == null || (!broadcasts.hasValue && broadcasts.isLoading)) {
       return const Center(
         child: CircularProgressIndicator.adaptive(),
       );
@@ -105,8 +117,10 @@ class _BodyState extends ConsumerState<_Body> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemBuilder: (context, index) =>
-                  BroadcastGridItem(broadcast: broadcasts.value!.active[index]),
+              itemBuilder: (context, index) => BroadcastGridItem(
+                broadcast: broadcasts.value!.active[index],
+                worker: _worker!,
+              ),
               itemCount: broadcasts.value!.active.length,
             ),
           ),
@@ -128,6 +142,7 @@ class _BodyState extends ConsumerState<_Body> {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) => BroadcastGridItem(
+                worker: _worker!,
                 broadcast: broadcasts.value!.upcoming[index],
               ),
               itemCount: broadcasts.value!.upcoming.length,
@@ -150,15 +165,18 @@ class _BodyState extends ConsumerState<_Body> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemBuilder: (context, index) => (broadcasts.isLoading &&
-                      index >= itemsCount - loadingItems)
-                  ? Shimmer(
-                      child: ShimmerLoading(
-                        isLoading: true,
-                        child: BroadcastGridItem.loading(),
-                      ),
-                    )
-                  : BroadcastGridItem(broadcast: broadcasts.value!.past[index]),
+              itemBuilder: (context, index) =>
+                  (broadcasts.isLoading && index >= itemsCount - loadingItems)
+                      ? Shimmer(
+                          child: ShimmerLoading(
+                            isLoading: true,
+                            child: BroadcastGridItem.loading(_worker!),
+                          ),
+                        )
+                      : BroadcastGridItem(
+                          worker: _worker!,
+                          broadcast: broadcasts.value!.past[index],
+                        ),
               itemCount: itemsCount,
             ),
           ),
@@ -169,11 +187,16 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class BroadcastGridItem extends StatefulWidget {
+  const BroadcastGridItem({
+    required this.broadcast,
+    required this.worker,
+    super.key,
+  });
+
   final Broadcast broadcast;
+  final ImageColorWorker worker;
 
-  const BroadcastGridItem({required this.broadcast});
-
-  BroadcastGridItem.loading()
+  BroadcastGridItem.loading(this.worker)
       : broadcast = Broadcast(
           tour: const BroadcastTournamentData(
             id: BroadcastTournamentId(''),
@@ -203,48 +226,71 @@ class BroadcastGridItem extends StatefulWidget {
   State<BroadcastGridItem> createState() => _BroadcastGridItemState();
 }
 
+typedef _CardColors = ({
+  Color primaryContainer,
+  Color onPrimaryContainer,
+});
+final Map<ImageProvider, _CardColors> _colorsCache = {
+  kDefaultBroadcastImage: (
+    primaryContainer: LichessColors.brag,
+    onPrimaryContainer: const Color(0xFF000000),
+  ),
+};
+
+const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+
 class _BroadcastGridItemState extends State<BroadcastGridItem> {
-  ColorScheme? _colorScheme;
+  _CardColors? _cardColors;
+
+  String? get imageUrl => widget.broadcast.tour.imageUrl;
+
+  ImageProvider get image =>
+      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.broadcast.tour.imageUrl != null) {
-      _fetchColorScheme(widget.broadcast.tour.imageUrl!);
+    final cachedColors = _colorsCache[image];
+    if (cachedColors != null) {
+      _cardColors = cachedColors;
+    } else {
+      if (imageUrl != null) {
+        _fetchImageAndColors(image as NetworkImage);
+      }
     }
   }
 
-  Future<void> _fetchColorScheme(String url) async {
+  Future<void> _fetchImageAndColors(NetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
       SchedulerBinding.instance.scheduleFrameCallback((_) {
-        scheduleMicrotask(() => _fetchColorScheme(url));
+        scheduleMicrotask(() => _fetchImageAndColors(provider));
       });
-    } else {
-      try {
-        final colorScheme = await ColorScheme.fromImageProvider(
-          provider: NetworkImage(url),
-          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+    } else if (widget.worker.closed == false) {
+      final response = await widget.worker.getImageColors(provider.url);
+      if (response != null) {
+        final (primaryContainer, onPrimaryContainer) = response;
+        final cardColors = (
+          primaryContainer: Color(primaryContainer),
+          onPrimaryContainer: Color(onPrimaryContainer),
         );
+        _colorsCache[provider] = cardColors;
         if (mounted) {
           setState(() {
-            _colorScheme = colorScheme;
+            _cardColors = cardColors;
           });
         }
-      } catch (_) {
-        // ignore
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor =
-        _colorScheme?.primaryContainer ?? Colors.transparent;
-    final titleColor = _colorScheme?.onPrimaryContainer;
+    final backgroundColor = _cardColors?.primaryContainer ?? Colors.transparent;
+    final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _colorScheme?.onPrimaryContainer.withValues(alpha: 0.7) ??
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.7) ??
             textShade(context, 0.7);
 
     return AdaptiveInkWell(
@@ -267,6 +313,15 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
               ? null
               : kElevationToShadow[1],
         ),
+        foregroundDecoration: BoxDecoration(
+          border: (widget.broadcast.isLive)
+              ? Border.all(
+                  color: LichessColors.red.withValues(alpha: 0.7),
+                  width: 3,
+                )
+              : null,
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,17 +340,15 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                   tileMode: TileMode.clamp,
                 ).createShader(bounds);
               },
-              child: widget.broadcast.tour.imageUrl != null
-                  ? AspectRatio(
-                      aspectRatio: 2.0,
-                      child: FadeInImage.memoryNetwork(
-                        placeholder: transparentImage,
-                        image: widget.broadcast.tour.imageUrl!,
-                        imageErrorBuilder: (context, error, stackTrace) =>
-                            const DefaultBroadcastImage(aspectRatio: 2.0),
-                      ),
-                    )
-                  : const DefaultBroadcastImage(aspectRatio: 2.0),
+              child: AspectRatio(
+                aspectRatio: 2.0,
+                child: FadeInImage(
+                  placeholder: kDefaultBroadcastImage,
+                  image: image,
+                  imageErrorBuilder: (context, error, stackTrace) =>
+                      const Image(image: kDefaultBroadcastImage),
+                ),
+              ),
             ),
             if (widget.broadcast.round.startsAt != null ||
                 widget.broadcast.isLive)

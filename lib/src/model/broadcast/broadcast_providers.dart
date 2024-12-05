@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
@@ -52,4 +53,17 @@ Future<BroadcastTournament> broadcastTournament(
     (client) =>
         BroadcastRepository(client).getTournament(broadcastTournamentId),
   );
+}
+
+@Riverpod(keepAlive: true)
+BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
+  return const BroadcastImageWorkerFactory();
+}
+
+class BroadcastImageWorkerFactory {
+  const BroadcastImageWorkerFactory();
+
+  Future<ImageColorWorker> spawn() async {
+    return ImageColorWorker.spawn();
+  }
 }
