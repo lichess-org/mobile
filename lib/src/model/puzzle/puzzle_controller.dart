@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:developer';
 import 'package:async/async.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -208,6 +209,18 @@ class PuzzleController extends _$PuzzleController {
     state = state.copyWith(
       viewedSolutionRecently: false,
     );
+  }
+
+  void toggleHint() {
+    log("Toggle Hint!");
+    final nodeList = _gameTree.branchesOn(state.currentPath).toList();
+    int size = state.initialPath.size;
+    int nodeLength = nodeList.length;
+    // log('Initial Path size:$size');
+    // log('NodeList length:$nodeLength');
+    // this produces the the solution move
+    String solutionHint = state.puzzle.puzzle.solution[nodeLength-size];
+    log('solutionHint:$solutionHint');
   }
 
   void viewSolution() {
