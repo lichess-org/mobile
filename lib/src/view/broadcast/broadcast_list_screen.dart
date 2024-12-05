@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +22,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 final _dateFormatter = DateFormat.MMMd().add_Hm();
 final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
+const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
+const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 16.0);
+
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
   const BroadcastListScreen({super.key});
@@ -29,7 +34,12 @@ class BroadcastListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.broadcastLiveBroadcasts),
+        title: AutoSizeText(
+          context.l10n.broadcastLiveBroadcasts,
+          minFontSize: 14.0,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
       ),
       body: const _Body(),
     );
@@ -100,10 +110,17 @@ class _BodyState extends ConsumerState<_Body> {
     }
 
     final isTablet = isTabletOrLarger(context);
-    final itemsByRow = isTablet ? 6 : 2;
-    final loadingItems = isTablet ? 36 : 12;
+    final itemsByRow = isTablet ? 2 : 1;
+    const loadingItems = 12;
     final itemsCount = broadcasts.requireValue.past.length +
         (broadcasts.isLoading ? loadingItems : 0);
+
+    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: itemsByRow,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 1.3,
+    );
 
     return SafeArea(
       child: CustomScrollView(
@@ -112,11 +129,7 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: itemsByRow,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
+              gridDelegate: gridDelegate,
               itemBuilder: (context, index) => BroadcastGridItem(
                 broadcast: broadcasts.value!.active[index],
                 worker: _worker!,
@@ -136,11 +149,7 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: itemsByRow,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
+              gridDelegate: gridDelegate,
               itemBuilder: (context, index) => BroadcastGridItem(
                 worker: _worker!,
                 broadcast: broadcasts.value!.upcoming[index],
@@ -160,11 +169,7 @@ class _BodyState extends ConsumerState<_Body> {
           SliverPadding(
             padding: Styles.bodySectionPadding,
             sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: itemsByRow,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
+              gridDelegate: gridDelegate,
               itemBuilder: (context, index) =>
                   (broadcasts.isLoading && index >= itemsCount - loadingItems)
                       ? Shimmer(
@@ -237,8 +242,6 @@ final Map<ImageProvider, _CardColors> _colorsCache = {
   ),
 };
 
-const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-
 class _BroadcastGridItemState extends State<BroadcastGridItem> {
   _CardColors? _cardColors;
 
@@ -294,7 +297,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
             textShade(context, 0.7);
 
     return AdaptiveInkWell(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: kBroadcastGridItemBorderRadius,
       onTap: () {
         pushPlatformRoute(
           context,
@@ -307,7 +310,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: kBroadcastGridItemBorderRadius,
           color: backgroundColor,
           boxShadow: Theme.of(context).platform == TargetPlatform.iOS
               ? null
@@ -320,7 +323,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                   width: 3,
                 )
               : null,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: kBroadcastGridItemBorderRadius,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -350,61 +353,66 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                 ),
               ),
             ),
-            if (widget.broadcast.round.startsAt != null ||
-                widget.broadcast.isLive)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _formatDate(widget.broadcast.round.startsAt!),
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: subTitleColor,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.broadcast.round.startsAt != null ||
+                      widget.broadcast.isLive)
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.broadcast.round.name,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subTitleColor,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          const SizedBox(width: 4.0),
+                          if (widget.broadcast.isLive)
+                            const Text(
+                              'LIVE',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          else
+                            Text(
+                              _formatDate(widget.broadcast.round.startsAt!),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: subTitleColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                        ],
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
                     ),
-                    if (widget.broadcast.isLive) ...[
-                      const SizedBox(width: 4.0),
-                      const Text(
-                        'LIVE',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                  const SizedBox(height: 4.0),
+                  Padding(
+                    padding: kBroadcastGridItemContentPadding,
+                    child: Text(
+                      widget.broadcast.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
-                    ],
-                  ],
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                widget.broadcast.round.name,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: subTitleColor,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ),
-            const SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                widget.broadcast.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: titleColor,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

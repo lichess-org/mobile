@@ -38,13 +38,6 @@ class BroadcastOverviewTab extends ConsumerWidget {
           child: ListView(
             padding: Styles.bodyPadding,
             children: [
-              if (Theme.of(context).platform == TargetPlatform.iOS) ...[
-                Text(
-                  broadcast.title,
-                  style: Styles.title,
-                ),
-                const SizedBox(height: 16.0),
-              ],
               if (tournament.data.imageUrl != null) ...[
                 Image.network(tournament.data.imageUrl!),
                 const SizedBox(height: 16.0),

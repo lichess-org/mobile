@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -74,43 +75,81 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
 
     switch (tournament) {
       case AsyncData(:final value):
+        // Eagerly initalize the round controller so it stays alive when switching tabs
+        ref.watch(
+          broadcastRoundControllerProvider(
+            _selectedRoundId ?? value.defaultRoundId,
+          ),
+        );
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: CupertinoSlidingSegmentedControl<_ViewMode>(
-                groupValue: _selectedSegment,
-                children: {
-                  _ViewMode.overview: Text(context.l10n.broadcastOverview),
-                  _ViewMode.boards: Text(context.l10n.broadcastBoards),
-                },
-                onValueChanged: (_ViewMode? view) {
-                  if (view != null) {
-                    setState(() {
-                      _selectedSegment = view;
-                    });
-                  }
-                },
+              middle: AutoSizeText(
+                widget.broadcast.title,
+                minFontSize: 14.0,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
+              automaticBackgroundVisibility: false,
+              border: null,
             ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: _selectedSegment == _ViewMode.overview
-                      ? BroadcastOverviewTab(
-                          broadcast: widget.broadcast,
-                          tournamentId: _selectedTournamentId,
-                        )
-                      : BroadcastBoardsTab(
-                          _selectedRoundId ?? value.defaultRoundId,
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  Container(
+                    height: kMinInteractiveDimensionCupertino,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                      border: const Border(
+                        bottom: BorderSide(
+                          color: Color(0x4D000000),
+                          width: 0.0,
                         ),
-                ),
-                _BottomBar(
-                  tournament: value,
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  setTournamentId: setTournamentId,
-                  setRoundId: setRoundId,
-                ),
-              ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 8.0,
+                      ),
+                      child: CupertinoSlidingSegmentedControl<_ViewMode>(
+                        groupValue: _selectedSegment,
+                        children: {
+                          _ViewMode.overview:
+                              Text(context.l10n.broadcastOverview),
+                          _ViewMode.boards: Text(context.l10n.broadcastBoards),
+                        },
+                        onValueChanged: (_ViewMode? view) {
+                          if (view != null) {
+                            setState(() {
+                              _selectedSegment = view;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: _selectedSegment == _ViewMode.overview
+                        ? BroadcastOverviewTab(
+                            broadcast: widget.broadcast,
+                            tournamentId: _selectedTournamentId,
+                          )
+                        : BroadcastBoardsTab(
+                            _selectedRoundId ?? value.defaultRoundId,
+                          ),
+                  ),
+                  _BottomBar(
+                    tournament: value,
+                    roundId: _selectedRoundId ?? value.defaultRoundId,
+                    setTournamentId: setTournamentId,
+                    setRoundId: setRoundId,
+                  ),
+                ],
+              ),
             ),
           );
         } else {
