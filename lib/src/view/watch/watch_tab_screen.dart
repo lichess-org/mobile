@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -87,12 +88,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     );
   }
 
-  List<Widget> get watchTabWidgets => const [
-        _BroadcastWidget(),
-        _WatchTvWidget(),
-        _StreamerWidget(),
-      ];
-
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
@@ -105,29 +100,14 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         appBar: AppBar(
           title: Text(context.l10n.watch),
         ),
-        body: RefreshIndicator(
-          key: _androidRefreshKey,
-          onRefresh: refreshData,
-          child: SafeArea(
-            child: OrientationBuilder(
-              builder: (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? ListView(
-                        controller: watchScrollController,
-                        children: watchTabWidgets,
-                      )
-                    : GridView(
-                        controller: watchScrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        children: watchTabWidgets,
-                      );
-              },
-            ),
-          ),
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: refreshData,
+              child: _Body(orientation),
+            );
+          },
         ),
       ),
     );
@@ -151,20 +131,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               ),
               SliverSafeArea(
                 top: false,
-                sliver: orientation == Orientation.portrait
-                    ? SliverList(
-                        delegate: SliverChildListDelegate(
-                          watchTabWidgets,
-                        ),
-                      )
-                    : SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        delegate: SliverChildListDelegate(watchTabWidgets),
-                      ),
+                sliver: _Body(orientation),
               ),
             ],
           );
@@ -176,6 +143,45 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Future<void> refreshData() => _refreshData(ref);
 }
 
+class _Body extends ConsumerWidget {
+  const _Body(this.orientation);
+
+  final Orientation orientation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final featuredChannels = ref.watch(featuredChannelsProvider);
+    final streamers = ref.watch(liveStreamersProvider);
+
+    final content = orientation == Orientation.portrait
+        ? [
+            _BroadcastWidget(broadcastList),
+            _WatchTvWidget(featuredChannels),
+            _StreamerWidget(streamers),
+          ]
+        : [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _BroadcastWidget(broadcastList)),
+                Expanded(child: _WatchTvWidget(featuredChannels)),
+              ],
+            ),
+            _StreamerWidget(streamers),
+          ];
+
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(
+            delegate: SliverChildListDelegate(content),
+          )
+        : ListView(
+            controller: watchScrollController,
+            children: content,
+          );
+  }
+}
+
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
     ref.refresh(broadcastsPaginatorProvider.future),
@@ -185,14 +191,14 @@ Future<void> _refreshData(WidgetRef ref) {
 }
 
 class _BroadcastWidget extends ConsumerWidget {
-  const _BroadcastWidget();
+  final AsyncValue<BroadcastList> broadcastList;
+
+  const _BroadcastWidget(this.broadcastList);
 
   static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastList = ref.watch(broadcastsPaginatorProvider);
-
     return broadcastList.when(
       data: (data) {
         return ListSection(
@@ -296,12 +302,12 @@ class _BroadcastTile extends ConsumerWidget {
 }
 
 class _WatchTvWidget extends ConsumerWidget {
-  const _WatchTvWidget();
+  final AsyncValue<IList<TvGameSnapshot>> featuredChannels;
+
+  const _WatchTvWidget(this.featuredChannels);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final featuredChannels = ref.watch(featuredChannelsProvider);
-
     return featuredChannels.when(
       data: (data) {
         if (data.isEmpty) {
@@ -360,15 +366,15 @@ class _WatchTvWidget extends ConsumerWidget {
 }
 
 class _StreamerWidget extends ConsumerWidget {
-  const _StreamerWidget();
+  final AsyncValue<IList<Streamer>> streamers;
+
+  const _StreamerWidget(this.streamers);
 
   static const int numberOfItems = 10;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streamerState = ref.watch(liveStreamersProvider);
-
-    return streamerState.when(
+    return streamers.when(
       data: (data) {
         if (data.isEmpty) {
           return const SizedBox.shrink();

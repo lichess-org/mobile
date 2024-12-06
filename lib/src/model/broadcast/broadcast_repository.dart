@@ -12,7 +12,7 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<BroadcastsList> getBroadcasts({int page = 1}) {
+  Future<BroadcastList> getBroadcasts({int page = 1}) {
     return client.readJson(
       Uri(
         path: '/api/broadcast/top',
@@ -53,7 +53,7 @@ class BroadcastRepository {
   }
 }
 
-BroadcastsList _makeBroadcastResponseFromJson(
+BroadcastList _makeBroadcastResponseFromJson(
   Map<String, dynamic> json,
 ) {
   return (
