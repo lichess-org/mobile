@@ -143,6 +143,7 @@ class PuzzleController extends _$PuzzleController {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
+      state = state.copyWith(showHint: false);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest =
           nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
@@ -245,12 +246,13 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void toggleHint() {
-    log('Toggle Hint!');
-    NormalMove move = solutionMove();
-    state = state.copyWith(
-      showHint: !state.showHint,
-      hintMove: move,
-    );
+    final showHint = !state.showHint;
+    state = state.copyWith(showHint: showHint);
+    if (state.showHint) {
+      final NormalMove move = solutionMove();
+      state = state.copyWith(hintMove: move);
+    }
+
   }
 
   void skipMove() {
