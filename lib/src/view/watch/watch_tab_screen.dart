@@ -88,18 +88,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     );
   }
 
-  List<Widget> watchTabWidgets(WidgetRef ref) {
-    final broadcastList = ref.watch(broadcastsPaginatorProvider);
-    final featuredChannels = ref.watch(featuredChannelsProvider);
-    final streamers = ref.watch(liveStreamersProvider);
-
-    return [
-      _BroadcastWidget(broadcastList),
-      _WatchTvWidget(featuredChannels),
-      _StreamerWidget(streamers),
-    ];
-  }
-
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
@@ -112,29 +100,14 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         appBar: AppBar(
           title: Text(context.l10n.watch),
         ),
-        body: RefreshIndicator(
-          key: _androidRefreshKey,
-          onRefresh: refreshData,
-          child: SafeArea(
-            child: OrientationBuilder(
-              builder: (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? ListView(
-                        controller: watchScrollController,
-                        children: watchTabWidgets(ref),
-                      )
-                    : GridView(
-                        controller: watchScrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        children: watchTabWidgets(ref),
-                      );
-              },
-            ),
-          ),
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: refreshData,
+              child: _Body(orientation),
+            );
+          },
         ),
       ),
     );
@@ -158,20 +131,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               ),
               SliverSafeArea(
                 top: false,
-                sliver: orientation == Orientation.portrait
-                    ? SliverList(
-                        delegate: SliverChildListDelegate(
-                          watchTabWidgets(ref),
-                        ),
-                      )
-                    : SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        delegate: SliverChildListDelegate(watchTabWidgets(ref)),
-                      ),
+                sliver: _Body(orientation),
               ),
             ],
           );
@@ -181,6 +141,45 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Future<void> refreshData() => _refreshData(ref);
+}
+
+class _Body extends ConsumerWidget {
+  const _Body(this.orientation);
+
+  final Orientation orientation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final featuredChannels = ref.watch(featuredChannelsProvider);
+    final streamers = ref.watch(liveStreamersProvider);
+
+    final content = orientation == Orientation.portrait
+        ? [
+            _BroadcastWidget(broadcastList),
+            _WatchTvWidget(featuredChannels),
+            _StreamerWidget(streamers),
+          ]
+        : [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _BroadcastWidget(broadcastList)),
+                Expanded(child: _WatchTvWidget(featuredChannels)),
+              ],
+            ),
+            _StreamerWidget(streamers),
+          ];
+
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(
+            delegate: SliverChildListDelegate(content),
+          )
+        : ListView(
+            controller: watchScrollController,
+            children: content,
+          );
+  }
 }
 
 Future<void> _refreshData(WidgetRef ref) {
