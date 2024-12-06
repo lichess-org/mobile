@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -35,7 +34,7 @@ class BroadcastListScreen extends StatelessWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: AutoSizeText(
-          context.l10n.broadcastLiveBroadcasts,
+          context.l10n.broadcastBroadcasts,
           minFontSize: 14.0,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
@@ -235,12 +234,7 @@ typedef _CardColors = ({
   Color primaryContainer,
   Color onPrimaryContainer,
 });
-final Map<ImageProvider, _CardColors> _colorsCache = {
-  kDefaultBroadcastImage: (
-    primaryContainer: LichessColors.brag,
-    onPrimaryContainer: const Color(0xFF000000),
-  ),
-};
+final Map<ImageProvider, _CardColors> _colorsCache = {};
 
 class _BroadcastGridItemState extends State<BroadcastGridItem> {
   _CardColors? _cardColors;
@@ -290,14 +284,18 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = _cardColors?.primaryContainer ?? Colors.transparent;
+    final defaultBackgroundColor =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? Styles.cupertinoCardColor.resolveFrom(context)
+            : Theme.of(context).colorScheme.surfaceContainer;
+    final backgroundColor =
+        _cardColors?.primaryContainer ?? defaultBackgroundColor;
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.7) ??
             textShade(context, 0.7);
 
-    return AdaptiveInkWell(
-      borderRadius: kBroadcastGridItemBorderRadius,
+    return GestureDetector(
       onTap: () {
         pushPlatformRoute(
           context,
@@ -307,7 +305,8 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
               BroadcastRoundScreen(broadcast: widget.broadcast),
         );
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: kBroadcastGridItemBorderRadius,
@@ -345,10 +344,20 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
               },
               child: AspectRatio(
                 aspectRatio: 2.0,
-                child: FadeInImage(
-                  placeholder: kDefaultBroadcastImage,
+                child: Image(
                   image: image,
-                  imageErrorBuilder: (context, error, stackTrace) =>
+                  frameBuilder:
+                      (context, child, frame, wasSynchronouslyLoaded) {
+                    if (wasSynchronouslyLoaded) {
+                      return child;
+                    }
+                    return AnimatedOpacity(
+                      duration: const Duration(milliseconds: 500),
+                      opacity: frame == null ? 0 : 1,
+                      child: child,
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
                       const Image(image: kDefaultBroadcastImage),
                 ),
               ),
@@ -379,7 +388,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                             const Text(
                               'LIVE',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red,
                               ),
@@ -427,8 +436,8 @@ String _formatDate(DateTime date) {
 
   return (!diff.isNegative && diff.inDays == 0)
       ? diff.inHours == 0
-          ? 'In ${diff.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
-          : 'In ${diff.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
+          ? 'in ${diff.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
+          : 'in ${diff.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
       : diff.inDays < 365
           ? _dateFormatter.format(date)
           : _dateFormatterWithYear.format(date);

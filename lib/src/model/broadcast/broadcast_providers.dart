@@ -25,12 +25,12 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
     final broadcastList = state.requireValue;
     final nextPage = broadcastList.nextPage;
 
-    if (nextPage != null && nextPage > 20) return;
+    if (nextPage == null || nextPage > 20) return;
 
     state = const AsyncLoading();
 
     final broadcastListNewPage = await ref.withClient(
-      (client) => BroadcastRepository(client).getBroadcasts(page: nextPage!),
+      (client) => BroadcastRepository(client).getBroadcasts(page: nextPage),
     );
 
     state = AsyncData(
