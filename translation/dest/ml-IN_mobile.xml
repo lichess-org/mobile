@@ -40,6 +40,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">വൃതിയാനം കാണിപ്പിക്കുക</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">എന്തോ കുഴപ്പം സംഭവിച്ചു.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">വ്യവസ്ഥാനിറങ്ങൾ</string>
+  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">ചമയം</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ഉപകരണങ്ങൾ</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">മറ്റെ കളിക്കാര്‍ക്കായി കാത്തുനിൽക്കുന്നു...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">കാണുക</string>
