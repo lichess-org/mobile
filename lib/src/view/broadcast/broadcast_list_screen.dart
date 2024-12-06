@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.MMMd().add_Hm();
@@ -31,16 +32,26 @@ class BroadcastListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: AutoSizeText(
-          context.l10n.broadcastBroadcasts,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
+    final title = AutoSizeText(
+      context.l10n.broadcastBroadcasts,
+      minFontSize: 14.0,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
+    return PlatformWidget(
+      androidBuilder: (_) => Scaffold(
+        body: const _Body(),
+        appBar: AppBar(title: title),
       ),
-      body: const _Body(),
+      iosBuilder: (_) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: title,
+          automaticBackgroundVisibility: false,
+          backgroundColor: Colors.transparent,
+          border: null,
+        ),
+        child: const _Body(),
+      ),
     );
   }
 }
@@ -55,6 +66,9 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
   ImageColorWorker? _worker;
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -121,69 +135,71 @@ class _BodyState extends ConsumerState<_Body> {
       childAspectRatio: 1.3,
     );
 
-    return SafeArea(
+    final sections = [
+      (context.l10n.broadcastOngoing, broadcasts.value!.active),
+      (context.l10n.broadcastUpcoming, broadcasts.value!.upcoming),
+      (context.l10n.broadcastCompleted, broadcasts.value!.past),
+    ];
+
+    return RefreshIndicator.adaptive(
+      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+          ? MediaQuery.paddingOf(context).top + 16.0
+          : 0,
+      key: _refreshIndicatorKey,
+      onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverPadding(
-            padding: Styles.bodySectionPadding,
-            sliver: SliverGrid.builder(
-              gridDelegate: gridDelegate,
-              itemBuilder: (context, index) => BroadcastGridItem(
-                broadcast: broadcasts.value!.active[index],
-                worker: _worker!,
-              ),
-              itemCount: broadcasts.value!.active.length,
-            ),
-          ),
-          SliverPadding(
-            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-            sliver: SliverToBoxAdapter(
-              child: DefaultTextStyle.merge(
-                style: Styles.sectionTitle,
-                child: const Text('Upcoming broadcasts'),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: Styles.bodySectionPadding,
-            sliver: SliverGrid.builder(
-              gridDelegate: gridDelegate,
-              itemBuilder: (context, index) => BroadcastGridItem(
-                worker: _worker!,
-                broadcast: broadcasts.value!.upcoming[index],
-              ),
-              itemCount: broadcasts.value!.upcoming.length,
-            ),
-          ),
-          SliverPadding(
-            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-            sliver: SliverToBoxAdapter(
-              child: DefaultTextStyle.merge(
-                style: Styles.sectionTitle,
-                child: const Text('Past broadcasts'),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: Styles.bodySectionPadding,
-            sliver: SliverGrid.builder(
-              gridDelegate: gridDelegate,
-              itemBuilder: (context, index) =>
-                  (broadcasts.isLoading && index >= itemsCount - loadingItems)
-                      ? Shimmer(
-                          child: ShimmerLoading(
-                            isLoading: true,
-                            child: BroadcastGridItem.loading(_worker!),
+          for (final section in sections)
+            SliverMainAxisGroup(
+              key: ValueKey(section),
+              slivers: [
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  CupertinoSliverNavigationBar(
+                    automaticallyImplyLeading: false,
+                    leading: null,
+                    largeTitle: AutoSizeText(
+                      section.$1,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    transitionBetweenRoutes: false,
+                  )
+                else
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    title: AutoSizeText(
+                      section.$1,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    pinned: true,
+                  ),
+                SliverPadding(
+                  padding: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Styles.horizontalBodyPadding
+                      : Styles.bodySectionPadding,
+                  sliver: SliverGrid.builder(
+                    gridDelegate: gridDelegate,
+                    itemBuilder: (context, index) => (broadcasts.isLoading &&
+                            index >= itemsCount - loadingItems)
+                        ? Shimmer(
+                            child: ShimmerLoading(
+                              isLoading: true,
+                              child: BroadcastGridItem.loading(_worker!),
+                            ),
+                          )
+                        : BroadcastGridItem(
+                            worker: _worker!,
+                            broadcast: section.$2[index],
                           ),
-                        )
-                      : BroadcastGridItem(
-                          worker: _worker!,
-                          broadcast: broadcasts.value!.past[index],
-                        ),
-              itemCount: itemsCount,
+                    itemCount: section.$2.length,
+                  ),
+                ),
+              ],
             ),
-          ),
         ],
       ),
     );

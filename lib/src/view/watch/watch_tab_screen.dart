@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -242,6 +244,8 @@ class _BroadcastTile extends ConsumerWidget {
 
   final Broadcast broadcast;
 
+  static final _dateFormat = DateFormat.E().add_jm();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformListTile(
@@ -253,6 +257,7 @@ class _BroadcastTile extends ConsumerWidget {
           builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
         );
       },
+      leading: const Icon(LichessIcons.radio_tower_lichess),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: Row(
@@ -267,26 +272,25 @@ class _BroadcastTile extends ConsumerWidget {
           ],
         ),
       ),
-      trailing: (broadcast.isLive)
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.circle,
-                  color: context.lichessColors.error,
-                  size: 20,
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  'LIVE',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: context.lichessColors.error,
-                  ),
-                ),
-              ],
-            )
-          : null,
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (broadcast.round.startsAt != null)
+            Text(
+              _dateFormat.format(broadcast.round.startsAt!),
+              style: const TextStyle(fontSize: 10.0),
+            ),
+          if (broadcast.isLive)
+            Text(
+              'LIVE',
+              style: TextStyle(
+                fontSize: 12.0,
+                color: context.lichessColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

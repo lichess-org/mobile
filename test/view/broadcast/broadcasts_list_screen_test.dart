@@ -96,7 +96,7 @@ void main() {
           // wait for broadcast tournaments to load
           await tester.pump(const Duration(milliseconds: 100));
 
-          await tester.scrollUntilVisible(find.text('Past broadcasts'), 200.0);
+          await tester.scrollUntilVisible(find.text('Completed'), 200.0);
 
           await tester.pumpAndSettle();
         });
