@@ -211,25 +211,6 @@ class PuzzleController extends _$PuzzleController {
     );
   }
 
-  void toggleHint() {
-    log('Toggle Hint!');
-    final moveIndex = state.currentPath.size - state.initialPath.size;
-    final solution = state.puzzle.puzzle.solution[moveIndex];
-    // onUserMove(NormalMove.fromUci(solution));
-    final Square from = NormalMove.fromUci(solution).from;
-    final String fromName = from.name;
-    final Piece? piece = state.position.board.pieceAt(from);
-    // state.position.board.roleAt()
-    log('solution:$solution');  
-    log('solution from:$fromName');
-    log('piece$piece');
-    final NormalMove move=NormalMove.fromUci(solution);
-    state = state.copyWith(
-      showHint: !state.showHint,
-      hintMove: move,
-    );
-  }
-
   void viewSolution() {
     if (state.mode == PuzzleMode.view) return;
 
@@ -257,12 +238,25 @@ class PuzzleController extends _$PuzzleController {
     });
   }
 
+  NormalMove solutionMove() {
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    return NormalMove.fromUci(solution);
+  }
+
+  void toggleHint() {
+    log('Toggle Hint!');
+    NormalMove move = solutionMove();
+    state = state.copyWith(
+      showHint: !state.showHint,
+      hintMove: move,
+    );
+  }
+
   void skipMove() {
     if (state.streak != null) {
       state = state.copyWith.streak!(hasSkipped: true);
-      final moveIndex = state.currentPath.size - state.initialPath.size;
-      final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(NormalMove.fromUci(solution));
+      onUserMove(solutionMove());
     }
   }
 
