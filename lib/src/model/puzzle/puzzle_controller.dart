@@ -252,7 +252,6 @@ class PuzzleController extends _$PuzzleController {
       final NormalMove move = solutionMove();
       state = state.copyWith(hintMove: move);
     }
-
   }
 
   void skipMove() {
