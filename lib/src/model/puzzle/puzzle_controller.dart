@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -124,6 +123,7 @@ class PuzzleController extends _$PuzzleController {
           ? Side.white
           : Side.black,
       canViewSolution: false,
+      showHint: false,
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
@@ -212,15 +212,22 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void toggleHint() {
-    log("Toggle Hint!");
-    final nodeList = _gameTree.branchesOn(state.currentPath).toList();
-    int size = state.initialPath.size;
-    int nodeLength = nodeList.length;
-    // log('Initial Path size:$size');
-    // log('NodeList length:$nodeLength');
-    // this produces the the solution move
-    String solutionHint = state.puzzle.puzzle.solution[nodeLength-size];
-    log('solutionHint:$solutionHint');
+    log('Toggle Hint!');
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    // onUserMove(NormalMove.fromUci(solution));
+    final Square from = NormalMove.fromUci(solution).from;
+    final String fromName = from.name;
+    final Piece? piece = state.position.board.pieceAt(from);
+    // state.position.board.roleAt()
+    log('solution:$solution');  
+    log('solution from:$fromName');
+    log('piece$piece');
+    final NormalMove move=NormalMove.fromUci(solution);
+    state = state.copyWith(
+      showHint: !state.showHint,
+      hintMove: move,
+    );
   }
 
   void viewSolution() {
@@ -615,6 +622,8 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,
+    required bool showHint,
+    NormalMove? hintMove,
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,

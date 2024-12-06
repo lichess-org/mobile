@@ -289,6 +289,13 @@ class _Body extends ConsumerWidget {
                         dest: evalBestMove.to,
                       ),
                     ])
+                  : puzzleState.showHint && puzzleState.hintMove != null 
+                  ? ISet([
+                      Circle(
+                        color: const Color(0x40003088),
+                        orig: puzzleState.hintMove!.from,
+                      )
+                    ])
                   : null,
               engineGauge: puzzleState.isEngineEnabled
                   ? (
