@@ -13,7 +13,7 @@ part 'broadcast_providers.g.dart';
 @riverpod
 class BroadcastsPaginator extends _$BroadcastsPaginator {
   @override
-  Future<BroadcastsList> build() async {
+  Future<BroadcastList> build() async {
     final broadcastList = await ref.withClient(
       (client) => BroadcastRepository(client).getBroadcasts(),
     );

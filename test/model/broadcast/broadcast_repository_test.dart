@@ -33,7 +33,7 @@ void main() {
 
       final response = await repo.getBroadcasts();
 
-      expect(response, isA<BroadcastsList>());
+      expect(response, isA<BroadcastList>());
       expect(response.active.isNotEmpty, true);
       expect(response.upcoming.isNotEmpty, true);
       expect(response.past.isNotEmpty, true);
