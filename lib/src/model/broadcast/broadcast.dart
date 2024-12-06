@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
 
-typedef BroadcastsList = ({
+typedef BroadcastList = ({
   IList<Broadcast> active,
   IList<Broadcast> upcoming,
   IList<Broadcast> past,

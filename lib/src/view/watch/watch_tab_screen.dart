@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -87,11 +88,17 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     );
   }
 
-  List<Widget> get watchTabWidgets => const [
-        _BroadcastWidget(),
-        _WatchTvWidget(),
-        _StreamerWidget(),
-      ];
+  List<Widget> watchTabWidgets(WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final featuredChannels = ref.watch(featuredChannelsProvider);
+    final streamers = ref.watch(liveStreamersProvider);
+
+    return [
+      _BroadcastWidget(broadcastList),
+      _WatchTvWidget(featuredChannels),
+      _StreamerWidget(streamers),
+    ];
+  }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -114,7 +121,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 return orientation == Orientation.portrait
                     ? ListView(
                         controller: watchScrollController,
-                        children: watchTabWidgets,
+                        children: watchTabWidgets(ref),
                       )
                     : GridView(
                         controller: watchScrollController,
@@ -123,7 +130,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.92,
                         ),
-                        children: watchTabWidgets,
+                        children: watchTabWidgets(ref),
                       );
               },
             ),
@@ -154,7 +161,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 sliver: orientation == Orientation.portrait
                     ? SliverList(
                         delegate: SliverChildListDelegate(
-                          watchTabWidgets,
+                          watchTabWidgets(ref),
                         ),
                       )
                     : SliverGrid(
@@ -163,7 +170,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.92,
                         ),
-                        delegate: SliverChildListDelegate(watchTabWidgets),
+                        delegate: SliverChildListDelegate(watchTabWidgets(ref)),
                       ),
               ),
             ],
@@ -185,14 +192,14 @@ Future<void> _refreshData(WidgetRef ref) {
 }
 
 class _BroadcastWidget extends ConsumerWidget {
-  const _BroadcastWidget();
+  final AsyncValue<BroadcastList> broadcastList;
+
+  const _BroadcastWidget(this.broadcastList);
 
   static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastList = ref.watch(broadcastsPaginatorProvider);
-
     return broadcastList.when(
       data: (data) {
         return ListSection(
@@ -296,12 +303,12 @@ class _BroadcastTile extends ConsumerWidget {
 }
 
 class _WatchTvWidget extends ConsumerWidget {
-  const _WatchTvWidget();
+  final AsyncValue<IList<TvGameSnapshot>> featuredChannels;
+
+  const _WatchTvWidget(this.featuredChannels);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final featuredChannels = ref.watch(featuredChannelsProvider);
-
     return featuredChannels.when(
       data: (data) {
         if (data.isEmpty) {
@@ -360,15 +367,15 @@ class _WatchTvWidget extends ConsumerWidget {
 }
 
 class _StreamerWidget extends ConsumerWidget {
-  const _StreamerWidget();
+  final AsyncValue<IList<Streamer>> streamers;
+
+  const _StreamerWidget(this.streamers);
 
   static const int numberOfItems = 10;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streamerState = ref.watch(liveStreamersProvider);
-
-    return streamerState.when(
+    return streamers.when(
       data: (data) {
         if (data.isEmpty) {
           return const SizedBox.shrink();
