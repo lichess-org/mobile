@@ -70,33 +70,31 @@ class _Body extends ConsumerWidget {
           );
     }
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          ListSection(
-            children: [
-              SliderSettingsTile(
-                icon: const Icon(Icons.volume_up),
-                value: generalPrefs.masterVolume,
-                values: kMasterVolumeValues,
-                onChangeEnd: (value) {
-                  ref
-                      .read(generalPreferencesProvider.notifier)
-                      .setMasterVolume(value);
-                },
-                labelBuilder: volumeLabel,
-              ),
-            ],
-          ),
-          ChoicePicker(
-            notchedTile: true,
-            choices: SoundTheme.values,
-            selectedItem: generalPrefs.soundTheme,
-            titleBuilder: (t) => Text(soundThemeL10n(context, t)),
-            onSelectedItemChanged: onChanged,
-          ),
-        ],
-      ),
+    return ListView(
+      children: [
+        ListSection(
+          children: [
+            SliderSettingsTile(
+              icon: const Icon(Icons.volume_up),
+              value: generalPrefs.masterVolume,
+              values: kMasterVolumeValues,
+              onChangeEnd: (value) {
+                ref
+                    .read(generalPreferencesProvider.notifier)
+                    .setMasterVolume(value);
+              },
+              labelBuilder: volumeLabel,
+            ),
+          ],
+        ),
+        ChoicePicker(
+          notchedTile: true,
+          choices: SoundTheme.values,
+          selectedItem: generalPrefs.soundTheme,
+          titleBuilder: (t) => Text(soundThemeL10n(context, t)),
+          onSelectedItemChanged: onChanged,
+        ),
+      ],
     );
   }
 }

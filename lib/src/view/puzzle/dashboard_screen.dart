@@ -39,13 +39,10 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PuzzleDashboardWidget(),
-        ],
-      ),
+    return ListView(
+      children: [
+        PuzzleDashboardWidget(),
+      ],
     );
   }
 }

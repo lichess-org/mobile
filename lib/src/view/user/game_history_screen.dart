@@ -157,63 +157,61 @@ class _BodyState extends ConsumerState<_Body> {
       data: (state) {
         final list = state.gameList;
 
-        return SafeArea(
-          child: list.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                  child: Center(
-                    child: Text(
-                      'No games found',
-                    ),
+        return list.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: Center(
+                  child: Text(
+                    'No games found',
                   ),
-                )
-              : ListView.separated(
-                  controller: _scrollController,
-                  separatorBuilder: (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(
-                              height: 1,
-                              cupertinoHasLeading: true,
-                            )
-                          : const PlatformDivider(
-                              height: 1,
-                              color: Colors.transparent,
-                            ),
-                  itemCount: list.length + (state.isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (state.isLoading && index == list.length) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: CenterLoadingIndicator(),
-                      );
-                    } else if (state.hasError &&
-                        state.hasMore &&
-                        index == list.length) {
-                      // TODO: add a retry button
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: Center(
-                          child: Text(
-                            'Could not load more games',
-                          ),
-                        ),
-                      );
-                    }
-
-                    return ExtendedGameListTile(
-                      item: list[index],
-                      userId: widget.user?.id,
-                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                      padding: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const EdgeInsets.symmetric(
-                              horizontal: 14.0,
-                              vertical: 12.0,
-                            )
-                          : null,
-                    );
-                  },
                 ),
-        );
+              )
+            : ListView.separated(
+                controller: _scrollController,
+                separatorBuilder: (context, index) =>
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? const PlatformDivider(
+                            height: 1,
+                            cupertinoHasLeading: true,
+                          )
+                        : const PlatformDivider(
+                            height: 1,
+                            color: Colors.transparent,
+                          ),
+                itemCount: list.length + (state.isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (state.isLoading && index == list.length) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: CenterLoadingIndicator(),
+                    );
+                  } else if (state.hasError &&
+                      state.hasMore &&
+                      index == list.length) {
+                    // TODO: add a retry button
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: Center(
+                        child: Text(
+                          'Could not load more games',
+                        ),
+                      ),
+                    );
+                  }
+
+                  return ExtendedGameListTile(
+                    item: list[index],
+                    userId: widget.user?.id,
+                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                    padding: Theme.of(context).platform == TargetPlatform.iOS
+                        ? const EdgeInsets.symmetric(
+                            horizontal: 14.0,
+                            vertical: 12.0,
+                          )
+                        : null,
+                  );
+                },
+              );
       },
       error: (e, s) {
         debugPrint(

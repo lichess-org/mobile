@@ -48,218 +48,214 @@ class _Body extends ConsumerWidget {
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          ListSection(
-            header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
-            hasLeading: false,
-            showDivider: false,
-            children: [
-              SettingsListTile(
-                settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
-                settingsValue:
-                    pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
-                showCupertinoTrailingValue: false,
-                onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: PieceShiftMethod.values,
-                      selectedItem: boardPrefs.pieceShiftMethod,
-                      labelBuilder: (t) =>
-                          Text(pieceShiftMethodl10n(context, t)),
-                      onSelectedItemChanged: (PieceShiftMethod? value) {
-                        ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setPieceShiftMethod(
-                              value ?? PieceShiftMethod.either,
-                            );
-                      },
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.preferencesHowDoYouMovePieces,
-                      builder: (context) =>
-                          const PieceShiftMethodSettingsScreen(),
-                    );
-                  }
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
-                value: boardPrefs.magnifyDraggedPiece,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleMagnifyDraggedPiece();
-                },
-              ),
-              SettingsListTile(
-                // TODO translate
-                settingsLabel: const Text('Drag target'),
-                explanation:
-                    // TODO translate
-                    'How the target square is highlighted when dragging a piece.',
-                settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
-                onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: DragTargetKind.values,
-                      selectedItem: boardPrefs.dragTargetKind,
-                      labelBuilder: (t) => Text(dragTargetKindLabel(t)),
-                      onSelectedItemChanged: (DragTargetKind? value) {
-                        ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setDragTargetKind(
-                              value ?? DragTargetKind.circle,
-                            );
-                      },
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: 'Dragged piece target',
-                      builder: (context) =>
-                          const DragTargetKindSettingsScreen(),
-                    );
-                  }
-                },
-              ),
-              SwitchSettingTile(
-                // TODO translate
-                title: const Text('Touch feedback'),
-                value: boardPrefs.hapticFeedback,
-                subtitle: const Text(
-                  // TODO translate
-                  'Vibrate when moving pieces or capturing them.',
-                  maxLines: 5,
-                  textAlign: TextAlign.justify,
-                ),
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleHapticFeedback();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPieceAnimation,
-                ),
-                value: boardPrefs.pieceAnimation,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .togglePieceAnimation();
-                },
-              ),
-              SwitchSettingTile(
-                // TODO: Add l10n
-                title: const Text('Shape drawing'),
-                subtitle: const Text(
-                  // TODO: translate
-                  'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
-                  maxLines: 5,
-                  textAlign: TextAlign.justify,
-                ),
-                value: boardPrefs.enableShapeDrawings,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleEnableShapeDrawings();
-                },
-              ),
-            ],
-          ),
-          ListSection(
-            header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-            hasLeading: false,
-            showDivider: false,
-            children: [
-              if (Theme.of(context).platform == TargetPlatform.android &&
-                  !isTabletOrLarger(context))
-                androidVersionAsync.maybeWhen(
-                  data: (version) => version != null && version.sdkInt >= 29
-                      ? SwitchSettingTile(
-                          title: Text(context.l10n.mobileSettingsImmersiveMode),
-                          subtitle: Text(
-                            context.l10n.mobileSettingsImmersiveModeSubtitle,
-                            textAlign: TextAlign.justify,
-                            maxLines: 5,
-                          ),
-                          value: boardPrefs.immersiveModeWhilePlaying ?? false,
-                          onChanged: (value) {
-                            ref
-                                .read(boardPreferencesProvider.notifier)
-                                .toggleImmersiveModeWhilePlaying();
-                          },
-                        )
-                      : const SizedBox.shrink(),
-                  orElse: () => const SizedBox.shrink(),
-                ),
-              SettingsListTile(
-                //TODO Add l10n
-                settingsLabel: const Text('Clock position'),
-                settingsValue: boardPrefs.clockPosition.label,
-                onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: ClockPosition.values,
-                      selectedItem: boardPrefs.clockPosition,
-                      labelBuilder: (t) => Text(t.label),
-                      onSelectedItemChanged: (ClockPosition? value) => ref
+    return ListView(
+      children: [
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
+          hasLeading: false,
+          showDivider: false,
+          children: [
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
+              settingsValue:
+                  pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
+              showCupertinoTrailingValue: false,
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  showChoicePicker(
+                    context,
+                    choices: PieceShiftMethod.values,
+                    selectedItem: boardPrefs.pieceShiftMethod,
+                    labelBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+                    onSelectedItemChanged: (PieceShiftMethod? value) {
+                      ref
                           .read(boardPreferencesProvider.notifier)
-                          .setClockPosition(value ?? ClockPosition.right),
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: 'Clock position',
-                      builder: (context) => const BoardClockPositionScreen(),
-                    );
-                  }
-                },
+                          .setPieceShiftMethod(
+                            value ?? PieceShiftMethod.either,
+                          );
+                    },
+                  );
+                } else {
+                  pushPlatformRoute(
+                    context,
+                    title: context.l10n.preferencesHowDoYouMovePieces,
+                    builder: (context) =>
+                        const PieceShiftMethodSettingsScreen(),
+                  );
+                }
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
+              value: boardPrefs.magnifyDraggedPiece,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleMagnifyDraggedPiece();
+              },
+            ),
+            SettingsListTile(
+              // TODO translate
+              settingsLabel: const Text('Drag target'),
+              explanation:
+                  // TODO translate
+                  'How the target square is highlighted when dragging a piece.',
+              settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  showChoicePicker(
+                    context,
+                    choices: DragTargetKind.values,
+                    selectedItem: boardPrefs.dragTargetKind,
+                    labelBuilder: (t) => Text(dragTargetKindLabel(t)),
+                    onSelectedItemChanged: (DragTargetKind? value) {
+                      ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setDragTargetKind(
+                            value ?? DragTargetKind.circle,
+                          );
+                    },
+                  );
+                } else {
+                  pushPlatformRoute(
+                    context,
+                    title: 'Dragged piece target',
+                    builder: (context) => const DragTargetKindSettingsScreen(),
+                  );
+                }
+              },
+            ),
+            SwitchSettingTile(
+              // TODO translate
+              title: const Text('Touch feedback'),
+              value: boardPrefs.hapticFeedback,
+              subtitle: const Text(
+                // TODO translate
+                'Vibrate when moving pieces or capturing them.',
+                maxLines: 5,
+                textAlign: TextAlign.justify,
               ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPieceDestinations,
-                ),
-                value: boardPrefs.showLegalMoves,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleShowLegalMoves();
-                },
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleHapticFeedback();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(
+                context.l10n.preferencesPieceAnimation,
               ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesBoardHighlights,
-                ),
-                value: boardPrefs.boardHighlights,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleBoardHighlights();
-                },
+              value: boardPrefs.pieceAnimation,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .togglePieceAnimation();
+              },
+            ),
+            SwitchSettingTile(
+              // TODO: Add l10n
+              title: const Text('Shape drawing'),
+              subtitle: const Text(
+                // TODO: translate
+                'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
+                maxLines: 5,
+                textAlign: TextAlign.justify,
               ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesMaterialDifference,
-                ),
-                value: boardPrefs.showMaterialDifference,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleShowMaterialDifference();
-                },
+              value: boardPrefs.enableShapeDrawings,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleEnableShapeDrawings();
+              },
+            ),
+          ],
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+          hasLeading: false,
+          showDivider: false,
+          children: [
+            if (Theme.of(context).platform == TargetPlatform.android &&
+                !isTabletOrLarger(context))
+              androidVersionAsync.maybeWhen(
+                data: (version) => version != null && version.sdkInt >= 29
+                    ? SwitchSettingTile(
+                        title: Text(context.l10n.mobileSettingsImmersiveMode),
+                        subtitle: Text(
+                          context.l10n.mobileSettingsImmersiveModeSubtitle,
+                          textAlign: TextAlign.justify,
+                          maxLines: 5,
+                        ),
+                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                        onChanged: (value) {
+                          ref
+                              .read(boardPreferencesProvider.notifier)
+                              .toggleImmersiveModeWhilePlaying();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+                orElse: () => const SizedBox.shrink(),
               ),
-            ],
-          ),
-        ],
-      ),
+            SettingsListTile(
+              //TODO Add l10n
+              settingsLabel: const Text('Clock position'),
+              settingsValue: boardPrefs.clockPosition.label,
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  showChoicePicker(
+                    context,
+                    choices: ClockPosition.values,
+                    selectedItem: boardPrefs.clockPosition,
+                    labelBuilder: (t) => Text(t.label),
+                    onSelectedItemChanged: (ClockPosition? value) => ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setClockPosition(value ?? ClockPosition.right),
+                  );
+                } else {
+                  pushPlatformRoute(
+                    context,
+                    title: 'Clock position',
+                    builder: (context) => const BoardClockPositionScreen(),
+                  );
+                }
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(
+                context.l10n.preferencesPieceDestinations,
+              ),
+              value: boardPrefs.showLegalMoves,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleShowLegalMoves();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(
+                context.l10n.preferencesBoardHighlights,
+              ),
+              value: boardPrefs.boardHighlights,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleBoardHighlights();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(
+                context.l10n.preferencesMaterialDifference,
+              ),
+              value: boardPrefs.showMaterialDifference,
+              onChanged: (value) {
+                ref
+                    .read(boardPreferencesProvider.notifier)
+                    .toggleShowMaterialDifference();
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

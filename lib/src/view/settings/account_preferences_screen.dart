@@ -47,395 +47,384 @@ class _AccountPreferencesScreenState
           );
         }
 
-        return SafeArea(
-          child: ListView(
-            children: [
-              ListSection(
-                header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-                hasLeading: false,
-                children: [
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesZenMode,
-                    ),
-                    settingsValue: data.zenMode.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: Zen.values,
-                          selectedItem: data.zenMode,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (Zen? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setZen(value ?? data.zenMode),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.preferencesZenMode,
-                          builder: (context) => const ZenSettingsScreen(),
-                        );
-                      }
-                    },
+        return ListView(
+          children: [
+            ListSection(
+              header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+              hasLeading: false,
+              children: [
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesZenMode,
                   ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesPgnPieceNotation,
-                    ),
-                    settingsValue: data.pieceNotation.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: PieceNotation.values,
-                          selectedItem: data.pieceNotation,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (PieceNotation? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setPieceNotation(
-                                          value ?? data.pieceNotation,
-                                        ),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.preferencesPgnPieceNotation,
-                          builder: (context) =>
-                              const PieceNotationSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
-                  SwitchSettingTile(
-                    title: Text(context.l10n.preferencesShowPlayerRatings),
-                    subtitle: Text(
-                      context.l10n.preferencesExplainShowPlayerRatings,
-                      maxLines: 5,
-                      textAlign: TextAlign.justify,
-                    ),
-                    value: data.showRatings.value,
-                    onChanged: isLoading
-                        ? null
-                        : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setShowRatings(BooleanPref(value)),
-                            );
-                          },
-                  ),
-                ],
-              ),
-              ListSection(
-                header:
-                    SettingsSectionTitle(context.l10n.preferencesGameBehavior),
-                hasLeading: false,
-                children: [
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesPremovesPlayingDuringOpponentTurn,
-                    ),
-                    value: data.premove.value,
-                    onChanged: isLoading
-                        ? null
-                        : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setPremove(BooleanPref(value)),
-                            );
-                          },
-                  ),
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.preferencesConfirmResignationAndDrawOffers,
-                    ),
-                    value: data.confirmResign.value,
-                    onChanged: isLoading
-                        ? null
-                        : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setConfirmResign(BooleanPref(value)),
-                            );
-                          },
-                  ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesTakebacksWithOpponentApproval,
-                    ),
-                    settingsValue: data.takeback.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: Takeback.values,
-                          selectedItem: data.takeback,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (Takeback? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setTakeback(value ?? data.takeback),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context
-                              .l10n.preferencesTakebacksWithOpponentApproval,
-                          builder: (context) => const TakebackSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesPromoteToQueenAutomatically,
-                    ),
-                    settingsValue: data.autoQueen.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: AutoQueen.values,
-                          selectedItem: data.autoQueen,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (AutoQueen? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setAutoQueen(value ?? data.autoQueen),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context
-                              .l10n.preferencesPromoteToQueenAutomatically,
-                          builder: (context) => const AutoQueenSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n
-                          .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-                    ),
-                    settingsValue: data.autoThreefold.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: AutoThreefold.values,
-                          selectedItem: data.autoThreefold,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (AutoThreefold? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setAutoThreefold(
-                                          value ?? data.autoThreefold,
-                                        ),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n
-                              .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-                          builder: (context) =>
-                              const AutoThreefoldSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesMoveConfirmation,
-                    ),
-                    settingsValue: data.submitMove.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      showMultipleChoicesPicker(
+                  settingsValue: data.zenMode.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
                         context,
-                        choices: SubmitMoveChoice.values,
-                        selectedItems: data.submitMove.choices,
+                        choices: Zen.values,
+                        selectedItem: data.zenMode,
                         labelBuilder: (t) => Text(t.label(context)),
-                      ).then((value) {
-                        if (value != null) {
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (Zen? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setZen(value ?? data.zenMode),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesZenMode,
+                        builder: (context) => const ZenSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesPgnPieceNotation,
+                  ),
+                  settingsValue: data.pieceNotation.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: PieceNotation.values,
+                        selectedItem: data.pieceNotation,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (PieceNotation? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setPieceNotation(
+                                        value ?? data.pieceNotation,
+                                      ),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesPgnPieceNotation,
+                        builder: (context) =>
+                            const PieceNotationSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SwitchSettingTile(
+                  title: Text(context.l10n.preferencesShowPlayerRatings),
+                  subtitle: Text(
+                    context.l10n.preferencesExplainShowPlayerRatings,
+                    maxLines: 5,
+                    textAlign: TextAlign.justify,
+                  ),
+                  value: data.showRatings.value,
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
                           _setPref(
                             () => ref
                                 .read(accountPreferencesProvider.notifier)
-                                .setSubmitMove(SubmitMove(value)),
+                                .setShowRatings(BooleanPref(value)),
                           );
-                        }
-                      });
-                    },
-                    explanation: context
-                        .l10n.preferencesExplainCanThenBeTemporarilyDisabled,
+                        },
+                ),
+              ],
+            ),
+            ListSection(
+              header:
+                  SettingsSectionTitle(context.l10n.preferencesGameBehavior),
+              hasLeading: false,
+              children: [
+                SwitchSettingTile(
+                  title: Text(
+                    context.l10n.preferencesPremovesPlayingDuringOpponentTurn,
                   ),
-                ],
-              ),
-              ListSection(
-                header:
-                    SettingsSectionTitle(context.l10n.preferencesChessClock),
-                hasLeading: false,
-                children: [
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.preferencesGiveMoreTime,
-                    ),
-                    settingsValue: data.moretime.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: Moretime.values,
-                          selectedItem: data.moretime,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (Moretime? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setMoretime(value ?? data.moretime),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.preferencesGiveMoreTime,
-                          builder: (context) => const MoretimeSettingsScreen(),
+                  value: data.premove.value,
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setPremove(BooleanPref(value)),
+                          );
+                        },
+                ),
+                SwitchSettingTile(
+                  title: Text(
+                    context.l10n.preferencesConfirmResignationAndDrawOffers,
+                  ),
+                  value: data.confirmResign.value,
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setConfirmResign(BooleanPref(value)),
+                          );
+                        },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesTakebacksWithOpponentApproval,
+                  ),
+                  settingsValue: data.takeback.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: Takeback.values,
+                        selectedItem: data.takeback,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (Takeback? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setTakeback(value ?? data.takeback),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context
+                            .l10n.preferencesTakebacksWithOpponentApproval,
+                        builder: (context) => const TakebackSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesPromoteToQueenAutomatically,
+                  ),
+                  settingsValue: data.autoQueen.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: AutoQueen.values,
+                        selectedItem: data.autoQueen,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (AutoQueen? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setAutoQueen(value ?? data.autoQueen),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title:
+                            context.l10n.preferencesPromoteToQueenAutomatically,
+                        builder: (context) => const AutoQueenSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n
+                        .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+                  ),
+                  settingsValue: data.autoThreefold.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: AutoThreefold.values,
+                        selectedItem: data.autoThreefold,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (AutoThreefold? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setAutoThreefold(
+                                        value ?? data.autoThreefold,
+                                      ),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n
+                            .preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+                        builder: (context) =>
+                            const AutoThreefoldSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesMoveConfirmation,
+                  ),
+                  settingsValue: data.submitMove.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    showMultipleChoicesPicker(
+                      context,
+                      choices: SubmitMoveChoice.values,
+                      selectedItems: data.submitMove.choices,
+                      labelBuilder: (t) => Text(t.label(context)),
+                    ).then((value) {
+                      if (value != null) {
+                        _setPref(
+                          () => ref
+                              .read(accountPreferencesProvider.notifier)
+                              .setSubmitMove(SubmitMove(value)),
                         );
                       }
-                    },
+                    });
+                  },
+                  explanation: context
+                      .l10n.preferencesExplainCanThenBeTemporarilyDisabled,
+                ),
+              ],
+            ),
+            ListSection(
+              header: SettingsSectionTitle(context.l10n.preferencesChessClock),
+              hasLeading: false,
+              children: [
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.preferencesGiveMoreTime,
                   ),
-                  SwitchSettingTile(
-                    title:
-                        Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
-                    value: data.clockSound.value,
-                    onChanged: isLoading
-                        ? null
-                        : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setClockSound(BooleanPref(value)),
-                            );
-                          },
+                  settingsValue: data.moretime.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: Moretime.values,
+                        selectedItem: data.moretime,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (Moretime? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setMoretime(value ?? data.moretime),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesGiveMoreTime,
+                        builder: (context) => const MoretimeSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+                SwitchSettingTile(
+                  title:
+                      Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
+                  value: data.clockSound.value,
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setClockSound(BooleanPref(value)),
+                          );
+                        },
+                ),
+              ],
+            ),
+            ListSection(
+              header: SettingsSectionTitle(context.l10n.preferencesPrivacy),
+              hasLeading: false,
+              children: [
+                SwitchSettingTile(
+                  title: Text(
+                    context.l10n.letOtherPlayersFollowYou,
                   ),
-                ],
-              ),
-              ListSection(
-                header: SettingsSectionTitle(context.l10n.preferencesPrivacy),
-                hasLeading: false,
-                children: [
-                  SwitchSettingTile(
-                    title: Text(
-                      context.l10n.letOtherPlayersFollowYou,
-                    ),
-                    value: data.follow.value,
-                    onChanged: isLoading
-                        ? null
-                        : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setFollow(BooleanPref(value)),
-                            );
-                          },
+                  value: data.follow.value,
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setFollow(BooleanPref(value)),
+                          );
+                        },
+                ),
+                SettingsListTile(
+                  settingsLabel: Text(
+                    context.l10n.letOtherPlayersChallengeYou,
                   ),
-                  SettingsListTile(
-                    settingsLabel: Text(
-                      context.l10n.letOtherPlayersChallengeYou,
-                    ),
-                    settingsValue: data.challenge.label(context),
-                    showCupertinoTrailingValue: false,
-                    onTap: () {
-                      if (Theme.of(context).platform ==
-                          TargetPlatform.android) {
-                        showChoicePicker(
-                          context,
-                          choices: Challenge.values,
-                          selectedItem: data.challenge,
-                          labelBuilder: (t) => Text(t.label(context)),
-                          onSelectedItemChanged: isLoading
-                              ? null
-                              : (Challenge? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(
-                                          accountPreferencesProvider.notifier,
-                                        )
-                                        .setChallenge(value ?? data.challenge),
-                                  );
-                                },
-                        );
-                      } else {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.letOtherPlayersChallengeYou,
-                          builder: (context) =>
-                              const _ChallengeSettingsScreen(),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  settingsValue: data.challenge.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: Challenge.values,
+                        selectedItem: data.challenge,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged: isLoading
+                            ? null
+                            : (Challenge? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(
+                                        accountPreferencesProvider.notifier,
+                                      )
+                                      .setChallenge(value ?? data.challenge),
+                                );
+                              },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.letOtherPlayersChallengeYou,
+                        builder: (context) => const _ChallengeSettingsScreen(),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

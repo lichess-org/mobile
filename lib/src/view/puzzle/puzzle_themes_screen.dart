@@ -67,51 +67,48 @@ class _Body extends ConsumerWidget {
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
 
-    return SafeArea(
-      child: themes.when(
-        data: (data) {
-          final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) =
-              data;
+    return themes.when(
+      data: (data) {
+        final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) =
+            data;
 
-          final openingsAvailable = hasConnectivity || hasSavedOpenings;
-          return ListView(
-            children: [
-              Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
-                child: Opacity(
-                  opacity: openingsAvailable ? 1 : 0.5,
-                  child: ExpansionTile(
-                    iconColor: expansionTileColor,
-                    collapsedIconColor: expansionTileColor,
-                    title: Text(context.l10n.puzzleByOpenings),
-                    trailing: const Icon(Icons.keyboard_arrow_right),
-                    onExpansionChanged: openingsAvailable
-                        ? (expanded) {
-                            pushPlatformRoute(
-                              context,
-                              builder: (ctx) => const OpeningThemeScreen(),
-                            );
-                          }
-                        : null,
-                  ),
+        final openingsAvailable = hasConnectivity || hasSavedOpenings;
+        return ListView(
+          children: [
+            Theme(
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: Opacity(
+                opacity: openingsAvailable ? 1 : 0.5,
+                child: ExpansionTile(
+                  iconColor: expansionTileColor,
+                  collapsedIconColor: expansionTileColor,
+                  title: Text(context.l10n.puzzleByOpenings),
+                  trailing: const Icon(Icons.keyboard_arrow_right),
+                  onExpansionChanged: openingsAvailable
+                      ? (expanded) {
+                          pushPlatformRoute(
+                            context,
+                            builder: (ctx) => const OpeningThemeScreen(),
+                          );
+                        }
+                      : null,
                 ),
               ),
-              for (final category in list)
-                _Category(
-                  hasConnectivity: hasConnectivity,
-                  category: category,
-                  onlineThemes: onlineThemes,
-                  savedThemes: savedThemes,
-                ),
-            ],
-          );
-        },
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
-        error: (error, stack) =>
-            const Center(child: Text('Could not load themes.')),
-      ),
+            ),
+            for (final category in list)
+              _Category(
+                hasConnectivity: hasConnectivity,
+                category: category,
+                onlineThemes: onlineThemes,
+                savedThemes: savedThemes,
+              ),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stack) =>
+          const Center(child: Text('Could not load themes.')),
     );
   }
 }
