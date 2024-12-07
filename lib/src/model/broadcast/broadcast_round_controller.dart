@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -21,6 +22,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
   StreamSubscription<SocketEvent>? _subscription;
+  AppLifecycleListener? _appLifecycleListener;
 
   late SocketClient _socketClient;
 
@@ -34,8 +36,15 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        ref.invalidateSelf();
+      },
+    );
+
     ref.onDispose(() {
       _subscription?.cancel();
+      _appLifecycleListener?.dispose();
     });
 
     final round = await ref.withClient(
