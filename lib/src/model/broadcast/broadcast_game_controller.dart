@@ -503,7 +503,7 @@ class BroadcastGameController extends _$BroadcastGameController
           state.requireValue.currentPath,
           _root.branchesOn(state.requireValue.currentPath).map(Step.fromNode),
           initialPositionEval: _root.eval,
-          shouldEmit: (work) => work.path == state.requireValue.currentPath,
+          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
         ?.forEach(
           (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
