@@ -3,10 +3,12 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -15,6 +17,7 @@ import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -56,7 +59,7 @@ class _Body extends ConsumerWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final double boardSize = math.min(
-              400,
+              250,
               constraints.biggest.shortestSide - horizontalPadding * 2,
             );
             return Padding(
@@ -111,6 +114,67 @@ class _Body extends ConsumerWidget {
                     : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
+            SwitchSettingTile(
+              leading: const Icon(Icons.colorize_outlined),
+              title: const Text('Custom theme'),
+              value: generalPrefs.customThemeEnabled,
+              onChanged: (value) {
+                ref
+                    .read(generalPreferencesProvider.notifier)
+                    .toggleCustomTheme();
+              },
+            ),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 300),
+              crossFadeState: generalPrefs.customThemeEnabled
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              firstChild: const SizedBox.shrink(),
+              secondChild: ListSection(
+                margin: EdgeInsets.zero,
+                cupertinoBorderRadius: BorderRadius.zero,
+                cupertinoClipBehavior: Clip.none,
+                children: [
+                  PlatformListTile(
+                    leading: const Icon(Icons.color_lens),
+                    title: const Text('Custom theme color'),
+                    trailing: generalPrefs.customThemeSeed != null
+                        ? Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: generalPrefs.customThemeSeed ??
+                                  LichessColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        : null,
+                    onTap: () {
+                      showAdaptiveDialog<void>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          return PlatformAlertDialog(
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: generalPrefs.customThemeSeed ??
+                                    LichessColors.primary,
+                                onColorChanged: (color) {},
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        ListSection(
+          hasLeading: true,
+          children: [
             SettingsListTile(
               icon: const Icon(LichessIcons.chess_board),
               settingsLabel: Text(context.l10n.board),
