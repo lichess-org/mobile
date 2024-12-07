@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -33,6 +34,7 @@ class BroadcastGameController extends _$BroadcastGameController
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
+  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _subscription;
 
   late SocketClient _socketClient;
@@ -55,11 +57,18 @@ class BroadcastGameController extends _$BroadcastGameController
 
     final evaluationService = ref.watch(evaluationServiceProvider);
 
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        ref.invalidateSelf();
+      },
+    );
+
     ref.onDispose(() {
       _subscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
+      _appLifecycleListener?.dispose();
     });
 
     final pgn = await ref.withClient(
