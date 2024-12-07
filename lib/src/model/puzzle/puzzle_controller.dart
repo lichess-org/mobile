@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -273,7 +274,15 @@ class PuzzleController extends _$PuzzleController {
     state = _loadNewContext(nextContext, nextStreak ?? state.streak);
   }
 
-  void sendStreakResult() {
+  void saveStreakResultLocally() {
+    ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(
+          state.streak!,
+        );
+  }
+
+  void _sendStreakResult() {
+    ref.read(streakStorageProvider(initialContext.userId)).clearActiveStreak();
+
     if (initialContext.userId != null) {
       final streak = state.streak?.index;
       if (streak != null && streak > 0) {
@@ -420,7 +429,7 @@ class PuzzleController extends _$PuzzleController {
             finished: true,
           ),
         );
-        sendStreakResult();
+        _sendStreakResult();
       } else {
         if (_nextPuzzleFuture == null) {
           assert(false, 'next puzzle future cannot be null with streak');
