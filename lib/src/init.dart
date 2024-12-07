@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -92,11 +93,19 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
     await DynamicColorPlugin.getCorePalette().then((value) {
       setCorePalette(value);
 
-      if (getCorePalette() != null && prefs.getString(PrefCategory.board.storageKey) == null) {
-        prefs.setString(
-          PrefCategory.board.storageKey,
-          jsonEncode(BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system)),
-        );
+      if (getCorePalette() != null) {
+        if (prefs.getString(PrefCategory.general.storageKey) == null) {
+          prefs.setString(
+            PrefCategory.general.storageKey,
+            jsonEncode(GeneralPrefs.defaults.copyWith(customThemeEnabled: true)),
+          );
+        }
+        if (prefs.getString(PrefCategory.board.storageKey) == null) {
+          prefs.setString(
+            PrefCategory.board.storageKey,
+            jsonEncode(BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system)),
+          );
+        }
       }
     });
   } catch (e) {

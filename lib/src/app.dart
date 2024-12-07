@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
@@ -139,13 +140,27 @@ class _AppState extends ConsumerState<Application> {
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
-        final colorScheme =
-            generalPrefs.systemColors && dynamicColorScheme != null
-                ? dynamicColorScheme
-                : ColorScheme.fromSeed(
-                  seedColor: boardTheme.colors.darkSquare,
-                  brightness: brightness,
-                );
+        ColorScheme colorScheme;
+        if (generalPrefs.customThemeEnabled) {
+          if (generalPrefs.customThemeSeed != null) {
+            colorScheme = ColorScheme.fromSeed(
+              seedColor: generalPrefs.customThemeSeed!,
+              brightness: brightness,
+            );
+          } else if (dynamicColorScheme != null) {
+            colorScheme = dynamicColorScheme;
+          } else {
+            colorScheme = ColorScheme.fromSeed(
+              seedColor: LichessColors.primary[500]!,
+              brightness: brightness,
+            );
+          }
+        } else {
+          colorScheme = ColorScheme.fromSeed(
+            seedColor: boardTheme.colors.darkSquare,
+            brightness: brightness,
+          );
+        }
 
         final cupertinoThemeData = CupertinoThemeData(
           primaryColor: colorScheme.primary,

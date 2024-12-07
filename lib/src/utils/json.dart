@@ -1,5 +1,63 @@
+import 'dart:ui' show Color, Locale;
+
 import 'package:deep_pick/deep_pick.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+
+class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
+  const LocaleConverter();
+
+  @override
+  Locale? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+    return Locale.fromSubtags(
+      languageCode: json['languageCode'] as String,
+      countryCode: json['countryCode'] as String?,
+      scriptCode: json['scriptCode'] as String?,
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(Locale? locale) {
+    return locale != null
+        ? {
+            'languageCode': locale.languageCode,
+            'countryCode': locale.countryCode,
+            'scriptCode': locale.scriptCode,
+          }
+        : null;
+  }
+}
+
+class ColorConverter implements JsonConverter<Color?, Map<String, dynamic>?> {
+  const ColorConverter();
+
+  @override
+  Color? fromJson(Map<String, dynamic>? json) {
+    return json != null
+        ? Color.from(
+            alpha: json['a'] as double,
+            red: json['r'] as double,
+            green: json['g'] as double,
+            blue: json['b'] as double,
+          )
+        : null;
+  }
+
+  @override
+  Map<String, dynamic>? toJson(Color? color) {
+    return color != null
+        ? {
+            'a': color.a,
+            'r': color.r,
+            'g': color.g,
+            'b': color.b,
+          }
+        : null;
+  }
+}
 
 extension UciExtension on Pick {
   /// Matches a UciCharPair from a string.

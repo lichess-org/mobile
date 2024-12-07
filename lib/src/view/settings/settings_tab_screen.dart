@@ -207,11 +207,13 @@ class _Body extends ConsumerWidget {
                   context,
                   choices: BackgroundThemeMode.values,
                   selectedItem: generalPrefs.themeMode,
-                  labelBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged:
-                      (BackgroundThemeMode? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setThemeMode(value ?? BackgroundThemeMode.system),
+                  labelBuilder: (t) =>
+                      Text(AppBackgroundModeScreen.themeTitle(context, t)),
+                  onSelectedItemChanged: (BackgroundThemeMode? value) => ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setBackgroundThemeMode(
+                        value ?? BackgroundThemeMode.system,
+                      ),
                 );
               } else {
                 pushPlatformRoute(

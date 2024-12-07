@@ -3,18 +3,22 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -41,7 +45,6 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     const horizontalPadding = 16.0;
 
@@ -50,7 +53,7 @@ class _Body extends ConsumerWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final double boardSize = math.min(
-              400,
+              250,
               constraints.biggest.shortestSide - horizontalPadding * 2,
             );
             return Padding(
@@ -82,22 +85,145 @@ class _Body extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
-            if (Theme.of(context).platform == TargetPlatform.android)
-              androidVersionAsync.maybeWhen(
-                data:
-                    (version) =>
-                        version != null && version.sdkInt >= 31
-                            ? SwitchSettingTile(
-                              leading: const Icon(Icons.colorize_outlined),
-                              title: Text(context.l10n.mobileSystemColors),
-                              value: generalPrefs.systemColors,
-                              onChanged: (value) {
-                                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
-                              },
-                            )
-                            : const SizedBox.shrink(),
-                orElse: () => const SizedBox.shrink(),
+            SwitchSettingTile(
+              leading: const Icon(Icons.colorize_outlined),
+              padding: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
+                  : null,
+              title: const Text('Custom theme'),
+              // TODO translate
+              subtitle: const Text(
+                'Configure your own app theme using a seed color. Disable to use the chessboard theme.',
+                maxLines: 3,
               ),
+              value: generalPrefs.customThemeEnabled,
+              onChanged: (value) {
+                ref
+                    .read(generalPreferencesProvider.notifier)
+                    .toggleCustomTheme();
+              },
+            ),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 300),
+              crossFadeState: generalPrefs.customThemeEnabled
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              firstChild: const SizedBox.shrink(),
+              secondChild: ListSection(
+                margin: EdgeInsets.zero,
+                cupertinoBorderRadius: BorderRadius.zero,
+                cupertinoClipBehavior: Clip.none,
+                children: [
+                  PlatformListTile(
+                    leading: const Icon(Icons.color_lens),
+                    title: const Text('Seed color'),
+                    trailing: generalPrefs.customThemeSeed != null
+                        ? Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: generalPrefs.customThemeSeed,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        : getCorePalette() != null
+                            ? Text(context.l10n.mobileSystemColors)
+                            : Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: LichessColors.primary[500],
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                    onTap: () {
+                      showAdaptiveDialog<Object>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          final defaultColor = getCorePalettePrimary() ??
+                              LichessColors.primary[500]!;
+                          bool useDefault =
+                              generalPrefs.customThemeSeed == null;
+                          Color color =
+                              generalPrefs.customThemeSeed ?? defaultColor;
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return PlatformAlertDialog(
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ColorPicker(
+                                        enableAlpha: false,
+                                        pickerColor: color,
+                                        onColorChanged: (c) {
+                                          setState(() {
+                                            useDefault = false;
+                                            color = c;
+                                          });
+                                        },
+                                      ),
+                                      SecondaryButton(
+                                        semanticsLabel: getCorePalette() != null
+                                            ? context.l10n.mobileSystemColors
+                                            : 'Default color',
+                                        onPressed: !useDefault
+                                            ? () {
+                                                setState(() {
+                                                  useDefault = true;
+                                                  color = defaultColor;
+                                                });
+                                              }
+                                            : null,
+                                        child: Text(
+                                          getCorePalette() != null
+                                              ? context.l10n.mobileSystemColors
+                                              : 'Default color',
+                                        ),
+                                      ),
+                                      SecondaryButton(
+                                        semanticsLabel: context.l10n.cancel,
+                                        onPressed: () {
+                                          Navigator.of(context).pop(false);
+                                        },
+                                        child: Text(context.l10n.cancel),
+                                      ),
+                                      SecondaryButton(
+                                        semanticsLabel: context.l10n.ok,
+                                        onPressed: () {
+                                          if (useDefault) {
+                                            Navigator.of(context).pop(null);
+                                          } else {
+                                            Navigator.of(context).pop(color);
+                                          }
+                                        },
+                                        child: Text(context.l10n.ok),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ).then((color) {
+                        if (color != false) {
+                          ref
+                              .read(generalPreferencesProvider.notifier)
+                              .setCustomThemeSeed(color as Color?);
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        ListSection(
+          hasLeading: true,
+          children: [
             SettingsListTile(
               icon: const Icon(LichessIcons.chess_board),
               settingsLabel: Text(context.l10n.board),

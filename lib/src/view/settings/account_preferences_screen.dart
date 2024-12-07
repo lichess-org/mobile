@@ -116,7 +116,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   subtitle: Text(
                     context.l10n.preferencesExplainShowPlayerRatings,
                     maxLines: 5,
-                    textAlign: TextAlign.justify,
                   ),
                   value: data.showRatings.value,
                   onChanged:
