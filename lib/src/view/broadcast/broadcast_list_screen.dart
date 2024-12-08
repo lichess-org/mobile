@@ -216,9 +216,9 @@ class BroadcastGridItem extends StatefulWidget {
   final Broadcast broadcast;
   final ImageColorWorker worker;
 
-  BroadcastGridItem.loading(this.worker)
-      : broadcast = Broadcast(
-          tour: const BroadcastTournamentData(
+  const BroadcastGridItem.loading(this.worker)
+      : broadcast = const Broadcast(
+          tour: BroadcastTournamentData(
             id: BroadcastTournamentId(''),
             name: '',
             imageUrl: null,
@@ -233,13 +233,15 @@ class BroadcastGridItem extends StatefulWidget {
             ),
           ),
           round: BroadcastRound(
-            id: const BroadcastRoundId(''),
+            id: BroadcastRoundId(''),
             name: '',
             status: RoundStatus.finished,
-            startsAt: DateTime.now(),
+            startsAt: null,
+            finishedAt: null,
+            startsAfterPrevious: false,
           ),
           group: null,
-          roundToLinkId: const BroadcastRoundId(''),
+          roundToLinkId: BroadcastRoundId(''),
         );
 
   @override
