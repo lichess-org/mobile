@@ -332,37 +332,40 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
     return BottomSheetScrollableContainer(
       scrollController: widget.scrollController,
       children: [
-        for (final round in widget.rounds)
+        for (final (index, round) in widget.rounds.indexed)
           PlatformListTile(
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
             title: Text(round.name),
-            trailing: switch (round.status) {
-              RoundStatus.finished => Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(_dateFormat.format(round.startsAt!)),
-                    const SizedBox(width: 5.0),
-                    Icon(Icons.check, color: context.lichessColors.good),
-                  ],
-                ),
-              RoundStatus.live => Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(_dateFormat.format(round.startsAt!)),
-                    const SizedBox(width: 5.0),
-                    Icon(Icons.circle, color: context.lichessColors.error),
-                  ],
-                ),
-              RoundStatus.upcoming => Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(_dateFormat.format(round.startsAt!)),
-                    const SizedBox(width: 5.0),
-                    const Icon(Icons.calendar_month, color: Colors.grey),
-                  ],
-                ),
-            },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (round.startsAt != null || round.startsAfterPrevious) ...[
+                  Text(
+                    round.startsAt != null
+                        ? _dateFormat.format(round.startsAt!)
+                        : context.l10n.broadcastStartsAfter(
+                            widget.rounds[index - 1].name,
+                          ),
+                  ),
+                  const SizedBox(width: 5.0),
+                ],
+                switch (round.status) {
+                  RoundStatus.finished => Icon(
+                      Icons.check,
+                      color: context.lichessColors.good,
+                    ),
+                  RoundStatus.live => Icon(
+                      Icons.circle,
+                      color: context.lichessColors.error,
+                    ),
+                  RoundStatus.upcoming => const Icon(
+                      Icons.calendar_month,
+                      color: Colors.grey,
+                    ),
+                },
+              ],
+            ),
             onTap: () {
               widget.setRoundId(round.id);
               Navigator.of(context).pop();
