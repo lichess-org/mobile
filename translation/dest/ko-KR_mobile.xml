@@ -40,7 +40,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">바리에이션 보이기</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">문제가 발생했습니다.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">시스템 색상</string>
-  <string name="theme" comment="Graphic theme section in the global app settings.">테마</string>
+  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">테마</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">도구</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">관람</string>
