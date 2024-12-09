@@ -58,8 +58,6 @@ BroadcastList _makeBroadcastResponseFromJson(
 ) {
   return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
-    upcoming:
-        pick(json, 'upcoming').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults')
         .asListOrThrow(_broadcastFromPick)
         .toIList(),

@@ -36,7 +36,6 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
     state = AsyncData(
       (
         active: broadcastList.active,
-        upcoming: broadcastList.upcoming,
         past: broadcastList.past.addAll(broadcastListNewPage.past),
         nextPage: broadcastListNewPage.nextPage,
       ),

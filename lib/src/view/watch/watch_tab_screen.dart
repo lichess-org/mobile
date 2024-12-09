@@ -215,7 +215,7 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           children: [
-            ...CombinedIterableView([data.active, data.upcoming, data.past])
+            ...CombinedIterableView([data.active, data.past])
                 .take(numberOfItems)
                 .map((broadcast) => _BroadcastTile(broadcast: broadcast)),
           ],

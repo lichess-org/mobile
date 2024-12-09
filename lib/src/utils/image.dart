@@ -5,6 +5,12 @@ import 'package:image/image.dart' as img;
 
 import 'package:material_color_utilities/material_color_utilities.dart';
 
+typedef ImageColors = ({
+  int primaryContainer,
+  int onPrimaryContainer,
+  int error,
+});
+
 /// A worker that calculates the `primaryContainer` color of a remote image.
 ///
 /// The worker is created by calling [ImageColorWorker.spawn], and the computation
@@ -12,15 +18,15 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 class ImageColorWorker {
   final SendPort _commands;
   final ReceivePort _responses;
-  final Map<int, Completer<(int, int)?>> _activeRequests = {};
+  final Map<int, Completer<ImageColors?>> _activeRequests = {};
   int _idCounter = 0;
   bool _closed = false;
 
   bool get closed => _closed;
 
-  Future<(int, int)?> getImageColors(String url) async {
+  Future<ImageColors?> getImageColors(String url) async {
     if (_closed) throw StateError('Closed');
-    final completer = Completer<(int, int)?>.sync();
+    final completer = Completer<ImageColors?>.sync();
     final id = _idCounter++;
     _activeRequests[id] = completer;
     _commands.send((id, url));
@@ -64,7 +70,7 @@ class ImageColorWorker {
     if (response is RemoteError) {
       completer.completeError(response);
     } else {
-      completer.complete(response as (int, int));
+      completer.complete(response as ImageColors);
     }
 
     if (_closed && _activeRequests.isEmpty) _responses.close();
@@ -102,7 +108,11 @@ class ImageColorWorker {
           isDark: false,
           contrastLevel: 0.0,
         );
-        final colors = (scheme.primaryContainer, scheme.onPrimaryContainer);
+        final colors = (
+          primaryContainer: scheme.primaryContainer,
+          onPrimaryContainer: scheme.onPrimaryContainer,
+          error: scheme.error,
+        );
         sendPort.send((id, colors));
       } catch (e) {
         sendPort.send((id, RemoteError(e.toString(), '')));

@@ -7,7 +7,6 @@ part 'broadcast.freezed.dart';
 
 typedef BroadcastList = ({
   IList<Broadcast> active,
-  IList<Broadcast> upcoming,
   IList<Broadcast> past,
   int? nextPage,
 });

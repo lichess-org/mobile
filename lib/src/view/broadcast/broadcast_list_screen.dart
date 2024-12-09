@@ -47,7 +47,9 @@ class BroadcastListScreen extends StatelessWidget {
         navigationBar: CupertinoNavigationBar(
           middle: title,
           automaticBackgroundVisibility: false,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Styles.cupertinoAppBarColor
+              .resolveFrom(context)
+              .withValues(alpha: 0.0),
           border: null,
         ),
         child: const _Body(),
@@ -137,7 +139,6 @@ class _BodyState extends ConsumerState<_Body> {
 
     final sections = [
       (context.l10n.broadcastOngoing, broadcasts.value!.active),
-      (context.l10n.broadcastUpcoming, broadcasts.value!.upcoming),
       (context.l10n.broadcastCompleted, broadcasts.value!.past),
     ];
 
@@ -249,6 +250,7 @@ class BroadcastGridItem extends StatefulWidget {
 typedef _CardColors = ({
   Color primaryContainer,
   Color onPrimaryContainer,
+  Color error,
 });
 final Map<ImageProvider, _CardColors> _colorsCache = {};
 
@@ -283,10 +285,11 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
     } else if (widget.worker.closed == false) {
       final response = await widget.worker.getImageColors(provider.url);
       if (response != null) {
-        final (primaryContainer, onPrimaryContainer) = response;
+        final (:primaryContainer, :onPrimaryContainer, :error) = response;
         final cardColors = (
           primaryContainer: Color(primaryContainer),
           onPrimaryContainer: Color(onPrimaryContainer),
+          error: Color(error),
         );
         _colorsCache[provider] = cardColors;
         if (mounted) {
@@ -310,6 +313,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
     final subTitleColor =
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.7) ??
             textShade(context, 0.7);
+    final liveColor = _cardColors?.error ?? LichessColors.red;
 
     return GestureDetector(
       onTap: () {
@@ -351,10 +355,10 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                   begin: Alignment.center,
                   end: Alignment.bottomCenter,
                   colors: [
-                    backgroundColor.withValues(alpha: 0.10),
+                    backgroundColor.withValues(alpha: 0.0),
                     backgroundColor.withValues(alpha: 1.0),
                   ],
-                  stops: const [0.5, 1.00],
+                  stops: const [0.7, 1.10],
                   tileMode: TileMode.clamp,
                 ).createShader(bounds);
               },
@@ -401,12 +405,12 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                           ),
                           const SizedBox(width: 4.0),
                           if (widget.broadcast.isLive)
-                            const Text(
+                            Text(
                               'LIVE',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.red,
+                                color: liveColor,
                               ),
                               overflow: TextOverflow.ellipsis,
                             )
