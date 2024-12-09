@@ -118,7 +118,7 @@ class AnalysisSettings extends ConsumerWidget {
                       isScrollControlled: true,
                       showDragHandle: true,
                       isDismissible: true,
-                      builder: (_) => OpeningExplorerSettings(options),
+                      builder: (_) => const OpeningExplorerSettings(),
                     ),
                   ),
                   SwitchSettingTile(
