@@ -65,6 +65,18 @@ Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
   );
 }
 
+@riverpod
+Future<BroadcastPlayerResults> broadcastPlayerResult(
+  Ref ref,
+  BroadcastTournamentId broadcastTournamentId,
+  String playerId,
+) {
+  return ref.withClient(
+    (client) => BroadcastRepository(client)
+        .getPlayerResults(broadcastTournamentId, playerId),
+  );
+}
+
 @Riverpod(keepAlive: true)
 BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
   return const BroadcastImageWorkerFactory();

@@ -82,6 +82,7 @@ class BroadcastRound with _$BroadcastRound {
     required DateTime? startsAt,
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
+    required String? url,
   }) = _BroadcastRound;
 }
 
@@ -136,7 +137,37 @@ class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
     required int played,
     required double? score,
     required int? ratingDiff,
+    required int? performance,
   }) = _BroadcastPlayerExtended;
+}
+
+typedef BroadcastFideData = ({
+  ({
+    int? standard,
+    int? rapid,
+    int? blitz,
+  }) ratings,
+  int? birthYear,
+});
+
+typedef BroadcastPlayerResults = ({
+  BroadcastPlayerExtended player,
+  BroadcastFideData fideData,
+  IList<BroadcastPlayerResultData> games,
+});
+
+enum BroadcastPoints { one, half, zero }
+
+@freezed
+class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
+  const factory BroadcastPlayerResultData({
+    required BroadcastRoundId roundId,
+    required BroadcastGameId gameId,
+    required Side color,
+    required BroadcastPoints? points,
+    required int? ratingDiff,
+    required BroadcastPlayer opponent,
+  }) = _BroadcastPlayerResult;
 }
 
 enum RoundStatus {

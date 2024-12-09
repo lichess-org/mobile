@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 
 class BroadcastPlayerWidget extends ConsumerWidget {
   const BroadcastPlayerWidget({
-    required this.federation,
+    this.federation,
     required this.title,
     required this.name,
     this.rating,
@@ -35,8 +35,10 @@ class BroadcastPlayerWidget extends ConsumerWidget {
         if (title != null) ...[
           Text(
             title!,
-            style: const TextStyle().copyWith(
-              color: context.lichessColors.brag,
+            style: TextStyle(
+              color: (title == 'BOT')
+                  ? context.lichessColors.purple
+                  : context.lichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -53,7 +55,6 @@ class BroadcastPlayerWidget extends ConsumerWidget {
           const SizedBox(width: 5),
           Text(
             rating.toString(),
-            style: const TextStyle(),
             overflow: TextOverflow.ellipsis,
           ),
         ],

@@ -238,6 +238,7 @@ class BroadcastGridItem extends StatefulWidget {
             startsAt: null,
             finishedAt: null,
             startsAfterPrevious: false,
+            url: null,
           ),
           group: null,
           roundToLinkId: BroadcastRoundId(''),
