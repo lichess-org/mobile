@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
@@ -26,11 +27,11 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _ViewMode { overview, boards }
+enum _CupertinoView { overview, boards }
 
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _ViewMode _selectedSegment = _ViewMode.boards;
+  _CupertinoView _selectedSegment = _CupertinoView.boards;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
@@ -49,7 +50,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setViewMode(_ViewMode mode) {
+  void setViewMode(_CupertinoView mode) {
     setState(() {
       _selectedSegment = mode;
     });
@@ -82,6 +83,20 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           ),
         );
         if (Theme.of(context).platform == TargetPlatform.iOS) {
+          final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
+            groupValue: _selectedSegment,
+            children: {
+              _CupertinoView.overview: Text(context.l10n.broadcastOverview),
+              _CupertinoView.boards: Text(context.l10n.broadcastBoards),
+            },
+            onValueChanged: (_CupertinoView? view) {
+              if (view != null) {
+                setState(() {
+                  _selectedSegment = view;
+                });
+              }
+            },
+          );
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: AutoSizeText(
@@ -90,66 +105,32 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              automaticBackgroundVisibility: false,
-              border: null,
             ),
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  Container(
-                    height: kMinInteractiveDimensionCupertino,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Styles.cupertinoAppBarColor.resolveFrom(context),
-                      border: const Border(
-                        bottom: BorderSide(
-                          color: Color(0x4D000000),
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: CupertinoSlidingSegmentedControl<_ViewMode>(
-                        groupValue: _selectedSegment,
-                        children: {
-                          _ViewMode.overview:
-                              Text(context.l10n.broadcastOverview),
-                          _ViewMode.boards: Text(context.l10n.broadcastBoards),
-                        },
-                        onValueChanged: (_ViewMode? view) {
-                          if (view != null) {
-                            setState(() {
-                              _selectedSegment = view;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: _selectedSegment == _ViewMode.overview
-                        ? BroadcastOverviewTab(
+            child: Column(
+              children: [
+                Expanded(
+                  child: _selectedSegment == _CupertinoView.overview
+                      ? _TabView(
+                          cupertinoTabSwitcher: tabSwitcher,
+                          sliver: BroadcastOverviewTab(
                             broadcast: widget.broadcast,
                             tournamentId: _selectedTournamentId,
-                          )
-                        : BroadcastBoardsTab(
-                            _selectedRoundId ?? value.defaultRoundId,
                           ),
-                  ),
-                  _BottomBar(
-                    tournament: value,
-                    roundId: _selectedRoundId ?? value.defaultRoundId,
-                    setTournamentId: setTournamentId,
-                    setRoundId: setRoundId,
-                  ),
-                ],
-              ),
+                        )
+                      : _TabView(
+                          cupertinoTabSwitcher: tabSwitcher,
+                          sliver: BroadcastBoardsTab(
+                            roundId: _selectedRoundId ?? value.defaultRoundId,
+                          ),
+                        ),
+                ),
+                _BottomBar(
+                  tournament: value,
+                  roundId: _selectedRoundId ?? value.defaultRoundId,
+                  setTournamentId: setTournamentId,
+                  setRoundId: setRoundId,
+                ),
+              ],
             ),
           );
         } else {
@@ -172,11 +153,17 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             body: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                BroadcastOverviewTab(
-                  broadcast: widget.broadcast,
-                  tournamentId: _selectedTournamentId,
+                _TabView(
+                  sliver: BroadcastOverviewTab(
+                    broadcast: widget.broadcast,
+                    tournamentId: _selectedTournamentId,
+                  ),
                 ),
-                BroadcastBoardsTab(_selectedRoundId ?? value.defaultRoundId),
+                _TabView(
+                  sliver: BroadcastBoardsTab(
+                    roundId: _selectedRoundId ?? value.defaultRoundId,
+                  ),
+                ),
               ],
             ),
             bottomNavigationBar: _BottomBar(
@@ -192,6 +179,41 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _TabView extends StatelessWidget {
+  const _TabView({
+    required this.sliver,
+    this.cupertinoTabSwitcher,
+  });
+
+  final Widget sliver;
+  final Widget? cupertinoTabSwitcher;
+
+  @override
+  Widget build(BuildContext context) {
+    final edgeInsets = MediaQuery.paddingOf(context) -
+        (cupertinoTabSwitcher != null
+            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
+            : EdgeInsets.zero) +
+        Styles.bodyPadding;
+    return Shimmer(
+      child: CustomScrollView(
+        slivers: [
+          if (cupertinoTabSwitcher != null)
+            SliverPadding(
+              padding: Styles.bodyPadding +
+                  EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+              sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
+            ),
+          SliverPadding(
+            padding: edgeInsets,
+            sliver: sliver,
+          ),
+        ],
+      ),
+    );
   }
 }
 
