@@ -46,13 +46,15 @@ class CreateCustomGameScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
+    return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticBackgroundVisibility: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Styles.cupertinoAppBarColor
+            .resolveFrom(context)
+            .withValues(alpha: 0.0),
         border: null,
       ),
-      child: _CupertinoBody(),
+      child: const _CupertinoBody(),
     );
   }
 
@@ -224,7 +226,7 @@ class _TabView extends StatelessWidget {
                   decoration: ShapeDecoration(
                     color: cupertinoHeaderOpacity == 1.0
                         ? backgroundColor
-                        : Colors.transparent,
+                        : backgroundColor.withAlpha(0),
                     shape: LinearBorder.bottom(
                       side: BorderSide(
                         color: cupertinoHeaderOpacity == 1.0
