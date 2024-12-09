@@ -258,7 +258,7 @@ class _BroadcastTile extends ConsumerWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          title: context.l10n.broadcastBroadcasts,
+          title: broadcast.title,
           rootNavigator: true,
           builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
         );

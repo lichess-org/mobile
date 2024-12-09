@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -33,11 +32,9 @@ class BroadcastOverviewTab extends ConsumerWidget {
       case AsyncData(value: final tournament):
         final information = tournament.data.information;
         final description = tournament.data.description;
-        return SafeArea(
-          bottom: false,
-          child: ListView(
-            padding: Styles.bodyPadding,
-            children: [
+        return SliverList(
+          delegate: SliverChildListDelegate(
+            [
               if (tournament.data.imageUrl != null) ...[
                 Image.network(tournament.data.imageUrl!),
                 const SizedBox(height: 16.0),
@@ -95,11 +92,13 @@ class BroadcastOverviewTab extends ConsumerWidget {
           ),
         );
       case AsyncError(:final error):
-        return Center(
-          child: Text('Cannot load broadcast data: $error'),
+        return SliverFillRemaining(
+          child: Center(child: Text('Cannot load broadcast data: $error')),
         );
       case _:
-        return const Center(child: CircularProgressIndicator.adaptive());
+        return const SliverFillRemaining(
+          child: Center(child: CircularProgressIndicator.adaptive()),
+        );
     }
   }
 }

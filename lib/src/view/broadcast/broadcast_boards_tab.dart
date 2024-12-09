@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -25,54 +26,60 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
-  final BroadcastRoundId roundId;
+  const BroadcastBoardsTab({
+    required this.roundId,
+  });
 
-  const BroadcastBoardsTab(this.roundId);
+  final BroadcastRoundId roundId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
-    return SafeArea(
-      bottom: false,
-      child: switch (round) {
-        AsyncData(:final value) => (value.games.isEmpty)
-            ? const Padding(
-                padding: Styles.bodyPadding,
-                child: Text('No boards to show for now'),
-              )
-            : BroadcastPreview(
-                games: value.games.values.toIList(),
-                roundId: roundId,
-                title: value.round.name,
+    return switch (round) {
+      AsyncData(:final value) => value.games.isEmpty
+          ? SliverPadding(
+              padding: const EdgeInsets.only(top: 16.0),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.info, size: 30),
+                    Text(context.l10n.broadcastNoBoardsYet),
+                  ],
+                ),
               ),
-        AsyncError(:final error) => Center(
-            child: Text(error.toString()),
-          ),
-        _ => const Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: BroadcastPreview(
-                roundId: BroadcastRoundId(''),
-                title: '',
-              ),
+            )
+          : BroadcastPreview(
+              games: value.games.values.toIList(),
+              roundId: roundId,
+              title: value.round.name,
             ),
+      AsyncError(:final error) => SliverFillRemaining(
+          child: Center(
+            child: Text('Could not load broadcast: $error'),
           ),
-      },
-    );
+        ),
+      _ => BroadcastPreview.loading(roundId: roundId),
+    };
   }
 }
 
 class BroadcastPreview extends StatelessWidget {
-  final BroadcastRoundId roundId;
-  final IList<BroadcastGame>? games;
-  final String title;
-
   const BroadcastPreview({
     required this.roundId,
-    this.games,
+    required this.games,
     required this.title,
   });
+
+  const BroadcastPreview.loading({
+    required this.roundId,
+  })  : games = null,
+        title = null;
+
+  final BroadcastRoundId roundId;
+  final IList<BroadcastGame>? games;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -83,64 +90,69 @@ class BroadcastPreview extends StatelessWidget {
     // see: https://api.flutter.dev/flutter/painting/TextStyle/height.html
     final textHeight = _kPlayerWidgetTextStyle.fontSize!;
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
-    final numberOfBoardsByRow = isTabletOrLarger(context) ? 4 : 2;
+    final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
     final boardWidth = (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
 
-    return GridView.builder(
-      padding: Styles.bodyPadding,
-      itemCount: games == null ? numberLoadingBoards : games!.length,
+    return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
         mainAxisSpacing: boardSpacing,
         mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
       ),
-      itemBuilder: (context, index) {
-        if (games == null) {
-          return BoardThumbnail.loading(
-            size: boardWidth,
-            header: _PlayerWidgetLoading(width: boardWidth),
-            footer: _PlayerWidgetLoading(width: boardWidth),
-          );
-        }
-
-        final game = games![index];
-        final playingSide = Setup.parseFen(game.fen).turn;
-
-        return BoardThumbnail(
-          animationDuration: const Duration(milliseconds: 150),
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              builder: (context) => BroadcastGameScreen(
-                roundId: roundId,
-                gameId: game.id,
-                title: title,
+      delegate: SliverChildBuilderDelegate(
+        childCount: games == null ? numberLoadingBoards : games!.length,
+        (context, index) {
+          if (games == null || title == null) {
+            return ShimmerLoading(
+              isLoading: true,
+              child: BoardThumbnail.loading(
+                size: boardWidth,
+                header: _PlayerWidgetLoading(width: boardWidth),
+                footer: _PlayerWidgetLoading(width: boardWidth),
               ),
             );
-          },
-          orientation: Side.white,
-          fen: game.fen,
-          lastMove: game.lastMove,
-          size: boardWidth,
-          header: _PlayerWidget(
-            width: boardWidth,
-            game: game,
-            side: Side.black,
-            playingSide: playingSide,
-          ),
-          footer: _PlayerWidget(
-            width: boardWidth,
-            game: game,
-            side: Side.white,
-            playingSide: playingSide,
-          ),
-        );
-      },
+          }
+
+          final game = games![index];
+          final playingSide = Setup.parseFen(game.fen).turn;
+
+          return BoardThumbnail(
+            animationDuration: const Duration(milliseconds: 150),
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                title: title,
+                builder: (context) => BroadcastGameScreen(
+                  roundId: roundId,
+                  gameId: game.id,
+                  title: title!,
+                ),
+              );
+            },
+            orientation: Side.white,
+            fen: game.fen,
+            lastMove: game.lastMove,
+            size: boardWidth,
+            header: _PlayerWidget(
+              width: boardWidth,
+              game: game,
+              side: Side.black,
+              playingSide: playingSide,
+            ),
+            footer: _PlayerWidget(
+              width: boardWidth,
+              game: game,
+              side: Side.white,
+              playingSide: playingSide,
+            ),
+          );
+        },
+      ),
     );
   }
 }

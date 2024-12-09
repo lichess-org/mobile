@@ -315,7 +315,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
       onTap: () {
         pushPlatformRoute(
           context,
-          title: context.l10n.broadcastBroadcasts,
+          title: widget.broadcast.title,
           rootNavigator: true,
           builder: (context) =>
               BroadcastRoundScreen(broadcast: widget.broadcast),

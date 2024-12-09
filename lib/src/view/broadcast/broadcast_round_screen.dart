@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
@@ -26,19 +27,21 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _ViewMode { overview, boards }
+enum _CupertinoView { overview, boards }
 
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _ViewMode _selectedSegment = _ViewMode.boards;
+  _CupertinoView selectedTab = _CupertinoView.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
 
+  bool roundLoaded = false;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 1, length: 2, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -49,9 +52,9 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setViewMode(_ViewMode mode) {
+  void setCupertinoTab(_CupertinoView mode) {
     setState(() {
-      _selectedSegment = mode;
+      selectedTab = mode;
     });
   }
 
@@ -74,124 +77,172 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
     switch (tournament) {
-      case AsyncData(:final value):
+      case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
-        ref.watch(
+        // and to know if the round has games to show
+        final round = ref.watch(
           broadcastRoundControllerProvider(
-            _selectedRoundId ?? value.defaultRoundId,
+            _selectedRoundId ?? tournament.defaultRoundId,
           ),
         );
-        if (Theme.of(context).platform == TargetPlatform.iOS) {
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: AutoSizeText(
-                widget.broadcast.title,
-                minFontSize: 14.0,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              automaticBackgroundVisibility: false,
-              border: null,
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  Container(
-                    height: kMinInteractiveDimensionCupertino,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Styles.cupertinoAppBarColor.resolveFrom(context),
-                      border: const Border(
-                        bottom: BorderSide(
-                          color: Color(0x4D000000),
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 8.0,
-                      ),
-                      child: CupertinoSlidingSegmentedControl<_ViewMode>(
-                        groupValue: _selectedSegment,
-                        children: {
-                          _ViewMode.overview:
-                              Text(context.l10n.broadcastOverview),
-                          _ViewMode.boards: Text(context.l10n.broadcastBoards),
-                        },
-                        onValueChanged: (_ViewMode? view) {
-                          if (view != null) {
-                            setState(() {
-                              _selectedSegment = view;
-                            });
-                          }
-                        },
-                      ),
-                    ),
+
+        ref.listen(
+          broadcastRoundControllerProvider(
+            _selectedRoundId ?? tournament.defaultRoundId,
+          ),
+          (_, round) {
+            if (!roundLoaded && round.hasValue) {
+              roundLoaded = true;
+              if (round.value!.games.isNotEmpty) {
+                _tabController.animateTo(1, duration: Duration.zero);
+
+                if (Theme.of(context).platform == TargetPlatform.iOS) {
+                  setCupertinoTab(_CupertinoView.boards);
+                }
+              }
+            }
+          },
+        );
+
+        switch (round) {
+          case AsyncData(value: final _):
+            if (Theme.of(context).platform == TargetPlatform.iOS) {
+              final tabSwitcher =
+                  CupertinoSlidingSegmentedControl<_CupertinoView>(
+                groupValue: selectedTab,
+                children: {
+                  _CupertinoView.overview: Text(context.l10n.broadcastOverview),
+                  _CupertinoView.boards: Text(context.l10n.broadcastBoards),
+                },
+                onValueChanged: (_CupertinoView? view) {
+                  if (view != null) {
+                    setCupertinoTab(view);
+                  }
+                },
+              );
+              return CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: AutoSizeText(
+                    widget.broadcast.title,
+                    minFontSize: 14.0,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  Expanded(
-                    child: _selectedSegment == _ViewMode.overview
-                        ? BroadcastOverviewTab(
-                            broadcast: widget.broadcast,
-                            tournamentId: _selectedTournamentId,
-                          )
-                        : BroadcastBoardsTab(
-                            _selectedRoundId ?? value.defaultRoundId,
-                          ),
-                  ),
-                  _BottomBar(
-                    tournament: value,
-                    roundId: _selectedRoundId ?? value.defaultRoundId,
-                    setTournamentId: setTournamentId,
-                    setRoundId: setRoundId,
-                  ),
-                ],
-              ),
-            ),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: AutoSizeText(
-                widget.broadcast.title,
-                minFontSize: 14.0,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              bottom: TabBar(
-                controller: _tabController,
-                tabs: <Widget>[
-                  Tab(text: context.l10n.broadcastOverview),
-                  Tab(text: context.l10n.broadcastBoards),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                BroadcastOverviewTab(
-                  broadcast: widget.broadcast,
-                  tournamentId: _selectedTournamentId,
                 ),
-                BroadcastBoardsTab(_selectedRoundId ?? value.defaultRoundId),
-              ],
-            ),
-            bottomNavigationBar: _BottomBar(
-              tournament: value,
-              roundId: _selectedRoundId ?? value.defaultRoundId,
-              setTournamentId: setTournamentId,
-              setRoundId: setRoundId,
-            ),
-          );
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: selectedTab == _CupertinoView.overview
+                          ? _TabView(
+                              cupertinoTabSwitcher: tabSwitcher,
+                              sliver: BroadcastOverviewTab(
+                                broadcast: widget.broadcast,
+                                tournamentId: _selectedTournamentId,
+                              ),
+                            )
+                          : _TabView(
+                              cupertinoTabSwitcher: tabSwitcher,
+                              sliver: BroadcastBoardsTab(
+                                roundId: _selectedRoundId ??
+                                    tournament.defaultRoundId,
+                              ),
+                            ),
+                    ),
+                    _BottomBar(
+                      tournament: tournament,
+                      roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                      setTournamentId: setTournamentId,
+                      setRoundId: setRoundId,
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Scaffold(
+                appBar: AppBar(
+                  title: AutoSizeText(
+                    widget.broadcast.title,
+                    minFontSize: 14.0,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  bottom: TabBar(
+                    controller: _tabController,
+                    tabs: <Widget>[
+                      Tab(text: context.l10n.broadcastOverview),
+                      Tab(text: context.l10n.broadcastBoards),
+                    ],
+                  ),
+                ),
+                body: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    _TabView(
+                      sliver: BroadcastOverviewTab(
+                        broadcast: widget.broadcast,
+                        tournamentId: _selectedTournamentId,
+                      ),
+                    ),
+                    _TabView(
+                      sliver: BroadcastBoardsTab(
+                        roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                      ),
+                    ),
+                  ],
+                ),
+                bottomNavigationBar: _BottomBar(
+                  tournament: tournament,
+                  roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                  setTournamentId: setTournamentId,
+                  setRoundId: setRoundId,
+                ),
+              );
+            }
+          case AsyncError(:final error):
+            return Center(child: Text('Could not load broadcast: $error'));
+          case _:
+            return const Center(child: CircularProgressIndicator.adaptive());
         }
       case AsyncError(:final error):
-        return Center(child: Text(error.toString()));
+        return Center(child: Text('Could not load broadcast: $error'));
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _TabView extends StatelessWidget {
+  const _TabView({
+    required this.sliver,
+    this.cupertinoTabSwitcher,
+  });
+
+  final Widget sliver;
+  final Widget? cupertinoTabSwitcher;
+
+  @override
+  Widget build(BuildContext context) {
+    final edgeInsets = MediaQuery.paddingOf(context) -
+        (cupertinoTabSwitcher != null
+            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
+            : EdgeInsets.zero) +
+        Styles.bodyPadding;
+    return Shimmer(
+      child: CustomScrollView(
+        slivers: [
+          if (cupertinoTabSwitcher != null)
+            SliverPadding(
+              padding: Styles.bodyPadding +
+                  EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+              sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
+            ),
+          SliverPadding(
+            padding: edgeInsets,
+            sliver: sliver,
+          ),
+        ],
+      ),
+    );
   }
 }
 
