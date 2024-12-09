@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -37,9 +38,16 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
     return switch (round) {
       AsyncData(:final value) => value.games.isEmpty
-          ? const SliverFillRemaining(
-              child: Center(
-                child: Text('No games found.'),
+          ? SliverPadding(
+              padding: const EdgeInsets.only(top: 16.0),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.info, size: 30),
+                    Text(context.l10n.broadcastNoBoardsYet),
+                  ],
+                ),
               ),
             )
           : BroadcastPreview(
