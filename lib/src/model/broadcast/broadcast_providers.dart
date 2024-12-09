@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -51,6 +52,16 @@ Future<BroadcastTournament> broadcastTournament(
   return ref.withClient(
     (client) =>
         BroadcastRepository(client).getTournament(broadcastTournamentId),
+  );
+}
+
+@riverpod
+Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
+  Ref ref,
+  BroadcastTournamentId tournamentId,
+) {
+  return ref.withClient(
+    (client) => BroadcastRepository(client).getPlayers(tournamentId),
   );
 }
 
