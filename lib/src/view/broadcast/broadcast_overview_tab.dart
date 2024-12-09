@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -26,77 +27,91 @@ class BroadcastOverviewTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final edgeInsets = MediaQuery.paddingOf(context) -
+        (Theme.of(context).platform == TargetPlatform.iOS
+            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
+            : EdgeInsets.zero) +
+        Styles.bodyPadding;
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
     switch (tournament) {
       case AsyncData(value: final tournament):
         final information = tournament.data.information;
         final description = tournament.data.description;
-        return SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              if (tournament.data.imageUrl != null) ...[
-                Image.network(tournament.data.imageUrl!),
-                const SizedBox(height: 16.0),
-              ],
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  if (information.dates != null)
-                    _BroadcastOverviewCard(
-                      CupertinoIcons.calendar,
-                      information.dates!.endsAt == null
-                          ? _dateFormatter.format(information.dates!.startsAt)
-                          : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
-                    ),
-                  if (information.format != null)
-                    _BroadcastOverviewCard(
-                      Icons.emoji_events,
-                      '${information.format}',
-                    ),
-                  if (information.timeControl != null)
-                    _BroadcastOverviewCard(
-                      CupertinoIcons.stopwatch_fill,
-                      '${information.timeControl}',
-                    ),
-                  if (information.location != null)
-                    _BroadcastOverviewCard(
-                      Icons.public,
-                      '${information.location}',
-                    ),
-                  if (information.players != null)
-                    _BroadcastOverviewCard(
-                      Icons.person,
-                      '${information.players}',
-                    ),
-                  if (information.website != null)
-                    _BroadcastOverviewCard(
-                      Icons.link,
-                      context.l10n.broadcastOfficialWebsite,
-                      information.website,
-                    ),
+        return SliverPadding(
+          padding: edgeInsets,
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                if (tournament.data.imageUrl != null) ...[
+                  Image.network(tournament.data.imageUrl!),
+                  const SizedBox(height: 16.0),
                 ],
-              ),
-              if (description != null) ...[
-                const SizedBox(height: 16),
-                MarkdownBody(
-                  data: description,
-                  onTapLink: (text, url, title) {
-                    if (url == null) return;
-                    launchUrl(Uri.parse(url));
-                  },
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    if (information.dates != null)
+                      _BroadcastOverviewCard(
+                        CupertinoIcons.calendar,
+                        information.dates!.endsAt == null
+                            ? _dateFormatter.format(information.dates!.startsAt)
+                            : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
+                      ),
+                    if (information.format != null)
+                      _BroadcastOverviewCard(
+                        Icons.emoji_events,
+                        '${information.format}',
+                      ),
+                    if (information.timeControl != null)
+                      _BroadcastOverviewCard(
+                        CupertinoIcons.stopwatch_fill,
+                        '${information.timeControl}',
+                      ),
+                    if (information.location != null)
+                      _BroadcastOverviewCard(
+                        Icons.public,
+                        '${information.location}',
+                      ),
+                    if (information.players != null)
+                      _BroadcastOverviewCard(
+                        Icons.person,
+                        '${information.players}',
+                      ),
+                    if (information.website != null)
+                      _BroadcastOverviewCard(
+                        Icons.link,
+                        context.l10n.broadcastOfficialWebsite,
+                        information.website,
+                      ),
+                  ],
                 ),
+                if (description != null) ...[
+                  const SizedBox(height: 16),
+                  MarkdownBody(
+                    data: description,
+                    onTapLink: (text, url, title) {
+                      if (url == null) return;
+                      launchUrl(Uri.parse(url));
+                    },
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         );
       case AsyncError(:final error):
-        return SliverFillRemaining(
-          child: Center(child: Text('Cannot load broadcast data: $error')),
+        return SliverPadding(
+          padding: edgeInsets,
+          sliver: SliverFillRemaining(
+            child: Center(child: Text('Cannot load broadcast data: $error')),
+          ),
         );
       case _:
-        return const SliverFillRemaining(
-          child: Center(child: CircularProgressIndicator.adaptive()),
+        return SliverPadding(
+          padding: edgeInsets,
+          sliver: const SliverFillRemaining(
+            child: Center(child: CircularProgressIndicator.adaptive()),
+          ),
         );
     }
   }
