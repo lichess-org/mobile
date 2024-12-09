@@ -28,7 +28,7 @@ dependencies:
   dynamic_color: ^1.6.9
   fast_immutable_collections: ^10.0.0
   firebase_core: ^3.0.0
-  firebase_crashlytics: ^4.0.0
+  firebase_crashlytics: ^4.2.0
   firebase_messaging: ^15.0.0
   fl_chart: ^0.69.0
   flutter:
