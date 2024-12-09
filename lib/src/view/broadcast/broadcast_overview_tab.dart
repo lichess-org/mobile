@@ -80,17 +80,16 @@ class BroadcastOverviewTab extends ConsumerWidget {
                     ),
                 ],
               ),
-              if (description != null)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: MarkdownBody(
-                    data: description,
-                    onTapLink: (text, url, title) {
-                      if (url == null) return;
-                      launchUrl(Uri.parse(url));
-                    },
-                  ),
+              if (description != null) ...[
+                const SizedBox(height: 16),
+                MarkdownBody(
+                  data: description,
+                  onTapLink: (text, url, title) {
+                    if (url == null) return;
+                    launchUrl(Uri.parse(url));
+                  },
                 ),
+              ],
             ],
           ),
         );
