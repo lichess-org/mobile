@@ -1,6 +1,8 @@
 import 'package:chessground/chessground.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -84,9 +86,11 @@ class BoardPreferences extends _$BoardPreferences
     return save(state.copyWith(dragTargetKind: dragTargetKind));
   }
 
-  Future<void> toggleShowMaterialDifference() {
+  Future<void> setMaterialDifferenceFormat(
+    MaterialDifferenceFormat materialDifferenceFormat,
+  ) {
     return save(
-      state.copyWith(showMaterialDifference: !state.showMaterialDifference),
+      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
     );
   }
 
@@ -120,11 +124,11 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    required bool showMaterialDifference,
     @JsonKey(
-      defaultValue: ClockPosition.right,
-      unknownEnumValue: ClockPosition.right,
+      defaultValue: MaterialDifferenceFormat.materialDifference,
+      unknownEnumValue: MaterialDifferenceFormat.materialDifference,
     )
+    required MaterialDifferenceFormat materialDifferenceFormat,
     required ClockPosition clockPosition,
     @JsonKey(
       defaultValue: PieceShiftMethod.either,
@@ -157,7 +161,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
-    showMaterialDifference: true,
+    materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
@@ -322,6 +326,27 @@ enum BoardTheme {
           height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
+}
+
+enum MaterialDifferenceFormat {
+  materialDifference(label: 'Material difference'),
+  capturedPieces(label: 'Captured pieces'),
+  hidden(label: 'Hidden');
+
+  const MaterialDifferenceFormat({
+    required this.label,
+  });
+
+  final String label;
+
+  bool get visible => this != MaterialDifferenceFormat.hidden;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+        //TODO: Add l10n
+        MaterialDifferenceFormat.materialDifference => materialDifference.label,
+        MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
+        MaterialDifferenceFormat.hidden => hidden.label,
+      };
 }
 
 enum ClockPosition {

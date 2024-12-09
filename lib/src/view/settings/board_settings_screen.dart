@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -242,15 +243,33 @@ class _Body extends ConsumerWidget {
                     .toggleBoardHighlights();
               },
             ),
-            SwitchSettingTile(
-              title: Text(
-                context.l10n.preferencesMaterialDifference,
-              ),
-              value: boardPrefs.showMaterialDifference,
-              onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleShowMaterialDifference();
+            SettingsListTile(
+              settingsLabel: const Text('Material'), //TODO: l10n
+              settingsValue: boardPrefs.materialDifferenceFormat
+                  .l10n(AppLocalizations.of(context)),
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  showChoicePicker(
+                    context,
+                    choices: MaterialDifferenceFormat.values,
+                    selectedItem: boardPrefs.materialDifferenceFormat,
+                    labelBuilder: (t) => Text(t.label),
+                    onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setMaterialDifferenceFormat(
+                              value ??
+                                  MaterialDifferenceFormat.materialDifference,
+                            ),
+                  );
+                } else {
+                  pushPlatformRoute(
+                    context,
+                    title: 'Material',
+                    builder: (context) =>
+                        const MaterialDifferenceFormatScreen(),
+                  );
+                }
               },
             ),
           ],
@@ -320,6 +339,35 @@ class BoardClockPositionScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MaterialDifferenceFormatScreen extends ConsumerWidget {
+  const MaterialDifferenceFormatScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final materialDifferenceFormat = ref.watch(
+      boardPreferencesProvider
+          .select((state) => state.materialDifferenceFormat),
+    );
+    void onChanged(MaterialDifferenceFormat? value) =>
+        ref.read(boardPreferencesProvider.notifier).setMaterialDifferenceFormat(
+              value ?? MaterialDifferenceFormat.materialDifference,
+            );
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: ListView(
+        children: [
+          ChoicePicker(
+            choices: MaterialDifferenceFormat.values,
+            selectedItem: materialDifferenceFormat,
+            titleBuilder: (t) => Text(t.label),
+            onSelectedItemChanged: onChanged,
+          ),
+        ],
       ),
     );
   }
