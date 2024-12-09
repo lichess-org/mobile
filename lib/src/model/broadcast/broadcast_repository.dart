@@ -136,6 +136,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
     status: status,
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
     finishedAt: pick('finishedAt').asDateTimeFromMillisecondsOrNull(),
+    startsAfterPrevious: pick('startsAfterPrevious').asBoolOrFalse(),
   );
 }
 
