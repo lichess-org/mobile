@@ -93,15 +93,19 @@ class ImageColorWorker {
         final QuantizerResult quantizerResult =
             await QuantizerCelebi().quantize(
           resized.buffer.asUint32List(),
-          128,
-          returnInputPixelToClusterPixel: true,
+          32,
         );
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
           (int key, int value) =>
               MapEntry<int, int>(_getArgbFromAbgr(key), value),
         );
         // Score colors for color scheme suitability.
-        final List<int> scoredResults = Score.score(colorToCount, desired: 1);
+        final List<int> scoredResults = Score.score(
+          colorToCount,
+          desired: 1,
+          fallbackColorARGB: 0xFFEEEEEE,
+          filter: false,
+        );
         final Hct sourceColor = Hct.fromInt(scoredResults.first);
         final scheme = SchemeFidelity(
           sourceColorHct: sourceColor,
