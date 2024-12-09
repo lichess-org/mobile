@@ -221,7 +221,7 @@ class _SessionItem extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: FittedBox(
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fitHeight,
                         child: Text(
                           attempt!.ratingDiffString!,
                           maxLines: 1,
