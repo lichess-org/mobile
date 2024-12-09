@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +37,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   BroadcastRoundId? _selectedRoundId;
 
   bool roundLoaded = false;
-  double headerOpacity = 0;
 
   @override
   void initState() {
@@ -58,7 +55,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   void setCupertinoTab(_CupertinoView mode) {
     setState(() {
       selectedTab = mode;
-      headerOpacity = 0.0;
     });
   }
 
@@ -73,31 +69,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     setState(() {
       _selectedRoundId = roundId;
     });
-  }
-
-  bool handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      final ScrollMetrics metrics = notification.metrics;
-      double scrollExtent = 0.0;
-      switch (metrics.axisDirection) {
-        case AxisDirection.up:
-          scrollExtent = metrics.extentAfter;
-        case AxisDirection.down:
-          scrollExtent = metrics.extentBefore;
-        case AxisDirection.right:
-        case AxisDirection.left:
-          break;
-      }
-
-      final opacity = scrollExtent > 0.0 ? 1.0 : 0.0;
-
-      if (opacity != headerOpacity) {
-        setState(() {
-          headerOpacity = opacity;
-        });
-      }
-    }
-    return false;
   }
 
   @override
@@ -149,49 +120,41 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   }
                 },
               );
-              return NotificationListener<ScrollNotification>(
-                onNotification: handleScrollNotification,
-                child: CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    automaticBackgroundVisibility: false,
-                    backgroundColor: Colors.transparent,
-                    border: null,
-                    middle: AutoSizeText(
-                      widget.broadcast.title,
-                      minFontSize: 14.0,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
+              return CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: AutoSizeText(
+                    widget.broadcast.title,
+                    minFontSize: 14.0,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: selectedTab == _CupertinoView.overview
-                            ? _TabView(
-                                cupertinoHeaderOpacity: headerOpacity,
-                                cupertinoTabSwitcher: tabSwitcher,
-                                sliver: BroadcastOverviewTab(
-                                  broadcast: widget.broadcast,
-                                  tournamentId: _selectedTournamentId,
-                                ),
-                              )
-                            : _TabView(
-                                cupertinoHeaderOpacity: headerOpacity,
-                                cupertinoTabSwitcher: tabSwitcher,
-                                sliver: BroadcastBoardsTab(
-                                  roundId: _selectedRoundId ??
-                                      tournament.defaultRoundId,
-                                ),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: selectedTab == _CupertinoView.overview
+                          ? _TabView(
+                              cupertinoTabSwitcher: tabSwitcher,
+                              sliver: BroadcastOverviewTab(
+                                broadcast: widget.broadcast,
+                                tournamentId: _selectedTournamentId,
                               ),
-                      ),
-                      _BottomBar(
-                        tournament: tournament,
-                        roundId: _selectedRoundId ?? tournament.defaultRoundId,
-                        setTournamentId: setTournamentId,
-                        setRoundId: setRoundId,
-                      ),
-                    ],
-                  ),
+                            )
+                          : _TabView(
+                              cupertinoTabSwitcher: tabSwitcher,
+                              sliver: BroadcastBoardsTab(
+                                roundId: _selectedRoundId ??
+                                    tournament.defaultRoundId,
+                              ),
+                            ),
+                    ),
+                    _BottomBar(
+                      tournament: tournament,
+                      roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                      setTournamentId: setTournamentId,
+                      setRoundId: setRoundId,
+                    ),
+                  ],
                 ),
               );
             } else {
@@ -252,12 +215,10 @@ class _TabView extends StatelessWidget {
   const _TabView({
     required this.sliver,
     this.cupertinoTabSwitcher,
-    this.cupertinoHeaderOpacity = 0.0,
   });
 
   final Widget sliver;
   final Widget? cupertinoTabSwitcher;
-  final double cupertinoHeaderOpacity;
 
   @override
   Widget build(BuildContext context) {
@@ -266,37 +227,14 @@ class _TabView extends StatelessWidget {
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
         Styles.bodyPadding;
-    final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
     return Shimmer(
       child: CustomScrollView(
         slivers: [
           if (cupertinoTabSwitcher != null)
-            PinnedHeaderSliver(
-              child: ClipRect(
-                child: BackdropFilter(
-                  enabled: backgroundColor.alpha != 0xFF,
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: ShapeDecoration(
-                      color: cupertinoHeaderOpacity == 1.0
-                          ? backgroundColor
-                          : Colors.transparent,
-                      shape: LinearBorder.bottom(
-                        side: BorderSide(
-                          color: cupertinoHeaderOpacity == 1.0
-                              ? const Color(0x4D000000)
-                              : Colors.transparent,
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    padding: Styles.bodyPadding +
-                        EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                    child: cupertinoTabSwitcher,
-                  ),
-                ),
-              ),
+            SliverPadding(
+              padding: Styles.bodyPadding +
+                  EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+              sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
             ),
           SliverPadding(
             padding: edgeInsets,
