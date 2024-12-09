@@ -65,6 +65,8 @@ extension type const StudyChapterId(String value) implements StringId {
   StudyChapterId.fromJson(dynamic json) : this(json as String);
 }
 
+extension type const FideId(String value) implements StringId {}
+
 extension IDPick on Pick {
   UserId asUserIdOrThrow() {
     final value = required().value;
@@ -226,5 +228,24 @@ extension IDPick on Pick {
     throw PickException(
       "value $value at $debugParsingExit can't be casted to StudyId",
     );
+  }
+
+  FideId asFideIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return FideId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to FideId",
+    );
+  }
+
+  FideId? asFideIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asFideIdOrThrow();
+    } catch (_) {
+      return null;
+    }
   }
 }
