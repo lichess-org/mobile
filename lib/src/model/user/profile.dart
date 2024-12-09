@@ -101,6 +101,7 @@ enum LinkSite {
     ]),
   ),
   twitter('Twitter', IListConst(['twitter.com'])),
+  bluesky('Bluesky', IListConst(['bsky.app'])),
   facebook('Facebook', IListConst(['facebook.com'])),
   instagram('Instagram', IListConst(['instagram.com'])),
   youtube('YouTube', IListConst(['youtube.com'])),
