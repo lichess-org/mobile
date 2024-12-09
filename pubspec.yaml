@@ -29,7 +29,7 @@ dependencies:
   fast_immutable_collections: ^10.0.0
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
-  firebase_messaging: ^15.0.0
+  firebase_messaging: ^15.1.6
   fl_chart: ^0.69.0
   flutter:
     sdk: flutter
