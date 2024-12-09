@@ -390,6 +390,15 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (puzzleState.mode != PuzzleMode.view)
           BottomBarButton(
+            icon: Icons.info,
+            label: context.l10n.getAHint,
+            showLabel: true,
+            onTap: puzzleState.canViewSolution
+                ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                : null,
+          ),
+        if (puzzleState.mode != PuzzleMode.view)
+          BottomBarButton(
             icon: Icons.help,
             label: context.l10n.viewTheSolution,
             showLabel: true,
