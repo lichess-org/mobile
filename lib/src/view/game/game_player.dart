@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,7 @@ class GamePlayer extends StatelessWidget {
     required this.player,
     this.clock,
     this.materialDiff,
+    this.materialDifferenceFormat,
     this.confirmMoveCallbacks,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
@@ -40,6 +42,7 @@ class GamePlayer extends StatelessWidget {
   final Player player;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
+  final MaterialDifferenceFormat? materialDifferenceFormat;
 
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
@@ -148,33 +151,12 @@ class GamePlayer extends StatelessWidget {
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
         else if (materialDiff != null)
-          Row(
-            mainAxisAlignment: clockPosition == ClockPosition.right
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
-            children: [
-              for (final role in Role.values)
-                for (int i = 0; i < materialDiff!.pieces[role]!; i++)
-                  Icon(
-                    _iconByRole[role],
-                    size: 13,
-                    color: Colors.grey,
-                  ),
-              const SizedBox(width: 3),
-              Text(
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                ),
-                materialDiff != null && materialDiff!.score > 0
-                    ? '+${materialDiff!.score}'
-                    : '',
-              ),
-            ],
-          )
-        else
-          // to avoid shifts use an empty text widget
-          const Text('', style: TextStyle(fontSize: 13)),
+          MaterialDifferenceDisplay(
+            materialDiff: materialDiff!,
+            materialDifferenceFormat: materialDifferenceFormat,
+          ),
+        // to avoid shifts use an empty text widget
+        const Text('', style: TextStyle(fontSize: 13)),
       ],
     );
 
@@ -344,6 +326,46 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
             ),
           )
         : const Text('');
+  }
+}
+
+class MaterialDifferenceDisplay extends StatelessWidget {
+  const MaterialDifferenceDisplay({
+    required this.materialDiff,
+    this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
+  });
+
+  final MaterialDiffSide materialDiff;
+  final MaterialDifferenceFormat? materialDifferenceFormat;
+
+  @override
+  Widget build(BuildContext context) {
+    final IMap<Role, int> piecesToRender =
+        (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
+            ? materialDiff.capturedPieces
+            : materialDiff.pieces);
+
+    return materialDifferenceFormat?.visible ?? true
+        ? Row(
+            children: [
+              for (final role in Role.values)
+                for (int i = 0; i < piecesToRender[role]!; i++)
+                  Icon(
+                    _iconByRole[role],
+                    size: 13,
+                    color: Colors.grey,
+                  ),
+              const SizedBox(width: 3),
+              Text(
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+                materialDiff.score > 0 ? '+${materialDiff.score}' : '',
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }
 
