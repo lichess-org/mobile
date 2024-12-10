@@ -2,18 +2,16 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -34,34 +32,42 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final edgeInsets = MediaQuery.paddingOf(context) -
+        (Theme.of(context).platform == TargetPlatform.iOS
+            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
+            : EdgeInsets.zero) +
+        Styles.bodyPadding;
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
-    return switch (round) {
-      AsyncData(:final value) => value.games.isEmpty
-          ? SliverPadding(
-              padding: const EdgeInsets.only(top: 16.0),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.info, size: 30),
-                    Text(context.l10n.broadcastNoBoardsYet),
-                  ],
+    return SliverPadding(
+      padding: edgeInsets,
+      sliver: switch (round) {
+        AsyncData(:final value) => value.games.isEmpty
+            ? SliverPadding(
+                padding: const EdgeInsets.only(top: 16.0),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.info, size: 30),
+                      Text(context.l10n.broadcastNoBoardsYet),
+                    ],
+                  ),
                 ),
+              )
+            : BroadcastPreview(
+                games: value.games.values.toIList(),
+                roundId: roundId,
+                title: value.round.name,
               ),
-            )
-          : BroadcastPreview(
-              games: value.games.values.toIList(),
-              roundId: roundId,
-              title: value.round.name,
+        AsyncError(:final error) => SliverFillRemaining(
+            child: Center(
+              child: Text('Could not load broadcast: $error'),
             ),
-      AsyncError(:final error) => SliverFillRemaining(
-          child: Center(
-            child: Text('Could not load broadcast: $error'),
           ),
-        ),
-      _ => BroadcastPreview.loading(roundId: roundId),
-    };
+        _ => BroadcastPreview.loading(roundId: roundId),
+      },
+    );
   }
 }
 
@@ -210,40 +216,11 @@ class _PlayerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (player.federation != null) ...[
-                      Consumer(
-                        builder: (context, widgetRef, _) {
-                          return SvgPicture.network(
-                            lichessFideFedSrc(player.federation!),
-                            height: 12,
-                            httpClient: widgetRef.read(defaultClientProvider),
-                          );
-                        },
-                      ),
-                    ],
-                    const SizedBox(width: 5),
-                    if (player.title != null) ...[
-                      Text(
-                        player.title!,
-                        style: const TextStyle().copyWith(
-                          color: context.lichessColors.brag,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                    ],
-                    Flexible(
-                      child: Text(
-                        player.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: BroadcastPlayerWidget(
+                  federation: player.federation,
+                  title: player.title,
+                  name: player.name,
                 ),
               ),
               const SizedBox(width: 5),

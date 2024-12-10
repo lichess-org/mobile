@@ -18,7 +18,6 @@ class BroadcastRepository {
         path: '/api/broadcast/top',
         queryParameters: {'page': page.toString()},
       ),
-      headers: {'Accept': 'application/json'},
       mapper: _makeBroadcastResponseFromJson,
     );
   }
@@ -28,7 +27,6 @@ class BroadcastRepository {
   ) {
     return client.readJson(
       Uri(path: 'api/broadcast/$broadcastTournamentId'),
-      headers: {'Accept': 'application/json'},
       mapper: _makeTournamentFromJson,
     );
   }
@@ -40,7 +38,6 @@ class BroadcastRepository {
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slugs
       // They are only used for SEO, so we can safely use - for these parameters
-      headers: {'Accept': 'application/x-ndjson'},
       mapper: _makeRoundWithGamesFromJson,
     );
   }
@@ -50,6 +47,15 @@ class BroadcastRepository {
     BroadcastGameId gameId,
   ) {
     return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
+  }
+
+  Future<IList<BroadcastPlayerExtended>> getPlayers(
+    BroadcastTournamentId tournamentId,
+  ) {
+    return client.readJsonList(
+      Uri(path: '/broadcast/$tournamentId/players'),
+      mapper: _makePlayerFromJson,
+    );
   }
 }
 
@@ -195,5 +201,23 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     clock: pick('clock').asDurationFromCentiSecondsOrNull(),
     federation: pick('fed').asStringOrNull(),
+    fideId: pick('fideId').asFideIdOrNull(),
+  );
+}
+
+BroadcastPlayerExtended _makePlayerFromJson(Map<String, dynamic> json) {
+  return _playerExtendedFromPick(pick(json).required());
+}
+
+BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
+  return BroadcastPlayerExtended(
+    name: pick('name').asStringOrThrow(),
+    title: pick('title').asStringOrNull(),
+    rating: pick('rating').asIntOrNull(),
+    federation: pick('fed').asStringOrNull(),
+    fideId: pick('fideId').asFideIdOrNull(),
+    played: pick('played').asIntOrThrow(),
+    score: pick('score').asDoubleOrNull(),
+    ratingDiff: pick('ratingDiff').asIntOrNull(),
   );
 }
