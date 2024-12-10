@@ -222,7 +222,9 @@ class _Body extends ConsumerWidget {
                       Text(AppBackgroundModeScreen.themeTitle(context, t)),
                   onSelectedItemChanged: (BackgroundThemeMode? value) => ref
                       .read(generalPreferencesProvider.notifier)
-                      .setThemeMode(value ?? BackgroundThemeMode.system),
+                      .setBackgroundThemeMode(
+                        value ?? BackgroundThemeMode.system,
+                      ),
                 );
               } else {
                 pushPlatformRoute(
