@@ -81,13 +81,16 @@ class GameShareService {
 
   /// Fetches the GIF animation of a game.
   Future<XFile> gameGif(GameId id, Side orientation) async {
-    final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
-    final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
+    final boardPreferences = _ref.read(boardPreferencesProvider);
+    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
+        ? BoardTheme.brown
+        : boardPreferences.boardTheme;
+    final pieceTheme = boardPreferences.pieceSet;
     final resp = await _ref
         .read(defaultClientProvider)
         .get(
           Uri.parse(
-            '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.name}&piece=${pieceTheme.name}',
+            '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
           ),
         )
         .timeout(const Duration(seconds: 1));
