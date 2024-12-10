@@ -55,48 +55,14 @@ Future<BroadcastTournament> broadcastTournament(
   );
 }
 
-enum BroadcastPlayersSortingTypes { player, elo, score }
-
 @riverpod
-class BroadcastPlayers extends _$BroadcastPlayers {
-  @override
-  Future<IList<BroadcastPlayerExtended>> build(
-    BroadcastTournamentId tournamentId,
-  ) async {
-    final players = ref.withClient(
-      (client) => BroadcastRepository(client).getPlayers(tournamentId),
-    );
-
-    return players;
-  }
-
-  void sort(BroadcastPlayersSortingTypes sortingType, [bool reverse = false]) {
-    if (!state.hasValue) return;
-
-    final compare = switch (sortingType) {
-      BroadcastPlayersSortingTypes.player =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) =>
-            a.name.compareTo(b.name),
-      BroadcastPlayersSortingTypes.elo =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
-          if (a.rating == null) return -1;
-          if (b.rating == null) return 1;
-          return b.rating!.compareTo(a.rating!);
-        },
-      BroadcastPlayersSortingTypes.score =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
-          if (a.score == null) return -1;
-          if (b.score == null) return 1;
-          return b.score!.compareTo(a.score!);
-        }
-    };
-
-    state = AsyncData(
-      reverse
-          ? state.requireValue.sortReversed(compare)
-          : state.requireValue.sort(compare),
-    );
-  }
+Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
+  Ref ref,
+  BroadcastTournamentId tournamentId,
+) {
+  return ref.withClient(
+    (client) => BroadcastRepository(client).getPlayers(tournamentId),
+  );
 }
 
 @Riverpod(keepAlive: true)
