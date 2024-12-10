@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
+import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -315,7 +316,31 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ),
             Flexible(
               child: Column(
-                children: welcomeWidgets,
+                children: [
+                  ...welcomeWidgets,
+                  if (!status.isOnline) ...[
+                    const SizedBox(height: 16.0),
+                    SecondaryButton(
+                      semanticsLabel: 'Play over the Board',
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(LichessIcons.chess_board),
+                          SizedBox(width: 8.0),
+                          Text('Play over the Board'),
+                        ],
+                      ),
+                      onPressed: () {
+                        pushPlatformRoute(
+                          context,
+                          title: 'Over the Board',
+                          rootNavigator: true,
+                          builder: (_) => const OverTheBoardScreen(),
+                        );
+                      },
+                    ),
+                  ],
+                ],
               ),
             ),
           ],
