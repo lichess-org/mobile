@@ -223,34 +223,35 @@ enum ShapeColor {
 
 /// The chessboard theme.
 enum BoardTheme {
-  system('System'),
-  blue('Blue'),
-  blue2('Blue2'),
-  blue3('Blue3'),
-  blueMarble('Blue Marble'),
-  canvas('Canvas'),
-  wood('Wood'),
-  wood2('Wood2'),
-  wood3('Wood3'),
-  wood4('Wood4'),
-  maple('Maple'),
-  maple2('Maple 2'),
-  brown('Brown'),
-  leather('Leather'),
-  green('Green'),
-  marble('Marble'),
-  greenPlastic('Green Plastic'),
-  grey('Grey'),
-  metal('Metal'),
-  olive('Olive'),
-  newspaper('Newspaper'),
-  purpleDiag('Purple-Diag'),
-  pinkPyramid('Pink'),
-  horsey('Horsey');
+  system('System', 'system'),
+  blue('Blue', 'blue'),
+  blue2('Blue 2', 'blue2'),
+  blue3('Blue 3', 'blue3'),
+  blueMarble('Blue Marble', 'blue-marble'),
+  canvas('Canvas', 'canvas'),
+  wood('Wood', 'wood'),
+  wood2('Wood 2', 'wood2'),
+  wood3('Wood 3', 'wood3'),
+  wood4('Wood 4', 'wood4'),
+  maple('Maple', 'maple'),
+  maple2('Maple 2', 'maple2'),
+  brown('Brown', 'brown'),
+  leather('Leather', 'leather'),
+  green('Green', 'green'),
+  marble('Marble', 'marble'),
+  greenPlastic('Green Plastic', 'green-plastic'),
+  grey('Grey', 'grey'),
+  metal('Metal', 'metal'),
+  olive('Olive', 'olive'),
+  newspaper('Newspaper', 'newspaper'),
+  purpleDiag('Purple-Diag', 'purple-diag'),
+  pinkPyramid('Pink', 'pink'),
+  horsey('Horsey', 'horsey');
 
   final String label;
+  final String gifApiName;
 
-  const BoardTheme(this.label);
+  const BoardTheme(this.label, this.gifApiName);
 
   ChessboardColorScheme get colors {
     switch (this) {

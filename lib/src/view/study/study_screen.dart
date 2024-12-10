@@ -333,7 +333,6 @@ class _StudyMenu extends ConsumerWidget {
                             await ref.read(studyRepositoryProvider).chapterGif(
                                   state.study.id,
                                   state.study.chapter.id,
-                                  state.pov,
                                 );
                         if (context.mounted) {
                           launchShareDialog(

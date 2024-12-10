@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -110,16 +109,19 @@ class StudyRepository {
   Future<XFile> chapterGif(
     StudyId id,
     StudyChapterId chapterId,
-    Side orientation,
   ) async {
-    final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-    final pieceTheme = ref.read(boardPreferencesProvider).pieceSet;
+    final boardPreferences = ref.read(boardPreferencesProvider);
+    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
+        ? BoardTheme.brown
+        : boardPreferences.boardTheme;
+    final pieceTheme = boardPreferences.pieceSet;
+
     final resp = await client
         .get(
           lichessUri(
             '/study/$id/$chapterId.gif',
             {
-              'theme': boardTheme.name,
+              'theme': boardTheme.gifApiName,
               'piece': pieceTheme.name,
             },
           ),
