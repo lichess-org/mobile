@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 typedef ImageColors = ({
+  Uint8List image,
   int primaryContainer,
   int onPrimaryContainer,
   int error,
 });
 
-/// A worker that calculates the `primaryContainer` color of a remote image.
+/// A worker that quantizes an image and returns a minimal color scheme associated
+/// with the image.
 ///
 /// The worker is created by calling [ImageColorWorker.spawn], and the computation
 /// is run in a separate isolate.
@@ -24,12 +27,21 @@ class ImageColorWorker {
 
   bool get closed => _closed;
 
-  Future<ImageColors?> getImageColors(String url) async {
+  /// Returns a minimal color scheme associated with the image at the given [url].
+  ///
+  /// The [fileExtension] parameter is optional and is used to specify the file
+  /// extension of the image at the given [url] if it is known. It will speed up
+  /// the decoding process, as otherwise the worker will check the image data
+  /// against all supported decoders.
+  Future<ImageColors?> getImageColors(
+    String url, {
+    String? fileExtension,
+  }) async {
     if (_closed) throw StateError('Closed');
     final completer = Completer<ImageColors?>.sync();
     final id = _idCounter++;
     _activeRequests[id] = completer;
-    _commands.send((id, url));
+    _commands.send((id, url, fileExtension));
     return await completer.future;
   }
 
@@ -85,21 +97,28 @@ class ImageColorWorker {
         receivePort.close();
         return;
       }
-      final (int id, String url) = message as (int, String);
+      final (int id, String url, String? extension) =
+          message as (int, String, String?);
       try {
         final bytes = await http.readBytes(Uri.parse(url));
-        final image = img.decodeImage(bytes);
+        // final stopwatch0 = Stopwatch()..start();
+        final decoder = extension != null
+            ? img.findDecoderForNamedImage('.$extension')
+            : img.findDecoderForData(bytes);
+        final image = decoder!.decode(bytes);
         final resized = img.copyResize(image!, width: 112);
         final QuantizerResult quantizerResult =
             await QuantizerCelebi().quantize(
           resized.buffer.asUint32List(),
           32,
         );
+        // debugPrint(
+        //   'Decoding and quantization took: ${stopwatch0.elapsedMilliseconds}ms',
+        // );
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
           (int key, int value) =>
               MapEntry<int, int>(_getArgbFromAbgr(key), value),
         );
-        // Score colors for color scheme suitability.
         final List<int> scoredResults = Score.score(
           colorToCount,
           desired: 1,
@@ -107,17 +126,21 @@ class ImageColorWorker {
           filter: false,
         );
         final Hct sourceColor = Hct.fromInt(scoredResults.first);
+        if (sourceColor.tone > 90.0) {
+          sourceColor.tone = 90.0;
+        }
         final scheme = SchemeFidelity(
           sourceColorHct: sourceColor,
           isDark: false,
           contrastLevel: 0.0,
         );
-        final colors = (
+        final result = (
+          image: bytes,
           primaryContainer: scheme.primaryContainer,
           onPrimaryContainer: scheme.onPrimaryContainer,
           error: scheme.error,
         );
-        sendPort.send((id, colors));
+        sendPort.send((id, result));
       } catch (e) {
         sendPort.send((id, RemoteError(e.toString(), '')));
       }

@@ -18,7 +18,7 @@ class FakeImageColorWorker implements ImageColorWorker {
   bool get closed => false;
 
   @override
-  Future<ImageColors?> getImageColors(String url) {
+  Future<ImageColors?> getImageColors(String url, {String? fileExtension}) {
     return Future.value(null);
   }
 }

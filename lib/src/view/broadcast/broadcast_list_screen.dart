@@ -134,7 +134,7 @@ class _BodyState extends ConsumerState<_Body> {
       crossAxisCount: itemsByRow,
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
-      childAspectRatio: 1.3,
+      childAspectRatio: 1.45,
     );
 
     final sections = [
@@ -258,6 +258,8 @@ final Map<ImageProvider, _CardColors> _colorsCache = {};
 
 class _BroadcastGridItemState extends State<BroadcastGridItem> {
   _CardColors? _cardColors;
+  ImageProvider? _imageProvider;
+  bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
@@ -270,9 +272,12 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
     final cachedColors = _colorsCache[image];
     if (cachedColors != null) {
       _cardColors = cachedColors;
+      _imageProvider = image;
     } else {
       if (imageUrl != null) {
-        _fetchImageAndColors(image as NetworkImage);
+        _fetchImageAndColors(NetworkImage(imageUrl!));
+      } else {
+        _imageProvider = kDefaultBroadcastImage;
       }
     }
   }
@@ -285,9 +290,11 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
         scheduleMicrotask(() => _fetchImageAndColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      final response = await widget.worker.getImageColors(provider.url);
+      final response = await widget.worker
+          .getImageColors(provider.url, fileExtension: 'webp');
       if (response != null) {
-        final (:primaryContainer, :onPrimaryContainer, :error) = response;
+        final (:image, :primaryContainer, :onPrimaryContainer, :error) =
+            response;
         final cardColors = (
           primaryContainer: Color(primaryContainer),
           onPrimaryContainer: Color(onPrimaryContainer),
@@ -296,11 +303,20 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
         _colorsCache[provider] = cardColors;
         if (mounted) {
           setState(() {
+            _imageProvider = MemoryImage(image);
             _cardColors = cardColors;
           });
         }
       }
     }
+  }
+
+  void _onTapDown() {
+    setState(() => _tapDown = true);
+  }
+
+  void _onTapCancel() {
+    setState(() => _tapDown = false);
   }
 
   @override
@@ -327,98 +343,76 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
               BroadcastRoundScreen(broadcast: widget.broadcast),
         );
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: kBroadcastGridItemBorderRadius,
-          color: backgroundColor,
-          boxShadow: Theme.of(context).platform == TargetPlatform.iOS
-              ? null
-              : kElevationToShadow[1],
-        ),
-        foregroundDecoration: BoxDecoration(
-          border: (widget.broadcast.isLive)
-              ? Border.all(
-                  color: LichessColors.red.withValues(alpha: 0.7),
-                  width: 3,
-                )
-              : null,
-          borderRadius: kBroadcastGridItemBorderRadius,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ShaderMask(
-              blendMode: BlendMode.dstOut,
-              shaderCallback: (bounds) {
-                return LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    backgroundColor.withValues(alpha: 0.0),
-                    backgroundColor.withValues(alpha: 1.0),
-                  ],
-                  stops: const [0.7, 1.10],
-                  tileMode: TileMode.clamp,
-                ).createShader(bounds);
-              },
-              child: AspectRatio(
-                aspectRatio: 2.0,
-                child: Image(
-                  image: image,
-                  frameBuilder:
-                      (context, child, frame, wasSynchronouslyLoaded) {
-                    if (wasSynchronouslyLoaded) {
-                      return child;
-                    }
-                    return AnimatedOpacity(
-                      duration: const Duration(milliseconds: 500),
-                      opacity: frame == null ? 0 : 1,
-                      child: child,
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Image(image: kDefaultBroadcastImage),
+      onTapDown: (_) => _onTapDown(),
+      onTapCancel: _onTapCancel,
+      onTapUp: (_) => _onTapCancel(),
+      child: AnimatedOpacity(
+        opacity: _tapDown ? 1.0 : 0.85,
+        duration: const Duration(milliseconds: 100),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: kBroadcastGridItemBorderRadius,
+            color: backgroundColor,
+            boxShadow: Theme.of(context).platform == TargetPlatform.iOS
+                ? null
+                : kElevationToShadow[1],
+          ),
+          child: Stack(
+            children: [
+              ShaderMask(
+                blendMode: BlendMode.dstOut,
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor.withValues(alpha: 0.0),
+                      backgroundColor.withValues(alpha: 1.0),
+                    ],
+                    stops: const [0.5, 1.10],
+                    tileMode: TileMode.clamp,
+                  ).createShader(bounds);
+                },
+                child: AspectRatio(
+                  aspectRatio: 2.0,
+                  child: _imageProvider != null
+                      ? Image(
+                          image: _imageProvider!,
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            if (wasSynchronouslyLoaded) {
+                              return child;
+                            }
+                            return AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: frame == null ? 0 : 1,
+                              child: child,
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Image(image: kDefaultBroadcastImage),
+                        )
+                      : const SizedBox.shrink(),
                 ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.broadcast.round.startsAt != null ||
-                      widget.broadcast.isLive)
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            widget.broadcast.round.name,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: subTitleColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          const SizedBox(width: 4.0),
-                          if (widget.broadcast.isLive)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 12.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.broadcast.round.startsAt != null ||
+                        widget.broadcast.isLive)
+                      Padding(
+                        padding: kBroadcastGridItemContentPadding,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                             Text(
-                              'LIVE',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: liveColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          else
-                            Text(
-                              _formatDate(widget.broadcast.round.startsAt!),
+                              widget.broadcast.round.name,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: subTitleColor,
@@ -426,27 +420,65 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                        ],
+                            const SizedBox(width: 4.0),
+                            if (widget.broadcast.isLive)
+                              Text(
+                                'LIVE',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: liveColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            else
+                              Text(
+                                _formatDate(widget.broadcast.round.startsAt!),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: subTitleColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                          ],
+                        ),
+                      ),
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding.add(
+                        const EdgeInsets.symmetric(vertical: 3.0),
+                      ),
+                      child: Text(
+                        widget.broadcast.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: titleColor,
+                          fontWeight: FontWeight.bold,
+                          height: 1.0,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                  const SizedBox(height: 4.0),
-                  Padding(
-                    padding: kBroadcastGridItemContentPadding,
-                    child: Text(
-                      widget.broadcast.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    if (widget.broadcast.tour.information.players != null)
+                      Padding(
+                        padding: kBroadcastGridItemContentPadding,
+                        child: Text(
+                          widget.broadcast.tour.information.players!,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: subTitleColor,
+                            letterSpacing: -0.2,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
