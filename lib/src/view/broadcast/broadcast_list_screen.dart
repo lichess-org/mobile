@@ -347,7 +347,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
       child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.85,
+        opacity: _tapDown ? 1.0 : 0.80,
         duration: const Duration(milliseconds: 100),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 500),
