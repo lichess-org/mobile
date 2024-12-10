@@ -245,11 +245,28 @@ class PuzzleController extends _$PuzzleController {
     return NormalMove.fromUci(solution);
   }
 
+  ISet<Square> possibleSquares(Square from) {
+    final name = from.name;
+    log('Possible Moves from:$name');
+    final possibleMovesSquares = ISet<Square>();
+    final possibleMoves = state.validMoves.get(from);
+    for(final Square possibleMove in possibleMoves!) {
+      possibleMovesSquares.add(possibleMove);
+      final moveName = possibleMove.name;
+      log('$moveName');
+    }
+    possibleMovesSquares.forEach(print);
+    return possibleMovesSquares;
+  }
+
   void toggleHint() {
     final showHint = !state.showHint;
     state = state.copyWith(showHint: showHint);
     if (state.showHint) {
       final NormalMove move = solutionMove();
+      possibleSquares(move.from);
+      // get the origin square of hint
+
       state = state.copyWith(hintMove: move);
     }
   }
