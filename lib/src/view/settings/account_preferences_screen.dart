@@ -129,7 +129,6 @@ class _AccountPreferencesScreenState
                   subtitle: Text(
                     context.l10n.preferencesExplainShowPlayerRatings,
                     maxLines: 5,
-                    textAlign: TextAlign.justify,
                   ),
                   value: data.showRatings.value,
                   onChanged: isLoading

@@ -49,17 +49,9 @@ class GeneralPreferences extends _$GeneralPreferences
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> toggleCustomTheme() {
-    return save(state.copyWith(customThemeEnabled: !state.customThemeEnabled));
-  }
-
-  Future<void> setCustomThemeSeed(Color? color) {
-    return save(state.copyWith(customThemeSeed: color));
-  }
-
-  Future<void> toggleSystemColors() async {
-    await save(state.copyWith(systemColors: !state.systemColors));
-    if (state.systemColors == false) {
+  Future<void> toggleCustomTheme() async {
+    await save(state.copyWith(customThemeEnabled: !state.customThemeEnabled));
+    if (state.customThemeEnabled == false) {
       final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
       if (boardTheme == BoardTheme.system) {
         await ref
@@ -71,6 +63,10 @@ class GeneralPreferences extends _$GeneralPreferences
           .read(boardPreferencesProvider.notifier)
           .setBoardTheme(BoardTheme.system);
     }
+  }
+
+  Future<void> setCustomThemeSeed(Color? color) {
+    return save(state.copyWith(customThemeSeed: color));
   }
 }
 
@@ -87,9 +83,6 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    /// Should enable system color palette (android 12+ only)
-    required bool systemColors,
-
     /// Should enable custom theme
     @JsonKey(defaultValue: false) required bool customThemeEnabled,
 
@@ -105,8 +98,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    systemColors: true,
-    customThemeEnabled: false,
+    customThemeEnabled: true,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
