@@ -309,10 +309,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (isTablet)
         Row(
           children: [
-            if (status.isOnline)
-              const Flexible(
-                child: _TabletCreateAGameSection(),
-              ),
+            const Flexible(
+              child: _TabletCreateAGameSection(),
+            ),
             Flexible(
               child: Column(
                 children: welcomeWidgets,
@@ -361,7 +360,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             child: Column(
               children: [
                 const SizedBox(height: 8.0),
-                if (status.isOnline) const _TabletCreateAGameSection(),
+                const _TabletCreateAGameSection(),
                 if (status.isOnline)
                   _OngoingGamesPreview(
                     ongoingGames,
