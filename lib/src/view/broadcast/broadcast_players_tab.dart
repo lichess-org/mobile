@@ -26,21 +26,26 @@ class BroadcastPlayersTab extends ConsumerWidget {
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
-      AsyncData(value: final players) =>
-        SliverFillRemaining(child: PlayersList(players)),
+      AsyncData(value: final players) => SliverList(
+          delegate: SliverChildListDelegate.fixed([
+            PlayersList(players),
+          ]),
+        ),
       AsyncError(:final error) => SliverPadding(
           padding: edgeInsets,
           sliver: SliverFillRemaining(
             child: Center(child: Text('Cannot load players data: $error')),
           ),
         ),
-      _ => SliverFillRemaining(
-          child: Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: PlayersList.loading(),
+      _ => SliverList(
+          delegate: SliverChildListDelegate.fixed([
+            Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: PlayersList.loading(),
+              ),
             ),
-          ),
+          ]),
         ),
     };
   }
@@ -48,8 +53,8 @@ class BroadcastPlayersTab extends ConsumerWidget {
 
 enum _SortingTypes { player, elo, score }
 
-const _kTableRowVerticalPadding = 10.0;
-const _kTableRowHorizontalPadding = 12.0;
+const _kTableRowVerticalPadding = 12.0;
+const _kTableRowHorizontalPadding = 8.0;
 const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
@@ -126,8 +131,8 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   Widget build(BuildContext context) {
     return Table(
       columnWidths: const {
-        1: MaxColumnWidth(FlexColumnWidth(0.3), FixedColumnWidth(100)),
-        2: MaxColumnWidth(FlexColumnWidth(0.3), FixedColumnWidth(100)),
+        1: MaxColumnWidth(FlexColumnWidth(0.2), FixedColumnWidth(100)),
+        2: MaxColumnWidth(FlexColumnWidth(0.2), FixedColumnWidth(100)),
       },
       children: [
         TableRow(
@@ -191,7 +196,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                       Text(player.$2.rating.toString()),
                       const SizedBox(width: 5),
                       if (player.$2.ratingDiff != null)
-                        ProgressionWidget(player.$2.ratingDiff!, fontSize: 16),
+                        ProgressionWidget(player.$2.ratingDiff!, fontSize: 14),
                     ],
                   ],
                 ),
@@ -236,7 +241,13 @@ class _TableTitleCell extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(text, style: _kHeaderTextStyle),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: _kHeaderTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 if (icon != null) Icon(icon),
               ],
             ),
