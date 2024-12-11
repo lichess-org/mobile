@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
@@ -68,20 +69,152 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
 
   void setRoundId(BroadcastRoundId roundId) {
     setState(() {
+      roundLoaded = false;
       _selectedRoundId = roundId;
     });
   }
 
+  Widget _iosBuilder(
+    BuildContext context,
+    AsyncValue<BroadcastTournament> asyncTournament,
+  ) {
+    final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
+      groupValue: selectedTab,
+      children: {
+        _CupertinoView.overview: Text(context.l10n.broadcastOverview),
+        _CupertinoView.boards: Text(context.l10n.broadcastBoards),
+        _CupertinoView.players: Text(context.l10n.players),
+      },
+      onValueChanged: (_CupertinoView? view) {
+        if (view != null) {
+          setCupertinoTab(view);
+        }
+      },
+    );
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: AutoSizeText(
+          widget.broadcast.title,
+          minFontSize: 14.0,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: switch (selectedTab) {
+              _CupertinoView.overview => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: BroadcastOverviewTab(
+                    broadcast: widget.broadcast,
+                    tournamentId: _selectedTournamentId,
+                  ),
+                ),
+              _CupertinoView.boards => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: switch (asyncTournament) {
+                    AsyncData(:final value) => BroadcastBoardsTab(
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                        broadcastTitle: widget.broadcast.title,
+                      ),
+                    _ => const SliverFillRemaining(
+                        child: SizedBox.shrink(),
+                      ),
+                  },
+                ),
+              _CupertinoView.players => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: BroadcastPlayersTab(
+                    tournamentId: _selectedTournamentId,
+                  ),
+                ),
+            },
+          ),
+          switch (asyncTournament) {
+            AsyncData(:final value) => _BottomBar(
+                tournament: value,
+                roundId: _selectedRoundId ?? value.defaultRoundId,
+                setTournamentId: setTournamentId,
+                setRoundId: setRoundId,
+              ),
+            _ => const BottomBar.empty(),
+          },
+        ],
+      ),
+    );
+  }
+
+  Widget _androidBuilder(
+    BuildContext context,
+    AsyncValue<BroadcastTournament> asyncTournament,
+  ) {
+    return Scaffold(
+      appBar: AppBar(
+        title: AutoSizeText(
+          widget.broadcast.title,
+          minFontSize: 14.0,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.broadcastOverview),
+            Tab(text: context.l10n.broadcastBoards),
+            Tab(text: context.l10n.players),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          _TabView(
+            sliver: BroadcastOverviewTab(
+              broadcast: widget.broadcast,
+              tournamentId: _selectedTournamentId,
+            ),
+          ),
+          _TabView(
+            sliver: switch (asyncTournament) {
+              AsyncData(:final value) => BroadcastBoardsTab(
+                  roundId: _selectedRoundId ?? value.defaultRoundId,
+                  broadcastTitle: widget.broadcast.title,
+                ),
+              _ => const SliverFillRemaining(
+                  child: SizedBox.shrink(),
+                ),
+            },
+          ),
+          _TabView(
+            sliver: BroadcastPlayersTab(
+              tournamentId: _selectedTournamentId,
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: switch (asyncTournament) {
+        AsyncData(:final value) => _BottomBar(
+            tournament: value,
+            roundId: _selectedRoundId ?? value.defaultRoundId,
+            setTournamentId: setTournamentId,
+            setRoundId: setRoundId,
+          ),
+        _ => const BottomBar.empty(),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tournament =
+    final asyncTour =
         ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    switch (tournament) {
+    switch (asyncTour) {
       case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
         // and to know if the round has games to show
-        final round = ref.watch(
+        ref.watch(
           broadcastRoundControllerProvider(
             _selectedRoundId ?? tournament.defaultRoundId,
           ),
@@ -92,7 +225,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             _selectedRoundId ?? tournament.defaultRoundId,
           ),
           (_, round) {
-            if (!roundLoaded && round.hasValue) {
+            if (round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.animateTo(1, duration: Duration.zero);
@@ -105,125 +238,16 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           },
         );
 
-        switch (round) {
-          case AsyncData(value: final _):
-            if (Theme.of(context).platform == TargetPlatform.iOS) {
-              final tabSwitcher =
-                  CupertinoSlidingSegmentedControl<_CupertinoView>(
-                groupValue: selectedTab,
-                children: {
-                  _CupertinoView.overview: Text(context.l10n.broadcastOverview),
-                  _CupertinoView.boards: Text(context.l10n.broadcastBoards),
-                  _CupertinoView.players: Text(context.l10n.players),
-                },
-                onValueChanged: (_CupertinoView? view) {
-                  if (view != null) {
-                    setCupertinoTab(view);
-                  }
-                },
-              );
-              return CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(
-                  middle: AutoSizeText(
-                    widget.broadcast.title,
-                    minFontSize: 14.0,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: switch (selectedTab) {
-                        _CupertinoView.overview => _TabView(
-                            cupertinoTabSwitcher: tabSwitcher,
-                            sliver: BroadcastOverviewTab(
-                              broadcast: widget.broadcast,
-                              tournamentId: _selectedTournamentId,
-                            ),
-                          ),
-                        _CupertinoView.boards => _TabView(
-                            cupertinoTabSwitcher: tabSwitcher,
-                            sliver: BroadcastBoardsTab(
-                              roundId:
-                                  _selectedRoundId ?? tournament.defaultRoundId,
-                              broadcastTitle: widget.broadcast.title,
-                            ),
-                          ),
-                        _CupertinoView.players => _TabView(
-                            cupertinoTabSwitcher: tabSwitcher,
-                            sliver: BroadcastPlayersTab(
-                              tournamentId: _selectedTournamentId,
-                            ),
-                          ),
-                      },
-                    ),
-                    _BottomBar(
-                      tournament: tournament,
-                      roundId: _selectedRoundId ?? tournament.defaultRoundId,
-                      setTournamentId: setTournamentId,
-                      setRoundId: setRoundId,
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Scaffold(
-                appBar: AppBar(
-                  title: AutoSizeText(
-                    widget.broadcast.title,
-                    minFontSize: 14.0,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  bottom: TabBar(
-                    controller: _tabController,
-                    tabs: <Widget>[
-                      Tab(text: context.l10n.broadcastOverview),
-                      Tab(text: context.l10n.broadcastBoards),
-                      Tab(text: context.l10n.players),
-                    ],
-                  ),
-                ),
-                body: TabBarView(
-                  controller: _tabController,
-                  children: <Widget>[
-                    _TabView(
-                      sliver: BroadcastOverviewTab(
-                        broadcast: widget.broadcast,
-                        tournamentId: _selectedTournamentId,
-                      ),
-                    ),
-                    _TabView(
-                      sliver: BroadcastBoardsTab(
-                        roundId: _selectedRoundId ?? tournament.defaultRoundId,
-                        broadcastTitle: widget.broadcast.title,
-                      ),
-                    ),
-                    _TabView(
-                      sliver: BroadcastPlayersTab(
-                        tournamentId: _selectedTournamentId,
-                      ),
-                    ),
-                  ],
-                ),
-                bottomNavigationBar: _BottomBar(
-                  tournament: tournament,
-                  roundId: _selectedRoundId ?? tournament.defaultRoundId,
-                  setTournamentId: setTournamentId,
-                  setRoundId: setRoundId,
-                ),
-              );
-            }
-          case AsyncError(:final error):
-            return Center(child: Text('Could not load broadcast: $error'));
-          case _:
-            return const Center(child: CircularProgressIndicator.adaptive());
-        }
-      case AsyncError(:final error):
-        return Center(child: Text('Could not load broadcast: $error'));
+        return PlatformWidget(
+          androidBuilder: (context) => _androidBuilder(context, asyncTour),
+          iosBuilder: (context) => _iosBuilder(context, asyncTour),
+        );
+
       case _:
-        return const Center(child: CircularProgressIndicator.adaptive());
+        return PlatformWidget(
+          androidBuilder: (context) => _androidBuilder(context, asyncTour),
+          iosBuilder: (context) => _iosBuilder(context, asyncTour),
+        );
     }
   }
 }
