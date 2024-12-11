@@ -26,9 +26,11 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 class BroadcastBoardsTab extends ConsumerWidget {
   const BroadcastBoardsTab({
     required this.roundId,
+    required this.broadcastTitle,
   });
 
   final BroadcastRoundId roundId;
+  final String broadcastTitle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,14 +60,18 @@ class BroadcastBoardsTab extends ConsumerWidget {
             : BroadcastPreview(
                 games: value.games.values.toIList(),
                 roundId: roundId,
-                title: value.round.name,
+                broadcastTitle: broadcastTitle,
+                roundTitle: value.round.name,
               ),
         AsyncError(:final error) => SliverFillRemaining(
             child: Center(
               child: Text('Could not load broadcast: $error'),
             ),
           ),
-        _ => BroadcastPreview.loading(roundId: roundId),
+        _ => BroadcastPreview.loading(
+            roundId: roundId,
+            broadcastTitle: broadcastTitle,
+          ),
       },
     );
   }
@@ -75,17 +81,20 @@ class BroadcastPreview extends StatelessWidget {
   const BroadcastPreview({
     required this.roundId,
     required this.games,
-    required this.title,
+    required this.broadcastTitle,
+    required this.roundTitle,
   });
 
   const BroadcastPreview.loading({
     required this.roundId,
+    required this.broadcastTitle,
   })  : games = null,
-        title = null;
+        roundTitle = null;
 
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
-  final String? title;
+  final String broadcastTitle;
+  final String? roundTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +122,7 @@ class BroadcastPreview extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         childCount: games == null ? numberLoadingBoards : games!.length,
         (context, index) {
-          if (games == null || title == null) {
+          if (games == null || roundTitle == null) {
             return ShimmerLoading(
               isLoading: true,
               child: BoardThumbnail.loading(
@@ -132,11 +141,12 @@ class BroadcastPreview extends StatelessWidget {
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: title,
+                title: roundTitle,
                 builder: (context) => BroadcastGameScreen(
                   roundId: roundId,
                   gameId: game.id,
-                  title: title!,
+                  broadcastTitle: broadcastTitle,
+                  roundTitle: roundTitle!,
                 ),
               );
             },

@@ -330,7 +330,7 @@ class _StudyMenu extends ConsumerWidget {
                     onPressed: (_) async {
                       try {
                         final gif =
-                            await ref.read(studyRepositoryProvider).chapterGif(
+                            await ref.read(gameShareServiceProvider).chapterGif(
                                   state.study.id,
                                   state.study.chapter.id,
                                 );
