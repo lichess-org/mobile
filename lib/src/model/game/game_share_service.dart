@@ -69,7 +69,7 @@ class GameShareService {
         .read(defaultClientProvider)
         .get(
           Uri.parse(
-            '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}${lastMove != null ? '&lastMove=${lastMove.uci}' : ''}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
+            '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}${lastMove != null ? '&lastMove=${lastMove.uci}' : ''}&theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
           ),
         )
         .timeout(const Duration(seconds: 1));
@@ -91,6 +91,35 @@ class GameShareService {
         .get(
           Uri.parse(
             '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
+          ),
+        )
+        .timeout(const Duration(seconds: 1));
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to get GIF');
+    }
+    return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
+  }
+
+  /// Fetches the GIF animation of a study chapter.
+  Future<XFile> chapterGif(
+    StringId id,
+    StringId chapterId,
+  ) async {
+    final boardPreferences = _ref.read(boardPreferencesProvider);
+    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
+        ? BoardTheme.brown
+        : boardPreferences.boardTheme;
+    final pieceTheme = boardPreferences.pieceSet;
+
+    final resp = await _ref
+        .read(lichessClientProvider)
+        .get(
+          lichessUri(
+            '/study/$id/$chapterId.gif',
+            {
+              'theme': boardTheme.gifApiName,
+              'piece': pieceTheme.name,
+            },
           ),
         )
         .timeout(const Duration(seconds: 1));
