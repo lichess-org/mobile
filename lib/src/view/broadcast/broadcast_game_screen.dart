@@ -33,12 +33,14 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String title;
+  final String broadcastTitle;
+  final String roundTitle;
 
   const BroadcastGameScreen({
     required this.roundId,
     required this.gameId,
-    required this.title,
+    required this.broadcastTitle,
+    required this.roundTitle,
   });
 
   @override
@@ -80,7 +82,11 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(widget.title, overflow: TextOverflow.ellipsis, maxLines: 1),
+        title: Text(
+          widget.roundTitle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
         actions: [
           AppBarAnalysisTabIndicator(
             tabs: tabs,
@@ -104,8 +110,13 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         ],
       ),
       body: switch (broadcastGameState) {
-        AsyncData() =>
-          _Body(widget.roundId, widget.gameId, tabController: _tabController),
+        AsyncData() => _Body(
+            widget.roundId,
+            widget.gameId,
+            widget.broadcastTitle,
+            widget.roundTitle,
+            tabController: _tabController,
+          ),
         AsyncError(:final error) => Center(
             child: Text('Cannot load broadcast game: $error'),
           ),
@@ -116,10 +127,18 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.roundId, this.gameId, {required this.tabController});
+  const _Body(
+    this.roundId,
+    this.gameId,
+    this.broadcastTitle,
+    this.roundTitle, {
+    required this.tabController,
+  });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
+  final String broadcastTitle;
+  final String roundTitle;
   final TabController tabController;
 
   @override
@@ -183,7 +202,12 @@ class _Body extends ConsumerWidget {
                   .onUserMove,
             )
           : null,
-      bottomBar: BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
+      bottomBar: BroadcastGameBottomBar(
+        roundId: roundId,
+        gameId: gameId,
+        broadcastTitle: broadcastTitle,
+        roundTitle: roundTitle,
+      ),
       children: [
         _OpeningExplorerTab(roundId, gameId),
         BroadcastGameTreeView(roundId, gameId),

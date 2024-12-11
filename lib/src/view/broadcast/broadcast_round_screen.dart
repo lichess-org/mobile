@@ -147,6 +147,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                             sliver: BroadcastBoardsTab(
                               roundId:
                                   _selectedRoundId ?? tournament.defaultRoundId,
+                              broadcastTitle: widget.broadcast.title,
                             ),
                           ),
                         _CupertinoView.players => _TabView(
@@ -196,6 +197,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     _TabView(
                       sliver: BroadcastBoardsTab(
                         roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                        broadcastTitle: widget.broadcast.title,
                       ),
                     ),
                     _TabView(
