@@ -130,8 +130,8 @@ class _BodyState extends ConsumerState<_Body> {
 
     final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: itemsByRow,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
+      crossAxisSpacing: 16.0,
+      mainAxisSpacing: 16.0,
       childAspectRatio: 1.45,
     );
 
