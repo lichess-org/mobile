@@ -35,7 +35,11 @@ class BroadcastPlayersTab extends ConsumerWidget {
             child: Center(child: Text('Cannot load players data: $error')),
           ),
         ),
-      _ => PlayersList.loading(),
+      _ => const SliverFillRemaining(
+          child: Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+        ),
     };
   }
 }
@@ -52,26 +56,9 @@ const _kHeaderTextStyle =
     TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players) : _isLoading = false;
-
-  PlayersList.loading()
-      : players = List.generate(
-          10,
-          (_) => const BroadcastPlayerExtended(
-            name: '',
-            title: null,
-            rating: null,
-            federation: null,
-            fideId: null,
-            played: 0,
-            score: null,
-            ratingDiff: null,
-          ),
-        ).toIList(),
-        _isLoading = true;
+  const PlayersList(this.players);
 
   final IList<BroadcastPlayerExtended> players;
-  final bool _isLoading;
 
   @override
   ConsumerState<PlayersList> createState() => _PlayersListState();
@@ -136,20 +123,6 @@ class _PlayersListState extends ConsumerState<PlayersList> {
     return SliverList.builder(
       itemCount: players.length + 1,
       itemBuilder: (context, index) {
-        if (widget._isLoading) {
-          return ShimmerLoading(
-            isLoading: true,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: index.isEven
-                    ? Theme.of(context).colorScheme.surfaceContainerLow
-                    : Theme.of(context).colorScheme.surfaceContainerHigh,
-              ),
-            ),
-          );
-        }
-
         if (index == 0) {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
