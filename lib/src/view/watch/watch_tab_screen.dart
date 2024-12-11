@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
@@ -17,6 +16,8 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
@@ -143,18 +144,53 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Future<void> refreshData() => _refreshData(ref);
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body(this.orientation);
 
   final Orientation orientation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  ImageColorWorker? _worker;
+  bool _imageAreCached = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _precacheImages();
+  }
+
+  @override
+  void dispose() {
+    _worker?.close();
+    super.dispose();
+  }
+
+  Future<void> _precacheImages() async {
+    _worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+      if (current.hasValue && !_imageAreCached) {
+        _imageAreCached = true;
+        await preCacheBroadcastImages(
+          context,
+          broadcasts: current.value!.active.take(10),
+          worker: _worker!,
+        );
+      }
+      _worker?.close();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
     final featuredChannels = ref.watch(featuredChannelsProvider);
     final streamers = ref.watch(liveStreamersProvider);
 
-    final content = orientation == Orientation.portrait
+    final content = widget.orientation == Orientation.portrait
         ? [
             _BroadcastWidget(broadcastList),
             _WatchTvWidget(featuredChannels),
@@ -250,8 +286,6 @@ class _BroadcastTile extends ConsumerWidget {
 
   final Broadcast broadcast;
 
-  static final _dateFormat = DateFormat.E().add_jm();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformListTile(
@@ -264,38 +298,31 @@ class _BroadcastTile extends ConsumerWidget {
         );
       },
       leading: const Icon(LichessIcons.radio_tower_lichess),
-      title: Padding(
-        padding: const EdgeInsets.only(right: 5.0),
-        child: Row(
-          children: [
-            Flexible(
-              child: Text(
-                broadcast.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      subtitle: Row(
         children: [
-          if (broadcast.round.startsAt != null)
-            Text(
-              _dateFormat.format(broadcast.round.startsAt!),
-              style: const TextStyle(fontSize: 10.0),
-            ),
-          if (broadcast.isLive)
+          Text(broadcast.round.name),
+          if (broadcast.isLive) ...[
+            const SizedBox(width: 5.0),
             Text(
               'LIVE',
               style: TextStyle(
-                fontSize: 12.0,
                 color: context.lichessColors.error,
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ] else if (broadcast.round.startsAt != null) ...[
+            const SizedBox(width: 5.0),
+            Text(relativeDate(broadcast.round.startsAt!)),
+          ],
         ],
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Text(
+          broadcast.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }

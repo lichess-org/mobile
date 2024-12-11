@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -18,7 +20,11 @@ class FakeImageColorWorker implements ImageColorWorker {
   bool get closed => false;
 
   @override
-  Future<ImageColors?> getImageColors(String url, {String? fileExtension}) {
+  Future<ImageColors?> getImageColors(
+    String url, {
+    Uint8List? image,
+    String? fileExtension,
+  }) {
     return Future.value(null);
   }
 }

@@ -7,7 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 typedef ImageColors = ({
-  Uint8List image,
+  Uint8List? image,
   int primaryContainer,
   int onPrimaryContainer,
   int error,
@@ -27,7 +27,8 @@ class ImageColorWorker {
 
   bool get closed => _closed;
 
-  /// Returns a minimal color scheme associated with the image at the given [url].
+  /// Returns a minimal color scheme associated with the image at the given [url], or
+  /// the given [image] if provided.
   ///
   /// The [fileExtension] parameter is optional and is used to specify the file
   /// extension of the image at the given [url] if it is known. It will speed up
@@ -35,13 +36,14 @@ class ImageColorWorker {
   /// against all supported decoders.
   Future<ImageColors?> getImageColors(
     String url, {
+    Uint8List? image,
     String? fileExtension,
   }) async {
     if (_closed) throw StateError('Closed');
     final completer = Completer<ImageColors?>.sync();
     final id = _idCounter++;
     _activeRequests[id] = completer;
-    _commands.send((id, url, fileExtension));
+    _commands.send((id, url, image, fileExtension));
     return await completer.future;
   }
 
@@ -97,16 +99,16 @@ class ImageColorWorker {
         receivePort.close();
         return;
       }
-      final (int id, String url, String? extension) =
-          message as (int, String, String?);
+      final (int id, String url, Uint8List? image, String? extension) =
+          message as (int, String, Uint8List?, String?);
       try {
-        final bytes = await http.readBytes(Uri.parse(url));
+        final bytes = image ?? await http.readBytes(Uri.parse(url));
         // final stopwatch0 = Stopwatch()..start();
         final decoder = extension != null
             ? img.findDecoderForNamedImage('.$extension')
             : img.findDecoderForData(bytes);
-        final image = decoder!.decode(bytes);
-        final resized = img.copyResize(image!, width: 112);
+        final decoded = decoder!.decode(bytes);
+        final resized = img.copyResize(decoded!, width: 112);
         final QuantizerResult quantizerResult =
             await QuantizerCelebi().quantize(
           resized.buffer.asUint32List(),
@@ -132,7 +134,7 @@ class ImageColorWorker {
           contrastLevel: 0.0,
         );
         final result = (
-          image: bytes,
+          image: image == null ? bytes : null,
           primaryContainer: scheme.primaryContainer,
           onPrimaryContainer: scheme.onPrimaryContainer,
           error: scheme.error,

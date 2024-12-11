@@ -1,26 +1,24 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-final _dateFormatter = DateFormat.MMMd().add_Hm();
-final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
@@ -256,6 +254,28 @@ typedef _CardColors = ({
 });
 final Map<ImageProvider, _CardColors> _colorsCache = {};
 
+Future<(_CardColors, Uint8List?)?> _computeImageColors(
+  ImageColorWorker worker,
+  String imageUrl, [
+  Uint8List? image,
+]) async {
+  final response = await worker.getImageColors(
+    imageUrl,
+    fileExtension: 'webp',
+  );
+  if (response != null) {
+    final (:image, :primaryContainer, :onPrimaryContainer, :error) = response;
+    final cardColors = (
+      primaryContainer: Color(primaryContainer),
+      onPrimaryContainer: Color(onPrimaryContainer),
+      error: Color(error),
+    );
+    _colorsCache[NetworkImage(imageUrl)] = cardColors;
+    return (cardColors, image);
+  }
+  return null;
+}
+
 class _BroadcastGridItemState extends State<BroadcastGridItem> {
   _CardColors? _cardColors;
   ImageProvider? _imageProvider;
@@ -263,16 +283,16 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
-  ImageProvider get image =>
+  ImageProvider get imageProvider =>
       imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final cachedColors = _colorsCache[image];
+    final cachedColors = _colorsCache[imageProvider];
     if (cachedColors != null) {
       _cardColors = cachedColors;
-      _imageProvider = image;
+      _imageProvider = imageProvider;
     } else {
       if (imageUrl != null) {
         _fetchImageAndColors(NetworkImage(imageUrl!));
@@ -290,22 +310,12 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
         scheduleMicrotask(() => _fetchImageAndColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      final response = await widget.worker.getImageColors(
-        provider.url,
-        fileExtension: 'webp',
-      );
+      final response = await _computeImageColors(widget.worker, provider.url);
       if (response != null) {
-        final (:image, :primaryContainer, :onPrimaryContainer, :error) =
-            response;
-        final cardColors = (
-          primaryContainer: Color(primaryContainer),
-          onPrimaryContainer: Color(onPrimaryContainer),
-          error: Color(error),
-        );
-        _colorsCache[provider] = cardColors;
+        final (cardColors, image) = response;
         if (mounted) {
           setState(() {
-            _imageProvider = MemoryImage(image);
+            _imageProvider = image != null ? MemoryImage(image) : imageProvider;
             _cardColors = cardColors;
           });
         }
@@ -436,7 +446,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
                             )
                           else
                             Text(
-                              _formatDate(widget.broadcast.round.startsAt!),
+                              relativeDate(widget.broadcast.round.startsAt!),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: subTitleColor,
@@ -487,14 +497,32 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
   }
 }
 
-String _formatDate(DateTime date) {
-  final diff = date.difference(DateTime.now());
-
-  return (!diff.isNegative && diff.inDays == 0)
-      ? diff.inHours == 0
-          ? 'in ${diff.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
-          : 'in ${diff.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
-      : diff.inDays < 365
-          ? _dateFormatter.format(date)
-          : _dateFormatterWithYear.format(date);
+Future<void> preCacheBroadcastImages(
+  BuildContext context, {
+  required Iterable<Broadcast> broadcasts,
+  required ImageColorWorker worker,
+}) async {
+  for (final broadcast in broadcasts) {
+    final imageUrl = broadcast.tour.imageUrl;
+    if (imageUrl != null) {
+      final provider = NetworkImage(imageUrl);
+      await precacheImage(provider, context);
+      final imageStream = provider.resolve(ImageConfiguration.empty);
+      final Completer<Uint8List?> completer = Completer<Uint8List?>();
+      final ImageStreamListener listener = ImageStreamListener(
+        (imageInfo, synchronousCall) async {
+          final bytes = await imageInfo.image.toByteData();
+          if (!completer.isCompleted) {
+            completer.complete(bytes?.buffer.asUint8List());
+          }
+        },
+      );
+      imageStream.addListener(listener);
+      final imageBytes = await completer.future;
+      imageStream.removeListener(listener);
+      if (imageBytes != null) {
+        await _computeImageColors(worker, imageUrl, imageBytes);
+      }
+    }
+  }
 }
