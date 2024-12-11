@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 /// A tab that displays the players participating in a broadcast tournament.
 class BroadcastPlayersTab extends ConsumerWidget {
