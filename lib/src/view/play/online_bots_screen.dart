@@ -22,24 +22,11 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO(#796): remove when Leela featured bots special challenges are ready
-// https://github.com/lichess-org/mobile/issues/796
-const _disabledBots = {
-  'leelaknightodds',
-  'leelaqueenodds',
-  'leelaqueenforknight',
-  'leelarookodds',
-};
-
 final _onlineBotsProvider =
     FutureProvider.autoDispose<IList<User>>((ref) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getOnlineBots().then(
-          (bots) => bots
-              .whereNot(
-                (bot) => _disabledBots.contains(bot.id.value.toLowerCase()),
-              )
-              .toIList(),
+          (bots) => bots.toIList(),
         ),
     const Duration(hours: 5),
   );
