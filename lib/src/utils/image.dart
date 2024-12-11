@@ -122,13 +122,10 @@ class ImageColorWorker {
         final List<int> scoredResults = Score.score(
           colorToCount,
           desired: 1,
-          fallbackColorARGB: 0xFFEEEEEE,
+          fallbackColorARGB: 0xFF000000,
           filter: false,
         );
         final Hct sourceColor = Hct.fromInt(scoredResults.first);
-        if (sourceColor.tone > 90.0) {
-          sourceColor.tone = 90.0;
-        }
         final scheme = SchemeFidelity(
           sourceColorHct: sourceColor,
           isDark: false,

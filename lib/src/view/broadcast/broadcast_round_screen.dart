@@ -363,7 +363,8 @@ class _RoundSelectorMenu extends ConsumerStatefulWidget {
   ConsumerState<_RoundSelectorMenu> createState() => _RoundSelectorState();
 }
 
-final _dateFormat = DateFormat.yMd().add_jm();
+final _dateFormatMonth = DateFormat.MMMd().add_jm();
+final _dateFormatYearMonth = DateFormat.yMMMd().add_jm();
 
 class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
   final currentRoundKey = GlobalKey();
@@ -394,7 +395,13 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
                 if (round.startsAt != null || round.startsAfterPrevious) ...[
                   Text(
                     round.startsAt != null
-                        ? _dateFormat.format(round.startsAt!)
+                        ? round.startsAt!
+                                    .difference(DateTime.now())
+                                    .inDays
+                                    .abs() <
+                                30
+                            ? _dateFormatMonth.format(round.startsAt!)
+                            : _dateFormatYearMonth.format(round.startsAt!)
                         : context.l10n.broadcastStartsAfter(
                             widget.rounds[index - 1].name,
                           ),
