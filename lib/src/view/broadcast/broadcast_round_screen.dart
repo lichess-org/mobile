@@ -77,6 +77,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _iosBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
+    AsyncValue<BroadcastRoundWithGames> asyncRound,
   ) {
     final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
       groupValue: selectedTab,
@@ -148,6 +149,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _androidBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
+    AsyncValue<BroadcastRoundWithGames> asyncRound,
   ) {
     return Scaffold(
       appBar: AppBar(
@@ -166,33 +168,38 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          _TabView(
-            sliver: BroadcastOverviewTab(
-              broadcast: widget.broadcast,
-              tournamentId: _selectedTournamentId,
-            ),
-          ),
-          _TabView(
-            sliver: switch (asyncTournament) {
-              AsyncData(:final value) => BroadcastBoardsTab(
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  broadcastTitle: widget.broadcast.title,
+      body: switch (asyncRound) {
+        AsyncData(value: final _) => TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              _TabView(
+                sliver: BroadcastOverviewTab(
+                  broadcast: widget.broadcast,
+                  tournamentId: _selectedTournamentId,
                 ),
-              _ => const SliverFillRemaining(
-                  child: SizedBox.shrink(),
+              ),
+              _TabView(
+                sliver: switch (asyncTournament) {
+                  AsyncData(:final value) => BroadcastBoardsTab(
+                      roundId: _selectedRoundId ?? value.defaultRoundId,
+                      broadcastTitle: widget.broadcast.title,
+                    ),
+                  _ => const SliverFillRemaining(
+                      child: SizedBox.shrink(),
+                    ),
+                },
+              ),
+              _TabView(
+                sliver: BroadcastPlayersTab(
+                  tournamentId: _selectedTournamentId,
                 ),
-            },
+              ),
+            ],
           ),
-          _TabView(
-            sliver: BroadcastPlayersTab(
-              tournamentId: _selectedTournamentId,
-            ),
-          ),
-        ],
-      ),
+        _ => const Center(
+            child: CircularProgressIndicator(),
+          )
+      },
       bottomNavigationBar: switch (asyncTournament) {
         AsyncData(:final value) => _BottomBar(
             tournament: value,
@@ -210,11 +217,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     final asyncTour =
         ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
+    const loadingRound = AsyncValue<BroadcastRoundWithGames>.loading();
+
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
         // and to know if the round has games to show
-        ref.watch(
+        final round = ref.watch(
           broadcastRoundControllerProvider(
             _selectedRoundId ?? tournament.defaultRoundId,
           ),
@@ -228,7 +237,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             if (round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
-                _tabController.animateTo(1, duration: Duration.zero);
+                _tabController.index = 1;
 
                 if (Theme.of(context).platform == TargetPlatform.iOS) {
                   setCupertinoTab(_CupertinoView.boards);
@@ -239,14 +248,17 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         );
 
         return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour),
+          androidBuilder: (context) =>
+              _androidBuilder(context, asyncTour, round),
+          iosBuilder: (context) => _iosBuilder(context, asyncTour, round),
         );
 
       case _:
         return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour),
+          androidBuilder: (context) =>
+              _androidBuilder(context, asyncTour, loadingRound),
+          iosBuilder: (context) =>
+              _iosBuilder(context, asyncTour, loadingRound),
         );
     }
   }
