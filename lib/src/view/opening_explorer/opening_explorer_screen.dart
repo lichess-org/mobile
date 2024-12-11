@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -181,6 +182,13 @@ class _Body extends ConsumerWidget {
                       ),
                       OpeningExplorerView(
                         position: state.position,
+                        opening: state.currentNode.isRoot
+                            ? LightOpening(
+                                eco: '',
+                                name: context.l10n.startPosition,
+                              )
+                            : state.currentNode.opening ??
+                                state.currentBranchOpening,
                         onMoveSelected: (move) {
                           ref
                               .read(

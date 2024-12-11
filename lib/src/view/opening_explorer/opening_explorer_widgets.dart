@@ -3,11 +3,13 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _kTableRowVerticalPadding = 10.0;
 const _kTableRowHorizontalPadding = 8.0;
@@ -26,6 +28,52 @@ Color _blackBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
         ? Colors.black.withValues(alpha: 0.7)
         : Colors.black;
+
+class OpeningNameHeader extends StatelessWidget {
+  const OpeningNameHeader({required this.opening, super.key});
+
+  final Opening opening;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: _kTableRowPadding,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      child: GestureDetector(
+        onTap: opening.name == context.l10n.startPosition
+            ? null
+            : () => launchUrl(
+                  Uri.parse(
+                    'https://lichess.org/opening/${opening.name}',
+                  ),
+                ),
+        child: Row(
+          children: [
+            if (opening.name != context.l10n.startPosition) ...[
+              Icon(
+                Icons.open_in_browser_outlined,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+              const SizedBox(width: 6.0),
+            ],
+            Expanded(
+              child: Text(
+                opening.name,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 /// Table of moves for the opening explorer.
 class OpeningExplorerMoveTable extends ConsumerWidget {
