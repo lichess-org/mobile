@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,27 +28,14 @@ class BroadcastPlayersTab extends ConsumerWidget {
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
-      AsyncData(value: final players) => SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            PlayersList(players),
-          ]),
-        ),
+      AsyncData(value: final players) => PlayersList(players),
       AsyncError(:final error) => SliverPadding(
           padding: edgeInsets,
           sliver: SliverFillRemaining(
             child: Center(child: Text('Cannot load players data: $error')),
           ),
         ),
-      _ => SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: PlayersList.loading(),
-              ),
-            ),
-          ]),
-        ),
+      _ => PlayersList.loading(),
     };
   }
 }
@@ -59,10 +48,11 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
-const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold);
+const _kHeaderTextStyle =
+    TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players);
+  const PlayersList(this.players) : _isLoading = false;
 
   PlayersList.loading()
       : players = List.generate(
@@ -77,9 +67,11 @@ class PlayersList extends ConsumerStatefulWidget {
             score: null,
             ratingDiff: null,
           ),
-        ).toIList();
+        ).toIList(),
+        _isLoading = true;
 
   final IList<BroadcastPlayerExtended> players;
+  final bool _isLoading;
 
   @override
   ConsumerState<PlayersList> createState() => _PlayersListState();
@@ -87,10 +79,10 @@ class PlayersList extends ConsumerStatefulWidget {
 
 class _PlayersListState extends ConsumerState<PlayersList> {
   late IList<BroadcastPlayerExtended> players;
-  _SortingTypes? currentSort;
+  _SortingTypes currentSort = _SortingTypes.score;
   bool reverse = false;
 
-  void sort(_SortingTypes newSort) {
+  void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
       _SortingTypes.player =>
         (BroadcastPlayerExtended a, BroadcastPlayerExtended b) =>
@@ -110,12 +102,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
     };
 
     setState(() {
-      if (currentSort == newSort) {
-        reverse = !reverse;
-      } else {
+      if (currentSort != newSort) {
         reverse = false;
-        currentSort = newSort;
+      } else {
+        reverse = toggleReverse ? !reverse : reverse;
       }
+      currentSort = newSort;
       players = reverse ? players.sortReversed(compare) : players.sort(compare);
     });
   }
@@ -128,129 +120,181 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   }
 
   @override
+  void didUpdateWidget(PlayersList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.players != widget.players) {
+      players = widget.players;
+      sort(_SortingTypes.score);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Table(
-      columnWidths: const {
-        1: MaxColumnWidth(FlexColumnWidth(0.2), FixedColumnWidth(100)),
-        2: MaxColumnWidth(FlexColumnWidth(0.2), FixedColumnWidth(100)),
-      },
-      children: [
-        TableRow(
-          children: [
-            _TableTitleCell(
-              text: context.l10n.player,
-              onTap: () {
-                sort(_SortingTypes.player);
-              },
-              icon: (currentSort == _SortingTypes.player)
-                  ? reverse
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down
-                  : null,
+    final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
+    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 70);
+
+    return SliverList.builder(
+      itemCount: players.length + 1,
+      itemBuilder: (context, index) {
+        if (widget._isLoading) {
+          return ShimmerLoading(
+            isLoading: true,
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: index.isEven
+                    ? Theme.of(context).colorScheme.surfaceContainerLow
+                    : Theme.of(context).colorScheme.surfaceContainerHigh,
+              ),
             ),
-            _TableTitleCell(
-              text: 'Elo',
-              onTap: () {
-                sort(_SortingTypes.elo);
-              },
-              icon: (currentSort == _SortingTypes.elo)
-                  ? reverse
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down
-                  : null,
-            ),
-            _TableTitleCell(
-              text: context.l10n.broadcastScore,
-              onTap: () {
-                sort(_SortingTypes.score);
-              },
-              icon: (currentSort == _SortingTypes.score)
-                  ? reverse
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down
-                  : null,
-            ),
-          ],
-        ),
-        ...players.indexed.map(
-          (player) => TableRow(
-            decoration: BoxDecoration(
-              color: player.$1.isEven
-                  ? Theme.of(context).colorScheme.surfaceContainerLow
-                  : Theme.of(context).colorScheme.surfaceContainerHigh,
-            ),
+          );
+        }
+
+        if (index == 0) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: _kTableRowPadding,
-                child: BroadcastPlayerWidget(
-                  federation: player.$2.federation,
-                  title: player.$2.title,
-                  name: player.$2.name,
+              Expanded(
+                child: _TableTitleCell(
+                  title: Text(context.l10n.player, style: _kHeaderTextStyle),
+                  onTap: () => sort(
+                    _SortingTypes.player,
+                    toggleReverse: currentSort == _SortingTypes.player,
+                  ),
+                  sortIcon: (currentSort == _SortingTypes.player)
+                      ? (reverse
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down)
+                      : null,
                 ),
               ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Row(
-                  children: [
-                    if (player.$2.rating != null) ...[
-                      Text(player.$2.rating.toString()),
-                      const SizedBox(width: 5),
-                      if (player.$2.ratingDiff != null)
-                        ProgressionWidget(player.$2.ratingDiff!, fontSize: 14),
-                    ],
-                  ],
+              SizedBox(
+                width: eloWidth,
+                child: _TableTitleCell(
+                  title: const Text('Elo', style: _kHeaderTextStyle),
+                  onTap: () => sort(
+                    _SortingTypes.elo,
+                    toggleReverse: currentSort == _SortingTypes.elo,
+                  ),
+                  sortIcon: (currentSort == _SortingTypes.elo)
+                      ? (reverse
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down)
+                      : null,
                 ),
               ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: (player.$2.score != null)
-                      ? Text(
-                          '${player.$2.score!.toStringAsFixed((player.$2.score! == player.$2.score!.roundToDouble()) ? 0 : 1)}/${player.$2.played}',
-                        )
-                      : const SizedBox.shrink(),
+              SizedBox(
+                width: scoreWidth,
+                child: _TableTitleCell(
+                  title: Text(
+                    context.l10n.broadcastScore,
+                    style: _kHeaderTextStyle,
+                  ),
+                  onTap: () => sort(
+                    _SortingTypes.score,
+                    toggleReverse: currentSort == _SortingTypes.score,
+                  ),
+                  sortIcon: (currentSort == _SortingTypes.score)
+                      ? (reverse
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down)
+                      : null,
                 ),
               ),
             ],
-          ),
-        ),
-      ],
+          );
+        } else {
+          final player = players[index - 1];
+          return Container(
+            decoration: BoxDecoration(
+              color: index.isEven
+                  ? Theme.of(context).colorScheme.surfaceContainerLow
+                  : Theme.of(context).colorScheme.surfaceContainerHigh,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: _kTableRowPadding,
+                    child: BroadcastPlayerWidget(
+                      federation: player.federation,
+                      title: player.title,
+                      name: player.name,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: eloWidth,
+                  child: Padding(
+                    padding: _kTableRowPadding,
+                    child: Row(
+                      children: [
+                        if (player.rating != null) ...[
+                          Text(player.rating.toString()),
+                          const SizedBox(width: 5),
+                          if (player.ratingDiff != null)
+                            ProgressionWidget(player.ratingDiff!, fontSize: 14),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: scoreWidth,
+                  child: Padding(
+                    padding: _kTableRowPadding,
+                    child: (player.score != null)
+                        ? Text(
+                            '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)}/${player.played}',
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }
 
 class _TableTitleCell extends StatelessWidget {
-  const _TableTitleCell({required this.text, required this.onTap, this.icon});
+  const _TableTitleCell({
+    required this.title,
+    required this.onTap,
+    this.sortIcon,
+  });
 
-  final String text;
+  final Widget title;
   final void Function() onTap;
-  final IconData? icon;
+  final IconData? sortIcon;
 
   @override
   Widget build(BuildContext context) {
-    return TableCell(
-      verticalAlignment:
-          (icon == null) ? TableCellVerticalAlignment.fill : null,
+    return SizedBox(
+      height: 44,
       child: GestureDetector(
         onTap: onTap,
-        child: ColoredBox(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          child: Padding(
-            padding: _kTableRowPadding,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    text,
-                    style: _kHeaderTextStyle,
-                    overflow: TextOverflow.ellipsis,
+        child: Padding(
+          padding: _kTableRowPadding,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: title,
+              ),
+              if (sortIcon != null)
+                Text(
+                  String.fromCharCode(sortIcon!.codePoint),
+                  style: _kHeaderTextStyle.copyWith(
+                    fontSize: 16,
+                    fontFamily: sortIcon!.fontFamily,
                   ),
                 ),
-                if (icon != null) Icon(icon),
-              ],
-            ),
+            ],
           ),
         ),
       ),
