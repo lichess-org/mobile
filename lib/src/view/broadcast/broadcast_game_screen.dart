@@ -3,7 +3,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -14,16 +13,15 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -386,40 +384,16 @@ class _PlayerWidget extends ConsumerWidget {
             ),
             const SizedBox(width: 16.0),
           ],
-          if (player.federation != null) ...[
-            SvgPicture.network(
-              lichessFideFedSrc(player.federation!),
-              height: 12,
-              httpClient: ref.read(defaultClientProvider),
+          Expanded(
+            child: BroadcastPlayerWidget(
+              federation: player.federation,
+              title: player.title,
+              name: player.name,
+              rating: player.rating,
+              textStyle:
+                  const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(width: 5),
-          ],
-          if (player.title != null) ...[
-            Text(
-              player.title!,
-              style: const TextStyle().copyWith(
-                color: context.lichessColors.brag,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Text(
-            player.name,
-            style: const TextStyle().copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-            overflow: TextOverflow.ellipsis,
           ),
-          if (player.rating != null) ...[
-            const SizedBox(width: 5),
-            Text(
-              player.rating.toString(),
-              style: const TextStyle(),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-          const Spacer(),
           if (clock != null)
             Container(
               height: kAnalysisBoardHeaderOrFooterHeight,
