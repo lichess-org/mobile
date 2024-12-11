@@ -24,6 +24,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   StreamSubscription<SocketEvent>? _subscription;
   AppLifecycleListener? _appLifecycleListener;
 
+  DateTime? _onPauseAt;
+
   late SocketClient _socketClient;
 
   @override
@@ -37,8 +39,18 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
     _appLifecycleListener = AppLifecycleListener(
+      onPause: () {
+        _onPauseAt = DateTime.now();
+      },
       onResume: () {
-        ref.invalidateSelf();
+        if (state.valueOrNull?.round.status == RoundStatus.live) {
+          if (_onPauseAt != null) {
+            final diff = DateTime.now().difference(_onPauseAt!);
+            if (diff >= const Duration(minutes: 5)) {
+              ref.invalidateSelf();
+            }
+          }
+        }
       },
     );
 

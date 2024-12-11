@@ -42,6 +42,7 @@ class BroadcastGameController extends _$BroadcastGameController
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
+  DateTime? _onPauseAt;
   Timer? _startEngineEvalTimer;
 
   @override
@@ -58,8 +59,18 @@ class BroadcastGameController extends _$BroadcastGameController
     final evaluationService = ref.watch(evaluationServiceProvider);
 
     _appLifecycleListener = AppLifecycleListener(
+      onPause: () {
+        _onPauseAt = DateTime.now();
+      },
       onResume: () {
-        ref.invalidateSelf();
+        if (state.valueOrNull?.isOngoing == true) {
+          if (_onPauseAt != null) {
+            final diff = DateTime.now().difference(_onPauseAt!);
+            if (diff >= const Duration(minutes: 5)) {
+              ref.invalidateSelf();
+            }
+          }
+        }
       },
     );
 
