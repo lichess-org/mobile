@@ -168,6 +168,17 @@ class BroadcastGameController extends _$BroadcastGameController
 
     final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
 
+    if (newPath != null && isNewNode == false) {
+      _root.updateAt(newPath, (node) {
+        if (node is Branch) {
+          node.comments = [
+            ...node.comments ?? [],
+            PgnComment(clock: clock),
+          ];
+        }
+      });
+    }
+
     if (newPath != null) {
       _root.promoteAt(newPath, toMainline: true);
       _setPath(
