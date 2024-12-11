@@ -75,8 +75,6 @@ typedef BroadcastTournamentGroup = ({
 
 @freezed
 class BroadcastRound with _$BroadcastRound {
-  const BroadcastRound._();
-
   const factory BroadcastRound({
     required BroadcastRoundId id,
     required String name,
@@ -117,15 +115,28 @@ class BroadcastGame with _$BroadcastGame {
 
 @freezed
 class BroadcastPlayer with _$BroadcastPlayer {
-  const BroadcastPlayer._();
-
   const factory BroadcastPlayer({
     required String name,
     required String? title,
     required int? rating,
     required Duration? clock,
     required String? federation,
+    required FideId? fideId,
   }) = _BroadcastPlayer;
+}
+
+@freezed
+class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
+  const factory BroadcastPlayerExtended({
+    required String name,
+    required String? title,
+    required int? rating,
+    required String? federation,
+    required FideId? fideId,
+    required int played,
+    required double? score,
+    required int? ratingDiff,
+  }) = _BroadcastPlayerExtended;
 }
 
 enum RoundStatus {

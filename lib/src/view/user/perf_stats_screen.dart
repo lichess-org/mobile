@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -213,7 +213,7 @@ class _Body extends ConsumerWidget {
                 context.l10n
                     .perfStatProgressOverLastXGames('12')
                     .replaceAll(':', ''),
-                child: _ProgressionWidget(data.progress),
+                child: ProgressionWidget(data.progress),
               ),
               StatCardRow([
                 if (data.rank != null)
@@ -420,49 +420,6 @@ class _Body extends ConsumerWidget {
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
-    );
-  }
-}
-
-class _ProgressionWidget extends StatelessWidget {
-  final int progress;
-
-  const _ProgressionWidget(this.progress);
-
-  @override
-  Widget build(BuildContext context) {
-    const progressionFontSize = 20.0;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (progress != 0) ...[
-          Icon(
-            progress > 0
-                ? LichessIcons.arrow_full_upperright
-                : LichessIcons.arrow_full_lowerright,
-            color: progress > 0
-                ? context.lichessColors.good
-                : context.lichessColors.error,
-          ),
-          Text(
-            progress.abs().toString(),
-            style: TextStyle(
-              color: progress > 0
-                  ? context.lichessColors.good
-                  : context.lichessColors.error,
-              fontSize: progressionFontSize,
-            ),
-          ),
-        ] else
-          Text(
-            '0',
-            style: TextStyle(
-              color: textShade(context, _customOpacity),
-              fontSize: progressionFontSize,
-            ),
-          ),
-      ],
     );
   }
 }

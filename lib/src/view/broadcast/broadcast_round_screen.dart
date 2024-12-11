@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -27,7 +28,7 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _CupertinoView { overview, boards }
+enum _CupertinoView { overview, boards, players }
 
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
@@ -41,7 +42,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -113,6 +114,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 children: {
                   _CupertinoView.overview: Text(context.l10n.broadcastOverview),
                   _CupertinoView.boards: Text(context.l10n.broadcastBoards),
+                  _CupertinoView.players: Text(context.l10n.players),
                 },
                 onValueChanged: (_CupertinoView? view) {
                   if (view != null) {
@@ -132,21 +134,28 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 child: Column(
                   children: [
                     Expanded(
-                      child: selectedTab == _CupertinoView.overview
-                          ? _TabView(
-                              cupertinoTabSwitcher: tabSwitcher,
-                              sliver: BroadcastOverviewTab(
-                                broadcast: widget.broadcast,
-                                tournamentId: _selectedTournamentId,
-                              ),
-                            )
-                          : _TabView(
-                              cupertinoTabSwitcher: tabSwitcher,
-                              sliver: BroadcastBoardsTab(
-                                roundId: _selectedRoundId ??
-                                    tournament.defaultRoundId,
-                              ),
+                      child: switch (selectedTab) {
+                        _CupertinoView.overview => _TabView(
+                            cupertinoTabSwitcher: tabSwitcher,
+                            sliver: BroadcastOverviewTab(
+                              broadcast: widget.broadcast,
+                              tournamentId: _selectedTournamentId,
                             ),
+                          ),
+                        _CupertinoView.boards => _TabView(
+                            cupertinoTabSwitcher: tabSwitcher,
+                            sliver: BroadcastBoardsTab(
+                              roundId:
+                                  _selectedRoundId ?? tournament.defaultRoundId,
+                            ),
+                          ),
+                        _CupertinoView.players => _TabView(
+                            cupertinoTabSwitcher: tabSwitcher,
+                            sliver: BroadcastPlayersTab(
+                              tournamentId: _selectedTournamentId,
+                            ),
+                          ),
+                      },
                     ),
                     _BottomBar(
                       tournament: tournament,
@@ -171,6 +180,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     tabs: <Widget>[
                       Tab(text: context.l10n.broadcastOverview),
                       Tab(text: context.l10n.broadcastBoards),
+                      Tab(text: context.l10n.players),
                     ],
                   ),
                 ),
@@ -186,6 +196,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     _TabView(
                       sliver: BroadcastBoardsTab(
                         roundId: _selectedRoundId ?? tournament.defaultRoundId,
+                      ),
+                    ),
+                    _TabView(
+                      sliver: BroadcastPlayersTab(
+                        tournamentId: _selectedTournamentId,
                       ),
                     ),
                   ],
@@ -222,11 +237,6 @@ class _TabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
-        (cupertinoTabSwitcher != null
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.bodyPadding;
     return Shimmer(
       child: CustomScrollView(
         slivers: [
@@ -236,10 +246,7 @@ class _TabView extends StatelessWidget {
                   EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
               sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
             ),
-          SliverPadding(
-            padding: edgeInsets,
-            sliver: sliver,
-          ),
+          sliver,
         ],
       ),
     );
