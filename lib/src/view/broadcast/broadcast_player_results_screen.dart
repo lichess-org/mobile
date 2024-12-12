@@ -157,7 +157,8 @@ class _Body extends ConsumerWidget {
                                           const SizedBox(width: 5),
                                           Flexible(
                                             child: Text(
-                                              fedIdToName[player.federation!]!,
+                                              federationIdToName[
+                                                  player.federation!]!,
                                               style: const TextStyle(
                                                 fontSize: 18.0,
                                               ),

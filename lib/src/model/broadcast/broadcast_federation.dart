@@ -1,4 +1,4 @@
-const fedIdToName = {
+const federationIdToName = {
   'FID': 'FIDE',
   'USA': 'United States of America',
   'IND': 'India',
