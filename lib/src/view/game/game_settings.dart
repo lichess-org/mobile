@@ -87,7 +87,7 @@ class GameSettings extends ConsumerWidget {
           },
         ),
         SwitchSettingTile(
-          title: Text(context.l10n.mobileBlindfoldMode),
+          title: Text(context.l10n.preferencesBlindfold),
           value: gamePrefs.blindfoldMode ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();

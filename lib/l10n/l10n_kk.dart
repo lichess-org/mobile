@@ -15,9 +15,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileAreYouSure => 'Растайсыз ба?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -593,9 +590,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1010,6 +1004,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Қоңыраулы ескерту';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Жұмбақтар';

@@ -104,31 +104,36 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       child: Column(
         children: [
           Expanded(
-            child: switch (selectedTab) {
-              _CupertinoView.overview => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastOverviewTab(
-                    broadcast: widget.broadcast,
-                    tournamentId: _selectedTournamentId,
-                  ),
-                ),
-              _CupertinoView.boards => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastBoardsTab(
-                        roundId: _selectedRoundId ?? value.defaultRoundId,
-                        tournamentSlug: widget.broadcast.tour.slug,
+            child: switch (asyncRound) {
+              AsyncData(value: final _) => switch (selectedTab) {
+                  _CupertinoView.overview => _TabView(
+                      cupertinoTabSwitcher: tabSwitcher,
+                      sliver: BroadcastOverviewTab(
+                        broadcast: widget.broadcast,
+                        tournamentId: _selectedTournamentId,
                       ),
-                    _ => const SliverFillRemaining(
-                        child: SizedBox.shrink(),
+                    ),
+                  _CupertinoView.boards => _TabView(
+                      cupertinoTabSwitcher: tabSwitcher,
+                      sliver: switch (asyncTournament) {
+                        AsyncData(:final value) => BroadcastBoardsTab(
+                            roundId: _selectedRoundId ?? value.defaultRoundId,
+                            tournamentSlug: widget.broadcast.tour.slug,
+                          ),
+                        _ => const SliverFillRemaining(
+                            child: SizedBox.shrink(),
+                          ),
+                      },
+                    ),
+                  _CupertinoView.players => _TabView(
+                      cupertinoTabSwitcher: tabSwitcher,
+                      sliver: BroadcastPlayersTab(
+                        tournamentId: _selectedTournamentId,
                       ),
-                  },
-                ),
-              _CupertinoView.players => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastPlayersTab(
-                    tournamentId: _selectedTournamentId,
-                  ),
+                    ),
+                },
+              _ => const Center(
+                  child: CircularProgressIndicator.adaptive(),
                 ),
             },
           ),

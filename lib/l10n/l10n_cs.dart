@@ -15,9 +15,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileAreYouSure => 'Jste si jistý?';
 
   @override
-  String get mobileBlindfoldMode => 'Páska přes oči';
-
-  @override
   String get mobileCancelTakebackOffer => 'Zrušit nabídnutí vrácení tahu';
 
   @override
@@ -85,7 +82,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Hrej úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
+  String get mobilePuzzleThemesSubtitle => 'Hraj úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
 
   @override
   String get mobilePuzzlesTab => 'Puzzles';
@@ -532,25 +529,25 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastRecentTournaments => 'Nedávné tournamenty';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Otevřít v Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Týmy';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Šachovnice';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Přehled';
 
   @override
   String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Nahrát obrázek turnaje';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Zatím žádné šachovnice. Ty se zobrazí se po nahrání partií.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -559,27 +556,27 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Začíná po $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Vysílání začne velmi brzy.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Vysílání ještě nezačalo.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Oficiální stránka';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Pořadí';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Oficiální pořadí';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Více možností na $param';
   }
 
   @override
@@ -605,7 +602,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastGamesThisTournament => 'Games in this tournament';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Skóre';
 
   @override
   String get broadcastAllTeams => 'All teams';
@@ -627,9 +624,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastOptionalDetails => 'Optional details';
-
-  @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
 
   @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
@@ -1048,6 +1042,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Typ zvukového upozornění';
+
+  @override
+  String get preferencesBlindfold => 'Páska přes oči';
 
   @override
   String get puzzlePuzzles => 'Úlohy';
@@ -4387,7 +4384,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get nothingToSeeHere => 'Momentálně zde není nic k vidění.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistiky';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5592,7 +5589,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param na stránku';
   }
 
   @override

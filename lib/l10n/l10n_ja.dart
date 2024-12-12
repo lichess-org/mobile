@@ -15,9 +15,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
-  String get mobileBlindfoldMode => 'めかくしモード';
-
-  @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
@@ -521,7 +518,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastStandings => '順位';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => '公式順位';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -554,34 +551,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastScore => 'スコア';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'すべてのチーム';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'トーナメント形式';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => '開催地';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'トッププレイヤー';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'タイムゾーン';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE レーティング カテゴリー';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'その他詳細（オプション）';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => '過去の中継';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'すべての中継を月別に表示';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -991,6 +985,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'ベル通知の音';
+
+  @override
+  String get preferencesBlindfold => 'めかくしモード';
 
   @override
   String get puzzlePuzzles => 'タクティクス問題';
@@ -5388,7 +5385,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param 件/ページ';
   }
 
   @override

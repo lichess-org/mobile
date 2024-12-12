@@ -174,13 +174,16 @@ class _BodyState extends ConsumerState<_Body> {
     ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
       if (current.hasValue && !_imageAreCached) {
         _imageAreCached = true;
-        await preCacheBroadcastImages(
-          context,
-          broadcasts: current.value!.active.take(10),
-          worker: _worker!,
-        );
+        try {
+          await preCacheBroadcastImages(
+            context,
+            broadcasts: current.value!.active.take(10),
+            worker: _worker!,
+          );
+        } finally {
+          _worker?.close();
+        }
       }
-      _worker?.close();
     });
   }
 

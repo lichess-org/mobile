@@ -15,9 +15,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
-  String get mobileBlindfoldMode => 'Körleme modu';
-
-  @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override
@@ -539,7 +536,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastStandings => 'Sıralamalar';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Resmi Sıralamalar';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -547,7 +544,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'ağ yöneticileri sayfası';
 
   @override
   String broadcastPgnSourceHelp(String param) {
@@ -572,34 +569,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastScore => 'Skor';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Tüm takımlar';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Turnuva biçimi';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Turnuva Konumu';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'En iyi oyuncular';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Zaman dilimi';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE derecelendirme kategorisi';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'İsteğe bağlı ayrıntılar';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Geçmiş yayınlar';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Tüm yayınları aylara göre görüntüleyin';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1010,6 +1004,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Çan bildirimi sesi';
+
+  @override
+  String get preferencesBlindfold => 'Körleme modu';
 
   @override
   String get puzzlePuzzles => 'Bulmacalar';
@@ -2319,7 +2316,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gamesPlayed => 'Oynanmış oyunlar';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Tamam';
 
   @override
   String get cancel => 'İptal et';
@@ -5456,7 +5453,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return 'Sayfa başına $param';
   }
 
   @override

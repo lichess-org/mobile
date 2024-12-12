@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -230,9 +231,19 @@ class _Body extends ConsumerWidget {
                       );
                     },
                     child: ColoredBox(
-                      color: (index - 1).isEven
-                          ? Theme.of(context).colorScheme.surfaceContainerLow
-                          : Theme.of(context).colorScheme.surfaceContainerHigh,
+                      color: Theme.of(context).platform == TargetPlatform.iOS
+                          ? (index - 1).isEven
+                              ? CupertinoColors.secondarySystemBackground
+                                  .resolveFrom(context)
+                              : CupertinoColors.tertiarySystemBackground
+                                  .resolveFrom(context)
+                          : (index - 1).isEven
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHigh,
                       child: Padding(
                         padding: _kTableRowPadding,
                         child: Row(

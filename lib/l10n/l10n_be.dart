@@ -15,9 +15,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileAreYouSure => 'Вы ўпэўнены?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -627,9 +624,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1044,6 +1038,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Гукавое паведамленне';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Задачы';
@@ -1908,7 +1905,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get usingServerAnalysis => 'Выкарыстоўваецца серверны аналіз';
 
   @override
-  String get loadingEngine => 'Загружаем шахматную праграму...';
+  String get loadingEngine => 'Загружаем рухавічок...';
 
   @override
   String get calculatingMoves => 'Пралічваем хады...';

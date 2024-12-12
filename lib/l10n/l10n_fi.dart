@@ -15,9 +15,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAreYouSure => 'Oletko varma?';
 
   @override
-  String get mobileBlindfoldMode => 'Sokko';
-
-  @override
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
@@ -47,7 +44,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileHomeTab => 'Etusivu';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Live-striimaajat';
 
   @override
   String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
@@ -133,7 +130,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSystemColors => 'Järjestelmän värit';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Teema';
 
   @override
   String get mobileToolsTab => 'Työkalut';
@@ -518,12 +515,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Laudat voidaan ladata lähteen kautta tai $param kautta';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Alkuun on aikaa $param';
+    return 'Alkaa $param:n jälkeen';
   }
 
   @override
@@ -539,7 +536,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastStandings => 'Tulostaulu';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Virallinen tulostaulu';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -572,34 +569,31 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastScore => 'Pisteet';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Kaikki joukkueet';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Turnauksen laji';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Turnauksen sijainti';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Parhaat pelaajat';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Aikavyöhyke';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Kategoria (FIDE-vahvuuslukujen mukaan)';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Mahdolliset lisätiedot';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Menneet lähetykset';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Näytä kaikki lähetykset kuukausikohtaisesti';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1010,6 +1004,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Ilmoitusten kilahdusääni';
+
+  @override
+  String get preferencesBlindfold => 'Sokko';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -5456,7 +5453,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param per sivu';
   }
 
   @override

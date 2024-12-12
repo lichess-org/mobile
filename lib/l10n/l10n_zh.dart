@@ -15,9 +15,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAreYouSure => '你确定吗？';
 
   @override
-  String get mobileBlindfoldMode => '盲棋';
-
-  @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
@@ -73,7 +70,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => '你想结束这组吗？';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '没有显示，请更改过滤器';
+  String get mobilePuzzleStormFilterNothingToShow => '没有结果，请更改筛选条件';
 
   @override
   String get mobilePuzzleStormNothingToShow => '没有记录。 请下几组 Puzzle Storm。';
@@ -133,7 +130,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSystemColors => '系统颜色';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => '主题';
 
   @override
   String get mobileToolsTab => '工具';
@@ -576,13 +573,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => '结束的转播';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => '按月查看所有转播';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -992,6 +986,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => '通知铃声';
+
+  @override
+  String get preferencesBlindfold => '盲棋';
 
   @override
   String get puzzlePuzzles => '谜题';
@@ -5444,9 +5441,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileAreYouSure => '您確定嗎？';
 
   @override
-  String get mobileBlindfoldMode => '盲棋';
-
-  @override
   String get mobileCancelTakebackOffer => '取消悔棋請求';
 
   @override
@@ -5925,6 +5919,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastNoBoardsYet => '尚無棋局。這些棋局將在對局上傳後顯示。';
 
   @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return '棋盤能夠以輸入源投放或是利用$param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return '於$param開始';
+  }
+
+  @override
   String get broadcastStartVerySoon => '直播即將開始。';
 
   @override
@@ -5965,6 +5969,33 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get broadcastScore => '分數';
+
+  @override
+  String get broadcastAllTeams => '所有團隊';
+
+  @override
+  String get broadcastTournamentFormat => '錦標賽格式';
+
+  @override
+  String get broadcastTournamentLocation => '錦標賽地點';
+
+  @override
+  String get broadcastTopPlayers => '排行榜';
+
+  @override
+  String get broadcastTimezone => '時區';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE 評級類別';
+
+  @override
+  String get broadcastOptionalDetails => '其他細節';
+
+  @override
+  String get broadcastPastBroadcasts => '直播紀錄';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => '以月份顯示所有直播';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -6374,6 +6405,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get preferencesBellNotificationSound => '通知鈴聲';
+
+  @override
+  String get preferencesBlindfold => '盲棋';
 
   @override
   String get puzzlePuzzles => '謎題';

@@ -15,9 +15,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileAreYouSure => 'Είστε σίγουροι;';
 
   @override
-  String get mobileBlindfoldMode => 'Τυφλό';
-
-  @override
   String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
 
   @override
@@ -97,7 +94,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsHapticFeedback => 'Απόκριση δόνησης';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Λειτουργία εστίασης';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Αποκρύπτει τη διεπαφή του συστήματος όσο παίζεται. Ενεργοποιήστε εάν σας ενοχλούν οι χειρονομίες πλοήγησης του συστήματος στα άκρα της οθόνης. Ισχύει για την προβολή παιχνιδιού και το Puzzle Storm.';
@@ -133,7 +130,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSystemColors => 'Χρώματα συστήματος';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Εμφάνιση';
 
   @override
   String get mobileToolsTab => 'Εργαλεία';
@@ -366,7 +363,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνούα';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Ημερολόγιο αναμεταδόσεων';
 
   @override
   String get broadcastNewBroadcast => 'Νέα ζωντανή αναμετάδοση';
@@ -419,7 +416,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'Πηγαίο URL για PGN';
 
   @override
   String get broadcastSourceUrlHelp => 'URL για λήψη PGN ενημερώσεων. Πρέπει να είναι δημόσια προσβάσιμο μέσω διαδικτύου.';
@@ -490,7 +487,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastAgeThisYear => 'Φετινή ηλικία';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'Μη βαθμολογημένο';
 
   @override
   String get broadcastRecentTournaments => 'Πρόσφατα τουρνουά';
@@ -518,7 +515,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Οι σκακιέρες μπορούν να φορτωθούν απο μια πηγή ή μέσω του $param';
   }
 
   @override
@@ -527,10 +524,10 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Η αναμετάδοση θα ξεκινήσει πολύ σύντομα.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Η αναμετάδοση δεν έχει ξεκινήσει ακόμα.';
 
   @override
   String get broadcastOfficialWebsite => 'Επίσημη ιστοσελίδα';
@@ -539,27 +536,27 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastStandings => 'Κατάταξη';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Επίσημη Κατάταξη';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Περισσότερες επιλογές στη $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'σελίδα για webmasters';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Μια δημόσια πηγή PGN πολύ λειτουργεί σε πραγματικό χρόνο για αυτόν τον γύρο. Προσφέρουμε επίσης το $param για γρηγορότερο και αποτελεσματικότερο συγχρονισμό.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Ενσωμάτωση αυτήν την αναμετάδοση στην ιστοσελίδα σας';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Ενσωματώστε τον $param στην ιστοσελίδα σας';
   }
 
   @override
@@ -572,34 +569,31 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastScore => 'Βαθμολογία';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Όλες οι ομάδες';
 
   @override
   String get broadcastTournamentFormat => 'Tournament format';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Τοποθεσία Τουρνουά';
 
   @override
   String get broadcastTopPlayers => 'Top players';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Ζώνη ώρας';
 
   @override
   String get broadcastFideRatingCategory => 'FIDE rating category';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Προαιρετικές λεπτομέρειες';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Προηγούμενες αναμετάδοσεις';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των αναμεταδόσεων ανά μήνα';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1010,6 +1004,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Ειδοποίηση με ήχο από καμπανάκι';
+
+  @override
+  String get preferencesBlindfold => 'Τυφλό';
 
   @override
   String get puzzlePuzzles => 'Γρίφοι';
