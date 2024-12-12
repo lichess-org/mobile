@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jste si jistý?</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Páska přes oči</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zrušit nabídnutí vrácení tahu</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Vymazat</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Vymazat uložené tahy</string>
