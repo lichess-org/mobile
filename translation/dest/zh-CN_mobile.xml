@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有对局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">你确定吗？</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">盲棋</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋请求</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">清空</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">清除已保存的着法</string>
@@ -40,7 +39,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">显示变着</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">出了一些问题。</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">系统颜色</string>
-  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">主题</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">主题</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">工具</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待对手加入...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观看</string>
