@@ -11,6 +11,7 @@ on:
         options:
           - internal
           - alpha
+          - production
 
 # Declare default permissions as read only.
 permissions: read-all
