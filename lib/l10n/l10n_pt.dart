@@ -15,9 +15,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileAreYouSure => 'Tens a certeza?';
 
   @override
-  String get mobileBlindfoldMode => 'De olhos vendados';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancelar pedido de voltar';
 
   @override
@@ -539,7 +536,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastStandings => 'Classificações';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Classificações oficiais';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -572,34 +569,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastScore => 'Pontuação';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Todas as equipas';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Formato do torneio';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Localização do Torneio';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Melhores jogadores';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Fuso horário';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Categoria do Elo FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Detalhes opcionais';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Transmissões anteriores';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Ver todas as transmissões por mês';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1010,6 +1004,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Som da notificação';
+
+  @override
+  String get preferencesBlindfold => 'De olhos vendados';
 
   @override
   String get puzzlePuzzles => 'Problemas';
@@ -2659,7 +2656,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get retry => 'Tentar novamente';
 
   @override
-  String get reconnecting => 'Reconectando';
+  String get reconnecting => 'A reconectar';
 
   @override
   String get noNetwork => 'Desligado';
@@ -5456,7 +5453,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param por página';
   }
 
   @override
@@ -5513,9 +5510,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileAreYouSure => 'Você tem certeza?';
-
-  @override
-  String get mobileBlindfoldMode => 'Venda';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar oferta de revanche';
@@ -5631,6 +5625,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileSystemColors => 'Cores do sistema';
+
+  @override
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Ferramentas';
@@ -6036,6 +6033,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastStandings => 'Classificação';
 
   @override
+  String get broadcastOfficialStandings => 'Classificação oficial';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Mais opções na $param';
   }
@@ -6064,6 +6064,33 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get broadcastScore => 'Pontuação';
+
+  @override
+  String get broadcastAllTeams => 'Todas as equipes';
+
+  @override
+  String get broadcastTournamentFormat => 'Formato do torneio';
+
+  @override
+  String get broadcastTournamentLocation => 'Local do torneio';
+
+  @override
+  String get broadcastTopPlayers => 'Melhores jogadores';
+
+  @override
+  String get broadcastTimezone => 'Fuso horário';
+
+  @override
+  String get broadcastFideRatingCategory => 'Categoria de rating FIDE';
+
+  @override
+  String get broadcastOptionalDetails => 'Detalhes opcionais';
+
+  @override
+  String get broadcastPastBroadcasts => 'Transmissões passadas';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'Ver todas as transmissões por mês';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -6474,6 +6501,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get preferencesBellNotificationSound => 'Som da notificação';
+
+  @override
+  String get preferencesBlindfold => 'Às cegas';
 
   @override
   String get puzzlePuzzles => 'Quebra-cabeças';
@@ -7174,7 +7204,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get waitingForOpponent => 'Aguardando oponente';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Ou deixe seu oponente ler este QR Code';
+  String get orLetYourOpponentScanQrCode => 'Ou deixe seu oponente ler este código QR';
 
   @override
   String get waiting => 'Aguardando';
@@ -7299,10 +7329,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get blackLeftTheGame => 'Pretas deixaram a partida';
 
   @override
-  String get whiteDidntMove => 'As brancas não se moveram';
+  String get whiteDidntMove => 'Brancas não moveram';
 
   @override
-  String get blackDidntMove => 'As pretas não se moveram';
+  String get blackDidntMove => 'Pretas não moveram';
 
   @override
   String get requestAComputerAnalysis => 'Solicitar uma análise do computador';
@@ -7361,10 +7391,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get deleteFromHere => 'Excluir a partir daqui';
 
   @override
-  String get collapseVariations => 'Esconder variantes';
+  String get collapseVariations => 'Recolher variações';
 
   @override
-  String get expandVariations => 'Mostrar variantes';
+  String get expandVariations => 'Expandir variações';
 
   @override
   String get forceVariation => 'Variante forçada';
@@ -7428,7 +7458,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\" com arredondamento, baseado no número de meias-jogadas até a próxima captura ou jogada de peão';
+  String get dtzWithRounding => 'DTZ50\" com arredondamento, baseado no número de lances até a próxima captura ou movimento de peão';
 
   @override
   String get noGameFound => 'Nenhuma partida encontrada';
@@ -8087,7 +8117,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get continueFromHere => 'Continuar daqui';
 
   @override
-  String get toStudy => 'Estudo';
+  String get toStudy => 'Estudar';
 
   @override
   String get importGame => 'Importar partida';
@@ -8290,7 +8320,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String nextXTournament(String param) {
-    return 'Próximo torneio $param:';
+    return 'Próximo torneio de $param:';
   }
 
   @override
@@ -8558,7 +8588,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get newPasswordStrength => 'Senha forte';
 
   @override
-  String get clockInitialTime => 'Tempo de relógio';
+  String get clockInitialTime => 'Tempo inicial no relógio';
 
   @override
   String get clockIncrement => 'Incremento do relógio';
@@ -9943,7 +9973,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       count,
       locale: localeName,
       other: 'O ranking é atualizado a cada $count minutos',
-      one: 'O ranking é atualizado a cada $count minutos',
+      one: 'O ranking é atualizado a cada $count minuto',
     );
     return '$_temp0';
   }
@@ -10917,6 +10947,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyYouCompletedThisLesson => 'Parabéns! Você completou essa lição.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param por página';
+  }
 
   @override
   String studyNbChapters(int count) {

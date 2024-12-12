@@ -15,9 +15,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
 
   @override
@@ -593,9 +590,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1010,6 +1004,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'पहेलियाँ';

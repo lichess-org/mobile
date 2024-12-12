@@ -9,13 +9,10 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Semua permainan';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
-
-  @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileAreYouSure => 'Apa kamu yakin?';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
@@ -30,21 +27,21 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileCustomGameJoinAGame => 'Join a game';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Ulas balik';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Halo, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Halo';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Sembunyikan variasi';
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Beranda';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
@@ -59,7 +56,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Oke';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -88,7 +85,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Teka-teki';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -103,28 +100,28 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Pengaturan';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Bagikan GPN';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Bagikan URL permainan';
 
   @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Bagikan teka-teki ini';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Tampilkan komentar';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Tampilkan hasil';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Tampilkan variasi';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
@@ -142,7 +139,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Tontonan';
 
   @override
   String get activityActivity => 'Aktivitas';
@@ -576,9 +573,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -993,6 +987,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Suara pemberitahuan';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Teka-teki';

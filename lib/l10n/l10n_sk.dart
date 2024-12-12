@@ -15,9 +15,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileAreYouSure => 'Ste si istý?';
 
   @override
-  String get mobileBlindfoldMode => 'Naslepo';
-
-  @override
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSystemColors => 'Farby operačného systému';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Vzhľad';
 
   @override
   String get mobileToolsTab => 'Nástroje';
@@ -559,7 +556,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Začína po $param';
   }
 
   @override
@@ -575,7 +572,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastStandings => 'Poradie';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Oficiálne poradie';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -608,34 +605,31 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastScore => 'Skóre';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Všetky tímy';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Formát turnaja';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Miesto konania turnaja';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Najlepší hráči';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Časové pásmo';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Kategória FIDE ratingu';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Nepovinné údaje';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Predchádzajúce vysielania';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Zobraziť všetky vysielania podľa mesiacov';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1048,6 +1042,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Zvuk upozornenia';
+
+  @override
+  String get preferencesBlindfold => 'Naslepo';
 
   @override
   String get puzzlePuzzles => 'Šachové úlohy';
@@ -5592,7 +5589,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param na stránku';
   }
 
   @override

@@ -216,12 +216,6 @@ abstract class AppLocalizations {
   /// **'Are you sure?'**
   String get mobileAreYouSure;
 
-  /// No description provided for @mobileBlindfoldMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Blindfold'**
-  String get mobileBlindfoldMode;
-
   /// No description provided for @mobileCancelTakebackOffer.
   ///
   /// In en, this message translates to:
@@ -1044,12 +1038,6 @@ abstract class AppLocalizations {
   /// **'Optional details'**
   String get broadcastOptionalDetails;
 
-  /// No description provided for @broadcastUpcomingBroadcasts.
-  ///
-  /// In en, this message translates to:
-  /// **'Upcoming broadcasts'**
-  String get broadcastUpcomingBroadcasts;
-
   /// No description provided for @broadcastPastBroadcasts.
   ///
   /// In en, this message translates to:
@@ -1805,6 +1793,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bell notification sound'**
   String get preferencesBellNotificationSound;
+
+  /// No description provided for @preferencesBlindfold.
+  ///
+  /// In en, this message translates to:
+  /// **'Blindfold'**
+  String get preferencesBlindfold;
 
   /// No description provided for @puzzlePuzzles.
   ///

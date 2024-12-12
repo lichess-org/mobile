@@ -15,9 +15,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileAreYouSure => 'Är du säker?';
 
   @override
-  String get mobileBlindfoldMode => 'I blindo';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -56,7 +53,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileNoSearchResults => 'Inga resultat';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Du följer inte någon användare.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -112,7 +109,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileShareGameURL => 'Dela parti-URL';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Dela position som FEN';
 
   @override
   String get mobileSharePuzzle => 'Dela detta schackproblem';
@@ -593,9 +590,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1010,6 +1004,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Klock-notisljud';
+
+  @override
+  String get preferencesBlindfold => 'I blindo';
 
   @override
   String get puzzlePuzzles => 'Problem';

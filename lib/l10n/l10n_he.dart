@@ -15,9 +15,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileAreYouSure => 'בטוח?';
 
   @override
-  String get mobileBlindfoldMode => 'משחק עיוור';
-
-  @override
   String get mobileCancelTakebackOffer => 'ביטול ההצעה להחזיר את המהלך האחרון';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSystemColors => 'צבעי מערכת ההפעלה';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'עיצוב';
 
   @override
   String get mobileToolsTab => 'כלים';
@@ -575,7 +572,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastStandings => 'תוצאות';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'טבלת מובילים רשמית';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -608,34 +605,31 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastScore => 'ניקוד';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'כל הקבוצות';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'שיטת הטורניר';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'מיקום הטורניר';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'שחקני צמרת';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'אזור זמן';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'קטגוריית דירוג FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'פרטים אופציונאליים';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'הקרנות עבר';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'צפו בכל ההקרנות לפי חודש';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1048,6 +1042,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'השמע צליל עבור התראות פעמון';
+
+  @override
+  String get preferencesBlindfold => 'משחק עיוור';
 
   @override
   String get puzzlePuzzles => 'פאזלים';
@@ -1731,7 +1728,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsClosingIsDefinitive => 'הסגירה היא סופית. אין דרך חזרה. האם את/ה בטוח/ה?';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'לא תוכל/י לפתוח חשבון חדש עם אותו השם, אפילו בשינוי אותיות קטנות לגדולות והפוך. ';
+  String get settingsCantOpenSimilarAccount => 'לא תוכל/י לפתוח חשבון חדש עם אותו השם, אפילו בשינוי אותיות קטנות לגדולות והפוך.';
 
   @override
   String get settingsChangedMindDoNotCloseAccount => 'שיניתי את דעתי, אל תסגרו את החשבון שלי';
@@ -5592,7 +5589,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param לכל עמוד';
   }
 
   @override

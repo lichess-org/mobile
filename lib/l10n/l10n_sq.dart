@@ -15,9 +15,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
-  String get mobileBlindfoldMode => 'Me sytë lidhur';
-
-  @override
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
 
   @override
@@ -88,7 +85,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobilePuzzleThemesSubtitle => 'Luani puzzle-e nga hapjet tuaja të parapëlqyera, ose zgjidhni një temë.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Ushtrime';
 
   @override
   String get mobileRecentSearches => 'Kërkime së fundi';
@@ -133,7 +130,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSystemColors => 'Ngjyra sistemi';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Temë';
 
   @override
   String get mobileToolsTab => 'Mjete';
@@ -572,34 +569,31 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastScore => 'Përfundim';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Krejt ekipet';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Format turneu';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Vendndodhje Turney';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Lojtarët kryesues';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Zonë kohore';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Kategori vlerësimi FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Hollësi opsionale';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Transmetime të kaluara';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Shihni krejt transmetimet sipas muajsh';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -614,11 +608,11 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String challengeChallengesX(String param1) {
-    return 'Challenges: $param1';
+    return 'Sfida: $param1';
   }
 
   @override
-  String get challengeChallengeToPlay => 'Sfidoni në një lojë';
+  String get challengeChallengeToPlay => 'Sfidoni me një lojë';
 
   @override
   String get challengeChallengeDeclined => 'Sfida u refuzua';
@@ -1010,6 +1004,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Tingull zileje njoftimesh';
+
+  @override
+  String get preferencesBlindfold => 'Me sytë lidhur';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -5456,7 +5453,7 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param për faqe';
   }
 
   @override

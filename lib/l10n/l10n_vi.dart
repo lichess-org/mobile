@@ -15,9 +15,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAreYouSure => 'Bạn chắc chứ?';
 
   @override
-  String get mobileBlindfoldMode => 'Bịt mắt';
-
-  @override
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSystemColors => 'Màu hệ thống';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Giao diện';
 
   @override
   String get mobileToolsTab => 'Công cụ';
@@ -521,7 +518,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastStandings => 'Bảng xếp hạng';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Bảng xếp hạng Chính thức';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -554,34 +551,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastScore => 'Điểm số';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Tất cả đội';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Điều lệ giải đấu';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Địa điểm tổ chức giải đấu';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Những kỳ thủ hàng đầu';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Múi giờ';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Thể loại xếp hạng FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Tùy chọn chi tiết';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Các phát sóng đã qua';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Xem tất cả phát sóng theo tháng';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -991,6 +985,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Âm thanh chuông báo';
+
+  @override
+  String get preferencesBlindfold => 'Bịt mắt';
 
   @override
   String get puzzlePuzzles => 'Câu đố';
@@ -5388,7 +5385,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param mỗi trang';
   }
 
   @override

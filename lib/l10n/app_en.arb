@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "All games",
   "mobileAreYouSure": "Are you sure?",
-  "mobileBlindfoldMode": "Blindfold",
   "mobileCancelTakebackOffer": "Cancel takeback offer",
   "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
@@ -365,7 +364,6 @@
   "broadcastTimezone": "Time zone",
   "broadcastFideRatingCategory": "FIDE rating category",
   "broadcastOptionalDetails": "Optional details",
-  "broadcastUpcomingBroadcasts": "Upcoming broadcasts",
   "broadcastPastBroadcasts": "Past broadcasts",
   "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
@@ -616,6 +614,7 @@
   "preferencesNotifyWeb": "Browser",
   "preferencesNotifyDevice": "Device",
   "preferencesBellNotificationSound": "Bell notification sound",
+  "preferencesBlindfold": "Blindfold",
   "puzzlePuzzles": "Puzzles",
   "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",

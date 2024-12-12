@@ -15,9 +15,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileAreYouSure => 'Sei sicuro?';
 
   @override
-  String get mobileBlindfoldMode => 'Alla cieca';
-
-  @override
   String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSystemColors => 'Tema app';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Strumenti';
@@ -496,110 +493,107 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastRecentTournaments => 'Tornei recenti';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Apri con Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Squadre';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Scacchiere';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Panoramica';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Iscriviti per ricevere notifiche sull\'inizio di ogni round. Puoi attivare o disattivare la campanella o le notifiche push per le dirette nelle preferenze del tuo account.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Carica immagine del torneo';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Non sono ancora presenti scacchiere. Esse compariranno non appena i giochi saranno stati caricati.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Le scacchiere possono essere caricate con una sorgente o tramite $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Inizia tra $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Questa trasmissione inizierà a breve.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Questa trasmissione non è ancora cominciata.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Sito web ufficiale';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Classifica';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Classifica Ufficiale';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Altre opzioni si trovano nella $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'pagina dei gestori web';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Una sorgente PGN pubblica per questo round. Viene offerta anche un\'$param per una sincronizzazione più rapida ed efficiente.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Incorpora questa trasmissione nel tuo sito web';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Incorpora $param nel tuo sito web';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Differenza di punteggio';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Partite in questo torneo';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Punteggio';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Tutte le squadre';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Formato del torneo';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Luogo del Torneo';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Giocatori migliori';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Fuso orario';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Categoria di punteggio FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Dettagli facoltativi';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Trasmissioni precedenti';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Visualizza tutte le trasmissioni per mese';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1010,6 +1004,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Tono notifica';
+
+  @override
+  String get preferencesBlindfold => 'Alla cieca';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -4339,7 +4336,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get nothingToSeeHere => 'Niente da vedere qui al momento.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistiche';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5456,7 +5453,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param per pagina';
   }
 
   @override

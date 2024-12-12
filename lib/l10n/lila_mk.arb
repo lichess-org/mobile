@@ -1,7 +1,7 @@
 {
-  "mobileSystemColors": "Системски бои",
   "mobileFeedbackButton": "Повратна информација",
   "mobileSettingsHapticFeedback": "Тактилен фидбек",
+  "mobileSystemColors": "Системски бои",
   "activityActivity": "Активност",
   "activityHostedALiveStream": "Емитуваше во живо",
   "activityRankedInSwissTournament": "Ранг #{param1} во {param2}",
@@ -311,7 +311,6 @@
   "replayMode": "Режим на реприза",
   "realtimeReplay": "Во реално време",
   "byCPL": "По CPL",
-  "openStudy": "Отвори студија",
   "enable": "Овозможи",
   "bestMoveArrow": "Стрелка за најдобар потег",
   "evaluationGauge": "Мерач за проценка",
@@ -513,7 +512,6 @@
   "block": "Блокирај",
   "blocked": "Блокиран",
   "unblock": "Одблокирај",
-  "followsYou": "Те следи",
   "xStartedFollowingY": "{param1} почна да го следи {param2}",
   "more": "Повеќе",
   "memberSince": "Член од",
@@ -1020,5 +1018,11 @@
   "availableInNbLanguages": "{count, plural, =1{Достапно на {count} јазик!} other{Достапно на {count} јазици!}}",
   "nbSecondsToPlayTheFirstMove": "{count, plural, =1{{count} секунда за првиот потег} other{{count} секунди за првиот потег}}",
   "nbSeconds": "{count, plural, =1{{count} секунда} other{{count} секунди}}",
-  "andSaveNbPremoveLines": "{count, plural, =1{и заштеди {count} пред-потег} other{и заштеди {count} пред-потези}}"
+  "andSaveNbPremoveLines": "{count, plural, =1{и заштеди {count} пред-потег} other{и заштеди {count} пред-потези}}",
+  "studyNext": "Следно",
+  "studyEmbedInYourWebsite": "Вгради во твојот сајт",
+  "studySave": "Зачувај",
+  "studyGoodMove": "Добар потег",
+  "studyMistake": "Грешка",
+  "studyBlunder": "Глупа грешка"
 }
