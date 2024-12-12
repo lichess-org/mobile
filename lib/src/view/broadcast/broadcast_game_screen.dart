@@ -81,15 +81,15 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   Widget build(BuildContext context) {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
-    final broadcastRoundState =
-        ref.watch(broadcastRoundControllerProvider(widget.roundId));
+    final title = ref.watch(
+      broadcastRoundControllerProvider(widget.roundId)
+          .select((round) => round.value?.round.name),
+    );
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(
-          widget.title ??
-              broadcastRoundState.value?.round.name ??
-              'BroadcastGame',
+          widget.title ?? title ?? 'BroadcastGame',
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
