@@ -181,6 +181,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
                 ),
               },
             ),
+            updatedClockAt: DateTime.now(),
           ),
         ),
       ),
