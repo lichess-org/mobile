@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle spelle</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Is jy seker?</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Geblinddoek</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Vee gestoorde skuif uit</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Sluit aan by \'n spel</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Terugvoer</string>
