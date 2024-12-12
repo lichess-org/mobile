@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -33,14 +34,19 @@ class BroadcastGameController extends _$BroadcastGameController
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
+  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<void>? _socketOpenSubscription;
 
   late SocketClient _socketClient;
   late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
+
+  Object? _key = Object();
 
   @override
   Future<BroadcastGameState> build(
@@ -53,13 +59,37 @@ class BroadcastGameController extends _$BroadcastGameController
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
+    await _socketClient.firstConnection;
+
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (state.valueOrNull?.isOngoing == true) {
+        _syncDebouncer(() {
+          _reloadPgn();
+        });
+      }
+    });
+
     final evaluationService = ref.watch(evaluationServiceProvider);
 
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        if (state.valueOrNull?.isOngoing == true) {
+          _syncDebouncer(() {
+            _reloadPgn();
+          });
+        }
+      },
+    );
+
     ref.onDispose(() {
+      _key = null;
       _subscription?.cancel();
+      _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
+      _appLifecycleListener?.dispose();
+      _syncDebouncer.dispose();
     });
 
     final pgn = await ref.withClient(
@@ -113,6 +143,48 @@ class BroadcastGameController extends _$BroadcastGameController
     return broadcastState;
   }
 
+  Future<void> _reloadPgn() async {
+    if (!state.hasValue) return;
+    final key = _key;
+
+    final pgn = await ref.withClient(
+      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
+    );
+
+    // check provider is still mounted
+    if (key == _key) {
+      final curState = state.requireValue;
+      final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
+      final game = PgnGame.parsePgn(pgn);
+      final pgnHeaders = IMap(game.headers);
+      final rootComments =
+          IList(game.comments.map((c) => PgnComment.fromPgn(c)));
+
+      final newRoot = Root.fromPgnGame(game);
+
+      final broadcastPath = newRoot.mainlinePath;
+      final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
+
+      newRoot.merge(_root);
+
+      _root = newRoot;
+
+      final newCurrentPath =
+          wasOnLivePath ? broadcastPath : curState.currentPath;
+      state = AsyncData(
+        state.requireValue.copyWith(
+          currentPath: newCurrentPath,
+          pgnHeaders: pgnHeaders,
+          pgnRootComments: rootComments,
+          broadcastPath: broadcastPath,
+          root: _root.view,
+          lastMove: lastMove,
+          clocks: _getClocks(newCurrentPath),
+        ),
+      );
+    }
+  }
+
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
@@ -147,6 +219,17 @@ class BroadcastGameController extends _$BroadcastGameController
         pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
     final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
+
+    if (newPath != null && isNewNode == false) {
+      _root.updateAt(newPath, (node) {
+        if (node is Branch) {
+          node.comments = [
+            ...node.comments ?? [],
+            PgnComment(clock: clock),
+          ];
+        }
+      });
+    }
 
     if (newPath != null) {
       _root.promoteAt(newPath, toMainline: true);
@@ -503,7 +586,7 @@ class BroadcastGameController extends _$BroadcastGameController
           state.requireValue.currentPath,
           _root.branchesOn(state.requireValue.currentPath).map(Step.fromNode),
           initialPositionEval: _root.eval,
-          shouldEmit: (work) => work.path == state.requireValue.currentPath,
+          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
         ?.forEach(
           (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),

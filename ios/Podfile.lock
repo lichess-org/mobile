@@ -1,11 +1,11 @@
 PODS:
   - app_settings (5.1.1):
     - Flutter
-  - AppAuth (1.7.5):
-    - AppAuth/Core (= 1.7.5)
-    - AppAuth/ExternalUserAgent (= 1.7.5)
-  - AppAuth/Core (1.7.5)
-  - AppAuth/ExternalUserAgent (1.7.5):
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
   - connectivity_plus (0.0.1):
     - Flutter
@@ -23,14 +23,14 @@ PODS:
   - Firebase/Messaging (11.4.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.4.0)
-  - firebase_core (3.8.0):
+  - firebase_core (3.8.1):
     - Firebase/CoreOnly (= 11.4.0)
     - Flutter
-  - firebase_crashlytics (4.1.5):
+  - firebase_crashlytics (4.2.0):
     - Firebase/Crashlytics (= 11.4.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (15.1.5):
+  - firebase_messaging (15.1.6):
     - Firebase/Messaging (= 11.4.0)
     - firebase_core
     - Flutter
@@ -40,7 +40,7 @@ PODS:
     - GoogleUtilities/Logger (~> 8.0)
   - FirebaseCoreExtension (11.4.1):
     - FirebaseCore (~> 11.0)
-  - FirebaseCoreInternal (11.5.0):
+  - FirebaseCoreInternal (11.6.0):
     - "GoogleUtilities/NSData+zlib (~> 8.0)"
   - FirebaseCrashlytics (11.4.0):
     - FirebaseCore (~> 11.4)
@@ -65,7 +65,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (11.5.0)
+  - FirebaseRemoteConfigInterop (11.6.0)
   - FirebaseSessions (11.4.0):
     - FirebaseCore (~> 11.4)
     - FirebaseCoreExtension (~> 11.4)
@@ -77,7 +77,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
   - flutter_appauth (0.0.1):
-    - AppAuth (= 1.7.5)
+    - AppAuth (= 1.7.6)
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -234,24 +234,24 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_settings: 3507c575c2b18a462c99948f61d5de21d4420999
-  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   connectivity_plus: b21496ab28d1324eb59885d888a4d83b98531f01
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_core: 84a16d041be8bc166b6e00350f89849e06daf9d1
-  firebase_crashlytics: 9fae6688e634a062ba57bd22d2b762b87fdcd1ec
-  firebase_messaging: 48ce5cf82b70ac47ed9cb9277f97bb77d1d01a38
+  firebase_core: 222ad1787f0b9c145a06af2fdaa265a366576c0d
+  firebase_crashlytics: 1c2e2091a0b06bf6e3d6535010469a98c44c4d67
+  firebase_messaging: a538130cb2bca3ea0ff0892b8c948bd7d20ecaed
   FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
   FirebaseCoreExtension: f1bc67a4702931a7caa097d8e4ac0a1b0d16720e
-  FirebaseCoreInternal: f47dd28ae7782e6a4738aad3106071a8fe0af604
+  FirebaseCoreInternal: d98ab91e2d80a56d7b246856a8885443b302c0c2
   FirebaseCrashlytics: 41bbdd2b514a8523cede0c217aee6ef7ecf38401
   FirebaseInstallations: 6ef4a1c7eb2a61ee1f74727d7f6ce2e72acf1414
   FirebaseMessaging: f8a160d99c2c2e5babbbcc90c4a3e15db036aee2
-  FirebaseRemoteConfigInterop: 7a7aebb9342d53913a5c890efa88e289d9e5c1bc
+  FirebaseRemoteConfigInterop: e75e348953352a000331eb77caf01e424248e176
   FirebaseSessions: 3f56f177d9e53a85021d16b31f9a111849d1dd8b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: a84b3dade5e072175e13b68af5b827ca76efb1f8
+  flutter_appauth: 240be31017bab05dc0ad10a863886d49eba477aa
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   flutter_native_splash: 576fbd69b830a63594ae678396fa17e43abbc5f8
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13

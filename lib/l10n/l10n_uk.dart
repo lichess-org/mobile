@@ -15,9 +15,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAreYouSure => 'Ви впевнені?';
 
   @override
-  String get mobileBlindfoldMode => 'Наосліп';
-
-  @override
   String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSystemColors => 'Системні кольори';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Тема';
 
   @override
   String get mobileToolsTab => 'Інструм.';
@@ -532,25 +529,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastRecentTournaments => 'Нещодавні турніри';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Відкрити в Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Команди';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Дошки';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Огляд';
 
   @override
   String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Завантажити зображення турніру';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Ще немає дощок. Вони з\'являться, коли ігри будуть завантажені.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -563,23 +560,23 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Трансляція розпочнеться дуже скоро.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Трансляція ще не розпочалася.';
 
   @override
   String get broadcastOfficialWebsite => 'Офіційний вебсайт';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Турнірна таблиця';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Офіційна турнірна таблиця';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Більше опцій на $param';
   }
 
   @override
@@ -591,48 +588,45 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Вбудувати цю трансляцію на своєму сайті';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Вбудувати $param на своєму сайті';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Різниця у рейтингу';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Ігри в цьому турнірі';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Очки';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Усі команди';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Формат турніру';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Місце турніру';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Найкращі гравці';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Часовий пояс';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Категорія рейтингу FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Додаткові деталі';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Минулі трансляції';
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
@@ -975,7 +969,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesInCorrespondenceGames => 'У заочних партіях';
 
   @override
-  String get preferencesCorrespondenceAndUnlimited => 'За листуванням та необмежені';
+  String get preferencesCorrespondenceAndUnlimited => 'Заочні та необмежені';
 
   @override
   String get preferencesConfirmResignationAndDrawOffers => 'Підтверджувати повернення ходу та пропозиції нічий';
@@ -1048,6 +1042,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Звук сповіщення';
+
+  @override
+  String get preferencesBlindfold => 'Наосліп';
 
   @override
   String get puzzlePuzzles => 'Задачі';
@@ -5592,7 +5589,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param на сторінку';
   }
 
   @override

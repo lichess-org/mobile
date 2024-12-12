@@ -15,9 +15,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAreYouSure => 'هل أنت واثق؟';
 
   @override
-  String get mobileBlindfoldMode => 'معصوب العينين';
-
-  @override
   String get mobileCancelTakebackOffer => 'إلغاء عرض الاسترداد';
 
   @override
@@ -661,9 +658,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1082,6 +1076,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'صوت التنبيه';
+
+  @override
+  String get preferencesBlindfold => 'معصوب العينين';
 
   @override
   String get puzzlePuzzles => 'الألغاز';

@@ -100,7 +100,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Should enable system color palette (android 12+ only)
-    required bool systemColors,
+    @JsonKey(defaultValue: true) required bool systemColors,
 
     /// Locale to use in the app, use system locale if null
     @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,

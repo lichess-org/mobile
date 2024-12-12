@@ -15,9 +15,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -644,9 +641,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1061,6 +1055,9 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Fadhbanna';

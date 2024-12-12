@@ -15,9 +15,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileAreYouSure => 'Is jy seker?';
 
   @override
-  String get mobileBlindfoldMode => 'Geblinddoek';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -593,9 +590,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1010,6 +1004,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Klokkie kennisgewing klank';
+
+  @override
+  String get preferencesBlindfold => 'Blinddoek';
 
   @override
   String get puzzlePuzzles => 'Raaisels';

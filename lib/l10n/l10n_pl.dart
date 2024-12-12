@@ -15,9 +15,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAreYouSure => 'Jesteś pewien?';
 
   @override
-  String get mobileBlindfoldMode => 'Gra na ślepo';
-
-  @override
   String get mobileCancelTakebackOffer => 'Anuluj prośbę cofnięcia ruchu';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSystemColors => 'Kolory systemowe';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Motyw';
 
   @override
   String get mobileToolsTab => 'Narzędzia';
@@ -575,7 +572,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastStandings => 'Klasyfikacja';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Oficjalna klasyfikacja';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -608,34 +605,31 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastScore => 'Wynik';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Wszystkie kluby';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Format turnieju';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Lokalizacja turnieju';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Najlepsi gracze';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Strefa czasowa';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Kategoria rankingu FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Opcjonalne szczegóły';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Poprzednie transmisje';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Zobacz wszystkie transmisje w danym miesiącu';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1048,6 +1042,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Dźwięk powiadomień';
+
+  @override
+  String get preferencesBlindfold => 'Gra na ślepo';
 
   @override
   String get puzzlePuzzles => 'Zadania szachowe';
@@ -1951,7 +1948,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get expandVariations => 'Rozwiń warianty';
 
   @override
-  String get forceVariation => 'Przedstaw jako wariant';
+  String get forceVariation => 'Zamień w wariant';
 
   @override
   String get copyVariationPgn => 'Skopiuj wariant PGN';
@@ -2038,7 +2035,7 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Zagraj pierwsze posunięcie z przeglądarki otwarć/końcówek';
+  String get playFirstOpeningEndgameExplorerMove => 'Zagraj pierwsze posunięcie z biblioteki otwarć';
 
   @override
   String get winPreventedBy50MoveRule => 'Bez wygranej ze względu na regułę 50 ruchów';
@@ -5592,7 +5589,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param na stronie';
   }
 
   @override

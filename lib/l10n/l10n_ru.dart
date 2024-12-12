@@ -15,9 +15,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileAreYouSure => 'Вы уверены?';
 
   @override
-  String get mobileBlindfoldMode => 'Игра вслепую';
-
-  @override
   String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSystemColors => 'Цвет интерфейса';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Оформление';
 
   @override
   String get mobileToolsTab => 'Анализ';
@@ -575,7 +572,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastStandings => 'Турнирная таблица';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Официальная турнирная таблица';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -608,34 +605,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastScore => 'Очки';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Все клубы';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Формат турнира';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Местоположение турнира';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Лучшие игроки';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Часовой пояс';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Категория рейтинга FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Необязательные данные';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Завершённые трансляции';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Просмотр всех трансляций за месяц';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1050,6 +1044,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesBellNotificationSound => 'Звук колокольчика уведомлений';
 
   @override
+  String get preferencesBlindfold => 'Игра вслепую';
+
+  @override
   String get puzzlePuzzles => 'Задачи';
 
   @override
@@ -1310,7 +1307,7 @@ class AppLocalizationsRu extends AppLocalizations {
       other: '$count баллов выше вашего рейтинга в задачах',
       many: '$count баллов выше вашего рейтинга в задачах',
       few: '$count баллов выше вашего рейтинга в задачах',
-      one: 'Один балл выше вашего рейтинга в пазлах',
+      one: 'Один балл выше вашего рейтинга в задачах',
     );
     return '$_temp0';
   }
@@ -2367,7 +2364,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gamesPlayed => 'Сыграно партий';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'ОК';
 
   @override
   String get cancel => 'Отменить';
@@ -4539,8 +4536,8 @@ class AppLocalizationsRu extends AppLocalizations {
       locale: localeName,
       other: '$count минут',
       many: '$count минут',
-      few: '$count минуты',
-      one: '$count одна минута',
+      few: '$count Минуты',
+      one: '$count Одна минута',
     );
     return '$_temp0';
   }
@@ -5592,7 +5589,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param на страницу';
   }
 
   @override

@@ -621,7 +621,7 @@ class AnalysisController extends _$AnalysisController
           curState.currentPath,
           _root.branchesOn(curState.currentPath).map(Step.fromNode),
           initialPositionEval: _root.eval,
-          shouldEmit: (work) => work.path == curState.currentPath,
+          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
         ?.forEach(
           (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),

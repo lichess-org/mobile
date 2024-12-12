@@ -49,17 +49,15 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          const Padding(
-            padding: Styles.bodySectionPadding,
-            child: _SearchButton(),
-          ),
-          if (session != null) _OnlineFriendsWidget(),
-          RatingPrefAware(child: LeaderboardWidget()),
-        ],
-      ),
+    return ListView(
+      children: [
+        const Padding(
+          padding: Styles.bodySectionPadding,
+          child: _SearchButton(),
+        ),
+        if (session != null) _OnlineFriendsWidget(),
+        RatingPrefAware(child: LeaderboardWidget()),
+      ],
     );
   }
 }

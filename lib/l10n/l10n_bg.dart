@@ -15,9 +15,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileAreYouSure => 'Сигурни ли сте?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -496,16 +493,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastRecentTournaments => 'Recent tournaments';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Отвори в Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Отбори';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Дъски';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Общ преглед';
 
   @override
   String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
@@ -533,10 +530,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastNotYetStarted => 'The broadcast has not yet started.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Официален уебсайт';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Класиране';
 
   @override
   String get broadcastOfficialStandings => 'Official Standings';
@@ -566,10 +563,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastRatingDiff => 'Rating diff';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Игри в този турнир';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Резултат';
 
   @override
   String get broadcastAllTeams => 'All teams';
@@ -591,9 +588,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get broadcastOptionalDetails => 'Optional details';
-
-  @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
 
   @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
@@ -1010,6 +1004,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Мелодия за известия';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Задачи';
@@ -4339,7 +4336,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Статистика';
 
   @override
   String opponentLeftCounter(int count) {

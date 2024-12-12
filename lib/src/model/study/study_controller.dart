@@ -558,7 +558,8 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
           _root.branchesOn(state.currentPath).map(Step.fromNode),
           // Note: AnalysisController passes _root.eval as initialPositionEval here,
           // but for studies this leads to false positive cache hits when switching between chapters.
-          shouldEmit: (work) => work.path == state.currentPath,
+          shouldEmit: (work) =>
+              work.path == this.state.valueOrNull?.currentPath,
         )
         ?.forEach(
           (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),

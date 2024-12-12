@@ -15,9 +15,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileSystemColors => 'Barve sistema';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Orodja';
@@ -575,7 +572,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Uradna lestvica';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -608,34 +605,31 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Vse ekipe';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Oblika turnirja';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Lokacija turnirja';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Najboljši igralci';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Časovni pas';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE rating kategorija';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Neobvezne podrobnosti';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Pretekle oddaje';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Oglejte si vse oddaje po mesecih';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1048,6 +1042,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Zvok obvestila zvonca';
+
+  @override
+  String get preferencesBlindfold => 'Šah z zavezanimi očmi';
 
   @override
   String get puzzlePuzzles => 'Šahovski problemi';
@@ -5592,7 +5589,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param na stran';
   }
 
   @override

@@ -65,13 +65,7 @@ class _Load extends ConsumerWidget {
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
             userId: session?.user.id,
           ),
-          streak: PuzzleStreak(
-            streak: data.streak,
-            index: 0,
-            hasSkipped: false,
-            finished: false,
-            timestamp: data.timestamp,
-          ),
+          streak: data.streak,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -219,9 +213,10 @@ class _Body extends ConsumerWidget {
           context: context,
           builder: (context) => YesNoDialog(
             title: Text(context.l10n.mobileAreYouSure),
-            content: Text(context.l10n.mobilePuzzleStreakAbortWarning),
+            content:
+                const Text('No worries, your score will be saved locally.'),
             onYes: () {
-              ref.read(ctrlProvider.notifier).sendStreakResult();
+              ref.read(ctrlProvider.notifier).saveStreakResultLocally();
               return Navigator.of(context).pop(true);
             },
             onNo: () => Navigator.of(context).pop(false),

@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-
 import 'game_screen_providers.dart';
 
 class GameSettings extends ConsumerWidget {
@@ -88,7 +87,7 @@ class GameSettings extends ConsumerWidget {
           },
         ),
         SwitchSettingTile(
-          title: Text(context.l10n.mobileBlindfoldMode),
+          title: Text(context.l10n.preferencesBlindfold),
           value: gamePrefs.blindfoldMode ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();

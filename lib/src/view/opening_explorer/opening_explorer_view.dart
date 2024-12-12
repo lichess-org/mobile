@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
@@ -8,13 +9,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widgets.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-const _kTableRowVerticalPadding = 12.0;
-const _kTableRowHorizontalPadding = 8.0;
-const _kTableRowPadding = EdgeInsets.symmetric(
-  horizontal: _kTableRowHorizontalPadding,
-  vertical: _kTableRowVerticalPadding,
-);
 
 /// Displays an opening explorer for the given position.
 ///
@@ -28,10 +22,12 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
   const OpeningExplorerView({
     required this.position,
     required this.onMoveSelected,
+    this.opening,
     this.scrollable = true,
   });
 
   final Position position;
+  final Opening? opening;
   final void Function(NormalMove) onMoveSelected;
   final bool scrollable;
 
@@ -49,23 +45,17 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   @override
   Widget build(BuildContext context) {
     if (widget.position.ply >= 50) {
-      return Padding(
-        padding: _kTableRowPadding,
-        child: Center(
-          child: Text(context.l10n.maxDepthReached),
-        ),
+      return Center(
+        child: Text(context.l10n.maxDepthReached),
       );
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
-      return const Padding(
-        padding: _kTableRowPadding,
-        child: Center(
-          // TODO: l10n
-          child: Text('Select a Lichess player in the settings.'),
-        ),
+      return const Center(
+        // TODO: l10n
+        child: Text('Select a Lichess player in the settings.'),
       );
     }
 
@@ -117,6 +107,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         final ply = widget.position.ply;
 
         final children = [
+          if (widget.opening != null)
+            OpeningNameHeader(opening: widget.opening!),
           OpeningExplorerMoveTable(
             moves: value.entry.moves,
             whiteWins: value.entry.white,

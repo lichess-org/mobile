@@ -15,9 +15,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileAreYouSure => 'Ești sigur?';
 
   @override
-  String get mobileBlindfoldMode => 'Legat la ochi';
-
-  @override
   String get mobileCancelTakebackOffer => 'Anulați propunerea de revanșă';
 
   @override
@@ -133,7 +130,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSystemColors => 'Culori sistem';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Unelte';
@@ -557,7 +554,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastStandings => 'Clasament';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Clasament oficial';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -590,28 +587,25 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastScore => 'Scor';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Toate echipele';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Format turneu';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Locație turneu';
 
   @override
   String get broadcastTopPlayers => 'Top players';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Fus orar';
 
   @override
   String get broadcastFideRatingCategory => 'FIDE rating category';
 
   @override
   String get broadcastOptionalDetails => 'Optional details';
-
-  @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
 
   @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
@@ -1029,6 +1023,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Sunet de notificare';
+
+  @override
+  String get preferencesBlindfold => 'Legat la ochi';
 
   @override
   String get puzzlePuzzles => 'Probleme de șah';
@@ -1675,7 +1672,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Adversarul este limitat în mișcările pe care le poate face, iar toate mișcările îi înrăutățesc poziția.';
 
   @override
-  String get puzzleThemeMix => 'Amestec sănătos';
+  String get puzzleThemeMix => 'Mixt';
 
   @override
   String get puzzleThemeMixDescription => 'Un pic din toate. Nu știi la ce să te aștepți, așa că rămâi gata pentru orice! La fel ca în jocurile reale.';
@@ -5524,7 +5521,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param pe pagină';
   }
 
   @override

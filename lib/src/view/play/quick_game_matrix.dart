@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -85,6 +86,8 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -99,15 +102,17 @@ class _SectionChoices extends ConsumerWidget {
                   ),
                 ),
                 speed: choice.speed,
-                onSelected: (bool selected) {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (_) => GameScreen(
-                      seek: GameSeek.fastPairing(choice, session),
-                    ),
-                  );
-                },
+                onTap: isOnline
+                    ? () {
+                        pushPlatformRoute(
+                          context,
+                          rootNavigator: true,
+                          builder: (_) => GameScreen(
+                            seek: GameSeek.fastPairing(choice, session),
+                          ),
+                        );
+                      }
+                    : null,
               ),
             ),
             if (index < choices.length - 1)
@@ -127,12 +132,14 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 label: Text(context.l10n.custom),
-                onSelected: (bool selected) {
-                  pushPlatformRoute(
-                    context,
-                    builder: (_) => const CreateCustomGameScreen(),
-                  );
-                },
+                onTap: isOnline
+                    ? () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (_) => const CreateCustomGameScreen(),
+                        );
+                      }
+                    : null,
               ),
             ),
           ],
@@ -146,13 +153,13 @@ class _ChoiceChip extends StatefulWidget {
   const _ChoiceChip({
     required this.label,
     this.speed,
-    required this.onSelected,
+    required this.onTap,
     super.key,
   });
 
   final Widget label;
   final Speed? speed;
-  final void Function(bool selected) onSelected;
+  final void Function()? onTap;
 
   @override
   State<_ChoiceChip> createState() => _ChoiceChipState();
@@ -165,18 +172,21 @@ class _ChoiceChipState extends State<_ChoiceChip> {
         ? Styles.cupertinoCardColor.resolveFrom(context).withValues(alpha: 0.7)
         : Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-      ),
-      child: AdaptiveInkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        onTap: () => widget.onSelected(true),
-        splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Center(child: widget.label),
+    return Opacity(
+      opacity: widget.onTap != null ? 1.0 : 0.5,
+      child: Container(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+        ),
+        child: AdaptiveInkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          onTap: widget.onTap,
+          splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Center(child: widget.label),
+          ),
         ),
       ),
     );

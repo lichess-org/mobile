@@ -53,40 +53,41 @@ class _Body extends ConsumerWidget {
         : null;
 
     final openings = ref.watch(_openingsProvider);
-    return SafeArea(
-      child: openings.when(
-        data: (data) {
-          final (isOnline, savedOpenings, onlineOpenings) = data;
-          if (isOnline && onlineOpenings != null) {
-            return ListView(
-              children: [
-                for (final openingFamily in onlineOpenings)
-                  _OpeningFamily(
-                    openingFamily: openingFamily,
-                    titleStyle: titleStyle,
-                  ),
-              ],
-            );
-          } else {
-            return ListSection(
-              children: [
-                for (final openingKey in savedOpenings.keys)
-                  _OpeningTile(
-                    name: openingKey.replaceAll('_', ' '),
-                    openingKey: openingKey,
-                    count: savedOpenings[openingKey]!,
-                    titleStyle: titleStyle,
-                  ),
-              ],
-            );
-          }
-        },
-        error: (error, stack) {
-          return const Center(child: Text('Could not load openings.'));
-        },
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
-      ),
+    return openings.when(
+      data: (data) {
+        final (isOnline, savedOpenings, onlineOpenings) = data;
+        if (isOnline && onlineOpenings != null) {
+          return ListView(
+            children: [
+              for (final openingFamily in onlineOpenings)
+                _OpeningFamily(
+                  openingFamily: openingFamily,
+                  titleStyle: titleStyle,
+                ),
+            ],
+          );
+        } else {
+          return ListView(
+            children: [
+              ListSection(
+                children: [
+                  for (final openingKey in savedOpenings.keys)
+                    _OpeningTile(
+                      name: openingKey.replaceAll('_', ' '),
+                      openingKey: openingKey,
+                      count: savedOpenings[openingKey]!,
+                      titleStyle: titleStyle,
+                    ),
+                ],
+              ),
+            ],
+          );
+        }
+      },
+      error: (error, stack) {
+        return const Center(child: Text('Could not load openings.'));
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
     );
   }
 }

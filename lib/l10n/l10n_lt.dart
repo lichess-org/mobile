@@ -15,9 +15,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -400,7 +397,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Vykstančios turnyrų transliacijos';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Transliavimo kalendorius';
 
   @override
   String get broadcastNewBroadcast => 'Nauja transliacija';
@@ -463,7 +460,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Turnyro pradžia vietos laiku: $param';
   }
 
   @override
@@ -530,110 +527,107 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastRecentTournaments => 'Neseniai sukurti turnyrai';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Atverti Lichess-e';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Komandos';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Lentos';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Apžvalga';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Užsakykite pranešimą apie kiekvieno turo pradžią. Paskyros nustatymuose galite perjungti transliacijų skambėjimo signalą arba tiesioginius pranešimus.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Įkelkite turnyro paveikslėlį';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Dar nėra lentų. Jos bus rodomos, kai bus įkeltos partijos.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Lentas galima įkelti iš šaltinio arba per $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Pradedama po $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Transliacija prasidės visai netrukus.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Transliacija dar neprasidėjo.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Oficialus tinklapis';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Rezultatai';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Oficialūs rezultatai';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Daugiau parinkčių $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'žiniatinklio valdytojų puslapis';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Viešas realaus laiko PGN šaltinis šiam turui. Taip pat siūlome $param greitesniam ir efektyvesniam sinchronizavimui.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Įterpkite šią transliaciją į savo svetainę';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Įterpkite $param į savo svetainę';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Reitingo skirtumas';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Partijos šiame turnyre';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Taškų skaičius';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Visos komandos';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Turnyro formatas';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Turnyro vieta';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Geriausi žaidėjai';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Laiko juosta';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE reitingo kategorija';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Papildoma informacija';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastPastBroadcasts => 'Ankstesnės transliacijos';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
-
-  @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Rodyti visas transliacijas pagal mėnesį';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1046,6 +1040,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Pranešimų varpelio garsas';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Užduotys';
@@ -4385,7 +4382,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get nothingToSeeHere => 'Nieko naujo.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5590,7 +5587,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param puslapyje';
   }
 
   @override

@@ -3,7 +3,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -14,16 +13,15 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -35,12 +33,14 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String title;
+  final String broadcastTitle;
+  final String roundTitle;
 
   const BroadcastGameScreen({
     required this.roundId,
     required this.gameId,
-    required this.title,
+    required this.broadcastTitle,
+    required this.roundTitle,
   });
 
   @override
@@ -82,7 +82,11 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(widget.title, overflow: TextOverflow.ellipsis, maxLines: 1),
+        title: Text(
+          widget.roundTitle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
         actions: [
           AppBarAnalysisTabIndicator(
             tabs: tabs,
@@ -106,8 +110,13 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         ],
       ),
       body: switch (broadcastGameState) {
-        AsyncData() =>
-          _Body(widget.roundId, widget.gameId, tabController: _tabController),
+        AsyncData() => _Body(
+            widget.roundId,
+            widget.gameId,
+            widget.broadcastTitle,
+            widget.roundTitle,
+            tabController: _tabController,
+          ),
         AsyncError(:final error) => Center(
             child: Text('Cannot load broadcast game: $error'),
           ),
@@ -118,10 +127,18 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.roundId, this.gameId, {required this.tabController});
+  const _Body(
+    this.roundId,
+    this.gameId,
+    this.broadcastTitle,
+    this.roundTitle, {
+    required this.tabController,
+  });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
+  final String broadcastTitle;
+  final String roundTitle;
   final TabController tabController;
 
   @override
@@ -185,7 +202,12 @@ class _Body extends ConsumerWidget {
                   .onUserMove,
             )
           : null,
-      bottomBar: BroadcastGameBottomBar(roundId: roundId, gameId: gameId),
+      bottomBar: BroadcastGameBottomBar(
+        roundId: roundId,
+        gameId: gameId,
+        broadcastTitle: broadcastTitle,
+        roundTitle: roundTitle,
+      ),
       children: [
         _OpeningExplorerTab(roundId, gameId),
         BroadcastGameTreeView(roundId, gameId),
@@ -347,7 +369,13 @@ class _PlayerWidget extends ConsumerWidget {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(roundId, gameId))
         .requireValue;
-    final clocks = broadcastGameState.clocks;
+    // TODO
+    // we'll probably want to remove this and get the game state from a single controller
+    // this won't work with deep links for instance
+    final game = ref.watch(
+      broadcastRoundControllerProvider(roundId)
+          .select((round) => round.requireValue.games[gameId]!),
+    );
     final isCursorOnLiveMove =
         broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
     final sideToMove = broadcastGameState.position.turn;
@@ -355,14 +383,13 @@ class _PlayerWidget extends ConsumerWidget {
       _PlayerWidgetPosition.bottom => broadcastGameState.pov,
       _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
     };
-    final clock = (sideToMove == side) ? clocks?.parentClock : clocks?.clock;
-
-    final game = ref.watch(
-      broadcastRoundControllerProvider(roundId)
-          .select((round) => round.requireValue.games[gameId]!),
-    );
     final player = game.players[side]!;
+    final liveClock = isCursorOnLiveMove ? player.clock : null;
     final gameStatus = game.status;
+
+    final pastClocks = broadcastGameState.clocks;
+    final pastClock =
+        (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
@@ -386,41 +413,17 @@ class _PlayerWidget extends ConsumerWidget {
             ),
             const SizedBox(width: 16.0),
           ],
-          if (player.federation != null) ...[
-            SvgPicture.network(
-              lichessFideFedSrc(player.federation!),
-              height: 12,
-              httpClient: ref.read(defaultClientProvider),
+          Expanded(
+            child: BroadcastPlayerWidget(
+              federation: player.federation,
+              title: player.title,
+              name: player.name,
+              rating: player.rating,
+              textStyle:
+                  const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(width: 5),
-          ],
-          if (player.title != null) ...[
-            Text(
-              player.title!,
-              style: const TextStyle().copyWith(
-                color: context.lichessColors.brag,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Text(
-            player.name,
-            style: const TextStyle().copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-            overflow: TextOverflow.ellipsis,
           ),
-          if (player.rating != null) ...[
-            const SizedBox(width: 5),
-            Text(
-              player.rating.toString(),
-              style: const TextStyle(),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-          const Spacer(),
-          if (clock != null)
+          if (liveClock != null || pastClock != null)
             Container(
               height: kAnalysisBoardHeaderOrFooterHeight,
               color: (side == sideToMove)
@@ -431,9 +434,9 @@ class _PlayerWidget extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Center(
-                  child: isCursorOnLiveMove
+                  child: liveClock != null
                       ? CountdownClockBuilder(
-                          timeLeft: clock,
+                          timeLeft: liveClock,
                           active: side == sideToMove,
                           builder: (context, timeLeft) => _Clock(
                             timeLeft: timeLeft,
@@ -441,11 +444,10 @@ class _PlayerWidget extends ConsumerWidget {
                             isLive: true,
                           ),
                           tickInterval: const Duration(seconds: 1),
-                          clockUpdatedAt:
-                              side == sideToMove ? game.updatedClockAt : null,
+                          clockUpdatedAt: game.updatedClockAt,
                         )
                       : _Clock(
-                          timeLeft: clock,
+                          timeLeft: pastClock!,
                           isSideToMove: side == sideToMove,
                           isLive: false,
                         ),

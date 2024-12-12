@@ -15,9 +15,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -644,9 +641,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1061,6 +1055,9 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Klevet ar c\'hloc\'h';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Poelladennoù';
@@ -5528,16 +5525,16 @@ class AppLocalizationsBr extends AppLocalizations {
   String get studyWhereDoYouWantToStudyThat => 'Pelec\'h ho peus c\'hoant da studiañ se?';
 
   @override
-  String get studyGoodMove => 'Good move';
+  String get studyGoodMove => 'Fiñvadenn vat';
 
   @override
-  String get studyMistake => 'Mistake';
+  String get studyMistake => 'Fazi';
 
   @override
   String get studyBrilliantMove => 'Brilliant move';
 
   @override
-  String get studyBlunder => 'Blunder';
+  String get studyBlunder => 'Bourd';
 
   @override
   String get studyInterestingMove => 'Interesting move';

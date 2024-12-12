@@ -15,9 +15,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -610,9 +607,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -632,7 +626,7 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String challengeChallengesX(String param1) {
-    return 'Challenges: $param1';
+    return 'Izazova: $param1';
   }
 
   @override
@@ -1018,7 +1012,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get preferencesNotifyBell => 'Obavijest zvonom unutar Lichessa';
 
   @override
-  String get preferencesNotifyPush => 'Obavijest uređaja kada niste na Lichessu';
+  String get preferencesNotifyPush => 'Obavijest uređaja kada niste na Lichess-u';
 
   @override
   String get preferencesNotifyWeb => 'Preglednik';
@@ -1028,6 +1022,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Obavijest kao zvuk';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Zadaci';
@@ -2219,7 +2216,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get signupUsernameHint => 'Obavezno odaberi obiteljsko korisničko ime. Ne možeš ga kasnije promijeniti i svi računi s neprikladnim korisničkim imenima bit će zatvoreni!';
 
   @override
-  String get signupEmailHint => 'Koristit ćemo ga samo za ponovno postavljanje lozinke.';
+  String get signupEmailHint => 'Koristiti ćemo ga samo za ponovno postavljanje lozinke.';
 
   @override
   String get password => 'Lozinka';
@@ -2243,7 +2240,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get error_weakPassword => 'Ova je lozinka iznimno česta i previše je lako pogoditi.';
 
   @override
-  String get error_namePassword => 'Molimo da ne koristitiš svoje korisničko ime kao lozinku.';
+  String get error_namePassword => 'Molimo da ne koristiš svoje korisničko ime kao lozinku.';
 
   @override
   String get blankedPassword => 'Koristio si istu lozinku na drugom mjestu, a to je mjesto ugroženo. Kako bismo osigurali sigurnost tvoga Lichess računa, potrebno je da postaviš novu lozinku. Hvala na razumijevanju.';
@@ -2909,7 +2906,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get editProfile => 'Uredi profil';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Puno ime';
 
   @override
   String get setFlair => 'Set your flair';
@@ -2924,7 +2921,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get biography => 'Životopis';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Država ili regija';
 
   @override
   String get thankYou => 'Hvala!';
@@ -3466,10 +3463,10 @@ class AppLocalizationsHr extends AppLocalizations {
   String get keyEnterOrExitVariation => 'otvori/zatvori varijantu';
 
   @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
+  String get keyRequestComputerAnalysis => 'Zatraži računalnu analizu, Uči na svojim greškama';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Next (Learn from your mistakes)';
+  String get keyNextLearnFromYourMistakes => 'Sljedeće (Uči na svojim greškama)';
 
   @override
   String get keyNextBlunder => 'Next blunder';
@@ -3755,16 +3752,16 @@ class AppLocalizationsHr extends AppLocalizations {
   String get backgroundImageUrl => 'URL pozadinske slike:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Ploča';
 
   @override
-  String get size => 'Size';
+  String get size => 'Veličina';
 
   @override
   String get opacity => 'Opacity';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Svjetlina';
 
   @override
   String get hue => 'Hue';
@@ -3816,7 +3813,7 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String notificationsX(String param1) {
-    return 'Notifications: $param1';
+    return 'Obavijesti: $param1';
   }
 
   @override
@@ -3965,7 +3962,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Klikni ovdje da pročitaš';
 
   @override
   String get sorry => 'Oprosti :(';
@@ -4218,7 +4215,7 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Zalijepite važeći FEN da biste započeli svaku igru s određene pozicije.\nRadi samo za standardne igre, ne i za varijante.\nMožete koristiti $param za generiranje FEN pozicije, a zatim ga zalijepite ovdje.\nOstavite prazno za početak igre s normalne početne pozicije.';
+    return 'Zalijepite važeći FEN da biste započeli svaku igru s određene pozicije.\nRadi samo za standardne igre, ne i za varijante.\nMožete koristiti $param za generiranje FEN pozicije, zatim ga zalijepite ovdje.\nOstavite prazno za početak igre s normalne početne pozicije.';
   }
 
   @override
@@ -4362,7 +4359,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
   String opponentLeftCounter(int count) {

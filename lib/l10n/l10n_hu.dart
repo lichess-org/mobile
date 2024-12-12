@@ -15,9 +15,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
-  String get mobileBlindfoldMode => 'Vakjátszma mód';
-
-  @override
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
@@ -593,9 +590,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
-
-  @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
@@ -1010,6 +1004,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Hangjelzés';
+
+  @override
+  String get preferencesBlindfold => 'Vakjátszma mód';
 
   @override
   String get puzzlePuzzles => 'Feladványok';

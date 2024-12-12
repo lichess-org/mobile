@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_round_controller.g.dart';
@@ -21,8 +23,14 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
   StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<void>? _socketOpenSubscription;
+  AppLifecycleListener? _appLifecycleListener;
 
   late SocketClient _socketClient;
+
+  final _debouncer = Debouncer(const Duration(milliseconds: 150));
+
+  Object? _key = Object();
 
   @override
   Future<BroadcastRoundWithGames> build(
@@ -34,15 +42,49 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    ref.onDispose(() {
-      _subscription?.cancel();
+    await _socketClient.firstConnection;
+
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (state.valueOrNull?.round.status == RoundStatus.live) {
+        _debouncer(() {
+          _syncRound();
+        });
+      }
     });
 
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        if (state.valueOrNull?.round.status == RoundStatus.live) {
+          _debouncer(() {
+            _syncRound();
+          });
+        }
+      },
+    );
+
+    ref.onDispose(() {
+      _key = null;
+      _subscription?.cancel();
+      _socketOpenSubscription?.cancel();
+      _appLifecycleListener?.dispose();
+      _debouncer.dispose();
+    });
+
+    return ref.withClient(
+      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
+    );
+  }
+
+  Future<void> _syncRound() async {
+    if (state.hasValue == false) return;
+    final key = _key;
     final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
-
-    return round;
+    // check provider is still mounted
+    if (key == _key) {
+      state = AsyncData(round);
+    }
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -139,6 +181,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
                 ),
               },
             ),
+            updatedClockAt: DateTime.now(),
           ),
         ),
       ),

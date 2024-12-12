@@ -15,9 +15,6 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileAreYouSure => 'Bass de sécher?';
 
   @override
-  String get mobileBlindfoldMode => 'Blann';
-
-  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
@@ -539,7 +536,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get broadcastStandings => 'Standings';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Offizielle Stand';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -572,28 +569,25 @@ class AppLocalizationsLb extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'All Ekippen';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Turnéierformat';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Turnéierplaz';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Topspiller';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Zäitzon';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE-Wäertungskategorie';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
-
-  @override
-  String get broadcastUpcomingBroadcasts => 'Upcoming broadcasts';
+  String get broadcastOptionalDetails => 'Fakultativ Detailler';
 
   @override
   String get broadcastPastBroadcasts => 'Past broadcasts';
@@ -1010,6 +1004,9 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Glacken-Notifikatiounstoun';
+
+  @override
+  String get preferencesBlindfold => 'Blann';
 
   @override
   String get puzzlePuzzles => 'Aufgaben';
@@ -5456,7 +5453,7 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param pro Säit';
   }
 
   @override
