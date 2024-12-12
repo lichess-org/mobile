@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Összes játszma</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Biztos vagy benne?</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Vakjátszma mód</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Visszalépés kérésének visszavonása</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Törlés</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Mentett lépés törlése</string>
