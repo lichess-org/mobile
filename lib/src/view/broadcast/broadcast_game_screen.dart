@@ -33,14 +33,14 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String broadcastTitle;
-  final String roundTitle;
+  final String? roundUrl;
+  final String? title;
 
   const BroadcastGameScreen({
     required this.roundId,
     required this.gameId,
-    required this.broadcastTitle,
-    required this.roundTitle,
+    this.roundUrl,
+    this.title,
   });
 
   @override
@@ -79,11 +79,15 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   Widget build(BuildContext context) {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
+    final broadcastRoundState =
+        ref.watch(broadcastRoundControllerProvider(widget.roundId));
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(
-          widget.roundTitle,
+          widget.title ??
+              broadcastRoundState.value?.round.name ??
+              'BroadcastGame',
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
@@ -113,8 +117,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         AsyncData() => _Body(
             widget.roundId,
             widget.gameId,
-            widget.broadcastTitle,
-            widget.roundTitle,
+            widget.roundUrl,
             tabController: _tabController,
           ),
         AsyncError(:final error) => Center(
@@ -130,15 +133,13 @@ class _Body extends ConsumerWidget {
   const _Body(
     this.roundId,
     this.gameId,
-    this.broadcastTitle,
-    this.roundTitle, {
+    this.roundUrl, {
     required this.tabController,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String broadcastTitle;
-  final String roundTitle;
+  final String? roundUrl;
   final TabController tabController;
 
   @override
@@ -205,8 +206,7 @@ class _Body extends ConsumerWidget {
       bottomBar: BroadcastGameBottomBar(
         roundId: roundId,
         gameId: gameId,
-        broadcastTitle: broadcastTitle,
-        roundTitle: roundTitle,
+        roundUrl: roundUrl,
       ),
       children: [
         _OpeningExplorerTab(roundId, gameId),

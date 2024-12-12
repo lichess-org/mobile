@@ -8,6 +8,8 @@ extension type const StringId(String value) {
   bool startsWith(String prefix) => value.startsWith(prefix);
 }
 
+extension type const IntId(int value) {}
+
 extension type const GameAnyId._(String value) implements StringId {
   GameAnyId(this.value) : assert(value.length == 8 || value.length == 12);
   GameId get gameId => GameId(value.substring(0, 8));
@@ -65,7 +67,7 @@ extension type const StudyChapterId(String value) implements StringId {
   StudyChapterId.fromJson(dynamic json) : this(json as String);
 }
 
-extension type const FideId(String value) implements StringId {}
+extension type const FideId(int value) implements IntId {}
 
 extension IDPick on Pick {
   UserId asUserIdOrThrow() {
@@ -192,7 +194,7 @@ extension IDPick on Pick {
     );
   }
 
-  BroadcastRoundId? asBroadcastRoundIddOrNull() {
+  BroadcastRoundId? asBroadcastRoundIdOrNull() {
     if (value == null) return null;
     try {
       return asBroadcastRoundIdOrThrow();
@@ -211,7 +213,7 @@ extension IDPick on Pick {
     );
   }
 
-  BroadcastGameId? asBroadcastGameIddOrNull() {
+  BroadcastGameId? asBroadcastGameIdOrNull() {
     if (value == null) return null;
     try {
       return asBroadcastGameIdOrThrow();
@@ -232,7 +234,7 @@ extension IDPick on Pick {
 
   FideId asFideIdOrThrow() {
     final value = required().value;
-    if (value is String) {
+    if (value is int && value != 0) {
       return FideId(value);
     }
     throw PickException(

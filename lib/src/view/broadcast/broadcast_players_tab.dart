@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 
@@ -27,7 +29,7 @@ class BroadcastPlayersTab extends ConsumerWidget {
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
-      AsyncData(value: final players) => PlayersList(players),
+      AsyncData(value: final players) => PlayersList(players, tournamentId),
       AsyncError(:final error) => SliverPadding(
           padding: edgeInsets,
           sliver: SliverFillRemaining(
@@ -55,9 +57,10 @@ const _kHeaderTextStyle =
     TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players);
+  const PlayersList(this.players, this.tournamentId);
 
   final IList<BroadcastPlayerExtended> players;
+  final BroadcastTournamentId tournamentId;
 
   @override
   ConsumerState<PlayersList> createState() => _PlayersListState();
@@ -117,7 +120,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   @override
   Widget build(BuildContext context) {
     final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
-    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 70);
+    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
 
     return SliverList.builder(
       itemCount: players.length + 1,
@@ -177,53 +180,72 @@ class _PlayersListState extends ConsumerState<PlayersList> {
           );
         } else {
           final player = players[index - 1];
-          return Container(
-            decoration: BoxDecoration(
-              color: index.isEven
+          return GestureDetector(
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => BroadcastPlayerResultsScreen(
+                  widget.tournamentId,
+                  player.fideId != null
+                      ? player.fideId.toString()
+                      : player.name,
+                  player.title,
+                  player.name,
+                ),
+              );
+            },
+            child: ColoredBox(
+              color: (index - 1).isEven
                   ? Theme.of(context).colorScheme.surfaceContainerLow
                   : Theme.of(context).colorScheme.surfaceContainerHigh,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: BroadcastPlayerWidget(
-                      federation: player.federation,
-                      title: player.title,
-                      name: player.name,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child: BroadcastPlayerWidget(
+                        federation: player.federation,
+                        title: player.title,
+                        name: player.name,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: eloWidth,
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: Row(
-                      children: [
-                        if (player.rating != null) ...[
-                          Text(player.rating.toString()),
-                          const SizedBox(width: 5),
-                          if (player.ratingDiff != null)
-                            ProgressionWidget(player.ratingDiff!, fontSize: 14),
+                  SizedBox(
+                    width: eloWidth,
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child: Row(
+                        children: [
+                          if (player.rating != null) ...[
+                            Text(player.rating.toString()),
+                            const SizedBox(width: 5),
+                            if (player.ratingDiff != null)
+                              ProgressionWidget(
+                                player.ratingDiff!,
+                                fontSize: 14,
+                              ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: scoreWidth,
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: (player.score != null)
-                        ? Text(
-                            '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)}/${player.played}',
-                          )
-                        : const SizedBox.shrink(),
+                  SizedBox(
+                    width: scoreWidth,
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child: (player.score != null)
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }

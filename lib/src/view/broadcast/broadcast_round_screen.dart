@@ -117,7 +117,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   sliver: switch (asyncTournament) {
                     AsyncData(:final value) => BroadcastBoardsTab(
                         roundId: _selectedRoundId ?? value.defaultRoundId,
-                        broadcastTitle: widget.broadcast.title,
                       ),
                     _ => const SliverFillRemaining(
                         child: SizedBox.shrink(),
@@ -182,7 +181,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 sliver: switch (asyncTournament) {
                   AsyncData(:final value) => BroadcastBoardsTab(
                       roundId: _selectedRoundId ?? value.defaultRoundId,
-                      broadcastTitle: widget.broadcast.title,
                     ),
                   _ => const SliverFillRemaining(
                       child: SizedBox.shrink(),

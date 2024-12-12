@@ -57,6 +57,16 @@ class BroadcastRepository {
       mapper: _makePlayerFromJson,
     );
   }
+
+  Future<BroadcastPlayerResults> getPlayerResults(
+    BroadcastTournamentId tournamentId,
+    String playerId,
+  ) {
+    return client.readJson(
+      Uri(path: 'broadcast/$tournamentId/players/$playerId'),
+      mapper: _makePlayerResultsFromJson,
+    );
+  }
 }
 
 BroadcastList _makeBroadcastResponseFromJson(
@@ -79,7 +89,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     round: _roundFromPick(pick('round').required()),
     group: pick('group').asStringOrNull(),
     roundToLinkId:
-        pick('roundToLink', 'id').asBroadcastRoundIddOrNull() ?? roundId,
+        pick('roundToLink', 'id').asBroadcastRoundIdOrNull() ?? roundId,
   );
 }
 
@@ -143,6 +153,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
     finishedAt: pick('finishedAt').asDateTimeFromMillisecondsOrNull(),
     startsAfterPrevious: pick('startsAfterPrevious').asBoolOrFalse(),
+    url: pick('url').asStringOrNull(),
   );
 }
 
@@ -219,5 +230,49 @@ BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
+    performance: pick('performance').asIntOrNull(),
+  );
+}
+
+BroadcastPlayerResults _makePlayerResultsFromJson(
+  Map<String, dynamic> json,
+) {
+  return (
+    player: _playerExtendedFromPick(pick(json).required()),
+    fideData: _fideDataFromPick(pick(json, 'fide')),
+    games:
+        pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList()
+  );
+}
+
+BroadcastFideData _fideDataFromPick(Pick pick) {
+  return (
+    ratings: (
+      standard: pick('ratings', 'standard').asIntOrNull(),
+      rapid: pick('ratings', 'rapid').asIntOrNull(),
+      blitz: pick('ratings', 'blitz').asIntOrNull()
+    ),
+    birthYear: pick('year').asIntOrNull(),
+  );
+}
+
+BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
+  final pointsString = pick('points').asStringOrNull();
+  BroadcastPoints? points;
+  if (pointsString == '1') {
+    points = BroadcastPoints.one;
+  } else if (pointsString == '1/2') {
+    points = BroadcastPoints.half;
+  } else if (pointsString == '0') {
+    points = BroadcastPoints.zero;
+  }
+
+  return BroadcastPlayerResultData(
+    roundId: pick('round').asBroadcastRoundIdOrThrow(),
+    gameId: pick('id').asBroadcastGameIdOrThrow(),
+    color: pick('color').asSideOrThrow(),
+    ratingDiff: pick('ratingDiff').asIntOrNull(),
+    points: points,
+    opponent: _playerFromPick(pick('opponent').required()),
   );
 }
