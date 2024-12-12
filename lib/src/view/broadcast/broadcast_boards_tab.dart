@@ -69,7 +69,11 @@ class BroadcastBoardsTab extends ConsumerWidget {
               child: Text('Could not load broadcast: $error'),
             ),
           ),
-        _ => const BroadcastPreview.loading()
+        _ => const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
+          ),
       },
     );
   }
