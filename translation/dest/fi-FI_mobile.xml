@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kaikki pelit</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Oletko varma?</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Sokko</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Peruuta siirron peruutuspyyntö</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tyhjennä</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Poista tallennettu siirto</string>
@@ -40,7 +39,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Näytä muunnelmat</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Jokin meni vikaan.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Järjestelmän värit</string>
-  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">Teema</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Työkalut</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seuraa</string>
