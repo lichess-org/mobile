@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">چشم‌بسته</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">رد درخواست برگرداندن</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">پاکسازی</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">پاک کردن حرکت ذخیره شده</string>
@@ -40,7 +39,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">نمایش وَرتِش</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">مشکلی پیش آمد.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">رنگ‌های دستگاه</string>
-  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">پوسته</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">پوسته</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ابزارها</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">در انتظار آمدن حریف...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تماشا</string>
