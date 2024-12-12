@@ -141,6 +141,23 @@ abstract class Node {
     }
   }
 
+  void merge(Node other) {
+    if (other.eval != null) {
+      eval = other.eval;
+    }
+    if (other.opening != null) {
+      opening = other.opening;
+    }
+    for (final otherChild in other.children) {
+      final child = childById(otherChild.id);
+      if (child != null) {
+        child.merge(otherChild);
+      } else {
+        addChild(otherChild);
+      }
+    }
+  }
+
   /// Adds a new node at the given path and returns the new path.
   ///
   /// Returns a tuple of the new path and whether the node was added.
@@ -419,11 +436,67 @@ class Branch extends Node {
   @override
   Branch branchAt(UciPath path) => nodeAt(path) as Branch;
 
-  /// Gets the clock information from the comments.
+  @override
+  void merge(Node other) {
+    if (other is Branch) {
+      other.lichessAnalysisComments?.forEach((c) {
+        if (lichessAnalysisComments == null) {
+          lichessAnalysisComments = [c];
+        } else {
+          final existing = lichessAnalysisComments?.firstWhereOrNull(
+            (e) => e.text == c.text,
+          );
+          if (existing == null) {
+            lichessAnalysisComments?.add(c);
+          }
+        }
+      });
+      other.startingComments?.forEach((c) {
+        if (startingComments == null) {
+          startingComments = [c];
+        } else {
+          final existing = startingComments?.firstWhereOrNull(
+            (e) => e.text == c.text,
+          );
+          if (existing == null) {
+            startingComments?.add(c);
+          }
+        }
+      });
+      other.comments?.forEach((c) {
+        if (comments == null) {
+          comments = [c];
+        } else {
+          final existing = comments?.firstWhereOrNull(
+            (e) => e.text == c.text,
+          );
+          if (existing == null) {
+            comments?.add(c);
+          }
+        }
+      });
+      if (other.nags != null) {
+        nags = other.nags;
+      }
+    }
+    super.merge(other);
+  }
+
+  /// Gets the first available clock from the comments.
   Duration? get clock {
     final clockComment = (lichessAnalysisComments ?? comments)
         ?.firstWhereOrNull((c) => c.clock != null);
     return clockComment?.clock;
+  }
+
+  /// Gets the first available external eval from the comments.
+  ExternalEval? get externalEval {
+    final comment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull(
+      (c) => c.eval != null,
+    );
+    return comment?.eval != null
+        ? ExternalEval.fromPgnEval(comment!.eval!)
+        : null;
   }
 
   @override

@@ -31,6 +31,14 @@ class ExternalEval with _$ExternalEval implements Eval {
     ({String name, String comment})? judgment,
   }) = _ExternalEval;
 
+  factory ExternalEval.fromPgnEval(PgnEvaluation eval) {
+    return ExternalEval(
+      cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+      mate: eval.mate,
+      depth: eval.depth,
+    );
+  }
+
   factory ExternalEval.fromJson(Map<String, dynamic> json) =>
       _$ExternalEvalFromJson(json);
 

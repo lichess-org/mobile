@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -453,6 +454,106 @@ void main() {
         ),
       );
     });
+
+    group('merge', () {
+      test('add moves', () {
+        const pgn = '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } *
+''';
+
+        const pgn2 = '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } *
+''';
+
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        expect(root.mainline.length, equals(48));
+
+        final root2 = Root.fromPgnGame(PgnGame.parsePgn(pgn2));
+        expect(root2.mainline.length, equals(50));
+
+        root2.merge(root);
+        expect(root2.mainline.length, equals(50));
+        expect(root2.mainline.last.sanMove.san, equals('Rc2'));
+
+        for (final nodes in IterableZip([root.mainline, root2.mainline])) {
+          final [node1, node2] = nodes;
+          expect(node1.sanMove, equals(node2.sanMove));
+          expect(node1.position.fen, equals(node2.position.fen));
+          expect(node1.clock, equals(node2.clock));
+        }
+      });
+
+      test('preserve variations', () {
+        const pgn = '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } 26. Qe3 { [%clk 0:34:49] } Nxd5 { [%clk 0:34:34] } ( 26... Qe7 27. Rc1 ) *
+''';
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        expect(root.mainline.length, equals(52));
+
+        const pgn2 = '''
+ 1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } 26. Qe3 { [%clk 0:34:49] } Nxd5 { [%clk 0:34:34] } 27. Nxg7 { [%clk 0:34:17] } Nxe3 { [%clk 0:34:04] } 28. Rxe3 { [%clk 0:33:12] } Kxg7 { [%clk 0:33:33] } 29. Ra3 { [%clk 0:31:18] } Rac8 { [%clk 0:32:46] } 30. Bh3 { [%clk 0:30:15] } *
+ ''';
+        final root2 = Root.fromPgnGame(PgnGame.parsePgn(pgn2));
+        expect(root2.mainline.length, equals(59));
+
+        root2.merge(root);
+        expect(root2.mainline.length, equals(59));
+        expect(root2.makePgn(), '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } 26. Qe3 { [%clk 0:34:49] } Nxd5 { [%clk 0:34:34] } ( 26... Qe7 27. Rc1 ) 27. Nxg7 { [%clk 0:34:17] } Nxe3 { [%clk 0:34:04] } 28. Rxe3 { [%clk 0:33:12] } Kxg7 { [%clk 0:33:33] } 29. Ra3 { [%clk 0:31:18] } Rac8 { [%clk 0:32:46] } 30. Bh3 { [%clk 0:30:15] } *
+''');
+      });
+
+      test('preserve evals', () {
+        const pgn = '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } 26. Qe3 { [%clk 0:34:49] } Nxd5 { [%clk 0:34:34] } 27. Nxg7 { [%clk 0:34:17] } Nxe3 { [%clk 0:34:04] } 28. Rxe3 { [%clk 0:33:12] } Kxg7 { [%clk 0:33:33] } 29. Ra3 { [%clk 0:31:18] } Rac8 { [%clk 0:32:46] } 30. Bh3 { [%clk 0:30:15] } *
+ ''';
+
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        expect(root.mainline.length, equals(59));
+        final clientEval = ClientEval(
+          position: Chess.initial,
+          depth: 22,
+          nodes: 100000,
+          pvs: IList<PvData>(),
+          millis: 1230900,
+          searchTime: const Duration(milliseconds: 1230900),
+          cp: 23,
+        );
+        root.mainline.last.eval = clientEval;
+
+        const pgn2 = '''
+1. d4 { [%clk 1:00:00] } Nf6 { [%clk 1:00:00] } 2. c4 { [%clk 1:00:00] } g6 { [%clk 1:00:00] } 3. Nc3 { [%clk 1:00:00] } Bg7 { [%clk 1:00:00] } 4. e4 { [%clk 1:00:00] } d6 { [%clk 1:00:00] } 5. f3 { [%clk 1:00:00] } O-O { [%clk 1:00:00] } 6. Be3 { [%clk 1:00:00] } e5 { [%clk 1:00:00] } 7. d5 { [%clk 1:00:00] } Nh5 { [%clk 1:00:00] } 8. Qd2 { [%clk 1:00:00] } Qh4+ { [%clk 1:00:00] } 9. g3 { [%clk 1:00:00] } Qe7 { [%clk 1:00:00] } 10. Nh3 { [%clk 1:00:00] } f5 { [%clk 0:56:44] } 11. exf5 { [%clk 0:58:18] } gxf5 { [%clk 0:55:20] } 12. O-O-O { [%clk 0:57:22] } Na6 { [%clk 0:52:30] } 13. Re1 { [%clk 0:52:22] } Nf6 { [%clk 0:48:20] } 14. Ng5 { [%clk 0:50:43] } c6 { [%clk 0:47:38] } 15. h4 { [%clk 0:50:01] } h6 { [%clk 0:46:10] } 16. Nh3 { [%clk 0:49:18] } cxd5 { [%clk 0:45:06] } 17. Bxh6 { [%clk 0:47:13] } Bxh6 { [%clk 0:44:17] } 18. Qxh6 { [%clk 0:45:59] } Bd7 { [%clk 0:43:34] } 19. cxd5 { [%clk 0:45:15] } Nc5 { [%clk 0:42:50] } 20. Kb1 { [%clk 0:44:14] } Qg7 { [%clk 0:41:29] } 21. Qd2 { [%clk 0:42:39] } e4 { [%clk 0:40:55] } 22. b4 { [%clk 0:40:31] } Na4 { [%clk 0:39:58] } 23. Nxa4 { [%clk 0:39:13] } Bxa4 { [%clk 0:38:39] } 24. Ng5 { [%clk 0:37:47] } Rfc8 { [%clk 0:37:14] } 25. Ne6 { [%clk 0:36:01] } Rc2 { [%clk 0:36:38] } 26. Qe3 { [%clk 0:34:49] } Nxd5 { [%clk 0:34:34] } 27. Nxg7 { [%clk 0:34:17] } Nxe3 { [%clk 0:34:04] } 28. Rxe3 { [%clk 0:33:12] } Kxg7 { [%clk 0:33:33] } 29. Ra3 { [%clk 0:31:18] } Rac8 { [%clk 0:32:46] } 30. Bh3 { [%clk 0:30:15] } Bd7 { [%clk 0:32:05] } 31. fxe4 { [%clk 0:29:38] } R8c4 { [%clk 0:31:11] } 32. Rxa7 { [%clk 0:27:46] } Bc6 { [%clk 0:30:37] } 33. Bxf5 { [%clk 0:27:20] } Re2 { [%clk 0:29:32] } 34. b5 { [%clk 0:26:56] } Rb4+ { [%clk 0:29:02] } 35. Ka1 { [%clk 0:25:59] } Rxb5 { [%clk 0:28:13] } 36. Rb1 { [%clk 0:25:17] } Rc5 { [%clk 0:27:47] } 37. h5 { [%clk 0:23:42] } Rh2 { [%clk 0:27:22] } 38. g4 { [%clk 0:22:55] } Kf6 { [%clk 0:26:59] } 39. Ra3 { [%clk 0:22:10] } Rc4 { [%clk 0:26:36] } 40. Re1 { [%eval 1.17,33] [%clk 0:19:30] } *
+''';
+
+        final root2 = Root.fromPgnGame(PgnGame.parsePgn(pgn2));
+        expect(root2.mainline.length, equals(79));
+
+        root2.merge(root);
+        expect(root2.mainline.length, equals(79));
+
+        for (final nodes in IterableZip([root.mainline, root2.mainline])) {
+          final [node1, node2] = nodes;
+          expect(node1.sanMove, equals(node2.sanMove));
+          expect(node1.position.fen, equals(node2.position.fen));
+          expect(node1.clock, equals(node2.clock));
+        }
+        // one new external eval
+        expect(
+          root2.mainline.where((n) => n.externalEval != null).length,
+          equals(1),
+        );
+        // one old client eval preseved
+        expect(
+          root2.mainline.where((node) => node.eval != null).length,
+          equals(1),
+        );
+        expect(
+          root2.mainline.firstWhereOrNull((node) => node.eval != null)?.eval,
+          equals(clientEval),
+        );
+      });
+    });
+
     group('convert alternative castling move', () {
       void makeTestAltCastlingMove(String pgn, String alt1, String alt2) {
         final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
@@ -505,29 +606,30 @@ void main() {
           'e8a8',
         );
       });
-    });
-    test('only convert king moves in altCastlingMove', () {
-      const pgn =
-          '1. e4 e5 2. Bc4 Qh4 3. Nf3 Qxh2 4. Ke2 Qxh1 5. Qe1 Qh5 6. Qh1';
-      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
-      final initialPng = root.makePgn();
-      final previousUciPath = root.mainlinePath.penultimate;
-      final move = Move.parse('e1g1');
-      root.addMoveAt(previousUciPath, move!);
-      expect(root.makePgn(), isNot(initialPng));
-    });
-    test(
-        'do not convert castling move if rook is on the alternative castling square',
-        () {
-      const pgn =
-          '[FEN "rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/2R1KBNR w KQkq - 0 1"]';
-      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
-      final initialPng = root.makePgn();
-      final previousUciPath = root.mainlinePath.penultimate;
-      final move = Move.parse('e1c1');
-      root.addMoveAt(previousUciPath, move!);
-      expect(root.makePgn(), isNot(initialPng));
-      expect(root.mainline.last.sanMove.move, move);
+      test('only convert king moves in altCastlingMove', () {
+        const pgn =
+            '1. e4 e5 2. Bc4 Qh4 3. Nf3 Qxh2 4. Ke2 Qxh1 5. Qe1 Qh5 6. Qh1';
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        final initialPng = root.makePgn();
+        final previousUciPath = root.mainlinePath.penultimate;
+        final move = Move.parse('e1g1');
+        root.addMoveAt(previousUciPath, move!);
+        expect(root.makePgn(), isNot(initialPng));
+      });
+
+      test(
+          'do not convert castling move if rook is on the alternative castling square',
+          () {
+        const pgn =
+            '[FEN "rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/2R1KBNR w KQkq - 0 1"]';
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        final initialPng = root.makePgn();
+        final previousUciPath = root.mainlinePath.penultimate;
+        final move = Move.parse('e1c1');
+        root.addMoveAt(previousUciPath, move!);
+        expect(root.makePgn(), isNot(initialPng));
+        expect(root.mainline.last.sanMove.move, move);
+      });
     });
   });
 

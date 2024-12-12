@@ -36,14 +36,17 @@ class BroadcastGameController extends _$BroadcastGameController
 
   AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<void>? _socketOpenSubscription;
 
   late SocketClient _socketClient;
   late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
-  DateTime? _onPauseAt;
   Timer? _startEngineEvalTimer;
+
+  Object? _key = Object();
 
   @override
   Future<BroadcastGameState> build(
@@ -56,30 +59,37 @@ class BroadcastGameController extends _$BroadcastGameController
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
+    await _socketClient.firstConnection;
+
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (state.valueOrNull?.isOngoing == true) {
+        _syncDebouncer(() {
+          _reloadPgn();
+        });
+      }
+    });
+
     final evaluationService = ref.watch(evaluationServiceProvider);
 
     _appLifecycleListener = AppLifecycleListener(
-      onPause: () {
-        _onPauseAt = DateTime.now();
-      },
       onResume: () {
         if (state.valueOrNull?.isOngoing == true) {
-          if (_onPauseAt != null) {
-            final diff = DateTime.now().difference(_onPauseAt!);
-            if (diff >= const Duration(minutes: 5)) {
-              ref.invalidateSelf();
-            }
-          }
+          _syncDebouncer(() {
+            _reloadPgn();
+          });
         }
       },
     );
 
     ref.onDispose(() {
+      _key = null;
       _subscription?.cancel();
+      _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
       _appLifecycleListener?.dispose();
+      _syncDebouncer.dispose();
     });
 
     final pgn = await ref.withClient(
@@ -131,6 +141,43 @@ class BroadcastGameController extends _$BroadcastGameController
     }
 
     return broadcastState;
+  }
+
+  Future<void> _reloadPgn() async {
+    if (!state.hasValue) return;
+    final key = _key;
+
+    final pgn = await ref.withClient(
+      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
+    );
+
+    // check provider is still mounted
+    if (key == _key) {
+      final game = PgnGame.parsePgn(pgn);
+      final pgnHeaders = IMap(game.headers);
+      final rootComments =
+          IList(game.comments.map((c) => PgnComment.fromPgn(c)));
+
+      final newRoot = Root.fromPgnGame(game);
+
+      final broadcastPath = newRoot.mainlinePath;
+      final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
+
+      newRoot.merge(_root);
+
+      _root = newRoot;
+
+      state = AsyncData(
+        state.requireValue.copyWith(
+          pgnHeaders: pgnHeaders,
+          pgnRootComments: rootComments,
+          broadcastPath: broadcastPath,
+          root: _root.view,
+          lastMove: lastMove,
+          clocks: _getClocks(state.requireValue.currentPath),
+        ),
+      );
+    }
   }
 
   void _handleSocketEvent(SocketEvent event) {
