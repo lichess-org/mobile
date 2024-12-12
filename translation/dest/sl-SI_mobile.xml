@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Šah z zavezanimi očmi</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Povratne informacije</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Pozdravljeni %s</string>
   <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Živjo</string>
@@ -14,7 +13,7 @@
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavitve</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Pokaži rezultat</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Barve sistema</string>
-  <string name="theme" comment="Graphic theme (appearance) section in the mobile app's global settings.">Tema</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Orodja</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Glej</string>
 </resources>
