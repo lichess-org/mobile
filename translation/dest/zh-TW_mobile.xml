@@ -2,7 +2,6 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有棋局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您確定嗎？</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">盲棋</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋請求</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">清除</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">清除已儲存移動</string>
