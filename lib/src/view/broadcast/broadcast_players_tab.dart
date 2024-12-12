@@ -197,12 +197,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
             },
             child: ColoredBox(
               color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? (index - 1).isEven
+                  ? index.isEven
                       ? CupertinoColors.secondarySystemBackground
                           .resolveFrom(context)
                       : CupertinoColors.tertiarySystemBackground
                           .resolveFrom(context)
-                  : (index - 1).isEven
+                  : index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerLow
                       : Theme.of(context).colorScheme.surfaceContainerHigh,
               child: Row(
