@@ -99,6 +99,7 @@ BroadcastTournamentData _tournamentDataFromPick(
     BroadcastTournamentData(
       id: pick('id').asBroadcastTournamentIdOrThrow(),
       name: pick('name').asStringOrThrow(),
+      slug: pick('slug').asStringOrThrow(),
       imageUrl: pick('image').asStringOrNull(),
       description: pick('description').asStringOrNull(),
       information: (
@@ -149,11 +150,11 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
   return BroadcastRound(
     id: pick('id').asBroadcastRoundIdOrThrow(),
     name: pick('name').asStringOrThrow(),
+    slug: pick('slug').asStringOrThrow(),
     status: status,
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
     finishedAt: pick('finishedAt').asDateTimeFromMillisecondsOrNull(),
     startsAfterPrevious: pick('startsAfterPrevious').asBoolOrFalse(),
-    url: pick('url').asStringOrNull(),
   );
 }
 

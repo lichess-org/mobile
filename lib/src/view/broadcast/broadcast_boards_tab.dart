@@ -26,9 +26,11 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 class BroadcastBoardsTab extends ConsumerWidget {
   const BroadcastBoardsTab({
     required this.roundId,
+    required this.tournamentSlug,
   });
 
   final BroadcastRoundId roundId;
+  final String tournamentSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,7 +61,8 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 games: value.games.values.toIList(),
                 roundId: roundId,
                 title: value.round.name,
-                roundUrl: value.round.url,
+                tournamentSlug: tournamentSlug,
+                roundSlug: value.round.slug,
               ),
         AsyncError(:final error) => SliverFillRemaining(
             child: Center(
@@ -77,19 +80,22 @@ class BroadcastPreview extends StatelessWidget {
     required this.roundId,
     required this.games,
     required this.title,
-    required this.roundUrl,
+    required this.tournamentSlug,
+    required this.roundSlug,
   });
 
   const BroadcastPreview.loading()
       : roundId = const BroadcastRoundId(''),
         games = null,
         title = '',
-        roundUrl = null;
+        tournamentSlug = '',
+        roundSlug = '';
 
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
   final String title;
-  final String? roundUrl;
+  final String tournamentSlug;
+  final String roundSlug;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +146,8 @@ class BroadcastPreview extends StatelessWidget {
                 builder: (context) => BroadcastGameScreen(
                   roundId: roundId,
                   gameId: game.id,
-                  roundUrl: roundUrl,
+                  tournamentSlug: tournamentSlug,
+                  roundSlug: roundSlug,
                   title: title,
                 ),
               );

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -19,19 +18,19 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   const BroadcastGameBottomBar({
     required this.roundId,
     required this.gameId,
-    this.roundUrl,
+    this.tournamentSlug,
+    this.roundSlug,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String? roundUrl;
+  final String? tournamentSlug;
+  final String? roundSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
     final broadcastGameState = ref.watch(ctrlProvider).requireValue;
-    final broadcastRoundState =
-        ref.watch(broadcastRoundControllerProvider(roundId));
 
     return BottomBar(
       children: [
@@ -41,15 +40,15 @@ class BroadcastGameBottomBar extends ConsumerWidget {
             showAdaptiveActionSheet<void>(
               context: context,
               actions: [
-                if (roundUrl != null || broadcastRoundState.hasValue)
+                if (tournamentSlug != null && roundSlug != null)
                   BottomSheetAction(
                     makeLabel: (context) =>
                         Text(context.l10n.mobileShareGameURL),
                     onPressed: (context) async {
                       launchShareDialog(
                         context,
-                        uri: Uri.parse(
-                          '${roundUrl ?? broadcastRoundState.requireValue.round.url}/$gameId',
+                        uri: lichessUri(
+                          '/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId',
                         ),
                       );
                     },

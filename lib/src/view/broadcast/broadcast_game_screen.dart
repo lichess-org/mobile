@@ -33,13 +33,15 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String? roundUrl;
+  final String? tournamentSlug;
+  final String? roundSlug;
   final String? title;
 
   const BroadcastGameScreen({
     required this.roundId,
     required this.gameId,
-    this.roundUrl,
+    this.tournamentSlug,
+    this.roundSlug,
     this.title,
   });
 
@@ -117,7 +119,8 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         AsyncData() => _Body(
             widget.roundId,
             widget.gameId,
-            widget.roundUrl,
+            widget.tournamentSlug,
+            widget.roundSlug,
             tabController: _tabController,
           ),
         AsyncError(:final error) => Center(
@@ -133,13 +136,15 @@ class _Body extends ConsumerWidget {
   const _Body(
     this.roundId,
     this.gameId,
-    this.roundUrl, {
+    this.tournamentSlug,
+    this.roundSlug, {
     required this.tabController,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String? roundUrl;
+  final String? tournamentSlug;
+  final String? roundSlug;
   final TabController tabController;
 
   @override
@@ -206,7 +211,8 @@ class _Body extends ConsumerWidget {
       bottomBar: BroadcastGameBottomBar(
         roundId: roundId,
         gameId: gameId,
-        roundUrl: roundUrl,
+        tournamentSlug: tournamentSlug,
+        roundSlug: roundSlug,
       ),
       children: [
         _OpeningExplorerTab(roundId, gameId),

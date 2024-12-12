@@ -220,6 +220,7 @@ class BroadcastGridItem extends StatefulWidget {
           tour: BroadcastTournamentData(
             id: BroadcastTournamentId(''),
             name: '',
+            slug: '',
             imageUrl: null,
             description: '',
             information: (
@@ -234,11 +235,11 @@ class BroadcastGridItem extends StatefulWidget {
           round: BroadcastRound(
             id: BroadcastRoundId(''),
             name: '',
+            slug: '',
             status: RoundStatus.finished,
             startsAt: null,
             finishedAt: null,
             startsAfterPrevious: false,
-            url: null,
           ),
           group: null,
           roundToLinkId: BroadcastRoundId(''),

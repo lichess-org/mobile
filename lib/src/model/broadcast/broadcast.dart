@@ -48,6 +48,7 @@ class BroadcastTournamentData with _$BroadcastTournamentData {
   const factory BroadcastTournamentData({
     required BroadcastTournamentId id,
     required String name,
+    required String slug,
     required String? imageUrl,
     required String? description,
     required BroadcastTournamentInformation information,
@@ -78,11 +79,11 @@ class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
     required BroadcastRoundId id,
     required String name,
+    required String slug,
     required RoundStatus status,
     required DateTime? startsAt,
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
-    required String? url,
   }) = _BroadcastRound;
 }
 
