@@ -400,6 +400,7 @@ class _BottomBar extends ConsumerWidget {
             icon: Icons.info,
             label: context.l10n.getAHint,
             showLabel: true,
+            highlighted: puzzleState.showHint,
             onTap: puzzleState.canViewSolution
                 ? () => ref.read(ctrlProvider.notifier).toggleHint()
                 : null,
