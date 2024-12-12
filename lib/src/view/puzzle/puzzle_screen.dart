@@ -294,7 +294,7 @@ class _Body extends ConsumerWidget {
                       Circle(
                         color: const Color(0x40003088),
                         orig: puzzleState.hintMove!.from,
-                      )
+                      ),
                     ]).addAll(puzzleState.hintPossibleMoves!.map((i) => Circle(color: const Color(0x40003088), orig: i)).toList())
                   : null,
               engineGauge: puzzleState.isEngineEnabled
