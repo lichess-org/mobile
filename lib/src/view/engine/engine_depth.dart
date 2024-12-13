@@ -35,7 +35,8 @@ class EngineDepth extends ConsumerWidget {
                 width: 240,
                 backgroundColor:
                     Theme.of(context).platform == TargetPlatform.android
-                        ? Theme.of(context).dialogBackgroundColor
+                        ? DialogTheme.of(context).backgroundColor ??
+                            Theme.of(context).colorScheme.surfaceContainerHigh
                         : CupertinoDynamicColor.resolve(
                             CupertinoColors.tertiarySystemBackground,
                             context,

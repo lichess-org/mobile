@@ -420,20 +420,20 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
 
 class _MaterialTabView extends ConsumerStatefulWidget {
   const _MaterialTabView({
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     super.key,
     required this.tab,
     this.builder,
     this.navigatorKey,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.routes,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.onGenerateRoute,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.onUnknownRoute,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.navigatorObservers = const <NavigatorObserver>[],
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.restorationScopeId,
   });
 
