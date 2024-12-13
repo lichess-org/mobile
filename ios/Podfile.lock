@@ -235,7 +235,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_settings: 3507c575c2b18a462c99948f61d5de21d4420999
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  connectivity_plus: b21496ab28d1324eb59885d888a4d83b98531f01
+  connectivity_plus: 2256d3e20624a7749ed21653aafe291a46446fee
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
@@ -251,7 +251,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: e75e348953352a000331eb77caf01e424248e176
   FirebaseSessions: 3f56f177d9e53a85021d16b31f9a111849d1dd8b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: 240be31017bab05dc0ad10a863886d49eba477aa
+  flutter_appauth: 914057fda669db5073d3ca9d94ea932e7df3c964
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   flutter_native_splash: 576fbd69b830a63594ae678396fa17e43abbc5f8
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13

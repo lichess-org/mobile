@@ -385,16 +385,9 @@ class _PlayerWidget extends ConsumerWidget {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(roundId, gameId))
         .requireValue;
-    final clocks = broadcastGameState.clocks;
-    final isCursorOnLiveMove =
-        broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
-    final sideToMove = broadcastGameState.position.turn;
-    final side = switch (widgetPosition) {
-      _PlayerWidgetPosition.bottom => broadcastGameState.pov,
-      _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
-    };
-    final clock = (sideToMove == side) ? clocks?.parentClock : clocks?.clock;
-
+    // TODO
+    // we'll probably want to remove this and get the game state from a single controller
+    // this won't work with deep links for instance
     final game = ref.watch(
       broadcastRoundControllerProvider(roundId)
           .select((round) => round.value?.games[gameId]),
@@ -402,8 +395,21 @@ class _PlayerWidget extends ConsumerWidget {
 
     if (game == null) return const SizedBox.shrink();
 
+    final isCursorOnLiveMove =
+        broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
+    final sideToMove = broadcastGameState.position.turn;
+    final side = switch (widgetPosition) {
+      _PlayerWidgetPosition.bottom => broadcastGameState.pov,
+      _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
+    };
+
     final player = game.players[side]!;
+    final liveClock = isCursorOnLiveMove ? player.clock : null;
     final gameStatus = game.status;
+
+    final pastClocks = broadcastGameState.clocks;
+    final pastClock =
+        (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
 
     return GestureDetector(
       onTap: () {
@@ -449,7 +455,7 @@ class _PlayerWidget extends ConsumerWidget {
                     const TextStyle().copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-            if (clock != null)
+            if (liveClock != null || pastClock != null)
               Container(
                 height: kAnalysisBoardHeaderOrFooterHeight,
                 color: (side == sideToMove)
@@ -460,9 +466,9 @@ class _PlayerWidget extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: Center(
-                    child: isCursorOnLiveMove
+                    child: liveClock != null
                         ? CountdownClockBuilder(
-                            timeLeft: clock,
+                            timeLeft: liveClock,
                             active: side == sideToMove,
                             builder: (context, timeLeft) => _Clock(
                               timeLeft: timeLeft,
@@ -470,11 +476,10 @@ class _PlayerWidget extends ConsumerWidget {
                               isLive: true,
                             ),
                             tickInterval: const Duration(seconds: 1),
-                            clockUpdatedAt:
-                                side == sideToMove ? game.updatedClockAt : null,
+                            clockUpdatedAt: game.updatedClockAt,
                           )
                         : _Clock(
-                            timeLeft: clock,
+                            timeLeft: pastClock!,
                             isSideToMove: side == sideToMove,
                             isLive: false,
                           ),

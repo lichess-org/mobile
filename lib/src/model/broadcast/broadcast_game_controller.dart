@@ -153,6 +153,8 @@ class BroadcastGameController extends _$BroadcastGameController
 
     // check provider is still mounted
     if (key == _key) {
+      final curState = state.requireValue;
+      final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
       final game = PgnGame.parsePgn(pgn);
       final pgnHeaders = IMap(game.headers);
       final rootComments =
@@ -167,14 +169,17 @@ class BroadcastGameController extends _$BroadcastGameController
 
       _root = newRoot;
 
+      final newCurrentPath =
+          wasOnLivePath ? broadcastPath : curState.currentPath;
       state = AsyncData(
         state.requireValue.copyWith(
+          currentPath: newCurrentPath,
           pgnHeaders: pgnHeaders,
           pgnRootComments: rootComments,
           broadcastPath: broadcastPath,
           root: _root.view,
           lastMove: lastMove,
-          clocks: _getClocks(state.requireValue.currentPath),
+          clocks: _getClocks(newCurrentPath),
         ),
       );
     }

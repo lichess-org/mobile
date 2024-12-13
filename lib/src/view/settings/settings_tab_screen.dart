@@ -437,7 +437,7 @@ class _Body extends ConsumerWidget {
   }
 
   String _getSizeString(int? bytes) =>
-      '${_bytesToMB(bytes ?? (0)).toStringAsFixed(2)}MB';
+      '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
 

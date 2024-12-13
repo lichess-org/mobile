@@ -189,29 +189,47 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
   /// The amount of time that the player whose turn it is has been thinking since his last move
   final thinkTime =
       pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
+  final fen =
+      pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen;
+  final playingSide = Setup.parseFen(fen).turn;
 
   return MapEntry(
     pick('id').asBroadcastGameIdOrThrow(),
     BroadcastGame(
       id: pick('id').asBroadcastGameIdOrThrow(),
       players: IMap({
-        Side.white: _playerFromPick(pick('players', 0).required()),
-        Side.black: _playerFromPick(pick('players', 1).required()),
+        Side.white: _playerFromPick(
+          pick('players', 0).required(),
+          isPlaying: playingSide == Side.white,
+          thinkingTime: thinkTime,
+        ),
+        Side.black: _playerFromPick(
+          pick('players', 1).required(),
+          isPlaying: playingSide == Side.black,
+          thinkingTime: thinkTime,
+        ),
       }),
       fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
       lastMove: pick('lastMove').asUciMoveOrNull(),
       status: status,
-      updatedClockAt: DateTime.now().subtract(thinkTime),
+      updatedClockAt: DateTime.now(),
     ),
   );
 }
 
-BroadcastPlayer _playerFromPick(RequiredPick pick) {
+BroadcastPlayer _playerFromPick(
+  RequiredPick pick, {
+  required bool isPlaying,
+  required Duration thinkingTime,
+}) {
+  final clock = pick('clock').asDurationFromCentiSecondsOrNull();
+  final updatedClock =
+      clock != null && isPlaying ? clock - thinkingTime : clock;
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    clock: pick('clock').asDurationFromCentiSecondsOrNull(),
+    clock: updatedClock,
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
   );
@@ -274,6 +292,10 @@ BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
     color: pick('color').asSideOrThrow(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
-    opponent: _playerFromPick(pick('opponent').required()),
+    opponent: _playerFromPick(
+      pick('opponent').required(),
+      isPlaying: false,
+      thinkingTime: Duration.zero,
+    ),
   );
 }
