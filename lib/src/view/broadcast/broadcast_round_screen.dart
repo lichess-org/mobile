@@ -117,6 +117,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       cupertinoTabSwitcher: tabSwitcher,
                       sliver: switch (asyncTournament) {
                         AsyncData(:final value) => BroadcastBoardsTab(
+                            tournamentId: _selectedTournamentId,
                             roundId: _selectedRoundId ?? value.defaultRoundId,
                             tournamentSlug: widget.broadcast.tour.slug,
                           ),
@@ -186,6 +187,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               _TabView(
                 sliver: switch (asyncTournament) {
                   AsyncData(:final value) => BroadcastBoardsTab(
+                      tournamentId: _selectedTournamentId,
                       roundId: _selectedRoundId ?? value.defaultRoundId,
                       tournamentSlug: widget.broadcast.tour.slug,
                     ),

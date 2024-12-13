@@ -25,10 +25,12 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
   const BroadcastBoardsTab({
+    required this.tournamentId,
     required this.roundId,
     required this.tournamentSlug,
   });
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final String tournamentSlug;
 
@@ -59,6 +61,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
               )
             : BroadcastPreview(
                 games: value.games.values.toIList(),
+                tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,
                 tournamentSlug: tournamentSlug,
@@ -81,6 +84,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
 class BroadcastPreview extends StatelessWidget {
   const BroadcastPreview({
+    required this.tournamentId,
     required this.roundId,
     required this.games,
     required this.title,
@@ -89,12 +93,14 @@ class BroadcastPreview extends StatelessWidget {
   });
 
   const BroadcastPreview.loading()
-      : roundId = const BroadcastRoundId(''),
+      : tournamentId = const BroadcastTournamentId(''),
+        roundId = const BroadcastRoundId(''),
         games = null,
         title = '',
         tournamentSlug = '',
         roundSlug = '';
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
   final String title;
@@ -148,6 +154,7 @@ class BroadcastPreview extends StatelessWidget {
                 context,
                 title: title,
                 builder: (context) => BroadcastGameScreen(
+                  tournamentId: tournamentId,
                   roundId: roundId,
                   gameId: game.id,
                   tournamentSlug: tournamentSlug,

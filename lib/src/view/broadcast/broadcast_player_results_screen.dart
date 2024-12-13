@@ -225,6 +225,7 @@ class _Body extends ConsumerWidget {
                       pushPlatformRoute(
                         context,
                         builder: (context) => BroadcastGameScreen(
+                          tournamentId: tournamentId,
                           roundId: playerResult.roundId,
                           gameId: playerResult.gameId,
                         ),

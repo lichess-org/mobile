@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -31,6 +32,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String? tournamentSlug;
@@ -38,6 +40,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? title;
 
   const BroadcastGameScreen({
+    required this.tournamentId,
     required this.roundId,
     required this.gameId,
     this.tournamentSlug,
@@ -117,6 +120,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       ),
       body: switch (broadcastGameState) {
         AsyncData() => _Body(
+            widget.tournamentId,
             widget.roundId,
             widget.gameId,
             widget.tournamentSlug,
@@ -134,6 +138,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
 class _Body extends ConsumerWidget {
   const _Body(
+    this.tournamentId,
     this.roundId,
     this.gameId,
     this.tournamentSlug,
@@ -141,6 +146,7 @@ class _Body extends ConsumerWidget {
     required this.tabController,
   });
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String? tournamentSlug;
@@ -169,11 +175,13 @@ class _Body extends ConsumerWidget {
         borderRadius,
       ),
       boardHeader: _PlayerWidget(
+        tournamentId: tournamentId,
         roundId: roundId,
         gameId: gameId,
         widgetPosition: _PlayerWidgetPosition.top,
       ),
       boardFooter: _PlayerWidget(
+        tournamentId: tournamentId,
         roundId: roundId,
         gameId: gameId,
         widgetPosition: _PlayerWidgetPosition.bottom,
@@ -361,11 +369,13 @@ enum _PlayerWidgetPosition { bottom, top }
 
 class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
+    required this.tournamentId,
     required this.roundId,
     required this.gameId,
     required this.widgetPosition,
   });
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final _PlayerWidgetPosition widgetPosition;
@@ -392,71 +402,84 @@ class _PlayerWidget extends ConsumerWidget {
     final player = game.players[side]!;
     final gameStatus = game.status;
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? Styles.cupertinoCardColor.resolveFrom(context)
-          : Theme.of(context).colorScheme.surfaceContainer,
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Row(
-        children: [
-          if (game.isOver) ...[
-            Text(
-              (gameStatus == BroadcastResult.draw)
-                  ? '½'
-                  : (gameStatus == BroadcastResult.whiteWins)
-                      ? side == Side.white
-                          ? '1'
-                          : '0'
-                      : side == Side.black
-                          ? '1'
-                          : '0',
-              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 16.0),
-          ],
-          Expanded(
-            child: BroadcastPlayerWidget(
-              federation: player.federation,
-              title: player.title,
-              name: player.name,
-              rating: player.rating,
-              textStyle:
-                  const TextStyle().copyWith(fontWeight: FontWeight.bold),
-            ),
+    return GestureDetector(
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          builder: (context) => BroadcastPlayerResultsScreen(
+            tournamentId,
+            (player.fideId != null) ? player.fideId!.toString() : player.name,
+            player.title,
+            player.name,
           ),
-          if (clock != null)
-            Container(
-              height: kAnalysisBoardHeaderOrFooterHeight,
-              color: (side == sideToMove)
-                  ? isCursorOnLiveMove
-                      ? Theme.of(context).colorScheme.tertiaryContainer
-                      : Theme.of(context).colorScheme.secondaryContainer
-                  : Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: Center(
-                  child: isCursorOnLiveMove
-                      ? CountdownClockBuilder(
-                          timeLeft: clock,
-                          active: side == sideToMove,
-                          builder: (context, timeLeft) => _Clock(
-                            timeLeft: timeLeft,
-                            isSideToMove: side == sideToMove,
-                            isLive: true,
-                          ),
-                          tickInterval: const Duration(seconds: 1),
-                          clockUpdatedAt:
-                              side == sideToMove ? game.updatedClockAt : null,
-                        )
-                      : _Clock(
-                          timeLeft: clock,
-                          isSideToMove: side == sideToMove,
-                          isLive: false,
-                        ),
-                ),
+        );
+      },
+      child: Container(
+        color: Theme.of(context).platform == TargetPlatform.iOS
+            ? Styles.cupertinoCardColor.resolveFrom(context)
+            : Theme.of(context).colorScheme.surfaceContainer,
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Row(
+          children: [
+            if (game.isOver) ...[
+              Text(
+                (gameStatus == BroadcastResult.draw)
+                    ? '½'
+                    : (gameStatus == BroadcastResult.whiteWins)
+                        ? side == Side.white
+                            ? '1'
+                            : '0'
+                        : side == Side.black
+                            ? '1'
+                            : '0',
+                style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 16.0),
+            ],
+            Expanded(
+              child: BroadcastPlayerWidget(
+                federation: player.federation,
+                title: player.title,
+                name: player.name,
+                rating: player.rating,
+                textStyle:
+                    const TextStyle().copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-        ],
+            if (clock != null)
+              Container(
+                height: kAnalysisBoardHeaderOrFooterHeight,
+                color: (side == sideToMove)
+                    ? isCursorOnLiveMove
+                        ? Theme.of(context).colorScheme.tertiaryContainer
+                        : Theme.of(context).colorScheme.secondaryContainer
+                    : Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: Center(
+                    child: isCursorOnLiveMove
+                        ? CountdownClockBuilder(
+                            timeLeft: clock,
+                            active: side == sideToMove,
+                            builder: (context, timeLeft) => _Clock(
+                              timeLeft: timeLeft,
+                              isSideToMove: side == sideToMove,
+                              isLive: true,
+                            ),
+                            tickInterval: const Duration(seconds: 1),
+                            clockUpdatedAt:
+                                side == sideToMove ? game.updatedClockAt : null,
+                          )
+                        : _Clock(
+                            timeLeft: clock,
+                            isSideToMove: side == sideToMove,
+                            isLive: false,
+                          ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
