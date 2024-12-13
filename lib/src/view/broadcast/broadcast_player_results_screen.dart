@@ -184,14 +184,15 @@ class _Body extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             spacing: cardSpacing,
                             children: [
-                              SizedBox(
-                                width: statWidth,
-                                child: StatCard(
-                                  context.l10n.broadcastScore,
-                                  value:
-                                      '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                              if (player.score != null)
+                                SizedBox(
+                                  width: statWidth,
+                                  child: StatCard(
+                                    context.l10n.broadcastScore,
+                                    value:
+                                        '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                                  ),
                                 ),
-                              ),
                               if (player.performance != null)
                                 SizedBox(
                                   width: statWidth,
