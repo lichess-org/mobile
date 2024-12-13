@@ -397,8 +397,11 @@ class _PlayerWidget extends ConsumerWidget {
 
     final game = ref.watch(
       broadcastRoundControllerProvider(roundId)
-          .select((round) => round.requireValue.games[gameId]!),
+          .select((round) => round.value?.games[gameId]),
     );
+
+    if (game == null) return const SizedBox.shrink();
+
     final player = game.players[side]!;
     final gameStatus = game.status;
 
