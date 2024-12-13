@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
@@ -82,17 +82,21 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final broadcastGameState = ref
-        .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
-    final title = ref.watch(
-      broadcastRoundControllerProvider(widget.roundId)
-          .select((round) => round.value?.round.name),
+    final broadcastGameState = ref.watch(
+      broadcastGameProvider(widget.roundId, widget.gameId),
     );
+    final broadcastGamePgn = ref
+        .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
+    final title = widget.title ??
+        (switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
+          AsyncData(value: final title) => title,
+          _ => 'Broadcast Game',
+        });
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(
-          widget.title ?? title ?? 'BroadcastGame',
+          title,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
@@ -102,7 +106,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             controller: _tabController,
           ),
           AppBarIconButton(
-            onPressed: (broadcastGameState.hasValue)
+            onPressed: (broadcastGamePgn.hasValue)
                 ? () {
                     pushPlatformRoute(
                       context,
@@ -118,8 +122,8 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           ),
         ],
       ),
-      body: switch (broadcastGameState) {
-        AsyncData() => _Body(
+      body: switch ((broadcastGameState, broadcastGamePgn)) {
+        (AsyncData(), AsyncData()) => _Body(
             widget.tournamentId,
             widget.roundId,
             widget.gameId,
@@ -127,7 +131,10 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             widget.roundSlug,
             tabController: _tabController,
           ),
-        AsyncError(:final error) => Center(
+        (AsyncError(:final error), _) => Center(
+            child: Text('Cannot load broadcast game: $error'),
+          ),
+        (_, AsyncError(:final error)) => Center(
             child: Text('Cannot load broadcast game: $error'),
           ),
         _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -385,15 +392,7 @@ class _PlayerWidget extends ConsumerWidget {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(roundId, gameId))
         .requireValue;
-    // TODO
-    // we'll probably want to remove this and get the game state from a single controller
-    // this won't work with deep links for instance
-    final game = ref.watch(
-      broadcastRoundControllerProvider(roundId)
-          .select((round) => round.value?.games[gameId]),
-    );
-
-    if (game == null) return const SizedBox.shrink();
+    final game = ref.watch(broadcastGameProvider(roundId, gameId)).requireValue;
 
     final isCursorOnLiveMove =
         broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
