@@ -37,7 +37,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
             title!,
             style: TextStyle(
               color: (title == 'BOT')
-                  ? context.lichessColors.purple
+                  ? context.lichessColors.fancy
                   : context.lichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
