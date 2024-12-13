@@ -87,7 +87,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
         (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
           if (a.score == null) return 1;
           if (b.score == null) return -1;
-          return b.score!.compareTo(a.score!);
+          final value = b.score!.compareTo(a.score!);
+          if (value == 0) {
+            return a.played.compareTo(b.played);
+          } else {
+            return value;
+          }
         }
     };
 
