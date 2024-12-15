@@ -128,9 +128,6 @@ class ImageColorWorker {
           filter: false,
         );
         final Hct sourceColor = Hct.fromInt(scoredResults.first);
-        if (sourceColor.tone > 90) {
-          sourceColor.tone = 90;
-        }
         final scheme = SchemeFidelity(
           sourceColorHct: sourceColor,
           isDark: false,

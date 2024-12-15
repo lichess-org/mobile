@@ -22,8 +22,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
-const kBroadcastGridItemContentPadding =
-    EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0);
+const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 16.0);
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -122,12 +121,9 @@ class _BodyState extends ConsumerState<_Body> {
       );
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final itemsByRow = screenWidth >= 1200
-        ? 3
-        : screenWidth >= 800
-            ? 2
-            : 1;
+
+    final isTablet = isTabletOrLarger(context);
+    final itemsByRow = isTablet ? 2 : 1;
     const loadingItems = 12;
     final itemsCount = broadcasts.requireValue.past.length +
         (broadcasts.isLoading ? loadingItems : 0);
@@ -136,7 +132,7 @@ class _BodyState extends ConsumerState<_Body> {
       crossAxisCount: itemsByRow,
       crossAxisSpacing: 16.0,
       mainAxisSpacing: 16.0,
-      childAspectRatio: 1.4,
+      childAspectRatio: 1.45,
     );
 
     final sections = [
@@ -345,10 +341,9 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
         _cardColors?.primaryContainer ?? defaultBackgroundColor;
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ??
-            textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.7) ??
+            textShade(context, 0.7);
     final liveColor = _cardColors?.error ?? LichessColors.red;
-    final isTablet = isTabletOrLarger(context);
 
     return GestureDetector(
       onTap: () {
@@ -363,159 +358,139 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
-      child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.9,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: kBroadcastGridItemBorderRadius,
-            boxShadow: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : kElevationToShadow[1],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: _imageProvider != null
-                    ? Image(
-                        image: _imageProvider!,
-                        frameBuilder: (
-                          context,
-                          child,
-                          frame,
-                          wasSynchronouslyLoaded,
-                        ) {
-                          if (wasSynchronouslyLoaded) {
-                            return child;
-                          }
-                          return AnimatedOpacity(
-                            duration: const Duration(milliseconds: 500),
-                            opacity: frame == null ? 0 : 1,
-                            child: child,
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Image(image: kDefaultBroadcastImage),
-                      )
-                    : const SizedBox.shrink(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: kBroadcastGridItemBorderRadius,
+          color: backgroundColor,
+          boxShadow: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : kElevationToShadow[1],
+        ),
+        child: Stack(
+          children: [
+            ShaderMask(
+              blendMode: BlendMode.dstOut,
+              shaderCallback: (bounds) {
+                return LinearGradient(
+                  begin: const Alignment(0.0, 0.5),
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    backgroundColor.withValues(alpha: 0.0),
+                    backgroundColor.withValues(alpha: 1.0),
+                  ],
+                  stops: const [0.5, 1.10],
+                  tileMode: TileMode.clamp,
+                ).createShader(bounds);
+              },
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 100),
+                opacity: _tapDown ? 1.0 : 0.7,
+                child: AspectRatio(
+                  aspectRatio: 2.0,
+                  child: _imageProvider != null
+                      ? Image(
+                          image: _imageProvider!,
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            if (wasSynchronouslyLoaded) {
+                              return child;
+                            }
+                            return AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: frame == null ? 0 : 1,
+                              child: child,
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Image(image: kDefaultBroadcastImage),
+                        )
+                      : const SizedBox.shrink(),
+                ),
               ),
-              Expanded(
-                child: ColoredBox(
-                  color: backgroundColor,
-                  child: Padding(
-                    padding: kBroadcastGridItemContentPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (widget.broadcast.round.startsAt != null) ...[
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    widget.broadcast.round.name,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: subTitleColor,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  const SizedBox(width: 6.0),
-                                  Text(
-                                    relativeDate(
-                                      widget.broadcast.round.startsAt!,
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: subTitleColor,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  const Spacer(),
-                                  if (widget.broadcast.isLive)
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.circle,
-                                          size: 16,
-                                          color: liveColor,
-                                          shadows: const [
-                                            Shadow(
-                                              color: Colors.black54,
-                                              offset: Offset(0, 1),
-                                              blurRadius: 2,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        Text(
-                                          'LIVE',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: liveColor,
-                                            shadows: const [
-                                              Shadow(
-                                                color: Colors.black54,
-                                                offset: Offset(0, 1),
-                                                blurRadius: 2,
-                                              ),
-                                            ],
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 2.0),
-                            ],
-                            Text(
-                              widget.broadcast.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: titleColor,
-                                fontWeight: FontWeight.bold,
-                                height: 1.0,
-                                fontSize: 16,
-                              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 12.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.broadcast.round.startsAt != null ||
+                      widget.broadcast.isLive)
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.broadcast.round.name,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: subTitleColor,
                             ),
-                          ],
-                        ),
-                        if (widget.broadcast.tour.information.players !=
-                            null) ...[
-                          SizedBox(height: isTablet ? 0.0 : 8.0),
-                          Flexible(
-                            child: Text(
-                              widget.broadcast.tour.information.players!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          const SizedBox(width: 4.0),
+                          if (widget.broadcast.isLive)
+                            Text(
+                              'LIVE',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: liveColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          else
+                            Text(
+                              relativeDate(widget.broadcast.round.startsAt!),
+                              style: TextStyle(
+                                fontSize: 12,
                                 color: subTitleColor,
-                                letterSpacing: -0.2,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                          ),
                         ],
-                      ],
+                      ),
+                    ),
+                  Padding(
+                    padding: kBroadcastGridItemContentPadding.add(
+                      const EdgeInsets.symmetric(vertical: 3.0),
+                    ),
+                    child: Text(
+                      widget.broadcast.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontWeight: FontWeight.bold,
+                        height: 1.0,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
-                ),
+                  if (widget.broadcast.tour.information.players != null)
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding,
+                      child: Text(
+                        widget.broadcast.tour.information.players!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: subTitleColor,
+                          letterSpacing: -0.2,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
