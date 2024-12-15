@@ -35,14 +35,8 @@ class StudyRepository {
     );
   }
 
-  Future<StudyList> searchStudies({
-    required String query,
-    int page = 1,
-  }) {
-    return _requestStudies(
-      path: 'search',
-      queryParameters: {'page': page.toString(), 'q': query},
-    );
+  Future<StudyList> searchStudies({required String query, int page = 1}) {
+    return _requestStudies(path: 'search', queryParameters: {'page': page.toString(), 'q': query});
   }
 
   Future<StudyList> _requestStudies({
@@ -50,22 +44,18 @@ class StudyRepository {
     required Map<String, String> queryParameters,
   }) {
     return client.readJson(
-      Uri(
-        path: '/study/$path',
-        queryParameters: queryParameters,
-      ),
+      Uri(path: '/study/$path', queryParameters: queryParameters),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) {
-        final paginator =
-            pick(json, 'paginator').asMapOrThrow<String, dynamic>();
+        final paginator = pick(json, 'paginator').asMapOrThrow<String, dynamic>();
 
         return (
-          studies: pick(paginator, 'currentPageResults')
-              .asListOrThrow(
-                (pick) => StudyPageData.fromJson(pick.asMapOrThrow()),
-              )
-              .toIList(),
-          nextPage: pick(paginator, 'nextPage').asIntOrNull()
+          studies:
+              pick(
+                paginator,
+                'currentPageResults',
+              ).asListOrThrow((pick) => StudyPageData.fromJson(pick.asMapOrThrow())).toIList(),
+          nextPage: pick(paginator, 'nextPage').asIntOrNull(),
         );
       },
     );
@@ -78,9 +68,7 @@ class StudyRepository {
     final study = await client.readJson(
       Uri(
         path: (chapterId != null) ? '/study/$id/$chapterId' : '/study/$id',
-        queryParameters: {
-          'chapters': '1',
-        },
+        queryParameters: {'chapters': '1'},
       ),
       headers: {'Accept': 'application/json'},
       mapper: Study.fromServerJson,

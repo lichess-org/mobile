@@ -21,8 +21,7 @@ class AuthController extends _$AuthController {
     final appAuth = ref.read(appAuthProvider);
 
     try {
-      final session = await ref
-          .withClient((client) => AuthRepository(client, appAuth).signIn());
+      final session = await ref.withClient((client) => AuthRepository(client, appAuth).signIn());
 
       await ref.read(authSessionProvider.notifier).update(session);
 
@@ -47,9 +46,7 @@ class AuthController extends _$AuthController {
 
     try {
       await ref.read(notificationServiceProvider).unregister();
-      await ref.withClient(
-        (client) => AuthRepository(client, appAuth).signOut(),
-      );
+      await ref.withClient((client) => AuthRepository(client, appAuth).signOut());
       await ref.read(authSessionProvider.notifier).delete();
       // force reconnect to the current socket
       await ref.read(socketPoolProvider).currentClient.connect();

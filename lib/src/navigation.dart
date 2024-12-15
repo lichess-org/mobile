@@ -64,8 +64,7 @@ enum BottomTab {
   }
 }
 
-final currentBottomTabProvider =
-    StateProvider<BottomTab>((ref) => BottomTab.home);
+final currentBottomTabProvider = StateProvider<BottomTab>((ref) => BottomTab.home);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
@@ -111,8 +110,7 @@ final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
-final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
-    RouteObserver<PageRoute<void>>();
+final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
 final _cupertinoTabController = CupertinoTabController();
 
@@ -132,17 +130,10 @@ class BottomNavScaffold extends ConsumerWidget {
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return Scaffold(
-          body: _TabSwitchingView(
-            currentTab: currentTab,
-            tabBuilder: _androidTabBuilder,
-          ),
+          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
           bottomNavigationBar: Consumer(
             builder: (context, ref, _) {
-              final isOnline = ref
-                      .watch(connectivityChangesProvider)
-                      .valueOrNull
-                      ?.isOnline ??
-                  true;
+              final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
               return NavigationBar(
                 selectedIndex: currentTab.index,
                 destinations: [
@@ -152,16 +143,13 @@ class BottomNavScaffold extends ConsumerWidget {
                       label: tab.label(context.l10n),
                     ),
                 ],
-                onDestinationSelected: (i) =>
-                    _onItemTapped(ref, i, isOnline: isOnline),
+                onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
               );
             },
           ),
         );
       case TargetPlatform.iOS:
-        final isOnline =
-            ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ??
-                true;
+        final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           controller: _cupertinoTabController,
@@ -191,11 +179,7 @@ class BottomNavScaffold extends ConsumerWidget {
   void _onItemTapped(WidgetRef ref, int index, {required bool isOnline}) {
     if (index == BottomTab.watch.index && !isOnline) {
       _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
-      showPlatformSnackbar(
-        ref.context,
-        'Not available in offline mode',
-        type: SnackBarType.info,
-      );
+      showPlatformSnackbar(ref.context, 'Not available in offline mode', type: SnackBarType.info);
       return;
     }
 
@@ -306,10 +290,7 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
 /// A widget laying out multiple tabs with only one active tab being built
 /// at a time and on stage. Off stage tabs' animations are stopped.
 class _TabSwitchingView extends StatefulWidget {
-  const _TabSwitchingView({
-    required this.currentTab,
-    required this.tabBuilder,
-  });
+  const _TabSwitchingView({required this.currentTab, required this.tabBuilder});
 
   final BottomTab currentTab;
   final IndexedWidgetBuilder tabBuilder;
@@ -352,24 +333,19 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
     if (tabFocusNodes.length != BottomTab.values.length) {
       if (tabFocusNodes.length > BottomTab.values.length) {
         discardedNodes.addAll(tabFocusNodes.sublist(BottomTab.values.length));
-        tabFocusNodes.removeRange(
-          BottomTab.values.length,
-          tabFocusNodes.length,
-        );
+        tabFocusNodes.removeRange(BottomTab.values.length, tabFocusNodes.length);
       } else {
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             BottomTab.values.length - tabFocusNodes.length,
             (int index) => FocusScopeNode(
-              debugLabel:
-                  '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
+              debugLabel: '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
             ),
           ),
         );
       }
     }
-    FocusScope.of(context)
-        .setFirstFocus(tabFocusNodes[widget.currentTab.index]);
+    FocusScope.of(context).setFirstFocus(tabFocusNodes[widget.currentTab.index]);
   }
 
   @override
@@ -401,9 +377,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
                 node: tabFocusNodes[index],
                 child: Builder(
                   builder: (BuildContext context) {
-                    return shouldBuildTab[index]
-                        ? widget.tabBuilder(context, index)
-                        : Container();
+                    return shouldBuildTab[index] ? widget.tabBuilder(context, index) : Container();
                   },
                 ),
               ),
@@ -490,11 +464,12 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
     final currentTab = ref.watch(currentBottomTabProvider);
     final enablePopHandler = currentTab == widget.tab;
     return NavigatorPopHandler(
-      onPopWithResult: enablePopHandler
-          ? (_) {
-              widget.navigatorKey?.currentState?.maybePop();
-            }
-          : null,
+      onPopWithResult:
+          enablePopHandler
+              ? (_) {
+                widget.navigatorKey?.currentState?.maybePop();
+              }
+              : null,
       enabled: enablePopHandler,
       child: Navigator(
         key: widget.navigatorKey,
@@ -515,10 +490,7 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
       routeBuilder = widget.routes![name];
     }
     if (routeBuilder != null) {
-      return MaterialPageRoute<dynamic>(
-        builder: routeBuilder,
-        settings: settings,
-      );
+      return MaterialPageRoute<dynamic>(builder: routeBuilder, settings: settings);
     }
     if (widget.onGenerateRoute != null) {
       return widget.onGenerateRoute!(settings);

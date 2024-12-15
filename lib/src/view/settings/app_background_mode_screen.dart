@@ -11,24 +11,15 @@ class AppBackgroundModeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
-      body: _Body(),
-    );
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.background)), body: _Body());
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
+    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 
   static String themeTitle(BuildContext context, BackgroundThemeMode theme) {
@@ -46,9 +37,7 @@ class AppBackgroundModeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select((state) => state.themeMode),
-    );
+    final themeMode = ref.watch(generalPreferencesProvider.select((state) => state.themeMode));
 
     void onChanged(BackgroundThemeMode? value) => ref
         .read(generalPreferencesProvider.notifier)
@@ -60,8 +49,7 @@ class _Body extends ConsumerWidget {
           ChoicePicker(
             choices: BackgroundThemeMode.values,
             selectedItem: themeMode,
-            titleBuilder: (t) =>
-                Text(AppBackgroundModeScreen.themeTitle(context, t)),
+            titleBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
             onSelectedItemChanged: onChanged,
           ),
         ],

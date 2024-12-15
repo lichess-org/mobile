@@ -23,11 +23,6 @@ Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
 }
 
 @riverpod
-Future<IList<LightArchivedGame>> gamesById(
-  Ref ref, {
-  required ISet<GameId> ids,
-}) {
-  return ref.withClient(
-    (client) => GameRepository(client).getGamesByIds(ids),
-  );
+Future<IList<LightArchivedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
+  return ref.withClient((client) => GameRepository(client).getGamesByIds(ids));
 }

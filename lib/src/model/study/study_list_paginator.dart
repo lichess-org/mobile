@@ -12,10 +12,7 @@ typedef StudyList = ({IList<StudyPageData> studies, int? nextPage});
 @riverpod
 class StudyListPaginator extends _$StudyListPaginator {
   @override
-  Future<StudyList> build({
-    required StudyFilterState filter,
-    String? search,
-  }) async {
+  Future<StudyList> build({required StudyFilterState filter, String? search}) async {
     return _nextPage();
   }
 
@@ -25,12 +22,10 @@ class StudyListPaginator extends _$StudyListPaginator {
 
     final newStudyPage = await _nextPage();
 
-    state = AsyncData(
-      (
-        nextPage: newStudyPage.nextPage,
-        studies: studyList.studies.addAll(newStudyPage.studies),
-      ),
-    );
+    state = AsyncData((
+      nextPage: newStudyPage.nextPage,
+      studies: studyList.studies.addAll(newStudyPage.studies),
+    ));
   }
 
   Future<StudyList> _nextPage() async {
@@ -38,14 +33,7 @@ class StudyListPaginator extends _$StudyListPaginator {
 
     final repo = ref.read(studyRepositoryProvider);
     return search == null
-        ? repo.getStudies(
-            category: filter.category,
-            order: filter.order,
-            page: nextPage,
-          )
-        : repo.searchStudies(
-            query: search!,
-            page: nextPage,
-          );
+        ? repo.getStudies(category: filter.category, order: filter.order, page: nextPage)
+        : repo.searchStudies(query: search!, page: nextPage);
   }
 }

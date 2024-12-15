@@ -33,8 +33,7 @@ class StatCard extends StatelessWidget {
       fontSize: statFontSize ?? _defaultStatFontSize,
     );
 
-    final defaultValueStyle =
-        TextStyle(fontSize: valueFontSize ?? _defaultValueFontSize);
+    final defaultValueStyle = TextStyle(fontSize: valueFontSize ?? _defaultValueFontSize);
 
     return Padding(
       padding: padding ?? EdgeInsets.zero,
@@ -48,18 +47,10 @@ class StatCard extends StatelessWidget {
               FittedBox(
                 alignment: Alignment.center,
                 fit: BoxFit.scaleDown,
-                child: Text(
-                  stat,
-                  style: defaultStatStyle,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(stat, style: defaultStatStyle, textAlign: TextAlign.center),
               ),
               if (value != null)
-                Text(
-                  value!,
-                  style: defaultValueStyle,
-                  textAlign: TextAlign.center,
-                )
+                Text(value!, style: defaultValueStyle, textAlign: TextAlign.center)
               else if (child != null)
                 child!
               else
@@ -83,9 +74,7 @@ class StatCardRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _divideRow(cards)
-            .map((e) => Expanded(child: e))
-            .toList(growable: false),
+        children: _divideRow(cards).map((e) => Expanded(child: e)).toList(growable: false),
       ),
     );
   }
@@ -100,14 +89,8 @@ Iterable<Widget> _divideRow(Iterable<Widget> elements) {
   }
 
   Widget wrapElement(Widget el) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: el,
-    );
+    return Container(margin: const EdgeInsets.only(right: 8), child: el);
   }
 
-  return <Widget>[
-    ...list.take(list.length - 1).map(wrapElement),
-    list.last,
-  ];
+  return <Widget>[...list.take(list.length - 1).map(wrapElement), list.last];
 }

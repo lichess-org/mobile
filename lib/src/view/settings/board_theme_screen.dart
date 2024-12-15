@@ -13,60 +13,46 @@ class BoardThemeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.board)),
-      body: _Body(),
-    );
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.board)), body: _Body());
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
+    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 }
 
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardTheme =
-        ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
+    final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
 
-    final hasSystemColors =
-        ref.watch(generalPreferencesProvider.select((p) => p.systemColors));
+    final hasSystemColors = ref.watch(generalPreferencesProvider.select((p) => p.systemColors));
 
-    final androidVersion = ref.watch(androidVersionProvider).whenOrNull(
-          data: (v) => v,
-        );
+    final androidVersion = ref.watch(androidVersionProvider).whenOrNull(data: (v) => v);
 
-    final choices = BoardTheme.values
-        .where(
-          (t) =>
-              t != BoardTheme.system ||
-              (hasSystemColors &&
-                  androidVersion != null &&
-                  androidVersion.sdkInt >= 31),
-        )
-        .toList();
+    final choices =
+        BoardTheme.values
+            .where(
+              (t) =>
+                  t != BoardTheme.system ||
+                  (hasSystemColors && androidVersion != null && androidVersion.sdkInt >= 31),
+            )
+            .toList();
 
-    void onChanged(BoardTheme? value) => ref
-        .read(boardPreferencesProvider.notifier)
-        .setBoardTheme(value ?? BoardTheme.brown);
+    void onChanged(BoardTheme? value) =>
+        ref.read(boardPreferencesProvider.notifier).setBoardTheme(value ?? BoardTheme.brown);
 
-    final checkedIcon = Theme.of(context).platform == TargetPlatform.android
-        ? const Icon(Icons.check)
-        : Icon(
-            CupertinoIcons.check_mark_circled_solid,
-            color: CupertinoTheme.of(context).primaryColor,
-          );
+    final checkedIcon =
+        Theme.of(context).platform == TargetPlatform.android
+            ? const Icon(Icons.check)
+            : Icon(
+              CupertinoIcons.check_mark_circled_solid,
+              color: CupertinoTheme.of(context).primaryColor,
+            );
 
     return SafeArea(
       child: ListView.separated(
@@ -80,15 +66,13 @@ class _Body extends ConsumerWidget {
             onTap: () => onChanged(t),
           );
         },
-        separatorBuilder: (_, __) => PlatformDivider(
-          height: 1,
-          // on iOS: 14 (default indent) + 16 (padding)
-          indent:
-              Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
-          color: Theme.of(context).platform == TargetPlatform.iOS
-              ? null
-              : Colors.transparent,
-        ),
+        separatorBuilder:
+            (_, __) => PlatformDivider(
+              height: 1,
+              // on iOS: 14 (default indent) + 16 (padding)
+              indent: Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
+              color: Theme.of(context).platform == TargetPlatform.iOS ? null : Colors.transparent,
+            ),
         itemCount: choices.length,
       ),
     );

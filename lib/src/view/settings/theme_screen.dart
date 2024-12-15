@@ -23,24 +23,18 @@ class ThemeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: const PlatformAppBar(title: Text('Theme')),
-      body: _Body(),
-    );
+    return PlatformScaffold(appBar: const PlatformAppBar(title: Text('Theme')), body: _Body());
   }
 }
 
-String shapeColorL10n(
-  BuildContext context,
-  ShapeColor shapeColor,
-) =>
-    // TODO add l10n
-    switch (shapeColor) {
-      ShapeColor.green => 'Green',
-      ShapeColor.red => 'Red',
-      ShapeColor.blue => 'Blue',
-      ShapeColor.yellow => 'Yellow',
-    };
+String shapeColorL10n(BuildContext context, ShapeColor shapeColor) =>
+// TODO add l10n
+switch (shapeColor) {
+  ShapeColor.green => 'Green',
+  ShapeColor.red => 'Red',
+  ShapeColor.blue => 'Blue',
+  ShapeColor.yellow => 'Yellow',
+};
 
 class _Body extends ConsumerWidget {
   @override
@@ -60,33 +54,26 @@ class _Body extends ConsumerWidget {
               constraints.biggest.shortestSide - horizontalPadding * 2,
             );
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 16),
               child: Center(
                 child: Chessboard.fixed(
                   size: boardSize,
                   orientation: Side.white,
                   lastMove: const NormalMove(from: Square.e2, to: Square.e4),
-                  fen:
-                      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-                  shapes: <Shape>{
-                    Circle(
-                      color: boardPrefs.shapeColor.color,
-                      orig: Square.fromName('b8'),
-                    ),
-                    Arrow(
-                      color: boardPrefs.shapeColor.color,
-                      orig: Square.fromName('b8'),
-                      dest: Square.fromName('c6'),
-                    ),
-                  }.lock,
+                  fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+                  shapes:
+                      <Shape>{
+                        Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
+                        Arrow(
+                          color: boardPrefs.shapeColor.color,
+                          orig: Square.fromName('b8'),
+                          dest: Square.fromName('c6'),
+                        ),
+                      }.lock,
                   settings: boardPrefs.toBoardSettings().copyWith(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(4.0)),
-                        boxShadow: boardShadows,
-                      ),
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    boxShadow: boardShadows,
+                  ),
                 ),
               ),
             );
@@ -97,18 +84,18 @@ class _Body extends ConsumerWidget {
           children: [
             if (Theme.of(context).platform == TargetPlatform.android)
               androidVersionAsync.maybeWhen(
-                data: (version) => version != null && version.sdkInt >= 31
-                    ? SwitchSettingTile(
-                        leading: const Icon(Icons.colorize_outlined),
-                        title: Text(context.l10n.mobileSystemColors),
-                        value: generalPrefs.systemColors,
-                        onChanged: (value) {
-                          ref
-                              .read(generalPreferencesProvider.notifier)
-                              .toggleSystemColors();
-                        },
-                      )
-                    : const SizedBox.shrink(),
+                data:
+                    (version) =>
+                        version != null && version.sdkInt >= 31
+                            ? SwitchSettingTile(
+                              leading: const Icon(Icons.colorize_outlined),
+                              title: Text(context.l10n.mobileSystemColors),
+                              value: generalPrefs.systemColors,
+                              onChanged: (value) {
+                                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+                              },
+                            )
+                            : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
             SettingsListTile(
@@ -144,23 +131,16 @@ class _Body extends ConsumerWidget {
                   context,
                   choices: ShapeColor.values,
                   selectedItem: boardPrefs.shapeColor,
-                  labelBuilder: (t) => Text.rich(
-                    TextSpan(
-                      children: [
+                  labelBuilder:
+                      (t) => Text.rich(
                         TextSpan(
-                          text: shapeColorL10n(context, t),
+                          children: [
+                            TextSpan(text: shapeColorL10n(context, t)),
+                            const TextSpan(text: '   '),
+                            WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
+                          ],
                         ),
-                        const TextSpan(text: '   '),
-                        WidgetSpan(
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            color: t.color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
                   onSelectedItemChanged: (ShapeColor? value) {
                     ref
                         .read(boardPreferencesProvider.notifier)
@@ -171,9 +151,7 @@ class _Body extends ConsumerWidget {
             ),
             SwitchSettingTile(
               leading: const Icon(Icons.location_on),
-              title: Text(
-                context.l10n.preferencesBoardCoordinates,
-              ),
+              title: Text(context.l10n.preferencesBoardCoordinates),
               value: boardPrefs.coordinates,
               onChanged: (value) {
                 ref.read(boardPreferencesProvider.notifier).toggleCoordinates();

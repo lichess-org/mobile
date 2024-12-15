@@ -26,6 +26,9 @@ analyzer:
   plugins:
     - custom_lint
 
+formatter:
+  page_width: 100
+
 linter:
   rules:
     prefer_single_quotes: true

@@ -21,14 +21,9 @@ part 'evaluation_service.g.dart';
 part 'evaluation_service.freezed.dart';
 
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
-final defaultEngineCores =
-    min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
+final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
-const engineSupportedVariants = {
-  Variant.standard,
-  Variant.chess960,
-  Variant.fromPosition,
-};
+const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
@@ -47,11 +42,9 @@ class EvaluationService {
     searchTime: const Duration(seconds: 10),
   );
 
-  static const _defaultState =
-      (engineName: 'Stockfish', state: EngineState.initial, eval: null);
+  static const _defaultState = (engineName: 'Stockfish', state: EngineState.initial, eval: null);
 
-  final ValueNotifier<EngineEvaluationState> _state =
-      ValueNotifier(_defaultState);
+  final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
 
   /// Initialize the engine with the given context and options.
@@ -82,7 +75,7 @@ class EvaluationService {
         _state.value = (
           engineName: _engine!.name,
           state: _engine!.state.value,
-          eval: _state.value.eval
+          eval: _state.value.eval,
         );
       }
     });
@@ -141,8 +134,7 @@ class EvaluationService {
     );
 
     // cancel evaluation if we already have a cached eval at max search time
-    final cachedEval =
-        work.steps.isEmpty ? initialPositionEval : work.evalCache;
+    final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
     if (cachedEval != null && cachedEval.searchTime >= _options.searchTime) {
       _state.value = (
         engineName: _state.value.engineName,
@@ -152,19 +144,14 @@ class EvaluationService {
       return null;
     }
 
-    final evalStream = engine.start(work).throttle(
-          const Duration(milliseconds: 200),
-          trailing: true,
-        );
+    final evalStream = engine
+        .start(work)
+        .throttle(const Duration(milliseconds: 200), trailing: true);
 
     evalStream.forEach((t) {
       final (work, eval) = t;
       if (shouldEmit(work)) {
-        _state.value = (
-          engineName: _state.value.engineName,
-          state: _state.value.state,
-          eval: eval,
-        );
+        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: eval);
       }
     });
 
@@ -178,8 +165,7 @@ class EvaluationService {
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
-  final maxMemory =
-      ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
+  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
   final service = EvaluationService(ref, maxMemory: maxMemory);
   ref.onDispose(() {
@@ -188,11 +174,7 @@ EvaluationService evaluationService(Ref ref) {
   return service;
 }
 
-typedef EngineEvaluationState = ({
-  String engineName,
-  EngineState state,
-  ClientEval? eval
-});
+typedef EngineEvaluationState = ({String engineName, EngineState state, ClientEval? eval});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod
@@ -220,10 +202,8 @@ class EngineEvaluation extends _$EngineEvaluation {
 
 @freezed
 class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
+  const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
+      _EvaluationContext;
 }
 
 @freezed

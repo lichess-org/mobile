@@ -29,32 +29,22 @@ class GameSettings extends ConsumerWidget {
             return [
               if (data.prefs?.submitMove == true)
                 SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesMoveConfirmation,
-                  ),
+                  title: Text(context.l10n.preferencesMoveConfirmation),
                   value: data.shouldConfirmMove,
                   onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleMoveConfirmation();
+                    ref.read(gameControllerProvider(id).notifier).toggleMoveConfirmation();
                   },
                 ),
               if (data.prefs?.autoQueen == AutoQueen.always)
                 SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesPromoteToQueenAutomatically,
-                  ),
+                  title: Text(context.l10n.preferencesPromoteToQueenAutomatically),
                   value: data.canAutoQueen,
                   onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleAutoQueen();
+                    ref.read(gameControllerProvider(id).notifier).toggleAutoQueen();
                   },
                 ),
               SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesZenMode,
-                ),
+                title: Text(context.l10n.preferencesZenMode),
                 value: data.isZenModeEnabled,
                 onChanged: (value) {
                   ref.read(gameControllerProvider(id).notifier).toggleZenMode();
@@ -69,17 +59,11 @@ class GameSettings extends ConsumerWidget {
           title: const Text('Board settings'),
           trailing: const Icon(CupertinoIcons.chevron_right),
           onTap: () {
-            pushPlatformRoute(
-              context,
-              fullscreenDialog: true,
-              screen: const BoardSettingsScreen(),
-            );
+            pushPlatformRoute(context, fullscreenDialog: true, screen: const BoardSettingsScreen());
           },
         ),
         SwitchSettingTile(
-          title: Text(
-            context.l10n.toggleTheChat,
-          ),
+          title: Text(context.l10n.toggleTheChat),
           value: gamePrefs.enableChat ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleChat();

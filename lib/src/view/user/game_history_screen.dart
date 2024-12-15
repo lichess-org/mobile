@@ -30,16 +30,15 @@ class GameHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
-    final nbGamesAsync = ref.watch(
-      userNumberOfGamesProvider(user, isOnline: isOnline),
-    );
-    final title = filtersInUse.count == 0
-        ? nbGamesAsync.when(
-            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
-            loading: () => const ButtonLoadingIndicator(),
-            error: (e, s) => Text(context.l10n.mobileAllGames),
-          )
-        : Text(filtersInUse.selectionLabel(context));
+    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user, isOnline: isOnline));
+    final title =
+        filtersInUse.count == 0
+            ? nbGamesAsync.when(
+              data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+              loading: () => const ButtonLoadingIndicator(),
+              error: (e, s) => Text(context.l10n.mobileAllGames),
+            )
+            : Text(filtersInUse.selectionLabel(context));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -52,38 +51,31 @@ class GameHistoryScreen extends ConsumerWidget {
         child: const Icon(Icons.tune),
       ),
       semanticsLabel: context.l10n.filterGames,
-      onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
-        context: context,
-        isScrollControlled: true,
-        builder: (_) => _FilterGames(
-          filter: ref.read(gameFilterProvider(filter: gameFilter)),
-          user: user,
-        ),
-      ).then((value) {
-        if (value != null) {
-          ref
-              .read(gameFilterProvider(filter: gameFilter).notifier)
-              .setFilter(value);
-        }
-      }),
+      onPressed:
+          () => showAdaptiveBottomSheet<GameFilterState>(
+            context: context,
+            isScrollControlled: true,
+            builder:
+                (_) => _FilterGames(
+                  filter: ref.read(gameFilterProvider(filter: gameFilter)),
+                  user: user,
+                ),
+          ).then((value) {
+            if (value != null) {
+              ref.read(gameFilterProvider(filter: gameFilter).notifier).setFilter(value);
+            }
+          }),
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [filterBtn],
-      ),
+      appBar: PlatformAppBar(title: title, actions: [filterBtn]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.user,
-    required this.isOnline,
-    required this.gameFilter,
-  });
+  const _Body({required this.user, required this.isOnline, required this.gameFilter});
 
   final LightUser? user;
   final bool isOnline;
@@ -110,8 +102,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(
         userGameHistoryProvider(
           widget.user?.id,
@@ -143,14 +134,9 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final gameFilterState =
-        ref.watch(gameFilterProvider(filter: widget.gameFilter));
+    final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
     final gameListState = ref.watch(
-      userGameHistoryProvider(
-        widget.user?.id,
-        isOnline: widget.isOnline,
-        filter: gameFilterState,
-      ),
+      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
     );
 
     return gameListState.when(
@@ -159,64 +145,45 @@ class _BodyState extends ConsumerState<_Body> {
 
         return list.isEmpty
             ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.0),
-                child: Center(
-                  child: Text(
-                    'No games found',
-                  ),
-                ),
-              )
+              padding: EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(child: Text('No games found')),
+            )
             : ListView.separated(
-                controller: _scrollController,
-                separatorBuilder: (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const PlatformDivider(
-                            height: 1,
-                            cupertinoHasLeading: true,
-                          )
-                        : const PlatformDivider(
-                            height: 1,
-                            color: Colors.transparent,
-                          ),
-                itemCount: list.length + (state.isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (state.isLoading && index == list.length) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: CenterLoadingIndicator(),
-                    );
-                  } else if (state.hasError &&
-                      state.hasMore &&
-                      index == list.length) {
-                    // TODO: add a retry button
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: Center(
-                        child: Text(
-                          'Could not load more games',
-                        ),
-                      ),
-                    );
-                  }
-
-                  return ExtendedGameListTile(
-                    item: list[index],
-                    userId: widget.user?.id,
-                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                    padding: Theme.of(context).platform == TargetPlatform.iOS
-                        ? const EdgeInsets.symmetric(
-                            horizontal: 14.0,
-                            vertical: 12.0,
-                          )
-                        : null,
+              controller: _scrollController,
+              separatorBuilder:
+                  (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                          : const PlatformDivider(height: 1, color: Colors.transparent),
+              itemCount: list.length + (state.isLoading ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (state.isLoading && index == list.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: CenterLoadingIndicator(),
                   );
-                },
-              );
+                } else if (state.hasError && state.hasMore && index == list.length) {
+                  // TODO: add a retry button
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: Center(child: Text('Could not load more games')),
+                  );
+                }
+
+                return ExtendedGameListTile(
+                  item: list[index],
+                  userId: widget.user?.id,
+                  // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                  padding:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                          : null,
+                );
+              },
+            );
       },
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [GameHistoryScreen] could not load game list',
-        );
+        debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
         return const Center(child: Text('Could not load Game History'));
       },
       loading: () => const CenterLoadingIndicator(),
@@ -225,10 +192,7 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _FilterGames extends ConsumerStatefulWidget {
-  const _FilterGames({
-    required this.filter,
-    required this.user,
-  });
+  const _FilterGames({required this.filter, required this.user});
 
   final GameFilterState filter;
   final LightUser? user;
@@ -269,15 +233,16 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     final session = ref.read(authSessionProvider);
     final userId = widget.user?.id ?? session?.user.id;
 
-    final Widget filters = userId != null
-        ? ref.watch(userProvider(id: userId)).when(
-              data: (user) => perfFilter(availablePerfs(user)),
-              loading: () => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-              error: (_, __) => perfFilter(gamePerfs),
-            )
-        : perfFilter(gamePerfs);
+    final Widget filters =
+        userId != null
+            ? ref
+                .watch(userProvider(id: userId))
+                .when(
+                  data: (user) => perfFilter(availablePerfs(user)),
+                  loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+                  error: (_, __) => perfFilter(gamePerfs),
+                )
+            : perfFilter(gamePerfs);
 
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.all(16.0),
@@ -291,15 +256,15 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           filterType: FilterType.singleChoice,
           choices: Side.values,
           choiceSelected: (choice) => filter.side == choice,
-          choiceLabel: (t) => switch (t) {
-            Side.white => Text(context.l10n.white),
-            Side.black => Text(context.l10n.black),
-          },
-          onSelected: (value, selected) => setState(
-            () {
-              filter = filter.copyWith(side: selected ? value : null);
-            },
-          ),
+          choiceLabel:
+              (t) => switch (t) {
+                Side.white => Text(context.l10n.white),
+                Side.black => Text(context.l10n.black),
+              },
+          onSelected:
+              (value, selected) => setState(() {
+                filter = filter.copyWith(side: selected ? value : null);
+              }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -320,31 +285,30 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
   }
 
   List<Perf> availablePerfs(User user) {
-    final perfs = gamePerfs.where((perf) {
-      final p = user.perfs[perf];
-      return p != null && p.numberOfGamesOrRuns > 0;
-    }).toList(growable: false);
+    final perfs = gamePerfs
+        .where((perf) {
+          final p = user.perfs[perf];
+          return p != null && p.numberOfGamesOrRuns > 0;
+        })
+        .toList(growable: false);
     perfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
-          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
     return perfs;
   }
 
   Widget perfFilter(List<Perf> choices) => Filter<Perf>(
-        filterName: context.l10n.variant,
-        filterType: FilterType.multipleChoice,
-        choices: choices,
-        choiceSelected: (choice) => filter.perfs.contains(choice),
-        choiceLabel: (t) => Text(t.shortTitle),
-        onSelected: (value, selected) => setState(
-          () {
-            filter = filter.copyWith(
-              perfs: selected
-                  ? filter.perfs.add(value)
-                  : filter.perfs.remove(value),
-            );
-          },
-        ),
-      );
+    filterName: context.l10n.variant,
+    filterType: FilterType.multipleChoice,
+    choices: choices,
+    choiceSelected: (choice) => filter.perfs.contains(choice),
+    choiceLabel: (t) => Text(t.shortTitle),
+    onSelected:
+        (value, selected) => setState(() {
+          filter = filter.copyWith(
+            perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),
+          );
+        }),
+  );
 }

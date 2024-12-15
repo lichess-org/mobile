@@ -25,32 +25,28 @@ Future<void> showChoicePicker<T>(
             scrollable: true,
             content: Builder(
               builder: (context) {
-                final List<Widget> choiceWidgets = choices.map((value) {
-                  return RadioListTile<T>(
-                    title: labelBuilder(value),
-                    value: value,
-                    groupValue: selectedItem,
-                    onChanged: (value) {
-                      if (value != null && onSelectedItemChanged != null) {
-                        onSelectedItemChanged(value);
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  );
-                }).toList(growable: false);
+                final List<Widget> choiceWidgets = choices
+                    .map((value) {
+                      return RadioListTile<T>(
+                        title: labelBuilder(value),
+                        value: value,
+                        groupValue: selectedItem,
+                        onChanged: (value) {
+                          if (value != null && onSelectedItemChanged != null) {
+                            onSelectedItemChanged(value);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
+                    })
+                    .toList(growable: false);
                 return choiceWidgets.length >= 10
                     ? SizedBox(
-                        width: double.maxFinite,
-                        height: deviceHeight * 0.6,
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: choiceWidgets,
-                        ),
-                      )
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: choiceWidgets,
-                      );
+                      width: double.maxFinite,
+                      height: deviceHeight * 0.6,
+                      child: ListView(shrinkWrap: true, children: choiceWidgets),
+                    )
+                    : Column(mainAxisSize: MainAxisSize.min, children: choiceWidgets);
               },
             ),
             actions: [
@@ -68,17 +64,18 @@ Future<void> showChoicePicker<T>(
           context: context,
           builder: (context) {
             return CupertinoActionSheet(
-              actions: choices.map((value) {
-                return CupertinoActionSheetAction(
-                  onPressed: () {
-                    if (onSelectedItemChanged != null) {
-                      onSelectedItemChanged(value);
-                    }
-                    Navigator.of(context).pop();
-                  },
-                  child: labelBuilder(value),
-                );
-              }).toList(),
+              actions:
+                  choices.map((value) {
+                    return CupertinoActionSheetAction(
+                      onPressed: () {
+                        if (onSelectedItemChanged != null) {
+                          onSelectedItemChanged(value);
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: labelBuilder(value),
+                    );
+                  }).toList(),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () => Navigator.of(context).pop(),
@@ -94,8 +91,7 @@ Future<void> showChoicePicker<T>(
             return NotificationListener(
               onNotification: (ScrollEndNotification notification) {
                 if (onSelectedItemChanged != null) {
-                  final index =
-                      (notification.metrics as FixedExtentMetrics).itemIndex;
+                  final index = (notification.metrics as FixedExtentMetrics).itemIndex;
                   onSelectedItemChanged(choices[index]);
                 }
                 return false;
@@ -110,11 +106,10 @@ Future<void> showChoicePicker<T>(
                   scrollController: FixedExtentScrollController(
                     initialItem: choices.indexWhere((t) => t == selectedItem),
                   ),
-                  children: choices.map((value) {
-                    return Center(
-                      child: labelBuilder(value),
-                    );
-                  }).toList(),
+                  children:
+                      choices.map((value) {
+                        return Center(child: labelBuilder(value));
+                      }).toList(),
                   onSelectedItemChanged: (_) {},
                 ),
               ),
@@ -144,46 +139,47 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
           builder: (BuildContext context, StateSetter setState) {
             return Column(
               mainAxisSize: MainAxisSize.min,
-              children: choices.map((choice) {
-                return CheckboxListTile.adaptive(
-                  title: labelBuilder(choice),
-                  value: items.contains(choice),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        items = value
-                            ? items.union({choice})
-                            : items.difference({choice});
-                      });
-                    }
-                  },
-                );
-              }).toList(growable: false),
+              children: choices
+                  .map((choice) {
+                    return CheckboxListTile.adaptive(
+                      title: labelBuilder(choice),
+                      value: items.contains(choice),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            items = value ? items.union({choice}) : items.difference({choice});
+                          });
+                        }
+                      },
+                    );
+                  })
+                  .toList(growable: false),
             );
           },
         ),
-        actions: Theme.of(context).platform == TargetPlatform.iOS
-            ? [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ]
-            : [
-                TextButton(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ],
+        actions:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? [
+                  CupertinoDialogAction(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(context.l10n.cancel),
+                  ),
+                  CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text(context.l10n.mobileOkButton),
+                    onPressed: () => Navigator.of(context).pop(items),
+                  ),
+                ]
+                : [
+                  TextButton(
+                    child: Text(context.l10n.cancel),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  TextButton(
+                    child: Text(context.l10n.mobileOkButton),
+                    onPressed: () => Navigator.of(context).pop(items),
+                  ),
+                ],
       );
     },
   );

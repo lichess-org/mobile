@@ -39,18 +39,14 @@ class StockfishSettingsWidget extends ConsumerWidget {
           title: Text.rich(
             TextSpan(
               text: 'Search time: ',
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.normal),
               children: [
                 TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                  text: prefs.engineSearchTime.inSeconds == 3600
-                      ? '∞'
-                      : '${prefs.engineSearchTime.inSeconds}s',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  text:
+                      prefs.engineSearchTime.inSeconds == 3600
+                          ? '∞'
+                          : '${prefs.engineSearchTime.inSeconds}s',
                 ),
               ],
             ),
@@ -58,25 +54,18 @@ class StockfishSettingsWidget extends ConsumerWidget {
           subtitle: NonLinearSlider(
             labelBuilder: (value) => value == 3600 ? '∞' : '${value}s',
             value: prefs.engineSearchTime.inSeconds,
-            values:
-                kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
-            onChangeEnd: (value) =>
-                onSetEngineSearchTime(Duration(seconds: value.toInt())),
+            values: kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
+            onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
           ),
         ),
         PlatformListTile(
           title: Text.rich(
             TextSpan(
               text: '${context.l10n.multipleLines}: ',
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.normal),
               children: [
                 TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   text: prefs.numEvalLines.toString(),
                 ),
               ],
@@ -93,15 +82,10 @@ class StockfishSettingsWidget extends ConsumerWidget {
             title: Text.rich(
               TextSpan(
                 text: '${context.l10n.cpus}: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.normal),
                 children: [
                   TextSpan(
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     text: prefs.numEngineCores.toString(),
                   ),
                 ],
@@ -109,10 +93,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
             ),
             subtitle: NonLinearSlider(
               value: prefs.numEngineCores,
-              values: List.generate(
-                maxEngineCores,
-                (index) => index + 1,
-              ),
+              values: List.generate(maxEngineCores, (index) => index + 1),
               onChangeEnd: (value) => onSetEngineCores(value.toInt()),
             ),
           ),

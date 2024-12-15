@@ -402,8 +402,7 @@ enum PuzzleThemeKey {
   }
 }
 
-final IMap<String, PuzzleThemeKey> puzzleThemeNameMap =
-    IMap(PuzzleThemeKey.values.asNameMap());
+final IMap<String, PuzzleThemeKey> puzzleThemeNameMap = IMap(PuzzleThemeKey.values.asNameMap());
 
 typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 
@@ -412,12 +411,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
   final l10n = ref.watch(localizationsProvider);
 
   return IList([
-    (
-      l10n.strings.puzzleRecommended,
-      [
-        PuzzleThemeKey.mix,
-      ],
-    ),
+    (l10n.strings.puzzleRecommended, [PuzzleThemeKey.mix]),
     (
       l10n.strings.puzzlePhases,
       [
@@ -504,20 +498,11 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
     ),
     (
       l10n.strings.puzzleLengths,
-      [
-        PuzzleThemeKey.oneMove,
-        PuzzleThemeKey.short,
-        PuzzleThemeKey.long,
-        PuzzleThemeKey.veryLong,
-      ],
+      [PuzzleThemeKey.oneMove, PuzzleThemeKey.short, PuzzleThemeKey.long, PuzzleThemeKey.veryLong],
     ),
     (
       l10n.strings.puzzleOrigin,
-      [
-        PuzzleThemeKey.master,
-        PuzzleThemeKey.masterVsMaster,
-        PuzzleThemeKey.superGM,
-      ],
+      [PuzzleThemeKey.master, PuzzleThemeKey.masterVsMaster, PuzzleThemeKey.superGM],
     ),
   ]);
 }

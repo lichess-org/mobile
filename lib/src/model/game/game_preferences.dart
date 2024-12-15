@@ -7,8 +7,7 @@ part 'game_preferences.g.dart';
 
 /// Local game preferences, defined client-side only.
 @riverpod
-class GamePreferences extends _$GamePreferences
-    with PreferencesStorage<GamePrefs> {
+class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.game;
@@ -31,23 +30,15 @@ class GamePreferences extends _$GamePreferences
   }
 
   Future<void> toggleBlindfoldMode() {
-    return save(
-      state.copyWith(blindfoldMode: !(state.blindfoldMode ?? false)),
-    );
+    return save(state.copyWith(blindfoldMode: !(state.blindfoldMode ?? false)));
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
 class GamePrefs with _$GamePrefs implements Serializable {
-  const factory GamePrefs({
-    bool? enableChat,
-    bool? blindfoldMode,
-  }) = _GamePrefs;
+  const factory GamePrefs({bool? enableChat, bool? blindfoldMode}) = _GamePrefs;
 
-  static const defaults = GamePrefs(
-    enableChat: true,
-  );
+  static const defaults = GamePrefs(enableChat: true);
 
-  factory GamePrefs.fromJson(Map<String, dynamic> json) =>
-      _$GamePrefsFromJson(json);
+  factory GamePrefs.fromJson(Map<String, dynamic> json) => _$GamePrefsFromJson(json);
 }

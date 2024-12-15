@@ -26,9 +26,7 @@ const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
 Future<PuzzleService> puzzleService(Ref ref) {
-  return ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
-  );
+  return ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 }
 
 @Riverpod(keepAlive: true)
@@ -90,15 +88,16 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
-            ? PuzzleContext(
-                puzzle: data.$1!.unsolved[0],
-                angle: angle,
-                userId: userId,
-                glicko: data.$2,
-                rounds: data.$3,
-              )
-            : null,
+        (data) =>
+            data.$1 != null && data.$1!.unsolved.isNotEmpty
+                ? PuzzleContext(
+                  puzzle: data.$1!.unsolved[0],
+                  angle: angle,
+                  userId: userId,
+                  glicko: data.$2,
+                  rounds: data.$3,
+                )
+                : null,
       ),
     );
   }
@@ -114,18 +113,14 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
-    final data = await batchStorage.fetch(
-      userId: userId,
-      angle: angle,
-    );
+    final data = await batchStorage.fetch(userId: userId, angle: angle);
     if (data != null) {
       await batchStorage.save(
         userId: userId,
         angle: angle,
         data: PuzzleBatch(
           solved: IList([...data.solved, solution]),
-          unsolved:
-              data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
+          unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
     }
@@ -142,10 +137,7 @@ class PuzzleService {
   }
 
   /// Deletes the puzzle batch of [angle] from the local storage.
-  Future<void> deleteBatch({
-    required UserId? userId,
-    required PuzzleAngle angle,
-  }) async {
+  Future<void> deleteBatch({required UserId? userId, required PuzzleAngle angle}) async {
     await batchStorage.delete(userId: userId, angle: angle);
   }
 
@@ -157,15 +149,11 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
-      _syncAndLoadData(
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)> _syncAndLoadData(
     UserId? userId,
     PuzzleAngle angle,
   ) async {
-    final data = await batchStorage.fetch(
-      userId: userId,
-      angle: angle,
-    );
+    final data = await batchStorage.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
@@ -182,48 +170,37 @@ class PuzzleService {
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           solved.isNotEmpty && userId != null
-              ? PuzzleRepository(client).solveBatch(
-                  nb: deficit,
-                  solved: solved,
-                  angle: angle,
-                  difficulty: difficulty,
-                )
-              : PuzzleRepository(client).selectBatch(
-                  nb: deficit,
-                  angle: angle,
-                  difficulty: difficulty,
-                ),
+              ? PuzzleRepository(
+                client,
+              ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(
+                client,
+              ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 
       return batchResponse
           .fold(
-        (value) => Result.value(
-          (
-            PuzzleBatch(
-              solved: IList(const []),
-              unsolved: IList([...unsolved, ...value.puzzles]),
-            ),
-            value.glicko,
-            value.rounds,
-            true, // should save the batch
-          ),
-        ),
+            (value) => Result.value((
+              PuzzleBatch(
+                solved: IList(const []),
+                unsolved: IList([...unsolved, ...value.puzzles]),
+              ),
+              value.glicko,
+              value.rounds,
+              true, // should save the batch
+            )),
 
-        // we don't need to save the batch if the request failed
-        (_, __) => Result.value((data, null, null, false)),
-      )
+            // we don't need to save the batch if the request failed
+            (_, __) => Result.value((data, null, null, false)),
+          )
           .flatMap((tuple) async {
-        final (newBatch, glicko, rounds, shouldSave) = tuple;
-        if (newBatch != null && shouldSave) {
-          await batchStorage.save(
-            userId: userId,
-            angle: angle,
-            data: newBatch,
-          );
-        }
-        return Result.value((newBatch, glicko, rounds));
-      });
+            final (newBatch, glicko, rounds, shouldSave) = tuple;
+            if (newBatch != null && shouldSave) {
+              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
+            }
+            return Result.value((newBatch, glicko, rounds));
+          });
     }
 
     return Result.value((data, null, null));

@@ -60,33 +60,20 @@ Future<void> pushPlatformRoute(
   bool fullscreenDialog = false,
   String? title,
 }) {
-  assert(
-    screen != null || builder != null,
-    'Either screen or builder must be provided.',
-  );
+  assert(screen != null || builder != null, 'Either screen or builder must be provided.');
 
   return Navigator.of(context, rootNavigator: rootNavigator).push<void>(
     Theme.of(context).platform == TargetPlatform.iOS
         ? builder != null
-            ? CupertinoPageRoute(
-                builder: builder,
-                title: title,
-                fullscreenDialog: fullscreenDialog,
-              )
+            ? CupertinoPageRoute(builder: builder, title: title, fullscreenDialog: fullscreenDialog)
             : CupertinoScreenRoute(
-                screen: screen!,
-                title: title,
-                fullscreenDialog: fullscreenDialog,
-              )
+              screen: screen!,
+              title: title,
+              fullscreenDialog: fullscreenDialog,
+            )
         : builder != null
-            ? MaterialPageRoute(
-                builder: builder,
-                fullscreenDialog: fullscreenDialog,
-              )
-            : MaterialScreenRoute(
-                screen: screen!,
-                fullscreenDialog: fullscreenDialog,
-              ),
+        ? MaterialPageRoute(builder: builder, fullscreenDialog: fullscreenDialog)
+        : MaterialScreenRoute(screen: screen!, fullscreenDialog: fullscreenDialog),
   );
 }
 
@@ -107,30 +94,17 @@ Future<void> pushReplacementPlatformRoute(
   bool fullscreenDialog = false,
   String? title,
 }) {
-  return Navigator.of(
-    context,
-    rootNavigator: rootNavigator,
-  ).pushReplacement<void, void>(
+  return Navigator.of(context, rootNavigator: rootNavigator).pushReplacement<void, void>(
     Theme.of(context).platform == TargetPlatform.iOS
         ? builder != null
-            ? CupertinoPageRoute(
-                builder: builder,
-                title: title,
-                fullscreenDialog: fullscreenDialog,
-              )
+            ? CupertinoPageRoute(builder: builder, title: title, fullscreenDialog: fullscreenDialog)
             : CupertinoScreenRoute(
-                screen: screen!,
-                title: title,
-                fullscreenDialog: fullscreenDialog,
-              )
+              screen: screen!,
+              title: title,
+              fullscreenDialog: fullscreenDialog,
+            )
         : builder != null
-            ? MaterialPageRoute(
-                builder: builder,
-                fullscreenDialog: fullscreenDialog,
-              )
-            : MaterialScreenRoute(
-                screen: screen!,
-                fullscreenDialog: fullscreenDialog,
-              ),
+        ? MaterialPageRoute(builder: builder, fullscreenDialog: fullscreenDialog)
+        : MaterialScreenRoute(screen: screen!, fullscreenDialog: fullscreenDialog),
   );
 }

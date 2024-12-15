@@ -20,7 +20,8 @@ class BroadcastPlayersTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
+    final edgeInsets =
+        MediaQuery.paddingOf(context) -
         (Theme.of(context).platform == TargetPlatform.iOS
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
@@ -30,16 +31,10 @@ class BroadcastPlayersTab extends ConsumerWidget {
     return switch (players) {
       AsyncData(value: final players) => PlayersList(players),
       AsyncError(:final error) => SliverPadding(
-          padding: edgeInsets,
-          sliver: SliverFillRemaining(
-            child: Center(child: Text('Cannot load players data: $error')),
-          ),
-        ),
-      _ => const SliverFillRemaining(
-          child: Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        ),
+        padding: edgeInsets,
+        sliver: SliverFillRemaining(child: Center(child: Text('Cannot load players data: $error'))),
+      ),
+      _ => const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
     };
   }
 }
@@ -52,8 +47,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
-const _kHeaderTextStyle =
-    TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
+const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
   const PlayersList(this.players);
@@ -72,20 +66,17 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
       _SortingTypes.player =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) =>
-            a.name.compareTo(b.name),
-      _SortingTypes.elo =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
-          if (a.rating == null) return 1;
-          if (b.rating == null) return -1;
-          return b.rating!.compareTo(a.rating!);
-        },
-      _SortingTypes.score =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
-          if (a.score == null) return 1;
-          if (b.score == null) return -1;
-          return b.score!.compareTo(a.score!);
-        }
+        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) => a.name.compareTo(b.name),
+      _SortingTypes.elo => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
+        if (a.rating == null) return 1;
+        if (b.rating == null) return -1;
+        return b.rating!.compareTo(a.rating!);
+      },
+      _SortingTypes.score => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
+        if (a.score == null) return 1;
+        if (b.score == null) return -1;
+        return b.score!.compareTo(a.score!);
+      },
     };
 
     setState(() {
@@ -130,48 +121,43 @@ class _PlayersListState extends ConsumerState<PlayersList> {
               Expanded(
                 child: _TableTitleCell(
                   title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                  onTap: () => sort(
-                    _SortingTypes.player,
-                    toggleReverse: currentSort == _SortingTypes.player,
-                  ),
-                  sortIcon: (currentSort == _SortingTypes.player)
-                      ? (reverse
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down)
-                      : null,
+                  onTap:
+                      () => sort(
+                        _SortingTypes.player,
+                        toggleReverse: currentSort == _SortingTypes.player,
+                      ),
+                  sortIcon:
+                      (currentSort == _SortingTypes.player)
+                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                          : null,
                 ),
               ),
               SizedBox(
                 width: eloWidth,
                 child: _TableTitleCell(
                   title: const Text('Elo', style: _kHeaderTextStyle),
-                  onTap: () => sort(
-                    _SortingTypes.elo,
-                    toggleReverse: currentSort == _SortingTypes.elo,
-                  ),
-                  sortIcon: (currentSort == _SortingTypes.elo)
-                      ? (reverse
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down)
-                      : null,
+                  onTap:
+                      () =>
+                          sort(_SortingTypes.elo, toggleReverse: currentSort == _SortingTypes.elo),
+                  sortIcon:
+                      (currentSort == _SortingTypes.elo)
+                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                          : null,
                 ),
               ),
               SizedBox(
                 width: scoreWidth,
                 child: _TableTitleCell(
-                  title: Text(
-                    context.l10n.broadcastScore,
-                    style: _kHeaderTextStyle,
-                  ),
-                  onTap: () => sort(
-                    _SortingTypes.score,
-                    toggleReverse: currentSort == _SortingTypes.score,
-                  ),
-                  sortIcon: (currentSort == _SortingTypes.score)
-                      ? (reverse
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down)
-                      : null,
+                  title: Text(context.l10n.broadcastScore, style: _kHeaderTextStyle),
+                  onTap:
+                      () => sort(
+                        _SortingTypes.score,
+                        toggleReverse: currentSort == _SortingTypes.score,
+                      ),
+                  sortIcon:
+                      (currentSort == _SortingTypes.score)
+                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                          : null,
                 ),
               ),
             ],
@@ -180,13 +166,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
           final player = players[index - 1];
           return Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? index.isEven
-                      ? CupertinoColors.secondarySystemBackground
-                          .resolveFrom(context)
-                      : CupertinoColors.tertiarySystemBackground
-                          .resolveFrom(context)
-                  : index.isEven
+              color:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? index.isEven
+                          ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
+                          : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
+                      : index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerLow
                       : Theme.of(context).colorScheme.surfaceContainerHigh,
             ),
@@ -223,11 +208,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                   width: scoreWidth,
                   child: Padding(
                     padding: _kTableRowPadding,
-                    child: (player.score != null)
-                        ? Text(
-                            '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)}/${player.played}',
-                          )
-                        : const SizedBox.shrink(),
+                    child:
+                        (player.score != null)
+                            ? Text(
+                              '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)}/${player.played}',
+                            )
+                            : const SizedBox.shrink(),
                   ),
                 ),
               ],
@@ -240,11 +226,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
 }
 
 class _TableTitleCell extends StatelessWidget {
-  const _TableTitleCell({
-    required this.title,
-    required this.onTap,
-    this.sortIcon,
-  });
+  const _TableTitleCell({required this.title, required this.onTap, this.sortIcon});
 
   final Widget title;
   final void Function() onTap;
@@ -262,16 +244,11 @@ class _TableTitleCell extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: title,
-              ),
+              Expanded(child: title),
               if (sortIcon != null)
                 Text(
                   String.fromCharCode(sortIcon!.codePoint),
-                  style: _kHeaderTextStyle.copyWith(
-                    fontSize: 16,
-                    fontFamily: sortIcon!.fontFamily,
-                  ),
+                  style: _kHeaderTextStyle.copyWith(fontSize: 16, fontFamily: sortIcon!.fontFamily),
                 ),
             ],
           ),

@@ -49,9 +49,7 @@ class CreateCustomGameScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticBackgroundVisibility: false,
-        backgroundColor: Styles.cupertinoAppBarColor
-            .resolveFrom(context)
-            .withValues(alpha: 0.0),
+        backgroundColor: Styles.cupertinoAppBarColor.resolveFrom(context).withValues(alpha: 0.0),
         border: null,
       ),
       child: const _CupertinoBody(),
@@ -70,8 +68,7 @@ class _AndroidBody extends StatefulWidget {
   State<_AndroidBody> createState() => _AndroidBodyState();
 }
 
-class _AndroidBodyState extends State<_AndroidBody>
-    with TickerProviderStateMixin {
+class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -179,17 +176,18 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
     );
     return NotificationListener<ScrollNotification>(
       onNotification: handleScrollNotification,
-      child: _selectedSegment == _ViewMode.create
-          ? _TabView(
-              cupertinoTabSwitcher: tabSwitcher,
-              cupertinoHeaderOpacity: headerOpacity,
-              sliver: _CreateGameBody(setViewMode: setViewMode),
-            )
-          : _TabView(
-              cupertinoTabSwitcher: tabSwitcher,
-              cupertinoHeaderOpacity: headerOpacity,
-              sliver: _ChallengesBody(setViewMode: setViewMode),
-            ),
+      child:
+          _selectedSegment == _ViewMode.create
+              ? _TabView(
+                cupertinoTabSwitcher: tabSwitcher,
+                cupertinoHeaderOpacity: headerOpacity,
+                sliver: _CreateGameBody(setViewMode: setViewMode),
+              )
+              : _TabView(
+                cupertinoTabSwitcher: tabSwitcher,
+                cupertinoHeaderOpacity: headerOpacity,
+                sliver: _ChallengesBody(setViewMode: setViewMode),
+              ),
     );
   }
 }
@@ -207,7 +205,8 @@ class _TabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
+    final edgeInsets =
+        MediaQuery.paddingOf(context) -
         (cupertinoTabSwitcher != null
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
@@ -224,29 +223,28 @@ class _TabView extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   decoration: ShapeDecoration(
-                    color: cupertinoHeaderOpacity == 1.0
-                        ? backgroundColor
-                        : backgroundColor.withAlpha(0),
+                    color:
+                        cupertinoHeaderOpacity == 1.0
+                            ? backgroundColor
+                            : backgroundColor.withAlpha(0),
                     shape: LinearBorder.bottom(
                       side: BorderSide(
-                        color: cupertinoHeaderOpacity == 1.0
-                            ? const Color(0x4D000000)
-                            : Colors.transparent,
+                        color:
+                            cupertinoHeaderOpacity == 1.0
+                                ? const Color(0x4D000000)
+                                : Colors.transparent,
                         width: 0.0,
                       ),
                     ),
                   ),
-                  padding: Styles.bodyPadding +
-                      EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                  padding:
+                      Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
                   child: cupertinoTabSwitcher,
                 ),
               ),
             ),
           ),
-        SliverPadding(
-          padding: edgeInsets,
-          sliver: sliver,
-        ),
+        SliverPadding(padding: edgeInsets, sliver: sliver),
       ],
     );
   }
@@ -270,8 +268,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   void initState() {
     super.initState();
 
-    socketClient =
-        ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
+    socketClient = ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
 
     _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
@@ -311,17 +308,15 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
     return challengesAsync.when(
       data: (challenges) {
-        final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isPlaySupported)
-            .toList();
+        final supportedChallenges =
+            challenges.where((challenge) => challenge.variant.isPlaySupported).toList();
         return SliverList.separated(
           itemCount: supportedChallenges.length,
-          separatorBuilder: (context, index) =>
-              const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          separatorBuilder:
+              (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
             final challenge = supportedChallenges[index];
-            final isMySeek =
-                UserId.fromUserName(challenge.username) == session?.user.id;
+            final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
 
             return CorrespondenceChallengeListItem(
               challenge: challenge,
@@ -330,36 +325,29 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                 name: challenge.username,
                 title: challenge.title,
               ),
-              onPressed: isMySeek
-                  ? null
-                  : session == null
+              onPressed:
+                  isMySeek
+                      ? null
+                      : session == null
                       ? () {
-                          showPlatformSnackbar(
-                            context,
-                            context.l10n.youNeedAnAccountToDoThat,
-                          );
-                        }
+                        showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+                      }
                       : () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: Text(context.l10n.accept),
-                            isDestructiveAction: true,
-                            onConfirm: (_) {
-                              socketClient.send(
-                                'joinSeek',
-                                challenge.id.toString(),
-                              );
-                            },
-                          );
-                        },
-              onCancel: isMySeek
-                  ? () {
-                      socketClient.send(
-                        'cancelSeek',
-                        challenge.id.toString(),
-                      );
-                    }
-                  : null,
+                        showConfirmDialog<void>(
+                          context,
+                          title: Text(context.l10n.accept),
+                          isDestructiveAction: true,
+                          onConfirm: (_) {
+                            socketClient.send('joinSeek', challenge.id.toString());
+                          },
+                        );
+                      },
+              onCancel:
+                  isMySeek
+                      ? () {
+                        socketClient.send('cancelSeek', challenge.id.toString());
+                      }
+                      : null,
             );
           },
         );
@@ -369,9 +357,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           child: Center(child: CircularProgressIndicator.adaptive()),
         );
       },
-      error: (error, stack) => SliverFillRemaining(
-        child: Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
-      ),
+      error:
+          (error, stack) => SliverFillRemaining(
+            child: Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
+          ),
     );
   }
 }
@@ -392,8 +381,8 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(gameSetupPreferencesProvider);
-    final isValidTimeControl = preferences.customTimeSeconds > 0 ||
-        preferences.customIncrementSeconds > 0;
+    final isValidTimeControl =
+        preferences.customTimeSeconds > 0 || preferences.customIncrementSeconds > 0;
 
     final realTimeSelector = [
       Builder(
@@ -408,10 +397,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.minutesPerSide}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: clockLabelInMinutes(customTimeSeconds),
                       ),
                     ],
@@ -421,13 +407,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
                   labelBuilder: clockLabelInMinutes,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            customTimeSeconds = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              customTimeSeconds = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       customTimeSeconds = value.toInt();
@@ -454,10 +441,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.incrementInSeconds}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: customIncrementSeconds.toString(),
                       ),
                     ],
@@ -466,13 +450,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customIncrementSeconds,
                   values: kAvailableIncrementsInSeconds,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            customIncrementSeconds = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              customIncrementSeconds = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       customIncrementSeconds = value.toInt();
@@ -502,10 +487,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.daysPerTurn}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: _daysLabel(daysPerTurn),
                       ),
                     ],
@@ -515,13 +497,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: daysPerTurn,
                   values: kAvailableDaysPerTurn,
                   labelBuilder: _daysLabel,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            daysPerTurn = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              daysPerTurn = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       daysPerTurn = value.toInt();
@@ -540,169 +523,151 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
     return accountAsync.when(
       data: (account) {
-        final timeControl = account == null
-            ? TimeControl.realTime
-            : preferences.customTimeControl;
+        final timeControl = account == null ? TimeControl.realTime : preferences.customTimeControl;
 
-        final userPerf = account?.perfs[timeControl == TimeControl.realTime
-            ? preferences.perfFromCustom
-            : Perf.correspondence];
+        final userPerf =
+            account?.perfs[timeControl == TimeControl.realTime
+                ? preferences.perfFromCustom
+                : Perf.correspondence];
         return SliverPadding(
           padding: Styles.sectionBottomPadding,
           sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                if (account != null)
-                  PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.timeControl),
-                    trailing: AdaptiveTextButton(
-                      onPressed: () {
-                        showChoicePicker(
-                          context,
-                          choices: [
-                            TimeControl.realTime,
-                            TimeControl.correspondence,
-                          ],
-                          selectedItem: preferences.customTimeControl,
-                          labelBuilder: (TimeControl timeControl) => Text(
-                            timeControl == TimeControl.realTime
-                                ? context.l10n.realTime
-                                : context.l10n.correspondence,
-                          ),
-                          onSelectedItemChanged: (TimeControl value) {
-                            ref
-                                .read(gameSetupPreferencesProvider.notifier)
-                                .setCustomTimeControl(value);
-                          },
-                        );
-                      },
-                      child: Text(
-                        preferences.customTimeControl == TimeControl.realTime
-                            ? context.l10n.realTime
-                            : context.l10n.correspondence,
-                      ),
-                    ),
-                  ),
-                if (timeControl == TimeControl.realTime)
-                  ...realTimeSelector
-                else
-                  ...correspondenceSelector,
+            delegate: SliverChildListDelegate([
+              if (account != null)
                 PlatformListTile(
                   harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.variant),
+                  title: Text(context.l10n.timeControl),
                   trailing: AdaptiveTextButton(
                     onPressed: () {
                       showChoicePicker(
                         context,
-                        choices: [Variant.standard, Variant.chess960],
-                        selectedItem: preferences.customVariant,
-                        labelBuilder: (Variant variant) => Text(variant.label),
-                        onSelectedItemChanged: (Variant variant) {
+                        choices: [TimeControl.realTime, TimeControl.correspondence],
+                        selectedItem: preferences.customTimeControl,
+                        labelBuilder:
+                            (TimeControl timeControl) => Text(
+                              timeControl == TimeControl.realTime
+                                  ? context.l10n.realTime
+                                  : context.l10n.correspondence,
+                            ),
+                        onSelectedItemChanged: (TimeControl value) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
-                              .setCustomVariant(variant);
+                              .setCustomTimeControl(value);
                         },
                       );
                     },
-                    child: Text(preferences.customVariant.label),
-                  ),
-                ),
-                ExpandedSection(
-                  expand: preferences.customRated == false,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.side),
-                    trailing: AdaptiveTextButton(
-                      onPressed: null,
-                      child: Text(SideChoice.random.label(context.l10n)),
+                    child: Text(
+                      preferences.customTimeControl == TimeControl.realTime
+                          ? context.l10n.realTime
+                          : context.l10n.correspondence,
                     ),
                   ),
                 ),
-                if (account != null)
-                  PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.rated),
-                    trailing: Switch.adaptive(
-                      applyCupertinoTheme: true,
-                      value: preferences.customRated,
-                      onChanged: (bool value) {
-                        ref
-                            .read(gameSetupPreferencesProvider.notifier)
-                            .setCustomRated(value);
+              if (timeControl == TimeControl.realTime)
+                ...realTimeSelector
+              else
+                ...correspondenceSelector,
+              PlatformListTile(
+                harmonizeCupertinoTitleStyle: true,
+                title: Text(context.l10n.variant),
+                trailing: AdaptiveTextButton(
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: [Variant.standard, Variant.chess960],
+                      selectedItem: preferences.customVariant,
+                      labelBuilder: (Variant variant) => Text(variant.label),
+                      onSelectedItemChanged: (Variant variant) {
+                        ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                       },
-                    ),
+                    );
+                  },
+                  child: Text(preferences.customVariant.label),
+                ),
+              ),
+              ExpandedSection(
+                expand: preferences.customRated == false,
+                child: PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.side),
+                  trailing: AdaptiveTextButton(
+                    onPressed: null,
+                    child: Text(SideChoice.random.label(context.l10n)),
                   ),
-                if (userPerf != null)
-                  PlayRatingRange(
-                    perf: userPerf,
-                    ratingDelta: preferences.customRatingDelta,
-                    onRatingDeltaChange: (int subtract, int add) {
-                      ref
-                          .read(gameSetupPreferencesProvider.notifier)
-                          .setCustomRatingRange(subtract, add);
+                ),
+              ),
+              if (account != null)
+                PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.rated),
+                  trailing: Switch.adaptive(
+                    applyCupertinoTheme: true,
+                    value: preferences.customRated,
+                    onChanged: (bool value) {
+                      ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
                     },
                   ),
-                const SizedBox(height: 20),
-                FutureBuilder(
-                  future: _pendingCreateGame,
-                  builder: (context, snapshot) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: FatButton(
-                        semanticsLabel: context.l10n.createAGame,
-                        onPressed: timeControl == TimeControl.realTime
-                            ? isValidTimeControl
-                                ? () {
+                ),
+              if (userPerf != null)
+                PlayRatingRange(
+                  perf: userPerf,
+                  ratingDelta: preferences.customRatingDelta,
+                  onRatingDeltaChange: (int subtract, int add) {
+                    ref
+                        .read(gameSetupPreferencesProvider.notifier)
+                        .setCustomRatingRange(subtract, add);
+                  },
+                ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: _pendingCreateGame,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: FatButton(
+                      semanticsLabel: context.l10n.createAGame,
+                      onPressed:
+                          timeControl == TimeControl.realTime
+                              ? isValidTimeControl
+                                  ? () {
                                     pushPlatformRoute(
                                       context,
                                       rootNavigator: true,
                                       builder: (BuildContext context) {
                                         return GameScreen(
-                                          seek: GameSeek.custom(
-                                            preferences,
-                                            account,
-                                          ),
+                                          seek: GameSeek.custom(preferences, account),
                                         );
                                       },
                                     );
                                   }
-                                : null
-                            : snapshot.connectionState ==
-                                    ConnectionState.waiting
-                                ? null
-                                : () async {
-                                    _pendingCreateGame = ref
-                                        .read(createGameServiceProvider)
-                                        .newCorrespondenceGame(
-                                          GameSeek.correspondence(
-                                            preferences,
-                                            account,
-                                          ),
-                                        );
+                                  : null
+                              : snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : () async {
+                                _pendingCreateGame = ref
+                                    .read(createGameServiceProvider)
+                                    .newCorrespondenceGame(
+                                      GameSeek.correspondence(preferences, account),
+                                    );
 
-                                    await _pendingCreateGame;
-                                    widget.setViewMode(_ViewMode.challenges);
-                                  },
-                        child:
-                            Text(context.l10n.createAGame, style: Styles.bold),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                                await _pendingCreateGame;
+                                widget.setViewMode(_ViewMode.challenges);
+                              },
+                      child: Text(context.l10n.createAGame, style: Styles.bold),
+                    ),
+                  );
+                },
+              ),
+            ]),
           ),
         );
       },
-      loading: () => const SliverFillRemaining(
-        child: Center(child: CircularProgressIndicator.adaptive()),
-      ),
-      error: (error, stackTrace) => const SliverFillRemaining(
-        child: Center(
-          child: Text('Could not load account data'),
-        ),
-      ),
+      loading:
+          () =>
+              const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
+      error:
+          (error, stackTrace) =>
+              const SliverFillRemaining(child: Center(child: Text('Could not load account data'))),
     );
   }
 }

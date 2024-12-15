@@ -7,14 +7,7 @@ import 'package:stockfish/stockfish.dart';
 import 'uci_protocol.dart';
 import 'work.dart';
 
-enum EngineState {
-  initial,
-  loading,
-  idle,
-  computing,
-  error,
-  disposed,
-}
+enum EngineState { initial, loading, idle, computing, error, disposed }
 
 abstract class Engine {
   ValueListenable<EngineState> get state;
@@ -44,36 +37,36 @@ class StockfishEngine implements Engine {
 
   @override
   Stream<EvalResult> start(Work work) {
-    _log.info(
-      'engine start at ply ${work.ply} and path ${work.path}',
-    );
+    _log.info('engine start at ply ${work.ply} and path ${work.path}');
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      stockfishAsync().then((stockfish) {
-        _state.value = EngineState.loading;
-        _stockfish = stockfish;
-        _stdoutSubscription = stockfish.stdout.listen((line) {
-          _protocol.received(line);
-        });
-        stockfish.state.addListener(_stockfishStateListener);
-        _protocol.isComputing.addListener(() {
-          if (_protocol.isComputing.value) {
-            _state.value = EngineState.computing;
-          } else {
-            _state.value = EngineState.idle;
-          }
-        });
-        _protocol.connected((String cmd) {
-          stockfish.stdin = cmd;
-        });
-        _protocol.engineName.then((name) {
-          _name = name;
-        });
-      }).catchError((Object e, StackTrace s) {
-        _log.severe('error loading stockfish', e, s);
-        _state.value = EngineState.error;
-      });
+      stockfishAsync()
+          .then((stockfish) {
+            _state.value = EngineState.loading;
+            _stockfish = stockfish;
+            _stdoutSubscription = stockfish.stdout.listen((line) {
+              _protocol.received(line);
+            });
+            stockfish.state.addListener(_stockfishStateListener);
+            _protocol.isComputing.addListener(() {
+              if (_protocol.isComputing.value) {
+                _state.value = EngineState.computing;
+              } else {
+                _state.value = EngineState.idle;
+              }
+            });
+            _protocol.connected((String cmd) {
+              stockfish.stdin = cmd;
+            });
+            _protocol.engineName.then((name) {
+              _name = name;
+            });
+          })
+          .catchError((Object e, StackTrace s) {
+            _log.severe('error loading stockfish', e, s);
+            _state.value = EngineState.error;
+          });
     }
 
     return _protocol.evalStream.where((e) => e.$1 == work);
@@ -100,8 +93,7 @@ class StockfishEngine implements Engine {
   @override
   Future<void> dispose() {
     _log.fine('disposing engine');
-    if (_stockfish == null ||
-        _stockfish?.state.value == StockfishState.disposed) {
+    if (_stockfish == null || _stockfish?.state.value == StockfishState.disposed) {
       return Future.value();
     }
     _stdoutSubscription?.cancel();

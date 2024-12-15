@@ -58,8 +58,7 @@ class GamePlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remaingHeight = estimateRemainingHeightLeftBoard(context);
-    final playerFontSize =
-        remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
+    final playerFontSize = remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
 
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +66,10 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (!zenMode)
           Row(
-            mainAxisAlignment: clockPosition == ClockPosition.right
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
+            mainAxisAlignment:
+                clockPosition == ClockPosition.right
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.end,
             children: [
               if (player.user != null) ...[
                 Icon(
@@ -92,11 +92,11 @@ class GamePlayer extends StatelessWidget {
                   player.user!.title!,
                   style: TextStyle(
                     fontSize: playerFontSize,
-                    fontWeight:
-                        player.user?.title == 'BOT' ? null : FontWeight.bold,
-                    color: player.user?.title == 'BOT'
-                        ? context.lichessColors.fancy
-                        : context.lichessColors.brag,
+                    fontWeight: player.user?.title == 'BOT' ? null : FontWeight.bold,
+                    color:
+                        player.user?.title == 'BOT'
+                            ? context.lichessColors.fancy
+                            : context.lichessColors.brag,
                   ),
                 ),
                 const SizedBox(width: 5),
@@ -105,10 +105,7 @@ class GamePlayer extends StatelessWidget {
                 child: Text(
                   player.displayName(context),
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: playerFontSize,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
                 ),
               ),
               if (player.user?.flair != null) ...[
@@ -124,26 +121,22 @@ class GamePlayer extends StatelessWidget {
                 RatingPrefAware(
                   child: Text.rich(
                     TextSpan(
-                      text:
-                          ' ${player.rating}${player.provisional == true ? '?' : ''}',
+                      text: ' ${player.rating}${player.provisional == true ? '?' : ''}',
                       children: [
                         if (player.ratingDiff != null)
                           TextSpan(
-                            text:
-                                ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                            text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
-                              color: player.ratingDiff! > 0
-                                  ? context.lichessColors.good
-                                  : context.lichessColors.error,
+                              color:
+                                  player.ratingDiff! > 0
+                                      ? context.lichessColors.good
+                                      : context.lichessColors.error,
                             ),
                           ),
                       ],
                     ),
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: textShade(context, 0.7),
-                    ),
+                    style: TextStyle(fontSize: 14, color: textShade(context, 0.7)),
                   ),
                 ),
             ],
@@ -164,8 +157,7 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (clock != null && clockPosition == ClockPosition.left)
-          Flexible(flex: 3, child: clock!),
+        if (clock != null && clockPosition == ClockPosition.left) Flexible(flex: 3, child: clock!),
         if (mePlaying && confirmMoveCallbacks != null)
           Expanded(
             flex: 7,
@@ -182,38 +174,35 @@ class GamePlayer extends StatelessWidget {
             flex: 7,
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: shouldLinkToUserProfile
-                  ? GestureDetector(
-                      onTap: player.user != null
-                          ? () {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) => mePlaying
-                                    ? const ProfileScreen()
-                                    : UserScreen(
-                                        user: player.user!,
-                                      ),
-                              );
-                            }
-                          : null,
-                      child: playerWidget,
-                    )
-                  : playerWidget,
+              child:
+                  shouldLinkToUserProfile
+                      ? GestureDetector(
+                        onTap:
+                            player.user != null
+                                ? () {
+                                  pushPlatformRoute(
+                                    context,
+                                    builder:
+                                        (context) =>
+                                            mePlaying
+                                                ? const ProfileScreen()
+                                                : UserScreen(user: player.user!),
+                                  );
+                                }
+                                : null,
+                        child: playerWidget,
+                      )
+                      : playerWidget,
             ),
           ),
-        if (clock != null && clockPosition == ClockPosition.right)
-          Flexible(flex: 3, child: clock!),
+        if (clock != null && clockPosition == ClockPosition.right) Flexible(flex: 3, child: clock!),
       ],
     );
   }
 }
 
 class ConfirmMove extends StatelessWidget {
-  const ConfirmMove({
-    required this.onConfirm,
-    required this.onCancel,
-    super.key,
-  });
+  const ConfirmMove({required this.onConfirm, required this.onCancel, super.key});
 
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
@@ -253,11 +242,7 @@ class ConfirmMove extends StatelessWidget {
 }
 
 class MoveExpiration extends ConsumerStatefulWidget {
-  const MoveExpiration({
-    required this.timeToMove,
-    required this.mePlaying,
-    super.key,
-  });
+  const MoveExpiration({required this.timeToMove, required this.mePlaying, super.key});
 
   final Duration timeToMove;
   final bool mePlaying;
@@ -318,13 +303,9 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
 
     return secs <= 20
         ? Text(
-            context.l10n.nbSecondsToPlayTheFirstMove(secs),
-            style: TextStyle(
-              color: widget.mePlaying && emerg
-                  ? context.lichessColors.error
-                  : null,
-            ),
-          )
+          context.l10n.nbSecondsToPlayTheFirstMove(secs),
+          style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.error : null),
+        )
         : const Text('');
   }
 }
@@ -347,24 +328,17 @@ class MaterialDifferenceDisplay extends StatelessWidget {
 
     return materialDifferenceFormat?.visible ?? true
         ? Row(
-            children: [
-              for (final role in Role.values)
-                for (int i = 0; i < piecesToRender[role]!; i++)
-                  Icon(
-                    _iconByRole[role],
-                    size: 13,
-                    color: Colors.grey,
-                  ),
-              const SizedBox(width: 3),
-              Text(
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                ),
-                materialDiff.score > 0 ? '+${materialDiff.score}' : '',
-              ),
-            ],
-          )
+          children: [
+            for (final role in Role.values)
+              for (int i = 0; i < piecesToRender[role]!; i++)
+                Icon(_iconByRole[role], size: 13, color: Colors.grey),
+            const SizedBox(width: 3),
+            Text(
+              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              materialDiff.score > 0 ? '+${materialDiff.score}' : '',
+            ),
+          ],
+        )
         : const SizedBox.shrink();
   }
 }

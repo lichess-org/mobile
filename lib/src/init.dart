@@ -31,8 +31,7 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
-  if (installedVersion == null ||
-      Version.parse(installedVersion) != appVersion) {
+  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 
@@ -62,8 +61,7 @@ Future<void> initializeLocalNotifications(Locale locale) async {
         ],
       ),
     ),
-    onDidReceiveNotificationResponse:
-        NotificationService.onDidReceiveNotificationResponse,
+    onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 }
@@ -74,8 +72,7 @@ Future<void> preloadPieceImages() async {
   BoardPrefs boardPrefs = BoardPrefs.defaults;
   if (storedPrefs != null) {
     try {
-      boardPrefs =
-          BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
+      boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
     } catch (e) {
       _logger.warning('Failed to decode board preferences: $e');
     }
@@ -95,13 +92,10 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
     await DynamicColorPlugin.getCorePalette().then((value) {
       setCorePalette(value);
 
-      if (getCorePalette() != null &&
-          prefs.getString(PrefCategory.board.storageKey) == null) {
+      if (getCorePalette() != null && prefs.getString(PrefCategory.board.storageKey) == null) {
         prefs.setString(
           PrefCategory.board.storageKey,
-          jsonEncode(
-            BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system),
-          ),
+          jsonEncode(BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system)),
         );
       }
     });
@@ -130,17 +124,13 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   final List<DisplayMode> supported = await FlutterDisplayMode.supported;
   final DisplayMode active = await FlutterDisplayMode.active;
 
-  final List<DisplayMode> sameResolution = supported
-      .where(
-        (DisplayMode m) => m.width == active.width && m.height == active.height,
-      )
-      .toList()
-    ..sort(
-      (DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate),
-    );
+  final List<DisplayMode> sameResolution =
+      supported
+          .where((DisplayMode m) => m.width == active.width && m.height == active.height)
+          .toList()
+        ..sort((DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate));
 
-  final DisplayMode mostOptimalMode =
-      sameResolution.isNotEmpty ? sameResolution.first : active;
+  final DisplayMode mostOptimalMode = sameResolution.isNotEmpty ? sameResolution.first : active;
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);

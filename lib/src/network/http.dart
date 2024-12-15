@@ -58,9 +58,10 @@ class HttpClientFactory {
     }
 
     if (Platform.isIOS || Platform.isMacOS) {
-      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-        ..httpAdditionalHeaders = {'User-Agent': userAgent};
+      final config =
+          URLSessionConfiguration.ephemeralSessionConfiguration()
+            ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+            ..httpAdditionalHeaders = {'User-Agent': userAgent};
       return CupertinoClient.fromSessionConfiguration(config);
     }
 
@@ -118,14 +119,8 @@ String userAgent(Ref ref) {
 }
 
 /// Creates a user-agent string with the app version, build number, and device info and possibly the user ID if a user is logged in.
-String makeUserAgent(
-  PackageInfo info,
-  BaseDeviceInfo deviceInfo,
-  String sri,
-  LightUser? user,
-) {
-  final base =
-      'Lichess Mobile/${info.version} as:${user?.id ?? 'anon'} sri:$sri';
+String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, LightUser? user) {
+  final base = 'Lichess Mobile/${info.version} as:${user?.id ?? 'anon'} sri:$sri';
 
   if (deviceInfo is AndroidDeviceInfo) {
     return '$base os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
@@ -180,9 +175,7 @@ class LichessClient implements Client {
       session?.user,
     );
 
-    _logger.info(
-      '${request.method} ${request.url} ${request.headers['User-Agent']}',
-    );
+    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
 
     try {
       final response = await _inner.send(request);
@@ -204,11 +197,7 @@ class LichessClient implements Client {
   Future<void> _checkSessionToken(AuthSessionState session) async {
     final defaultClient = _ref.read(defaultClientProvider);
     final data = await defaultClient
-        .postReadJson(
-          lichessUri('/api/token/test'),
-          mapper: (json) => json,
-          body: session.token,
-        )
+        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
         .timeout(const Duration(seconds: 5));
     if (data[session.token] == null) {
       _logger.fine('Session is not active. Deleting it.');
@@ -233,17 +222,11 @@ class LichessClient implements Client {
   }
 
   @override
-  Future<Response> head(
-    Uri url, {
-    Map<String, String>? headers,
-  }) =>
+  Future<Response> head(Uri url, {Map<String, String>? headers}) =>
       _sendUnstreamed('HEAD', url, headers);
 
   @override
-  Future<Response> get(
-    Uri url, {
-    Map<String, String>? headers,
-  }) =>
+  Future<Response> get(Uri url, {Map<String, String>? headers}) =>
       _sendUnstreamed('GET', url, headers);
 
   @override
@@ -252,16 +235,10 @@ class LichessClient implements Client {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-  }) =>
-      _sendUnstreamed('POST', url, headers, body, encoding);
+  }) => _sendUnstreamed('POST', url, headers, body, encoding);
 
   @override
-  Future<Response> put(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) =>
+  Future<Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) =>
       _sendUnstreamed('PUT', url, headers, body, encoding);
 
   @override
@@ -270,8 +247,7 @@ class LichessClient implements Client {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-  }) =>
-      _sendUnstreamed('PATCH', url, headers, body, encoding);
+  }) => _sendUnstreamed('PATCH', url, headers, body, encoding);
 
   @override
   Future<Response> delete(
@@ -279,8 +255,7 @@ class LichessClient implements Client {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-  }) =>
-      _sendUnstreamed('DELETE', url, headers, body, encoding);
+  }) => _sendUnstreamed('DELETE', url, headers, body, encoding);
 
   @override
   Future<String> read(Uri url, {Map<String, String>? headers}) async {
@@ -332,12 +307,7 @@ class ServerException extends ClientException {
   final int statusCode;
   final Map<String, dynamic>? jsonError;
 
-  ServerException(
-    this.statusCode,
-    super.message,
-    Uri super.url,
-    this.jsonError,
-  );
+  ServerException(this.statusCode, super.message, Uri super.url, this.jsonError);
 }
 
 /// Throws an error if [response] is not successful.
@@ -387,19 +357,13 @@ extension ClientExtension on Client {
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
       _logger.severe('Could not read JSON object as $T: expected an object.');
-      throw ClientException(
-        'Could not read JSON object as $T: expected an object.',
-        url,
-      );
+      throw ClientException('Could not read JSON object as $T: expected an object.', url);
     }
     try {
       return mapper(json);
     } catch (e, st) {
       _logger.severe('Could not read JSON object as $T: $e', e, st);
-      throw ClientException(
-        'Could not read JSON object as $T: $e\n$st',
-        url,
-      );
+      throw ClientException('Could not read JSON object as $T: $e\n$st', url);
     }
   }
 
@@ -419,20 +383,14 @@ extension ClientExtension on Client {
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! List<dynamic>) {
       _logger.severe('Could not read JSON object as List: expected a list.');
-      throw ClientException(
-        'Could not read JSON object as List: expected a list.',
-        url,
-      );
+      throw ClientException('Could not read JSON object as List: expected a list.', url);
     }
 
     final List<T> list = [];
     for (final e in json) {
       if (e is! Map<String, dynamic>) {
         _logger.severe('Could not read JSON object as $T: expected an object.');
-        throw ClientException(
-          'Could not read JSON object as $T: expected an object.',
-          url,
-        );
+        throw ClientException('Could not read JSON object as $T: expected an object.', url);
       }
       try {
         final mapped = mapper(e);
@@ -486,19 +444,13 @@ extension ClientExtension on Client {
       throw ServerException(response.statusCode, '$message.', url, null);
     }
     try {
-      return response.stream
-          .map(utf8.decode)
-          .where((e) => e.isNotEmpty && e != '\n')
-          .map((e) {
+      return response.stream.map(utf8.decode).where((e) => e.isNotEmpty && e != '\n').map((e) {
         final json = jsonDecode(e) as Map<String, dynamic>;
         return mapper(json);
       });
     } catch (e) {
       _logger.severe('Could not read nd-json object as $T.');
-      throw ClientException(
-        'Could not read nd-json object as $T: $e',
-        url,
-      );
+      throw ClientException('Could not read nd-json object as $T: $e', url);
     }
   }
 
@@ -515,25 +467,18 @@ extension ClientExtension on Client {
     Encoding? encoding,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final response =
-        await post(url, headers: headers, body: body, encoding: encoding);
+    final response = await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
       _logger.severe('Could not read json object as $T: expected an object.');
-      throw ClientException(
-        'Could not read json object as $T: expected an object.',
-        url,
-      );
+      throw ClientException('Could not read json object as $T: expected an object.', url);
     }
     try {
       return mapper(json);
     } catch (e, st) {
       _logger.severe('Could not read json as $T: $e', e, st);
-      throw ClientException(
-        'Could not read json as $T: $e',
-        url,
-      );
+      throw ClientException('Could not read json as $T: $e', url);
     }
   }
 
@@ -550,21 +495,17 @@ extension ClientExtension on Client {
     Encoding? encoding,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final response =
-        await post(url, headers: headers, body: body, encoding: encoding);
+    final response = await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
     return _readNdJsonList(response, mapper);
   }
 
-  IList<T> _readNdJsonList<T>(
-    Response response,
-    T Function(Map<String, dynamic>) mapper,
-  ) {
+  IList<T> _readNdJsonList<T>(Response response, T Function(Map<String, dynamic>) mapper) {
     try {
       return IList(
-        LineSplitter.split(utf8.decode(response.bodyBytes))
-            .where((e) => e.isNotEmpty && e != '\n')
-            .map((e) {
+        LineSplitter.split(
+          utf8.decode(response.bodyBytes),
+        ).where((e) => e.isNotEmpty && e != '\n').map((e) {
           final json = jsonDecode(e) as Map<String, dynamic>;
           return mapper(json);
         }),
@@ -600,10 +541,7 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
-  Future<U> withClientCacheFor<U>(
-    Future<U> Function(LichessClient) fn,
-    Duration duration,
-  ) async {
+  Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
     final client = read(lichessClientProvider);

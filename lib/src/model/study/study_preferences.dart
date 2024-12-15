@@ -6,8 +6,7 @@ part 'study_preferences.freezed.dart';
 part 'study_preferences.g.dart';
 
 @riverpod
-class StudyPreferences extends _$StudyPreferences
-    with PreferencesStorage<StudyPrefs> {
+class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.study;
@@ -25,11 +24,7 @@ class StudyPreferences extends _$StudyPreferences
   }
 
   Future<void> toggleShowVariationArrows() {
-    return save(
-      state.copyWith(
-        showVariationArrows: !state.showVariationArrows,
-      ),
-    );
+    return save(state.copyWith(showVariationArrows: !state.showVariationArrows));
   }
 }
 
@@ -37,13 +32,9 @@ class StudyPreferences extends _$StudyPreferences
 class StudyPrefs with _$StudyPrefs implements Serializable {
   const StudyPrefs._();
 
-  const factory StudyPrefs({
-    required bool showVariationArrows,
-  }) = _StudyPrefs;
+  const factory StudyPrefs({required bool showVariationArrows}) = _StudyPrefs;
 
-  static const defaults = StudyPrefs(
-    showVariationArrows: false,
-  );
+  static const defaults = StudyPrefs(showVariationArrows: false);
 
   factory StudyPrefs.fromJson(Map<String, dynamic> json) {
     return _$StudyPrefsFromJson(json);

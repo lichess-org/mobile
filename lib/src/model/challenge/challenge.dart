@@ -23,16 +23,13 @@ abstract mixin class BaseChallenge {
   SideChoice get sideChoice;
   String? get initialFen;
 
-  TimeIncrement? get timeIncrement => clock != null
-      ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds)
-      : null;
+  TimeIncrement? get timeIncrement =>
+      clock != null ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds) : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
-        variant,
-        timeIncrement != null
-            ? Speed.fromTimeIncrement(timeIncrement!)
-            : Speed.correspondence,
-      );
+    variant,
+    timeIncrement != null ? Speed.fromTimeIncrement(timeIncrement!) : Speed.correspondence,
+  );
 }
 
 /// A challenge already created server-side.
@@ -59,8 +56,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     ChallengeDirection? direction,
   }) = _Challenge;
 
-  factory Challenge.fromJson(Map<String, dynamic> json) =>
-      _$ChallengeFromJson(json);
+  factory Challenge.fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
 
   factory Challenge.fromServerJson(Map<String, dynamic> json) {
     return _challengeFromPick(pick(json).required());
@@ -77,30 +73,32 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 
     final time = switch (timeControl) {
       ChallengeTimeControlType.clock => () {
-          final minutes = switch (clock!.time.inSeconds) {
-            15 => '¼',
-            30 => '½',
-            45 => '¾',
-            90 => '1.5',
-            _ => clock!.time.inMinutes,
-          };
-          return '$minutes+${clock!.increment.inSeconds}';
-        }(),
+        final minutes = switch (clock!.time.inSeconds) {
+          15 => '¼',
+          30 => '½',
+          45 => '¾',
+          90 => '1.5',
+          _ => clock!.time.inMinutes,
+        };
+        return '$minutes+${clock!.increment.inSeconds}';
+      }(),
       ChallengeTimeControlType.correspondence => '${l10n.daysPerTurn}: $days',
       ChallengeTimeControlType.unlimited => '∞',
     };
 
     final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
 
-    final sidePiece = sideChoice == SideChoice.black
-        ? '♔ '
-        : sideChoice == SideChoice.white
+    final sidePiece =
+        sideChoice == SideChoice.black
+            ? '♔ '
+            : sideChoice == SideChoice.white
             ? '♚ '
             : '';
 
-    final side = sideChoice == SideChoice.black
-        ? l10n.white
-        : sideChoice == SideChoice.white
+    final side =
+        sideChoice == SideChoice.black
+            ? l10n.white
+            : sideChoice == SideChoice.white
             ? l10n.black
             : l10n.randomColor;
 
@@ -112,15 +110,10 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 
 /// A challenge request to play a game with another user.
 @freezed
-class ChallengeRequest
-    with _$ChallengeRequest, BaseChallenge
-    implements BaseChallenge {
+class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
   const ChallengeRequest._();
 
-  @Assert(
-    'clock != null || days != null',
-    'Either clock or days must be set but not both.',
-  )
+  @Assert('clock != null || days != null', 'Either clock or days must be set but not both.')
   const factory ChallengeRequest({
     required LightUser destUser,
     required Variant variant,
@@ -134,17 +127,16 @@ class ChallengeRequest
 
   @override
   Speed get speed => Speed.fromTimeIncrement(
-        TimeIncrement(
-          clock != null ? clock!.time.inSeconds : 0,
-          clock != null ? clock!.increment.inSeconds : 0,
-        ),
-      );
+    TimeIncrement(
+      clock != null ? clock!.time.inSeconds : 0,
+      clock != null ? clock!.increment.inSeconds : 0,
+    ),
+  );
 
   Map<String, dynamic> get toRequestBody {
     return {
       if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
-      if (clock != null)
-        'clock.increment': clock!.increment.inSeconds.toString(),
+      if (clock != null) 'clock.increment': clock!.increment.inSeconds.toString(),
       if (days != null) 'days': days.toString(),
       'rated': variant == Variant.fromPosition ? 'false' : rated.toString(),
       'variant': variant.name,
@@ -154,24 +146,11 @@ class ChallengeRequest
   }
 }
 
-enum ChallengeDirection {
-  outward,
-  inward,
-}
+enum ChallengeDirection { outward, inward }
 
-enum ChallengeStatus {
-  created,
-  offline,
-  canceled,
-  declined,
-  accepted,
-}
+enum ChallengeStatus { created, offline, canceled, declined, accepted }
 
-enum ChallengeTimeControlType {
-  unlimited,
-  clock,
-  correspondence,
-}
+enum ChallengeTimeControlType { unlimited, clock, correspondence }
 
 enum ChallengeDeclineReason {
   generic,
@@ -187,26 +166,21 @@ enum ChallengeDeclineReason {
   onlyBot;
 
   String label(AppLocalizations l10n) => switch (this) {
-        ChallengeDeclineReason.generic => l10n.challengeDeclineGeneric,
-        ChallengeDeclineReason.later => l10n.challengeDeclineLater,
-        ChallengeDeclineReason.tooFast => l10n.challengeDeclineTooFast,
-        ChallengeDeclineReason.tooSlow => l10n.challengeDeclineTooSlow,
-        ChallengeDeclineReason.timeControl => l10n.challengeDeclineTimeControl,
-        ChallengeDeclineReason.rated => l10n.challengeDeclineRated,
-        ChallengeDeclineReason.casual => l10n.challengeDeclineCasual,
-        ChallengeDeclineReason.standard => l10n.challengeDeclineStandard,
-        ChallengeDeclineReason.variant => l10n.challengeDeclineVariant,
-        ChallengeDeclineReason.noBot => l10n.challengeDeclineNoBot,
-        ChallengeDeclineReason.onlyBot => l10n.challengeDeclineOnlyBot,
-      };
+    ChallengeDeclineReason.generic => l10n.challengeDeclineGeneric,
+    ChallengeDeclineReason.later => l10n.challengeDeclineLater,
+    ChallengeDeclineReason.tooFast => l10n.challengeDeclineTooFast,
+    ChallengeDeclineReason.tooSlow => l10n.challengeDeclineTooSlow,
+    ChallengeDeclineReason.timeControl => l10n.challengeDeclineTimeControl,
+    ChallengeDeclineReason.rated => l10n.challengeDeclineRated,
+    ChallengeDeclineReason.casual => l10n.challengeDeclineCasual,
+    ChallengeDeclineReason.standard => l10n.challengeDeclineStandard,
+    ChallengeDeclineReason.variant => l10n.challengeDeclineVariant,
+    ChallengeDeclineReason.noBot => l10n.challengeDeclineNoBot,
+    ChallengeDeclineReason.onlyBot => l10n.challengeDeclineOnlyBot,
+  };
 }
 
-typedef ChallengeUser = ({
-  LightUser user,
-  int? rating,
-  bool? provisionalRating,
-  int? lagRating,
-});
+typedef ChallengeUser = ({LightUser user, int? rating, bool? provisionalRating, int? lagRating});
 
 extension ChallengeExtension on Pick {
   ChallengeDirection asChallengeDirectionOrThrow() {
@@ -226,9 +200,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeDirection",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeDirection");
   }
 
   ChallengeDirection? asChallengeDirectionOrNull() {
@@ -263,9 +235,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeStatus",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeStatus");
   }
 
   ChallengeStatus? asChallengeStatusOrNull() {
@@ -329,9 +299,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to SideChoice",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to SideChoice");
   }
 
   SideChoice? asSideChoiceOrNull() {
@@ -351,9 +319,11 @@ extension ChallengeExtension on Pick {
     if (value is String) {
       return ChallengeDeclineReason.values.firstWhere(
         (element) => element.name.toLowerCase() == value,
-        orElse: () => throw PickException(
-          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
-        ),
+        orElse:
+            () =>
+                throw PickException(
+                  "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+                ),
       );
     }
     throw PickException(
@@ -379,42 +349,33 @@ Challenge _challengeFromPick(RequiredPick pick) {
     status: pick('status').asChallengeStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
-    timeControl:
-        pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
-    clock: pick('timeControl').letOrThrow(
-      (clockPick) {
-        final time = clockPick('limit').asDurationFromSecondsOrNull();
-        final increment = clockPick('increment').asDurationFromSecondsOrNull();
-        return time != null && increment != null
-            ? (time: time, increment: increment)
-            : null;
-      },
-    ),
+    timeControl: pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
+    clock: pick('timeControl').letOrThrow((clockPick) {
+      final time = clockPick('limit').asDurationFromSecondsOrNull();
+      final increment = clockPick('increment').asDurationFromSecondsOrNull();
+      return time != null && increment != null ? (time: time, increment: increment) : null;
+    }),
     days: pick('timeControl', 'daysPerTurn').asIntOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     sideChoice: pick('color').asSideChoiceOrThrow(),
-    challenger: pick('challenger').letOrNull(
-      (challengerPick) {
-        final challengerUser = pick('challenger').asLightUserOrThrow();
-        return (
-          user: challengerUser,
-          rating: challengerPick('rating').asIntOrNull(),
-          provisionalRating: challengerPick('provisional').asBoolOrNull(),
-          lagRating: challengerPick('lag').asIntOrNull(),
-        );
-      },
-    ),
-    destUser: pick('destUser').letOrNull(
-      (destPick) {
-        final destUser = pick('destUser').asLightUserOrThrow();
-        return (
-          user: destUser,
-          rating: destPick('rating').asIntOrNull(),
-          provisionalRating: destPick('provisional').asBoolOrNull(),
-          lagRating: destPick('lag').asIntOrNull(),
-        );
-      },
-    ),
+    challenger: pick('challenger').letOrNull((challengerPick) {
+      final challengerUser = pick('challenger').asLightUserOrThrow();
+      return (
+        user: challengerUser,
+        rating: challengerPick('rating').asIntOrNull(),
+        provisionalRating: challengerPick('provisional').asBoolOrNull(),
+        lagRating: challengerPick('lag').asIntOrNull(),
+      );
+    }),
+    destUser: pick('destUser').letOrNull((destPick) {
+      final destUser = pick('destUser').asLightUserOrThrow();
+      return (
+        user: destUser,
+        rating: destPick('rating').asIntOrNull(),
+        provisionalRating: destPick('provisional').asBoolOrNull(),
+        lagRating: destPick('lag').asIntOrNull(),
+      );
+    }),
     initialFen: pick('initialFen').asStringOrNull(),
     direction: pick('direction').asChallengeDirectionOrNull(),
     declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),

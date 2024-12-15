@@ -34,13 +34,11 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
       (client) => BroadcastRepository(client).getBroadcasts(page: nextPage),
     );
 
-    state = AsyncData(
-      (
-        active: broadcastList.active,
-        past: broadcastList.past.addAll(broadcastListNewPage.past),
-        nextPage: broadcastListNewPage.nextPage,
-      ),
-    );
+    state = AsyncData((
+      active: broadcastList.active,
+      past: broadcastList.past.addAll(broadcastListNewPage.past),
+      nextPage: broadcastListNewPage.nextPage,
+    ));
   }
 }
 
@@ -50,8 +48,7 @@ Future<BroadcastTournament> broadcastTournament(
   BroadcastTournamentId broadcastTournamentId,
 ) {
   return ref.withClient(
-    (client) =>
-        BroadcastRepository(client).getTournament(broadcastTournamentId),
+    (client) => BroadcastRepository(client).getTournament(broadcastTournamentId),
   );
 }
 
@@ -60,9 +57,7 @@ Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
   Ref ref,
   BroadcastTournamentId tournamentId,
 ) {
-  return ref.withClient(
-    (client) => BroadcastRepository(client).getPlayers(tournamentId),
-  );
+  return ref.withClient((client) => BroadcastRepository(client).getPlayers(tournamentId));
 }
 
 @Riverpod(keepAlive: true)

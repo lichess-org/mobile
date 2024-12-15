@@ -14,18 +14,14 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StudyBottomBar extends ConsumerWidget {
-  const StudyBottomBar({
-    required this.id,
-  });
+  const StudyBottomBar({required this.id});
 
   final StudyId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gamebook = ref.watch(
-      studyControllerProvider(id).select(
-        (s) => s.requireValue.gamebookActive,
-      ),
+      studyControllerProvider(id).select((s) => s.requireValue.gamebookActive),
     );
 
     return gamebook ? _GamebookBottomBar(id: id) : _AnalysisBottomBar(id: id);
@@ -33,9 +29,7 @@ class StudyBottomBar extends ConsumerWidget {
 }
 
 class _AnalysisBottomBar extends ConsumerWidget {
-  const _AnalysisBottomBar({
-    required this.id,
-  });
+  const _AnalysisBottomBar({required this.id});
 
   final StudyId id;
 
@@ -46,12 +40,10 @@ class _AnalysisBottomBar extends ConsumerWidget {
       return const BottomBar(children: []);
     }
 
-    final onGoForward = state.canGoNext
-        ? ref.read(studyControllerProvider(id).notifier).userNext
-        : null;
-    final onGoBack = state.canGoBack
-        ? ref.read(studyControllerProvider(id).notifier).userPrevious
-        : null;
+    final onGoForward =
+        state.canGoNext ? ref.read(studyControllerProvider(id).notifier).userNext : null;
+    final onGoBack =
+        state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
     return BottomBar(
       children: [
@@ -60,9 +52,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
           id: id,
           chapterId: state.study.chapter.id,
           hasNextChapter: state.hasNextChapter,
-          blink: !state.isIntroductoryChapter &&
-              state.isAtEndOfChapter &&
-              state.hasNextChapter,
+          blink: !state.isIntroductoryChapter && state.isAtEndOfChapter && state.hasNextChapter,
         ),
         RepeatButton(
           onLongPress: onGoBack,
@@ -92,9 +82,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
 }
 
 class _GamebookBottomBar extends ConsumerWidget {
-  const _GamebookBottomBar({
-    required this.id,
-  });
+  const _GamebookBottomBar({required this.id});
 
   final StudyId id;
 
@@ -107,77 +95,75 @@ class _GamebookBottomBar extends ConsumerWidget {
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [
-              if (!state.currentNode.isRoot)
-                BottomBarButton(
-                  onTap: ref.read(studyControllerProvider(id).notifier).reset,
-                  icon: Icons.skip_previous,
-                  label: 'Back',
-                  showLabel: true,
-                ),
+            if (!state.currentNode.isRoot)
               BottomBarButton(
-                icon: Icons.help,
-                label: context.l10n.viewTheSolution,
+                onTap: ref.read(studyControllerProvider(id).notifier).reset,
+                icon: Icons.skip_previous,
+                label: 'Back',
                 showLabel: true,
-                onTap: ref
-                    .read(studyControllerProvider(id).notifier)
-                    .showGamebookSolution,
               ),
-            ],
+            BottomBarButton(
+              icon: Icons.help,
+              label: context.l10n.viewTheSolution,
+              showLabel: true,
+              onTap: ref.read(studyControllerProvider(id).notifier).showGamebookSolution,
+            ),
+          ],
           GamebookState.startLesson || GamebookState.correctMove => [
-              BottomBarButton(
-                onTap: ref.read(studyControllerProvider(id).notifier).userNext,
-                icon: Icons.play_arrow,
-                label: context.l10n.studyNext,
-                showLabel: true,
-                blink: state.gamebookComment != null &&
-                    !state.isIntroductoryChapter,
-              ),
-            ],
+            BottomBarButton(
+              onTap: ref.read(studyControllerProvider(id).notifier).userNext,
+              icon: Icons.play_arrow,
+              label: context.l10n.studyNext,
+              showLabel: true,
+              blink: state.gamebookComment != null && !state.isIntroductoryChapter,
+            ),
+          ],
           GamebookState.incorrectMove => [
+            BottomBarButton(
+              onTap: ref.read(studyControllerProvider(id).notifier).userPrevious,
+              label: context.l10n.retry,
+              showLabel: true,
+              icon: Icons.refresh,
+              blink: state.gamebookComment != null,
+            ),
+          ],
+          GamebookState.lessonComplete => [
+            if (!state.isIntroductoryChapter)
+              BottomBarButton(
+                onTap: ref.read(studyControllerProvider(id).notifier).reset,
+                icon: Icons.refresh,
+                label: context.l10n.studyPlayAgain,
+                showLabel: true,
+              ),
+            _NextChapterButton(
+              id: id,
+              chapterId: state.study.chapter.id,
+              hasNextChapter: state.hasNextChapter,
+              blink: !state.isIntroductoryChapter && state.hasNextChapter,
+            ),
+            if (!state.isIntroductoryChapter)
               BottomBarButton(
                 onTap:
-                    ref.read(studyControllerProvider(id).notifier).userPrevious,
-                label: context.l10n.retry,
-                showLabel: true,
-                icon: Icons.refresh,
-                blink: state.gamebookComment != null,
-              ),
-            ],
-          GamebookState.lessonComplete => [
-              if (!state.isIntroductoryChapter)
-                BottomBarButton(
-                  onTap: ref.read(studyControllerProvider(id).notifier).reset,
-                  icon: Icons.refresh,
-                  label: context.l10n.studyPlayAgain,
-                  showLabel: true,
-                ),
-              _NextChapterButton(
-                id: id,
-                chapterId: state.study.chapter.id,
-                hasNextChapter: state.hasNextChapter,
-                blink: !state.isIntroductoryChapter && state.hasNextChapter,
-              ),
-              if (!state.isIntroductoryChapter)
-                BottomBarButton(
-                  onTap: () => pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => AnalysisScreen(
-                      options: AnalysisOptions(
-                        orientation: state.pov,
-                        standalone: (
-                          pgn: state.pgn,
-                          isComputerAnalysisAllowed: true,
-                          variant: state.variant,
-                        ),
-                      ),
+                    () => pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder:
+                          (context) => AnalysisScreen(
+                            options: AnalysisOptions(
+                              orientation: state.pov,
+                              standalone: (
+                                pgn: state.pgn,
+                                isComputerAnalysisAllowed: true,
+                                variant: state.variant,
+                              ),
+                            ),
+                          ),
                     ),
-                  ),
-                  icon: Icons.biotech,
-                  label: context.l10n.analysis,
-                  showLabel: true,
-                ),
-            ],
+                icon: Icons.biotech,
+                label: context.l10n.analysis,
+                showLabel: true,
+              ),
+          ],
         },
       ],
     );
@@ -217,19 +203,18 @@ class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : BottomBarButton(
-            onTap: widget.hasNextChapter
-                ? () {
-                    ref
-                        .read(studyControllerProvider(widget.id).notifier)
-                        .nextChapter();
+          onTap:
+              widget.hasNextChapter
+                  ? () {
+                    ref.read(studyControllerProvider(widget.id).notifier).nextChapter();
                     setState(() => isLoading = true);
                   }
-                : null,
-            icon: Icons.play_arrow,
-            label: context.l10n.studyNextChapter,
-            showLabel: true,
-            blink: widget.blink,
-          );
+                  : null,
+          icon: Icons.play_arrow,
+          label: context.l10n.studyNextChapter,
+          showLabel: true,
+          blink: widget.blink,
+        );
   }
 }
 
@@ -241,24 +226,26 @@ class _ChapterButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBarButton(
-      onTap: () => showAdaptiveBottomSheet<void>(
-        context: context,
-        showDragHandle: true,
-        isScrollControlled: true,
-        isDismissible: true,
-        builder: (_) => DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          maxChildSize: 0.6,
-          snap: true,
-          expand: false,
-          builder: (context, scrollController) {
-            return _StudyChaptersMenu(
-              id: state.study.id,
-              scrollController: scrollController,
-            );
-          },
-        ),
-      ),
+      onTap:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            isDismissible: true,
+            builder:
+                (_) => DraggableScrollableSheet(
+                  initialChildSize: 0.6,
+                  maxChildSize: 0.6,
+                  snap: true,
+                  expand: false,
+                  builder: (context, scrollController) {
+                    return _StudyChaptersMenu(
+                      id: state.study.id,
+                      scrollController: scrollController,
+                    );
+                  },
+                ),
+          ),
       label: context.l10n.studyNbChapters(state.study.chapters.length),
       showLabel: true,
       icon: Icons.menu_book,
@@ -267,10 +254,7 @@ class _ChapterButton extends ConsumerWidget {
 }
 
 class _StudyChaptersMenu extends ConsumerStatefulWidget {
-  const _StudyChaptersMenu({
-    required this.id,
-    required this.scrollController,
-  });
+  const _StudyChaptersMenu({required this.id, required this.scrollController});
 
   final StudyId id;
   final ScrollController scrollController;
@@ -289,10 +273,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
     // Scroll to the current chapter
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentChapterKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentChapterKey.currentContext!,
-          alignment: 0.5,
-        );
+        Scrollable.ensureVisible(currentChapterKey.currentContext!, alignment: 0.5);
       }
     });
 
@@ -309,14 +290,10 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
         const SizedBox(height: 16),
         for (final chapter in state.study.chapters)
           PlatformListTile(
-            key: chapter.id == state.currentChapter.id
-                ? currentChapterKey
-                : null,
+            key: chapter.id == state.currentChapter.id ? currentChapterKey : null,
             title: Text(chapter.name, maxLines: 2),
             onTap: () {
-              ref.read(studyControllerProvider(widget.id).notifier).goToChapter(
-                    chapter.id,
-                  );
+              ref.read(studyControllerProvider(widget.id).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();
             },
             selected: chapter.id == state.currentChapter.id,

@@ -36,9 +36,10 @@ class BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
 
-    final labelFontSize = Theme.of(context).platform == TargetPlatform.iOS
-        ? 11.0
-        : Theme.of(context).textTheme.bodySmall?.fontSize;
+    final labelFontSize =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? 11.0
+            : Theme.of(context).textTheme.bodySmall?.fontSize;
 
     return Semantics(
       container: true,
@@ -49,9 +50,7 @@ class BottomBarButton extends StatelessWidget {
       child: Tooltip(
         excludeFromSemantics: true,
         message: label,
-        triggerMode: showTooltip
-            ? TooltipTriggerMode.longPress
-            : TooltipTriggerMode.manual,
+        triggerMode: showTooltip ? TooltipTriggerMode.longPress : TooltipTriggerMode.manual,
         child: AdaptiveInkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
@@ -65,9 +64,8 @@ class BottomBarButton extends StatelessWidget {
                   _BlinkIcon(
                     badgeLabel: badgeLabel,
                     icon: icon,
-                    color: highlighted
-                        ? primary
-                        : Theme.of(context).iconTheme.color ?? Colors.black,
+                    color:
+                        highlighted ? primary : Theme.of(context).iconTheme.color ?? Colors.black,
                   )
                 else
                   Badge(
@@ -103,11 +101,7 @@ class BottomBarButton extends StatelessWidget {
 }
 
 class _BlinkIcon extends StatefulWidget {
-  const _BlinkIcon({
-    this.badgeLabel,
-    required this.icon,
-    required this.color,
-  });
+  const _BlinkIcon({this.badgeLabel, required this.icon, required this.color});
 
   final String? badgeLabel;
   final IconData icon;
@@ -117,8 +111,7 @@ class _BlinkIcon extends StatefulWidget {
   _BlinkIconState createState() => _BlinkIconState();
 }
 
-class _BlinkIconState extends State<_BlinkIcon>
-    with SingleTickerProviderStateMixin {
+class _BlinkIconState extends State<_BlinkIcon> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
 
@@ -126,20 +119,16 @@ class _BlinkIconState extends State<_BlinkIcon>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
-    _colorAnimation =
-        ColorTween(begin: widget.color, end: null).animate(_controller)
-          ..addStatusListener((status) {
-            if (_controller.status == AnimationStatus.completed) {
-              _controller.reverse();
-            } else if (_controller.status == AnimationStatus.dismissed) {
-              _controller.forward();
-            }
-          });
+    _colorAnimation = ColorTween(begin: widget.color, end: null).animate(_controller)
+      ..addStatusListener((status) {
+        if (_controller.status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (_controller.status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
 
     _controller.forward();
   }
@@ -163,10 +152,7 @@ class _BlinkIconState extends State<_BlinkIcon>
           ),
           isLabelVisible: widget.badgeLabel != null,
           label: widget.badgeLabel != null ? Text(widget.badgeLabel!) : null,
-          child: Icon(
-            widget.icon,
-            color: _colorAnimation.value ?? Colors.transparent,
-          ),
+          child: Icon(widget.icon, color: _colorAnimation.value ?? Colors.transparent),
         );
       },
     );

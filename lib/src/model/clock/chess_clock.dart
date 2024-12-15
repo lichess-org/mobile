@@ -15,9 +15,9 @@ class ChessClock {
     this.emergencyThreshold,
     this.onFlag,
     this.onEmergency,
-  })  : _whiteTime = ValueNotifier(whiteTime),
-        _blackTime = ValueNotifier(blackTime),
-        _activeSide = Side.white;
+  }) : _whiteTime = ValueNotifier(whiteTime),
+       _blackTime = ValueNotifier(blackTime),
+       _activeSide = Side.white;
 
   /// The threshold at which the clock will call [onEmergency] if provided.
   final Duration? emergencyThreshold;
@@ -176,8 +176,7 @@ class ChessClock {
       _shouldPlayEmergencyFeedback = false;
       _nextEmergency = clock.now().add(_emergencyDelay);
       onEmergency?.call(_activeSide);
-    } else if (emergencyThreshold != null &&
-        timeLeft > emergencyThreshold! * 1.5) {
+    } else if (emergencyThreshold != null && timeLeft > emergencyThreshold! * 1.5) {
       _shouldPlayEmergencyFeedback = true;
     }
   }
