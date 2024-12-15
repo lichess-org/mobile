@@ -82,10 +82,10 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final broadcastGameState = ref.watch(
-      broadcastGameProvider(widget.roundId, widget.gameId),
+    final broadcastRoundGameState = ref.watch(
+      broadcastRoundGameProvider(widget.roundId, widget.gameId),
     );
-    final broadcastGamePgn = ref
+    final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
     final title = (widget.title != null)
         ? Text(
@@ -111,7 +111,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             controller: _tabController,
           ),
           AppBarIconButton(
-            onPressed: (broadcastGamePgn.hasValue)
+            onPressed: (broadcastGameState.hasValue)
                 ? () {
                     pushPlatformRoute(
                       context,
@@ -127,7 +127,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           ),
         ],
       ),
-      body: switch ((broadcastGameState, broadcastGamePgn)) {
+      body: switch ((broadcastRoundGameState, broadcastGameState)) {
         (AsyncData(), AsyncData()) => _Body(
             widget.tournamentId,
             widget.roundId,
@@ -397,7 +397,8 @@ class _PlayerWidget extends ConsumerWidget {
     final broadcastGameState = ref
         .watch(broadcastGameControllerProvider(roundId, gameId))
         .requireValue;
-    final game = ref.watch(broadcastGameProvider(roundId, gameId)).requireValue;
+    final game =
+        ref.watch(broadcastRoundGameProvider(roundId, gameId)).requireValue;
 
     final isCursorOnLiveMove =
         broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
