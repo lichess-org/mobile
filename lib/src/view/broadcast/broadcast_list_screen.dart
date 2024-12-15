@@ -257,6 +257,12 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                 ],
               ),
+            const SliverSafeArea(
+              top: false,
+              sliver: SliverToBoxAdapter(
+                child: SizedBox(height: 16.0),
+              ),
+            ),
           ],
         ),
       ),
@@ -477,22 +483,25 @@ class _BroadcastCartState extends State<BroadcastCard> {
                       Padding(
                         padding: kBroadcastGridItemContentPadding,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
                           children: [
                             Text(
                               widget.broadcast.round.name,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: subTitleColor,
+                                letterSpacing: -0.2,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                            const SizedBox(width: 4.0),
-                            Flexible(
+                            const SizedBox(width: 5.0),
+                            Expanded(
                               child: Text(
                                 relativeDate(widget.broadcast.round.startsAt!),
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   color: subTitleColor,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -500,7 +509,6 @@ class _BroadcastCartState extends State<BroadcastCard> {
                               ),
                             ),
                             if (widget.broadcast.isLive) ...[
-                              const Spacer(flex: 3),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

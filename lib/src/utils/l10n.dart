@@ -45,8 +45,8 @@ Text l10nWithWidget<T extends Widget>(
 }
 
 final _dayFormatter = DateFormat.E().add_jm();
-final _monthFormatter = DateFormat.MMMd().add_Hm();
-final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
+final _monthFormatter = DateFormat.MMMd();
+final _dateFormatterWithYear = DateFormat.yMMMd();
 
 String relativeDate(DateTime date) {
   final diff = date.difference(DateTime.now());
@@ -55,9 +55,9 @@ String relativeDate(DateTime date) {
       ? diff.inHours == 0
           ? 'in ${diff.inMinutes} minute${diff.inMinutes > 1 ? 's' : ''}' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
           : 'in ${diff.inHours} hour${diff.inHours > 1 ? 's' : ''}' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
-      : diff.inDays <= 7
+      : diff.inDays.abs() <= 7
           ? _dayFormatter.format(date)
-          : diff.inDays < 365
+          : diff.inDays.abs() < 365
               ? _monthFormatter.format(date)
               : _dateFormatterWithYear.format(date);
 }
