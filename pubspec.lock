@@ -804,7 +804,7 @@ packages:
     source: hosted
     version: "0.1.0"
   image:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: image
       sha256: "599d08e369969bdf83138f5b4e0a7e823d3f992f23b8a64dd626877c37013533"

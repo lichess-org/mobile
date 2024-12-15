@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,15 +16,13 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
-const kBroadcastGridItemContentPadding =
-    EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0);
+const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -122,27 +121,53 @@ class _BodyState extends ConsumerState<_Body> {
       );
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
+
     final screenWidth = MediaQuery.sizeOf(context).width;
     final itemsByRow = screenWidth >= 1200
         ? 3
-        : screenWidth >= 800
+        : screenWidth >= 700
             ? 2
             : 1;
     const loadingItems = 12;
-    final itemsCount = broadcasts.requireValue.past.length +
+    final pastItemsCount = broadcasts.requireValue.past.length +
         (broadcasts.isLoading ? loadingItems : 0);
 
-    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+    final highTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: itemsByRow,
       crossAxisSpacing: 16.0,
       mainAxisSpacing: 16.0,
-      childAspectRatio: 1.4,
+      childAspectRatio: 1.45,
+    );
+
+    final lowTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: itemsByRow + 1,
+      crossAxisSpacing: 16.0,
+      mainAxisSpacing: 16.0,
+      childAspectRatio: screenWidth >= 1200
+          ? 1.4
+          : screenWidth >= 700
+              ? 1.3
+              : 1.0,
     );
 
     final sections = [
-      (context.l10n.broadcastOngoing, broadcasts.value!.active),
-      (context.l10n.broadcastCompleted, broadcasts.value!.past),
+      ('ongoing', context.l10n.broadcastOngoing, broadcasts.value!.active),
+      ('past', context.l10n.broadcastCompleted, broadcasts.value!.past),
     ];
+
+    final activeHighTier = broadcasts.value!.active
+        .where(
+          (broadcast) =>
+              broadcast.tour.tier != null && broadcast.tour.tier! >= 4,
+        )
+        .toList();
+
+    final activeLowTier = broadcasts.value!.active
+        .where(
+          (broadcast) =>
+              broadcast.tour.tier == null || broadcast.tour.tier! < 4,
+        )
+        .toList();
 
     return RefreshIndicator.adaptive(
       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
@@ -150,67 +175,97 @@ class _BodyState extends ConsumerState<_Body> {
           : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          for (final section in sections)
-            SliverMainAxisGroup(
-              key: ValueKey(section),
-              slivers: [
-                if (Theme.of(context).platform == TargetPlatform.iOS)
-                  CupertinoSliverNavigationBar(
-                    automaticallyImplyLeading: false,
-                    leading: null,
-                    largeTitle: AutoSizeText(
-                      section.$1,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      overflow: TextOverflow.ellipsis,
+      child: Shimmer(
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            for (final section in sections)
+              SliverMainAxisGroup(
+                key: ValueKey(section),
+                slivers: [
+                  if (Theme.of(context).platform == TargetPlatform.iOS)
+                    CupertinoSliverNavigationBar(
+                      automaticallyImplyLeading: false,
+                      leading: null,
+                      largeTitle: AutoSizeText(
+                        section.$2,
+                        maxLines: 1,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      transitionBetweenRoutes: false,
+                    )
+                  else
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      title: AutoSizeText(
+                        section.$2,
+                        maxLines: 1,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      pinned: true,
                     ),
-                    transitionBetweenRoutes: false,
-                  )
-                else
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    title: AutoSizeText(
-                      section.$1,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    pinned: true,
-                  ),
-                SliverPadding(
-                  padding: Theme.of(context).platform == TargetPlatform.iOS
-                      ? Styles.horizontalBodyPadding
-                      : Styles.bodySectionPadding,
-                  sliver: SliverGrid.builder(
-                    gridDelegate: gridDelegate,
-                    itemBuilder: (context, index) => (broadcasts.isLoading &&
-                            index >= itemsCount - loadingItems)
-                        ? Shimmer(
-                            child: ShimmerLoading(
-                              isLoading: true,
-                              child: BroadcastGridItem.loading(_worker!),
-                            ),
-                          )
-                        : BroadcastGridItem(
+                  if (section.$1 == 'ongoing') ...[
+                    if (activeHighTier.isNotEmpty)
+                      SliverPadding(
+                        padding:
+                            Theme.of(context).platform == TargetPlatform.iOS
+                                ? Styles.horizontalBodyPadding
+                                : Styles.bodySectionPadding,
+                        sliver: SliverGrid.builder(
+                          gridDelegate: highTierGridDelegate,
+                          itemBuilder: (context, index) => BroadcastCard(
                             worker: _worker!,
-                            broadcast: section.$2[index],
+                            broadcast: activeHighTier[index],
                           ),
-                    itemCount: section.$2.length,
-                  ),
-                ),
-              ],
-            ),
-        ],
+                          itemCount: activeHighTier.length,
+                        ),
+                      ),
+                    if (activeLowTier.isNotEmpty)
+                      SliverPadding(
+                        padding: Styles.bodySectionPadding,
+                        sliver: SliverGrid.builder(
+                          gridDelegate: lowTierGridDelegate,
+                          itemBuilder: (context, index) => BroadcastCard(
+                            worker: _worker!,
+                            broadcast: activeLowTier[index],
+                          ),
+                          itemCount: activeLowTier.length,
+                        ),
+                      ),
+                  ] else
+                    SliverPadding(
+                      padding: Theme.of(context).platform == TargetPlatform.iOS
+                          ? Styles.horizontalBodyPadding
+                          : Styles.bodySectionPadding,
+                      sliver: SliverGrid.builder(
+                        gridDelegate: lowTierGridDelegate,
+                        itemBuilder: (context, index) =>
+                            (broadcasts.isLoading &&
+                                    index >= pastItemsCount - loadingItems)
+                                ? ShimmerLoading(
+                                    isLoading: true,
+                                    child: BroadcastCard.loading(_worker!),
+                                  )
+                                : BroadcastCard(
+                                    worker: _worker!,
+                                    broadcast: section.$3[index],
+                                  ),
+                        itemCount: section.$3.length,
+                      ),
+                    ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class BroadcastGridItem extends StatefulWidget {
-  const BroadcastGridItem({
+class BroadcastCard extends StatefulWidget {
+  const BroadcastCard({
     required this.broadcast,
     required this.worker,
     super.key,
@@ -219,7 +274,7 @@ class BroadcastGridItem extends StatefulWidget {
   final Broadcast broadcast;
   final ImageColorWorker worker;
 
-  const BroadcastGridItem.loading(this.worker)
+  const BroadcastCard.loading(this.worker)
       : broadcast = const Broadcast(
           tour: BroadcastTournamentData(
             id: BroadcastTournamentId(''),
@@ -250,41 +305,36 @@ class BroadcastGridItem extends StatefulWidget {
         );
 
   @override
-  State<BroadcastGridItem> createState() => _BroadcastGridItemState();
+  State<BroadcastCard> createState() => _BroadcastCartState();
 }
 
 typedef _CardColors = ({
   Color primaryContainer,
   Color onPrimaryContainer,
-  Color error,
 });
-final Map<ImageProvider, _CardColors> _colorsCache = {};
+final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
-Future<(_CardColors, Uint8List?)?> _computeImageColors(
+Future<_CardColors?> _computeImageColors(
   ImageColorWorker worker,
-  String imageUrl, [
-  Uint8List? image,
-]) async {
-  final response = await worker.getImageColors(
-    imageUrl,
-    fileExtension: 'webp',
-  );
+  String imageUrl,
+  ByteData imageBytes,
+) async {
+  final response =
+      await worker.getImageColors(imageBytes.buffer.asUint32List());
   if (response != null) {
-    final (:image, :primaryContainer, :onPrimaryContainer, :error) = response;
+    final (:primaryContainer, :onPrimaryContainer) = response;
     final cardColors = (
       primaryContainer: Color(primaryContainer),
       onPrimaryContainer: Color(onPrimaryContainer),
-      error: Color(error),
     );
     _colorsCache[NetworkImage(imageUrl)] = cardColors;
-    return (cardColors, image);
+    return cardColors;
   }
   return null;
 }
 
-class _BroadcastGridItemState extends State<BroadcastGridItem> {
+class _BroadcastCartState extends State<BroadcastCard> {
   _CardColors? _cardColors;
-  ImageProvider? _imageProvider;
   bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
@@ -296,33 +346,30 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final cachedColors = _colorsCache[imageProvider];
-    if (cachedColors != null) {
+    if (_colorsCache.containsKey(imageProvider)) {
       _cardColors = cachedColors;
-      _imageProvider = imageProvider;
-    } else {
-      if (imageUrl != null) {
-        _fetchImageAndColors(NetworkImage(imageUrl!));
-      } else {
-        _imageProvider = kDefaultBroadcastImage;
-      }
+    } else if (imageUrl != null) {
+      _getImageColors(NetworkImage(imageUrl!));
     }
   }
 
-  Future<void> _fetchImageAndColors(NetworkImage provider) async {
+  Future<void> _getImageColors(NetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
       SchedulerBinding.instance.scheduleFrameCallback((_) {
-        scheduleMicrotask(() => _fetchImageAndColors(provider));
+        scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      final response = await _computeImageColors(widget.worker, provider.url);
+      await precacheImage(provider, context);
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      final response =
+          await _computeImageColors(widget.worker, provider.url, imageBytes!);
       if (response != null) {
-        final (cardColors, image) = response;
         if (mounted) {
           setState(() {
-            _imageProvider = image != null ? MemoryImage(image) : imageProvider;
-            _cardColors = cardColors;
+            _cardColors = response;
           });
         }
       }
@@ -349,8 +396,11 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
     final subTitleColor =
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ??
             textShade(context, 0.8);
-    final liveColor = _cardColors?.error ?? LichessColors.red;
-    final isTablet = isTabletOrLarger(context);
+    final bgHsl = HSLColor.fromColor(backgroundColor);
+    final liveHsl = HSLColor.fromColor(LichessColors.red);
+    final liveColor =
+        (bgHsl.lightness <= 0.5 ? liveHsl.withLightness(0.9) : liveHsl)
+            .toColor();
 
     return GestureDetector(
       onTap: () {
@@ -366,154 +416,162 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
       child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.9,
+        opacity: _tapDown ? 1.0 : 0.85,
         duration: const Duration(milliseconds: 100),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             borderRadius: kBroadcastGridItemBorderRadius,
+            color: backgroundColor,
             boxShadow: Theme.of(context).platform == TargetPlatform.iOS
                 ? null
                 : kElevationToShadow[1],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Stack(
             children: [
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: _imageProvider != null
-                    ? Image(
-                        image: _imageProvider!,
-                        frameBuilder: (
-                          context,
-                          child,
-                          frame,
-                          wasSynchronouslyLoaded,
-                        ) {
-                          if (wasSynchronouslyLoaded) {
-                            return child;
-                          }
-                          return AnimatedOpacity(
-                            duration: const Duration(milliseconds: 500),
-                            opacity: frame == null ? 0 : 1,
-                            child: child,
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Image(image: kDefaultBroadcastImage),
-                      )
-                    : const SizedBox.shrink(),
+              ShaderMask(
+                blendMode: BlendMode.dstOut,
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    begin: const Alignment(0.0, 0.5),
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor.withValues(alpha: 0.0),
+                      backgroundColor.withValues(alpha: 1.0),
+                    ],
+                    stops: const [0.5, 1.10],
+                    tileMode: TileMode.clamp,
+                  ).createShader(bounds);
+                },
+                child: AspectRatio(
+                  aspectRatio: 2.0,
+                  child: Image(
+                    image: imageProvider,
+                    frameBuilder: (
+                      context,
+                      child,
+                      frame,
+                      wasSynchronouslyLoaded,
+                    ) {
+                      if (wasSynchronouslyLoaded) {
+                        return child;
+                      }
+                      return AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        opacity: frame == null ? 0 : 1,
+                        child: child,
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Image(image: kDefaultBroadcastImage),
+                  ),
+                ),
               ),
-              Expanded(
-                child: ColoredBox(
-                  color: backgroundColor,
-                  child: Padding(
-                    padding: kBroadcastGridItemContentPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 8.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.broadcast.round.startsAt != null)
+                      Padding(
+                        padding: kBroadcastGridItemContentPadding,
+                        child: Row(
                           children: [
-                            if (widget.broadcast.round.startsAt != null) ...[
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    widget.broadcast.round.name,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: subTitleColor,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  const SizedBox(width: 6.0),
-                                  Text(
-                                    relativeDate(
-                                      widget.broadcast.round.startsAt!,
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: subTitleColor,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                  const Spacer(),
-                                  if (widget.broadcast.isLive)
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.circle,
-                                          size: 16,
-                                          color: liveColor,
-                                          shadows: const [
-                                            Shadow(
-                                              color: Colors.black54,
-                                              offset: Offset(0, 1),
-                                              blurRadius: 2,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        Text(
-                                          'LIVE',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: liveColor,
-                                            shadows: const [
-                                              Shadow(
-                                                color: Colors.black54,
-                                                offset: Offset(0, 1),
-                                                blurRadius: 2,
-                                              ),
-                                            ],
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 2.0),
-                            ],
                             Text(
-                              widget.broadcast.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: titleColor,
-                                fontWeight: FontWeight.bold,
-                                height: 1.0,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (widget.broadcast.tour.information.players !=
-                            null) ...[
-                          SizedBox(height: isTablet ? 0.0 : 8.0),
-                          Flexible(
-                            child: Text(
-                              widget.broadcast.tour.information.players!,
+                              widget.broadcast.round.name,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: subTitleColor,
-                                letterSpacing: -0.2,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                          ),
-                        ],
-                      ],
+                            const SizedBox(width: 4.0),
+                            Flexible(
+                              child: Text(
+                                relativeDate(widget.broadcast.round.startsAt!),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: subTitleColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                            if (widget.broadcast.isLive) ...[
+                              const Spacer(flex: 3),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 16,
+                                    color: liveColor,
+                                    shadows: const [
+                                      Shadow(
+                                        color: Colors.black54,
+                                        offset: Offset(0, 1),
+                                        blurRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 4.0),
+                                  Text(
+                                    'LIVE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: liveColor,
+                                      shadows: const [
+                                        Shadow(
+                                          color: Colors.black54,
+                                          offset: Offset(0, 1),
+                                          blurRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding.add(
+                        const EdgeInsets.symmetric(vertical: 3.0),
+                      ),
+                      child: Text(
+                        widget.broadcast.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: titleColor,
+                          fontWeight: FontWeight.bold,
+                          height: 1.0,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (widget.broadcast.tour.information.players != null)
+                      Padding(
+                        padding: kBroadcastGridItemContentPadding,
+                        child: Text(
+                          widget.broadcast.tour.information.players!,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: subTitleColor,
+                            letterSpacing: -0.2,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
@@ -524,6 +582,7 @@ class _BroadcastGridItemState extends State<BroadcastGridItem> {
   }
 }
 
+/// Pre-cache images and extract colors for broadcasts.
 Future<void> preCacheBroadcastImages(
   BuildContext context, {
   required Iterable<Broadcast> broadcasts,
@@ -534,22 +593,70 @@ Future<void> preCacheBroadcastImages(
     if (imageUrl != null) {
       final provider = NetworkImage(imageUrl);
       await precacheImage(provider, context);
-      final imageStream = provider.resolve(ImageConfiguration.empty);
-      final Completer<Uint8List?> completer = Completer<Uint8List?>();
-      final ImageStreamListener listener = ImageStreamListener(
-        (imageInfo, synchronousCall) async {
-          final bytes = await imageInfo.image.toByteData();
-          if (!completer.isCompleted) {
-            completer.complete(bytes?.buffer.asUint8List());
-          }
-        },
-      );
-      imageStream.addListener(listener);
-      final imageBytes = await completer.future;
-      imageStream.removeListener(listener);
-      if (imageBytes != null) {
-        await _computeImageColors(worker, imageUrl, imageBytes);
-      }
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      await _computeImageColors(worker, imageUrl, imageBytes!);
     }
   }
+}
+
+// Scale image size down to reduce computation time of color extraction.
+Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
+  const double maxDimension = 112.0;
+  final ImageStream stream = imageProvider.resolve(
+    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
+  );
+  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
+  late ImageStreamListener listener;
+  late ui.Image scaledImage;
+  Timer? loadFailureTimeout;
+
+  listener = ImageStreamListener(
+    (ImageInfo info, bool sync) async {
+      loadFailureTimeout?.cancel();
+      stream.removeListener(listener);
+      final ui.Image image = info.image;
+      final int width = image.width;
+      final int height = image.height;
+      double paintWidth = width.toDouble();
+      double paintHeight = height.toDouble();
+      assert(width > 0 && height > 0);
+
+      final bool rescale = width > maxDimension || height > maxDimension;
+      if (rescale) {
+        paintWidth =
+            (width > height) ? maxDimension : (maxDimension / height) * width;
+        paintHeight =
+            (height > width) ? maxDimension : (maxDimension / width) * height;
+      }
+      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(pictureRecorder);
+      paintImage(
+        canvas: canvas,
+        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
+        image: image,
+        filterQuality: FilterQuality.none,
+      );
+
+      final ui.Picture picture = pictureRecorder.endRecording();
+      scaledImage =
+          await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
+      imageCompleter.complete(info.image);
+    },
+    onError: (Object exception, StackTrace? stackTrace) {
+      stream.removeListener(listener);
+      throw Exception('Failed to render image: $exception');
+    },
+  );
+
+  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
+    stream.removeListener(listener);
+    imageCompleter.completeError(
+      TimeoutException('Timeout occurred trying to load image'),
+    );
+  });
+
+  stream.addListener(listener);
+  await imageCompleter.future;
+  return scaledImage;
 }
