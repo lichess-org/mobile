@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const kLichessHost = String.fromEnvironment(
-  'LICHESS_HOST',
-  defaultValue: 'lichess.dev',
-);
+const kLichessHost = String.fromEnvironment('LICHESS_HOST', defaultValue: 'lichess.dev');
 
 const kLichessWSHost = String.fromEnvironment(
   'LICHESS_WS_HOST',
@@ -26,8 +23,7 @@ const kLichessOpeningExplorerHost = String.fromEnvironment(
   defaultValue: 'explorer.lichess.ovh',
 );
 
-const kLichessDevUser =
-    String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
+const kLichessDevUser = String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
 const kLichessClientId = 'lichess_mobile';
@@ -50,9 +46,8 @@ const kFlexGoldenRatioBase = 100000000000;
 const kFlexGoldenRatio = 161803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
-    ? <BoxShadow>[]
-    : kElevationToShadow[1]!;
+final List<BoxShadow> boardShadows =
+    defaultTargetPlatform == TargetPlatform.iOS ? <BoxShadow>[] : kElevationToShadow[1]!;
 
 const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;

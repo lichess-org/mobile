@@ -46,10 +46,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            seek.perf.icon,
-                            color: DefaultTextStyle.of(context).style.color,
-                          ),
+                          Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
                           const SizedBox(width: 8.0),
                           Text(
                             seek.timeIncrement?.display ??
@@ -171,12 +168,7 @@ class ChallengeLoadingContent extends StatelessWidget {
 }
 
 class StandaloneGameLoadingBoard extends StatelessWidget {
-  const StandaloneGameLoadingBoard({
-    this.fen,
-    this.lastMove,
-    this.orientation,
-    super.key,
-  });
+  const StandaloneGameLoadingBoard({this.fen, this.lastMove, this.orientation, super.key});
 
   final String? fen;
   final Side? orientation;
@@ -234,10 +226,7 @@ class LoadGameError extends StatelessWidget {
 
 /// A board that shows a message that a challenge has been declined.
 class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({
-    required this.declineReason,
-    required this.challenge,
-  });
+  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
 
   final String declineReason;
   final Challenge challenge;
@@ -272,10 +261,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                         ),
                         const SizedBox(height: 8.0),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
-                        Text(
-                          declineReason,
-                          style: const TextStyle(fontStyle: FontStyle.italic),
-                        ),
+                        Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
                         if (challenge.destUser != null)
                           Align(
@@ -284,9 +270,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Text(' — '),
-                                UserFullNameWidget(
-                                  user: challenge.destUser?.user,
-                                ),
+                                UserFullNameWidget(user: challenge.destUser?.user),
                                 if (challenge.destUser?.lagRating != null) ...[
                                   const SizedBox(width: 6.0),
                                   LagIndicator(
@@ -329,13 +313,9 @@ class _LobbyNumbers extends ConsumerWidget {
     if (lobbyNumbers == null) {
       return Column(
         children: [
-          Text(
-            context.l10n.nbPlayers(0).replaceAll('0', '...'),
-          ),
+          Text(context.l10n.nbPlayers(0).replaceAll('0', '...')),
           const SizedBox(height: 8.0),
-          Text(
-            context.l10n.nbGamesInPlay(0).replaceAll('0', '...'),
-          ),
+          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '...')),
         ],
       );
     } else {

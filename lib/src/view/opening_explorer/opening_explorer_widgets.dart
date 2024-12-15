@@ -38,17 +38,12 @@ class OpeningNameHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
       child: GestureDetector(
-        onTap: opening.name == context.l10n.startPosition
-            ? null
-            : () => launchUrl(
-                  Uri.parse(
-                    'https://lichess.org/opening/${opening.name}',
-                  ),
-                ),
+        onTap:
+            opening.name == context.l10n.startPosition
+                ? null
+                : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
@@ -87,13 +82,13 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   }) : _isLoading = false;
 
   const OpeningExplorerMoveTable.loading()
-      : _isLoading = true,
-        moves = const IListConst([]),
-        whiteWins = 0,
-        draws = 0,
-        blackWins = 0,
-        isIndexing = false,
-        onMoveSelected = null;
+    : _isLoading = true,
+      moves = const IListConst([]),
+      whiteWins = 0,
+      draws = 0,
+      blackWins = 0,
+      isIndexing = false,
+      onMoveSelected = null;
 
   final IList<OpeningMove> moves;
   final int whiteWins;
@@ -124,9 +119,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       columnWidths: columnWidths,
       children: [
         TableRow(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-          ),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
           children: [
             Padding(
               padding: _kTableRowPadding,
@@ -155,56 +148,49 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
           ],
         ),
-        ...List.generate(
-          moves.length,
-          (int index) {
-            final move = moves.get(index);
-            final percentGames = ((move.games / games) * 100).round();
-            return TableRow(
-              decoration: BoxDecoration(
-                color: index.isEven
-                    ? Theme.of(context).colorScheme.surfaceContainerLow
-                    : Theme.of(context).colorScheme.surfaceContainerHigh,
+        ...List.generate(moves.length, (int index) {
+          final move = moves.get(index);
+          final percentGames = ((move.games / games) * 100).round();
+          return TableRow(
+            decoration: BoxDecoration(
+              color:
+                  index.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+            ),
+            children: [
+              TableRowInkWell(
+                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                child: Padding(padding: _kTableRowPadding, child: Text(move.san)),
               ),
-              children: [
-                TableRowInkWell(
-                  onTap: () =>
-                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: Text(move.san),
+              TableRowInkWell(
+                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                child: Padding(
+                  padding: _kTableRowPadding,
+                  child: Text('${formatNum(move.games)} ($percentGames%)'),
+                ),
+              ),
+              TableRowInkWell(
+                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                child: Padding(
+                  padding: _kTableRowPadding,
+                  child: _WinPercentageChart(
+                    whiteWins: move.white,
+                    draws: move.draws,
+                    blackWins: move.black,
                   ),
                 ),
-                TableRowInkWell(
-                  onTap: () =>
-                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: Text('${formatNum(move.games)} ($percentGames%)'),
-                  ),
-                ),
-                TableRowInkWell(
-                  onTap: () =>
-                      onMoveSelected?.call(NormalMove.fromUci(move.uci)),
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: _WinPercentageChart(
-                      whiteWins: move.white,
-                      draws: move.draws,
-                      blackWins: move.black,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        }),
         if (moves.isNotEmpty)
           TableRow(
             decoration: BoxDecoration(
-              color: moves.length.isEven
-                  ? Theme.of(context).colorScheme.surfaceContainerLow
-                  : Theme.of(context).colorScheme.surfaceContainerHigh,
+              color:
+                  moves.length.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
             ),
             children: [
               Container(
@@ -212,10 +198,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 alignment: Alignment.centerLeft,
                 child: const Icon(Icons.functions),
               ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text('${formatNum(games)} (100%)'),
-              ),
+              Padding(padding: _kTableRowPadding, child: Text('${formatNum(games)} (100%)')),
               Padding(
                 padding: _kTableRowPadding,
                 child: _WinPercentageChart(
@@ -228,27 +211,17 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           )
         else
           TableRow(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerLow),
             children: [
               Padding(
                 padding: _kTableRowPadding,
                 child: Text(
                   String.fromCharCode(Icons.not_interested_outlined.codePoint),
-                  style: TextStyle(
-                    fontFamily: Icons.not_interested_outlined.fontFamily,
-                  ),
+                  style: TextStyle(fontFamily: Icons.not_interested_outlined.fontFamily),
                 ),
               ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Text(context.l10n.noGameFound),
-              ),
-              const Padding(
-                padding: _kTableRowPadding,
-                child: SizedBox.shrink(),
-              ),
+              Padding(padding: _kTableRowPadding, child: Text(context.l10n.noGameFound)),
+              const Padding(padding: _kTableRowPadding, child: SizedBox.shrink()),
             ],
           ),
       ],
@@ -307,16 +280,13 @@ class IndexingIndicator extends StatefulWidget {
   State<IndexingIndicator> createState() => _IndexingIndicatorState();
 }
 
-class _IndexingIndicatorState extends State<IndexingIndicator>
-    with TickerProviderStateMixin {
+class _IndexingIndicatorState extends State<IndexingIndicator> with TickerProviderStateMixin {
   late AnimationController controller;
 
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..addListener(() {
+    controller = AnimationController(vsync: this, duration: const Duration(seconds: 3))
+      ..addListener(() {
         setState(() {});
       });
     controller.repeat();
@@ -354,9 +324,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
       child: child,
     );
   }
@@ -376,12 +344,10 @@ class OpeningExplorerGameTile extends ConsumerStatefulWidget {
   final int ply;
 
   @override
-  ConsumerState<OpeningExplorerGameTile> createState() =>
-      _OpeningExplorerGameTileState();
+  ConsumerState<OpeningExplorerGameTile> createState() => _OpeningExplorerGameTileState();
 }
 
-class _OpeningExplorerGameTileState
-    extends ConsumerState<OpeningExplorerGameTile> {
+class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTile> {
   @override
   Widget build(BuildContext context) {
     const widthResultBox = 50.0;
@@ -394,11 +360,12 @@ class _OpeningExplorerGameTileState
         onTap: () {
           pushPlatformRoute(
             context,
-            builder: (_) => ArchivedGameScreen(
-              gameId: widget.game.id,
-              orientation: Side.white,
-              initialCursor: widget.ply,
-            ),
+            builder:
+                (_) => ArchivedGameScreen(
+                  gameId: widget.game.id,
+                  orientation: Side.white,
+                  initialCursor: widget.ply,
+                ),
           );
         },
         child: Row(
@@ -416,14 +383,8 @@ class _OpeningExplorerGameTileState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.game.white.name,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    widget.game.black.name,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(widget.game.white.name, overflow: TextOverflow.ellipsis),
+                  Text(widget.game.black.name, overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
@@ -440,9 +401,7 @@ class _OpeningExplorerGameTileState
                     child: const Text(
                       '1-0',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(color: Colors.black),
                     ),
                   )
                 else if (widget.game.winner == 'black')
@@ -456,9 +415,7 @@ class _OpeningExplorerGameTileState
                     child: const Text(
                       '0-1',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(color: Colors.white),
                     ),
                   )
                 else
@@ -472,18 +429,14 @@ class _OpeningExplorerGameTileState
                     child: const Text(
                       '½-½',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 if (widget.game.month != null) ...[
                   const SizedBox(width: 10.0),
                   Text(
                     widget.game.month!,
-                    style: const TextStyle(
-                      fontFeatures: [FontFeature.tabularFigures()],
-                    ),
+                    style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
                   ),
                 ],
                 if (widget.game.speed != null) ...[
@@ -510,8 +463,7 @@ class _WinPercentageChart extends StatelessWidget {
   final int draws;
   final int blackWins;
 
-  int percentGames(int games) =>
-      ((games / (whiteWins + draws + blackWins)) * 100).round();
+  int percentGames(int games) => ((games / (whiteWins + draws + blackWins)) * 100).round();
   String label(int percent) => percent < 20 ? '' : '$percent%';
 
   @override

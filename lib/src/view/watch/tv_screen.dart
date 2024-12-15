@@ -27,8 +27,7 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> {
-  TvControllerProvider get _tvGameCtrl =>
-      tvControllerProvider(widget.channel, widget.initialGame);
+  TvControllerProvider get _tvGameCtrl => tvControllerProvider(widget.channel, widget.initialGame);
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
@@ -47,9 +46,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text('${widget.channel.label} TV'),
-          actions: const [
-            ToggleSoundButton(),
-          ],
+          actions: const [ToggleSoundButton()],
         ),
         body: _Body(
           widget.channel,
@@ -86,47 +83,46 @@ class _Body extends ConsumerWidget {
             child: asyncGame.when(
               data: (gameState) {
                 final game = gameState.game;
-                final position =
-                    gameState.game.positionAt(gameState.stepCursor);
+                final position = gameState.game.positionAt(gameState.stepCursor);
 
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
-                  clock: gameState.game.clock != null
-                      ? CountdownClockBuilder(
-                          key: blackClockKey,
-                          timeLeft: gameState.game.clock!.black,
-                          delay: gameState.game.clock!.lag ??
-                              const Duration(milliseconds: 10),
-                          clockUpdatedAt: gameState.game.clock!.at,
-                          active: gameState.activeClockSide == Side.black,
-                          builder: (context, timeLeft) {
-                            return Clock(
-                              timeLeft: timeLeft,
-                              active: gameState.activeClockSide == Side.black,
-                            );
-                          },
-                        )
-                      : null,
+                  clock:
+                      gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                            key: blackClockKey,
+                            timeLeft: gameState.game.clock!.black,
+                            delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                            clockUpdatedAt: gameState.game.clock!.at,
+                            active: gameState.activeClockSide == Side.black,
+                            builder: (context, timeLeft) {
+                              return Clock(
+                                timeLeft: timeLeft,
+                                active: gameState.activeClockSide == Side.black,
+                              );
+                            },
+                          )
+                          : null,
                   materialDiff: game.lastMaterialDiffAt(Side.black),
                 );
                 final whitePlayerWidget = GamePlayer(
                   player: game.white.setOnGame(true),
-                  clock: gameState.game.clock != null
-                      ? CountdownClockBuilder(
-                          key: whiteClockKey,
-                          timeLeft: gameState.game.clock!.white,
-                          clockUpdatedAt: gameState.game.clock!.at,
-                          delay: gameState.game.clock!.lag ??
-                              const Duration(milliseconds: 10),
-                          active: gameState.activeClockSide == Side.white,
-                          builder: (context, timeLeft) {
-                            return Clock(
-                              timeLeft: timeLeft,
-                              active: gameState.activeClockSide == Side.white,
-                            );
-                          },
-                        )
-                      : null,
+                  clock:
+                      gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                            key: whiteClockKey,
+                            timeLeft: gameState.game.clock!.white,
+                            clockUpdatedAt: gameState.game.clock!.at,
+                            delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                            active: gameState.activeClockSide == Side.white,
+                            builder: (context, timeLeft) {
+                              return Clock(
+                                timeLeft: timeLeft,
+                                active: gameState.activeClockSide == Side.white,
+                              );
+                            },
+                          )
+                          : null,
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
 
@@ -136,31 +132,25 @@ class _Body extends ConsumerWidget {
                   boardSettingsOverrides: const BoardSettingsOverrides(
                     animationDuration: Duration.zero,
                   ),
-                  topTable: gameState.orientation == Side.white
-                      ? blackPlayerWidget
-                      : whitePlayerWidget,
-                  bottomTable: gameState.orientation == Side.white
-                      ? whitePlayerWidget
-                      : blackPlayerWidget,
-                  moves: game.steps
-                      .skip(1)
-                      .map((e) => e.sanMove!.san)
-                      .toList(growable: false),
+                  topTable:
+                      gameState.orientation == Side.white ? blackPlayerWidget : whitePlayerWidget,
+                  bottomTable:
+                      gameState.orientation == Side.white ? whitePlayerWidget : blackPlayerWidget,
+                  moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                   currentMoveIndex: gameState.stepCursor,
                   lastMove: game.moveAt(gameState.stepCursor),
                 );
               },
-              loading: () => const BoardTable(
-                topTable: kEmptyWidget,
-                bottomTable: kEmptyWidget,
-                orientation: Side.white,
-                fen: kEmptyFEN,
-                showMoveListPlaceholder: true,
-              ),
+              loading:
+                  () => const BoardTable(
+                    topTable: kEmptyWidget,
+                    bottomTable: kEmptyWidget,
+                    orientation: Side.white,
+                    fen: kEmptyFEN,
+                    showMoveListPlaceholder: true,
+                  ),
               error: (err, stackTrace) {
-                debugPrint(
-                  'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
-                );
+                debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
                 return const BoardTable(
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
@@ -173,20 +163,14 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(
-          tvChannel: channel,
-          game: initialGame,
-        ),
+        _BottomBar(tvChannel: channel, game: initialGame),
       ],
     );
   }
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.tvChannel,
-    required this.game,
-  });
+  const _BottomBar({required this.tvChannel, required this.game});
   final TvChannel tvChannel;
   final (GameId id, Side orientation)? game;
 
@@ -200,42 +184,34 @@ class _BottomBar extends ConsumerWidget {
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         RepeatButton(
-          onLongPress: ref
-                  .read(tvControllerProvider(tvChannel, game).notifier)
-                  .canGoBack()
-              ? () => _moveBackward(ref)
-              : null,
+          onLongPress:
+              ref.read(tvControllerProvider(tvChannel, game).notifier).canGoBack()
+                  ? () => _moveBackward(ref)
+                  : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
-            onTap: ref
-                    .read(
-                      tvControllerProvider(tvChannel, game).notifier,
-                    )
-                    .canGoBack()
-                ? () => _moveBackward(ref)
-                : null,
+            onTap:
+                ref.read(tvControllerProvider(tvChannel, game).notifier).canGoBack()
+                    ? () => _moveBackward(ref)
+                    : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
         ),
         RepeatButton(
-          onLongPress: ref
-                  .read(tvControllerProvider(tvChannel, game).notifier)
-                  .canGoForward()
-              ? () => _moveForward(ref)
-              : null,
+          onLongPress:
+              ref.read(tvControllerProvider(tvChannel, game).notifier).canGoForward()
+                  ? () => _moveForward(ref)
+                  : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             label: context.l10n.next,
-            onTap: ref
-                    .read(
-                      tvControllerProvider(tvChannel, game).notifier,
-                    )
-                    .canGoForward()
-                ? () => _moveForward(ref)
-                : null,
+            onTap:
+                ref.read(tvControllerProvider(tvChannel, game).notifier).canGoForward()
+                    ? () => _moveForward(ref)
+                    : null,
             showTooltip: false,
           ),
         ),

@@ -9,8 +9,7 @@ class LichessColors {
   // http://mmbitson.com
 
   // primary: blue
-  static const MaterialColor primary =
-      MaterialColor(_primaryPrimaryValue, <int, Color>{
+  static const MaterialColor primary = MaterialColor(_primaryPrimaryValue, <int, Color>{
     50: Color(0xFFE4EFF9),
     100: Color(0xFFBBD7F1),
     200: Color(0xFF8DBCE8),
@@ -25,8 +24,7 @@ class LichessColors {
   static const int _primaryPrimaryValue = 0xFF1B78D0;
 
   // secondary: green
-  static const MaterialColor secondary =
-      MaterialColor(_secondaryPrimaryValue, <int, Color>{
+  static const MaterialColor secondary = MaterialColor(_secondaryPrimaryValue, <int, Color>{
     50: Color(0xFFECF3E5),
     100: Color(0xFFD0E0BD),
     200: Color(0xFFB1CC92),
@@ -41,8 +39,7 @@ class LichessColors {
   static const int _secondaryPrimaryValue = 0xFF629924;
 
   // accent: orange
-  static const MaterialColor accent =
-      MaterialColor(_accentPrimaryValue, <int, Color>{
+  static const MaterialColor accent = MaterialColor(_accentPrimaryValue, <int, Color>{
     50: Color(0xFFFAEAE0),
     100: Color(0xFFF3CAB3),
     200: Color(0xFFEBA780),

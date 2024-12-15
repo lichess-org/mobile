@@ -34,10 +34,7 @@ import 'tree_view.dart';
 final _logger = Logger('AnalysisScreen');
 
 class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({
-    required this.options,
-    this.enableDrawingShapes = true,
-  });
+  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 
@@ -62,11 +59,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       if (widget.options.gameId != null) AnalysisTab.summary,
     ];
 
-    _tabController = TabController(
-      vsync: this,
-      initialIndex: 1,
-      length: tabs.length,
-    );
+    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
   }
 
   @override
@@ -84,10 +77,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
     final appBarActions = [
       if (prefs.enableComputerAnalysis)
         EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
-      AppBarAnalysisTabIndicator(
-        tabs: tabs,
-        controller: _tabController,
-      ),
+      AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
           pushPlatformRoute(
@@ -105,10 +95,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       case AsyncData(:final value):
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBar: PlatformAppBar(
-            title: _Title(variant: value.variant),
-            actions: appBarActions,
-          ),
+          appBar: PlatformAppBar(title: _Title(variant: value.variant), actions: appBarActions),
           body: _Body(
             options: widget.options,
             controller: _tabController,
@@ -146,10 +133,7 @@ class _Title extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (!excludedIcons.contains(variant)) ...[
-          Icon(variant.icon),
-          const SizedBox(width: 5.0),
-        ],
+        if (!excludedIcons.contains(variant)) ...[Icon(variant.icon), const SizedBox(width: 5.0)],
         Flexible(
           child: AutoSizeText(
             context.l10n.analysis,
@@ -164,11 +148,7 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({
-    required this.options,
-    required this.controller,
-    required this.enableDrawingShapes,
-  });
+  const _Body({required this.options, required this.controller, required this.enableDrawingShapes});
 
   final TabController controller;
   final AnalysisOptions options;
@@ -189,51 +169,49 @@ class _Body extends ConsumerWidget {
 
     return AnalysisLayout(
       tabController: controller,
-      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
-        options,
-        boardSize,
-        borderRadius: borderRadius,
-        enableDrawingShapes: enableDrawingShapes,
-      ),
-      engineGaugeBuilder: hasEval && showEvaluationGauge
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
+      boardBuilder:
+          (context, boardSize, borderRadius) => AnalysisBoard(
+            options,
+            boardSize,
+            borderRadius: borderRadius,
+            enableDrawingShapes: enableDrawingShapes,
+          ),
+      engineGaugeBuilder:
+          hasEval && showEvaluationGauge
+              ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: analysisState.engineGaugeParams,
                     )
-                  : Container(
+                    : Container(
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                       child: EngineGauge(
                         displayMode: EngineGaugeDisplayMode.vertical,
                         params: analysisState.engineGaugeParams,
                       ),
                     );
-            }
-          : null,
-      engineLines: isEngineAvailable && numEvalLines > 0
-          ? EngineLines(
-              onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-              clientEval: currentNode.eval,
-              isGameOver: currentNode.position.isGameOver,
-            )
-          : null,
+              }
+              : null,
+      engineLines:
+          isEngineAvailable && numEvalLines > 0
+              ? EngineLines(
+                onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+                clientEval: currentNode.eval,
+                isGameOver: currentNode.position.isGameOver,
+              )
+              : null,
       bottomBar: _BottomBar(options: options),
       children: [
         OpeningExplorerView(
           position: currentNode.position,
-          opening: kOpeningAllowedVariants.contains(analysisState.variant)
-              ? analysisState.currentNode.isRoot
-                  ? LightOpening(
-                      eco: '',
-                      name: context.l10n.startPosition,
-                    )
-                  : analysisState.currentNode.opening ??
-                      analysisState.currentBranchOpening
-              : null,
+          opening:
+              kOpeningAllowedVariants.contains(analysisState.variant)
+                  ? analysisState.currentNode.isRoot
+                      ? LightOpening(eco: '', name: context.l10n.startPosition)
+                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
+                  : null,
           onMoveSelected: (move) {
             ref.read(ctrlProvider.notifier).onUserMove(move);
           },
@@ -270,8 +248,7 @@ class _BottomBar extends ConsumerWidget {
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         RepeatButton(
-          onLongPress:
-              analysisState.canGoBack ? () => _moveBackward(ref) : null,
+          onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -306,23 +283,18 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
-            ref
-                .read(analysisControllerProvider(options).notifier)
-                .toggleBoard();
+            ref.read(analysisControllerProvider(options).notifier).toggleBoard();
           },
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.boardEditor),
           onPressed: (context) {
-            final analysisState =
-                ref.read(analysisControllerProvider(options)).requireValue;
+            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
             final boardFen = analysisState.position.fen;
             pushPlatformRoute(
               context,
               title: context.l10n.boardEditor,
-              builder: (_) => BoardEditorScreen(
-                initialFen: boardFen,
-              ),
+              builder: (_) => BoardEditorScreen(initialFen: boardFen),
             );
           },
         ),
@@ -339,45 +311,34 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
           onPressed: (_) {
-            final analysisState =
-                ref.read(analysisControllerProvider(options)).requireValue;
-            launchShareDialog(
-              context,
-              text: analysisState.position.fen,
-            );
+            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+            launchShareDialog(context, text: analysisState.position.fen);
           },
         ),
         if (options.gameId != null)
           BottomSheetAction(
-            makeLabel: (context) =>
-                Text(context.l10n.screenshotCurrentPosition),
+            makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
               final gameId = options.gameId!;
-              final analysisState =
-                  ref.read(analysisControllerProvider(options)).requireValue;
+              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
               try {
-                final image =
-                    await ref.read(gameShareServiceProvider).screenshotPosition(
-                          analysisState.pov,
-                          analysisState.position.fen,
-                          analysisState.lastMove,
-                        );
+                final image = await ref
+                    .read(gameShareServiceProvider)
+                    .screenshotPosition(
+                      analysisState.pov,
+                      analysisState.position.fen,
+                      analysisState.lastMove,
+                    );
                 if (context.mounted) {
                   launchShareDialog(
                     context,
                     files: [image],
-                    subject: context.l10n.puzzleFromGameLink(
-                      lichessUri('/$gameId').toString(),
-                    ),
+                    subject: context.l10n.puzzleFromGameLink(lichessUri('/$gameId').toString()),
                   );
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get GIF',
-                    type: SnackBarType.error,
-                  );
+                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
                 }
               }
             },

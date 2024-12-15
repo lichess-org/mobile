@@ -35,9 +35,7 @@ class PlayerScreen extends ConsumerWidget {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.players),
-        ),
+        appBar: PlatformAppBar(title: Text(context.l10n.players)),
         body: _Body(),
       ),
     );
@@ -51,10 +49,7 @@ class _Body extends ConsumerWidget {
 
     return ListView(
       children: [
-        const Padding(
-          padding: Styles.bodySectionPadding,
-          child: _SearchButton(),
-        ),
+        const Padding(padding: Styles.bodySectionPadding, child: _SearchButton()),
         if (session != null) _OnlineFriendsWidget(),
         RatingPrefAware(child: LeaderboardWidget()),
       ],
@@ -72,19 +67,18 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onUserTap(LightUser user) => pushPlatformRoute(
-          context,
-          builder: (ctx) => UserScreen(user: user),
-        );
+    void onUserTap(LightUser user) =>
+        pushPlatformRoute(context, builder: (ctx) => UserScreen(user: user));
 
     return PlatformSearchBar(
       hintText: context.l10n.searchSearch,
       focusNode: AlwaysDisabledFocusNode(),
-      onTap: () => pushPlatformRoute(
-        context,
-        fullscreenDialog: true,
-        builder: (_) => SearchScreen(onUserTap: onUserTap),
-      ),
+      onTap:
+          () => pushPlatformRoute(
+            context,
+            fullscreenDialog: true,
+            builder: (_) => SearchScreen(onUserTap: onUserTap),
+          ),
     );
   }
 }
@@ -98,21 +92,18 @@ class _OnlineFriendsWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           header: Text(context.l10n.nbFriendsOnline(data.length)),
-          headerTrailing: data.isEmpty
-              ? null
-              : NoPaddingTextButton(
-                  onPressed: () => _handleTap(context, data),
-                  child: Text(
-                    context.l10n.more,
+          headerTrailing:
+              data.isEmpty
+                  ? null
+                  : NoPaddingTextButton(
+                    onPressed: () => _handleTap(context, data),
+                    child: Text(context.l10n.more),
                   ),
-                ),
           children: [
             if (data.isEmpty)
               PlatformListTile(
                 title: Text(context.l10n.friends),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                ),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () => _handleTap(context, data),
               ),
             for (final user in data)
@@ -121,13 +112,12 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),
                 ),
-                onTap: () => pushPlatformRoute(
-                  context,
-                  title: user.name,
-                  builder: (_) => UserScreen(
-                    user: user,
-                  ),
-                ),
+                onTap:
+                    () => pushPlatformRoute(
+                      context,
+                      title: user.name,
+                      builder: (_) => UserScreen(user: user),
+                    ),
               ),
           ],
         );
@@ -136,19 +126,15 @@ class _OnlineFriendsWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PlayerScreen] could not load following online users; $error\n $stackTrace',
         );
-        return const Center(
-          child: Text('Could not load online friends'),
-        );
+        return const Center(child: Text('Could not load online friends'));
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 3,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 3, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 

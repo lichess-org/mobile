@@ -34,10 +34,7 @@ class TimeControlModal extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       padding: Styles.bodyPadding,
       children: [
-        Text(
-          context.l10n.timeControl,
-          style: Styles.title,
-        ),
+        Text(context.l10n.timeControl, style: Styles.title),
         const SizedBox(height: 26.0),
         _SectionChoices(
           value,
@@ -47,10 +44,7 @@ class TimeControlModal extends ConsumerWidget {
             const TimeIncrement(60, 1),
             const TimeIncrement(120, 1),
           ],
-          title: const _SectionTitle(
-            title: 'Bullet',
-            icon: LichessIcons.bullet,
-          ),
+          title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
           onSelected: onSelected,
         ),
         const SizedBox(height: 20.0),
@@ -62,10 +56,7 @@ class TimeControlModal extends ConsumerWidget {
             TimeIncrement(300, 0),
             TimeIncrement(300, 3),
           ],
-          title: const _SectionTitle(
-            title: 'Blitz',
-            icon: LichessIcons.blitz,
-          ),
+          title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
           onSelected: onSelected,
         ),
         const SizedBox(height: 20.0),
@@ -77,10 +68,7 @@ class TimeControlModal extends ConsumerWidget {
             TimeIncrement(900, 0),
             TimeIncrement(900, 10),
           ],
-          title: const _SectionTitle(
-            title: 'Rapid',
-            icon: LichessIcons.rapid,
-          ),
+          title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
           onSelected: onSelected,
         ),
         const SizedBox(height: 20.0),
@@ -92,20 +80,14 @@ class TimeControlModal extends ConsumerWidget {
             TimeIncrement(1800, 20),
             TimeIncrement(3600, 0),
           ],
-          title: const _SectionTitle(
-            title: 'Classical',
-            icon: LichessIcons.classical,
-          ),
+          title: const _SectionTitle(title: 'Classical', icon: LichessIcons.classical),
           onSelected: onSelected,
         ),
         const SizedBox(height: 20.0),
         Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-            title: _SectionTitle(
-              title: context.l10n.custom,
-              icon: Icons.tune,
-            ),
+            title: _SectionTitle(title: context.l10n.custom, icon: Icons.tune),
             tilePadding: EdgeInsets.zero,
             minTileHeight: 0,
             children: [
@@ -124,23 +106,20 @@ class TimeControlModal extends ConsumerWidget {
                                   value: custom.time,
                                   values: kAvailableTimesInSeconds,
                                   labelBuilder: clockLabelInMinutes,
-                                  onChange: Theme.of(context).platform ==
-                                          TargetPlatform.iOS
-                                      ? (num value) {
-                                          setState(() {
-                                            custom = TimeIncrement(
-                                              value.toInt(),
-                                              custom.increment,
-                                            );
-                                          });
-                                        }
-                                      : null,
+                                  onChange:
+                                      Theme.of(context).platform == TargetPlatform.iOS
+                                          ? (num value) {
+                                            setState(() {
+                                              custom = TimeIncrement(
+                                                value.toInt(),
+                                                custom.increment,
+                                              );
+                                            });
+                                          }
+                                          : null,
                                   onChangeEnd: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        value.toInt(),
-                                        custom.increment,
-                                      );
+                                      custom = TimeIncrement(value.toInt(), custom.increment);
                                     });
                                   },
                                 ),
@@ -150,8 +129,7 @@ class TimeControlModal extends ConsumerWidget {
                                 child: Center(
                                   child: Text(
                                     custom.display,
-                                    style:
-                                        Styles.timeControl.merge(Styles.bold),
+                                    style: Styles.timeControl.merge(Styles.bold),
                                   ),
                                 ),
                               ),
@@ -159,23 +137,17 @@ class TimeControlModal extends ConsumerWidget {
                                 child: NonLinearSlider(
                                   value: custom.increment,
                                   values: kAvailableIncrementsInSeconds,
-                                  onChange: Theme.of(context).platform ==
-                                          TargetPlatform.iOS
-                                      ? (num value) {
-                                          setState(() {
-                                            custom = TimeIncrement(
-                                              custom.time,
-                                              value.toInt(),
-                                            );
-                                          });
-                                        }
-                                      : null,
+                                  onChange:
+                                      Theme.of(context).platform == TargetPlatform.iOS
+                                          ? (num value) {
+                                            setState(() {
+                                              custom = TimeIncrement(custom.time, value.toInt());
+                                            });
+                                          }
+                                          : null,
                                   onChangeEnd: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        custom.time,
-                                        value.toInt(),
-                                      );
+                                      custom = TimeIncrement(custom.time, value.toInt());
                                     });
                                   },
                                 ),
@@ -183,14 +155,9 @@ class TimeControlModal extends ConsumerWidget {
                             ],
                           ),
                           SecondaryButton(
-                            onPressed: custom.isInfinite
-                                ? null
-                                : () => onSelected(custom),
+                            onPressed: custom.isInfinite ? null : () => onSelected(custom),
                             semanticsLabel: 'OK',
-                            child: Text(
-                              context.l10n.mobileOkButton,
-                              style: Styles.bold,
-                            ),
+                            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
                           ),
                         ],
                       );
@@ -221,46 +188,38 @@ class _SectionChoices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final choiceWidgets = choices
-        .mapIndexed((index, choice) {
-          return [
-            Expanded(
-              child: _ChoiceChip(
-                key: ValueKey(choice),
-                label: Text(choice.display, style: Styles.bold),
-                selected: selected == choice,
-                onSelected: (bool selected) {
-                  if (selected) onSelected(choice);
-                },
-              ),
-            ),
-            if (index < choices.length - 1) const SizedBox(width: 10),
-          ];
-        })
-        .flattened
-        .toList();
+    final choiceWidgets =
+        choices
+            .mapIndexed((index, choice) {
+              return [
+                Expanded(
+                  child: _ChoiceChip(
+                    key: ValueKey(choice),
+                    label: Text(choice.display, style: Styles.bold),
+                    selected: selected == choice,
+                    onSelected: (bool selected) {
+                      if (selected) onSelected(choice);
+                    },
+                  ),
+                ),
+                if (index < choices.length - 1) const SizedBox(width: 10),
+              ];
+            })
+            .flattened
+            .toList();
 
     if (choices.length < 4) {
       final placeHolders = [
         const [SizedBox(width: 10)],
         for (int i = choices.length; i < 4; i++)
-          [
-            const Expanded(child: SizedBox(width: 10)),
-            if (i < 3) const SizedBox(width: 10),
-          ],
+          [const Expanded(child: SizedBox(width: 10)), if (i < 3) const SizedBox(width: 10)],
       ];
       choiceWidgets.addAll(placeHolders.flattened);
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        title,
-        const SizedBox(height: 10),
-        Row(
-          children: choiceWidgets,
-        ),
-      ],
+      children: [title, const SizedBox(height: 10), Row(children: choiceWidgets)],
     );
   }
 }
@@ -281,36 +240,24 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoColors.secondarySystemGroupedBackground
-                .resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainerHighest,
+        color:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context)
+                : Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        border: selected
-            ? Border.fromBorderSide(
-                BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2.0,
-                ),
-              )
-            : const Border.fromBorderSide(
-                BorderSide(
-                  color: Colors.transparent,
-                  width: 2.0,
-                ),
-              ),
+        border:
+            selected
+                ? Border.fromBorderSide(
+                  BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
+                )
+                : const Border.fromBorderSide(BorderSide(color: Colors.transparent, width: 2.0)),
       ),
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => onSelected(true),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Center(
-            child: DefaultTextStyle.merge(
-              style: Styles.timeControl,
-              child: label,
-            ),
-          ),
+          child: Center(child: DefaultTextStyle.merge(style: Styles.timeControl, child: label)),
         ),
       ),
     );
@@ -326,17 +273,12 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconTheme(
-      data: CupertinoIconThemeData(
-        color: CupertinoColors.systemGrey.resolveFrom(context),
-      ),
+      data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
       child: Row(
         children: [
           Icon(icon, size: 20.0),
           const SizedBox(width: 10),
-          Text(
-            title,
-            style: _titleStyle,
-          ),
+          Text(title, style: _titleStyle),
         ],
       ),
     );

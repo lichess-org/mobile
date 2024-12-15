@@ -13,8 +13,7 @@ import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/streak') {
-    return mockResponse(
-      '''
+    return mockResponse('''
       {
         "game": {
           "id": "Xndtxsoa",
@@ -65,12 +64,9 @@ final client = MockClient((request) {
         },
         "streak": "MptxK 4CZxz kcN3a 1I9Ly kOx90 eTrkO G0tpf iwTxQ tg2IU TovLC 0miTI Jpmkf 8VqjS XftoM 70UGG lm8O8 R4Y49 76Llk XZOyq QUgzo dACnQ qFjLp ytKo4 6JIj1 SYz3x kEkib dkvMp Dk0Ln Ok3qk zbRCc fQSVb vmDLx VJw06 3up01 X9aHm EicvD 5lhwD fTJE0 08LZy XAsVO TVB8s VCLTk KH6zc CaByR E2dUi JOxJg Agtzu KwbY9 Rmcf7 k9jGo 0zTgd 5YCx8 BtqDp DQdRO ytwPd sHqWB 1WunB Fovke mmMDN UNcwu isI02 3sIJB mnuzi 4aaRt Jvkvj UsXO2 kLfmz gsC1H TADGH a0Jz6 oUPR2 1IOBO 9PUdj haSH3 wn5by 22fL0 CR3Wu FaBtd DorJu unTls qeu0r xo40H DssQ9 D6s6S hkWx4 GF7s5 rzREu vhsbo s1haw j9ckI ekJnL TvcVB a7T4o 1olwh pydoy rGs3G k5ljZ gowEl UNXOV XkaUw 10lYO 6Ufqg Q45go KxGe3 vgwIt lqoaX nBtOq uAo3e jsbpu JLtdz TGUcX PobG5 ScDAL YPEfv o52sU FV0lM evQzq qAny0 dkDJi 0AUNz uzI6q kh13r Rubxa ecY6Q T9EL2 TmBka DPT5t qmzEf dyo0g MsGbE hPkmk 3wZBI 7kpeT 6EKGn kozHL Vnaiz 6DzDP HQ5RQ 7Ilyn 9n7Pz PwtXo kgMG2 J7gat gXcxs 4YVfC e8jGb m71Kb 9OrKY z530i"
       }
-      ''',
-      200,
-    );
+      ''', 200);
   } else if (request.url.path == '/api/puzzle/4CZxz') {
-    return mockResponse(
-      '''
+    return mockResponse('''
       {
         "game": {
           "id": "MQOxq7Jl",
@@ -114,12 +110,9 @@ final client = MockClient((request) {
           "initialPly": 87
         }
       }
-      ''',
-      200,
-    );
+      ''', 200);
   } else if (request.url.path == '/api/puzzle/kcN3a') {
-    return mockResponse(
-      '''
+    return mockResponse('''
       {
         "game": {
           "id": "bEuHKQSa",
@@ -161,12 +154,9 @@ final client = MockClient((request) {
           "initialPly": 36
         }
       }
-      ''',
-      200,
-    );
+      ''', 200);
   } else if (request.url.path == '/api/puzzle/1I9Ly') {
-    return mockResponse(
-      '''
+    return mockResponse('''
       {
         "game": {
           "id": "DTmg6BsX",
@@ -210,58 +200,48 @@ final client = MockClient((request) {
           "initialPly": 22
         }
       }
-      ''',
-      200,
-    );
+      ''', 200);
   }
   return mockResponse('', 404);
 });
 
 void main() {
   group('StreakScreen', () {
-    testWidgets(
-      'meets accessibility guidelines',
-      (tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets('meets accessibility guidelines', (tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const StreakScreen(),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    }, variant: kPlatformVariant);
 
     testWidgets('Score is saved when exiting screen', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Builder(
-          builder: (context) => PlatformScaffold(
-            appBar: const PlatformAppBar(title: Text('Test Streak Screen')),
-            body: FatButton(
-              semanticsLabel: 'Start Streak',
-              child: const Text('Start Streak'),
-              onPressed: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => const StreakScreen(),
+          builder:
+              (context) => PlatformScaffold(
+                appBar: const PlatformAppBar(title: Text('Test Streak Screen')),
+                body: FatButton(
+                  semanticsLabel: 'Start Streak',
+                  child: const Text('Start Streak'),
+                  onPressed:
+                      () => pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => const StreakScreen(),
+                      ),
+                ),
               ),
-            ),
-          ),
         ),
-        overrides: [
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
 

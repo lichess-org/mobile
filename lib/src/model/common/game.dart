@@ -7,8 +7,8 @@ enum SideChoice {
   black;
 
   String label(AppLocalizations l10n) => switch (this) {
-        SideChoice.white => l10n.white,
-        SideChoice.random => l10n.randomColor,
-        SideChoice.black => l10n.black,
-      };
+    SideChoice.white => l10n.white,
+    SideChoice.random => l10n.randomColor,
+    SideChoice.black => l10n.black,
+  };
 }

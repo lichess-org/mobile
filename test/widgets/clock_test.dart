@@ -5,26 +5,17 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 
 void main() {
   group('Clock', () {
-    testWidgets('shows milliseconds when time < 1s and active is false',
-        (WidgetTester tester) async {
+    testWidgets('shows milliseconds when time < 1s and active is false', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Clock(
-            timeLeft: Duration(seconds: 1),
-            active: true,
-          ),
-        ),
+        const MaterialApp(home: Clock(timeLeft: Duration(seconds: 1), active: true)),
       );
 
       expect(find.text('0:01.0', findRichText: true), findsOneWidget);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Clock(
-            timeLeft: Duration(milliseconds: 988),
-            active: false,
-          ),
-        ),
+        const MaterialApp(home: Clock(timeLeft: Duration(milliseconds: 988), active: false)),
         duration: const Duration(milliseconds: 1000),
       );
 
@@ -77,8 +68,7 @@ void main() {
       expect(find.text('0:00.0'), findsOneWidget);
     });
 
-    testWidgets('update time by changing widget configuration',
-        (WidgetTester tester) async {
+    testWidgets('update time by changing widget configuration', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
@@ -115,8 +105,7 @@ void main() {
       expect(find.text('0:00.0'), findsOneWidget);
     });
 
-    testWidgets('do not update if clockUpdatedAt is same',
-        (WidgetTester tester) async {
+    testWidgets('do not update if clockUpdatedAt is same', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(

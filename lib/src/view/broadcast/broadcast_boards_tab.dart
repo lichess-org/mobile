@@ -24,17 +24,15 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({
-    required this.roundId,
-    required this.broadcastTitle,
-  });
+  const BroadcastBoardsTab({required this.roundId, required this.broadcastTitle});
 
   final BroadcastRoundId roundId;
   final String broadcastTitle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
+    final edgeInsets =
+        MediaQuery.paddingOf(context) -
         (Theme.of(context).platform == TargetPlatform.iOS
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
@@ -44,8 +42,9 @@ class BroadcastBoardsTab extends ConsumerWidget {
     return SliverPadding(
       padding: edgeInsets,
       sliver: switch (round) {
-        AsyncData(:final value) => value.games.isEmpty
-            ? SliverPadding(
+        AsyncData(:final value) =>
+          value.games.isEmpty
+              ? SliverPadding(
                 padding: const EdgeInsets.only(top: 16.0),
                 sliver: SliverToBoxAdapter(
                   child: Column(
@@ -57,22 +56,16 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   ),
                 ),
               )
-            : BroadcastPreview(
+              : BroadcastPreview(
                 games: value.games.values.toIList(),
                 roundId: roundId,
                 broadcastTitle: broadcastTitle,
                 roundTitle: value.round.name,
               ),
         AsyncError(:final error) => SliverFillRemaining(
-            child: Center(
-              child: Text('Could not load broadcast: $error'),
-            ),
-          ),
-        _ => const SliverFillRemaining(
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          ),
+          child: Center(child: Text('Could not load broadcast: $error')),
+        ),
+        _ => const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
       },
     );
   }
@@ -86,11 +79,9 @@ class BroadcastPreview extends StatelessWidget {
     required this.roundTitle,
   });
 
-  const BroadcastPreview.loading({
-    required this.roundId,
-    required this.broadcastTitle,
-  })  : games = null,
-        roundTitle = null;
+  const BroadcastPreview.loading({required this.roundId, required this.broadcastTitle})
+    : games = null,
+      roundTitle = null;
 
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
@@ -108,7 +99,8 @@ class BroadcastPreview extends StatelessWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWidth = (screenWidth -
+    final boardWidth =
+        (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
@@ -143,12 +135,13 @@ class BroadcastPreview extends StatelessWidget {
               pushPlatformRoute(
                 context,
                 title: roundTitle,
-                builder: (context) => BroadcastGameScreen(
-                  roundId: roundId,
-                  gameId: game.id,
-                  broadcastTitle: broadcastTitle,
-                  roundTitle: roundTitle!,
-                ),
+                builder:
+                    (context) => BroadcastGameScreen(
+                      roundId: roundId,
+                      gameId: game.id,
+                      broadcastTitle: broadcastTitle,
+                      roundTitle: roundTitle!,
+                    ),
               );
             },
             orientation: Side.white,
@@ -175,9 +168,7 @@ class BroadcastPreview extends StatelessWidget {
 }
 
 class _PlayerWidgetLoading extends StatelessWidget {
-  const _PlayerWidgetLoading({
-    required this.width,
-  });
+  const _PlayerWidgetLoading({required this.width});
 
   final double width;
 
@@ -189,10 +180,7 @@ class _PlayerWidgetLoading extends StatelessWidget {
         padding: _kPlayerWidgetPadding,
         child: Container(
           height: _kPlayerWidgetTextStyle.fontSize,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(5),
-          ),
+          decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(5)),
         ),
       ),
     );
@@ -240,26 +228,26 @@ class _PlayerWidget extends StatelessWidget {
                   (gameStatus == BroadcastResult.draw)
                       ? '½'
                       : (gameStatus == BroadcastResult.whiteWins)
-                          ? side == Side.white
-                              ? '1'
-                              : '0'
-                          : side == Side.black
-                              ? '1'
-                              : '0',
-                  style:
-                      const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                      ? side == Side.white
+                          ? '1'
+                          : '0'
+                      : side == Side.black
+                      ? '1'
+                      : '0',
+                  style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
                 CountdownClockBuilder(
                   timeLeft: player.clock!,
                   active: side == playingSide,
-                  builder: (context, timeLeft) => Text(
-                    timeLeft.toHoursMinutesSeconds(),
-                    style: TextStyle(
-                      color: (side == playingSide) ? Colors.orange[900] : null,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
+                  builder:
+                      (context, timeLeft) => Text(
+                        timeLeft.toHoursMinutesSeconds(),
+                        style: TextStyle(
+                          color: (side == playingSide) ? Colors.orange[900] : null,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
+                      ),
                   tickInterval: const Duration(seconds: 1),
                   clockUpdatedAt: game.updatedClockAt,
                 ),

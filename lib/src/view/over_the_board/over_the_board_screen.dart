@@ -76,8 +76,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
 
-    ref.listen(overTheBoardClockProvider.select((value) => value.flagSide),
-        (previous, flagSide) {
+    ref.listen(overTheBoardClockProvider.select((value) => value.flagSide), (previous, flagSide) {
       if (previous == null && flagSide != null) {
         ref.read(overTheBoardGameControllerProvider.notifier).onFlag(flagSide);
       }
@@ -90,19 +89,18 @@ class _BodyState extends ConsumerState<_Body> {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => OverTheBoardGameResultDialog(
-                game: newGameState.game,
-                onRematch: () {
-                  setState(() {
-                    orientation = orientation.opposite;
-                    ref
-                        .read(overTheBoardGameControllerProvider.notifier)
-                        .rematch();
-                    ref.read(overTheBoardClockProvider.notifier).restart();
-                    Navigator.pop(context);
-                  });
-                },
-              ),
+              builder:
+                  (context) => OverTheBoardGameResultDialog(
+                    game: newGameState.game,
+                    onRematch: () {
+                      setState(() {
+                        orientation = orientation.opposite;
+                        ref.read(overTheBoardGameControllerProvider.notifier).rematch();
+                        ref.read(overTheBoardClockProvider.notifier).restart();
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
               barrierDismissible: true,
             );
           }
@@ -121,40 +119,37 @@ class _BodyState extends ConsumerState<_Body> {
                   key: _boardKey,
                   topTable: _Player(
                     side: orientation.opposite,
-                    upsideDown: !overTheBoardPrefs.flipPiecesAfterMove ||
-                        orientation != gameState.turn,
+                    upsideDown:
+                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                     clockKey: const ValueKey('topClock'),
                   ),
                   bottomTable: _Player(
                     side: orientation,
-                    upsideDown: overTheBoardPrefs.flipPiecesAfterMove &&
-                        orientation != gameState.turn,
+                    upsideDown:
+                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     clockKey: const ValueKey('bottomClock'),
                   ),
                   orientation: orientation,
                   fen: gameState.currentPosition.fen,
                   lastMove: gameState.lastMove,
                   gameData: GameData(
-                    isCheck: boardPreferences.boardHighlights &&
-                        gameState.currentPosition.isCheck,
-                    playerSide: gameState.game.finished
-                        ? PlayerSide.none
-                        : gameState.turn == Side.white
+                    isCheck: boardPreferences.boardHighlights && gameState.currentPosition.isCheck,
+                    playerSide:
+                        gameState.game.finished
+                            ? PlayerSide.none
+                            : gameState.turn == Side.white
                             ? PlayerSide.white
                             : PlayerSide.black,
                     sideToMove: gameState.turn,
                     validMoves: gameState.legalMoves,
-                    onPromotionSelection: ref
-                        .read(overTheBoardGameControllerProvider.notifier)
-                        .onPromotionSelection,
+                    onPromotionSelection:
+                        ref.read(overTheBoardGameControllerProvider.notifier).onPromotionSelection,
                     promotionMove: gameState.promotionMove,
                     onMove: (move, {isDrop}) {
-                      ref.read(overTheBoardClockProvider.notifier).onMove(
-                            newSideToMove: gameState.turn.opposite,
-                          );
                       ref
-                          .read(overTheBoardGameControllerProvider.notifier)
-                          .makeMove(move);
+                          .read(overTheBoardClockProvider.notifier)
+                          .onMove(newSideToMove: gameState.turn.opposite);
+                      ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                     },
                   ),
                   moves: gameState.moves,
@@ -165,9 +160,8 @@ class _BodyState extends ConsumerState<_Body> {
                         overTheBoardPrefs.flipPiecesAfterMove
                             ? PieceOrientationBehavior.sideToPlay
                             : PieceOrientationBehavior.opponentUpsideDown,
-                    pieceAssets: overTheBoardPrefs.symmetricPieces
-                        ? PieceSet.symmetric.assets
-                        : null,
+                    pieceAssets:
+                        overTheBoardPrefs.symmetricPieces ? PieceSet.symmetric.assets : null,
                   ),
                 ),
               ),
@@ -187,9 +181,7 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.onFlipBoard,
-  });
+  const _BottomBar({required this.onFlipBoard});
 
   final VoidCallback onFlipBoard;
 
@@ -215,51 +207,46 @@ class _BottomBar extends ConsumerWidget {
         if (!clock.timeIncrement.isInfinite)
           BottomBarButton(
             label: clock.active ? 'Pause' : 'Resume',
-            onTap: gameState.finished
-                ? null
-                : () {
-                    if (clock.active) {
-                      ref.read(overTheBoardClockProvider.notifier).pause();
-                    } else {
-                      ref
-                          .read(overTheBoardClockProvider.notifier)
-                          .resume(gameState.turn);
-                    }
-                  },
+            onTap:
+                gameState.finished
+                    ? null
+                    : () {
+                      if (clock.active) {
+                        ref.read(overTheBoardClockProvider.notifier).pause();
+                      } else {
+                        ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
+                      }
+                    },
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
         BottomBarButton(
           label: 'Previous',
-          onTap: gameState.canGoBack
-              ? () {
-                  ref
-                      .read(overTheBoardGameControllerProvider.notifier)
-                      .goBack();
-                  if (clock.active) {
-                    ref.read(overTheBoardClockProvider.notifier).switchSide(
-                          newSideToMove: gameState.turn.opposite,
-                          addIncrement: false,
-                        );
+          onTap:
+              gameState.canGoBack
+                  ? () {
+                    ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                    if (clock.active) {
+                      ref
+                          .read(overTheBoardClockProvider.notifier)
+                          .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                    }
                   }
-                }
-              : null,
+                  : null,
           icon: CupertinoIcons.chevron_back,
         ),
         BottomBarButton(
           label: 'Next',
-          onTap: gameState.canGoForward
-              ? () {
-                  ref
-                      .read(overTheBoardGameControllerProvider.notifier)
-                      .goForward();
-                  if (clock.active) {
-                    ref.read(overTheBoardClockProvider.notifier).switchSide(
-                          newSideToMove: gameState.turn.opposite,
-                          addIncrement: false,
-                        );
+          onTap:
+              gameState.canGoForward
+                  ? () {
+                    ref.read(overTheBoardGameControllerProvider.notifier).goForward();
+                    if (clock.active) {
+                      ref
+                          .read(overTheBoardClockProvider.notifier)
+                          .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                    }
                   }
-                }
-              : null,
+                  : null,
           icon: CupertinoIcons.chevron_forward,
         ),
       ],
@@ -268,11 +255,7 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _Player extends ConsumerWidget {
-  const _Player({
-    required this.clockKey,
-    required this.side,
-    required this.upsideDown,
-  });
+  const _Player({required this.clockKey, required this.side, required this.upsideDown});
 
   final Side side;
 
@@ -287,40 +270,35 @@ class _Player extends ConsumerWidget {
     final clock = ref.watch(overTheBoardClockProvider);
 
     final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = brightness == Brightness.dark
-        ? ClockStyle.darkThemeStyle
-        : ClockStyle.lightThemeStyle;
+    final clockStyle =
+        brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
 
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
         player: Player(
           onGame: true,
-          user: LightUser(
-            id: UserId(side.name),
-            name: side.name.capitalize(),
-          ),
+          user: LightUser(id: UserId(side.name), name: side.name.capitalize()),
         ),
-        materialDiff: boardPreferences.materialDifferenceFormat.visible
-            ? gameState.currentMaterialDiff(side)
-            : null,
+        materialDiff:
+            boardPreferences.materialDifferenceFormat.visible
+                ? gameState.currentMaterialDiff(side)
+                : null,
         materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
         shouldLinkToUserProfile: false,
-        clock: clock.timeIncrement.isInfinite
-            ? null
-            : Clock(
-                timeLeft: Duration(
-                  milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds),
+        clock:
+            clock.timeIncrement.isInfinite
+                ? null
+                : Clock(
+                  timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+                  key: clockKey,
+                  active: clock.activeClock == side,
+                  clockStyle: clockStyle,
+                  // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
+                  emergencyThreshold: Duration(
+                    seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
+                  ),
                 ),
-                key: clockKey,
-                active: clock.activeClock == side,
-                clockStyle: clockStyle,
-                // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
-                emergencyThreshold: Duration(
-                  seconds:
-                      (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
-                ),
-              ),
       ),
     );
   }

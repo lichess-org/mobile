@@ -20,10 +20,7 @@ void main() {
         child.position.fen,
         equals('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
       );
-      expect(
-        child.position,
-        equals(Chess.initial.playUnchecked(Move.parse('e2e4')!)),
-      );
+      expect(child.position, equals(Chess.initial.playUnchecked(Move.parse('e2e4')!)));
     });
 
     test('Root.fromPgnGame, flat', () {
@@ -40,8 +37,7 @@ void main() {
       expect(root.position, equals(Chess.initial));
       expect(root.children.length, equals(1));
       expect(root.mainline.length, equals(5));
-      final nodeWithVariation =
-          root.nodeAt(UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5']));
+      final nodeWithVariation = root.nodeAt(UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5']));
       expect(nodeWithVariation.children.length, 2);
       expect(nodeWithVariation.children[1].sanMove.san, equals('Nf6'));
       expect(nodeWithVariation.children[1].children.length, 2);
@@ -53,10 +49,7 @@ void main() {
       final nodeList = root.nodesOn(path).toList();
       expect(nodeList.length, equals(2));
       expect(nodeList[0], equals(root));
-      expect(
-        nodeList[1],
-        equals(root.nodeAt(path) as Branch),
-      );
+      expect(nodeList[1], equals(root.nodeAt(path) as Branch));
     });
 
     test('branchesOn, simple', () {
@@ -64,29 +57,21 @@ void main() {
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final nodeList = root.branchesOn(path);
       expect(nodeList.length, equals(1));
-      expect(
-        nodeList.first,
-        equals(root.nodeAt(path) as Branch),
-      );
+      expect(nodeList.first, equals(root.nodeAt(path) as Branch));
     });
 
     test('branchesOn, with variation', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
       final move = Move.parse('b1c3')!;
       final (newPath, _) = root.addMoveAt(
-        UciPath.fromIds(
-          [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
-        ),
+        UciPath.fromIds([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock),
         move,
       );
       final newNode = root.nodeAt(newPath!);
 
       // mainline has not changed
       expect(root.mainline.length, equals(3));
-      expect(
-        root.mainline.last,
-        equals(root.nodeAt(root.mainlinePath) as Branch),
-      );
+      expect(root.mainline.last, equals(root.nodeAt(root.mainlinePath) as Branch));
 
       final nodeList = root.branchesOn(newPath);
       expect(nodeList.length, equals(3));
@@ -110,9 +95,7 @@ void main() {
 
       final move = Move.parse('b1c3')!;
       final (newPath, _) = root.addMoveAt(
-        UciPath.fromIds(
-          [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
-        ),
+        UciPath.fromIds([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock),
         move,
       );
 
@@ -120,13 +103,8 @@ void main() {
     });
 
     test('add child', () {
-      final root = Root(
-        position: Chess.initial,
-      );
-      final child = Branch(
-        sanMove: SanMove('e4', Move.parse('e2e4')!),
-        position: Chess.initial,
-      );
+      final root = Root(position: Chess.initial);
+      final child = Branch(sanMove: SanMove('e4', Move.parse('e2e4')!), position: Chess.initial);
       root.addChild(child);
       expect(root.children.length, equals(1));
       expect(root.children.first, equals(child));
@@ -134,10 +112,7 @@ void main() {
 
     test('prepend child', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final child = Branch(
-        sanMove: SanMove('d4', Move.parse('d2d4')!),
-        position: Chess.initial,
-      );
+      final child = Branch(sanMove: SanMove('d4', Move.parse('d2d4')!), position: Chess.initial);
       root.prependChild(child);
       expect(root.children.length, equals(2));
       expect(root.children.first, equals(child));
@@ -152,12 +127,10 @@ void main() {
 
     test('nodeAtOrNull', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch =
-          root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final branch = root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(branch, equals(root.children.first));
 
-      final branch2 =
-          root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('b1c3')));
+      final branch2 = root.nodeAtOrNull(UciPath.fromId(UciCharPair.fromUci('b1c3')));
       expect(branch2, isNull);
     });
 
@@ -170,28 +143,18 @@ void main() {
     test('branchAt from branch', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
       final branch = root.branchAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
-      final branch2 =
-          branch!.branchAt(UciPath.fromId(UciCharPair.fromUci('e7e5')));
+      final branch2 = branch!.branchAt(UciPath.fromId(UciCharPair.fromUci('e7e5')));
       expect(branch2, equals(branch.children.first));
     });
 
     test('updateAt', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch = Branch(
-        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
-        position: Chess.initial,
-      );
+      final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
 
       final fromPath = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final (nodePath, _) = root.addNodeAt(fromPath, branch);
 
-      expect(
-        root.branchesOn(nodePath!),
-        equals([
-          root.children.first,
-          branch,
-        ]),
-      );
+      expect(root.branchesOn(nodePath!), equals([root.children.first, branch]));
 
       final eval = ClientEval(
         position: branch.position,
@@ -209,22 +172,13 @@ void main() {
         node.eval = eval;
       });
 
-      expect(
-        root.branchesOn(nodePath),
-        equals([
-          root.children.first,
-          newNode!,
-        ]),
-      );
+      expect(root.branchesOn(nodePath), equals([root.children.first, newNode!]));
     });
 
     test('updateAll', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
 
-      expect(
-        root.mainline.map((n) => n.eval),
-        equals([null, null, null]),
-      );
+      expect(root.mainline.map((n) => n.eval), equals([null, null, null]));
 
       final eval = ClientEval(
         position: root.position,
@@ -242,28 +196,20 @@ void main() {
         node.eval = eval;
       });
 
-      expect(
-        root.mainline.map((n) => n.eval),
-        equals([eval, eval, eval]),
-      );
+      expect(root.mainline.map((n) => n.eval), equals([eval, eval, eval]));
     });
 
     test('addNodeAt', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch = Branch(
-        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
-        position: Chess.initial,
+      final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
+      final (newPath, isNewNode) = root.addNodeAt(
+        UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        branch,
       );
-      final (newPath, isNewNode) =
-          root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
 
       expect(
         newPath,
-        equals(
-          UciPath.fromIds(
-            IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('b8c6')]),
-          ),
-        ),
+        equals(UciPath.fromIds(IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('b8c6')]))),
       );
 
       expect(isNewNode, isTrue);
@@ -275,15 +221,8 @@ void main() {
 
     test('addNodeAt, prepend', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch = Branch(
-        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
-        position: Chess.initial,
-      );
-      root.addNodeAt(
-        UciPath.fromId(UciCharPair.fromUci('e2e4')),
-        branch,
-        prepend: true,
-      );
+      final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
+      root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch, prepend: true);
 
       final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(testNode.children.length, equals(2));
@@ -292,20 +231,15 @@ void main() {
 
     test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch = Branch(
-        sanMove: SanMove('e5', Move.parse('e7e5')!),
-        position: Chess.initial,
+      final branch = Branch(sanMove: SanMove('e5', Move.parse('e7e5')!), position: Chess.initial);
+      final (newPath, isNewNode) = root.addNodeAt(
+        UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        branch,
       );
-      final (newPath, isNewNode) =
-          root.addNodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), branch);
 
       expect(
         newPath,
-        equals(
-          UciPath.fromIds(
-            IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')]),
-          ),
-        ),
+        equals(UciPath.fromIds(IList([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')]))),
       );
 
       expect(isNewNode, isFalse);
@@ -319,18 +253,9 @@ void main() {
 
     test('addNodesAt', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final branch = Branch(
-        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
-        position: Chess.initial,
-      );
-      final branch2 = Branch(
-        sanMove: SanMove('Na6', Move.parse('b8a6')!),
-        position: Chess.initial,
-      );
-      root.addNodesAt(
-        UciPath.fromId(UciCharPair.fromUci('e2e4')),
-        [branch, branch2],
-      );
+      final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
+      final branch2 = Branch(sanMove: SanMove('Na6', Move.parse('b8a6')!), position: Chess.initial);
+      root.addNodesAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), [branch, branch2]);
 
       final testNode = root.nodeAt(UciPath.fromId(UciCharPair.fromUci('e2e4')));
       expect(testNode.children.length, equals(2));
@@ -341,23 +266,16 @@ void main() {
     test('addMoveAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final move = Move.parse('b1c3')!;
-      final path = UciPath.fromIds(
-        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
-      );
+      final path = UciPath.fromIds([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock);
       final currentPath = root.mainlinePath;
       final (newPath, _) = root.addMoveAt(path, move);
-      expect(
-        newPath,
-        equals(currentPath + UciCharPair.fromMove(move)),
-      );
+      expect(newPath, equals(currentPath + UciCharPair.fromMove(move)));
       final newNode = root.branchAt(newPath!);
       expect(newNode?.position.ply, equals(3));
       expect(newNode?.sanMove, equals(SanMove('Nc3', move)));
       expect(
         newNode?.position.fen,
-        equals(
-          'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
-        ),
+        equals('rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2'),
       );
 
       final testNode = root.nodeAt(path);
@@ -365,17 +283,13 @@ void main() {
       expect(testNode.children.first.sanMove, equals(SanMove('Nc3', move)));
       expect(
         testNode.children.first.position.fen,
-        equals(
-          'rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2',
-        ),
+        equals('rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2'),
       );
     });
 
     test('deleteAt', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
-      final path = UciPath.fromIds(
-        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')],
-      );
+      final path = UciPath.fromIds([UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')]);
       root.deleteAt(path);
       expect(root.mainline.length, equals(1));
       expect(root.mainline.last, equals(root.children.first));
@@ -396,44 +310,27 @@ void main() {
       root.promoteAt(path, toMainline: false);
       expect(
         root.mainline.map((n) => n.sanMove.san).toList(),
-        equals([
-          'e4',
-          'd5',
-          'exd5',
-          'Nf6',
-          'c4',
-        ]),
+        equals(['e4', 'd5', 'exd5', 'Nf6', 'c4']),
       );
       expect(
         root.makePgn(),
-        equals(
-          '1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. c4 ( 3. Nc3 ) *\n',
-        ),
+        equals('1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. c4 ( 3. Nc3 ) *\n'),
       );
     });
 
     test('promoteAt, to mainline', () {
       const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
       final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
-      final path =
-          UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5', 'g8f6', 'b1c3']);
+      final path = UciPath.fromUciMoves(['e2e4', 'd7d5', 'e4d5', 'g8f6', 'b1c3']);
       expect(root.nodeAt(path), isNotNull);
       root.promoteAt(path, toMainline: true);
       expect(
         root.mainline.map((n) => n.sanMove.san).toList(),
-        equals([
-          'e4',
-          'd5',
-          'exd5',
-          'Nf6',
-          'Nc3',
-        ]),
+        equals(['e4', 'd5', 'exd5', 'Nf6', 'Nc3']),
       );
       expect(
         root.makePgn(),
-        equals(
-          '1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. Nc3 ( 3. c4 ) *\n',
-        ),
+        equals('1. e4 d5 2. exd5 Nf6 ( 2... Qxd5 3. Nc3 ) 3. Nc3 ( 3. c4 ) *\n'),
       );
     });
 
@@ -443,16 +340,8 @@ void main() {
       final path = UciPath.fromUciMoves(['d2d4']);
       expect(root.nodeAt(path), isNotNull);
       root.promoteAt(path, toMainline: false);
-      expect(
-        root.mainline.map((n) => n.sanMove.san).toList(),
-        equals(['d4']),
-      );
-      expect(
-        root.makePgn(),
-        equals(
-          '1. d4 ( 1. e4 ) *\n',
-        ),
-      );
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['d4']));
+      expect(root.makePgn(), equals('1. d4 ( 1. e4 ) *\n'));
     });
 
     group('merge', () {
@@ -538,15 +427,9 @@ void main() {
           expect(node1.clock, equals(node2.clock));
         }
         // one new external eval
-        expect(
-          root2.mainline.where((n) => n.externalEval != null).length,
-          equals(1),
-        );
+        expect(root2.mainline.where((n) => n.externalEval != null).length, equals(1));
         // one old client eval preseved
-        expect(
-          root2.mainline.where((node) => node.eval != null).length,
-          equals(1),
-        );
+        expect(root2.mainline.where((node) => node.eval != null).length, equals(1));
         expect(
           root2.mainline.firstWhereOrNull((node) => node.eval != null)?.eval,
           equals(clientEval),
@@ -576,19 +459,11 @@ void main() {
       }
 
       test('e1g1 -> e1h1', () {
-        makeTestAltCastlingMove(
-          '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O',
-          'e1g1',
-          'e1h1',
-        );
+        makeTestAltCastlingMove('1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O', 'e1g1', 'e1h1');
       });
 
       test('e8g8 -> e8h8', () {
-        makeTestAltCastlingMove(
-          '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O O-O',
-          'e8g8',
-          'e8h8',
-        );
+        makeTestAltCastlingMove('1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O O-O', 'e8g8', 'e8h8');
       });
 
       test('e1c1 -> e1a1', () {
@@ -607,8 +482,7 @@ void main() {
         );
       });
       test('only convert king moves in altCastlingMove', () {
-        const pgn =
-            '1. e4 e5 2. Bc4 Qh4 3. Nf3 Qxh2 4. Ke2 Qxh1 5. Qe1 Qh5 6. Qh1';
+        const pgn = '1. e4 e5 2. Bc4 Qh4 3. Nf3 Qxh2 4. Ke2 Qxh1 5. Qe1 Qh5 6. Qh1';
         final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
         final initialPng = root.makePgn();
         final previousUciPath = root.mainlinePath.penultimate;
@@ -617,11 +491,8 @@ void main() {
         expect(root.makePgn(), isNot(initialPng));
       });
 
-      test(
-          'do not convert castling move if rook is on the alternative castling square',
-          () {
-        const pgn =
-            '[FEN "rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/2R1KBNR w KQkq - 0 1"]';
+      test('do not convert castling move if rook is on the alternative castling square', () {
+        const pgn = '[FEN "rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/2R1KBNR w KQkq - 0 1"]';
         final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
         final initialPng = root.makePgn();
         final previousUciPath = root.mainlinePath.penultimate;

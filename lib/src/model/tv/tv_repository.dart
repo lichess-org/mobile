@@ -17,10 +17,7 @@ class TvRepository {
   final http.Client client;
 
   Future<TvChannels> channels() {
-    return client.readJson(
-      Uri(path: '/api/tv/channels'),
-      mapper: _tvGamesFromJson,
-    );
+    return client.readJson(Uri(path: '/api/tv/channels'), mapper: _tvGamesFromJson);
   }
 }
 
@@ -33,12 +30,11 @@ TvChannels _tvGamesFromJson(Map<String, dynamic> json) {
   });
 }
 
-TvGame _tvGameFromJson(Map<String, dynamic> json) =>
-    _tvGameFromPick(pick(json).required());
+TvGame _tvGameFromJson(Map<String, dynamic> json) => _tvGameFromPick(pick(json).required());
 
 TvGame _tvGameFromPick(RequiredPick pick) => TvGame(
-      user: pick('user').asLightUserOrThrow(),
-      rating: pick('rating').asIntOrNull(),
-      id: pick('gameId').asGameIdOrThrow(),
-      side: pick('color').asSideOrNull(),
-    );
+  user: pick('user').asLightUserOrThrow(),
+  rating: pick('rating').asIntOrNull(),
+  id: pick('gameId').asGameIdOrThrow(),
+  side: pick('color').asSideOrNull(),
+);

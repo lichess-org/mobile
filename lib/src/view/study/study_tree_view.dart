@@ -11,30 +11,24 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 const kNextChapterButtonHeight = 32.0;
 
 class StudyTreeView extends ConsumerWidget {
-  const StudyTreeView(
-    this.id,
-  );
+  const StudyTreeView(this.id);
 
   final StudyId id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final root = ref.watch(
-          studyControllerProvider(id)
-              .select((value) => value.requireValue.root),
-        ) ??
+    final root =
+        ref.watch(studyControllerProvider(id).select((value) => value.requireValue.root)) ??
         // If root is null, the study chapter's position is illegal.
         // We still want to display the root comments though, so create a dummy root.
         const ViewRoot(position: Chess.initial, children: IList.empty());
 
     final currentPath = ref.watch(
-      studyControllerProvider(id)
-          .select((value) => value.requireValue.currentPath),
+      studyControllerProvider(id).select((value) => value.requireValue.currentPath),
     );
 
     final pgnRootComments = ref.watch(
-      studyControllerProvider(id)
-          .select((value) => value.requireValue.pgnRootComments),
+      studyControllerProvider(id).select((value) => value.requireValue.pgnRootComments),
     );
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);

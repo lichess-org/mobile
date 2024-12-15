@@ -54,44 +54,23 @@ class _Body extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
-                child: StatCardRow(
-                  [
-                    StatCard(
-                      context.l10n.stormAllTime,
-                      value: data.highScore.allTime.toString(),
-                    ),
-                    StatCard(
-                      context.l10n.stormThisMonth,
-                      value: data.highScore.month.toString(),
-                    ),
-                  ],
-                ),
+                padding: Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
+                child: StatCardRow([
+                  StatCard(context.l10n.stormAllTime, value: data.highScore.allTime.toString()),
+                  StatCard(context.l10n.stormThisMonth, value: data.highScore.month.toString()),
+                ]),
               ),
               Padding(
-                padding:
-                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
-                child: StatCardRow(
-                  [
-                    StatCard(
-                      context.l10n.stormThisWeek,
-                      value: data.highScore.week.toString(),
-                    ),
-                    StatCard(
-                      context.l10n.today,
-                      value: data.highScore.day.toString(),
-                    ),
-                  ],
-                ),
+                padding: Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
+                child: StatCardRow([
+                  StatCard(context.l10n.stormThisWeek, value: data.highScore.week.toString()),
+                  StatCard(context.l10n.today, value: data.highScore.day.toString()),
+                ]),
               ),
               if (data.dayHighscores.isNotEmpty) ...[
                 Padding(
                   padding: Styles.bodySectionPadding,
-                  child: Text(
-                    context.l10n.stormBestRunOfDay,
-                    style: Styles.sectionTitle,
-                  ),
+                  child: Text(context.l10n.stormBestRunOfDay, style: Styles.sectionTitle),
                 ),
                 Padding(
                   padding: Styles.horizontalBodyPadding,
@@ -100,22 +79,10 @@ class _Body extends ConsumerWidget {
                     children: [
                       TableRow(
                         children: [
-                          Text(
-                            textAlign: TextAlign.center,
-                            context.l10n.stormScore,
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            context.l10n.stormTime,
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            context.l10n.stormHighestSolved,
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            context.l10n.stormRuns,
-                          ),
+                          Text(textAlign: TextAlign.center, context.l10n.stormScore),
+                          Text(textAlign: TextAlign.center, context.l10n.stormTime),
+                          Text(textAlign: TextAlign.center, context.l10n.stormHighestSolved),
+                          Text(textAlign: TextAlign.center, context.l10n.stormRuns),
                         ],
                       ),
                     ],
@@ -133,10 +100,8 @@ class _Body extends ConsumerWidget {
                           child: Padding(
                             padding: Styles.horizontalBodyPadding,
                             child: Text(
-                              dateFormat
-                                  .format(data.dayHighscores[entryIndex].day),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w600),
+                              dateFormat.format(data.dayHighscores[entryIndex].day),
+                              style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
                         );
@@ -144,20 +109,15 @@ class _Body extends ConsumerWidget {
                         // Data row
                         final entryIndex = (index - 1) ~/ 2;
                         return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                           child: Table(
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
+                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                             children: [
                               TableRow(
                                 children: [
                                   Text(
                                     textAlign: TextAlign.center,
-                                    data.dayHighscores[entryIndex].score
-                                        .toString(),
+                                    data.dayHighscores[entryIndex].score.toString(),
                                     style: TextStyle(
                                       color: context.lichessColors.brag,
                                       fontWeight: FontWeight.bold,
@@ -169,13 +129,11 @@ class _Body extends ConsumerWidget {
                                   ),
                                   Text(
                                     textAlign: TextAlign.center,
-                                    data.dayHighscores[entryIndex].highest
-                                        .toString(),
+                                    data.dayHighscores[entryIndex].highest.toString(),
                                   ),
                                   Text(
                                     textAlign: TextAlign.center,
-                                    data.dayHighscores[entryIndex].runs
-                                        .toString(),
+                                    data.dayHighscores[entryIndex].runs.toString(),
                                   ),
                                 ],
                               ),
@@ -187,17 +145,13 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ] else
-                Center(
-                  child: Text(context.l10n.mobilePuzzleStormNothingToShow),
-                ),
+                Center(child: Text(context.l10n.mobilePuzzleStormNothingToShow)),
             ],
           ),
         );
       },
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s',
-        );
+        debugPrint('SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s');
         return const SafeArea(child: Text('Could not load dashboard'));
       },
       loading: () => _Loading(),

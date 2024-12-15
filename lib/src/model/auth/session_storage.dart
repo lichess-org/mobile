@@ -21,9 +21,7 @@ class SessionStorage {
   Future<AuthSessionState?> read() async {
     final string = await SecureStorage.instance.read(key: kSessionStorageKey);
     if (string != null) {
-      return AuthSessionState.fromJson(
-        jsonDecode(string) as Map<String, dynamic>,
-      );
+      return AuthSessionState.fromJson(jsonDecode(string) as Map<String, dynamic>);
     }
     return null;
   }

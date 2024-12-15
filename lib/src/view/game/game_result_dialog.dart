@@ -23,11 +23,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({
-    required this.id,
-    required this.onNewOpponentCallback,
-    super.key,
-  });
+  const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
 
   final GameFullId id;
 
@@ -46,19 +42,18 @@ Widget _adaptiveDialog(BuildContext context, Widget content) {
   );
 
   final screenWidth = MediaQuery.of(context).size.width;
-  final paddedContent = Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: content,
-  );
+  final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
   return Dialog(
-    backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(dialogColor, context)
-        : null,
+    backgroundColor:
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? CupertinoDynamicColor.resolve(dialogColor, context)
+            : null,
     child: SizedBox(
       width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-      child: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoPopupSurface(child: paddedContent)
-          : paddedContent,
+      child:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoPopupSurface(child: paddedContent)
+              : paddedContent,
     ),
   );
 }
@@ -108,10 +103,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             children: [
               const Padding(
                 padding: EdgeInsets.only(bottom: 15.0),
-                child: Text(
-                  'Your opponent has offered a rematch',
-                  textAlign: TextAlign.center,
-                ),
+                child: Text('Your opponent has offered a rematch', textAlign: TextAlign.center),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
@@ -122,9 +114,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                       semanticsLabel: context.l10n.rematch,
                       child: const Text('Accept rematch'),
                       onPressed: () {
-                        ref
-                            .read(ctrlProvider.notifier)
-                            .proposeOrAcceptRematch();
+                        ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                       },
                     ),
                     SecondaryButton(
@@ -139,9 +129,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               ),
             ],
           ),
-          crossFadeState: gameState.game.opponent?.offeringRematch ?? false
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
+          crossFadeState:
+              gameState.game.opponent?.offeringRematch ?? false
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
         ),
         if (gameState.game.me?.offeringRematch == true)
           SecondaryButton(
@@ -149,40 +140,32 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             onPressed: () {
               ref.read(ctrlProvider.notifier).declineRematch();
             },
-            child: Text(
-              context.l10n.cancelRematchOffer,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(context.l10n.cancelRematchOffer, textAlign: TextAlign.center),
           )
         else if (gameState.canOfferRematch)
           SecondaryButton(
             semanticsLabel: context.l10n.rematch,
-            onPressed: _activateButtons &&
-                    gameState.game.opponent?.onGame == true &&
-                    gameState.game.opponent?.offeringRematch != true
-                ? () {
-                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                  }
-                : null,
-            child: Text(
-              context.l10n.rematch,
-              textAlign: TextAlign.center,
-            ),
+            onPressed:
+                _activateButtons &&
+                        gameState.game.opponent?.onGame == true &&
+                        gameState.game.opponent?.offeringRematch != true
+                    ? () {
+                      ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                    }
+                    : null,
+            child: Text(context.l10n.rematch, textAlign: TextAlign.center),
           ),
         if (gameState.canGetNewOpponent)
           SecondaryButton(
             semanticsLabel: context.l10n.newOpponent,
-            onPressed: _activateButtons
-                ? () {
-                    Navigator.of(context)
-                        .popUntil((route) => route is! PopupRoute);
-                    widget.onNewOpponentCallback(gameState.game);
-                  }
-                : null,
-            child: Text(
-              context.l10n.newOpponent,
-              textAlign: TextAlign.center,
-            ),
+            onPressed:
+                _activateButtons
+                    ? () {
+                      Navigator.of(context).popUntil((route) => route is! PopupRoute);
+                      widget.onNewOpponentCallback(gameState.game);
+                    }
+                    : null,
+            child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
           ),
         if (gameState.game.userAnalysable)
           SecondaryButton(
@@ -190,15 +173,10 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             onPressed: () {
               pushPlatformRoute(
                 context,
-                builder: (_) => AnalysisScreen(
-                  options: gameState.analysisOptions,
-                ),
+                builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
               );
             },
-            child: Text(
-              context.l10n.analysis,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(context.l10n.analysis, textAlign: TextAlign.center),
           ),
       ],
     );
@@ -217,11 +195,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
     final content = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        GameResult(game: game),
-        const SizedBox(height: 16.0),
-        PlayerSummary(game: game),
-      ],
+      children: [GameResult(game: game), const SizedBox(height: 16.0), PlayerSummary(game: game)],
     );
 
     return _adaptiveDialog(context, content);
@@ -229,11 +203,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
 }
 
 class OverTheBoardGameResultDialog extends StatelessWidget {
-  const OverTheBoardGameResultDialog({
-    super.key,
-    required this.game,
-    required this.onRematch,
-  });
+  const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
 
   final OverTheBoardGame game;
 
@@ -249,32 +219,27 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
         SecondaryButton(
           semanticsLabel: context.l10n.rematch,
           onPressed: onRematch,
-          child: Text(
-            context.l10n.rematch,
-            textAlign: TextAlign.center,
-          ),
+          child: Text(context.l10n.rematch, textAlign: TextAlign.center),
         ),
         SecondaryButton(
           semanticsLabel: context.l10n.analysis,
           onPressed: () {
             pushPlatformRoute(
               context,
-              builder: (_) => AnalysisScreen(
-                options: AnalysisOptions(
-                  orientation: Side.white,
-                  standalone: (
-                    pgn: game.makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: game.meta.variant,
+              builder:
+                  (_) => AnalysisScreen(
+                    options: AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: game.makePgn(),
+                        isComputerAnalysisAllowed: true,
+                        variant: game.meta.variant,
+                      ),
+                    ),
                   ),
-                ),
-              ),
             );
           },
-          child: Text(
-            context.l10n.analysis,
-            textAlign: TextAlign.center,
-          ),
+          child: Text(context.l10n.analysis, textAlign: TextAlign.center),
         ),
       ],
     );
@@ -298,22 +263,14 @@ class PlayerSummary extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    Widget makeStatCol(
-      int value,
-      String Function(int count) labelFn,
-      Color? color,
-    ) {
+    Widget makeStatCol(int value, String Function(int count) labelFn, Color? color) {
       return Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               value.toString(),
-              style: TextStyle(
-                fontSize: 18.0,
-                color: color,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18.0, color: color, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4.0),
             FittedBox(
@@ -358,9 +315,10 @@ class GameResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showWinner = game.winner != null
-        ? ' • ${game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
-        : '';
+    final showWinner =
+        game.winner != null
+            ? ' • ${game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
+            : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -370,27 +328,15 @@ class GameResult extends StatelessWidget {
             game.winner == null
                 ? '½-½'
                 : game.winner == Side.white
-                    ? '1-0'
-                    : '0-1',
-            style: const TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
+                ? '1-0'
+                : '0-1',
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         const SizedBox(height: 6.0),
         Text(
-          '${gameStatusL10n(
-            context,
-            variant: game.meta.variant,
-            status: game.status,
-            lastPosition: game.lastPosition,
-            winner: game.winner,
-            isThreefoldRepetition: game.isThreefoldRepetition,
-          )}$showWinner',
-          style: const TextStyle(
-            fontStyle: FontStyle.italic,
-          ),
+          '${gameStatusL10n(context, variant: game.meta.variant, status: game.status, lastPosition: game.lastPosition, winner: game.winner, isThreefoldRepetition: game.isThreefoldRepetition)}$showWinner',
+          style: const TextStyle(fontStyle: FontStyle.italic),
           textAlign: TextAlign.center,
         ),
       ],

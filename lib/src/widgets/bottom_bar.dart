@@ -13,9 +13,9 @@ class BottomBar extends StatelessWidget {
   });
 
   const BottomBar.empty()
-      : children = const [],
-        expandChildren = true,
-        mainAxisAlignment = MainAxisAlignment.spaceAround;
+    : children = const [],
+      expandChildren = true,
+      mainAxisAlignment = MainAxisAlignment.spaceAround;
 
   /// Children to display in the bottom bar's [Row]. Typically instances of [BottomBarButton].
   final List<Widget> children;
@@ -38,9 +38,10 @@ class BottomBar extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: mainAxisAlignment,
-              children: expandChildren
-                  ? children.map((child) => Expanded(child: child)).toList()
-                  : children,
+              children:
+                  expandChildren
+                      ? children.map((child) => Expanded(child: child)).toList()
+                      : children,
             ),
           ),
         ),
@@ -52,9 +53,8 @@ class BottomBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
       child: Row(
         mainAxisAlignment: mainAxisAlignment,
-        children: expandChildren
-            ? children.map((child) => Expanded(child: child)).toList()
-            : children,
+        children:
+            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
       ),
     );
   }

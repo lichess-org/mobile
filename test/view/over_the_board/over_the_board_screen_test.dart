@@ -17,10 +17,7 @@ import '../../test_provider_scope.dart';
 void main() {
   group('Playing over the board (offline)', () {
     testWidgets('Checkmate and Rematch', (tester) async {
-      final boardRect = await initOverTheBoardGame(
-        tester,
-        const TimeIncrement(60, 5),
-      );
+      final boardRect = await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 
       // Default orientation is white at the bottom
       expect(
@@ -40,28 +37,20 @@ void main() {
       await tester.tap(find.text('Rematch'));
       await tester.pumpAndSettle();
 
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(Chessboard)),
-      );
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
       final gameState = container.read(overTheBoardGameControllerProvider);
       expect(gameState.game.steps.length, 1);
       expect(gameState.game.steps.first.position, Chess.initial);
 
       // Rematch should flip orientation
-      expect(
-        tester.getTopRight(find.byKey(const ValueKey('a1-whiterook'))),
-        boardRect.topRight,
-      );
+      expect(tester.getTopRight(find.byKey(const ValueKey('a1-whiterook'))), boardRect.topRight);
 
       expect(activeClock(tester), null);
     });
 
     testWidgets('Game ends when out of time', (tester) async {
       const time = Duration(seconds: 1);
-      await initOverTheBoardGame(
-        tester,
-        TimeIncrement(time.inSeconds, 0),
-      );
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 0));
 
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
@@ -81,10 +70,7 @@ void main() {
     testWidgets('Pausing the clock', (tester) async {
       const time = Duration(seconds: 10);
 
-      await initOverTheBoardGame(
-        tester,
-        TimeIncrement(time.inSeconds, 0),
-      );
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 0));
 
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
@@ -116,10 +102,7 @@ void main() {
     testWidgets('Go back and Forward', (tester) async {
       const time = Duration(seconds: 10);
 
-      await initOverTheBoardGame(
-        tester,
-        TimeIncrement(time.inSeconds, 0),
-      );
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 0));
 
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
@@ -155,10 +138,7 @@ void main() {
     });
 
     testWidgets('No clock if time is infinite', (tester) async {
-      await initOverTheBoardGame(
-        tester,
-        const TimeIncrement(0, 0),
-      );
+      await initOverTheBoardGame(tester, const TimeIncrement(0, 0));
 
       expect(find.byType(Clock), findsNothing);
     });
@@ -166,10 +146,7 @@ void main() {
     testWidgets('Clock logic', (tester) async {
       const time = Duration(minutes: 5);
 
-      await initOverTheBoardGame(
-        tester,
-        TimeIncrement(time.inSeconds, 3),
-      );
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 3));
 
       expect(activeClock(tester), null);
 
@@ -199,23 +176,15 @@ void main() {
   });
 }
 
-Future<Rect> initOverTheBoardGame(
-  WidgetTester tester,
-  TimeIncrement timeIncrement,
-) async {
-  final app = await makeTestProviderScopeApp(
-    tester,
-    home: const OverTheBoardScreen(),
-  );
+Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
+  final app = await makeTestProviderScopeApp(tester, home: const OverTheBoardScreen());
   await tester.pumpWidget(app);
 
   await tester.pumpAndSettle();
   await tester.tap(find.text('Play'));
   await tester.pumpAndSettle();
 
-  final container = ProviderScope.containerOf(
-    tester.element(find.byType(Chessboard)),
-  );
+  final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
   container.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
   await tester.pumpAndSettle();
 
@@ -241,16 +210,12 @@ Side? activeClock(WidgetTester tester, {Side orientation = Side.white}) {
 
 Clock findWhiteClock(WidgetTester tester, {Side orientation = Side.white}) {
   return tester.widget<Clock>(
-    find.byKey(
-      ValueKey(orientation == Side.white ? 'bottomClock' : 'topClock'),
-    ),
+    find.byKey(ValueKey(orientation == Side.white ? 'bottomClock' : 'topClock')),
   );
 }
 
 Clock findBlackClock(WidgetTester tester, {Side orientation = Side.white}) {
   return tester.widget<Clock>(
-    find.byKey(
-      ValueKey(orientation == Side.white ? 'topClock' : 'bottomClock'),
-    ),
+    find.byKey(ValueKey(orientation == Side.white ? 'topClock' : 'bottomClock')),
   );
 }

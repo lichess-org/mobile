@@ -9,8 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-const _kBoardCarouselItemMargin =
-    EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0);
+const _kBoardCarouselItemMargin = EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0);
 
 class BoardCarouselItem extends ConsumerWidget {
   const BoardCarouselItem({
@@ -51,13 +50,13 @@ class BoardCarouselItem extends ConsumerWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide -
-            _kBoardCarouselItemMargin.horizontal;
+        final boardSize = constraints.biggest.shortestSide - _kBoardCarouselItemMargin.horizontal;
         final card = PlatformCard(
           color: backgroundColor,
-          margin: Theme.of(context).platform == TargetPlatform.iOS
-              ? EdgeInsets.zero
-              : _kBoardCarouselItemMargin,
+          margin:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? EdgeInsets.zero
+                  : _kBoardCarouselItemMargin,
           child: AdaptiveInkWell(
             splashColor: splashColor,
             borderRadius: BorderRadius.circular(10),
@@ -101,9 +100,7 @@ class BoardCarouselItem extends ConsumerWidget {
                   left: 0,
                   bottom: 8,
                   child: DefaultTextStyle.merge(
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(color: Colors.white),
                     child: description,
                   ),
                 ),
@@ -114,20 +111,17 @@ class BoardCarouselItem extends ConsumerWidget {
 
         return Theme.of(context).platform == TargetPlatform.iOS
             ? Padding(
-                padding: _kBoardCarouselItemMargin,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: card,
+              padding: _kBoardCarouselItemMargin,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6.0),
+                  ],
                 ),
-              )
+                child: card,
+              ),
+            )
             : card;
       },
     );
@@ -178,10 +172,10 @@ class BoardsPageView extends StatefulWidget {
     this.scrollBehavior,
     this.padding = EdgeInsets.zero,
   }) : childrenDelegate = SliverChildBuilderDelegate(
-          itemBuilder,
-          findChildIndexCallback: findChildIndexCallback,
-          childCount: itemCount,
-        );
+         itemBuilder,
+         findChildIndexCallback: findChildIndexCallback,
+         childCount: itemCount,
+       );
 
   final bool allowImplicitScrolling;
   final String? restorationId;
@@ -241,11 +235,8 @@ class _BoardsPageViewState extends State<BoardsPageView> {
       case Axis.horizontal:
         assert(debugCheckHasDirectionality(context));
         final TextDirection textDirection = Directionality.of(context);
-        final AxisDirection axisDirection =
-            textDirectionToAxisDirection(textDirection);
-        return widget.reverse
-            ? flipAxisDirection(axisDirection)
-            : axisDirection;
+        final AxisDirection axisDirection = textDirectionToAxisDirection(textDirection);
+        return widget.reverse ? flipAxisDirection(axisDirection) : axisDirection;
       case Axis.vertical:
         return widget.reverse ? AxisDirection.up : AxisDirection.down;
     }
@@ -259,9 +250,8 @@ class _BoardsPageViewState extends State<BoardsPageView> {
     ).applyTo(
       widget.pageSnapping
           ? _kPagePhysics.applyTo(
-              widget.physics ??
-                  widget.scrollBehavior?.getScrollPhysics(context),
-            )
+            widget.physics ?? widget.scrollBehavior?.getScrollPhysics(context),
+          )
           : widget.physics ?? widget.scrollBehavior?.getScrollPhysics(context),
     );
 
@@ -285,8 +275,8 @@ class _BoardsPageViewState extends State<BoardsPageView> {
         controller: _controller,
         physics: physics,
         restorationId: widget.restorationId,
-        scrollBehavior: widget.scrollBehavior ??
-            ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        scrollBehavior:
+            widget.scrollBehavior ?? ScrollConfiguration.of(context).copyWith(scrollbars: false),
         viewportBuilder: (BuildContext context, ViewportOffset position) {
           return Viewport(
             cacheExtent: 0,
@@ -309,11 +299,8 @@ class _BoardsPageViewState extends State<BoardsPageView> {
 }
 
 class _SliverFillViewport extends StatelessWidget {
-  const _SliverFillViewport({
-    required this.delegate,
-    this.viewportFraction = 1.0,
-    this.padding,
-  }) : assert(viewportFraction > 0.0);
+  const _SliverFillViewport({required this.delegate, this.viewportFraction = 1.0, this.padding})
+    : assert(viewportFraction > 0.0);
 
   final double viewportFraction;
 
@@ -333,8 +320,7 @@ class _SliverFillViewport extends StatelessWidget {
   }
 }
 
-class _SliverFillViewportRenderObjectWidget
-    extends SliverMultiBoxAdaptorWidget {
+class _SliverFillViewportRenderObjectWidget extends SliverMultiBoxAdaptorWidget {
   const _SliverFillViewportRenderObjectWidget({
     required super.delegate,
     this.viewportFraction = 1.0,
@@ -344,28 +330,18 @@ class _SliverFillViewportRenderObjectWidget
 
   @override
   RenderSliverFillViewport createRenderObject(BuildContext context) {
-    final SliverMultiBoxAdaptorElement element =
-        context as SliverMultiBoxAdaptorElement;
-    return RenderSliverFillViewport(
-      childManager: element,
-      viewportFraction: viewportFraction,
-    );
+    final SliverMultiBoxAdaptorElement element = context as SliverMultiBoxAdaptorElement;
+    return RenderSliverFillViewport(childManager: element, viewportFraction: viewportFraction);
   }
 
   @override
-  void updateRenderObject(
-    BuildContext context,
-    RenderSliverFillViewport renderObject,
-  ) {
+  void updateRenderObject(BuildContext context, RenderSliverFillViewport renderObject) {
     renderObject.viewportFraction = viewportFraction;
   }
 }
 
 class _ForceImplicitScrollPhysics extends ScrollPhysics {
-  const _ForceImplicitScrollPhysics({
-    required this.allowImplicitScrolling,
-    super.parent,
-  });
+  const _ForceImplicitScrollPhysics({required this.allowImplicitScrolling, super.parent});
 
   @override
   _ForceImplicitScrollPhysics applyTo(ScrollPhysics? ancestor) {

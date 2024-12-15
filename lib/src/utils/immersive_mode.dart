@@ -11,11 +11,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 /// force the device to stay awake.
 class ImmersiveModeWidget extends StatelessWidget {
   /// Create a new immersive mode widget, that enables immersive mode when focused.
-  const ImmersiveModeWidget({
-    required this.child,
-    this.shouldEnableOnFocusGained,
-    super.key,
-  });
+  const ImmersiveModeWidget({required this.child, this.shouldEnableOnFocusGained, super.key});
 
   final Widget child;
 
@@ -40,11 +36,7 @@ class ImmersiveModeWidget extends StatelessWidget {
 /// A widget that enables wakelock when focused.
 class WakelockWidget extends StatelessWidget {
   /// Create a new wakelock widget, that enables wakelock when focused.
-  const WakelockWidget({
-    required this.child,
-    this.shouldEnableOnFocusGained,
-    super.key,
-  });
+  const WakelockWidget({required this.child, this.shouldEnableOnFocusGained, super.key});
 
   final Widget child;
 
@@ -91,17 +83,18 @@ class ImmersiveMode {
   Future<void> disable() async {
     final wakeFuture = WakelockPlus.disable();
 
-    final androidInfo = defaultTargetPlatform == TargetPlatform.android
-        ? await DeviceInfoPlugin().androidInfo
-        : null;
+    final androidInfo =
+        defaultTargetPlatform == TargetPlatform.android
+            ? await DeviceInfoPlugin().androidInfo
+            : null;
 
     final setUiModeFuture =
         androidInfo == null || androidInfo.version.sdkInt >= 29
             ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)
             : SystemChrome.setEnabledSystemUIMode(
-                SystemUiMode.manual,
-                overlays: SystemUiOverlay.values,
-              );
+              SystemUiMode.manual,
+              overlays: SystemUiOverlay.values,
+            );
 
     return Future.wait([wakeFuture, setUiModeFuture]).then((_) {});
   }

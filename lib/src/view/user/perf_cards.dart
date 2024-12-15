@@ -15,12 +15,7 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 
 /// A widget that displays the performance cards of a user.
 class PerfCards extends StatelessWidget {
-  const PerfCards({
-    required this.user,
-    required this.isMe,
-    this.padding,
-    super.key,
-  });
+  const PerfCards({required this.user, required this.isMe, this.padding, super.key});
 
   final User user;
 
@@ -31,32 +26,34 @@ class PerfCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const puzzlePerfsSet = {Perf.puzzle, Perf.streak, Perf.storm};
-    final List<Perf> gamePerfs = Perf.values.where((element) {
-      if (puzzlePerfsSet.contains(element)) {
-        return false;
-      }
-      final p = user.perfs[element];
-      return p != null &&
-          p.numberOfGamesOrRuns > 0 &&
-          p.ratingDeviation < kClueLessDeviation;
-    }).toList(growable: false);
+    final List<Perf> gamePerfs = Perf.values
+        .where((element) {
+          if (puzzlePerfsSet.contains(element)) {
+            return false;
+          }
+          final p = user.perfs[element];
+          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+        })
+        .toList(growable: false);
 
     gamePerfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
-          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
 
-    final List<Perf> puzzlePerfs = Perf.values.where((element) {
-      if (!puzzlePerfsSet.contains(element)) {
-        return false;
-      }
-      final p = user.perfs[element];
-      return p != null && p.numberOfGamesOrRuns > 0;
-    }).toList(growable: false);
+    final List<Perf> puzzlePerfs = Perf.values
+        .where((element) {
+          if (!puzzlePerfsSet.contains(element)) {
+            return false;
+          }
+          final p = user.perfs[element];
+          return p != null && p.numberOfGamesOrRuns > 0;
+        })
+        .toList(growable: false);
 
     puzzlePerfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
-          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
 
     final userPerfs = [...gamePerfs, ...puzzlePerfs];
@@ -84,18 +81,13 @@ class PerfCards extends StatelessWidget {
                 child: PlatformCard(
                   child: AdaptiveInkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    onTap: isPerfWithoutStats
-                        ? null
-                        : () => _handlePerfCardTap(context, perf),
+                    onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            perf.shortTitle,
-                            style: TextStyle(color: textShade(context, 0.7)),
-                          ),
+                          Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
                           Icon(perf.icon, color: textShade(context, 0.6)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -114,17 +106,19 @@ class PerfCards extends StatelessWidget {
                                   userPerf.progression > 0
                                       ? LichessIcons.arrow_full_upperright
                                       : LichessIcons.arrow_full_lowerright,
-                                  color: userPerf.progression > 0
-                                      ? context.lichessColors.good
-                                      : context.lichessColors.error,
+                                  color:
+                                      userPerf.progression > 0
+                                          ? context.lichessColors.good
+                                          : context.lichessColors.error,
                                   size: 12,
                                 ),
                                 Text(
                                   userPerf.progression.abs().toString(),
                                   style: TextStyle(
-                                    color: userPerf.progression > 0
-                                        ? context.lichessColors.good
-                                        : context.lichessColors.error,
+                                    color:
+                                        userPerf.progression > 0
+                                            ? context.lichessColors.good
+                                            : context.lichessColors.error,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -153,10 +147,7 @@ class PerfCards extends StatelessWidget {
           case Perf.storm:
             return StormDashboardModal(user: user.lightUser);
           default:
-            return PerfStatsScreen(
-              user: user,
-              perf: perf,
-            );
+            return PerfStatsScreen(user: user, perf: perf);
         }
       },
     );

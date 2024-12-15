@@ -59,12 +59,10 @@ class UserFullNameWidget extends ConsumerWidget {
       orElse: () => false,
     );
 
-    final displayName = user?.name ??
+    final displayName =
+        user?.name ??
         (aiLevel != null
-            ? context.l10n.aiNameLevelAiLevel(
-                'Stockfish',
-                aiLevel.toString(),
-              )
+            ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -74,8 +72,7 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
-              size: style?.fontSize ??
-                  DefaultTextStyle.of(context).style.fontSize,
+              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
               color: user?.isOnline == true ? context.lichessColors.good : null,
             ),
           ),
@@ -84,8 +81,7 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               LichessIcons.patron,
-              size: style?.fontSize ??
-                  DefaultTextStyle.of(context).style.fontSize,
+              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
               color: style?.color ?? DefaultTextStyle.of(context).style.color,
               semanticLabel: context.l10n.patronLichessPatron,
             ),
@@ -94,37 +90,26 @@ class UserFullNameWidget extends ConsumerWidget {
           Text(
             user!.title!,
             style: (style ?? const TextStyle()).copyWith(
-              color: user?.title == 'BOT'
-                  ? context.lichessColors.fancy
-                  : context.lichessColors.brag,
+              color:
+                  user?.title == 'BOT' ? context.lichessColors.fancy : context.lichessColors.brag,
               fontWeight: user?.title == 'BOT' ? null : FontWeight.bold,
             ),
           ),
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text(
-            displayName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
+          child: Text(displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: style),
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
             errorWidget: (_, __, ___) => kEmptyWidget,
-            width:
-                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
-            height:
-                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),
         ],
-        if (shouldShowRating && ratingStr != null) ...[
-          const SizedBox(width: 5),
-          Text(ratingStr),
-        ],
+        if (shouldShowRating && ratingStr != null) ...[const SizedBox(width: 5), Text(ratingStr)],
       ],
     );
   }

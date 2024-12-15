@@ -9,8 +9,7 @@ part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
 @riverpod
-class GeneralPreferences extends _$GeneralPreferences
-    with PreferencesStorage<GeneralPrefs> {
+class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.general;
@@ -20,8 +19,7 @@ class GeneralPreferences extends _$GeneralPreferences
   GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override
-  GeneralPrefs fromJson(Map<String, dynamic> json) =>
-      GeneralPrefs.fromJson(json);
+  GeneralPrefs fromJson(Map<String, dynamic> json) => GeneralPrefs.fromJson(json);
 
   @override
   GeneralPrefs build() {
@@ -53,14 +51,10 @@ class GeneralPreferences extends _$GeneralPreferences
     if (state.systemColors == false) {
       final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
       if (boardTheme == BoardTheme.system) {
-        await ref
-            .read(boardPreferencesProvider.notifier)
-            .setBoardTheme(BoardTheme.brown);
+        await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.brown);
       }
     } else {
-      await ref
-          .read(boardPreferencesProvider.notifier)
-          .setBoardTheme(BoardTheme.system);
+      await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system);
     }
   }
 }
@@ -68,10 +62,10 @@ class GeneralPreferences extends _$GeneralPreferences
 Map<String, dynamic>? _localeToJson(Locale? locale) {
   return locale != null
       ? {
-          'languageCode': locale.languageCode,
-          'countryCode': locale.countryCode,
-          'scriptCode': locale.scriptCode,
-        }
+        'languageCode': locale.languageCode,
+        'countryCode': locale.countryCode,
+        'scriptCode': locale.scriptCode,
+      }
       : null;
 }
 
@@ -89,14 +83,10 @@ Locale? _localeFromJson(Map<String, dynamic>? json) {
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const factory GeneralPrefs({
-    @JsonKey(
-      unknownEnumValue: BackgroundThemeMode.system,
-      defaultValue: BackgroundThemeMode.system,
-    )
+    @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
-    @JsonKey(unknownEnumValue: SoundTheme.standard)
-    required SoundTheme soundTheme,
+    @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Should enable system color palette (android 12+ only)

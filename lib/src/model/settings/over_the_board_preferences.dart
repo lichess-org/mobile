@@ -17,8 +17,7 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
   OverTheBoardPrefs get defaults => OverTheBoardPrefs.defaults;
 
   @override
-  OverTheBoardPrefs fromJson(Map<String, dynamic> json) =>
-      OverTheBoardPrefs.fromJson(json);
+  OverTheBoardPrefs fromJson(Map<String, dynamic> json) => OverTheBoardPrefs.fromJson(json);
 
   @override
   OverTheBoardPrefs build() {
@@ -26,15 +25,11 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
   }
 
   Future<void> toggleFlipPiecesAfterMove() {
-    return save(
-      state.copyWith(flipPiecesAfterMove: !state.flipPiecesAfterMove),
-    );
+    return save(state.copyWith(flipPiecesAfterMove: !state.flipPiecesAfterMove));
   }
 
   Future<void> toggleSymmetricPieces() {
-    return save(
-      state.copyWith(symmetricPieces: !state.symmetricPieces),
-    );
+    return save(state.copyWith(symmetricPieces: !state.symmetricPieces));
   }
 }
 
@@ -47,10 +42,7 @@ class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
     required bool symmetricPieces,
   }) = _OverTheBoardPrefs;
 
-  static const defaults = OverTheBoardPrefs(
-    flipPiecesAfterMove: false,
-    symmetricPieces: false,
-  );
+  static const defaults = OverTheBoardPrefs(flipPiecesAfterMove: false, symmetricPieces: false);
 
   factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {
     return _$OverTheBoardPrefsFromJson(json);

@@ -9,11 +9,7 @@ class RatingPrefAware extends ConsumerWidget {
   /// in their settings.
   ///
   /// Optionally, a different [orElse] widget can be displayed if ratings are disabled.
-  const RatingPrefAware({
-    required this.child,
-    this.orElse,
-    super.key,
-  });
+  const RatingPrefAware({required this.child, this.orElse, super.key});
 
   final Widget child;
   final Widget? orElse;

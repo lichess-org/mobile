@@ -11,46 +11,31 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({
-    required this.onTapMove,
-    required this.clientEval,
-    required this.isGameOver,
-  });
+  const EngineLines({required this.onTapMove, required this.clientEval, required this.isGameOver});
   final void Function(NormalMove move) onTapMove;
   final ClientEval? clientEval;
   final bool isGameOver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final numEvalLines = ref.watch(
-      analysisPreferencesProvider.select(
-        (p) => p.numEvalLines,
-      ),
-    );
+    final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
     final engineEval = ref.watch(engineEvaluationProvider).eval;
     final eval = engineEval ?? clientEval;
 
-    final emptyLines = List.filled(
-      numEvalLines,
-      const Engineline.empty(),
-    );
+    final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
-    final content = isGameOver
-        ? emptyLines
-        : (eval != null
-            ? eval.pvs
-                .take(numEvalLines)
-                .map(
-                  (pv) => Engineline(onTapMove, eval.position, pv),
-                )
-                .toList()
-            : emptyLines);
+    final content =
+        isGameOver
+            ? emptyLines
+            : (eval != null
+                ? eval.pvs
+                    .take(numEvalLines)
+                    .map((pv) => Engineline(onTapMove, eval.position, pv))
+                    .toList()
+                : emptyLines);
 
     if (content.length < numEvalLines) {
-      final padding = List.filled(
-        numEvalLines - content.length,
-        const Engineline.empty(),
-      );
+      final padding = List.filled(numEvalLines - content.length, const Engineline.empty());
       content.addAll(padding);
     }
 
@@ -64,16 +49,12 @@ class EngineLines extends ConsumerWidget {
 }
 
 class Engineline extends ConsumerWidget {
-  const Engineline(
-    this.onTapMove,
-    this.fromPosition,
-    this.pvData,
-  );
+  const Engineline(this.onTapMove, this.fromPosition, this.pvData);
 
   const Engineline.empty()
-      : onTapMove = null,
-        pvData = const PvData(moves: IListConst([])),
-        fromPosition = Chess.initial;
+    : onTapMove = null,
+      pvData = const PvData(moves: IListConst([])),
+      fromPosition = Chess.initial;
 
   final void Function(NormalMove move)? onTapMove;
   final Position fromPosition;
@@ -82,16 +63,12 @@ class Engineline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (pvData.moves.isEmpty) {
-      return const SizedBox(
-        height: kEvalGaugeSize,
-        child: SizedBox.shrink(),
-      );
+      return const SizedBox(height: kEvalGaugeSize, child: SizedBox.shrink());
     }
 
-    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
-          data: (value) => value,
-          orElse: () => defaultAccountPreferences.pieceNotation,
-        );
+    final pieceNotation = ref
+        .watch(pieceNotationProvider)
+        .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
 
     final lineBuffer = StringBuffer();
     int ply = fromPosition.ply + 1;
@@ -100,8 +77,8 @@ class Engineline extends ConsumerWidget {
         ply.isOdd
             ? '${(ply / 2).ceil()}. $s '
             : i == 0
-                ? '${(ply / 2).ceil()}... $s '
-                : '$s ',
+            ? '${(ply / 2).ceil()}... $s '
+            : '$s ',
       );
       ply += 1;
     });
@@ -122,21 +99,17 @@ class Engineline extends ConsumerWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: pvData.winningSide == Side.black
-                      ? EngineGauge.backgroundColor(context, brightness)
-                      : EngineGauge.valueColor(context, brightness),
+                  color:
+                      pvData.winningSide == Side.black
+                          ? EngineGauge.backgroundColor(context, brightness)
+                          : EngineGauge.valueColor(context, brightness),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 4.0,
-                  vertical: 2.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                 child: Text(
                   evalString,
                   style: TextStyle(
-                    color: pvData.winningSide == Side.black
-                        ? Colors.white
-                        : Colors.black,
+                    color: pvData.winningSide == Side.black ? Colors.white : Colors.black,
                     fontSize: kEvalGaugeFontSize,
                     fontWeight: FontWeight.w600,
                   ),
@@ -149,9 +122,7 @@ class Engineline extends ConsumerWidget {
                   maxLines: 1,
                   softWrap: false,
                   style: TextStyle(
-                    fontFamily: pieceNotation == PieceNotation.symbol
-                        ? 'ChessFont'
-                        : null,
+                    fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

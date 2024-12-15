@@ -22,24 +22,19 @@ class ListSection extends StatelessWidget {
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
-  ListSection.loading({
-    required int itemsNumber,
-    bool header = false,
-    this.margin,
-  })  : children = [
-          for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink(),
-        ],
-        headerTrailing = null,
-        header = header ? const SizedBox.shrink() : null,
-        hasLeading = false,
-        showDivider = false,
-        showDividerBetweenTiles = false,
-        dense = false,
-        cupertinoAdditionalDividerMargin = null,
-        cupertinoBackgroundColor = null,
-        cupertinoBorderRadius = null,
-        cupertinoClipBehavior = Clip.hardEdge,
-        _isLoading = true;
+  ListSection.loading({required int itemsNumber, bool header = false, this.margin})
+    : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+      headerTrailing = null,
+      header = header ? const SizedBox.shrink() : null,
+      hasLeading = false,
+      showDivider = false,
+      showDividerBetweenTiles = false,
+      dense = false,
+      cupertinoAdditionalDividerMargin = null,
+      cupertinoBackgroundColor = null,
+      cupertinoBorderRadius = null,
+      cupertinoClipBehavior = Clip.hardEdge,
+      _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
   final List<Widget> children;
@@ -81,139 +76,125 @@ class ListSection extends StatelessWidget {
       case TargetPlatform.android:
         return _isLoading
             ? Padding(
-                padding: margin ?? Styles.sectionBottomPadding,
-                child: Column(
-                  children: [
-                    if (header != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 16.0,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                          ),
+              padding: margin ?? Styles.sectionBottomPadding,
+              child: Column(
+                children: [
+                  if (header != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
                       ),
-                    for (int i = 0; i < children.length; i++)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 16.0,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
+                    ),
+                  for (int i = 0; i < children.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
-                  ],
-                ),
-              )
+                    ),
+                ],
+              ),
+            )
             : Padding(
-                padding: margin ?? Styles.sectionBottomPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (header != null)
-                      ListTile(
-                        dense: true,
-                        title: DefaultTextStyle.merge(
-                          style: Styles.sectionTitle,
-                          child: header!,
-                        ),
-                        trailing: headerTrailing,
-                      ),
-                    if (showDividerBetweenTiles)
-                      ...ListTile.divideTiles(
-                        context: context,
-                        tiles: children,
-                      )
-                    else
-                      ...children,
-                    if (showDivider)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                        child: Divider(thickness: 0),
-                      ),
-                  ],
-                ),
-              );
+              padding: margin ?? Styles.sectionBottomPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (header != null)
+                    ListTile(
+                      dense: true,
+                      title: DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
+                      trailing: headerTrailing,
+                    ),
+                  if (showDividerBetweenTiles)
+                    ...ListTile.divideTiles(context: context, tiles: children)
+                  else
+                    ...children,
+                  if (showDivider)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: Divider(thickness: 0),
+                    ),
+                ],
+              ),
+            );
       case TargetPlatform.iOS:
         return _isLoading
             ? Padding(
-                padding: margin ?? Styles.bodySectionPadding,
-                child: Column(
-                  children: [
-                    if (header != null)
-                      // ignore: avoid-wrapping-in-padding
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                          ),
+              padding: margin ?? Styles.bodySectionPadding,
+              child: Column(
+                children: [
+                  if (header != null)
+                    // ignore: avoid-wrapping-in-padding
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
                       ),
-                    Container(
-                      width: double.infinity,
-                      height: children.length * 54,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
                     ),
-                  ],
-                ),
-              )
+                  Container(
+                    width: double.infinity,
+                    height: children.length * 54,
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ],
+              ),
+            )
             : Padding(
-                padding: margin ?? Styles.bodySectionPadding,
-                child: Column(
-                  children: [
-                    if (header != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            DefaultTextStyle.merge(
-                              style: Styles.sectionTitle,
-                              child: header!,
-                            ),
-                            if (headerTrailing != null) headerTrailing!,
-                          ],
-                        ),
+              padding: margin ?? Styles.bodySectionPadding,
+              child: Column(
+                children: [
+                  if (header != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
+                          if (headerTrailing != null) headerTrailing!,
+                        ],
                       ),
-                    CupertinoListSection.insetGrouped(
-                      clipBehavior: cupertinoClipBehavior,
-                      backgroundColor: cupertinoBackgroundColor ??
-                          CupertinoTheme.of(context).scaffoldBackgroundColor,
-                      decoration: BoxDecoration(
-                        color: cupertinoBackgroundColor ??
-                            Styles.cupertinoCardColor.resolveFrom(context),
-                        borderRadius: cupertinoBorderRadius ??
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      separatorColor:
-                          Styles.cupertinoSeparatorColor.resolveFrom(context),
-                      margin: EdgeInsets.zero,
-                      hasLeading: hasLeading,
-                      additionalDividerMargin: cupertinoAdditionalDividerMargin,
-                      children: children,
                     ),
-                  ],
-                ),
-              );
+                  CupertinoListSection.insetGrouped(
+                    clipBehavior: cupertinoClipBehavior,
+                    backgroundColor:
+                        cupertinoBackgroundColor ??
+                        CupertinoTheme.of(context).scaffoldBackgroundColor,
+                    decoration: BoxDecoration(
+                      color:
+                          cupertinoBackgroundColor ??
+                          Styles.cupertinoCardColor.resolveFrom(context),
+                      borderRadius:
+                          cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),
+                    margin: EdgeInsets.zero,
+                    hasLeading: hasLeading,
+                    additionalDividerMargin: cupertinoAdditionalDividerMargin,
+                    children: children,
+                  ),
+                ],
+              ),
+            );
       default:
         assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
@@ -249,21 +230,21 @@ class PlatformDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.android
         ? Divider(
-            height: height,
-            thickness: thickness,
-            indent: indent,
-            endIndent: endIndent,
-            color: color,
-          )
+          height: height,
+          thickness: thickness,
+          indent: indent,
+          endIndent: endIndent,
+          color: color,
+        )
         : Divider(
-            height: height,
-            thickness: thickness ?? 0.0,
-            // see:
-            // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
-            indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
-            endIndent: endIndent,
-            color: color ?? CupertinoColors.separator.resolveFrom(context),
-          );
+          height: height,
+          thickness: thickness ?? 0.0,
+          // see:
+          // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
+          indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
+          endIndent: endIndent,
+          color: color ?? CupertinoColors.separator.resolveFrom(context),
+        );
   }
 }
 
@@ -328,14 +309,13 @@ class PlatformListTile extends StatelessWidget {
           leading: leading,
           title: title,
           iconColor: Theme.of(context).colorScheme.outline,
-          subtitle: subtitle != null
-              ? DefaultTextStyle.merge(
-                  child: subtitle!,
-                  style: TextStyle(
-                    color: textShade(context, Styles.subtitleOpacity),
-                  ),
-                )
-              : null,
+          subtitle:
+              subtitle != null
+                  ? DefaultTextStyle.merge(
+                    child: subtitle!,
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                  )
+                  : null,
           trailing: trailing,
           dense: dense,
           visualDensity: visualDensity,
@@ -347,31 +327,27 @@ class PlatformListTile extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         return IconTheme(
-          data: CupertinoIconThemeData(
-            color: CupertinoColors.systemGrey.resolveFrom(context),
-          ),
+          data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor: selected == true
-                  ? CupertinoColors.systemGrey4.resolveFrom(context)
-                  : cupertinoBackgroundColor,
+              backgroundColor:
+                  selected == true
+                      ? CupertinoColors.systemGrey4.resolveFrom(context)
+                      : cupertinoBackgroundColor,
               leading: leading,
-              title: harmonizeCupertinoTitleStyle
-                  ? DefaultTextStyle.merge(
-                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
-                      child: title,
-                    )
-                  : title,
+              title:
+                  harmonizeCupertinoTitleStyle
+                      ? DefaultTextStyle.merge(
+                        // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
+                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                        child: title,
+                      )
+                      : title,
               subtitle: subtitle,
-              trailing: trailing ??
-                  (selected == true
-                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                      : null),
+              trailing:
+                  trailing ??
+                  (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
               additionalInfo: additionalInfo,
               padding: padding,
               onTap: onTap,
@@ -415,9 +391,8 @@ class AdaptiveListTile extends StatelessWidget {
       color: Colors.transparent,
       child: Theme(
         data: Theme.of(context).copyWith(
-          splashFactory: Theme.of(context).platform == TargetPlatform.iOS
-              ? NoSplash.splashFactory
-              : null,
+          splashFactory:
+              Theme.of(context).platform == TargetPlatform.iOS ? NoSplash.splashFactory : null,
         ),
         child: ListTile(
           leading: leading,
@@ -431,11 +406,8 @@ class AdaptiveListTile extends StatelessWidget {
   }
 }
 
-typedef RemovedItemBuilder<T> = Widget Function(
-  T item,
-  BuildContext context,
-  Animation<double> animation,
-);
+typedef RemovedItemBuilder<T> =
+    Widget Function(T item, BuildContext context, Animation<double> animation);
 
 /// Keeps a Dart [List] in sync with an [AnimatedList] or [SliverAnimatedList].
 ///
@@ -447,8 +419,8 @@ class AnimatedListModel<E> {
     required this.removedItemBuilder,
     Iterable<E>? initialItems,
     int? itemsOffset,
-  })  : _items = List<E>.from(initialItems ?? <E>[]),
-        itemsOffset = itemsOffset ?? 0;
+  }) : _items = List<E>.from(initialItems ?? <E>[]),
+       itemsOffset = itemsOffset ?? 0;
 
   final GlobalKey<AnimatedListState> listKey;
   final RemovedItemBuilder<E> removedItemBuilder;
@@ -470,12 +442,9 @@ class AnimatedListModel<E> {
   E removeAt(int index) {
     final E removedItem = _items.removeAt(index - itemsOffset);
     if (removedItem != null) {
-      _animatedList!.removeItem(
-        index,
-        (BuildContext context, Animation<double> animation) {
-          return removedItemBuilder(removedItem, context, animation);
-        },
-      );
+      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return removedItemBuilder(removedItem, context, animation);
+      });
     }
     return removedItem;
   }
@@ -497,8 +466,8 @@ class SliverAnimatedListModel<E> {
     required this.removedItemBuilder,
     Iterable<E>? initialItems,
     int? itemsOffset,
-  })  : _items = List<E>.from(initialItems ?? <E>[]),
-        itemsOffset = itemsOffset ?? 0;
+  }) : _items = List<E>.from(initialItems ?? <E>[]),
+       itemsOffset = itemsOffset ?? 0;
 
   final GlobalKey<SliverAnimatedListState> listKey;
   final RemovedItemBuilder<E> removedItemBuilder;
@@ -520,12 +489,9 @@ class SliverAnimatedListModel<E> {
   E removeAt(int index) {
     final E removedItem = _items.removeAt(index - itemsOffset);
     if (removedItem != null) {
-      _animatedList!.removeItem(
-        index,
-        (BuildContext context, Animation<double> animation) {
-          return removedItemBuilder(removedItem, context, animation);
-        },
-      );
+      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return removedItemBuilder(removedItem, context, animation);
+      });
     }
     return removedItem;
   }

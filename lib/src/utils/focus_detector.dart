@@ -52,8 +52,7 @@ class FocusDetector extends StatefulWidget {
   _FocusDetectorState createState() => _FocusDetectorState();
 }
 
-class _FocusDetectorState extends State<FocusDetector>
-    with WidgetsBindingObserver {
+class _FocusDetectorState extends State<FocusDetector> with WidgetsBindingObserver {
   final _visibilityDetectorKey = UniqueKey();
 
   /// Counter to keep track of the visibility changes.
@@ -101,13 +100,13 @@ class _FocusDetectorState extends State<FocusDetector>
 
   @override
   Widget build(BuildContext context) => VisibilityDetector(
-        key: _visibilityDetectorKey,
-        onVisibilityChanged: (visibilityInfo) {
-          final visibleFraction = visibilityInfo.visibleFraction;
-          _notifyVisibilityStatusChange(visibleFraction);
-        },
-        child: widget.child,
-      );
+    key: _visibilityDetectorKey,
+    onVisibilityChanged: (visibilityInfo) {
+      final visibleFraction = visibilityInfo.visibleFraction;
+      _notifyVisibilityStatusChange(visibleFraction);
+    },
+    child: widget.child,
+  );
 
   /// Notifies changes in the widget's visibility.
   void _notifyVisibilityStatusChange(double newVisibleFraction) {

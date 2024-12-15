@@ -42,20 +42,10 @@ class BroadcastPlayerWidget extends ConsumerWidget {
           ),
           const SizedBox(width: 5),
         ],
-        Flexible(
-          child: Text(
-            name,
-            style: textStyle,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+        Flexible(child: Text(name, style: textStyle, overflow: TextOverflow.ellipsis)),
         if (rating != null) ...[
           const SizedBox(width: 5),
-          Text(
-            rating.toString(),
-            style: const TextStyle(),
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(rating.toString(), style: const TextStyle(), overflow: TextOverflow.ellipsis),
         ],
       ],
     );

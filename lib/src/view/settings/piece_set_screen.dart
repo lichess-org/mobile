@@ -53,34 +53,30 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.pieceSet),
-        actions: [
-          if (isLoading) const PlatformAppBarLoadingIndicator(),
-        ],
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: SafeArea(
         child: ListView.separated(
           itemCount: PieceSet.values.length,
-          separatorBuilder: (_, __) => PlatformDivider(
-            height: 1,
-            // on iOS: 14 (default indent) + 16 (padding)
-            indent: Theme.of(context).platform == TargetPlatform.iOS
-                ? 14 + 16
-                : null,
-            color: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : Colors.transparent,
-          ),
+          separatorBuilder:
+              (_, __) => PlatformDivider(
+                height: 1,
+                // on iOS: 14 (default indent) + 16 (padding)
+                indent: Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
+                color: Theme.of(context).platform == TargetPlatform.iOS ? null : Colors.transparent,
+              ),
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
             return PlatformListTile(
-              trailing: boardPrefs.pieceSet == pieceSet
-                  ? Theme.of(context).platform == TargetPlatform.android
-                      ? const Icon(Icons.check)
-                      : Icon(
-                          CupertinoIcons.check_mark_circled_solid,
-                          color: CupertinoTheme.of(context).primaryColor,
-                        )
-                  : null,
+              trailing:
+                  boardPrefs.pieceSet == pieceSet
+                      ? Theme.of(context).platform == TargetPlatform.android
+                          ? const Icon(Icons.check)
+                          : Icon(
+                            CupertinoIcons.check_mark_circled_solid,
+                            color: CupertinoTheme.of(context).primaryColor,
+                          )
+                      : null,
               title: Text(pieceSet.label),
               subtitle: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 264),
@@ -89,11 +85,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                     boardPrefs.boardTheme.thumbnail,
                     Row(
                       children: [
-                        for (final img in getPieceImages(pieceSet))
-                          Image(
-                            image: img,
-                            height: 44,
-                          ),
+                        for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),
                       ],
                     ),
                   ],

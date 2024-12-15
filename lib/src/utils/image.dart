@@ -4,10 +4,7 @@ import 'dart:typed_data';
 
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-typedef ImageColors = ({
-  int primaryContainer,
-  int onPrimaryContainer,
-});
+typedef ImageColors = ({int primaryContainer, int onPrimaryContainer});
 
 /// A worker that quantizes an image and returns a minimal color scheme associated
 /// with the image.
@@ -41,12 +38,7 @@ class ImageColorWorker {
     final connection = Completer<(ReceivePort, SendPort)>.sync();
     initPort.handler = (dynamic initialMessage) {
       final commandPort = initialMessage as SendPort;
-      connection.complete(
-        (
-          ReceivePort.fromRawReceivePort(initPort),
-          commandPort,
-        ),
-      );
+      connection.complete((ReceivePort.fromRawReceivePort(initPort), commandPort));
     };
 
     try {
@@ -56,8 +48,7 @@ class ImageColorWorker {
       rethrow;
     }
 
-    final (ReceivePort receivePort, SendPort sendPort) =
-        await connection.future;
+    final (ReceivePort receivePort, SendPort sendPort) = await connection.future;
 
     return ImageColorWorker._(receivePort, sendPort);
   }
@@ -79,10 +70,7 @@ class ImageColorWorker {
     if (_closed && _activeRequests.isEmpty) _responses.close();
   }
 
-  static void _handleCommandsToIsolate(
-    ReceivePort receivePort,
-    SendPort sendPort,
-  ) {
+  static void _handleCommandsToIsolate(ReceivePort receivePort, SendPort sendPort) {
     receivePort.listen((message) async {
       if (message == 'shutdown') {
         receivePort.close();
@@ -91,15 +79,14 @@ class ImageColorWorker {
       final (int id, Uint32List image) = message as (int, Uint32List);
       try {
         // final stopwatch0 = Stopwatch()..start();
-        final QuantizerResult quantizerResult =
-            await QuantizerCelebi().quantize(image, 32);
+        final QuantizerResult quantizerResult = await QuantizerCelebi().quantize(image, 32);
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-          (int key, int value) =>
-              MapEntry<int, int>(_getArgbFromAbgr(key), value),
+          (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
         );
         final significantColors = Map<int, int>.from(colorToCount)
           ..removeWhere((key, value) => value < 10);
-        final meanTone = colorToCount.entries.fold<double>(
+        final meanTone =
+            colorToCount.entries.fold<double>(
               0,
               (double previousValue, MapEntry<int, int> element) =>
                   previousValue + Hct.fromInt(element.key).tone * element.value,
@@ -109,19 +96,18 @@ class ImageColorWorker {
               (int previousValue, int element) => previousValue + element,
             );
 
-        final int scoredResult = Score.score(
-          colorToCount,
-          desired: 1,
-          fallbackColorARGB: 0xFFFFFFFF,
-          filter: false,
-        ).first;
+        final int scoredResult =
+            Score.score(
+              colorToCount,
+              desired: 1,
+              fallbackColorARGB: 0xFFFFFFFF,
+              filter: false,
+            ).first;
         final Hct sourceColor = Hct.fromInt(scoredResult);
         if ((meanTone - sourceColor.tone).abs() > 20) {
           sourceColor.tone = meanTone;
         }
-        final scheme = (significantColors.length <= 10
-            ? SchemeMonochrome.new
-            : SchemeFidelity.new)(
+        final scheme = (significantColors.length <= 10 ? SchemeMonochrome.new : SchemeFidelity.new)(
           sourceColorHct: sourceColor,
           isDark: sourceColor.tone < 50,
           contrastLevel: 0.0,

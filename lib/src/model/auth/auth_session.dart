@@ -30,11 +30,8 @@ class AuthSession extends _$AuthSession {
 
 @Freezed(fromJson: true, toJson: true)
 class AuthSessionState with _$AuthSessionState {
-  const factory AuthSessionState({
-    required LightUser user,
-    required String token,
-  }) = _AuthSessionState;
+  const factory AuthSessionState({required LightUser user, required String token}) =
+      _AuthSessionState;
 
-  factory AuthSessionState.fromJson(Map<String, dynamic> json) =>
-      _$AuthSessionStateFromJson(json);
+  factory AuthSessionState.fromJson(Map<String, dynamic> json) => _$AuthSessionStateFromJson(json);
 }

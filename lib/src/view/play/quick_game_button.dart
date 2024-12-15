@@ -21,8 +21,7 @@ class QuickGameButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return Row(
       children: [
@@ -51,9 +50,7 @@ class QuickGameButton extends ConsumerWidget {
                 context: context,
                 isScrollControlled: true,
                 showDragHandle: true,
-                constraints: BoxConstraints(
-                  maxHeight: screenHeight - (screenHeight / 10),
-                ),
+                constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
                 builder: (BuildContext context) {
                   return TimeControlModal(
                     value: playPrefs.quickPairingTimeIncrement,
@@ -68,52 +65,53 @@ class QuickGameButton extends ConsumerWidget {
             },
           ),
         ),
-        if (Theme.of(context).platform == TargetPlatform.android)
-          const SizedBox(width: 8.0),
+        if (Theme.of(context).platform == TargetPlatform.android) const SizedBox(width: 8.0),
         Expanded(
           flex: kFlexGoldenRatio,
-          child: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton.tinted(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 16.0,
-                  ),
-                  onPressed: isOnline
-                      ? () {
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (_) => GameScreen(
-                              seek: GameSeek.fastPairing(
-                                playPrefs.quickPairingTimeIncrement,
-                                session,
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  child: Text(context.l10n.play, style: Styles.bold),
-                )
-              : FilledButton(
-                  onPressed: isOnline
-                      ? () {
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (_) => GameScreen(
-                              seek: GameSeek.fastPairing(
-                                playPrefs.quickPairingTimeIncrement,
-                                session,
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? CupertinoButton.tinted(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                    onPressed:
+                        isOnline
+                            ? () {
+                              pushPlatformRoute(
+                                context,
+                                rootNavigator: true,
+                                builder:
+                                    (_) => GameScreen(
+                                      seek: GameSeek.fastPairing(
+                                        playPrefs.quickPairingTimeIncrement,
+                                        session,
+                                      ),
+                                    ),
+                              );
+                            }
+                            : null,
                     child: Text(context.l10n.play, style: Styles.bold),
+                  )
+                  : FilledButton(
+                    onPressed:
+                        isOnline
+                            ? () {
+                              pushPlatformRoute(
+                                context,
+                                rootNavigator: true,
+                                builder:
+                                    (_) => GameScreen(
+                                      seek: GameSeek.fastPairing(
+                                        playPrefs.quickPairingTimeIncrement,
+                                        session,
+                                      ),
+                                    ),
+                              );
+                            }
+                            : null,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(context.l10n.play, style: Styles.bold),
+                    ),
                   ),
-                ),
         ),
       ],
     );
