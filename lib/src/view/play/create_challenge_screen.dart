@@ -416,7 +416,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
       try {
         Chess.fromSetup(Setup.parseFen(data.text!.trim()));
         _controller.text = data.text!;
-      } catch (_, __) {
+      } catch (_) {
         if (mounted) {
           showPlatformSnackbar(context, context.l10n.invalidFen, type: SnackBarType.error);
         }

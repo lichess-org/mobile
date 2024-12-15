@@ -136,7 +136,7 @@ class _BodyState extends State<_Body> {
           ),
         ),
       );
-    } catch (_, __) {}
+    } catch (_) {}
 
     // try to parse as PGN
     try {
@@ -169,7 +169,7 @@ class _BodyState extends State<_Body> {
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
         ),
       );
-    } catch (_, __) {}
+    } catch (_) {}
 
     return null;
   }
