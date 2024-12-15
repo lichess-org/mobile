@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -311,30 +312,27 @@ typedef _CardColors = ({
 });
 final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
-Future<(_CardColors?, Uint8List?)?> _computeImageColors(
+Future<_CardColors?> _computeImageColors(
   ImageColorWorker worker,
-  String imageUrl, [
-  Uint8List? image,
-]) async {
-  final response = await worker.getImageColors(
-    imageUrl,
-    fileExtension: 'webp',
-  );
+  String imageUrl,
+  ByteData imageBytes,
+) async {
+  final response =
+      await worker.getImageColors(imageBytes.buffer.asUint32List());
   if (response != null) {
-    final (:image, :primaryContainer, :onPrimaryContainer) = response;
+    final (:primaryContainer, :onPrimaryContainer) = response;
     final cardColors = (
       primaryContainer: Color(primaryContainer),
       onPrimaryContainer: Color(onPrimaryContainer),
     );
     _colorsCache[NetworkImage(imageUrl)] = cardColors;
-    return (cardColors, image);
+    return cardColors;
   }
   return null;
 }
 
 class _BroadcastCartState extends State<BroadcastCard> {
   _CardColors? _cardColors;
-  ImageProvider? _imageProvider;
   bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
@@ -348,31 +346,28 @@ class _BroadcastCartState extends State<BroadcastCard> {
     final cachedColors = _colorsCache[imageProvider];
     if (_colorsCache.containsKey(imageProvider)) {
       _cardColors = cachedColors;
-      _imageProvider = imageProvider;
-    } else {
-      if (imageUrl != null) {
-        _fetchImageAndColors(NetworkImage(imageUrl!));
-      } else {
-        _imageProvider = kDefaultBroadcastImage;
-      }
+    } else if (imageUrl != null) {
+      _getImageColors(NetworkImage(imageUrl!));
     }
   }
 
-  Future<void> _fetchImageAndColors(NetworkImage provider) async {
+  Future<void> _getImageColors(NetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
       SchedulerBinding.instance.scheduleFrameCallback((_) {
-        scheduleMicrotask(() => _fetchImageAndColors(provider));
+        scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      final response = await _computeImageColors(widget.worker, provider.url);
+      await precacheImage(provider, context);
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      final response =
+          await _computeImageColors(widget.worker, provider.url, imageBytes!);
       if (response != null) {
-        final (cardColors, image) = response;
         if (mounted) {
           setState(() {
-            _imageProvider = image != null ? MemoryImage(image) : imageProvider;
-            _cardColors = cardColors;
+            _cardColors = response;
           });
         }
       }
@@ -449,28 +444,26 @@ class _BroadcastCartState extends State<BroadcastCard> {
                 },
                 child: AspectRatio(
                   aspectRatio: 2.0,
-                  child: _imageProvider != null
-                      ? Image(
-                          image: _imageProvider!,
-                          frameBuilder: (
-                            context,
-                            child,
-                            frame,
-                            wasSynchronouslyLoaded,
-                          ) {
-                            if (wasSynchronouslyLoaded) {
-                              return child;
-                            }
-                            return AnimatedOpacity(
-                              duration: const Duration(milliseconds: 500),
-                              opacity: frame == null ? 0 : 1,
-                              child: child,
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Image(image: kDefaultBroadcastImage),
-                        )
-                      : const SizedBox.shrink(),
+                  child: Image(
+                    image: imageProvider,
+                    frameBuilder: (
+                      context,
+                      child,
+                      frame,
+                      wasSynchronouslyLoaded,
+                    ) {
+                      if (wasSynchronouslyLoaded) {
+                        return child;
+                      }
+                      return AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        opacity: frame == null ? 0 : 1,
+                        child: child,
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Image(image: kDefaultBroadcastImage),
+                  ),
                 ),
               ),
               Positioned(
@@ -587,6 +580,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
   }
 }
 
+/// Pre-cache images and extract colors for broadcasts.
 Future<void> preCacheBroadcastImages(
   BuildContext context, {
   required Iterable<Broadcast> broadcasts,
@@ -597,22 +591,70 @@ Future<void> preCacheBroadcastImages(
     if (imageUrl != null) {
       final provider = NetworkImage(imageUrl);
       await precacheImage(provider, context);
-      final imageStream = provider.resolve(ImageConfiguration.empty);
-      final Completer<Uint8List?> completer = Completer<Uint8List?>();
-      final ImageStreamListener listener = ImageStreamListener(
-        (imageInfo, synchronousCall) async {
-          final bytes = await imageInfo.image.toByteData();
-          if (!completer.isCompleted) {
-            completer.complete(bytes?.buffer.asUint8List());
-          }
-        },
-      );
-      imageStream.addListener(listener);
-      final imageBytes = await completer.future;
-      imageStream.removeListener(listener);
-      if (imageBytes != null) {
-        await _computeImageColors(worker, imageUrl, imageBytes);
-      }
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      await _computeImageColors(worker, imageUrl, imageBytes!);
     }
   }
+}
+
+// Scale image size down to reduce computation time of color extraction.
+Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
+  const double maxDimension = 112.0;
+  final ImageStream stream = imageProvider.resolve(
+    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
+  );
+  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
+  late ImageStreamListener listener;
+  late ui.Image scaledImage;
+  Timer? loadFailureTimeout;
+
+  listener = ImageStreamListener(
+    (ImageInfo info, bool sync) async {
+      loadFailureTimeout?.cancel();
+      stream.removeListener(listener);
+      final ui.Image image = info.image;
+      final int width = image.width;
+      final int height = image.height;
+      double paintWidth = width.toDouble();
+      double paintHeight = height.toDouble();
+      assert(width > 0 && height > 0);
+
+      final bool rescale = width > maxDimension || height > maxDimension;
+      if (rescale) {
+        paintWidth =
+            (width > height) ? maxDimension : (maxDimension / height) * width;
+        paintHeight =
+            (height > width) ? maxDimension : (maxDimension / width) * height;
+      }
+      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(pictureRecorder);
+      paintImage(
+        canvas: canvas,
+        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
+        image: image,
+        filterQuality: FilterQuality.none,
+      );
+
+      final ui.Picture picture = pictureRecorder.endRecording();
+      scaledImage =
+          await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
+      imageCompleter.complete(info.image);
+    },
+    onError: (Object exception, StackTrace? stackTrace) {
+      stream.removeListener(listener);
+      throw Exception('Failed to render image: $exception');
+    },
+  );
+
+  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
+    stream.removeListener(listener);
+    imageCompleter.completeError(
+      TimeoutException('Timeout occurred trying to load image'),
+    );
+  });
+
+  stream.addListener(listener);
+  await imageCompleter.future;
+  return scaledImage;
 }

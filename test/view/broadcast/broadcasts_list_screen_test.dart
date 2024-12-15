@@ -20,11 +20,7 @@ class FakeImageColorWorker implements ImageColorWorker {
   bool get closed => false;
 
   @override
-  Future<ImageColors?> getImageColors(
-    String url, {
-    Uint8List? image,
-    String? fileExtension,
-  }) {
+  Future<ImageColors?> getImageColors(Uint32List image) {
     return Future.value(null);
   }
 }
@@ -73,7 +69,7 @@ void main() {
           // wait for broadcast tournaments to load
           await tester.pump(const Duration(milliseconds: 100));
 
-          expect(find.byType(BroadcastGridItem), findsAtLeast(1));
+          expect(find.byType(BroadcastCard), findsAtLeast(1));
         });
       },
     );
@@ -103,8 +99,6 @@ void main() {
           await tester.pump(const Duration(milliseconds: 100));
 
           await tester.scrollUntilVisible(find.text('Completed'), 200.0);
-
-          await tester.pumpAndSettle();
         });
       },
     );
