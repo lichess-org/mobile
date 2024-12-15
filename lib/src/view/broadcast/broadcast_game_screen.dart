@@ -87,19 +87,24 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     );
     final broadcastGamePgn = ref
         .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
-    final title = widget.title ??
-        (switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
-          AsyncData(value: final title) => title,
-          _ => 'Broadcast Game',
-        });
+    final title = (widget.title != null)
+        ? Text(
+            widget.title!,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          )
+        : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
+            AsyncData(value: final title) => Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            _ => const SizedBox.shrink(),
+          };
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(
-          title,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
+        title: title,
         actions: [
           AppBarAnalysisTabIndicator(
             tabs: tabs,
