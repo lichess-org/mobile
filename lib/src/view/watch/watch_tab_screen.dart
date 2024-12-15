@@ -177,7 +177,7 @@ class _BodyState extends ConsumerState<_Body> {
         try {
           await preCacheBroadcastImages(
             context,
-            broadcasts: current.value!.active.take(10),
+            broadcasts: current.value!.active,
             worker: _worker!,
           );
         } finally {

@@ -10,7 +10,6 @@ typedef ImageColors = ({
   Uint8List? image,
   int primaryContainer,
   int onPrimaryContainer,
-  int error,
 });
 
 /// A worker that quantizes an image and returns a minimal color scheme associated
@@ -114,30 +113,46 @@ class ImageColorWorker {
           resized.buffer.asUint32List(),
           32,
         );
-        // debugPrint(
+        // print(
         //   'Decoding and quantization took: ${stopwatch0.elapsedMilliseconds}ms',
         // );
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
           (int key, int value) =>
               MapEntry<int, int>(_getArgbFromAbgr(key), value),
         );
-        final List<int> scoredResults = Score.score(
+        final significantColors = Map<int, int>.from(colorToCount)
+          ..removeWhere((key, value) => value < 10);
+        final meanTone = colorToCount.entries.fold<double>(
+              0,
+              (double previousValue, MapEntry<int, int> element) =>
+                  previousValue + Hct.fromInt(element.key).tone * element.value,
+            ) /
+            colorToCount.values.fold<int>(
+              0,
+              (int previousValue, int element) => previousValue + element,
+            );
+
+        final int scoredResult = Score.score(
           colorToCount,
           desired: 1,
-          fallbackColorARGB: 0xFF000000,
+          fallbackColorARGB: 0xFFFFFFFF,
           filter: false,
-        );
-        final Hct sourceColor = Hct.fromInt(scoredResults.first);
-        final scheme = SchemeFidelity(
+        ).first;
+        final Hct sourceColor = Hct.fromInt(scoredResult);
+        if ((meanTone - sourceColor.tone).abs() > 20) {
+          sourceColor.tone = meanTone;
+        }
+        final scheme = (significantColors.length <= 10
+            ? SchemeMonochrome.new
+            : SchemeFidelity.new)(
           sourceColorHct: sourceColor,
-          isDark: false,
+          isDark: sourceColor.tone < 50,
           contrastLevel: 0.0,
         );
         final result = (
           image: image == null ? bytes : null,
           primaryContainer: scheme.primaryContainer,
           onPrimaryContainer: scheme.onPrimaryContainer,
-          error: scheme.error,
         );
         sendPort.send((id, result));
       } catch (e) {

@@ -50,6 +50,8 @@ class BroadcastTournamentData with _$BroadcastTournamentData {
     required String name,
     required String? imageUrl,
     required String? description,
+    // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
+    int? tier,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }

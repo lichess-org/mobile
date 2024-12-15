@@ -89,6 +89,7 @@ BroadcastTournamentData _tournamentDataFromPick(
     BroadcastTournamentData(
       id: pick('id').asBroadcastTournamentIdOrThrow(),
       name: pick('name').asStringOrThrow(),
+      tier: pick('tier').asIntOrNull(),
       imageUrl: pick('image').asStringOrNull(),
       description: pick('description').asStringOrNull(),
       information: (
