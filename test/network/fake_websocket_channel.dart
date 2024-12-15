@@ -114,25 +114,19 @@ class FakeWebSocketChannel implements WebSocketChannel {
   void pipe(StreamChannel<dynamic> other) {}
 
   @override
-  StreamChannel<S> transform<S>(
-    StreamChannelTransformer<S, dynamic> transformer,
-  ) {
+  StreamChannel<S> transform<S>(StreamChannelTransformer<S, dynamic> transformer) {
     // TODO: implement transform
     throw UnimplementedError();
   }
 
   @override
-  StreamChannel<dynamic> transformSink(
-    StreamSinkTransformer<dynamic, dynamic> transformer,
-  ) {
+  StreamChannel<dynamic> transformSink(StreamSinkTransformer<dynamic, dynamic> transformer) {
     // TODO: implement transformSink
     throw UnimplementedError();
   }
 
   @override
-  StreamChannel<dynamic> transformStream(
-    StreamTransformer<dynamic, dynamic> transformer,
-  ) {
+  StreamChannel<dynamic> transformStream(StreamTransformer<dynamic, dynamic> transformer) {
     // TODO: implement transformStream
     throw UnimplementedError();
   }
@@ -144,17 +138,13 @@ class FakeWebSocketChannel implements WebSocketChannel {
   }
 
   @override
-  StreamChannel<dynamic> changeSink(
-    StreamSink<dynamic> Function(StreamSink<dynamic> p1) change,
-  ) {
+  StreamChannel<dynamic> changeSink(StreamSink<dynamic> Function(StreamSink<dynamic> p1) change) {
     // TODO: implement changeSink
     throw UnimplementedError();
   }
 
   @override
-  StreamChannel<dynamic> changeStream(
-    Stream<dynamic> Function(Stream<dynamic> p1) change,
-  ) {
+  StreamChannel<dynamic> changeStream(Stream<dynamic> Function(Stream<dynamic> p1) change) {
     // TODO: implement changeStream
     throw UnimplementedError();
   }
@@ -200,9 +190,7 @@ class FakeWebSocketSink implements WebSocketSink {
 
   @override
   Future<void> close([int? closeCode, String? closeReason]) {
-    return Future.wait([
-      _channel._incomingController.close(),
-    ]);
+    return Future.wait([_channel._incomingController.close()]);
   }
 
   @override

@@ -166,10 +166,7 @@ void main() {
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tv/channels') {
-          return mockResponse(
-            response,
-            200,
-          );
+          return mockResponse(response, 200);
         }
         return mockResponse('', 404);
       });
@@ -183,10 +180,7 @@ void main() {
       // supported channels only
       expect(result.length, 13);
 
-      expect(
-        result[TvChannel.best]?.user.name,
-        'Chessisnotfair',
-      );
+      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
     });
   });
 }

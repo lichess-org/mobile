@@ -35,12 +35,7 @@ class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(
-      PuzzleBatch(
-        solved: IList(const []),
-        unsolved: IList([puzzle]),
-      ),
-    );
+    registerFallbackValue(PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -49,23 +44,14 @@ void main() {
     final SemanticsHandle handle = tester.ensureSemantics();
 
     when(
-      () => mockBatchStorage.fetch(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      ),
+      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAll(
-        userId: null,
-      ),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
 
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
-      overrides: [
-        puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-      ],
+      overrides: [puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage)],
     );
 
     await tester.pumpWidget(app);
@@ -87,16 +73,9 @@ void main() {
 
   testWidgets('shows puzzle menu', (WidgetTester tester) async {
     when(
-      () => mockBatchStorage.fetch(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      ),
+      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAll(
-        userId: null,
-      ),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -120,16 +99,9 @@ void main() {
 
   testWidgets('shows daily puzzle', (WidgetTester tester) async {
     when(
-      () => mockBatchStorage.fetch(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      ),
+      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAll(
-        userId: null,
-      ),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -150,31 +122,17 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(DailyPuzzle), findsOneWidget);
-    expect(
-      find.widgetWithText(DailyPuzzle, 'Puzzle of the day'),
-      findsOneWidget,
-    );
-    expect(
-      find.widgetWithText(DailyPuzzle, 'Played 93,270 times'),
-      findsOneWidget,
-    );
+    expect(find.widgetWithText(DailyPuzzle, 'Puzzle of the day'), findsOneWidget);
+    expect(find.widgetWithText(DailyPuzzle, 'Played 93,270 times'), findsOneWidget);
     expect(find.widgetWithText(DailyPuzzle, 'Black to play'), findsOneWidget);
   });
 
   group('tactical training preview', () {
-    testWidgets('shows first puzzle from unsolved batch',
-        (WidgetTester tester) async {
+    testWidgets('shows first puzzle from unsolved batch', (WidgetTester tester) async {
       when(
-        () => mockBatchStorage.fetch(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
       ).thenAnswer((_) async => batch);
-      when(
-        () => mockBatchStorage.fetchAll(
-          userId: null,
-        ),
-      ).thenAnswer((_) async => IList(const []));
+      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -196,31 +154,24 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(PuzzleAnglePreview), findsOneWidget);
-      expect(
-        find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'),
-        findsOneWidget,
-      );
-      final chessboard = find
-          .descendant(
-            of: find.byType(PuzzleAnglePreview),
-            matching: find.byType(Chessboard),
-          )
-          .evaluate()
-          .first
-          .widget as Chessboard;
+      expect(find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'), findsOneWidget);
+      final chessboard =
+          find
+                  .descendant(
+                    of: find.byType(PuzzleAnglePreview),
+                    matching: find.byType(Chessboard),
+                  )
+                  .evaluate()
+                  .first
+                  .widget
+              as Chessboard;
 
-      expect(
-        chessboard.fen,
-        equals('4k2r/Q5pp/3bp3/4n3/1r5q/8/PP2B1PP/R1B2R1K b k - 0 21'),
-      );
+      expect(chessboard.fen, equals('4k2r/Q5pp/3bp3/4n3/1r5q/8/PP2B1PP/R1B2R1K b k - 0 21'));
     });
 
     testWidgets('shows saved puzzle batches', (WidgetTester tester) async {
       when(
-        () => mockBatchStorage.fetch(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
       ).thenAnswer((_) async => batch);
       when(
         () => mockBatchStorage.fetch(
@@ -229,16 +180,9 @@ void main() {
         ),
       ).thenAnswer((_) async => batch);
       when(
-        () => mockBatchStorage.fetch(
-          userId: null,
-          angle: const PuzzleOpening('A00'),
-        ),
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleOpening('A00')),
       ).thenAnswer((_) async => batch);
-      when(
-        () => mockBatchStorage.fetchAll(
-          userId: null,
-        ),
-      ).thenAnswer(
+      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer(
         (_) async => IList(const [
           (PuzzleTheme(PuzzleThemeKey.advancedPawn), 50),
           (PuzzleOpening('A00'), 50),
@@ -264,49 +208,27 @@ void main() {
       // wait for the puzzles to load
       await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.scrollUntilVisible(
-        find.widgetWithText(PuzzleAnglePreview, 'A00'),
-        200,
-      );
+      await tester.scrollUntilVisible(find.widgetWithText(PuzzleAnglePreview, 'A00'), 200);
       expect(find.byType(PuzzleAnglePreview), findsNWidgets(3));
-      expect(
-        find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'),
-        findsOneWidget,
-      );
-      expect(
-        find.widgetWithText(PuzzleAnglePreview, 'Advanced pawn'),
-        findsOneWidget,
-      );
-      expect(
-        find.widgetWithText(PuzzleAnglePreview, 'A00'),
-        findsOneWidget,
-      );
+      expect(find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'), findsOneWidget);
+      expect(find.widgetWithText(PuzzleAnglePreview, 'Advanced pawn'), findsOneWidget);
+      expect(find.widgetWithText(PuzzleAnglePreview, 'A00'), findsOneWidget);
     });
 
     testWidgets('delete a saved puzzle batch', (WidgetTester tester) async {
-      final testDb = await openAppDatabase(
-        databaseFactoryFfiNoIsolate,
-        inMemoryDatabasePath,
-      );
+      final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
 
       for (final (angle, timestamp) in [
         (const PuzzleTheme(PuzzleThemeKey.mix), '2021-01-01T00:00:00Z'),
-        (
-          const PuzzleTheme(PuzzleThemeKey.advancedPawn),
-          '2021-01-01T00:00:00Z'
-        ),
+        (const PuzzleTheme(PuzzleThemeKey.advancedPawn), '2021-01-01T00:00:00Z'),
         (const PuzzleOpening('A00'), '2021-01-02T00:00:00Z'),
       ]) {
-        await testDb.insert(
-          'puzzle_batchs',
-          {
-            'userId': '**anon**',
-            'angle': angle.key,
-            'data': jsonEncode(onePuzzleBatch.toJson()),
-            'lastModified': timestamp,
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        await testDb.insert('puzzle_batchs', {
+          'userId': '**anon**',
+          'angle': angle.key,
+          'data': jsonEncode(onePuzzleBatch.toJson()),
+          'lastModified': timestamp,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
       }
 
       final app = await makeTestProviderScopeApp(
@@ -347,19 +269,13 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(
-        find.widgetWithText(SlidableAction, 'Delete'),
-        findsOneWidget,
-      );
+      expect(find.widgetWithText(SlidableAction, 'Delete'), findsOneWidget);
 
       await tester.tap(find.widgetWithText(SlidableAction, 'Delete'));
 
       await tester.pumpAndSettle();
 
-      expect(
-        find.widgetWithText(PuzzleAnglePreview, 'A00'),
-        findsNothing,
-      );
+      expect(find.widgetWithText(PuzzleAnglePreview, 'A00'), findsNothing);
     });
   });
 }
@@ -383,14 +299,8 @@ final onePuzzleBatch = PuzzleBatch(
         id: GameId('PrlkCqOv'),
         perf: Perf.blitz,
         rated: true,
-        white: PuzzleGamePlayer(
-          side: Side.white,
-          name: 'user1',
-        ),
-        black: PuzzleGamePlayer(
-          side: Side.black,
-          name: 'user2',
-        ),
+        white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+        black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
         pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
       ),
     ),

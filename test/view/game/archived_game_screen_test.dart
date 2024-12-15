@@ -29,121 +29,78 @@ final client = MockClient((request) {
 
 void main() {
   group('ArchivedGameScreen', () {
-    testWidgets(
-      'loads game data if only game id is provided',
-      (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const ArchivedGameScreen(
-            gameId: GameId('qVChCOTc'),
-            orientation: Side.white,
-          ),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('loads game data if only game id is provided', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const ArchivedGameScreen(gameId: GameId('qVChCOTc'), orientation: Side.white),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(PieceWidget), findsNothing);
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // wait for game data loading
-        await tester.pump(const Duration(milliseconds: 100));
+      // wait for game data loading
+      await tester.pump(const Duration(milliseconds: 100));
 
-        expect(find.byType(PieceWidget), findsNWidgets(25));
-        expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
-        expect(
-          find.widgetWithText(GamePlayer, 'Stockfish level 1'),
-          findsOneWidget,
-        );
-      },
-      variant: kPlatformVariant,
-    );
+      expect(find.byType(PieceWidget), findsNWidgets(25));
+      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'displays game data and last fen immediately, then moves',
-      (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: ArchivedGameScreen(
-            gameData: gameData,
-            orientation: Side.white,
-          ),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('displays game data and last fen immediately, then moves', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: ArchivedGameScreen(gameData: gameData, orientation: Side.white),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        // data shown immediately
-        expect(find.byType(Chessboard), findsOneWidget);
-        expect(find.byType(PieceWidget), findsNWidgets(25));
-        expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
-        expect(
-          find.widgetWithText(GamePlayer, 'Stockfish level 1'),
-          findsOneWidget,
-        );
+      // data shown immediately
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(25));
+      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
 
-        // cannot interact with board
-        expect(
-          tester.widget<Chessboard>(find.byType(Chessboard)).game,
-          null,
-        );
+      // cannot interact with board
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).game, null);
 
-        // moves are not loaded
-        expect(find.byType(MoveList), findsNothing);
-        expect(
-          tester
-              .widget<BottomBarButton>(
-                find.byKey(const ValueKey('cursor-back')),
-              )
-              .onTap,
-          isNull,
-        );
+      // moves are not loaded
+      expect(find.byType(MoveList), findsNothing);
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
+        isNull,
+      );
 
-        // wait for game steps loading
-        await tester.pump(const Duration(milliseconds: 100));
-        // wait for move list ensureVisible animation to finish
-        await tester.pumpAndSettle();
+      // wait for game steps loading
+      await tester.pump(const Duration(milliseconds: 100));
+      // wait for move list ensureVisible animation to finish
+      await tester.pumpAndSettle();
 
-        // same info still displayed
-        expect(find.byType(Chessboard), findsOneWidget);
-        expect(find.byType(PieceWidget), findsNWidgets(25));
-        expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
-        expect(
-          find.widgetWithText(GamePlayer, 'Stockfish level 1'),
-          findsOneWidget,
-        );
+      // same info still displayed
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(25));
+      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
 
-        // now with the clocks
-        expect(find.text('1:46', findRichText: true), findsNWidgets(1));
-        expect(find.text('0:46', findRichText: true), findsNWidgets(1));
+      // now with the clocks
+      expect(find.text('1:46', findRichText: true), findsNWidgets(1));
+      expect(find.text('0:46', findRichText: true), findsNWidgets(1));
 
-        // moves are loaded
-        expect(find.byType(MoveList), findsOneWidget);
-        expect(
-          tester
-              .widget<BottomBarButton>(
-                find.byKey(const ValueKey('cursor-back')),
-              )
-              .onTap,
-          isNotNull,
-        );
-      },
-      variant: kPlatformVariant,
-    );
+      // moves are loaded
+      expect(find.byType(MoveList), findsOneWidget);
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
+        isNotNull,
+      );
+    }, variant: kPlatformVariant);
 
     testWidgets('navigate game positions', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: ArchivedGameScreen(
-          gameData: gameData,
-          orientation: Side.white,
-        ),
+        home: ArchivedGameScreen(gameData: gameData, orientation: Side.white),
         overrides: [
           lichessClientProvider.overrideWith((ref) {
             return LichessClient(client, ref);
@@ -168,23 +125,12 @@ void main() {
               .toList();
 
       expect(
-        tester
-            .widget<InlineMoveItem>(
-              find.widgetWithText(InlineMoveItem, 'Qe1#'),
-            )
-            .current,
+        tester.widget<InlineMoveItem>(find.widgetWithText(InlineMoveItem, 'Qe1#')).current,
         isTrue,
       );
 
       // cannot go forward
-      expect(
-        tester
-            .widget<BottomBarButton>(
-              find.byKey(const Key('cursor-forward')),
-            )
-            .onTap,
-        isNull,
-      );
+      expect(tester.widget<BottomBarButton>(find.byKey(const Key('cursor-forward'))).onTap, isNull);
 
       for (var i = 0; i <= movesAfterE4.length; i++) {
         // go back in history
@@ -195,25 +141,17 @@ void main() {
         // move list is updated
         final prevMoveIndex = i + 1;
         if (prevMoveIndex < movesAfterE4.length) {
-          final prevMove =
-              find.widgetWithText(InlineMoveItem, movesAfterE4[prevMoveIndex]);
+          final prevMove = find.widgetWithText(InlineMoveItem, movesAfterE4[prevMoveIndex]);
           expect(prevMove, findsAtLeastNWidgets(1));
           expect(
-            tester
-                .widgetList<InlineMoveItem>(prevMove)
-                .any((e) => e.current ?? false),
+            tester.widgetList<InlineMoveItem>(prevMove).any((e) => e.current ?? false),
             isTrue,
           );
         }
       }
 
       // cannot go backward anymore
-      expect(
-        tester
-            .widget<BottomBarButton>(find.byKey(const Key('cursor-back')))
-            .onTap,
-        isNull,
-      );
+      expect(tester.widget<BottomBarButton>(find.byKey(const Key('cursor-back'))).onTap, isNull);
     });
   });
 }
@@ -234,11 +172,7 @@ final gameData = LightArchivedGame(
   status: GameStatus.mate,
   white: const Player(aiLevel: 1),
   black: const Player(
-    user: LightUser(
-      id: UserId('veloce'),
-      name: 'veloce',
-      isPatron: true,
-    ),
+    user: LightUser(id: UserId('veloce'), name: 'veloce', isPatron: true),
     rating: 1435,
   ),
   variant: Variant.standard,
