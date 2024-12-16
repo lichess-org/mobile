@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/change_colors.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -75,25 +76,29 @@ class _BodyState extends ConsumerState<_Body> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 16),
               child: Center(
-                child: Chessboard.fixed(
-                  size: boardSize,
-                  orientation: Side.white,
-                  lastMove: const NormalMove(from: Square.e2, to: Square.e4),
-                  fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-                  shapes:
-                      <Shape>{
-                        Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
-                        Arrow(
-                          color: boardPrefs.shapeColor.color,
-                          orig: Square.fromName('b8'),
-                          dest: Square.fromName('c6'),
-                        ),
-                      }.lock,
-                  settings: boardPrefs.toBoardSettings().copyWith(
-                    brightness: brightness,
-                    hue: hue,
-                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                    boxShadow: boardShadows,
+                child: ChangeColors(
+                  brightness: brightness,
+                  hue: hue,
+                  child: Chessboard.fixed(
+                    size: boardSize,
+                    orientation: Side.white,
+                    lastMove: const NormalMove(from: Square.e2, to: Square.e4),
+                    fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+                    shapes:
+                        <Shape>{
+                          Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
+                          Arrow(
+                            color: boardPrefs.shapeColor.color,
+                            orig: Square.fromName('b8'),
+                            dest: Square.fromName('c6'),
+                          ),
+                        }.lock,
+                    settings: boardPrefs.toBoardSettings().copyWith(
+                      brightness: 0.0,
+                      hue: 0.0,
+                      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                      boxShadow: boardShadows,
+                    ),
                   ),
                 ),
               ),
@@ -103,18 +108,6 @@ class _BodyState extends ConsumerState<_Body> {
         ListSection(
           hasLeading: true,
           children: [
-            SettingsListTile(
-              icon: const Icon(LichessIcons.chess_board),
-              settingsLabel: Text(context.l10n.board),
-              settingsValue: boardPrefs.boardTheme.label,
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.board,
-                  builder: (context) => const BoardThemeScreen(),
-                );
-              },
-            ),
             PlatformListTile(
               leading: const Icon(Icons.brightness_6),
               title: Slider.adaptive(
@@ -127,7 +120,7 @@ class _BodyState extends ConsumerState<_Body> {
                   });
                 },
                 onChangeEnd: (value) {
-                  ref.read(boardPreferencesProvider.notifier).setBrightness(brightness);
+                  ref.read(boardPreferencesProvider.notifier).adjustColors(brightness: brightness);
                 },
               ),
             ),
@@ -143,7 +136,7 @@ class _BodyState extends ConsumerState<_Body> {
                   });
                 },
                 onChangeEnd: (value) {
-                  ref.read(boardPreferencesProvider.notifier).setHue(hue);
+                  ref.read(boardPreferencesProvider.notifier).adjustColors(hue: hue);
                 },
               ),
             ),
@@ -162,8 +155,9 @@ class _BodyState extends ConsumerState<_Body> {
                     brightness = 0.0;
                     hue = 0.0;
                   });
-                  ref.read(boardPreferencesProvider.notifier).setBrightness(0.0);
-                  ref.read(boardPreferencesProvider.notifier).setHue(0.0);
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .adjustColors(brightness: 0.0, hue: 0.0);
                 },
               ),
             ),
@@ -172,6 +166,18 @@ class _BodyState extends ConsumerState<_Body> {
         ListSection(
           hasLeading: true,
           children: [
+            SettingsListTile(
+              icon: const Icon(LichessIcons.chess_board),
+              settingsLabel: Text(context.l10n.board),
+              settingsValue: boardPrefs.boardTheme.label,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.board,
+                  builder: (context) => const BoardThemeScreen(),
+                );
+              },
+            ),
             SettingsListTile(
               icon: const Icon(LichessIcons.chess_pawn),
               settingsLabel: Text(context.l10n.pieceSet),

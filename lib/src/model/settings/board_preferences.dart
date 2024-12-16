@@ -95,12 +95,8 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     return save(state.copyWith(shapeColor: shapeColor));
   }
 
-  Future<void> setBrightness(double brightness) {
-    return save(state.copyWith(brightness: brightness));
-  }
-
-  Future<void> setHue(double hue) {
-    return save(state.copyWith(hue: hue));
+  Future<void> adjustColors({double? brightness, double? hue}) {
+    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
 }
 

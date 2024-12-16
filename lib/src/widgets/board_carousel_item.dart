@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/change_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _kBoardCarouselItemMargin = EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0);
@@ -51,58 +52,64 @@ class BoardCarouselItem extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide - _kBoardCarouselItemMargin.horizontal;
-        final card = PlatformCard(
-          color: backgroundColor,
-          margin:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? EdgeInsets.zero
-                  : _kBoardCarouselItemMargin,
-          child: AdaptiveInkWell(
-            splashColor: splashColor,
-            borderRadius: BorderRadius.circular(10),
-            onTap: onTap,
-            child: Stack(
-              children: [
-                ShaderMask(
-                  blendMode: BlendMode.dstOut,
-                  shaderCallback: (bounds) {
-                    return LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        backgroundColor.withValues(alpha: 0.25),
-                        backgroundColor.withValues(alpha: 1.0),
-                      ],
-                      stops: const [0.3, 1.00],
-                      tileMode: TileMode.clamp,
-                    ).createShader(bounds);
-                  },
-                  child: SizedBox(
-                    height: boardSize,
-                    child: Chessboard.fixed(
-                      size: boardSize,
-                      fen: fen,
-                      orientation: orientation,
-                      lastMove: lastMove,
-                      settings: boardPrefs.toBoardSettings().copyWith(
-                        enableCoordinates: false,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0),
+        final card = ChangeColors(
+          brightness: boardPrefs.brightness,
+          hue: boardPrefs.hue,
+          child: PlatformCard(
+            color: backgroundColor,
+            margin:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? EdgeInsets.zero
+                    : _kBoardCarouselItemMargin,
+            child: AdaptiveInkWell(
+              splashColor: splashColor,
+              borderRadius: BorderRadius.circular(10),
+              onTap: onTap,
+              child: Stack(
+                children: [
+                  ShaderMask(
+                    blendMode: BlendMode.dstOut,
+                    shaderCallback: (bounds) {
+                      return LinearGradient(
+                        begin: Alignment.center,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          backgroundColor.withValues(alpha: 0.25),
+                          backgroundColor.withValues(alpha: 1.0),
+                        ],
+                        stops: const [0.3, 1.00],
+                        tileMode: TileMode.clamp,
+                      ).createShader(bounds);
+                    },
+                    child: SizedBox(
+                      height: boardSize,
+                      child: Chessboard.fixed(
+                        size: boardSize,
+                        fen: fen,
+                        orientation: orientation,
+                        lastMove: lastMove,
+                        settings: boardPrefs.toBoardSettings().copyWith(
+                          brightness: 0.0,
+                          hue: 0.0,
+                          enableCoordinates: false,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  left: 0,
-                  bottom: 8,
-                  child: DefaultTextStyle.merge(
-                    style: const TextStyle(color: Colors.white),
-                    child: description,
+                  Positioned(
+                    left: 0,
+                    bottom: 8,
+                    child: DefaultTextStyle.merge(
+                      style: const TextStyle(color: Colors.white),
+                      child: description,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
