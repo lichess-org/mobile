@@ -444,13 +444,13 @@ class _BroadcastCartState extends State<BroadcastCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget.broadcast.round.startsAt != null)
-                      Padding(
-                        padding: kBroadcastGridItemContentPadding,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          if (!widget.broadcast.isFinished) ...[
                             Text(
                               widget.broadcast.round.name,
                               style: TextStyle(
@@ -462,6 +462,8 @@ class _BroadcastCartState extends State<BroadcastCard> {
                               maxLines: 1,
                             ),
                             const SizedBox(width: 5.0),
+                          ],
+                          if (widget.broadcast.round.startsAt != null)
                             Expanded(
                               child: Text(
                                 relativeDate(widget.broadcast.round.startsAt!),
@@ -470,13 +472,28 @@ class _BroadcastCartState extends State<BroadcastCard> {
                                 maxLines: 1,
                               ),
                             ),
-                            if (widget.broadcast.isLive) ...[
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 16,
+                          if (widget.broadcast.isLive) ...[
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 16,
+                                  color: liveColor,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(0, 1),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text(
+                                  'LIVE',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                     color: liveColor,
                                     shadows: const [
                                       Shadow(
@@ -486,29 +503,14 @@ class _BroadcastCartState extends State<BroadcastCard> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(width: 4.0),
-                                  Text(
-                                    'LIVE',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: liveColor,
-                                      shadows: const [
-                                        Shadow(
-                                          color: Colors.black54,
-                                          offset: Offset(0, 1),
-                                          blurRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
+                        ],
                       ),
+                    ),
                     Padding(
                       padding: kBroadcastGridItemContentPadding.add(
                         const EdgeInsets.symmetric(vertical: 3.0),

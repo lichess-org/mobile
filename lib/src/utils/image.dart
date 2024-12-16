@@ -79,7 +79,7 @@ class ImageColorWorker {
       final (int id, Uint32List image) = message as (int, Uint32List);
       try {
         // final stopwatch0 = Stopwatch()..start();
-        final QuantizerResult quantizerResult = await QuantizerCelebi().quantize(image, 32);
+        final quantizerResult = await QuantizerCelebi().quantize(image, 32);
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
           (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
         );
