@@ -88,13 +88,11 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                       fen: widget.fen,
                       orientation: widget.orientation,
                       lastMove: widget.lastMove as NormalMove?,
-                      settings: ChessboardSettings(
+                      settings: boardPrefs.toBoardSettings().copyWith(
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                         boxShadow: boardShadows,
                         animationDuration: const Duration(milliseconds: 150),
-                        pieceAssets: boardPrefs.pieceSet.assets,
-                        colorScheme: boardPrefs.boardTheme.colors,
                       ),
                     ),
                   const SizedBox(width: 10.0),

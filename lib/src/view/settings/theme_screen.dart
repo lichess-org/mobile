@@ -40,9 +40,25 @@ switch (shapeColor) {
   ShapeColor.yellow => 'Yellow',
 };
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  late double brightness;
+  late double hue;
+
+  @override
+  void initState() {
+    super.initState();
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    brightness = boardPrefs.brightness;
+    hue = boardPrefs.hue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
@@ -74,6 +90,8 @@ class _Body extends ConsumerWidget {
                         ),
                       }.lock,
                   settings: boardPrefs.toBoardSettings().copyWith(
+                    brightness: brightness,
+                    hue: hue,
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     boxShadow: boardShadows,
                   ),
@@ -85,18 +103,145 @@ class _Body extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
+            SettingsListTile(
+              icon: const Icon(LichessIcons.chess_board),
+              settingsLabel: Text(context.l10n.board),
+              settingsValue: boardPrefs.boardTheme.label,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.board,
+                  builder: (context) => const BoardThemeScreen(),
+                );
+              },
+            ),
+            PlatformListTile(
+              leading: const Icon(Icons.brightness_6),
+              title: Slider.adaptive(
+                min: -0.5,
+                max: 0.5,
+                value: brightness,
+                onChanged: (value) {
+                  setState(() {
+                    brightness = value;
+                  });
+                },
+                onChangeEnd: (value) {
+                  ref.read(boardPreferencesProvider.notifier).setBrightness(brightness);
+                },
+              ),
+            ),
+            PlatformListTile(
+              leading: const Icon(Icons.invert_colors),
+              title: Slider.adaptive(
+                min: -1.0,
+                max: 1.0,
+                value: hue,
+                onChanged: (value) {
+                  setState(() {
+                    hue = value;
+                  });
+                },
+                onChangeEnd: (value) {
+                  ref.read(boardPreferencesProvider.notifier).setHue(hue);
+                },
+              ),
+            ),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 300),
+              crossFadeState:
+                  brightness != 0.0 || hue != 0.0
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+              firstChild: const SizedBox.shrink(),
+              secondChild: PlatformListTile(
+                leading: const Icon(Icons.cancel),
+                title: Text(context.l10n.boardReset),
+                onTap: () {
+                  setState(() {
+                    brightness = 0.0;
+                    hue = 0.0;
+                  });
+                  ref.read(boardPreferencesProvider.notifier).setBrightness(0.0);
+                  ref.read(boardPreferencesProvider.notifier).setHue(0.0);
+                },
+              ),
+            ),
+          ],
+        ),
+        ListSection(
+          hasLeading: true,
+          children: [
+            SettingsListTile(
+              icon: const Icon(LichessIcons.chess_pawn),
+              settingsLabel: Text(context.l10n.pieceSet),
+              settingsValue: boardPrefs.pieceSet.label,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.pieceSet,
+                  builder: (context) => const PieceSetScreen(),
+                );
+              },
+            ),
+            SettingsListTile(
+              icon: const Icon(LichessIcons.arrow_full_upperright),
+              settingsLabel: const Text('Shape color'),
+              settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: ShapeColor.values,
+                  selectedItem: boardPrefs.shapeColor,
+                  labelBuilder:
+                      (t) => Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(text: shapeColorL10n(context, t)),
+                            const TextSpan(text: '   '),
+                            WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
+                          ],
+                        ),
+                      ),
+                  onSelectedItemChanged: (ShapeColor? value) {
+                    ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setShapeColor(value ?? ShapeColor.green);
+                  },
+                );
+              },
+            ),
+            SwitchSettingTile(
+              leading: const Icon(Icons.location_on),
+              title: Text(context.l10n.preferencesBoardCoordinates),
+              value: boardPrefs.coordinates,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
+              },
+            ),
+            SwitchSettingTile(
+              // TODO translate
+              leading: const Icon(Icons.border_outer),
+              title: const Text('Show border'),
+              value: boardPrefs.showBorder,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleBorder();
+              },
+            ),
+          ],
+        ),
+        ListSection(
+          hasLeading: true,
+          children: [
             SwitchSettingTile(
               leading: const Icon(Icons.colorize_outlined),
               padding:
                   Theme.of(context).platform == TargetPlatform.iOS
                       ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
                       : null,
-              title: const Text('Custom theme'),
+              title: const Text('App theme'),
               // TODO translate
-              subtitle: const Text(
-                'Configure your own app theme using a seed color. Disable to use the chessboard theme.',
-                maxLines: 3,
-              ),
+              subtitle: const Text('Configure your own app theme using a seed color.', maxLines: 3),
               value: generalPrefs.customThemeEnabled,
               onChanged: (value) {
                 ref.read(generalPreferencesProvider.notifier).toggleCustomTheme();
@@ -219,79 +364,6 @@ class _Body extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-        ListSection(
-          hasLeading: true,
-          children: [
-            SettingsListTile(
-              icon: const Icon(LichessIcons.chess_board),
-              settingsLabel: Text(context.l10n.board),
-              settingsValue: boardPrefs.boardTheme.label,
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.board,
-                  builder: (context) => const BoardThemeScreen(),
-                );
-              },
-            ),
-            SettingsListTile(
-              icon: const Icon(LichessIcons.chess_pawn),
-              settingsLabel: Text(context.l10n.pieceSet),
-              settingsValue: boardPrefs.pieceSet.label,
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.pieceSet,
-                  builder: (context) => const PieceSetScreen(),
-                );
-              },
-            ),
-            SettingsListTile(
-              icon: const Icon(LichessIcons.arrow_full_upperright),
-              settingsLabel: const Text('Shape color'),
-              settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: ShapeColor.values,
-                  selectedItem: boardPrefs.shapeColor,
-                  labelBuilder:
-                      (t) => Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(text: shapeColorL10n(context, t)),
-                            const TextSpan(text: '   '),
-                            WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
-                          ],
-                        ),
-                      ),
-                  onSelectedItemChanged: (ShapeColor? value) {
-                    ref
-                        .read(boardPreferencesProvider.notifier)
-                        .setShapeColor(value ?? ShapeColor.green);
-                  },
-                );
-              },
-            ),
-            SwitchSettingTile(
-              leading: const Icon(Icons.location_on),
-              title: Text(context.l10n.preferencesBoardCoordinates),
-              value: boardPrefs.coordinates,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
-              },
-            ),
-            SwitchSettingTile(
-              // TODO translate
-              leading: const Icon(Icons.border_outer),
-              title: const Text('Show border'),
-              value: boardPrefs.showBorder,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleBorder();
-              },
             ),
           ],
         ),

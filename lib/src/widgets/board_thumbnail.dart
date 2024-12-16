@@ -76,13 +76,11 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
               fen: widget.fen,
               orientation: widget.orientation,
               lastMove: widget.lastMove as NormalMove?,
-              settings: ChessboardSettings(
+              settings: boardPrefs.toBoardSettings().copyWith(
                 enableCoordinates: false,
                 borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                 boxShadow: boardShadows,
-                animationDuration: widget.animationDuration!,
-                pieceAssets: boardPrefs.pieceSet.assets,
-                colorScheme: boardPrefs.boardTheme.colors,
+                animationDuration: widget.animationDuration,
               ),
             )
             : StaticChessboard(
@@ -95,6 +93,8 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
               boxShadow: boardShadows,
               pieceAssets: boardPrefs.pieceSet.assets,
               colorScheme: boardPrefs.boardTheme.colors,
+              brightness: boardPrefs.brightness,
+              hue: boardPrefs.hue,
             );
 
     final maybeTappableBoard =

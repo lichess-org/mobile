@@ -84,14 +84,12 @@ class BoardCarouselItem extends ConsumerWidget {
                       fen: fen,
                       orientation: orientation,
                       lastMove: lastMove,
-                      settings: ChessboardSettings(
+                      settings: boardPrefs.toBoardSettings().copyWith(
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10.0),
                           topRight: Radius.circular(10.0),
                         ),
-                        pieceAssets: boardPrefs.pieceSet.assets,
-                        colorScheme: boardPrefs.boardTheme.colors,
                       ),
                     ),
                   ),
