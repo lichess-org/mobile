@@ -31,11 +31,8 @@ class _Body extends ConsumerWidget {
 
     final hasSystemColors = getCorePalette() != null;
 
-    final choices = BoardTheme.values
-        .where(
-          (t) => t != BoardTheme.system || hasSystemColors,
-        )
-        .toList();
+    final choices =
+        BoardTheme.values.where((t) => t != BoardTheme.system || hasSystemColors).toList();
 
     void onChanged(BoardTheme? value) =>
         ref.read(boardPreferencesProvider.notifier).setBoardTheme(value ?? BoardTheme.brown);

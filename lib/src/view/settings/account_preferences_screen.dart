@@ -113,10 +113,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SwitchSettingTile(
                   title: Text(context.l10n.preferencesShowPlayerRatings),
-                  subtitle: Text(
-                    context.l10n.preferencesExplainShowPlayerRatings,
-                    maxLines: 5,
-                  ),
+                  subtitle: Text(context.l10n.preferencesExplainShowPlayerRatings, maxLines: 5),
                   value: data.showRatings.value,
                   onChanged:
                       isLoading

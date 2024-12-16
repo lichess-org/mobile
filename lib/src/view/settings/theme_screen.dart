@@ -87,9 +87,10 @@ class _Body extends ConsumerWidget {
           children: [
             SwitchSettingTile(
               leading: const Icon(Icons.colorize_outlined),
-              padding: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
-                  : null,
+              padding:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
+                      : null,
               title: const Text('Custom theme'),
               // TODO translate
               subtitle: const Text(
@@ -98,16 +99,15 @@ class _Body extends ConsumerWidget {
               ),
               value: generalPrefs.customThemeEnabled,
               onChanged: (value) {
-                ref
-                    .read(generalPreferencesProvider.notifier)
-                    .toggleCustomTheme();
+                ref.read(generalPreferencesProvider.notifier).toggleCustomTheme();
               },
             ),
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 300),
-              crossFadeState: generalPrefs.customThemeEnabled
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+              crossFadeState:
+                  generalPrefs.customThemeEnabled
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
               firstChild: const SizedBox.shrink(),
               secondChild: ListSection(
                 margin: EdgeInsets.zero,
@@ -117,36 +117,35 @@ class _Body extends ConsumerWidget {
                   PlatformListTile(
                     leading: const Icon(Icons.color_lens),
                     title: const Text('Seed color'),
-                    trailing: generalPrefs.customThemeSeed != null
-                        ? Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: generalPrefs.customThemeSeed,
-                              shape: BoxShape.circle,
-                            ),
-                          )
-                        : getCorePalette() != null
+                    trailing:
+                        generalPrefs.customThemeSeed != null
+                            ? Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: generalPrefs.customThemeSeed,
+                                shape: BoxShape.circle,
+                              ),
+                            )
+                            : getCorePalette() != null
                             ? Text(context.l10n.mobileSystemColors)
                             : Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: LichessColors.primary[500],
-                                  shape: BoxShape.circle,
-                                ),
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: LichessColors.primary[500],
+                                shape: BoxShape.circle,
                               ),
+                            ),
                     onTap: () {
                       showAdaptiveDialog<Object>(
                         context: context,
                         barrierDismissible: false,
                         builder: (context) {
-                          final defaultColor = getCorePalettePrimary() ??
-                              LichessColors.primary[500]!;
-                          bool useDefault =
-                              generalPrefs.customThemeSeed == null;
-                          Color color =
-                              generalPrefs.customThemeSeed ?? defaultColor;
+                          final defaultColor =
+                              getCorePalettePrimary() ?? LichessColors.primary[500]!;
+                          bool useDefault = generalPrefs.customThemeSeed == null;
+                          Color color = generalPrefs.customThemeSeed ?? defaultColor;
                           return StatefulBuilder(
                             builder: (context, setState) {
                               return PlatformAlertDialog(
@@ -165,17 +164,19 @@ class _Body extends ConsumerWidget {
                                         },
                                       ),
                                       SecondaryButton(
-                                        semanticsLabel: getCorePalette() != null
-                                            ? context.l10n.mobileSystemColors
-                                            : 'Default color',
-                                        onPressed: !useDefault
-                                            ? () {
-                                                setState(() {
-                                                  useDefault = true;
-                                                  color = defaultColor;
-                                                });
-                                              }
-                                            : null,
+                                        semanticsLabel:
+                                            getCorePalette() != null
+                                                ? context.l10n.mobileSystemColors
+                                                : 'Default color',
+                                        onPressed:
+                                            !useDefault
+                                                ? () {
+                                                  setState(() {
+                                                    useDefault = true;
+                                                    color = defaultColor;
+                                                  });
+                                                }
+                                                : null,
                                         child: Text(
                                           getCorePalette() != null
                                               ? context.l10n.mobileSystemColors

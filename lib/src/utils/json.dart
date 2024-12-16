@@ -23,10 +23,10 @@ class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
   Map<String, dynamic>? toJson(Locale? locale) {
     return locale != null
         ? {
-            'languageCode': locale.languageCode,
-            'countryCode': locale.countryCode,
-            'scriptCode': locale.scriptCode,
-          }
+          'languageCode': locale.languageCode,
+          'countryCode': locale.countryCode,
+          'scriptCode': locale.scriptCode,
+        }
         : null;
   }
 }
@@ -38,24 +38,17 @@ class ColorConverter implements JsonConverter<Color?, Map<String, dynamic>?> {
   Color? fromJson(Map<String, dynamic>? json) {
     return json != null
         ? Color.from(
-            alpha: json['a'] as double,
-            red: json['r'] as double,
-            green: json['g'] as double,
-            blue: json['b'] as double,
-          )
+          alpha: json['a'] as double,
+          red: json['r'] as double,
+          green: json['g'] as double,
+          blue: json['b'] as double,
+        )
         : null;
   }
 
   @override
   Map<String, dynamic>? toJson(Color? color) {
-    return color != null
-        ? {
-            'a': color.a,
-            'r': color.r,
-            'g': color.g,
-            'b': color.b,
-          }
-        : null;
+    return color != null ? {'a': color.a, 'r': color.r, 'g': color.g, 'b': color.b} : null;
   }
 }
 
