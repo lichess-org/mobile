@@ -53,8 +53,8 @@ class BoardCarouselItem extends ConsumerWidget {
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide - _kBoardCarouselItemMargin.horizontal;
         final card = ChangeColors(
-          brightness: boardPrefs.brightness,
           hue: boardPrefs.hue,
+          brightness: boardPrefs.brightness,
           child: PlatformCard(
             color: backgroundColor,
             margin:
@@ -88,14 +88,14 @@ class BoardCarouselItem extends ConsumerWidget {
                         fen: fen,
                         orientation: orientation,
                         lastMove: lastMove,
-                        settings: boardPrefs.toBoardSettings().copyWith(
-                          brightness: 0.0,
-                          hue: 0.0,
+                        settings: ChessboardSettings(
                           enableCoordinates: false,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(10.0),
                             topRight: Radius.circular(10.0),
                           ),
+                          pieceAssets: boardPrefs.pieceSet.assets,
+                          colorScheme: boardPrefs.boardTheme.colors,
                         ),
                       ),
                     ),

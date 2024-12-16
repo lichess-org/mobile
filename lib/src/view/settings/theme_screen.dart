@@ -65,6 +65,8 @@ class _BodyState extends ConsumerState<_Body> {
 
     const horizontalPadding = 16.0;
 
+    final bool hasAjustedColors = brightness != 0.0 || hue != 0.0;
+
     return ListView(
       children: [
         LayoutBuilder(
@@ -140,26 +142,27 @@ class _BodyState extends ConsumerState<_Body> {
                 },
               ),
             ),
-            AnimatedCrossFade(
-              duration: const Duration(milliseconds: 300),
-              crossFadeState:
-                  brightness != 0.0 || hue != 0.0
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-              firstChild: const SizedBox.shrink(),
-              secondChild: PlatformListTile(
-                leading: const Icon(Icons.cancel),
-                title: Text(context.l10n.boardReset),
-                onTap: () {
-                  setState(() {
-                    brightness = 0.0;
-                    hue = 0.0;
-                  });
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .adjustColors(brightness: 0.0, hue: 0.0);
-                },
+            PlatformListTile(
+              leading: Opacity(
+                opacity: hasAjustedColors ? 1.0 : 0.5,
+                child: const Icon(Icons.cancel),
               ),
+              title: Opacity(
+                opacity: hasAjustedColors ? 1.0 : 0.5,
+                child: Text(context.l10n.boardReset),
+              ),
+              onTap:
+                  hasAjustedColors
+                      ? () {
+                        setState(() {
+                          brightness = 0.0;
+                          hue = 0.0;
+                        });
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .adjustColors(brightness: 0.0, hue: 0.0);
+                      }
+                      : null,
             ),
           ],
         ),

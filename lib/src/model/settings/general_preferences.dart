@@ -49,14 +49,6 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
 
   Future<void> toggleCustomTheme() async {
     await save(state.copyWith(customThemeEnabled: !state.customThemeEnabled));
-    if (state.customThemeEnabled == false) {
-      final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-      if (boardTheme == BoardTheme.system) {
-        await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.brown);
-      }
-    } else {
-      await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system);
-    }
   }
 
   Future<void> setCustomThemeSeed(Color? color) {
@@ -88,7 +80,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    customThemeEnabled: true,
+    customThemeEnabled: false,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
