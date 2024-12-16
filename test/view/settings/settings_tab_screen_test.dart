@@ -21,83 +21,60 @@ final client = MockClient((request) {
 
 void main() {
   group('SettingsTabScreen', () {
-    testWidgets(
-      'meets accessibility guidelines',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const SettingsTabScreen(),
-        );
+      final app = await makeTestProviderScopeApp(tester, home: const SettingsTabScreen());
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await meetsTapTargetGuideline(tester);
+      await meetsTapTargetGuideline(tester);
 
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-        await expectLater(tester, meetsGuideline(textContrastGuideline));
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      "don't show signOut if no session",
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const SettingsTabScreen(),
-        );
+    testWidgets("don't show signOut if no session", (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const SettingsTabScreen());
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.text('Sign out'), findsNothing);
-      },
-      variant: kPlatformVariant,
-    );
+      expect(find.text('Sign out'), findsNothing);
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'signout',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const SettingsTabScreen(),
-          userSession: fakeSession,
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-            getDbSizeInBytesProvider.overrideWith((_) => 1000),
-          ],
-        );
+    testWidgets('signout', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const SettingsTabScreen(),
+        userSession: fakeSession,
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+          getDbSizeInBytesProvider.overrideWith((_) => 1000),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.text('Sign out'), findsOneWidget);
+      expect(find.text('Sign out'), findsOneWidget);
 
-        await tester.tap(
-          find.widgetWithText(PlatformListTile, 'Sign out'),
-          warnIfMissed: false,
-        );
-        await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(PlatformListTile, 'Sign out'), warnIfMissed: false);
+      await tester.pumpAndSettle();
 
-        // confirm
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
-          await tester
-              .tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
-        } else {
-          await tester.tap(find.text('OK'));
-        }
-        await tester.pump();
+      // confirm
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+        await tester.tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
+      } else {
+        await tester.tap(find.text('OK'));
+      }
+      await tester.pump();
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        // wait for sign out future
-        await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // wait for sign out future
+      await tester.pump(const Duration(seconds: 1));
 
-        expect(find.text('Sign out'), findsNothing);
-      },
-      variant: kPlatformVariant,
-    );
+      expect(find.text('Sign out'), findsNothing);
+    }, variant: kPlatformVariant);
   });
 }

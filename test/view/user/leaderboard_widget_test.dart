@@ -17,47 +17,31 @@ final client = MockClient((request) {
 
 void main() {
   group('LeaderboardWidget', () {
-    testWidgets(
-      'accessibility and basic info showing test',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: Column(children: [LeaderboardWidget()]),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('accessibility and basic info showing test', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Column(children: [LeaderboardWidget()]),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump(const Duration(milliseconds: 50));
 
-        for (final name in [
-          'Svetlana',
-          'Marcel',
-          'Anthony',
-          'Patoulatchi',
-          'Cerdan',
-        ]) {
-          expect(
-            find.widgetWithText(LeaderboardListTile, name),
-            findsOneWidget,
-          );
-        }
+      for (final name in ['Svetlana', 'Marcel', 'Anthony', 'Patoulatchi', 'Cerdan']) {
+        expect(find.widgetWithText(LeaderboardListTile, name), findsOneWidget);
+      }
 
-        // await meetsTapTargetGuideline(tester);
+      // await meetsTapTargetGuideline(tester);
 
-        // await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      // await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-        // if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-        //   await expectLater(tester, meetsGuideline(textContrastGuideline));
-        // }
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      // if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+      //   await expectLater(tester, meetsGuideline(textContrastGuideline));
+      // }
+      handle.dispose();
+    }, variant: kPlatformVariant);
   });
 }
 

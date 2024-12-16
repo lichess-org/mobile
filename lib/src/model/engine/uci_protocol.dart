@@ -13,12 +13,7 @@ const minDepth = 6;
 const maxPlies = 245;
 
 class UCIProtocol {
-  UCIProtocol()
-      : _options = {
-          'Threads': '1',
-          'Hash': '16',
-          'MultiPV': '1',
-        };
+  UCIProtocol() : _options = {'Threads': '1', 'Hash': '16', 'MultiPV': '1'};
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
@@ -95,9 +90,7 @@ class UCIProtocol {
       _work = null;
       _swapWork();
       return;
-    } else if (_work != null &&
-        _stopRequested != true &&
-        parts.first == 'info') {
+    } else if (_work != null && _stopRequested != true && parts.first == 'info') {
       int depth = 0;
       int nodes = 0;
       int multiPv = 1;
@@ -120,8 +113,7 @@ class UCIProtocol {
             isMate = parts[++i] == 'mate';
             povEv = int.parse(parts[++i]);
             if (i + 1 < parts.length &&
-                (parts[i + 1] == 'lowerbound' ||
-                    parts[i + 1] == 'upperbound')) {
+                (parts[i + 1] == 'lowerbound' || parts[i + 1] == 'upperbound')) {
               evalType = parts[++i];
             }
           case 'pv':
@@ -142,11 +134,7 @@ class UCIProtocol {
       // However non-primary pvs may only have an upperbound.
       if (evalType != null && multiPv == 1) return;
 
-      final pvData = PvData(
-        moves: IList(moves),
-        cp: isMate ? null : ev,
-        mate: isMate ? ev : null,
-      );
+      final pvData = PvData(moves: IList(moves), cp: isMate ? null : ev, mate: isMate ? ev : null);
 
       if (multiPv == 1) {
         _currentEval = ClientEval(
@@ -206,9 +194,7 @@ class UCIProtocol {
           _work!.initialPosition.fen,
           'moves',
           ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960
-                ? s.sanMove.move.uci
-                : s.castleSafeUCI,
+            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
           ),
         ].join(' '),
       );

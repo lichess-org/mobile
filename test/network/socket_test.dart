@@ -7,9 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';
 
-SocketClient makeTestSocketClient(
-  FakeWebSocketChannelFactory fakeChannelFactory,
-) {
+SocketClient makeTestSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
   final client = SocketClient(
     Uri(path: kDefaultSocketRoute),
     channelFactory: fakeChannelFactory,
@@ -44,8 +42,7 @@ void main() {
     test('handles ping/pong', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       int sentPingCount = 0;
@@ -133,11 +130,9 @@ void main() {
     });
 
     test('computes average lag', () async {
-      final fakeChannel =
-          FakeWebSocketChannel(connectionLag: const Duration(milliseconds: 10));
+      final fakeChannel = FakeWebSocketChannel(connectionLag: const Duration(milliseconds: 10));
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       // before the connection is ready the average lag is zero
@@ -153,19 +148,13 @@ void main() {
       await expectLater(fakeChannel.stream, emits('0'));
 
       // after the ping/pong exchange the average lag is computed
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(10));
 
       // wait for more ping/pong exchanges
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
 
       // average lag is still the same
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(10));
 
       // increase the lag of the connection
       fakeChannel.connectionLag = const Duration(milliseconds: 100);
@@ -174,10 +163,7 @@ void main() {
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
 
       // average lag should be higher
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(40),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(40));
 
       await socketClient.close();
 
@@ -188,8 +174,7 @@ void main() {
     test('handles ackable messages', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       await socketClient.firstConnection;
@@ -211,10 +196,7 @@ void main() {
       fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
 
       // no more messages are expected
-      await expectLater(
-        fakeChannel.sentMessagesExceptPing,
-        emitsInOrder([]),
-      );
+      await expectLater(fakeChannel.sentMessagesExceptPing, emitsInOrder([]));
 
       socketClient.close();
     });

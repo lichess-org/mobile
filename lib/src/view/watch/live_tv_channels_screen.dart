@@ -26,9 +26,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
         }
       },
       child: const PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text('Lichess TV'),
-        ),
+        appBar: PlatformAppBar(title: Text('Lichess TV')),
         body: _Body(),
       ),
     );
@@ -56,10 +54,9 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => TvScreen(
-                    channel: game.channel,
-                    initialGame: (game.id, game.orientation),
-                  ),
+                  builder:
+                      (_) =>
+                          TvScreen(channel: game.channel, initialGame: (game.id, game.orientation)),
                 );
               },
               orientation: game.orientation,
@@ -70,15 +67,8 @@ class _Body extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    game.channel.label,
-                    style: Styles.boardPreviewTitle,
-                  ),
-                  Icon(
-                    game.channel.icon,
-                    color: context.lichessColors.brag,
-                    size: 30,
-                  ),
+                  Text(game.channel.label, style: Styles.boardPreviewTitle),
+                  Icon(game.channel.icon, color: context.lichessColors.brag, size: 30),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,
                     aiLevel: game.player.asPlayer.aiLevel,
@@ -90,12 +80,8 @@ class _Body extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
 }

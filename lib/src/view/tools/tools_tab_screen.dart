@@ -42,15 +42,8 @@ class ToolsTabScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.tools),
-        ),
-        body: const Column(
-          children: [
-            ConnectivityBanner(),
-            Expanded(child: _Body()),
-          ],
-        ),
+        appBar: AppBar(title: Text(context.l10n.tools)),
+        body: const Column(children: [ConnectivityBanner(), Expanded(child: _Body())]),
       ),
     );
   }
@@ -62,10 +55,7 @@ class ToolsTabScreen extends ConsumerWidget {
         slivers: [
           CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
-          const SliverSafeArea(
-            top: false,
-            sliver: _Body(),
-          ),
+          const SliverSafeArea(top: false, sliver: _Body()),
         ],
       ),
     );
@@ -73,11 +63,7 @@ class ToolsTabScreen extends ConsumerWidget {
 }
 
 class _ToolsButton extends StatelessWidget {
-  const _ToolsButton({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
+  const _ToolsButton({required this.icon, required this.title, required this.onTap});
 
   final IconData icon;
 
@@ -87,31 +73,32 @@ class _ToolsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tilePadding = Theme.of(context).platform == TargetPlatform.iOS
-        ? const EdgeInsets.symmetric(vertical: 8.0)
-        : EdgeInsets.zero;
+    final tilePadding =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? const EdgeInsets.symmetric(vertical: 8.0)
+            : EdgeInsets.zero;
 
     return Padding(
-      padding: Theme.of(context).platform == TargetPlatform.android
-          ? const EdgeInsets.only(bottom: 16.0)
-          : EdgeInsets.zero,
+      padding:
+          Theme.of(context).platform == TargetPlatform.android
+              ? const EdgeInsets.only(bottom: 16.0)
+              : EdgeInsets.zero,
       child: Opacity(
         opacity: onTap == null ? 0.5 : 1.0,
         child: PlatformListTile(
           leading: Icon(
             icon,
             size: Styles.mainListTileIconSize,
-            color: Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoTheme.of(context).primaryColor
-                : Theme.of(context).colorScheme.primary,
+            color:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoTheme.of(context).primaryColor
+                    : Theme.of(context).colorScheme.primary,
           ),
-          title: Padding(
-            padding: tilePadding,
-            child: Text(title, style: Styles.callout),
-          ),
-          trailing: Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
+          title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
+          trailing:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
           onTap: onTap,
         ),
       ),
@@ -124,96 +111,97 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     final content = [
-      if (Theme.of(context).platform == TargetPlatform.android)
-        const SizedBox(height: 16.0),
+      if (Theme.of(context).platform == TargetPlatform.android) const SizedBox(height: 16.0),
       ListSection(
         hasLeading: true,
         children: [
           _ToolsButton(
             icon: Icons.upload_file,
             title: context.l10n.loadPosition,
-            onTap: () => pushPlatformRoute(
-              context,
-              builder: (context) => const LoadPositionScreen(),
-            ),
+            onTap:
+                () => pushPlatformRoute(context, builder: (context) => const LoadPositionScreen()),
           ),
           _ToolsButton(
             icon: Icons.biotech,
             title: context.l10n.analysis,
-            onTap: () => pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (context) => const AnalysisScreen(
-                options: AnalysisOptions(
-                  orientation: Side.white,
-                  standalone: (
-                    pgn: '',
-                    isComputerAnalysisAllowed: true,
-                    variant: Variant.standard,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          _ToolsButton(
-            icon: Icons.explore_outlined,
-            title: context.l10n.openingExplorer,
-            onTap: isOnline
-                ? () => pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (context) => const OpeningExplorerScreen(
+            onTap:
+                () => pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder:
+                      (context) => const AnalysisScreen(
                         options: AnalysisOptions(
                           orientation: Side.white,
                           standalone: (
                             pgn: '',
-                            isComputerAnalysisAllowed: false,
+                            isComputerAnalysisAllowed: true,
                             variant: Variant.standard,
                           ),
                         ),
                       ),
+                ),
+          ),
+          _ToolsButton(
+            icon: Icons.explore_outlined,
+            title: context.l10n.openingExplorer,
+            onTap:
+                isOnline
+                    ? () => pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder:
+                          (context) => const OpeningExplorerScreen(
+                            options: AnalysisOptions(
+                              orientation: Side.white,
+                              standalone: (
+                                pgn: '',
+                                isComputerAnalysisAllowed: false,
+                                variant: Variant.standard,
+                              ),
+                            ),
+                          ),
                     )
-                : null,
+                    : null,
           ),
           if (isOnline)
             _ToolsButton(
               icon: LichessIcons.study,
               title: context.l10n.studyMenu,
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const StudyListScreen(),
-              ),
+              onTap:
+                  () => pushPlatformRoute(context, builder: (context) => const StudyListScreen()),
             ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
-            onTap: () => pushPlatformRoute(
-              context,
-              builder: (context) => const BoardEditorScreen(),
-              rootNavigator: true,
-            ),
+            onTap:
+                () => pushPlatformRoute(
+                  context,
+                  builder: (context) => const BoardEditorScreen(),
+                  rootNavigator: true,
+                ),
           ),
           _ToolsButton(
             icon: Icons.where_to_vote_outlined,
             title: 'Coordinate Training', // TODO l10n
-            onTap: () => pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (context) => const CoordinateTrainingScreen(),
-            ),
+            onTap:
+                () => pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (context) => const CoordinateTrainingScreen(),
+                ),
           ),
           _ToolsButton(
             icon: Icons.alarm,
             title: context.l10n.clock,
-            onTap: () => pushPlatformRoute(
-              context,
-              builder: (context) => const ClockToolScreen(),
-              rootNavigator: true,
-            ),
+            onTap:
+                () => pushPlatformRoute(
+                  context,
+                  builder: (context) => const ClockToolScreen(),
+                  rootNavigator: true,
+                ),
           ),
         ],
       ),
@@ -221,9 +209,6 @@ class _Body extends ConsumerWidget {
 
     return Theme.of(context).platform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(
-            controller: puzzlesScrollController,
-            children: content,
-          );
+        : ListView(controller: puzzlesScrollController, children: content);
   }
 }

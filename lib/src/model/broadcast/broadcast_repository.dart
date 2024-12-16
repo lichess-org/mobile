@@ -14,26 +14,19 @@ class BroadcastRepository {
 
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return client.readJson(
-      Uri(
-        path: '/api/broadcast/top',
-        queryParameters: {'page': page.toString()},
-      ),
+      Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
       mapper: _makeBroadcastResponseFromJson,
     );
   }
 
-  Future<BroadcastTournament> getTournament(
-    BroadcastTournamentId broadcastTournamentId,
-  ) {
+  Future<BroadcastTournament> getTournament(BroadcastTournamentId broadcastTournamentId) {
     return client.readJson(
       Uri(path: 'api/broadcast/$broadcastTournamentId'),
       mapper: _makeTournamentFromJson,
     );
   }
 
-  Future<BroadcastRoundWithGames> getRound(
-    BroadcastRoundId broadcastRoundId,
-  ) {
+  Future<BroadcastRoundWithGames> getRound(BroadcastRoundId broadcastRoundId) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slugs
@@ -42,16 +35,11 @@ class BroadcastRepository {
     );
   }
 
-  Future<String> getGamePgn(
-    BroadcastRoundId roundId,
-    BroadcastGameId gameId,
-  ) {
+  Future<String> getGamePgn(BroadcastRoundId roundId, BroadcastGameId gameId) {
     return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
   }
 
-  Future<IList<BroadcastPlayerExtended>> getPlayers(
-    BroadcastTournamentId tournamentId,
-  ) {
+  Future<IList<BroadcastPlayerExtended>> getPlayers(BroadcastTournamentId tournamentId) {
     return client.readJsonList(
       Uri(path: '/broadcast/$tournamentId/players'),
       mapper: _makePlayerFromJson,
@@ -69,14 +57,10 @@ class BroadcastRepository {
   }
 }
 
-BroadcastList _makeBroadcastResponseFromJson(
-  Map<String, dynamic> json,
-) {
+BroadcastList _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
   return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
-    past: pick(json, 'past', 'currentPageResults')
-        .asListOrThrow(_broadcastFromPick)
-        .toIList(),
+    past: pick(json, 'past', 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),
     nextPage: pick(json, 'past', 'nextPage').asIntOrNull(),
   );
 }
@@ -88,47 +72,38 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     tour: _tournamentDataFromPick(pick('tour').required()),
     round: _roundFromPick(pick('round').required()),
     group: pick('group').asStringOrNull(),
-    roundToLinkId:
-        pick('roundToLink', 'id').asBroadcastRoundIdOrNull() ?? roundId,
+    roundToLinkId: pick('roundToLink', 'id').asBroadcastRoundIdOrNull() ?? roundId,
   );
 }
 
-BroadcastTournamentData _tournamentDataFromPick(
-  RequiredPick pick,
-) =>
-    BroadcastTournamentData(
-      id: pick('id').asBroadcastTournamentIdOrThrow(),
-      name: pick('name').asStringOrThrow(),
-      slug: pick('slug').asStringOrThrow(),
-      tier: pick('tier').asIntOrNull(),
-      imageUrl: pick('image').asStringOrNull(),
-      description: pick('description').asStringOrNull(),
-      information: (
-        format: pick('info', 'format').asStringOrNull(),
-        timeControl: pick('info', 'tc').asStringOrNull(),
-        players: pick('info', 'players').asStringOrNull(),
-        location: pick('info', 'location').asStringOrNull(),
-        dates: pick('dates').letOrNull(
-          (pick) => (
-            startsAt: pick(0).asDateTimeFromMillisecondsOrThrow(),
-            endsAt: pick(1).asDateTimeFromMillisecondsOrNull(),
-          ),
-        ),
-        website: pick('info', 'website')
-            .letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
+BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastTournamentData(
+  id: pick('id').asBroadcastTournamentIdOrThrow(),
+  name: pick('name').asStringOrThrow(),
+  slug: pick('slug').asStringOrThrow(),
+  tier: pick('tier').asIntOrNull(),
+  imageUrl: pick('image').asStringOrNull(),
+  description: pick('description').asStringOrNull(),
+  information: (
+    format: pick('info', 'format').asStringOrNull(),
+    timeControl: pick('info', 'tc').asStringOrNull(),
+    players: pick('info', 'players').asStringOrNull(),
+    location: pick('info', 'location').asStringOrNull(),
+    dates: pick('dates').letOrNull(
+      (pick) => (
+        startsAt: pick(0).asDateTimeFromMillisecondsOrThrow(),
+        endsAt: pick(1).asDateTimeFromMillisecondsOrNull(),
       ),
-    );
+    ),
+    website: pick('info', 'website').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
+  ),
+);
 
-BroadcastTournament _makeTournamentFromJson(
-  Map<String, dynamic> json,
-) {
+BroadcastTournament _makeTournamentFromJson(Map<String, dynamic> json) {
   return BroadcastTournament(
     data: _tournamentDataFromPick(pick(json, 'tour').required()),
     rounds: pick(json, 'rounds').asListOrThrow(_roundFromPick).toIList(),
     defaultRoundId: pick(json, 'defaultRoundId').asBroadcastRoundIdOrThrow(),
-    group: pick(json, 'group', 'tours')
-        .asListOrNull(_tournamentGroupFromPick)
-        ?.toIList(),
+    group: pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList(),
   );
 }
 
@@ -142,9 +117,10 @@ BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
 BroadcastRound _roundFromPick(RequiredPick pick) {
   final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
-  final status = live
-      ? RoundStatus.live
-      : finished
+  final status =
+      live
+          ? RoundStatus.live
+          : finished
           ? RoundStatus.finished
           : RoundStatus.upcoming;
 
@@ -165,33 +141,29 @@ BroadcastRoundWithGames _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
   return (round: _roundFromPick(round), games: _gamesFromPick(games));
 }
 
-BroadcastRoundGames _gamesFromPick(
-  RequiredPick pick,
-) =>
+BroadcastRoundGames _gamesFromPick(RequiredPick pick) =>
     IMap.fromEntries(pick.asListOrThrow(gameFromPick));
 
-MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
-  RequiredPick pick,
-) {
+MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   final stringStatus = pick('status').asStringOrNull();
 
-  final status = (stringStatus == null)
-      ? BroadcastResult.noResultPgnTag
-      : switch (stringStatus) {
-          '½-½' => BroadcastResult.draw,
-          '1-0' => BroadcastResult.whiteWins,
-          '0-1' => BroadcastResult.blackWins,
-          '*' => BroadcastResult.ongoing,
-          _ => throw FormatException(
-              "value $stringStatus can't be interpreted as a broadcast result",
-            )
-        };
+  final status =
+      (stringStatus == null)
+          ? BroadcastResult.noResultPgnTag
+          : switch (stringStatus) {
+            '½-½' => BroadcastResult.draw,
+            '1-0' => BroadcastResult.whiteWins,
+            '0-1' => BroadcastResult.blackWins,
+            '*' => BroadcastResult.ongoing,
+            _ =>
+              throw FormatException(
+                "value $stringStatus can't be interpreted as a broadcast result",
+              ),
+          };
 
   /// The amount of time that the player whose turn it is has been thinking since his last move
-  final thinkTime =
-      pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
-  final fen =
-      pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen;
+  final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
+  final fen = pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen;
   final playingSide = Setup.parseFen(fen).turn;
 
   return MapEntry(
@@ -224,8 +196,7 @@ BroadcastPlayer _playerFromPick(
   required Duration thinkingTime,
 }) {
   final clock = pick('clock').asDurationFromCentiSecondsOrNull();
-  final updatedClock =
-      clock != null && isPlaying ? clock - thinkingTime : clock;
+  final updatedClock = clock != null && isPlaying ? clock - thinkingTime : clock;
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
@@ -254,14 +225,11 @@ BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayerResults _makePlayerResultsFromJson(
-  Map<String, dynamic> json,
-) {
+BroadcastPlayerResults _makePlayerResultsFromJson(Map<String, dynamic> json) {
   return (
     player: _playerExtendedFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
-    games:
-        pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList()
+    games: pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList(),
   );
 }
 
@@ -270,7 +238,7 @@ BroadcastFideData _fideDataFromPick(Pick pick) {
     ratings: (
       standard: pick('ratings', 'standard').asIntOrNull(),
       rapid: pick('ratings', 'rapid').asIntOrNull(),
-      blitz: pick('ratings', 'blitz').asIntOrNull()
+      blitz: pick('ratings', 'blitz').asIntOrNull(),
     ),
     birthYear: pick('year').asIntOrNull(),
   );

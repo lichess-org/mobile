@@ -13,9 +13,7 @@ class PuzzleSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final autoNext = ref.watch(
-      puzzlePreferencesProvider.select((value) => value.autoNext),
-    );
+    final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
     return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
@@ -29,11 +27,7 @@ class PuzzleSettingsScreen extends ConsumerWidget {
           title: const Text('Board settings'),
           trailing: const Icon(CupertinoIcons.chevron_right),
           onTap: () {
-            pushPlatformRoute(
-              context,
-              fullscreenDialog: true,
-              screen: const BoardSettingsScreen(),
-            );
+            pushPlatformRoute(context, fullscreenDialog: true, screen: const BoardSettingsScreen());
           },
         ),
       ],

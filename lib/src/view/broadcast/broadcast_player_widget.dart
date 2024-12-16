@@ -36,27 +36,16 @@ class BroadcastPlayerWidget extends ConsumerWidget {
           Text(
             title!,
             style: TextStyle(
-              color: (title == 'BOT')
-                  ? context.lichessColors.fancy
-                  : context.lichessColors.brag,
+              color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(width: 5),
         ],
-        Flexible(
-          child: Text(
-            name,
-            style: textStyle,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+        Flexible(child: Text(name, style: textStyle, overflow: TextOverflow.ellipsis)),
         if (rating != null) ...[
           const SizedBox(width: 5),
-          Text(
-            rating.toString(),
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(rating.toString(), overflow: TextOverflow.ellipsis),
         ],
       ],
     );

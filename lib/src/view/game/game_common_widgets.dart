@@ -27,13 +27,7 @@ import 'ping_rating.dart';
 final _gameTitledateFormat = DateFormat.yMMMd();
 
 class GameAppBar extends ConsumerWidget {
-  const GameAppBar({
-    this.id,
-    this.seek,
-    this.challenge,
-    this.lastMoveAt,
-    super.key,
-  });
+  const GameAppBar({this.id, this.seek, this.challenge, this.lastMoveAt, super.key});
 
   final GameSeek? seek;
   final ChallengeRequest? challenge;
@@ -49,36 +43,35 @@ class GameAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldPreventGoingBackAsync = id != null
-        ? ref.watch(shouldPreventGoingBackProvider(id!))
-        : const AsyncValue.data(true);
+    final shouldPreventGoingBackAsync =
+        id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
         data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
-      title: id != null
-          ? _StandaloneGameTitle(id: id!, lastMoveAt: lastMoveAt)
-          : seek != null
+      title:
+          id != null
+              ? _StandaloneGameTitle(id: id!, lastMoveAt: lastMoveAt)
+              : seek != null
               ? _LobbyGameTitle(seek: seek!)
               : challenge != null
-                  ? _ChallengeGameTitle(challenge: challenge!)
-                  : const SizedBox.shrink(),
+              ? _ChallengeGameTitle(challenge: challenge!)
+              : const SizedBox.shrink(),
       actions: [
         const ToggleSoundButton(),
         if (id != null)
           AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isDismissible: true,
-              isScrollControlled: true,
-              showDragHandle: true,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.sizeOf(context).height * 0.5,
-              ),
-              builder: (_) => GameSettings(id: id!),
-            ),
+            onPressed:
+                () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+                  builder: (_) => GameSettings(id: id!),
+                ),
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
@@ -106,12 +99,13 @@ List<BottomSheetAction> makeFinishedGameShareActions(
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => GameShareBottomSheet(
-            game: game,
-            currentGamePosition: currentGamePosition,
-            orientation: orientation,
-            lastMove: lastMove,
-          ),
+          builder:
+              (context) => GameShareBottomSheet(
+                game: game,
+                currentGamePosition: currentGamePosition,
+                orientation: orientation,
+                lastMove: lastMove,
+              ),
         );
       },
     ),
@@ -140,10 +134,7 @@ class GameShareBottomSheet extends ConsumerWidget {
           icon: CupertinoIcons.link,
           closeOnPressed: false,
           onPressed: () {
-            launchShareDialog(
-              context,
-              uri: lichessUri('/${game.id}'),
-            );
+            launchShareDialog(context, uri: lichessUri('/${game.id}'));
           },
           child: Text(context.l10n.mobileShareGameURL),
         ),
@@ -166,20 +157,14 @@ class GameShareBottomSheet extends ConsumerWidget {
                     launchShareDialog(
                       context,
                       files: [gif],
-                      subject: '${game.meta.perf.title} • ${context.l10n.resVsX(
-                        game.white.fullName(context),
-                        game.black.fullName(context),
-                      )}',
+                      subject:
+                          '${game.meta.perf.title} • ${context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context))}',
                     );
                   }
                 } catch (e) {
                   debugPrint(e.toString());
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get GIF',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
                   }
                 }
               },
@@ -201,11 +186,7 @@ class GameShareBottomSheet extends ConsumerWidget {
                   try {
                     final image = await ref
                         .read(gameShareServiceProvider)
-                        .screenshotPosition(
-                          orientation,
-                          currentGamePosition.fen,
-                          lastMove,
-                        );
+                        .screenshotPosition(orientation, currentGamePosition.fen, lastMove);
                     if (context.mounted) {
                       launchShareDialog(
                         context,
@@ -217,11 +198,7 @@ class GameShareBottomSheet extends ConsumerWidget {
                     }
                   } catch (e) {
                     if (context.mounted) {
-                      showPlatformSnackbar(
-                        context,
-                        'Failed to get GIF',
-                        type: SnackBarType.error,
-                      );
+                      showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
                     }
                   }
                 },
@@ -240,22 +217,13 @@ class GameShareBottomSheet extends ConsumerWidget {
               child: Text('PGN: ${context.l10n.downloadAnnotated}'),
               onPressed: () async {
                 try {
-                  final pgn = await ref
-                      .read(gameShareServiceProvider)
-                      .annotatedPgn(game.id);
+                  final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
                   if (context.mounted) {
-                    launchShareDialog(
-                      context,
-                      text: pgn,
-                    );
+                    launchShareDialog(context, text: pgn);
                   }
                 } catch (e) {
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get PGN',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
                   }
                 }
               },
@@ -275,21 +243,13 @@ class GameShareBottomSheet extends ConsumerWidget {
               child: Text('PGN: ${context.l10n.downloadRaw}'),
               onPressed: () async {
                 try {
-                  final pgn =
-                      await ref.read(gameShareServiceProvider).rawPgn(game.id);
+                  final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
                   if (context.mounted) {
-                    launchShareDialog(
-                      context,
-                      text: pgn,
-                    );
+                    launchShareDialog(context, text: pgn);
                   }
                 } catch (e) {
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get PGN',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
                   }
                 }
               },
@@ -308,15 +268,11 @@ class _LobbyGameTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode =
-        seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+    final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          seek.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
+        Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
         Text('${seek.timeIncrement?.display}$mode'),
       ],
@@ -325,41 +281,29 @@ class _LobbyGameTitle extends ConsumerWidget {
 }
 
 class _ChallengeGameTitle extends ConsumerWidget {
-  const _ChallengeGameTitle({
-    required this.challenge,
-  });
+  const _ChallengeGameTitle({required this.challenge});
 
   final ChallengeRequest challenge;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode = challenge.rated
-        ? ' • ${context.l10n.rated}'
-        : ' • ${context.l10n.casual}';
+    final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          challenge.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
+        Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
         if (challenge.timeIncrement != null)
           Text('${challenge.timeIncrement?.display}$mode')
         else if (challenge.days != null)
-          Text(
-            '${context.l10n.nbDays(challenge.days!)}$mode',
-          ),
+          Text('${context.l10n.nbDays(challenge.days!)}$mode'),
       ],
     );
   }
 }
 
 class _StandaloneGameTitle extends ConsumerWidget {
-  const _StandaloneGameTitle({
-    required this.id,
-    this.lastMoveAt,
-  });
+  const _StandaloneGameTitle({required this.id, this.lastMoveAt});
 
   final GameFullId id;
 
@@ -370,21 +314,14 @@ class _StandaloneGameTitle extends ConsumerWidget {
     final metaAsync = ref.watch(gameMetaProvider(id));
     return metaAsync.maybeWhen<Widget>(
       data: (meta) {
-        final mode = meta.rated
-            ? ' • ${context.l10n.rated}'
-            : ' • ${context.l10n.casual}';
+        final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
-        final info = lastMoveAt != null
-            ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}'
-            : mode;
+        final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              meta.perf.icon,
-              color: DefaultTextStyle.of(context).style.color,
-            ),
+            Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
             const SizedBox(width: 4.0),
             if (meta.clock != null)
               Expanded(
@@ -404,11 +341,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
               )
             else
               Expanded(
-                child: AutoSizeText(
-                  '${meta.perf.title}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                ),
+                child: AutoSizeText('${meta.perf.title}$info', maxLines: 1, minFontSize: 14.0),
               ),
           ],
         );

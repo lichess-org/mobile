@@ -14,13 +14,13 @@ enum StudyCategory {
   likes;
 
   String l10n(AppLocalizations l10n) => switch (this) {
-        StudyCategory.all => l10n.studyAllStudies,
-        StudyCategory.mine => l10n.studyMyStudies,
-        StudyCategory.member => l10n.studyStudiesIContributeTo,
-        StudyCategory.public => l10n.studyMyPublicStudies,
-        StudyCategory.private => l10n.studyMyPrivateStudies,
-        StudyCategory.likes => l10n.studyMyFavoriteStudies,
-      };
+    StudyCategory.all => l10n.studyAllStudies,
+    StudyCategory.mine => l10n.studyMyStudies,
+    StudyCategory.member => l10n.studyStudiesIContributeTo,
+    StudyCategory.public => l10n.studyMyPublicStudies,
+    StudyCategory.private => l10n.studyMyPrivateStudies,
+    StudyCategory.likes => l10n.studyMyFavoriteStudies,
+  };
 }
 
 enum StudyListOrder {
@@ -31,12 +31,12 @@ enum StudyListOrder {
   updated;
 
   String l10n(AppLocalizations l10n) => switch (this) {
-        StudyListOrder.hot => l10n.studyHot,
-        StudyListOrder.newest => l10n.studyDateAddedNewest,
-        StudyListOrder.oldest => l10n.studyDateAddedOldest,
-        StudyListOrder.updated => l10n.studyRecentlyUpdated,
-        StudyListOrder.popular => l10n.studyMostPopular,
-      };
+    StudyListOrder.hot => l10n.studyHot,
+    StudyListOrder.newest => l10n.studyDateAddedNewest,
+    StudyListOrder.oldest => l10n.studyDateAddedOldest,
+    StudyListOrder.updated => l10n.studyRecentlyUpdated,
+    StudyListOrder.popular => l10n.studyMostPopular,
+  };
 }
 
 @riverpod
@@ -44,8 +44,7 @@ class StudyFilter extends _$StudyFilter {
   @override
   StudyFilterState build() => const StudyFilterState();
 
-  void setCategory(StudyCategory category) =>
-      state = state.copyWith(category: category);
+  void setCategory(StudyCategory category) => state = state.copyWith(category: category);
 
   void setOrder(StudyListOrder order) => state = state.copyWith(order: order);
 }

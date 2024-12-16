@@ -45,63 +45,53 @@ final client = MockClient((request) {
 
 void main() {
   group('BroadcastListScreen', () {
-    testWidgets(
-      'Displays broadcast tournament screen',
-      variant: kPlatformVariant,
-      (tester) async {
-        mockNetworkImagesFor(() async {
-          final app = await makeTestProviderScopeApp(
-            tester,
-            home: const BroadcastListScreen(),
-            overrides: [
-              lichessClientProvider
-                  .overrideWith((ref) => LichessClient(client, ref)),
-              broadcastImageWorkerFactoryProvider.overrideWith(
-                (ref) => FakeBroadcastImageWorkerFactory(),
-              ),
-            ],
-          );
+    testWidgets('Displays broadcast tournament screen', variant: kPlatformVariant, (tester) async {
+      mockNetworkImagesFor(() async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastListScreen(),
+          overrides: [
+            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+            broadcastImageWorkerFactoryProvider.overrideWith(
+              (ref) => FakeBroadcastImageWorkerFactory(),
+            ),
+          ],
+        );
 
-          await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-          expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-          // wait for broadcast tournaments to load
-          await tester.pump(const Duration(milliseconds: 100));
+        // wait for broadcast tournaments to load
+        await tester.pump(const Duration(milliseconds: 100));
 
-          expect(find.byType(BroadcastCard), findsAtLeast(1));
-        });
-      },
-    );
+        expect(find.byType(BroadcastCard), findsAtLeast(1));
+      });
+    });
 
-    testWidgets(
-      'Scroll broadcast tournament screen',
-      variant: kPlatformVariant,
-      (tester) async {
-        mockNetworkImagesFor(() async {
-          final app = await makeTestProviderScopeApp(
-            tester,
-            home: const BroadcastListScreen(),
-            overrides: [
-              lichessClientProvider
-                  .overrideWith((ref) => LichessClient(client, ref)),
-              broadcastImageWorkerFactoryProvider.overrideWith(
-                (ref) => FakeBroadcastImageWorkerFactory(),
-              ),
-            ],
-          );
+    testWidgets('Scroll broadcast tournament screen', variant: kPlatformVariant, (tester) async {
+      mockNetworkImagesFor(() async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastListScreen(),
+          overrides: [
+            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+            broadcastImageWorkerFactoryProvider.overrideWith(
+              (ref) => FakeBroadcastImageWorkerFactory(),
+            ),
+          ],
+        );
 
-          await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-          expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-          // wait for broadcast tournaments to load
-          await tester.pump(const Duration(milliseconds: 100));
+        // wait for broadcast tournaments to load
+        await tester.pump(const Duration(milliseconds: 100));
 
-          await tester.scrollUntilVisible(find.text('Completed'), 200.0);
-        });
-      },
-    );
+        await tester.scrollUntilVisible(find.text('Completed'), 200.0);
+      });
+    });
   });
 }
 

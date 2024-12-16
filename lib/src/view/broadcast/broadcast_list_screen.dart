@@ -37,21 +37,19 @@ class BroadcastListScreen extends StatelessWidget {
       maxLines: 1,
     );
     return PlatformWidget(
-      androidBuilder: (_) => Scaffold(
-        body: const _Body(),
-        appBar: AppBar(title: title),
-      ),
-      iosBuilder: (_) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: title,
-          automaticBackgroundVisibility: false,
-          backgroundColor: Styles.cupertinoAppBarColor
-              .resolveFrom(context)
-              .withValues(alpha: 0.0),
-          border: null,
-        ),
-        child: const _Body(),
-      ),
+      androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
+      iosBuilder:
+          (_) => CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: title,
+              automaticBackgroundVisibility: false,
+              backgroundColor: Styles.cupertinoAppBarColor
+                  .resolveFrom(context)
+                  .withValues(alpha: 0.0),
+              border: null,
+            ),
+            child: const _Body(),
+          ),
     );
   }
 }
@@ -67,8 +65,7 @@ class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
   ImageColorWorker? _worker;
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -95,8 +92,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
@@ -110,27 +106,24 @@ class _BodyState extends ConsumerState<_Body> {
     final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
     if (_worker == null || (!broadcasts.hasValue && broadcasts.isLoading)) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
-      debugPrint(
-        'SEVERE: [BroadcastsListScreen] could not load broadcast tournaments',
-      );
+      debugPrint('SEVERE: [BroadcastsListScreen] could not load broadcast tournaments');
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
 
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final itemsByRow = screenWidth >= 1200
-        ? 3
-        : screenWidth >= 700
+    final itemsByRow =
+        screenWidth >= 1200
+            ? 3
+            : screenWidth >= 700
             ? 2
             : 1;
     const loadingItems = 12;
-    final pastItemsCount = broadcasts.requireValue.past.length +
-        (broadcasts.isLoading ? loadingItems : 0);
+    final pastItemsCount =
+        broadcasts.requireValue.past.length + (broadcasts.isLoading ? loadingItems : 0);
 
     final highTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: itemsByRow,
@@ -143,9 +136,10 @@ class _BodyState extends ConsumerState<_Body> {
       crossAxisCount: itemsByRow + 1,
       crossAxisSpacing: 16.0,
       mainAxisSpacing: 16.0,
-      childAspectRatio: screenWidth >= 1200
-          ? 1.4
-          : screenWidth >= 700
+      childAspectRatio:
+          screenWidth >= 1200
+              ? 1.4
+              : screenWidth >= 700
               ? 1.3
               : 1.0,
     );
@@ -155,24 +149,21 @@ class _BodyState extends ConsumerState<_Body> {
       ('past', context.l10n.broadcastCompleted, broadcasts.value!.past),
     ];
 
-    final activeHighTier = broadcasts.value!.active
-        .where(
-          (broadcast) =>
-              broadcast.tour.tier != null && broadcast.tour.tier! >= 4,
-        )
-        .toList();
+    final activeHighTier =
+        broadcasts.value!.active
+            .where((broadcast) => broadcast.tour.tier != null && broadcast.tour.tier! >= 4)
+            .toList();
 
-    final activeLowTier = broadcasts.value!.active
-        .where(
-          (broadcast) =>
-              broadcast.tour.tier == null || broadcast.tour.tier! < 4,
-        )
-        .toList();
+    final activeLowTier =
+        broadcasts.value!.active
+            .where((broadcast) => broadcast.tour.tier == null || broadcast.tour.tier! < 4)
+            .toList();
 
     return RefreshIndicator.adaptive(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + 16.0
-          : 0,
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + 16.0
+              : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: Shimmer(
@@ -215,10 +206,9 @@ class _BodyState extends ConsumerState<_Body> {
                                 : Styles.bodySectionPadding,
                         sliver: SliverGrid.builder(
                           gridDelegate: highTierGridDelegate,
-                          itemBuilder: (context, index) => BroadcastCard(
-                            worker: _worker!,
-                            broadcast: activeHighTier[index],
-                          ),
+                          itemBuilder:
+                              (context, index) =>
+                                  BroadcastCard(worker: _worker!, broadcast: activeHighTier[index]),
                           itemCount: activeHighTier.length,
                         ),
                       ),
@@ -227,36 +217,37 @@ class _BodyState extends ConsumerState<_Body> {
                         padding: Styles.bodySectionPadding,
                         sliver: SliverGrid.builder(
                           gridDelegate: lowTierGridDelegate,
-                          itemBuilder: (context, index) => BroadcastCard(
-                            worker: _worker!,
-                            broadcast: activeLowTier[index],
-                          ),
+                          itemBuilder:
+                              (context, index) =>
+                                  BroadcastCard(worker: _worker!, broadcast: activeLowTier[index]),
                           itemCount: activeLowTier.length,
                         ),
                       ),
                   ] else
                     SliverPadding(
-                      padding: Theme.of(context).platform == TargetPlatform.iOS
-                          ? Styles.horizontalBodyPadding
-                          : Styles.bodySectionPadding,
+                      padding:
+                          Theme.of(context).platform == TargetPlatform.iOS
+                              ? Styles.horizontalBodyPadding
+                              : Styles.bodySectionPadding,
                       sliver: SliverGrid.builder(
                         gridDelegate: lowTierGridDelegate,
-                        itemBuilder: (context, index) =>
-                            (broadcasts.isLoading &&
-                                    index >= pastItemsCount - loadingItems)
-                                ? ShimmerLoading(
-                                    isLoading: true,
-                                    child: BroadcastCard.loading(_worker!),
-                                  )
-                                : BroadcastCard(
-                                    worker: _worker!,
-                                    broadcast: section.$3[index],
-                                  ),
+                        itemBuilder:
+                            (context, index) =>
+                                (broadcasts.isLoading && index >= pastItemsCount - loadingItems)
+                                    ? ShimmerLoading(
+                                      isLoading: true,
+                                      child: BroadcastCard.loading(_worker!),
+                                    )
+                                    : BroadcastCard(worker: _worker!, broadcast: section.$3[index]),
                         itemCount: section.$3.length,
                       ),
                     ),
                 ],
               ),
+            const SliverSafeArea(
+              top: false,
+              sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+            ),
           ],
         ),
       ),
@@ -265,53 +256,46 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class BroadcastCard extends StatefulWidget {
-  const BroadcastCard({
-    required this.broadcast,
-    required this.worker,
-    super.key,
-  });
+  const BroadcastCard({required this.broadcast, required this.worker, super.key});
 
   final Broadcast broadcast;
   final ImageColorWorker worker;
 
   const BroadcastCard.loading(this.worker)
-      : broadcast = const Broadcast(
-          tour: BroadcastTournamentData(
-            id: BroadcastTournamentId(''),
-            name: '',
-            slug: '',
-            imageUrl: null,
-            description: '',
-            information: (
-              format: null,
-              timeControl: null,
-              players: null,
-              website: null,
-              location: null,
-              dates: null,
-            ),
+    : broadcast = const Broadcast(
+        tour: BroadcastTournamentData(
+          id: BroadcastTournamentId(''),
+          name: '',
+          slug: '',
+          imageUrl: null,
+          description: '',
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            website: null,
+            location: null,
+            dates: null,
           ),
-          round: BroadcastRound(
-            id: BroadcastRoundId(''),
-            name: '',
-            slug: '',
-            status: RoundStatus.finished,
-            startsAt: null,
-            finishedAt: null,
-            startsAfterPrevious: false,
-          ),
-          group: null,
-          roundToLinkId: BroadcastRoundId(''),
-        );
+        ),
+        round: BroadcastRound(
+          id: BroadcastRoundId(''),
+          name: '',
+          slug: '',
+          status: RoundStatus.finished,
+          startsAt: null,
+          finishedAt: null,
+          startsAfterPrevious: false,
+        ),
+        group: null,
+        roundToLinkId: BroadcastRoundId(''),
+      );
 
   @override
   State<BroadcastCard> createState() => _BroadcastCartState();
 }
 
-typedef _CardColors = ({
-  Color primaryContainer,
-  Color onPrimaryContainer,
-});
+typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
 Future<_CardColors?> _computeImageColors(
@@ -319,8 +303,7 @@ Future<_CardColors?> _computeImageColors(
   String imageUrl,
   ByteData imageBytes,
 ) async {
-  final response =
-      await worker.getImageColors(imageBytes.buffer.asUint32List());
+  final response = await worker.getImageColors(imageBytes.buffer.asUint32List());
   if (response != null) {
     final (:primaryContainer, :onPrimaryContainer) = response;
     final cardColors = (
@@ -364,8 +347,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
       await precacheImage(provider, context);
       final ui.Image scaledImage = await _imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
-      final response =
-          await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
       if (response != null) {
         if (mounted) {
           setState(() {
@@ -390,17 +372,13 @@ class _BroadcastCartState extends State<BroadcastCard> {
         Theme.of(context).platform == TargetPlatform.iOS
             ? Styles.cupertinoCardColor.resolveFrom(context)
             : Theme.of(context).colorScheme.surfaceContainer;
-    final backgroundColor =
-        _cardColors?.primaryContainer ?? defaultBackgroundColor;
+    final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ??
-            textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
     final bgHsl = HSLColor.fromColor(backgroundColor);
     final liveHsl = HSLColor.fromColor(LichessColors.red);
-    final liveColor =
-        (bgHsl.lightness <= 0.5 ? liveHsl.withLightness(0.9) : liveHsl)
-            .toColor();
+    final liveColor = (bgHsl.lightness <= 0.5 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
 
     return GestureDetector(
       onTap: () {
@@ -408,8 +386,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
           context,
           title: widget.broadcast.title,
           rootNavigator: true,
-          builder: (context) =>
-              BroadcastRoundScreen(broadcast: widget.broadcast),
+          builder: (context) => BroadcastRoundScreen(broadcast: widget.broadcast),
         );
       },
       onTapDown: (_) => _onTapDown(),
@@ -424,9 +401,8 @@ class _BroadcastCartState extends State<BroadcastCard> {
           decoration: BoxDecoration(
             borderRadius: kBroadcastGridItemBorderRadius,
             color: backgroundColor,
-            boxShadow: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : kElevationToShadow[1],
+            boxShadow:
+                Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
           ),
           child: Stack(
             children: [
@@ -448,12 +424,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
                   aspectRatio: 2.0,
                   child: Image(
                     image: imageProvider,
-                    frameBuilder: (
-                      context,
-                      child,
-                      frame,
-                      wasSynchronouslyLoaded,
-                    ) {
+                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                       if (wasSynchronouslyLoaded) {
                         return child;
                       }
@@ -463,8 +434,8 @@ class _BroadcastCartState extends State<BroadcastCard> {
                         child: child,
                       );
                     },
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Image(image: kDefaultBroadcastImage),
+                    errorBuilder:
+                        (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
                   ),
                 ),
               ),
@@ -475,40 +446,56 @@ class _BroadcastCartState extends State<BroadcastCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget.broadcast.round.startsAt != null)
-                      Padding(
-                        padding: kBroadcastGridItemContentPadding,
-                        child: Row(
-                          children: [
+                    Padding(
+                      padding: kBroadcastGridItemContentPadding,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          if (!widget.broadcast.isFinished) ...[
                             Text(
                               widget.broadcast.round.name,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: subTitleColor,
+                                letterSpacing: -0.2,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                            const SizedBox(width: 4.0),
-                            Flexible(
+                            const SizedBox(width: 5.0),
+                          ],
+                          if (widget.broadcast.round.startsAt != null)
+                            Expanded(
                               child: Text(
                                 relativeDate(widget.broadcast.round.startsAt!),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: subTitleColor,
-                                ),
+                                style: TextStyle(fontSize: 12, color: subTitleColor),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            if (widget.broadcast.isLive) ...[
-                              const Spacer(flex: 3),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 16,
+                          if (widget.broadcast.isLive) ...[
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 16,
+                                  color: liveColor,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(0, 1),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text(
+                                  'LIVE',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                     color: liveColor,
                                     shadows: const [
                                       Shadow(
@@ -518,29 +505,14 @@ class _BroadcastCartState extends State<BroadcastCard> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(width: 4.0),
-                                  Text(
-                                    'LIVE',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: liveColor,
-                                      shadows: const [
-                                        Shadow(
-                                          color: Colors.black54,
-                                          offset: Offset(0, 1),
-                                          blurRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
+                        ],
                       ),
+                    ),
                     Padding(
                       padding: kBroadcastGridItemContentPadding.add(
                         const EdgeInsets.symmetric(vertical: 3.0),
@@ -562,11 +534,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
                         padding: kBroadcastGridItemContentPadding,
                         child: Text(
                           widget.broadcast.tour.information.players!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: subTitleColor,
-                            letterSpacing: -0.2,
-                          ),
+                          style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
@@ -624,10 +592,8 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
 
       final bool rescale = width > maxDimension || height > maxDimension;
       if (rescale) {
-        paintWidth =
-            (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight =
-            (height > width) ? maxDimension : (maxDimension / width) * height;
+        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
+        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
       }
       final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(pictureRecorder);
@@ -639,8 +605,7 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
       );
 
       final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage =
-          await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
+      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
       imageCompleter.complete(info.image);
     },
     onError: (Object exception, StackTrace? stackTrace) {
@@ -651,9 +616,7 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
 
   loadFailureTimeout = Timer(const Duration(seconds: 5), () {
     stream.removeListener(listener);
-    imageCompleter.completeError(
-      TimeoutException('Timeout occurred trying to load image'),
-    );
+    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
   });
 
   stream.addListener(listener);

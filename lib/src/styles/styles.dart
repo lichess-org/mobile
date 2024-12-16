@@ -8,14 +8,8 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
-  static const title = TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
-  );
-  static const subtitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
+  static const title = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
+  static const subtitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
   static final callout = TextStyle(
     fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
@@ -32,29 +26,16 @@ abstract class Styles {
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
     fontWeight: FontWeight.bold,
   );
-  static const boardPreviewTitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-  );
+  static const boardPreviewTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   static const subtitleOpacity = 0.7;
-  static const timeControl = TextStyle(
-    letterSpacing: 1.2,
-  );
-  static const formLabel = TextStyle(
-    fontWeight: FontWeight.bold,
-  );
-  static const formError = TextStyle(
-    color: LichessColors.red,
-  );
+  static const timeControl = TextStyle(letterSpacing: 1.2);
+  static const formLabel = TextStyle(fontWeight: FontWeight.bold);
+  static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
 
   // padding
-  static const cupertinoAppBarTrailingWidgetPadding =
-      EdgeInsetsDirectional.only(
-    end: 8.0,
-  );
-  static const bodyPadding =
-      EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
+  static const cupertinoAppBarTrailingWidgetPadding = EdgeInsetsDirectional.only(end: 8.0);
+  static const bodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const sectionBottomPadding = EdgeInsets.only(bottom: 16.0);
@@ -62,11 +43,7 @@ abstract class Styles {
   static const bodySectionPadding = EdgeInsets.all(16.0);
 
   /// Horizontal and bottom padding for the body section.
-  static const bodySectionBottomPadding = EdgeInsets.only(
-    bottom: 16.0,
-    left: 16.0,
-    right: 16.0,
-  );
+  static const bodySectionBottomPadding = EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0);
 
   // colors
   static Color? expansionTileColor(BuildContext context) =>
@@ -77,8 +54,7 @@ abstract class Styles {
     color: Color(0xE6F9F9F9),
     darkColor: Color.fromARGB(210, 36, 36, 38),
   );
-  static const cupertinoTabletAppBarColor =
-      CupertinoDynamicColor.withBrightness(
+  static const cupertinoTabletAppBarColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFFF9F9F9),
     darkColor: Color.fromARGB(255, 36, 36, 36),
   );
@@ -207,10 +183,7 @@ abstract class Styles {
   // from:
   // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
   static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
-      CupertinoDynamicColor.withBrightness(
-    color: Color(0x4D000000),
-    darkColor: Color(0x29000000),
-  );
+      CupertinoDynamicColor.withBrightness(color: Color(0x4D000000), darkColor: Color(0x29000000));
 }
 
 /// Retrieve the default text color and apply an opacity to it.
@@ -313,6 +286,5 @@ const lichessCustomColors = CustomColors(
 );
 
 extension CustomColorsBuildContext on BuildContext {
-  CustomColors get lichessColors =>
-      Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
+  CustomColors get lichessColors => Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
 }

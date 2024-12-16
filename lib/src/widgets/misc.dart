@@ -4,11 +4,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LichessMessage extends StatefulWidget {
-  const LichessMessage({
-    super.key,
-    this.style,
-    this.textAlign = TextAlign.start,
-  });
+  const LichessMessage({super.key, this.style, this.textAlign = TextAlign.start});
 
   final TextStyle? style;
   final TextAlign textAlign;
@@ -38,10 +34,7 @@ class _LichessMessageState extends State<LichessMessage> {
 
   @override
   Widget build(BuildContext context) {
-    final trans = context.l10n.xIsAFreeYLibreOpenSourceChessServer(
-      'Lichess',
-      context.l10n.really,
-    );
+    final trans = context.l10n.xIsAFreeYLibreOpenSourceChessServer('Lichess', context.l10n.really);
     final regexp = RegExp(r'''^([^(]*\()([^)]*)(\).*)$''');
     final match = regexp.firstMatch(trans);
     final List<TextSpan> spans = [];
@@ -50,9 +43,7 @@ class _LichessMessageState extends State<LichessMessage> {
         spans.add(
           TextSpan(
             text: match[i],
-            style: i == 2
-                ? TextStyle(color: Theme.of(context).colorScheme.primary)
-                : null,
+            style: i == 2 ? TextStyle(color: Theme.of(context).colorScheme.primary) : null,
             recognizer: i == 2 ? _recognizer : null,
           ),
         );
@@ -61,12 +52,6 @@ class _LichessMessageState extends State<LichessMessage> {
       spans.add(TextSpan(text: trans));
     }
 
-    return Text.rich(
-      TextSpan(
-        style: widget.style,
-        children: spans,
-      ),
-      textAlign: widget.textAlign,
-    );
+    return Text.rich(TextSpan(style: widget.style, children: spans), textAlign: widget.textAlign);
   }
 }

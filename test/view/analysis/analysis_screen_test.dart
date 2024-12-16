@@ -44,12 +44,7 @@ void main() {
       expect(currentMove, findsOneWidget);
       expect(
         tester
-            .widget<InlineMove>(
-              find.ancestor(
-                of: currentMove,
-                matching: find.byType(InlineMove),
-              ),
-            )
+            .widget<InlineMove>(find.ancestor(of: currentMove, matching: find.byType(InlineMove)))
             .isCurrentMove,
         isTrue,
       );
@@ -75,18 +70,11 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1));
 
       // cannot go forward
-      expect(
-        tester
-            .widget<BottomBarButton>(find.byKey(const Key('goto-next')))
-            .onTap,
-        isNull,
-      );
+      expect(tester.widget<BottomBarButton>(find.byKey(const Key('goto-next'))).onTap, isNull);
 
       // can go back
       expect(
-        tester
-            .widget<BottomBarButton>(find.byKey(const Key('goto-previous')))
-            .onTap,
+        tester.widget<BottomBarButton>(find.byKey(const Key('goto-previous'))).onTap,
         isNotNull,
       );
 
@@ -98,12 +86,7 @@ void main() {
       expect(currentMove, findsOneWidget);
       expect(
         tester
-            .widget<InlineMove>(
-              find.ancestor(
-                of: currentMove,
-                matching: find.byType(InlineMove),
-              ),
-            )
+            .widget<InlineMove>(find.ancestor(of: currentMove, matching: find.byType(InlineMove)))
             .isCurrentMove,
         isTrue,
       );
@@ -111,29 +94,18 @@ void main() {
   });
 
   group('Analysis Tree View', () {
-    Future<void> buildTree(
-      WidgetTester tester,
-      String pgn,
-    ) async {
+    Future<void> buildTree(WidgetTester tester, String pgn) async {
       final app = await makeTestProviderScopeApp(
         tester,
         defaultPreferences: {
           PrefCategory.analysis.storageKey: jsonEncode(
-            AnalysisPrefs.defaults
-                .copyWith(
-                  enableLocalEvaluation: false,
-                )
-                .toJson(),
+            AnalysisPrefs.defaults.copyWith(enableLocalEvaluation: false).toJson(),
           ),
         },
         home: AnalysisScreen(
           options: AnalysisOptions(
             orientation: Side.white,
-            standalone: (
-              pgn: pgn,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+            standalone: (pgn: pgn, isComputerAnalysisAllowed: false, variant: Variant.standard),
           ),
           enableDrawingShapes: false,
         ),
@@ -144,12 +116,7 @@ void main() {
     }
 
     Text parentText(WidgetTester tester, String move) {
-      return tester.widget<Text>(
-        find.ancestor(
-          of: find.text(move),
-          matching: find.byType(Text),
-        ),
-      );
+      return tester.widget<Text>(find.ancestor(of: find.text(move), matching: find.byType(Text)));
     }
 
     void expectSameLine(WidgetTester tester, Iterable<String> moves) {
@@ -158,23 +125,14 @@ void main() {
       for (final move in moves.skip(1)) {
         final moveText = find.text(move);
         expect(moveText, findsOneWidget);
-        expect(
-          parentText(tester, move),
-          line,
-        );
+        expect(parentText(tester, move), line);
       }
     }
 
-    void expectDifferentLines(
-      WidgetTester tester,
-      List<String> moves,
-    ) {
+    void expectDifferentLines(WidgetTester tester, List<String> moves) {
       for (int i = 0; i < moves.length; i++) {
         for (int j = i + 1; j < moves.length; j++) {
-          expect(
-            parentText(tester, moves[i]),
-            isNot(parentText(tester, moves[j])),
-          );
+          expect(parentText(tester, moves[i]), isNot(parentText(tester, moves[j])));
         }
       }
     }
@@ -182,33 +140,23 @@ void main() {
     testWidgets('displays short sideline as inline', (tester) async {
       await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) 2. Nf3 *');
 
-      final mainline = find.ancestor(
-        of: find.text('1. e4'),
-        matching: find.byType(Text),
-      );
+      final mainline = find.ancestor(of: find.text('1. e4'), matching: find.byType(Text));
       expect(mainline, findsOneWidget);
 
       expectSameLine(tester, ['1. e4', 'e5', '1… d5', '2. exd5', '2. Nf3']);
     });
 
     testWidgets('displays long sideline on its own line', (tester) async {
-      await buildTree(
-        tester,
-        '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *',
-      );
+      await buildTree(tester, '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *');
 
       expectSameLine(tester, ['1. e4', 'e5']);
-      expectSameLine(
-        tester,
-        ['1… d5', '2. exd5', 'Qxd5', '3. Nc3', 'Qd8', '4. d4', 'Nf6'],
-      );
+      expectSameLine(tester, ['1… d5', '2. exd5', 'Qxd5', '3. Nc3', 'Qd8', '4. d4', 'Nf6']);
       expectSameLine(tester, ['2. Nc3']);
 
       expectDifferentLines(tester, ['1. e4', '1… d5', '2. Nc3']);
     });
 
-    testWidgets('displays sideline with branching on its own line',
-        (tester) async {
+    testWidgets('displays sideline with branching on its own line', (tester) async {
       await buildTree(tester, '1. e4 e5 (1... d5 2. exd5 (2. Nc3)) *');
 
       expectSameLine(tester, ['1. e4', 'e5']);
@@ -220,10 +168,7 @@ void main() {
     });
 
     testWidgets('multiple sidelines', (tester) async {
-      await buildTree(
-        tester,
-        '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
-      );
+      await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *');
 
       expectSameLine(tester, ['1. e4', 'e5']);
       expectSameLine(tester, ['1… d5', '2. exd5']);
@@ -234,10 +179,7 @@ void main() {
     });
 
     testWidgets('collapses lines with nesting > 2', (tester) async {
-      await buildTree(
-        tester,
-        '1. e4 e5 (1... d5 2. Nc3 (2. h4 h5 (2... Nc6 3. d3) (2... Qd7))) *',
-      );
+      await buildTree(tester, '1. e4 e5 (1... d5 2. Nc3 (2. h4 h5 (2... Nc6 3. d3) (2... Qd7))) *');
 
       expectSameLine(tester, ['1. e4', 'e5']);
       expectSameLine(tester, ['1… d5']);
@@ -277,9 +219,9 @@ void main() {
       expect(find.text('2… Qd7'), findsNothing);
     });
 
-    testWidgets(
-        'Expanding one line does not expand the following one (regression test)',
-        (tester) async {
+    testWidgets('Expanding one line does not expand the following one (regression test)', (
+      tester,
+    ) async {
       /// Will be rendered as:
       /// -------------------
       /// 1. e4 e5
@@ -287,10 +229,7 @@ void main() {
       /// 2. Nf3
       /// |- 2. a4 d5 (2... f5)
       /// -------------------
-      await buildTree(
-        tester,
-        '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))',
-      );
+      await buildTree(tester, '1. e4 e5 (1... d5 2. Nf3 (2. Nc3)) 2. Nf3 (2. a4 d5 (2... f5))');
 
       expect(find.byIcon(Icons.add_box), findsNothing);
 
@@ -323,12 +262,8 @@ void main() {
       expect(find.text('2. a4'), findsNothing);
     });
 
-    testWidgets('subtrees not part of the current mainline part are cached',
-        (tester) async {
-      await buildTree(
-        tester,
-        '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
-      );
+    testWidgets('subtrees not part of the current mainline part are cached', (tester) async {
+      await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *');
 
       // will be rendered as:
       // -------------------
@@ -346,10 +281,7 @@ void main() {
       expect(
         tester
             .widgetList<InlineMove>(
-              find.ancestor(
-                of: find.textContaining('Nc6'),
-                matching: find.byType(InlineMove),
-              ),
+              find.ancestor(of: find.textContaining('Nc6'), matching: find.byType(InlineMove)),
             )
             .last
             .isCurrentMove,
@@ -363,10 +295,7 @@ void main() {
       expect(
         tester
             .widgetList<InlineMove>(
-              find.ancestor(
-                of: find.textContaining('Nf3'),
-                matching: find.byType(InlineMove),
-              ),
+              find.ancestor(of: find.textContaining('Nf3'), matching: find.byType(InlineMove)),
             )
             .last
             .isCurrentMove,
@@ -375,18 +304,12 @@ void main() {
 
       // first mainline part has not changed since the current move is
       // not part of it
-      expect(
-        identical(firstMainlinePart, parentText(tester, '1. e4')),
-        isTrue,
-      );
+      expect(identical(firstMainlinePart, parentText(tester, '1. e4')), isTrue);
 
       final secondMainlinePartOnMoveNf3 = parentText(tester, '2. Nf3');
 
       // second mainline part has changed since the current move is part of it
-      expect(
-        secondMainlinePart,
-        isNot(secondMainlinePartOnMoveNf3),
-      );
+      expect(secondMainlinePart, isNot(secondMainlinePartOnMoveNf3));
 
       await tester.tap(find.byKey(const Key('goto-previous')));
       // need to wait for current move change debounce delay
@@ -395,10 +318,7 @@ void main() {
       expect(
         tester
             .widgetList<InlineMove>(
-              find.ancestor(
-                of: find.textContaining('e5'),
-                matching: find.byType(InlineMove),
-              ),
+              find.ancestor(of: find.textContaining('e5'), matching: find.byType(InlineMove)),
             )
             .first
             .isCurrentMove,
@@ -409,17 +329,11 @@ void main() {
       final secondMainlinePartOnMoveE5 = parentText(tester, '2. Nf3');
 
       // first mainline part has changed since the current move is part of it
-      expect(
-        firstMainlinePart,
-        isNot(firstMainlinePartOnMoveE5),
-      );
+      expect(firstMainlinePart, isNot(firstMainlinePartOnMoveE5));
 
       // second mainline part has changed since the current move is not part of it
       // anymore
-      expect(
-        secondMainlinePartOnMoveNf3,
-        isNot(secondMainlinePartOnMoveE5),
-      );
+      expect(secondMainlinePartOnMoveNf3, isNot(secondMainlinePartOnMoveE5));
 
       await tester.tap(find.byKey(const Key('goto-previous')));
       // need to wait for current move change debounce delay
@@ -428,10 +342,7 @@ void main() {
       expect(
         tester
             .firstWidget<InlineMove>(
-              find.ancestor(
-                of: find.textContaining('e4'),
-                matching: find.byType(InlineMove),
-              ),
+              find.ancestor(of: find.textContaining('e4'), matching: find.byType(InlineMove)),
             )
             .isCurrentMove,
         isTrue,
@@ -441,16 +352,10 @@ void main() {
       final secondMainlinePartOnMoveE4 = parentText(tester, '2. Nf3');
 
       // first mainline part has changed since the current move is part of it
-      expect(
-        firstMainlinePartOnMoveE4,
-        isNot(firstMainlinePartOnMoveE5),
-      );
+      expect(firstMainlinePartOnMoveE4, isNot(firstMainlinePartOnMoveE5));
 
       // second mainline part has not changed since the current move is not part of it
-      expect(
-        identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4),
-        isTrue,
-      );
+      expect(identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4), isTrue);
     });
   });
 }

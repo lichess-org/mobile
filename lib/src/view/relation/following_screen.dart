@@ -18,21 +18,20 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _getFollowingAndOnlinesProvider =
-    FutureProvider.autoDispose<(IList<User>, IList<LightUser>)>((ref) async {
-  final following = await ref.watch(followingProvider.future);
-  final onlines = await ref.watch(onlineFriendsProvider.future);
-  return (following, onlines);
-});
+final _getFollowingAndOnlinesProvider = FutureProvider.autoDispose<(IList<User>, IList<LightUser>)>(
+  (ref) async {
+    final following = await ref.watch(followingProvider.future);
+    final onlines = await ref.watch(onlineFriendsProvider.future);
+    return (following, onlines);
+  },
+);
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.friends),
-      ),
+      appBar: PlatformAppBar(title: Text(context.l10n.friends)),
       body: const _Body(),
     );
   }
@@ -43,9 +42,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(
-      _getFollowingAndOnlinesProvider,
-    );
+    final followingAndOnlines = ref.watch(_getFollowingAndOnlinesProvider);
 
     return followingAndOnlines.when(
       data: (data) {
@@ -53,21 +50,19 @@ class _Body extends ConsumerWidget {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
-              return Center(
-                child: Text(context.l10n.mobileNotFollowingAnyUser),
-              );
+              return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
             }
             return SafeArea(
               child: ColoredBox(
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoColors.systemBackground.resolveFrom(context)
-                    : Colors.transparent,
+                color:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoColors.systemBackground.resolveFrom(context)
+                        : Colors.transparent,
                 child: ListView.separated(
                   itemCount: following.length,
-                  separatorBuilder: (context, index) => const PlatformDivider(
-                    height: 1,
-                    cupertinoHasLeading: true,
-                  ),
+                  separatorBuilder:
+                      (context, index) =>
+                          const PlatformDivider(height: 1, cupertinoHasLeading: true),
                   itemBuilder: (context, index) {
                     final user = following[index];
                     return Slidable(
@@ -80,14 +75,11 @@ class _Body extends ConsumerWidget {
                             onPressed: (BuildContext context) async {
                               final oldState = following;
                               setState(() {
-                                following = following.removeWhere(
-                                  (v) => v.id == user.id,
-                                );
+                                following = following.removeWhere((v) => v.id == user.id);
                               });
                               try {
                                 await ref.withClient(
-                                  (client) => RelationRepository(client)
-                                      .unfollow(user.id),
+                                  (client) => RelationRepository(client).unfollow(user.id),
                                 );
                               } catch (_) {
                                 setState(() {
@@ -106,14 +98,13 @@ class _Body extends ConsumerWidget {
                       child: UserListTile.fromUser(
                         user,
                         _isOnline(user, data.$2),
-                        onTap: () => {
-                          pushPlatformRoute(
-                            context,
-                            builder: (context) => UserScreen(
-                              user: user.lightUser,
-                            ),
-                          ),
-                        },
+                        onTap:
+                            () => {
+                              pushPlatformRoute(
+                                context,
+                                builder: (context) => UserScreen(user: user.lightUser),
+                              ),
+                            },
                       ),
                     );
                   },
@@ -124,12 +115,8 @@ class _Body extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [FollowingScreen] could not load following users; $error\n$stackTrace',
-        );
-        return FullScreenRetryRequest(
-          onRetry: () => ref.invalidate(followingProvider),
-        );
+        debugPrint('SEVERE: [FollowingScreen] could not load following users; $error\n$stackTrace');
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
       },
       loading: () => const CenterLoadingIndicator(),
     );

@@ -61,26 +61,26 @@ class GameListTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => _ContextMenu(
-            game: game,
-            mySide: mySide,
-            oppponentTitle: opponentTitle,
-            icon: icon,
-            subtitle: subtitle,
-            trailing: trailing,
-          ),
+          builder:
+              (context) => _ContextMenu(
+                game: game,
+                mySide: mySide,
+                oppponentTitle: opponentTitle,
+                icon: icon,
+                subtitle: subtitle,
+                trailing: trailing,
+              ),
         );
       },
       leading: icon != null ? Icon(icon) : null,
       title: opponentTitle,
-      subtitle: subtitle != null
-          ? DefaultTextStyle.merge(
-              child: subtitle!,
-              style: TextStyle(
-                color: textShade(context, Styles.subtitleOpacity),
-              ),
-            )
-          : null,
+      subtitle:
+          subtitle != null
+              ? DefaultTextStyle.merge(
+                child: subtitle!,
+                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+              )
+              : null,
       trailing: trailing,
       padding: padding,
     );
@@ -114,25 +114,18 @@ class _ContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-            const EdgeInsets.only(bottom: 8.0),
-          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+          ).add(const EdgeInsets.only(bottom: 8.0)),
           child: Text(
-            context.l10n.resVsX(
-              game.white.fullName(context),
-              game.black.fullName(context),
-            ),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.5,
-            ),
+            context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context)),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.5),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-            const EdgeInsets.only(bottom: 8.0),
-          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+          ).add(const EdgeInsets.only(bottom: 8.0)),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return IntrinsicHeight(
@@ -141,8 +134,7 @@ class _ContextMenu extends ConsumerWidget {
                   children: [
                     if (game.lastFen != null)
                       BoardThumbnail(
-                        size: constraints.maxWidth -
-                            (constraints.maxWidth / 1.618),
+                        size: constraints.maxWidth - (constraints.maxWidth / 1.618),
                         fen: game.lastFen!,
                         orientation: mySide,
                         lastMove: game.lastMove,
@@ -160,17 +152,12 @@ class _ContextMenu extends ConsumerWidget {
                               children: [
                                 Text(
                                   '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 Text(
                                   _dateFormatter.format(game.lastMoveAt),
                                   style: TextStyle(
-                                    color: textShade(
-                                      context,
-                                      Styles.subtitleOpacity,
-                                    ),
+                                    color: textShade(context, Styles.subtitleOpacity),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -189,9 +176,10 @@ class _ContextMenu extends ConsumerWidget {
                                   winner: game.winner,
                                 ),
                                 style: TextStyle(
-                                  color: game.winner == null
-                                      ? customColors?.brag
-                                      : game.winner == mySide
+                                  color:
+                                      game.winner == null
+                                          ? customColors?.brag
+                                          : game.winner == mySide
                                           ? customColors?.good
                                           : customColors?.error,
                                 ),
@@ -201,10 +189,7 @@ class _ContextMenu extends ConsumerWidget {
                                 game.opening!.name,
                                 maxLines: 2,
                                 style: TextStyle(
-                                  color: textShade(
-                                    context,
-                                    Styles.subtitleOpacity,
-                                  ),
+                                  color: textShade(context, Styles.subtitleOpacity),
                                   fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -221,33 +206,29 @@ class _ContextMenu extends ConsumerWidget {
         ),
         BottomSheetContextMenuAction(
           icon: Icons.biotech,
-          onPressed: game.variant.isReadSupported
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => AnalysisScreen(
-                      options: AnalysisOptions(
-                        orientation: orientation,
-                        gameId: game.id,
-                      ),
-                    ),
-                  );
-                }
-              : () {
-                  showPlatformSnackbar(
-                    context,
-                    'This variant is not supported yet.',
-                    type: SnackBarType.info,
-                  );
-                },
+          onPressed:
+              game.variant.isReadSupported
+                  ? () {
+                    pushPlatformRoute(
+                      context,
+                      builder:
+                          (context) => AnalysisScreen(
+                            options: AnalysisOptions(orientation: orientation, gameId: game.id),
+                          ),
+                    );
+                  }
+                  : () {
+                    showPlatformSnackbar(
+                      context,
+                      'This variant is not supported yet.',
+                      type: SnackBarType.info,
+                    );
+                  },
           child: Text(context.l10n.gameAnalysis),
         ),
         BottomSheetContextMenuAction(
           onPressed: () {
-            launchShareDialog(
-              context,
-              uri: lichessUri('/${game.id}'),
-            );
+            launchShareDialog(context, uri: lichessUri('/${game.id}'));
           },
           icon: CupertinoIcons.link,
           closeOnPressed: false,
@@ -272,20 +253,14 @@ class _ContextMenu extends ConsumerWidget {
                     launchShareDialog(
                       context,
                       files: [gif],
-                      subject: '${game.perf.title} • ${context.l10n.resVsX(
-                        game.white.fullName(context),
-                        game.black.fullName(context),
-                      )}',
+                      subject:
+                          '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context))}',
                     );
                   }
                 } catch (e) {
                   debugPrint(e.toString());
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get GIF',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
                   }
                 }
               },
@@ -307,11 +282,7 @@ class _ContextMenu extends ConsumerWidget {
                   try {
                     final image = await ref
                         .read(gameShareServiceProvider)
-                        .screenshotPosition(
-                          orientation,
-                          game.lastFen!,
-                          game.lastMove,
-                        );
+                        .screenshotPosition(orientation, game.lastFen!, game.lastMove);
                     if (context.mounted) {
                       launchShareDialog(
                         context,
@@ -323,11 +294,7 @@ class _ContextMenu extends ConsumerWidget {
                     }
                   } catch (e) {
                     if (context.mounted) {
-                      showPlatformSnackbar(
-                        context,
-                        'Failed to get GIF',
-                        type: SnackBarType.error,
-                      );
+                      showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
                     }
                   }
                 },
@@ -346,22 +313,13 @@ class _ContextMenu extends ConsumerWidget {
               child: Text('PGN: ${context.l10n.downloadAnnotated}'),
               onPressed: () async {
                 try {
-                  final pgn = await ref
-                      .read(gameShareServiceProvider)
-                      .annotatedPgn(game.id);
+                  final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
                   if (context.mounted) {
-                    launchShareDialog(
-                      context,
-                      text: pgn,
-                    );
+                    launchShareDialog(context, text: pgn);
                   }
                 } catch (e) {
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get PGN',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
                   }
                 }
               },
@@ -381,21 +339,13 @@ class _ContextMenu extends ConsumerWidget {
               child: Text('PGN: ${context.l10n.downloadRaw}'),
               onPressed: () async {
                 try {
-                  final pgn =
-                      await ref.read(gameShareServiceProvider).rawPgn(game.id);
+                  final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
                   if (context.mounted) {
-                    launchShareDialog(
-                      context,
-                      text: pgn,
-                    );
+                    launchShareDialog(context, text: pgn);
                   }
                 } catch (e) {
                   if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get PGN',
-                      type: SnackBarType.error,
-                    );
+                    showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
                   }
                 }
               },
@@ -409,11 +359,7 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({
-    required this.item,
-    this.userId,
-    this.padding,
-  });
+  const ExtendedGameListTile({required this.item, this.userId, this.padding});
 
   final LightArchivedGameWithPov item;
   final UserId? userId;
@@ -427,27 +373,14 @@ class ExtendedGameListTile extends StatelessWidget {
     final opponent = youAre == Side.white ? game.black : game.white;
 
     Widget getResultIcon(LightArchivedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted ||
-          game.status == GameStatus.noStart) {
-        return const Icon(
-          CupertinoIcons.xmark_square_fill,
-          color: LichessColors.grey,
-        );
+      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
+        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
       } else {
         return game.winner == null
-            ? Icon(
-                CupertinoIcons.equal_square_fill,
-                color: context.lichessColors.brag,
-              )
+            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
             : game.winner == mySide
-                ? Icon(
-                    CupertinoIcons.plus_square_fill,
-                    color: context.lichessColors.good,
-                  )
-                : Icon(
-                    CupertinoIcons.minus_square_fill,
-                    color: context.lichessColors.error,
-                  );
+            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
+            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
       }
     }
 
@@ -455,32 +388,32 @@ class ExtendedGameListTile extends StatelessWidget {
       game: game,
       mySide: youAre,
       padding: padding,
-      onTap: game.variant.isReadSupported
-          ? () {
-              pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => game.fullId != null
-                    ? GameScreen(
-                        initialGameId: game.fullId,
-                        loadingFen: game.lastFen,
-                        loadingLastMove: game.lastMove,
-                        loadingOrientation: youAre,
-                        lastMoveAt: game.lastMoveAt,
-                      )
-                    : ArchivedGameScreen(
-                        gameData: game,
-                        orientation: youAre,
-                      ),
-              );
-            }
-          : () {
-              showPlatformSnackbar(
-                context,
-                'This variant is not supported yet.',
-                type: SnackBarType.info,
-              );
-            },
+      onTap:
+          game.variant.isReadSupported
+              ? () {
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder:
+                      (context) =>
+                          game.fullId != null
+                              ? GameScreen(
+                                initialGameId: game.fullId,
+                                loadingFen: game.lastFen,
+                                loadingLastMove: game.lastMove,
+                                loadingOrientation: youAre,
+                                lastMoveAt: game.lastMoveAt,
+                              )
+                              : ArchivedGameScreen(gameData: game, orientation: youAre),
+                );
+              }
+              : () {
+                showPlatformSnackbar(
+                  context,
+                  'This variant is not supported yet.',
+                  type: SnackBarType.info,
+                );
+              },
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
@@ -492,10 +425,7 @@ class ExtendedGameListTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (me.analysis != null) ...[
-            Icon(
-              CupertinoIcons.chart_bar_alt_fill,
-              color: textShade(context, 0.5),
-            ),
+            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
             const SizedBox(width: 5),
           ],
           getResultIcon(game, youAre),

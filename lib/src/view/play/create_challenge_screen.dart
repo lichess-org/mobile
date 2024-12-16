@@ -38,9 +38,7 @@ class CreateChallengeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.challengeChallengesX(user.name)),
-      ),
+      appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
       body: _ChallengeBody(user),
     );
   }
@@ -84,12 +82,12 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
-            preferences.clock.time > Duration.zero ||
-            preferences.clock.increment > Duration.zero;
+        preferences.clock.time > Duration.zero ||
+        preferences.clock.increment > Duration.zero;
 
     final isValidPosition =
         (fromPositionFenInput != null && fromPositionFenInput!.isNotEmpty) ||
-            preferences.variant != Variant.fromPosition;
+        preferences.variant != Variant.fromPosition;
 
     return accountAsync.when(
       data: (account) {
@@ -98,9 +96,10 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         return Center(
           child: ListView(
             shrinkWrap: true,
-            padding: Theme.of(context).platform == TargetPlatform.iOS
-                ? Styles.sectionBottomPadding
-                : Styles.verticalBodyPadding,
+            padding:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? Styles.sectionBottomPadding
+                    : Styles.verticalBodyPadding,
             children: [
               PlatformListTile(
                 harmonizeCupertinoTitleStyle: true,
@@ -114,21 +113,14 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         ChallengeTimeControlType.correspondence,
                       ],
                       selectedItem: preferences.timeControl,
-                      labelBuilder: (ChallengeTimeControlType timeControl) =>
-                          Text(
-                        switch (timeControl) {
-                          ChallengeTimeControlType.clock =>
-                            context.l10n.realTime,
-                          ChallengeTimeControlType.correspondence =>
-                            context.l10n.correspondence,
-                          ChallengeTimeControlType.unlimited =>
-                            context.l10n.unlimited,
-                        },
-                      ),
+                      labelBuilder:
+                          (ChallengeTimeControlType timeControl) => Text(switch (timeControl) {
+                            ChallengeTimeControlType.clock => context.l10n.realTime,
+                            ChallengeTimeControlType.correspondence => context.l10n.correspondence,
+                            ChallengeTimeControlType.unlimited => context.l10n.unlimited,
+                          }),
                       onSelectedItemChanged: (ChallengeTimeControlType value) {
-                        ref
-                            .read(challengePreferencesProvider.notifier)
-                            .setTimeControl(value);
+                        ref.read(challengePreferencesProvider.notifier).setTimeControl(value);
                       },
                     );
                   },
@@ -152,10 +144,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                               text: '${context.l10n.minutesPerSide}: ',
                               children: [
                                 TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                   text: clockLabelInMinutes(seconds),
                                 ),
                               ],
@@ -168,10 +157,10 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             onChange:
                                 Theme.of(context).platform == TargetPlatform.iOS
                                     ? (num value) {
-                                        setState(() {
-                                          seconds = value.toInt();
-                                        });
-                                      }
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                    }
                                     : null,
                             onChangeEnd: (num value) {
                               setState(() {
@@ -192,8 +181,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
                 Builder(
                   builder: (context) {
-                    int incrementSeconds =
-                        preferences.clock.increment.inSeconds;
+                    int incrementSeconds = preferences.clock.increment.inSeconds;
                     return StatefulBuilder(
                       builder: (context, setState) {
                         return PlatformListTile(
@@ -203,10 +191,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                               text: '${context.l10n.incrementInSeconds}: ',
                               children: [
                                 TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                   text: incrementSeconds.toString(),
                                 ),
                               ],
@@ -218,10 +203,10 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             onChange:
                                 Theme.of(context).platform == TargetPlatform.iOS
                                     ? (num value) {
-                                        setState(() {
-                                          incrementSeconds = value.toInt();
-                                        });
-                                      }
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                    }
                                     : null,
                             onChangeEnd: (num value) {
                               setState(() {
@@ -253,10 +238,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                               text: '${context.l10n.daysPerTurn}: ',
                               children: [
                                 TextSpan(
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                   text: _daysLabel(daysPerTurn),
                                 ),
                               ],
@@ -269,10 +251,10 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             onChange:
                                 Theme.of(context).platform == TargetPlatform.iOS
                                     ? (num value) {
-                                        setState(() {
-                                          daysPerTurn = value.toInt();
-                                        });
-                                      }
+                                      setState(() {
+                                        daysPerTurn = value.toInt();
+                                      });
+                                    }
                                     : null,
                             onChangeEnd: (num value) {
                               setState(() {
@@ -296,17 +278,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   onPressed: () {
                     showChoicePicker(
                       context,
-                      choices: [
-                        Variant.standard,
-                        Variant.chess960,
-                        Variant.fromPosition,
-                      ],
+                      choices: [Variant.standard, Variant.chess960, Variant.fromPosition],
                       selectedItem: preferences.variant,
                       labelBuilder: (Variant variant) => Text(variant.label),
                       onSelectedItemChanged: (Variant variant) {
-                        ref
-                            .read(challengePreferencesProvider.notifier)
-                            .setVariant(variant);
+                        ref.read(challengePreferencesProvider.notifier).setVariant(variant);
                       },
                     );
                   },
@@ -316,9 +292,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               ExpandedSection(
                 expand: preferences.variant == Variant.fromPosition,
                 child: SmallBoardPreview(
-                  orientation: preferences.sideChoice == SideChoice.black
-                      ? Side.black
-                      : Side.white,
+                  orientation: preferences.sideChoice == SideChoice.black ? Side.black : Side.white,
                   fen: fromPositionFenInput ?? kEmptyFen,
                   description: AdaptiveTextField(
                     maxLines: 5,
@@ -330,8 +304,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
               ),
               ExpandedSection(
-                expand: preferences.rated == false ||
-                    preferences.variant == Variant.fromPosition,
+                expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
                 child: PlatformListTile(
                   harmonizeCupertinoTitleStyle: true,
                   title: Text(context.l10n.side),
@@ -341,18 +314,13 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         context,
                         choices: SideChoice.values,
                         selectedItem: preferences.sideChoice,
-                        labelBuilder: (SideChoice side) =>
-                            Text(side.label(context.l10n)),
+                        labelBuilder: (SideChoice side) => Text(side.label(context.l10n)),
                         onSelectedItemChanged: (SideChoice side) {
-                          ref
-                              .read(challengePreferencesProvider.notifier)
-                              .setSideChoice(side);
+                          ref.read(challengePreferencesProvider.notifier).setSideChoice(side);
                         },
                       );
                     },
-                    child: Text(
-                      preferences.sideChoice.label(context.l10n),
-                    ),
+                    child: Text(preferences.sideChoice.label(context.l10n)),
                   ),
                 ),
               ),
@@ -366,9 +334,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       applyCupertinoTheme: true,
                       value: preferences.rated,
                       onChanged: (bool value) {
-                        ref
-                            .read(challengePreferencesProvider.notifier)
-                            .setRated(value);
+                        ref.read(challengePreferencesProvider.notifier).setRated(value);
                       },
                     ),
                   ),
@@ -381,69 +347,56 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
                       semanticsLabel: context.l10n.challengeChallengeToPlay,
-                      onPressed: timeControl == ChallengeTimeControlType.clock
-                          ? isValidTimeControl && isValidPosition
-                              ? () {
-                                  pushPlatformRoute(
-                                    context,
-                                    rootNavigator: true,
-                                    builder: (BuildContext context) {
-                                      return GameScreen(
-                                        challenge: preferences.makeRequest(
-                                          widget.user,
-                                          preferences.variant !=
-                                                  Variant.fromPosition
-                                              ? null
-                                              : fromPositionFenInput,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                              : null
-                          : timeControl ==
-                                      ChallengeTimeControlType.correspondence &&
-                                  snapshot.connectionState !=
-                                      ConnectionState.waiting
+                      onPressed:
+                          timeControl == ChallengeTimeControlType.clock
+                              ? isValidTimeControl && isValidPosition
+                                  ? () {
+                                    pushPlatformRoute(
+                                      context,
+                                      rootNavigator: true,
+                                      builder: (BuildContext context) {
+                                        return GameScreen(
+                                          challenge: preferences.makeRequest(
+                                            widget.user,
+                                            preferences.variant != Variant.fromPosition
+                                                ? null
+                                                : fromPositionFenInput,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                  : null
+                              : timeControl == ChallengeTimeControlType.correspondence &&
+                                  snapshot.connectionState != ConnectionState.waiting
                               ? () async {
-                                  final createGameService =
-                                      ref.read(createGameServiceProvider);
-                                  _pendingCorrespondenceChallenge =
-                                      createGameService
-                                          .newCorrespondenceChallenge(
-                                    preferences.makeRequest(
-                                      widget.user,
-                                      preferences.variant !=
-                                              Variant.fromPosition
-                                          ? null
-                                          : fromPositionFenInput,
-                                    ),
-                                  );
+                                final createGameService = ref.read(createGameServiceProvider);
+                                _pendingCorrespondenceChallenge = createGameService
+                                    .newCorrespondenceChallenge(
+                                      preferences.makeRequest(
+                                        widget.user,
+                                        preferences.variant != Variant.fromPosition
+                                            ? null
+                                            : fromPositionFenInput,
+                                      ),
+                                    );
 
-                                  await _pendingCorrespondenceChallenge!;
+                                await _pendingCorrespondenceChallenge!;
 
-                                  if (!context.mounted) return;
+                                if (!context.mounted) return;
 
-                                  Navigator.of(context).pop();
+                                Navigator.of(context).pop();
 
-                                  // Switch to the home tab
-                                  ref
-                                      .read(currentBottomTabProvider.notifier)
-                                      .state = BottomTab.home;
+                                // Switch to the home tab
+                                ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
 
-                                  // Navigate to the challenges screen where
-                                  // the new correspondence challenge will be
-                                  // displayed
-                                  pushPlatformRoute(
-                                    context,
-                                    screen: const ChallengeRequestsScreen(),
-                                  );
-                                }
+                                // Navigate to the challenges screen where
+                                // the new correspondence challenge will be
+                                // displayed
+                                pushPlatformRoute(context, screen: const ChallengeRequestsScreen());
+                              }
                               : null,
-                      child: Text(
-                        context.l10n.challengeChallengeToPlay,
-                        style: Styles.bold,
-                      ),
+                      child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                     ),
                   );
                 },
@@ -453,9 +406,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, stackTrace) => const Center(
-        child: Text('Could not load account data'),
-      ),
+      error: (error, stackTrace) => const Center(child: Text('Could not load account data')),
     );
   }
 
@@ -465,13 +416,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
       try {
         Chess.fromSetup(Setup.parseFen(data.text!.trim()));
         _controller.text = data.text!;
-      } catch (_, __) {
+      } catch (_) {
         if (mounted) {
-          showPlatformSnackbar(
-            context,
-            context.l10n.invalidFen,
-            type: SnackBarType.error,
-          );
+          showPlatformSnackbar(context, context.l10n.invalidFen, type: SnackBarType.error);
         }
       }
     }

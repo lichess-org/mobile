@@ -18,14 +18,13 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
     this.onTap,
   }) : _showLoadingPlaceholder = false;
 
-  const SmallBoardPreview.loading({
-    this.padding,
-  })  : orientation = Side.white,
-        fen = kEmptyFEN,
-        lastMove = null,
-        description = const SizedBox.shrink(),
-        onTap = null,
-        _showLoadingPlaceholder = true;
+  const SmallBoardPreview.loading({this.padding})
+    : orientation = Side.white,
+      fen = kEmptyFEN,
+      lastMove = null,
+      description = const SizedBox.shrink(),
+      onTap = null,
+      _showLoadingPlaceholder = true;
 
   /// Side by which the board is oriented.
   final Side orientation;
@@ -57,21 +56,19 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
 
     final content = LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide -
-            (constraints.biggest.shortestSide / 1.618);
+        final boardSize =
+            constraints.biggest.shortestSide - (constraints.biggest.shortestSide / 1.618);
         return Container(
           decoration: BoxDecoration(
-            color: _isPressed
-                ? CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey5,
-                    context,
-                  )
-                : null,
+            color:
+                _isPressed
+                    ? CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context)
+                    : null,
           ),
           child: Padding(
-            padding: widget.padding ??
-                Styles.horizontalBodyPadding
-                    .add(const EdgeInsets.symmetric(vertical: 8.0)),
+            padding:
+                widget.padding ??
+                Styles.horizontalBodyPadding.add(const EdgeInsets.symmetric(vertical: 8.0)),
             child: SizedBox(
               height: boardSize,
               child: Row(
@@ -93,8 +90,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                       lastMove: widget.lastMove as NormalMove?,
                       settings: ChessboardSettings(
                         enableCoordinates: false,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(4.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                         boxShadow: boardShadows,
                         animationDuration: const Duration(milliseconds: 150),
                         pieceAssets: boardPrefs.pieceSet.assets,
@@ -116,8 +112,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                                 width: double.infinity,
                                 decoration: const BoxDecoration(
                                   color: Colors.black,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
                                 ),
                               ),
                               const SizedBox(height: 4.0),
@@ -126,8 +121,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                                 width: MediaQuery.sizeOf(context).width / 3,
                                 decoration: const BoxDecoration(
                                   color: Colors.black,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
                                 ),
                               ),
                             ],
@@ -137,8 +131,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                             width: 44.0,
                             decoration: const BoxDecoration(
                               color: Colors.black,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
                             ),
                           ),
                           Container(
@@ -146,8 +139,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                             width: double.infinity,
                             decoration: const BoxDecoration(
                               color: Colors.black,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
                             ),
                           ),
                         ],
@@ -166,16 +158,13 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
     return widget.onTap != null
         ? Theme.of(context).platform == TargetPlatform.iOS
             ? GestureDetector(
-                onTapDown: (_) => setState(() => _isPressed = true),
-                onTapUp: (_) => setState(() => _isPressed = false),
-                onTapCancel: () => setState(() => _isPressed = false),
-                onTap: widget.onTap,
-                child: content,
-              )
-            : InkWell(
-                onTap: widget.onTap,
-                child: content,
-              )
+              onTapDown: (_) => setState(() => _isPressed = true),
+              onTapUp: (_) => setState(() => _isPressed = false),
+              onTapCancel: () => setState(() => _isPressed = false),
+              onTap: widget.onTap,
+              child: content,
+            )
+            : InkWell(onTap: widget.onTap, child: content)
         : content;
   }
 }

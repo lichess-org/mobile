@@ -22,83 +22,69 @@ final client = MockClient((request) {
 
 void main() {
   group('SearchScreen', () {
-    testWidgets(
-      'should see search results',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const SearchScreen(),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('should see search results', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const SearchScreen(),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        final textFieldFinder =
-            debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-                ? find.byType(CupertinoSearchTextField)
-                : find.byType(SearchBar);
+      final textFieldFinder =
+          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+              ? find.byType(CupertinoSearchTextField)
+              : find.byType(SearchBar);
 
-        await tester.enterText(textFieldFinder, 'joh');
+      await tester.enterText(textFieldFinder, 'joh');
 
-        // await debouce call
-        await tester.pump(const Duration(milliseconds: 300));
+      // await debouce call
+      await tester.pump(const Duration(milliseconds: 300));
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // await response
-        await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      // await response
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
-        expect(find.byType(CircularProgressIndicator), findsNothing);
-        expect(find.text('Players with "joh"'), findsOneWidget);
-        expect(find.byType(UserListTile), findsNWidgets(2));
-        expect(find.text('John Doe'), findsOneWidget);
-        expect(find.text('John Doe 2'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.text('Players with "joh"'), findsOneWidget);
+      expect(find.byType(UserListTile), findsNWidgets(2));
+      expect(find.text('John Doe'), findsOneWidget);
+      expect(find.text('John Doe 2'), findsOneWidget);
 
-        // await debouce call for saving search history
-        await tester.pump(const Duration(seconds: 2));
-      },
-      variant: kPlatformVariant,
-    );
+      // await debouce call for saving search history
+      await tester.pump(const Duration(seconds: 2));
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'should see "no result" when search finds nothing',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const SearchScreen(),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('should see "no result" when search finds nothing', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const SearchScreen(),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        final textFieldFinder =
-            debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-                ? find.byType(CupertinoSearchTextField)
-                : find.byType(SearchBar);
+      final textFieldFinder =
+          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+              ? find.byType(CupertinoSearchTextField)
+              : find.byType(SearchBar);
 
-        await tester.enterText(textFieldFinder, 'johnny');
-        // await debouce call
-        await tester.pump(const Duration(milliseconds: 300));
+      await tester.enterText(textFieldFinder, 'johnny');
+      // await debouce call
+      await tester.pump(const Duration(milliseconds: 300));
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // await response
-        await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      // await response
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
-        expect(find.text('Players with "johnny"'), findsNothing);
-        expect(find.text('No results'), findsOneWidget);
+      expect(find.text('Players with "johnny"'), findsNothing);
+      expect(find.text('No results'), findsOneWidget);
 
-        // await debouce call for saving search history
-        await tester.pump(const Duration(seconds: 2));
-      },
-      variant: kPlatformVariant,
-    );
+      // await debouce call for saving search history
+      await tester.pump(const Duration(seconds: 2));
+    }, variant: kPlatformVariant);
   });
 }
 

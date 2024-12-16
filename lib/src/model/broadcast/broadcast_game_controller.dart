@@ -29,8 +29,7 @@ part 'broadcast_game_controller.freezed.dart';
 part 'broadcast_game_controller.g.dart';
 
 @riverpod
-class BroadcastGameController extends _$BroadcastGameController
-    implements PgnTreeNotifier {
+class BroadcastGameController extends _$BroadcastGameController implements PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -49,10 +48,7 @@ class BroadcastGameController extends _$BroadcastGameController
   Object? _key = Object();
 
   @override
-  Future<BroadcastGameState> build(
-    BroadcastRoundId roundId,
-    BroadcastGameId gameId,
-  ) async {
+  Future<BroadcastGameState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastGameController.broadcastSocketUri(roundId));
@@ -126,18 +122,18 @@ class BroadcastGameController extends _$BroadcastGameController
     if (broadcastState.isLocalEvaluationEnabled) {
       evaluationService
           .initEngine(
-        _evaluationContext,
-        options: EvaluationOptions(
-          multiPv: prefs.numEvalLines,
-          cores: prefs.numEngineCores,
-          searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-        ),
-      )
+            _evaluationContext,
+            options: EvaluationOptions(
+              multiPv: prefs.numEvalLines,
+              cores: prefs.numEngineCores,
+              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
+            ),
+          )
           .then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
-      });
+            _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
+              _startEngineEval();
+            });
+          });
     }
 
     return broadcastState;
@@ -157,8 +153,7 @@ class BroadcastGameController extends _$BroadcastGameController
       final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
       final game = PgnGame.parsePgn(pgn);
       final pgnHeaders = IMap(game.headers);
-      final rootComments =
-          IList(game.comments.map((c) => PgnComment.fromPgn(c)));
+      final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
       final newRoot = Root.fromPgnGame(game);
 
@@ -169,8 +164,7 @@ class BroadcastGameController extends _$BroadcastGameController
 
       _root = newRoot;
 
-      final newCurrentPath =
-          wasOnLivePath ? broadcastPath : curState.currentPath;
+      final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: newCurrentPath,
@@ -199,8 +193,7 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   void _handleAddNodeEvent(SocketEvent event) {
-    final broadcastGameId =
-        pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
     if (broadcastGameId != gameId) return;
@@ -215,18 +208,14 @@ class BroadcastGameController extends _$BroadcastGameController
     // The path for the node that was received
     final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
     final uciMove = pick(event.data, 'n', 'uci').asUciMoveOrThrow();
-    final clock =
-        pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
+    final clock = pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
     final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
 
     if (newPath != null && isNewNode == false) {
       _root.updateAt(newPath, (node) {
         if (node is Branch) {
-          node.comments = [
-            ...node.comments ?? [],
-            PgnComment(clock: clock),
-          ];
+          node.comments = [...node.comments ?? [], PgnComment(clock: clock)];
         }
       });
     }
@@ -245,30 +234,22 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   void _handleSetTagsEvent(SocketEvent event) {
-    final broadcastGameId =
-        pick(event.data, 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(event.data, 'chapterId').asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
     if (broadcastGameId != gameId) return;
 
-    final pgnHeadersEntries = pick(event.data, 'tags').asListOrThrow(
-      (header) => MapEntry(
-        header(0).asStringOrThrow(),
-        header(1).asStringOrThrow(),
-      ),
-    );
+    final pgnHeadersEntries = pick(
+      event.data,
+      'tags',
+    ).asListOrThrow((header) => MapEntry(header(0).asStringOrThrow(), header(1).asStringOrThrow()));
 
-    final pgnHeaders =
-        state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
-    state = AsyncData(
-      state.requireValue.copyWith(pgnHeaders: pgnHeaders),
-    );
+    final pgnHeaders = state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
+    state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
 
-  EvaluationContext get _evaluationContext => EvaluationContext(
-        variant: Variant.standard,
-        initialPosition: _root.position,
-      );
+  EvaluationContext get _evaluationContext =>
+      EvaluationContext(variant: Variant.standard, initialPosition: _root.position);
 
   void onUserMove(NormalMove move) {
     if (!state.hasValue) return;
@@ -280,16 +261,9 @@ class BroadcastGameController extends _$BroadcastGameController
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(
-      state.requireValue.currentPath,
-      move,
-    );
+    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
-      _setPath(
-        newPath,
-        shouldRecomputeRootView: isNewNode,
-        shouldForceShowVariation: true,
-      );
+      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
   }
 
@@ -344,9 +318,7 @@ class BroadcastGameController extends _$BroadcastGameController
   void toggleBoard() {
     if (!state.hasValue) return;
 
-    state = AsyncData(
-      state.requireValue.copyWith(pov: state.requireValue.pov.opposite),
-    );
+    state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
   }
 
   void userPrevious() {
@@ -407,9 +379,7 @@ class BroadcastGameController extends _$BroadcastGameController
   Future<void> toggleLocalEvaluation() async {
     if (!state.hasValue) return;
 
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .toggleEnableLocalEvaluation();
+    ref.read(analysisPreferencesProvider.notifier).toggleEnableLocalEvaluation();
 
     state = AsyncData(
       state.requireValue.copyWith(
@@ -419,13 +389,14 @@ class BroadcastGameController extends _$BroadcastGameController
 
     if (state.requireValue.isLocalEvaluationEnabled) {
       final prefs = ref.read(analysisPreferencesProvider);
-      await ref.read(evaluationServiceProvider).initEngine(
+      await ref
+          .read(evaluationServiceProvider)
+          .initEngine(
             _evaluationContext,
             options: EvaluationOptions(
               multiPv: prefs.numEvalLines,
               cores: prefs.numEngineCores,
-              searchTime:
-                  ref.read(analysisPreferencesProvider).engineSearchTime,
+              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
             ),
           );
       _startEngineEval();
@@ -438,11 +409,11 @@ class BroadcastGameController extends _$BroadcastGameController
   void setNumEvalLines(int numEvalLines) {
     if (!state.hasValue) return;
 
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setNumEvalLines(numEvalLines);
+    ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
-    ref.read(evaluationServiceProvider).setOptions(
+    ref
+        .read(evaluationServiceProvider)
+        .setOptions(
           EvaluationOptions(
             multiPv: numEvalLines,
             cores: ref.read(analysisPreferencesProvider).numEngineCores,
@@ -454,9 +425,7 @@ class BroadcastGameController extends _$BroadcastGameController
 
     state = AsyncData(
       state.requireValue.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(
-          _root.nodeAt(state.requireValue.currentPath),
-        ),
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
 
@@ -464,11 +433,11 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   void setEngineCores(int numEngineCores) {
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setEngineCores(numEngineCores);
+    ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
 
-    ref.read(evaluationServiceProvider).setOptions(
+    ref
+        .read(evaluationServiceProvider)
+        .setOptions(
           EvaluationOptions(
             multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
             cores: numEngineCores,
@@ -480,11 +449,11 @@ class BroadcastGameController extends _$BroadcastGameController
   }
 
   void setEngineSearchTime(Duration searchTime) {
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setEngineSearchTime(searchTime);
+    ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
 
-    ref.read(evaluationServiceProvider).setOptions(
+    ref
+        .read(evaluationServiceProvider)
+        .setOptions(
           EvaluationOptions(
             multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
             cores: ref.read(analysisPreferencesProvider).numEngineCores,
@@ -508,9 +477,7 @@ class BroadcastGameController extends _$BroadcastGameController
     final currentNode = _root.nodeAt(path);
 
     // always show variation if the user plays a move
-    if (shouldForceShowVariation &&
-        currentNode is Branch &&
-        currentNode.isCollapsed) {
+    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
         if (node is Branch) node.isCollapsed = false;
       });
@@ -519,9 +486,8 @@ class BroadcastGameController extends _$BroadcastGameController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
-        ? _root.view
-        : state.requireValue.root;
+    final rootView =
+        shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.requireValue.root;
 
     final isForward = path.size > state.requireValue.currentPath.size;
     if (currentNode is Branch) {
@@ -529,9 +495,7 @@ class BroadcastGameController extends _$BroadcastGameController
         if (isForward) {
           final isCheck = currentNode.sanMove.isCheck;
           if (currentNode.sanMove.isCapture) {
-            ref
-                .read(moveFeedbackServiceProvider)
-                .captureFeedback(check: isCheck);
+            ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
           } else {
             ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
           }
@@ -588,9 +552,7 @@ class BroadcastGameController extends _$BroadcastGameController
           initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
-        ?.forEach(
-          (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
-        );
+        ?.forEach((t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2));
   }
 
   void _debouncedStartEngineEval() {
@@ -606,9 +568,7 @@ class BroadcastGameController extends _$BroadcastGameController
     // update the current node with last cached eval
     state = AsyncData(
       state.requireValue.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(
-          _root.nodeAt(state.requireValue.currentPath),
-        ),
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
   }
@@ -675,8 +635,7 @@ class BroadcastGameState with _$BroadcastGameState {
     IList<PgnComment>? pgnRootComments,
   }) = _BroadcastGameState;
 
-  IMap<Square, ISet<Square>> get validMoves =>
-      makeLegalMoves(currentNode.position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(currentNode.position);
 
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
@@ -689,9 +648,9 @@ class BroadcastGameState with _$BroadcastGameState {
   UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
 
   EngineGaugeParams get engineGaugeParams => (
-        orientation: pov,
-        isLocalEngineAvailable: isLocalEvaluationEnabled,
-        position: position,
-        savedEval: currentNode.eval ?? currentNode.serverEval,
-      );
+    orientation: pov,
+    isLocalEngineAvailable: isLocalEvaluationEnabled,
+    position: position,
+    savedEval: currentNode.eval ?? currentNode.serverEval,
+  );
 }

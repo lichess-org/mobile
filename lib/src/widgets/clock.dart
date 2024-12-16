@@ -46,20 +46,16 @@ class Clock extends StatelessWidget {
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < _showTenthsThreshold;
-    final isEmergency =
-        emergencyThreshold != null && timeLeft <= emergencyThreshold!;
+    final isEmergency = emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final hoursDisplay =
-        padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
-    final minsDisplay =
-        padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
+    final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
+    final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
     final brightness = Theme.of(context).brightness;
-    final activeClockStyle = clockStyle ??
-        (brightness == Brightness.dark
-            ? ClockStyle.darkThemeStyle
-            : ClockStyle.lightThemeStyle);
+    final activeClockStyle =
+        clockStyle ??
+        (brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -69,11 +65,12 @@ class Clock extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color: active
-                ? isEmergency
-                    ? activeClockStyle.emergencyBackgroundColor
-                    : activeClockStyle.activeBackgroundColor
-                : activeClockStyle.backgroundColor,
+            color:
+                active
+                    ? isEmergency
+                        ? activeClockStyle.emergencyBackgroundColor
+                        : activeClockStyle.activeBackgroundColor
+                    : activeClockStyle.backgroundColor,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -81,40 +78,31 @@ class Clock extends StatelessWidget {
               maxScaleFactor: kMaxClockTextScaleFactor,
               child: RichText(
                 text: TextSpan(
-                  text: hours > 0
-                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                      : '$minsDisplay:$secs',
+                  text:
+                      hours > 0
+                          ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                          : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color: active
-                        ? isEmergency
-                            ? activeClockStyle.emergencyTextColor
-                            : activeClockStyle.activeTextColor
-                        : activeClockStyle.textColor,
+                    color:
+                        active
+                            ? isEmergency
+                                ? activeClockStyle.emergencyTextColor
+                                : activeClockStyle.activeTextColor
+                            : activeClockStyle.textColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
-                    height: remainingHeight <
-                            kSmallRemainingHeightLeftBoardThreshold
-                        ? 1.0
-                        : null,
-                    fontFeatures: const [
-                      FontFeature.tabularFigures(),
-                    ],
+                    height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
+                    fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                   children: [
                     if (showTenths)
                       TextSpan(
-                        text:
-                            '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                        style: TextStyle(
-                          fontSize: _kClockTenthFontSize * fontScaleFactor,
-                        ),
+                        text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                        style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
                       ),
                     if (!active && timeLeft < const Duration(seconds: 1))
                       TextSpan(
-                        text:
-                            '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                        style: TextStyle(
-                          fontSize: _kClockHundredsFontSize * fontScaleFactor,
-                        ),
+                        text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                        style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
                       ),
                   ],
                 ),
@@ -309,8 +297,6 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: widget.builder(context, timeLeft),
-    );
+    return RepaintBoundary(child: widget.builder(context, timeLeft));
   }
 }

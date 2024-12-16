@@ -21,10 +21,7 @@ void setCorePalette(CorePalette? palette) {
     _boardColorScheme = ChessboardColorScheme(
       darkSquare: darkSquare,
       lightSquare: lightSquare,
-      background: SolidColorChessboardBackground(
-        lightSquare: lightSquare,
-        darkSquare: darkSquare,
-      ),
+      background: SolidColorChessboardBackground(lightSquare: lightSquare, darkSquare: darkSquare),
       whiteCoordBackground: SolidColorChessboardBackground(
         lightSquare: lightSquare,
         darkSquare: darkSquare,

@@ -12,10 +12,8 @@ class FakeConnectivity implements Connectivity {
   /// A broadcast stream controller of connectivity changes.
   ///
   /// This is used to simulate connectivity changes in tests.
-  static StreamController<List<ConnectivityResult>> controller =
-      StreamController.broadcast();
+  static StreamController<List<ConnectivityResult>> controller = StreamController.broadcast();
 
   @override
-  Stream<List<ConnectivityResult>> get onConnectivityChanged =>
-      controller.stream;
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => controller.stream;
 }

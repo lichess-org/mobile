@@ -21,17 +21,10 @@ void main() {
 
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await storage.save(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        data: data,
-      );
+      await storage.save(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix), data: data);
 
       expect(
-        storage.fetch(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
+        storage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
         completion(equals(data)),
       );
     });
@@ -41,11 +34,7 @@ void main() {
 
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await storage.save(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        data: data,
-      );
+      await storage.save(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix), data: data);
       await storage.save(
         userId: null,
         angle: const PuzzleTheme(PuzzleThemeKey.rookEndgame),
@@ -76,27 +65,12 @@ void main() {
 
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await storage.save(
-        userId: null,
-        angle: const PuzzleOpening('test_opening'),
-        data: data,
-      );
-      await storage.save(
-        userId: null,
-        angle: const PuzzleOpening('test_opening2'),
-        data: data,
-      );
+      await storage.save(userId: null, angle: const PuzzleOpening('test_opening'), data: data);
+      await storage.save(userId: null, angle: const PuzzleOpening('test_opening2'), data: data);
 
       expect(
         storage.fetchSavedOpenings(userId: null),
-        completion(
-          equals(
-            IMap(const {
-              'test_opening': 1,
-              'test_opening2': 1,
-            }),
-          ),
-        ),
+        completion(equals(IMap(const {'test_opening': 1, 'test_opening2': 1}))),
       );
     });
 
@@ -107,38 +81,18 @@ void main() {
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
       Future<void> save(PuzzleAngle angle, PuzzleBatch data, String timestamp) {
-        return database.insert(
-          'puzzle_batchs',
-          {
-            'userId': '**anon**',
-            'angle': angle.key,
-            'data': jsonEncode(data.toJson()),
-            'lastModified': timestamp,
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        return database.insert('puzzle_batchs', {
+          'userId': '**anon**',
+          'angle': angle.key,
+          'data': jsonEncode(data.toJson()),
+          'lastModified': timestamp,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
       }
 
-      await save(
-        const PuzzleTheme(PuzzleThemeKey.rookEndgame),
-        data,
-        '2021-01-02T00:00:00Z',
-      );
-      await save(
-        const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
-        data,
-        '2021-01-03T00:00:00Z',
-      );
-      await save(
-        const PuzzleOpening('test_opening'),
-        data,
-        '2021-01-04T00:00:00Z',
-      );
-      await save(
-        const PuzzleOpening('test_opening2'),
-        data,
-        '2021-01-04T80:00:00Z',
-      );
+      await save(const PuzzleTheme(PuzzleThemeKey.rookEndgame), data, '2021-01-02T00:00:00Z');
+      await save(const PuzzleTheme(PuzzleThemeKey.doubleBishopMate), data, '2021-01-03T00:00:00Z');
+      await save(const PuzzleOpening('test_opening'), data, '2021-01-04T00:00:00Z');
+      await save(const PuzzleOpening('test_opening2'), data, '2021-01-04T80:00:00Z');
 
       expect(
         storage.fetchAll(userId: null),
@@ -176,14 +130,8 @@ final data = PuzzleBatch(
         id: GameId('PrlkCqOv'),
         perf: Perf.blitz,
         rated: true,
-        white: PuzzleGamePlayer(
-          side: Side.white,
-          name: 'user1',
-        ),
-        black: PuzzleGamePlayer(
-          side: Side.black,
-          name: 'user2',
-        ),
+        white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+        black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
         pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
       ),
     ),

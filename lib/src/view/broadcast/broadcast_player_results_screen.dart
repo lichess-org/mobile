@@ -36,17 +36,13 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: BroadcastPlayerWidget(title: playerTitle, name: playerName),
-      ),
+      appBar: PlatformAppBar(title: BroadcastPlayerWidget(title: playerTitle, name: playerName)),
       body: _Body(tournamentId, playerId),
     );
   }
 }
 
-const _kTableRowPadding = EdgeInsets.symmetric(
-  vertical: 12.0,
-);
+const _kTableRowPadding = EdgeInsets.symmetric(vertical: 12.0);
 
 class _Body extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
@@ -56,24 +52,17 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playersResults =
-        ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
+    final playersResults = ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
 
     switch (playersResults) {
       case AsyncData(value: final playerResults):
         final player = playerResults.player;
         final fideData = playerResults.fideData;
-        final showRatingDiff =
-            playerResults.games.any((result) => result.ratingDiff != null);
-        final statWidth = (MediaQuery.sizeOf(context).width -
-                Styles.bodyPadding.horizontal -
-                10 * 2) /
-            3;
+        final showRatingDiff = playerResults.games.any((result) => result.ratingDiff != null);
+        final statWidth =
+            (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
         const cardSpacing = 10.0;
-        final indexWidth = max(
-          8.0 + playerResults.games.length.toString().length * 10.0,
-          28.0,
-        );
+        final indexWidth = max(8.0 + playerResults.games.length.toString().length * 10.0, 28.0);
 
         return ListView.builder(
           itemCount: playerResults.games.length + 1,
@@ -129,9 +118,7 @@ class _Body extends ConsumerWidget {
                               width: statWidth,
                               child: StatCard(
                                 context.l10n.broadcastAgeThisYear,
-                                value:
-                                    (DateTime.now().year - fideData.birthYear!)
-                                        .toString(),
+                                value: (DateTime.now().year - fideData.birthYear!).toString(),
                               ),
                             ),
                           if (player.federation != null)
@@ -143,20 +130,15 @@ class _Body extends ConsumerWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.network(
-                                      lichessFideFedSrc(
-                                        player.federation!,
-                                      ),
+                                      lichessFideFedSrc(player.federation!),
                                       height: 12,
-                                      httpClient:
-                                          ref.read(defaultClientProvider),
+                                      httpClient: ref.read(defaultClientProvider),
                                     ),
                                     const SizedBox(width: 5),
                                     Flexible(
                                       child: Text(
                                         federationIdToName[player.federation!]!,
-                                        style: const TextStyle(
-                                          fontSize: 18.0,
-                                        ),
+                                        style: const TextStyle(fontSize: 18.0),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -167,10 +149,7 @@ class _Body extends ConsumerWidget {
                           if (player.fideId != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
-                                'FIDE ID',
-                                value: player.fideId!.toString(),
-                              ),
+                              child: StatCard('FIDE ID', value: player.fideId!.toString()),
                             ),
                         ],
                       ),
@@ -200,10 +179,7 @@ class _Body extends ConsumerWidget {
                             width: statWidth,
                             child: StatCard(
                               context.l10n.broadcastRatingDiff,
-                              child: ProgressionWidget(
-                                player.ratingDiff!,
-                                fontSize: 18.0,
-                              ),
+                              child: ProgressionWidget(player.ratingDiff!, fontSize: 18.0),
                             ),
                           ),
                       ],
@@ -219,21 +195,21 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 pushPlatformRoute(
                   context,
-                  builder: (context) => BroadcastGameScreen(
-                    tournamentId: tournamentId,
-                    roundId: playerResult.roundId,
-                    gameId: playerResult.gameId,
-                  ),
+                  builder:
+                      (context) => BroadcastGameScreen(
+                        tournamentId: tournamentId,
+                        roundId: playerResult.roundId,
+                        gameId: playerResult.gameId,
+                      ),
                 );
               },
               child: ColoredBox(
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? index.isEven
-                        ? CupertinoColors.secondarySystemBackground
-                            .resolveFrom(context)
-                        : CupertinoColors.tertiarySystemBackground
-                            .resolveFrom(context)
-                    : index.isEven
+                color:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? index.isEven
+                            ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
+                            : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
+                        : index.isEven
                         ? Theme.of(context).colorScheme.surfaceContainerLow
                         : Theme.of(context).colorScheme.surfaceContainerHigh,
                 child: Padding(
@@ -245,9 +221,7 @@ class _Body extends ConsumerWidget {
                         child: Center(
                           child: Text(
                             index.toString(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -261,13 +235,10 @@ class _Body extends ConsumerWidget {
                       ),
                       Expanded(
                         flex: 3,
-                        child: (playerResult.opponent.rating != null)
-                            ? Center(
-                                child: Text(
-                                  playerResult.opponent.rating.toString(),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
+                        child:
+                            (playerResult.opponent.rating != null)
+                                ? Center(child: Text(playerResult.opponent.rating.toString()))
+                                : const SizedBox.shrink(),
                       ),
                       SizedBox(
                         width: 30,
@@ -276,24 +247,20 @@ class _Body extends ConsumerWidget {
                             width: 15,
                             height: 15,
                             decoration: BoxDecoration(
-                              border: (Theme.of(context).brightness ==
-                                              Brightness.light &&
-                                          playerResult.color == Side.white ||
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark &&
-                                          playerResult.color == Side.black)
-                                  ? Border.all(
-                                      width: 2.0,
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                    )
-                                  : null,
+                              border:
+                                  (Theme.of(context).brightness == Brightness.light &&
+                                              playerResult.color == Side.white ||
+                                          Theme.of(context).brightness == Brightness.dark &&
+                                              playerResult.color == Side.black)
+                                      ? Border.all(
+                                        width: 2.0,
+                                        color: Theme.of(context).colorScheme.outline,
+                                      )
+                                      : null,
                               shape: BoxShape.circle,
                               color: switch (playerResult.color) {
-                                Side.white =>
-                                  Colors.white.withValues(alpha: 0.9),
-                                Side.black =>
-                                  Colors.black.withValues(alpha: 0.9),
+                                Side.white => Colors.white.withValues(alpha: 0.9),
+                                Side.black => Colors.black.withValues(alpha: 0.9),
                               },
                             ),
                           ),
@@ -307,17 +274,15 @@ class _Body extends ConsumerWidget {
                               BroadcastPoints.one => '1',
                               BroadcastPoints.half => '½',
                               BroadcastPoints.zero => '0',
-                              _ => '*'
+                              _ => '*',
                             },
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: switch (playerResult.points) {
-                                BroadcastPoints.one =>
-                                  context.lichessColors.good,
-                                BroadcastPoints.zero =>
-                                  context.lichessColors.error,
-                                _ => null
+                                BroadcastPoints.one => context.lichessColors.good,
+                                BroadcastPoints.zero => context.lichessColors.error,
+                                _ => null,
                               },
                             ),
                           ),
@@ -326,12 +291,10 @@ class _Body extends ConsumerWidget {
                       if (showRatingDiff)
                         SizedBox(
                           width: 38,
-                          child: (playerResult.ratingDiff != null)
-                              ? ProgressionWidget(
-                                  playerResult.ratingDiff!,
-                                  fontSize: 14,
-                                )
-                              : null,
+                          child:
+                              (playerResult.ratingDiff != null)
+                                  ? ProgressionWidget(playerResult.ratingDiff!, fontSize: 14)
+                                  : null,
                         ),
                     ],
                   ),

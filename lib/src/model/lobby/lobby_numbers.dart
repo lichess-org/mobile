@@ -22,10 +22,7 @@ class LobbyNumbers extends _$LobbyNumbers {
     _socketSubscription = socketGlobalStream.listen((event) {
       if (event.topic == 'n') {
         final data = event.data as Map<String, int>;
-        state = (
-          nbPlayers: data['nbPlayers']!,
-          nbGames: data['nbGames']!,
-        );
+        state = (nbPlayers: data['nbPlayers']!, nbGames: data['nbGames']!);
       }
     });
 

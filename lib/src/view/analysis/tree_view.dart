@@ -15,17 +15,14 @@ class AnalysisTreeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
 
-    final root =
-        ref.watch(ctrlProvider.select((value) => value.requireValue.root));
-    final currentPath = ref
-        .watch(ctrlProvider.select((value) => value.requireValue.currentPath));
+    final root = ref.watch(ctrlProvider.select((value) => value.requireValue.root));
+    final currentPath = ref.watch(ctrlProvider.select((value) => value.requireValue.currentPath));
     final pgnRootComments = ref.watch(
       ctrlProvider.select((value) => value.requireValue.pgnRootComments),
     );
     final prefs = ref.watch(analysisPreferencesProvider);
     // enable computer analysis takes effect here only if it's a lichess game
-    final enableComputerAnalysis =
-        !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
+    final enableComputerAnalysis = !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
 
     return ListView(
       padding: EdgeInsets.zero,
@@ -37,8 +34,7 @@ class AnalysisTreeView extends ConsumerWidget {
           notifier: ref.read(ctrlProvider.notifier),
           shouldShowComputerVariations: enableComputerAnalysis,
           shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
-          shouldShowAnnotations:
-              enableComputerAnalysis && prefs.showAnnotations,
+          shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
         ),
       ],
     );

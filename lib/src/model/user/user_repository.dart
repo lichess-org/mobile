@@ -17,19 +17,13 @@ class UserRepository {
 
   Future<User> getUser(UserId id, {bool withCanChallenge = false}) {
     return client.readJson(
-      Uri(
-        path: '/api/user/$id',
-        queryParameters: withCanChallenge ? {'challenge': 'true'} : null,
-      ),
+      Uri(path: '/api/user/$id', queryParameters: withCanChallenge ? {'challenge': 'true'} : null),
       mapper: User.fromServerJson,
     );
   }
 
   Future<IList<User>> getOnlineBots() {
-    return client.readNdJsonList(
-      Uri(path: '/api/bot/online'),
-      mapper: User.fromServerJson,
-    );
+    return client.readNdJsonList(Uri(path: '/api/bot/online'), mapper: User.fromServerJson);
   }
 
   Future<UserPerfStats> getPerfStats(UserId id, Perf perf) {
@@ -41,40 +35,25 @@ class UserRepository {
 
   Future<IList<UserStatus>> getUsersStatuses(ISet<UserId> ids) {
     return client.readJsonList(
-      Uri(
-        path: '/api/users/status',
-        queryParameters: {'ids': ids.join(',')},
-      ),
+      Uri(path: '/api/users/status', queryParameters: {'ids': ids.join(',')}),
       mapper: UserStatus.fromJson,
     );
   }
 
   Future<IList<UserActivity>> getActivity(UserId id) {
-    return client.readJsonList(
-      Uri(path: '/api/user/$id/activity'),
-      mapper: _userActivityFromJson,
-    );
+    return client.readJsonList(Uri(path: '/api/user/$id/activity'), mapper: _userActivityFromJson);
   }
 
   Future<IList<Streamer>> getLiveStreamers() {
-    return client.readJsonList(
-      Uri(path: '/api/streamer/live'),
-      mapper: _streamersFromJson,
-    );
+    return client.readJsonList(Uri(path: '/api/streamer/live'), mapper: _streamersFromJson);
   }
 
   Future<IMap<Perf, LeaderboardUser>> getTop1() {
-    return client.readJson(
-      Uri(path: '/api/player/top/1/standard'),
-      mapper: _top1FromJson,
-    );
+    return client.readJson(Uri(path: '/api/player/top/1/standard'), mapper: _top1FromJson);
   }
 
   Future<Leaderboard> getLeaderboard() {
-    return client.readJson(
-      Uri(path: '/api/player'),
-      mapper: _leaderboardFromJson,
-    );
+    return client.readJson(Uri(path: '/api/player'), mapper: _leaderboardFromJson);
   }
 
   Future<IList<LightUser>> autocompleteUser(String term) {
@@ -95,14 +74,10 @@ class UserRepository {
   }
 }
 
-UserRatingHistoryPerf? _ratingHistoryFromJson(
-  Map<String, dynamic> json,
-) =>
+UserRatingHistoryPerf? _ratingHistoryFromJson(Map<String, dynamic> json) =>
     _ratingHistoryFromPick(pick(json).required());
 
-UserRatingHistoryPerf? _ratingHistoryFromPick(
-  RequiredPick pick,
-) {
+UserRatingHistoryPerf? _ratingHistoryFromPick(RequiredPick pick) {
   final perf = pick('name').asPerfOrNull();
 
   if (perf == null) {
@@ -111,17 +86,14 @@ UserRatingHistoryPerf? _ratingHistoryFromPick(
 
   return UserRatingHistoryPerf(
     perf: perf,
-    points: pick('points').asListOrThrow((point) {
-      final values = point.asListOrThrow((point) => point.asIntOrThrow());
-      return UserRatingHistoryPoint(
-        date: DateTime.utc(
-          values[0],
-          values[1] + 1,
-          values[2],
-        ),
-        elo: values[3],
-      );
-    }).toIList(),
+    points:
+        pick('points').asListOrThrow((point) {
+          final values = point.asListOrThrow((point) => point.asIntOrThrow());
+          return UserRatingHistoryPoint(
+            date: DateTime.utc(values[0], values[1] + 1, values[2]),
+            elo: values[3],
+          );
+        }).toIList(),
   );
 }
 
@@ -130,17 +102,14 @@ IList<LightUser> _autocompleteFromJson(Map<String, dynamic> json) =>
     _autocompleteFromPick(pick(json).required());
 
 IList<LightUser> _autocompleteFromPick(RequiredPick pick) {
-  return pick('result')
-      .asListOrThrow((userPick) => userPick.asLightUserOrThrow())
-      .toIList();
+  return pick('result').asListOrThrow((userPick) => userPick.asLightUserOrThrow()).toIList();
 }
 
 UserActivity _userActivityFromJson(Map<String, dynamic> json) =>
     _userActivityFromPick(pick(json).required());
 
 UserActivity _userActivityFromPick(RequiredPick pick) {
-  final receivedGamesMap =
-      pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
+  final receivedGamesMap = pick('games').asMapOrEmpty<String, Map<String, dynamic>>();
 
   final games = IMap({
     for (final entry in receivedGamesMap.entries)
@@ -148,8 +117,10 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
         Perf.nameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value),
   });
 
-  final bestTour = pick('tournaments', 'best')
-      .asListOrNull((p0) => UserActivityTournament.fromPick(p0));
+  final bestTour = pick(
+    'tournaments',
+    'best',
+  ).asListOrNull((p0) => UserActivityTournament.fromPick(p0));
 
   return UserActivity(
     startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
@@ -162,12 +133,10 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     puzzles: pick('puzzles', 'score').letOrNull(UserActivityScore.fromPick),
     streak: pick('streak').letOrNull(UserActivityStreak.fromPick),
     storm: pick('storm').letOrNull(UserActivityStreak.fromPick),
-    correspondenceEnds: pick('correspondenceEnds', 'score')
-        .letOrNull(UserActivityScore.fromPick),
+    correspondenceEnds: pick('correspondenceEnds', 'score').letOrNull(UserActivityScore.fromPick),
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
-    correspondenceGamesNb: pick('correspondenceMoves', 'games')
-        .asListOrNull((p) => p('id').asStringOrThrow())
-        ?.length,
+    correspondenceGamesNb:
+        pick('correspondenceMoves', 'games').asListOrNull((p) => p('id').asStringOrThrow())?.length,
   );
 }
 
@@ -214,11 +183,8 @@ UserPerfStats _userPerfStatsFromPick(RequiredPick pick) {
     maxPlayStreak: playStreak('nb', 'max').letOrNull(_userStreakFromPick),
     curTimeStreak: playStreak('time', 'cur').letOrNull(_userStreakFromPick),
     maxTimeStreak: playStreak('time', 'max').letOrNull(_userStreakFromPick),
-    worstLosses: IList(
-      stat('worstLosses', 'results').asListOrNull(_userPerfGameFromPick),
-    ),
-    bestWins:
-        IList(stat('bestWins', 'results').asListOrNull(_userPerfGameFromPick)),
+    worstLosses: IList(stat('worstLosses', 'results').asListOrNull(_userPerfGameFromPick)),
+    bestWins: IList(stat('bestWins', 'results').asListOrNull(_userPerfGameFromPick)),
   );
 }
 
@@ -272,8 +238,7 @@ UserPerfGame _userPerfGameFromPick(RequiredPick pick) {
   );
 }
 
-Streamer _streamersFromJson(Map<String, dynamic> json) =>
-    _streamersFromPick(pick(json).required());
+Streamer _streamersFromJson(Map<String, dynamic> json) => _streamersFromPick(pick(json).required());
 
 Streamer _streamersFromPick(RequiredPick pick) {
   final stream = pick('stream');
@@ -306,8 +271,7 @@ Leaderboard _leaderBoardFromPick(RequiredPick pick) {
     ultrabullet: pick('ultraBullet').asListOrEmpty(_leaderboardUserFromPick),
     crazyhouse: pick('crazyhouse').asListOrEmpty(_leaderboardUserFromPick),
     chess960: pick('chess960').asListOrEmpty(_leaderboardUserFromPick),
-    kingOfThehill:
-        pick('kingOfTheHill').asListOrEmpty(_leaderboardUserFromPick),
+    kingOfThehill: pick('kingOfTheHill').asListOrEmpty(_leaderboardUserFromPick),
     threeCheck: pick('threeCheck').asListOrEmpty(_leaderboardUserFromPick),
     antichess: pick('antichess').asListOrEmpty(_leaderboardUserFromPick),
     atomic: pick('atomic').asListOrEmpty(_leaderboardUserFromPick),
@@ -326,14 +290,14 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     flair: pick('flair').asStringOrNull(),
     patron: pick('patron').asBoolOrNull(),
     online: pick('online').asBoolOrNull(),
-    rating: pick('perfs')
-        .letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating'))
-        .asIntOrThrow(),
-    progress: pick('perfs')
-        .letOrThrow(
-          (prefsPick) => prefsPick(prefMap.keys.first, 'progress'),
-        )
-        .asIntOrThrow(),
+    rating:
+        pick(
+          'perfs',
+        ).letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating')).asIntOrThrow(),
+    progress:
+        pick(
+          'perfs',
+        ).letOrThrow((prefsPick) => prefsPick(prefMap.keys.first, 'progress')).asIntOrThrow(),
   );
 }
 

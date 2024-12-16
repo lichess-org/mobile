@@ -68,10 +68,7 @@ Future<Widget> makeTestProviderScopeApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: home,
       builder: (context, child) {
-        return CupertinoTheme(
-          data: const CupertinoThemeData(),
-          child: Material(child: child),
-        );
+        return CupertinoTheme(data: const CupertinoThemeData(), child: Material(child: child));
       },
     ),
     overrides: overrides,
@@ -89,19 +86,18 @@ Future<Widget> makeOfflineTestProviderScope(
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
-}) =>
-    makeTestProviderScope(
-      tester,
-      child: child,
-      overrides: [
-        httpClientFactoryProvider.overrideWith((ref) {
-          return FakeHttpClientFactory(() => offlineClient);
-        }),
-        ...overrides ?? [],
-      ],
-      userSession: userSession,
-      defaultPreferences: defaultPreferences,
-    );
+}) => makeTestProviderScope(
+  tester,
+  child: child,
+  overrides: [
+    httpClientFactoryProvider.overrideWith((ref) {
+      return FakeHttpClientFactory(() => offlineClient);
+    }),
+    ...overrides ?? [],
+  ],
+  userSession: userSession,
+  defaultPreferences: defaultPreferences,
+);
 
 /// Returns a [ProviderScope] and default mocks, ready for testing.
 ///
@@ -134,28 +130,16 @@ Future<Widget> makeTestProviderScope(
 
   // disable piece animation to simplify tests
   final defaultBoardPref = {
-    'preferences.board': jsonEncode(
-      BoardPrefs.defaults
-          .copyWith(
-            pieceAnimation: false,
-          )
-          .toJson(),
-    ),
+    'preferences.board': jsonEncode(BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson()),
   };
 
   await binding.setInitialSharedPreferencesValues(
-    defaultPreferences != null
-        ? {
-            ...defaultBoardPref,
-            ...defaultPreferences,
-          }
-        : defaultBoardPref,
+    defaultPreferences != null ? {...defaultBoardPref, ...defaultPreferences} : defaultBoardPref,
   );
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
-    if (userSession != null)
-      kSessionStorageKey: jsonEncode(userSession.toJson()),
+    if (userSession != null) kSessionStorageKey: jsonEncode(userSession.toJson()),
   });
 
   // TODO consider loading true fonts as well
@@ -170,10 +154,7 @@ Future<Widget> makeTestProviderScope(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       databaseProvider.overrideWith((ref) async {
-        final testDb = await openAppDatabase(
-          databaseFactoryFfiNoIsolate,
-          inMemoryDatabasePath,
-        );
+        final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
         ref.onDispose(testDb.close);
         return testDb;
       }),
@@ -226,23 +207,18 @@ Future<Widget> makeTestProviderScope(
       }),
       ...overrides ?? [],
     ],
-    child: TestSurface(
-      size: surfaceSize,
-      child: child,
-    ),
+    child: TestSurface(size: surfaceSize, child: child),
   );
 }
 
-void _ignoreOverflowErrors(
-  FlutterErrorDetails details, {
-  bool forceReport = false,
-}) {
+void _ignoreOverflowErrors(FlutterErrorDetails details, {bool forceReport = false}) {
   bool isOverflowError = false;
   final exception = details.exception;
 
   if (exception is FlutterError) {
-    isOverflowError = exception.diagnostics
-        .any((e) => e.value.toString().contains('A RenderFlex overflowed by'));
+    isOverflowError = exception.diagnostics.any(
+      (e) => e.value.toString().contains('A RenderFlex overflowed by'),
+    );
   }
 
   if (isOverflowError) {

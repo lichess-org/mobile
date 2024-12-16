@@ -14,18 +14,18 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'puzzle_screen.dart';
 
-final _openingsProvider = FutureProvider.autoDispose<
-    (bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
-  final connectivity = await ref.watch(connectivityChangesProvider.future);
-  final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-  IList<PuzzleOpeningFamily>? onlineOpenings;
-  try {
-    onlineOpenings = await ref.watch(puzzleOpeningsProvider.future);
-  } catch (e) {
-    onlineOpenings = null;
-  }
-  return (connectivity.isOnline, savedOpenings, onlineOpenings);
-});
+final _openingsProvider =
+    FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
+      final connectivity = await ref.watch(connectivityChangesProvider.future);
+      final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
+      IList<PuzzleOpeningFamily>? onlineOpenings;
+      try {
+        onlineOpenings = await ref.watch(puzzleOpeningsProvider.future);
+      } catch (e) {
+        onlineOpenings = null;
+      }
+      return (connectivity.isOnline, savedOpenings, onlineOpenings);
+    });
 
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
@@ -33,9 +33,7 @@ class OpeningThemeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.puzzlePuzzlesByOpenings),
-      ),
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
       body: const _Body(),
     );
   }
@@ -46,11 +44,10 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleStyle = Theme.of(context).platform == TargetPlatform.iOS
-        ? TextStyle(
-            color: CupertinoTheme.of(context).textTheme.textStyle.color,
-          )
-        : null;
+    final titleStyle =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? TextStyle(color: CupertinoTheme.of(context).textTheme.textStyle.color)
+            : null;
 
     final openings = ref.watch(_openingsProvider);
     return openings.when(
@@ -60,10 +57,7 @@ class _Body extends ConsumerWidget {
           return ListView(
             children: [
               for (final openingFamily in onlineOpenings)
-                _OpeningFamily(
-                  openingFamily: openingFamily,
-                  titleStyle: titleStyle,
-                ),
+                _OpeningFamily(openingFamily: openingFamily, titleStyle: titleStyle),
             ],
           );
         } else {
@@ -93,10 +87,7 @@ class _Body extends ConsumerWidget {
 }
 
 class _OpeningFamily extends ConsumerWidget {
-  const _OpeningFamily({
-    required this.openingFamily,
-    required this.titleStyle,
-  });
+  const _OpeningFamily({required this.openingFamily, required this.titleStyle});
 
   final PuzzleOpeningFamily openingFamily;
   final TextStyle? titleStyle;
@@ -105,62 +96,49 @@ class _OpeningFamily extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: openingFamily.openings.isNotEmpty
-          ? ExpansionTile(
-              title: Text(
-                openingFamily.name,
-                overflow: TextOverflow.ellipsis,
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                '${openingFamily.count}',
-                style: TextStyle(
-                  color: textShade(context, Styles.subtitleOpacity),
+      child:
+          openingFamily.openings.isNotEmpty
+              ? ExpansionTile(
+                title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
+                subtitle: Text(
+                  '${openingFamily.count}',
+                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                 ),
-              ),
-              children: [
-                ListSection(
-                  children: [
-                    _OpeningTile(
-                      name: openingFamily.name,
-                      openingKey: openingFamily.key,
-                      count: openingFamily.count,
-                      titleStyle: titleStyle,
-                    ),
-                    ...openingFamily.openings.map(
-                      (opening) => _OpeningTile(
-                        name: opening.name,
-                        openingKey: opening.key,
-                        count: opening.count,
+                children: [
+                  ListSection(
+                    children: [
+                      _OpeningTile(
+                        name: openingFamily.name,
+                        openingKey: openingFamily.key,
+                        count: openingFamily.count,
                         titleStyle: titleStyle,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          : ListTile(
-              title: Text(
-                openingFamily.name,
-                overflow: TextOverflow.ellipsis,
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                '${openingFamily.count}',
-                style: TextStyle(
-                  color: textShade(context, 0.5),
-                ),
-              ),
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (context) => PuzzleScreen(
-                    angle: PuzzleOpening(openingFamily.key),
+                      ...openingFamily.openings.map(
+                        (opening) => _OpeningTile(
+                          name: opening.name,
+                          openingKey: opening.key,
+                          count: opening.count,
+                          titleStyle: titleStyle,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ],
+              )
+              : ListTile(
+                title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
+                subtitle: Text(
+                  '${openingFamily.count}',
+                  style: TextStyle(color: textShade(context, 0.5)),
+                ),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => PuzzleScreen(angle: PuzzleOpening(openingFamily.key)),
+                  );
+                },
+              ),
     );
   }
 }
@@ -181,27 +159,14 @@ class _OpeningTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      leading: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : const SizedBox.shrink(),
-      title: Text(
-        name,
-        overflow: TextOverflow.ellipsis,
-        style: titleStyle,
-      ),
-      trailing: Text(
-        '$count',
-        style: TextStyle(
-          color: textShade(context, Styles.subtitleOpacity),
-        ),
-      ),
+      leading: Theme.of(context).platform == TargetPlatform.iOS ? null : const SizedBox.shrink(),
+      title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
+      trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
       onTap: () {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (context) => PuzzleScreen(
-            angle: PuzzleOpening(openingKey),
-          ),
+          builder: (context) => PuzzleScreen(angle: PuzzleOpening(openingKey)),
         );
       },
     );

@@ -30,10 +30,7 @@ void main() {
     });
 
     test('Estimated Duration', () {
-      expect(
-        const TimeIncrement(300, 5).estimatedDuration,
-        const Duration(seconds: 300 + 5 * 40),
-      );
+      expect(const TimeIncrement(300, 5).estimatedDuration, const Duration(seconds: 300 + 5 * 40));
       expect(const TimeIncrement(0, 0).estimatedDuration, Duration.zero);
     });
 

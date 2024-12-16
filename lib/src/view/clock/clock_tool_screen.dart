@@ -79,18 +79,20 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
-    final backgroundColor = clockState.isFlagged(playerType)
-        ? context.lichessColors.error
-        : !clockState.paused && clockState.isPlayersTurn(playerType)
+    final backgroundColor =
+        clockState.isFlagged(playerType)
+            ? context.lichessColors.error
+            : !clockState.paused && clockState.isPlayersTurn(playerType)
             ? colorScheme.primary
             : clockState.activeSide == playerType
-                ? colorScheme.secondaryContainer
-                : colorScheme.surfaceContainer;
+            ? colorScheme.secondaryContainer
+            : colorScheme.surfaceContainer;
 
     final clockStyle = ClockStyle(
-      textColor: clockState.activeSide == playerType
-          ? colorScheme.onSecondaryContainer
-          : colorScheme.onSurface,
+      textColor:
+          clockState.activeSide == playerType
+              ? colorScheme.onSecondaryContainer
+              : colorScheme.onSurface,
       activeTextColor: colorScheme.onPrimary,
       emergencyTextColor: Colors.white,
       backgroundColor: Colors.transparent,
@@ -99,10 +101,7 @@ class ClockTile extends ConsumerWidget {
     );
 
     return RotatedBox(
-      quarterTurns:
-          orientation == Orientation.portrait && position == TilePosition.top
-              ? 2
-              : 0,
+      quarterTurns: orientation == Orientation.portrait && position == TilePosition.top ? 2 : 0,
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
@@ -111,25 +110,22 @@ class ClockTile extends ConsumerWidget {
             color: backgroundColor,
             child: InkWell(
               splashFactory: NoSplash.splashFactory,
-              onTap: !clockState.started
-                  ? () {
-                      ref
-                          .read(clockToolControllerProvider.notifier)
-                          .setBottomPlayer(
-                            position == TilePosition.bottom
-                                ? Side.white
-                                : Side.black,
-                          );
-                    }
-                  : null,
-              onTapDown: clockState.started &&
-                      clockState.isPlayersMoveAllowed(playerType)
-                  ? (_) {
-                      ref
-                          .read(clockToolControllerProvider.notifier)
-                          .onTap(playerType);
-                    }
-                  : null,
+              onTap:
+                  !clockState.started
+                      ? () {
+                        ref
+                            .read(clockToolControllerProvider.notifier)
+                            .setBottomPlayer(
+                              position == TilePosition.bottom ? Side.white : Side.black,
+                            );
+                      }
+                      : null,
+              onTapDown:
+                  clockState.started && clockState.isPlayersMoveAllowed(playerType)
+                      ? (_) {
+                        ref.read(clockToolControllerProvider.notifier).onTap(playerType);
+                      }
+                      : null,
               child: Padding(
                 padding: const EdgeInsets.all(40),
                 child: Column(
@@ -152,9 +148,10 @@ class ClockTile extends ConsumerWidget {
                           },
                         ),
                         secondChild: const Icon(Icons.flag),
-                        crossFadeState: clockState.isFlagged(playerType)
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
+                        crossFadeState:
+                            clockState.isFlagged(playerType)
+                                ? CrossFadeState.showSecond
+                                : CrossFadeState.showFirst,
                       ),
                     ),
                   ],
@@ -186,32 +183,31 @@ class ClockTile extends ConsumerWidget {
                 iconSize: 32,
                 icon: Icons.tune,
                 color: clockStyle.textColor,
-                onTap: clockState.started
-                    ? null
-                    : () => showAdaptiveBottomSheet<void>(
+                onTap:
+                    clockState.started
+                        ? null
+                        : () => showAdaptiveBottomSheet<void>(
                           context: context,
-                          builder: (BuildContext context) =>
-                              CustomClockSettings(
-                            player: playerType,
-                            clock: playerType == Side.white
-                                ? TimeIncrement.fromDurations(
-                                    clockState.options.whiteTime,
-                                    clockState.options.whiteIncrement,
-                                  )
-                                : TimeIncrement.fromDurations(
-                                    clockState.options.blackTime,
-                                    clockState.options.blackIncrement,
-                                  ),
-                            onSubmit: (
-                              Side player,
-                              TimeIncrement clock,
-                            ) {
-                              Navigator.of(context).pop();
-                              ref
-                                  .read(clockToolControllerProvider.notifier)
-                                  .updateOptionsCustom(clock, player);
-                            },
-                          ),
+                          builder:
+                              (BuildContext context) => CustomClockSettings(
+                                player: playerType,
+                                clock:
+                                    playerType == Side.white
+                                        ? TimeIncrement.fromDurations(
+                                          clockState.options.whiteTime,
+                                          clockState.options.whiteIncrement,
+                                        )
+                                        : TimeIncrement.fromDurations(
+                                          clockState.options.blackTime,
+                                          clockState.options.blackIncrement,
+                                        ),
+                                onSubmit: (Side player, TimeIncrement clock) {
+                                  Navigator.of(context).pop();
+                                  ref
+                                      .read(clockToolControllerProvider.notifier)
+                                      .updateOptionsCustom(clock, player);
+                                },
+                              ),
                         ),
               ),
             ),

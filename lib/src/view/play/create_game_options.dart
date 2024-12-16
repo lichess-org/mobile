@@ -18,37 +18,38 @@ class CreateGameOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return Column(
       children: [
         _Section(
           children: [
             _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      ref.invalidate(accountProvider);
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.custom,
-                        builder: (_) => const CreateCustomGameScreen(),
-                      );
-                    }
-                  : null,
+              onTap:
+                  isOnline
+                      ? () {
+                        ref.invalidate(accountProvider);
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.custom,
+                          builder: (_) => const CreateCustomGameScreen(),
+                        );
+                      }
+                      : null,
               icon: Icons.tune,
               label: context.l10n.custom,
             ),
             _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.onlineBots,
-                        builder: (_) => const OnlineBotsScreen(),
-                      );
-                    }
-                  : null,
+              onTap:
+                  isOnline
+                      ? () {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.onlineBots,
+                          builder: (_) => const OnlineBotsScreen(),
+                        );
+                      }
+                      : null,
               icon: Icons.computer,
               label: context.l10n.onlineBots,
             ),
@@ -76,35 +77,23 @@ class CreateGameOptions extends ConsumerWidget {
 }
 
 class _Section extends StatelessWidget {
-  const _Section({
-    required this.children,
-  });
+  const _Section({required this.children});
 
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? ListSection(
-            hasLeading: true,
-            children: children,
-          )
+        ? ListSection(hasLeading: true, children: children)
         : Padding(
-            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
-            ),
-          );
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+        );
   }
 }
 
 class _CreateGamePlatformButton extends StatelessWidget {
-  const _CreateGamePlatformButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
+  const _CreateGamePlatformButton({required this.icon, required this.label, required this.onTap});
 
   final IconData icon;
 
@@ -116,18 +105,11 @@ class _CreateGamePlatformButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
         ? PlatformListTile(
-            leading: Icon(
-              icon,
-              size: 28,
-            ),
-            trailing: const CupertinoListTileChevron(),
-            title: Text(label, style: Styles.mainListTileTitle),
-            onTap: onTap,
-          )
-        : ElevatedButton.icon(
-            onPressed: onTap,
-            icon: Icon(icon),
-            label: Text(label),
-          );
+          leading: Icon(icon, size: 28),
+          trailing: const CupertinoListTileChevron(),
+          title: Text(label, style: Styles.mainListTileTitle),
+          onTap: onTap,
+        )
+        : ElevatedButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label));
   }
 }

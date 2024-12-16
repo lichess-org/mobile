@@ -5,11 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
 
-typedef BroadcastList = ({
-  IList<Broadcast> active,
-  IList<Broadcast> past,
-  int? nextPage,
-});
+typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? nextPage});
 
 enum BroadcastResult { whiteWins, blackWins, draw, ongoing, noResultPgnTag }
 
@@ -57,24 +53,19 @@ class BroadcastTournamentData with _$BroadcastTournamentData {
   }) = _BroadcastTournamentData;
 }
 
-typedef BroadcastTournamentInformation = ({
-  String? format,
-  String? timeControl,
-  String? players,
-  String? location,
-  BroadcastTournamentDates? dates,
-  Uri? website,
-});
+typedef BroadcastTournamentInformation =
+    ({
+      String? format,
+      String? timeControl,
+      String? players,
+      String? location,
+      BroadcastTournamentDates? dates,
+      Uri? website,
+    });
 
-typedef BroadcastTournamentDates = ({
-  DateTime startsAt,
-  DateTime? endsAt,
-});
+typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
 
-typedef BroadcastTournamentGroup = ({
-  BroadcastTournamentId id,
-  String name,
-});
+typedef BroadcastTournamentGroup = ({BroadcastTournamentId id, String name});
 
 @freezed
 class BroadcastRound with _$BroadcastRound {
@@ -89,10 +80,7 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundWithGames = ({
-  BroadcastRound round,
-  BroadcastRoundGames games,
-});
+typedef BroadcastRoundWithGames = ({BroadcastRound round, BroadcastRoundGames games});
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
@@ -144,20 +132,14 @@ class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
   }) = _BroadcastPlayerExtended;
 }
 
-typedef BroadcastFideData = ({
-  ({
-    int? standard,
-    int? rapid,
-    int? blitz,
-  }) ratings,
-  int? birthYear,
-});
+typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerResults = ({
-  BroadcastPlayerExtended player,
-  BroadcastFideData fideData,
-  IList<BroadcastPlayerResultData> games,
-});
+typedef BroadcastPlayerResults =
+    ({
+      BroadcastPlayerExtended player,
+      BroadcastFideData fideData,
+      IList<BroadcastPlayerResultData> games,
+    });
 
 enum BroadcastPoints { one, half, zero }
 
@@ -173,8 +155,4 @@ class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
   }) = _BroadcastPlayerResult;
 }
 
-enum RoundStatus {
-  live,
-  finished,
-  upcoming,
-}
+enum RoundStatus { live, finished, upcoming }

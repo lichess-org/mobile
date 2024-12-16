@@ -36,7 +36,8 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
+    final edgeInsets =
+        MediaQuery.paddingOf(context) -
         (Theme.of(context).platform == TargetPlatform.iOS
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
@@ -46,8 +47,9 @@ class BroadcastBoardsTab extends ConsumerWidget {
     return SliverPadding(
       padding: edgeInsets,
       sliver: switch (round) {
-        AsyncData(:final value) => value.games.isEmpty
-            ? SliverPadding(
+        AsyncData(:final value) =>
+          value.games.isEmpty
+              ? SliverPadding(
                 padding: const EdgeInsets.only(top: 16.0),
                 sliver: SliverToBoxAdapter(
                   child: Column(
@@ -59,7 +61,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   ),
                 ),
               )
-            : BroadcastPreview(
+              : BroadcastPreview(
                 games: value.games.values.toIList(),
                 tournamentId: tournamentId,
                 roundId: roundId,
@@ -68,15 +70,9 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 roundSlug: value.round.slug,
               ),
         AsyncError(:final error) => SliverFillRemaining(
-            child: Center(
-              child: Text('Could not load broadcast: $error'),
-            ),
-          ),
-        _ => const SliverFillRemaining(
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          ),
+          child: Center(child: Text('Could not load broadcast: $error')),
+        ),
+        _ => const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
       },
     );
   }
@@ -93,12 +89,12 @@ class BroadcastPreview extends StatelessWidget {
   });
 
   const BroadcastPreview.loading()
-      : tournamentId = const BroadcastTournamentId(''),
-        roundId = const BroadcastRoundId(''),
-        games = null,
-        title = '',
-        tournamentSlug = '',
-        roundSlug = '';
+    : tournamentId = const BroadcastTournamentId(''),
+      roundId = const BroadcastRoundId(''),
+      games = null,
+      title = '',
+      tournamentSlug = '',
+      roundSlug = '';
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
@@ -118,7 +114,8 @@ class BroadcastPreview extends StatelessWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWidth = (screenWidth -
+    final boardWidth =
+        (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
@@ -153,14 +150,15 @@ class BroadcastPreview extends StatelessWidget {
               pushPlatformRoute(
                 context,
                 title: title,
-                builder: (context) => BroadcastGameScreen(
-                  tournamentId: tournamentId,
-                  roundId: roundId,
-                  gameId: game.id,
-                  tournamentSlug: tournamentSlug,
-                  roundSlug: roundSlug,
-                  title: title,
-                ),
+                builder:
+                    (context) => BroadcastGameScreen(
+                      tournamentId: tournamentId,
+                      roundId: roundId,
+                      gameId: game.id,
+                      tournamentSlug: tournamentSlug,
+                      roundSlug: roundSlug,
+                      title: title,
+                    ),
               );
             },
             orientation: Side.white,
@@ -187,9 +185,7 @@ class BroadcastPreview extends StatelessWidget {
 }
 
 class _PlayerWidgetLoading extends StatelessWidget {
-  const _PlayerWidgetLoading({
-    required this.width,
-  });
+  const _PlayerWidgetLoading({required this.width});
 
   final double width;
 
@@ -201,10 +197,7 @@ class _PlayerWidgetLoading extends StatelessWidget {
         padding: _kPlayerWidgetPadding,
         child: Container(
           height: _kPlayerWidgetTextStyle.fontSize,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(5),
-          ),
+          decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(5)),
         ),
       ),
     );
@@ -252,26 +245,26 @@ class _PlayerWidget extends StatelessWidget {
                   (gameStatus == BroadcastResult.draw)
                       ? '½'
                       : (gameStatus == BroadcastResult.whiteWins)
-                          ? side == Side.white
-                              ? '1'
-                              : '0'
-                          : side == Side.black
-                              ? '1'
-                              : '0',
-                  style:
-                      const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                      ? side == Side.white
+                          ? '1'
+                          : '0'
+                      : side == Side.black
+                      ? '1'
+                      : '0',
+                  style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
                 CountdownClockBuilder(
                   timeLeft: player.clock!,
                   active: side == playingSide,
-                  builder: (context, timeLeft) => Text(
-                    timeLeft.toHoursMinutesSeconds(),
-                    style: TextStyle(
-                      color: (side == playingSide) ? Colors.orange[900] : null,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
+                  builder:
+                      (context, timeLeft) => Text(
+                        timeLeft.toHoursMinutesSeconds(),
+                        style: TextStyle(
+                          color: (side == playingSide) ? Colors.orange[900] : null,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
+                      ),
                   tickInterval: const Duration(seconds: 1),
                   clockUpdatedAt: game.updatedClockAt,
                 ),

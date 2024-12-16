@@ -23,9 +23,7 @@ class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.editProfile),
-      ),
+      appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
       body: _Body(),
     );
   }
@@ -38,9 +36,7 @@ class _Body extends ConsumerWidget {
     return account.when(
       data: (data) {
         if (data == null) {
-          return Center(
-            child: Text(context.l10n.mobileMustBeLoggedIn),
-          );
+          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
         return Padding(
           padding: Styles.bodyPadding,
@@ -88,10 +84,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   final _cupertinoTextFieldDecoration = BoxDecoration(
     color: CupertinoColors.tertiarySystemBackground,
-    border: Border.all(
-      color: CupertinoColors.systemGrey4,
-      width: 1,
-    ),
+    border: Border.all(color: CupertinoColors.systemGrey4, width: 1),
     borderRadius: BorderRadius.circular(8),
   );
 
@@ -99,8 +92,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    final String? initialLinks =
-        widget.user.profile?.links?.map((e) => e.url).join('\r\n');
+    final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
 
     return Form(
       key: _formKey,
@@ -110,9 +102,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.biography,
             initialValue: widget.user.profile?.bio,
             formKey: 'bio',
-            controller: TextEditingController(
-              text: widget.user.profile?.bio,
-            ),
+            controller: TextEditingController(text: widget.user.profile?.bio),
             description: context.l10n.biographyDescription,
             maxLength: 400,
             maxLines: 6,
@@ -133,17 +123,16 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                     AdaptiveAutoComplete<String>(
                       cupertinoDecoration: _cupertinoTextFieldDecoration,
                       textInputAction: TextInputAction.next,
-                      initialValue: field.value != null
-                          ? TextEditingValue(text: countries[field.value]!)
-                          : null,
+                      initialValue:
+                          field.value != null
+                              ? TextEditingValue(text: countries[field.value]!)
+                              : null,
                       optionsBuilder: (TextEditingValue value) {
                         if (value.text.isEmpty) {
                           return const Iterable<String>.empty();
                         }
                         return _countries.where((String option) {
-                          return option
-                              .toLowerCase()
-                              .contains(value.text.toLowerCase());
+                          return option.toLowerCase().contains(value.text.toLowerCase());
                         });
                       },
                       onSelected: (String selection) {
@@ -161,9 +150,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
           _textField(
             label: context.l10n.location,
             initialValue: widget.user.profile?.location,
-            controller: TextEditingController(
-              text: widget.user.profile?.location,
-            ),
+            controller: TextEditingController(text: widget.user.profile?.location),
             formKey: 'location',
             maxLength: 80,
           ),
@@ -171,18 +158,14 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.realName,
             initialValue: widget.user.profile?.realName,
             formKey: 'realName',
-            controller: TextEditingController(
-              text: widget.user.profile?.realName,
-            ),
+            controller: TextEditingController(text: widget.user.profile?.realName),
             maxLength: 20,
           ),
           _numericField(
             label: context.l10n.xRating('FIDE'),
             initialValue: widget.user.profile?.fideRating,
             formKey: 'fideRating',
-            controller: TextEditingController(
-              text: widget.user.profile?.fideRating?.toString(),
-            ),
+            controller: TextEditingController(text: widget.user.profile?.fideRating?.toString()),
             validator: (value) {
               if (value != null && (value < 1400 || value > 3000)) {
                 return 'Rating must be between 1400 and 3000';
@@ -194,9 +177,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.xRating('USCF'),
             initialValue: widget.user.profile?.uscfRating,
             formKey: 'uscfRating',
-            controller: TextEditingController(
-              text: widget.user.profile?.uscfRating?.toString(),
-            ),
+            controller: TextEditingController(text: widget.user.profile?.uscfRating?.toString()),
             validator: (value) {
               if (value != null && (value < 100 || value > 3000)) {
                 return 'Rating must be between 100 and 3000';
@@ -208,9 +189,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.xRating('ECF'),
             initialValue: widget.user.profile?.ecfRating,
             formKey: 'ecfRating',
-            controller: TextEditingController(
-              text: widget.user.profile?.ecfRating?.toString(),
-            ),
+            controller: TextEditingController(text: widget.user.profile?.ecfRating?.toString()),
             textInputAction: TextInputAction.done,
             validator: (value) {
               if (value != null && (value < 0 || value > 3000)) {
@@ -237,55 +216,52 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               builder: (context, snapshot) {
                 return FatButton(
                   semanticsLabel: context.l10n.apply,
-                  onPressed: snapshot.connectionState == ConnectionState.waiting
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            _formData.removeWhere((key, value) {
-                              return value == null;
-                            });
-                            final future = Result.capture(
-                              ref.withClient(
-                                (client) =>
-                                    AccountRepository(client).saveProfile(
-                                  _formData.map(
-                                    (key, value) =>
-                                        MapEntry(key, value.toString()),
+                  onPressed:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? null
+                          : () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              _formData.removeWhere((key, value) {
+                                return value == null;
+                              });
+                              final future = Result.capture(
+                                ref.withClient(
+                                  (client) => AccountRepository(client).saveProfile(
+                                    _formData.map((key, value) => MapEntry(key, value.toString())),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
 
-                            setState(() {
-                              _pendingSaveProfile = future;
-                            });
+                              setState(() {
+                                _pendingSaveProfile = future;
+                              });
 
-                            final result = await future;
+                              final result = await future;
 
-                            result.match(
-                              onError: (err, __) {
-                                if (context.mounted) {
-                                  showPlatformSnackbar(
-                                    context,
-                                    'Something went wrong',
-                                    type: SnackBarType.error,
-                                  );
-                                }
-                              },
-                              onSuccess: (_) {
-                                if (context.mounted) {
-                                  ref.invalidate(accountProvider);
-                                  showPlatformSnackbar(
-                                    context,
-                                    context.l10n.success,
-                                    type: SnackBarType.success,
-                                  );
-                                }
-                              },
-                            );
-                          }
-                        },
+                              result.match(
+                                onError: (err, __) {
+                                  if (context.mounted) {
+                                    showPlatformSnackbar(
+                                      context,
+                                      'Something went wrong',
+                                      type: SnackBarType.error,
+                                    );
+                                  }
+                                },
+                                onSuccess: (_) {
+                                  if (context.mounted) {
+                                    ref.invalidate(accountProvider);
+                                    showPlatformSnackbar(
+                                      context,
+                                      context.l10n.success,
+                                      type: SnackBarType.success,
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
                   child: Text(context.l10n.apply),
                 );
               },
@@ -324,17 +300,15 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 maxLines: maxLines,
                 cupertinoDecoration: _cupertinoTextFieldDecoration.copyWith(
                   border: Border.all(
-                    color: field.errorText == null
-                        ? CupertinoColors.systemGrey4
-                        : context.lichessColors.error,
+                    color:
+                        field.errorText == null
+                            ? CupertinoColors.systemGrey4
+                            : context.lichessColors.error,
                     width: 1,
                   ),
                 ),
-                materialDecoration: field.errorText != null
-                    ? InputDecoration(
-                        errorText: field.errorText,
-                      )
-                    : null,
+                materialDecoration:
+                    field.errorText != null ? InputDecoration(errorText: field.errorText) : null,
                 textInputAction: textInputAction,
                 controller: controller,
                 onChanged: (value) {
@@ -345,14 +319,10 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 const SizedBox(height: 6.0),
                 Text(description, style: Styles.formDescription),
               ],
-              if (Theme.of(context).platform == TargetPlatform.iOS &&
-                  field.errorText != null)
+              if (Theme.of(context).platform == TargetPlatform.iOS && field.errorText != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(
-                    field.errorText!,
-                    style: Styles.formError,
-                  ),
+                  child: Text(field.errorText!, style: Styles.formError),
                 ),
             ],
           );
@@ -387,31 +357,25 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 keyboardType: TextInputType.number,
                 cupertinoDecoration: _cupertinoTextFieldDecoration.copyWith(
                   border: Border.all(
-                    color: field.errorText == null
-                        ? CupertinoColors.systemGrey4
-                        : context.lichessColors.error,
+                    color:
+                        field.errorText == null
+                            ? CupertinoColors.systemGrey4
+                            : context.lichessColors.error,
                     width: 1,
                   ),
                 ),
-                materialDecoration: field.errorText != null
-                    ? InputDecoration(
-                        errorText: field.errorText,
-                      )
-                    : null,
+                materialDecoration:
+                    field.errorText != null ? InputDecoration(errorText: field.errorText) : null,
                 textInputAction: textInputAction,
                 controller: controller,
                 onChanged: (value) {
                   field.didChange(int.tryParse(value));
                 },
               ),
-              if (Theme.of(context).platform == TargetPlatform.iOS &&
-                  field.errorText != null)
+              if (Theme.of(context).platform == TargetPlatform.iOS && field.errorText != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(
-                    field.errorText!,
-                    style: Styles.formError,
-                  ),
+                  child: Text(field.errorText!, style: Styles.formError),
                 ),
             ],
           );

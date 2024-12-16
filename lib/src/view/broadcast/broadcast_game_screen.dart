@@ -49,8 +49,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<BroadcastGameScreen> createState() =>
-      _BroadcastGameScreenState();
+  ConsumerState<BroadcastGameScreen> createState() => _BroadcastGameScreenState();
 }
 
 class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
@@ -62,16 +61,9 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   void initState() {
     super.initState();
 
-    tabs = [
-      AnalysisTab.opening,
-      AnalysisTab.moves,
-    ];
+    tabs = [AnalysisTab.opening, AnalysisTab.moves];
 
-    _tabController = TabController(
-      vsync: this,
-      initialIndex: 1,
-      length: tabs.length,
-    );
+    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
   }
 
   @override
@@ -85,43 +77,36 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     final broadcastRoundGameState = ref.watch(
       broadcastRoundGameProvider(widget.roundId, widget.gameId),
     );
-    final broadcastGameState = ref
-        .watch(broadcastGameControllerProvider(widget.roundId, widget.gameId));
-    final title = (widget.title != null)
-        ? Text(
-            widget.title!,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          )
-        : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
-            AsyncData(value: final title) => Text(
+    final broadcastGameState = ref.watch(
+      broadcastGameControllerProvider(widget.roundId, widget.gameId),
+    );
+    final title =
+        (widget.title != null)
+            ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
+            : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
+              AsyncData(value: final title) => Text(
                 title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-            _ => const SizedBox.shrink(),
-          };
+              _ => const SizedBox.shrink(),
+            };
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: title,
         actions: [
-          AppBarAnalysisTabIndicator(
-            tabs: tabs,
-            controller: _tabController,
-          ),
+          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           AppBarIconButton(
-            onPressed: (broadcastGameState.hasValue)
-                ? () {
-                    pushPlatformRoute(
-                      context,
-                      screen: BroadcastGameSettings(
-                        widget.roundId,
-                        widget.gameId,
-                      ),
-                    );
-                  }
-                : null,
+            onPressed:
+                (broadcastGameState.hasValue)
+                    ? () {
+                      pushPlatformRoute(
+                        context,
+                        screen: BroadcastGameSettings(widget.roundId, widget.gameId),
+                      );
+                    }
+                    : null,
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
@@ -129,19 +114,15 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       ),
       body: switch ((broadcastRoundGameState, broadcastGameState)) {
         (AsyncData(), AsyncData()) => _Body(
-            widget.tournamentId,
-            widget.roundId,
-            widget.gameId,
-            widget.tournamentSlug,
-            widget.roundSlug,
-            tabController: _tabController,
-          ),
-        (AsyncError(:final error), _) => Center(
-            child: Text('Cannot load broadcast game: $error'),
-          ),
-        (_, AsyncError(:final error)) => Center(
-            child: Text('Cannot load broadcast game: $error'),
-          ),
+          widget.tournamentId,
+          widget.roundId,
+          widget.gameId,
+          widget.tournamentSlug,
+          widget.roundSlug,
+          tabController: _tabController,
+        ),
+        (AsyncError(:final error), _) => Center(child: Text('Cannot load broadcast game: $error')),
+        (_, AsyncError(:final error)) => Center(child: Text('Cannot load broadcast game: $error')),
         _ => const Center(child: CircularProgressIndicator.adaptive()),
       },
     );
@@ -167,9 +148,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastState = ref
-        .watch(broadcastGameControllerProvider(roundId, gameId))
-        .requireValue;
+    final broadcastState = ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
@@ -180,12 +159,9 @@ class _Body extends ConsumerWidget {
 
     return AnalysisLayout(
       tabController: tabController,
-      boardBuilder: (context, boardSize, borderRadius) => _BroadcastBoard(
-        roundId,
-        gameId,
-        boardSize,
-        borderRadius,
-      ),
+      boardBuilder:
+          (context, boardSize, borderRadius) =>
+              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
       boardHeader: _PlayerWidget(
         tournamentId: tournamentId,
         roundId: roundId,
@@ -198,55 +174,46 @@ class _Body extends ConsumerWidget {
         gameId: gameId,
         widgetPosition: _PlayerWidgetPosition.bottom,
       ),
-      engineGaugeBuilder: isLocalEvaluationEnabled && showEvaluationGauge
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
+      engineGaugeBuilder:
+          isLocalEvaluationEnabled && showEvaluationGauge
+              ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: engineGaugeParams,
                     )
-                  : Container(
+                    : Container(
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                       child: EngineGauge(
                         displayMode: EngineGaugeDisplayMode.vertical,
                         params: engineGaugeParams,
                       ),
                     );
-            }
-          : null,
-      engineLines: isLocalEvaluationEnabled && numEvalLines > 0
-          ? EngineLines(
-              clientEval: currentNode.eval,
-              isGameOver: currentNode.position.isGameOver,
-              onTapMove: ref
-                  .read(
-                    broadcastGameControllerProvider(roundId, gameId).notifier,
-                  )
-                  .onUserMove,
-            )
-          : null,
+              }
+              : null,
+      engineLines:
+          isLocalEvaluationEnabled && numEvalLines > 0
+              ? EngineLines(
+                clientEval: currentNode.eval,
+                isGameOver: currentNode.position.isGameOver,
+                onTapMove:
+                    ref.read(broadcastGameControllerProvider(roundId, gameId).notifier).onUserMove,
+              )
+              : null,
       bottomBar: BroadcastGameBottomBar(
         roundId: roundId,
         gameId: gameId,
         tournamentSlug: tournamentSlug,
         roundSlug: roundSlug,
       ),
-      children: [
-        _OpeningExplorerTab(roundId, gameId),
-        BroadcastGameTreeView(roundId, gameId),
-      ],
+      children: [_OpeningExplorerTab(roundId, gameId), BroadcastGameTreeView(roundId, gameId)],
     );
   }
 }
 
 class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab(
-    this.roundId,
-    this.gameId,
-  );
+  const _OpeningExplorerTab(this.roundId, this.gameId);
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
@@ -264,12 +231,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
 }
 
 class _BroadcastBoard extends ConsumerStatefulWidget {
-  const _BroadcastBoard(
-    this.roundId,
-    this.gameId,
-    this.boardSize,
-    this.borderRadius,
-  );
+  const _BroadcastBoard(this.roundId, this.gameId, this.boardSize, this.borderRadius);
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
@@ -285,15 +247,12 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider =
-        broadcastGameControllerProvider(widget.roundId, widget.gameId);
+    final ctrlProvider = broadcastGameControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    final evalBestMoves = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-    );
+    final evalBestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
 
     final currentNode = broadcastAnalysisState.currentNode;
     final annotation = makeAnnotation(currentNode.nags);
@@ -302,15 +261,16 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
     final sanMove = currentNode.sanMove;
 
-    final ISet<Shape> bestMoveShapes = analysisPrefs.showBestMoveArrow &&
-            broadcastAnalysisState.isLocalEvaluationEnabled &&
-            bestMoves != null
-        ? computeBestMoveShapes(
-            bestMoves,
-            currentNode.position.turn,
-            boardPrefs.pieceSet.assets,
-          )
-        : ISet();
+    final ISet<Shape> bestMoveShapes =
+        analysisPrefs.showBestMoveArrow &&
+                broadcastAnalysisState.isLocalEvaluationEnabled &&
+                bestMoves != null
+            ? computeBestMoveShapes(
+              bestMoves,
+              currentNode.position.turn,
+              boardPrefs.pieceSet.assets,
+            )
+            : ISet();
 
     return Chessboard(
       size: widget.boardSize,
@@ -318,42 +278,36 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
       game: GameData(
-        playerSide: broadcastAnalysisState.position.isGameOver
-            ? PlayerSide.none
-            : broadcastAnalysisState.position.turn == Side.white
+        playerSide:
+            broadcastAnalysisState.position.isGameOver
+                ? PlayerSide.none
+                : broadcastAnalysisState.position.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights &&
-            broadcastAnalysisState.position.isCheck,
+        isCheck: boardPrefs.boardHighlights && broadcastAnalysisState.position.isCheck,
         sideToMove: broadcastAnalysisState.position.turn,
         validMoves: broadcastAnalysisState.validMoves,
         promotionMove: broadcastAnalysisState.promotionMove,
-        onMove: (move, {isDrop, captured}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(move),
-        onPromotionSelection: (role) =>
-            ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+        onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
+        onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
           analysisPrefs.showAnnotations && sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({
-                      Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                    })
+                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: boardPrefs.enableShapeDrawings,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
+        borderRadius: widget.borderRadius,
+        boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
+        drawShape: DrawShapeOptions(
+          enable: boardPrefs.enableShapeDrawings,
+          onCompleteShape: _onCompleteShape,
+          onClearShapes: _onClearShapes,
+          newShapeColor: boardPrefs.shapeColor.color,
+        ),
+      ),
     );
   }
 
@@ -394,11 +348,9 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastGameState = ref
-        .watch(broadcastGameControllerProvider(roundId, gameId))
-        .requireValue;
-    final game =
-        ref.watch(broadcastRoundGameProvider(roundId, gameId)).requireValue;
+    final broadcastGameState =
+        ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
+    final game = ref.watch(broadcastRoundGameProvider(roundId, gameId)).requireValue;
 
     final isCursorOnLiveMove =
         broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
@@ -413,25 +365,26 @@ class _PlayerWidget extends ConsumerWidget {
     final gameStatus = game.status;
 
     final pastClocks = broadcastGameState.clocks;
-    final pastClock =
-        (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
+    final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
 
     return GestureDetector(
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => BroadcastPlayerResultsScreen(
-            tournamentId,
-            (player.fideId != null) ? player.fideId!.toString() : player.name,
-            player.title,
-            player.name,
-          ),
+          builder:
+              (context) => BroadcastPlayerResultsScreen(
+                tournamentId,
+                (player.fideId != null) ? player.fideId!.toString() : player.name,
+                player.title,
+                player.name,
+              ),
         );
       },
       child: Container(
-        color: Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer,
+        color:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? Styles.cupertinoCardColor.resolveFrom(context)
+                : Theme.of(context).colorScheme.surfaceContainer,
         padding: const EdgeInsets.only(left: 8.0),
         child: Row(
           children: [
@@ -440,12 +393,12 @@ class _PlayerWidget extends ConsumerWidget {
                 (gameStatus == BroadcastResult.draw)
                     ? '½'
                     : (gameStatus == BroadcastResult.whiteWins)
-                        ? side == Side.white
-                            ? '1'
-                            : '0'
-                        : side == Side.black
-                            ? '1'
-                            : '0',
+                    ? side == Side.white
+                        ? '1'
+                        : '0'
+                    : side == Side.black
+                    ? '1'
+                    : '0',
                 style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 16.0),
@@ -456,38 +409,40 @@ class _PlayerWidget extends ConsumerWidget {
                 title: player.title,
                 name: player.name,
                 rating: player.rating,
-                textStyle:
-                    const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             if (liveClock != null || pastClock != null)
               Container(
                 height: kAnalysisBoardHeaderOrFooterHeight,
-                color: (side == sideToMove)
-                    ? isCursorOnLiveMove
-                        ? Theme.of(context).colorScheme.tertiaryContainer
-                        : Theme.of(context).colorScheme.secondaryContainer
-                    : Colors.transparent,
+                color:
+                    (side == sideToMove)
+                        ? isCursorOnLiveMove
+                            ? Theme.of(context).colorScheme.tertiaryContainer
+                            : Theme.of(context).colorScheme.secondaryContainer
+                        : Colors.transparent,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: Center(
-                    child: liveClock != null
-                        ? CountdownClockBuilder(
-                            timeLeft: liveClock,
-                            active: side == sideToMove,
-                            builder: (context, timeLeft) => _Clock(
-                              timeLeft: timeLeft,
+                    child:
+                        liveClock != null
+                            ? CountdownClockBuilder(
+                              timeLeft: liveClock,
+                              active: side == sideToMove,
+                              builder:
+                                  (context, timeLeft) => _Clock(
+                                    timeLeft: timeLeft,
+                                    isSideToMove: side == sideToMove,
+                                    isLive: true,
+                                  ),
+                              tickInterval: const Duration(seconds: 1),
+                              clockUpdatedAt: game.updatedClockAt,
+                            )
+                            : _Clock(
+                              timeLeft: pastClock!,
                               isSideToMove: side == sideToMove,
-                              isLive: true,
+                              isLive: false,
                             ),
-                            tickInterval: const Duration(seconds: 1),
-                            clockUpdatedAt: game.updatedClockAt,
-                          )
-                        : _Clock(
-                            timeLeft: pastClock!,
-                            isSideToMove: side == sideToMove,
-                            isLive: false,
-                          ),
                   ),
                 ),
               ),
@@ -499,11 +454,7 @@ class _PlayerWidget extends ConsumerWidget {
 }
 
 class _Clock extends StatelessWidget {
-  const _Clock({
-    required this.timeLeft,
-    required this.isSideToMove,
-    required this.isLive,
-  });
+  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isLive});
 
   final Duration timeLeft;
   final bool isSideToMove;
@@ -514,11 +465,12 @@ class _Clock extends StatelessWidget {
     return Text(
       timeLeft.toHoursMinutesSeconds(),
       style: TextStyle(
-        color: isSideToMove
-            ? isLive
-                ? Theme.of(context).colorScheme.onTertiaryContainer
-                : Theme.of(context).colorScheme.onSecondaryContainer
-            : null,
+        color:
+            isSideToMove
+                ? isLive
+                    ? Theme.of(context).colorScheme.onTertiaryContainer
+                    : Theme.of(context).colorScheme.onSecondaryContainer
+                : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );

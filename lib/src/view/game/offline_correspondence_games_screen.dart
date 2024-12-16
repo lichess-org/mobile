@@ -35,17 +35,15 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineGames.maybeWhen(
-      data: (data) => ListView(
-        children: [
-          const SizedBox(height: 8.0),
-          ...data.map(
-            (game) => OfflineCorrespondenceGamePreview(
-              game: game.$2,
-              lastModified: game.$1,
-            ),
+      data:
+          (data) => ListView(
+            children: [
+              const SizedBox(height: 8.0),
+              ...data.map(
+                (game) => OfflineCorrespondenceGamePreview(game: game.$2, lastModified: game.$1),
+              ),
+            ],
           ),
-        ],
-      ),
       orElse: () => const SizedBox.shrink(),
     );
   }
@@ -69,10 +67,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          UserFullNameWidget(
-            user: game.opponent.user,
-            style: Styles.boardPreviewTitle,
-          ),
+          UserFullNameWidget(user: game.opponent.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
             Text(
               timeago.format(
@@ -80,20 +75,14 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
                 allowFromNow: true,
               ),
             ),
-          Icon(
-            game.perf.icon,
-            size: 40,
-            color: DefaultTextStyle.of(context).style.color,
-          ),
+          Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),
         ],
       ),
       onTap: () {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (_) => OfflineCorrespondenceGameScreen(
-            initialGame: (lastModified, game),
-          ),
+          builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (lastModified, game)),
         );
       },
     );

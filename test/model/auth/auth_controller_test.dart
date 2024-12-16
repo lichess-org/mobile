@@ -30,26 +30,17 @@ void main() {
 
   const testUserSession = AuthSessionState(
     token: 'testToken',
-    user: LightUser(
-      id: UserId('test'),
-      name: 'test',
-      title: 'GM',
-      isPatron: true,
-    ),
+    user: LightUser(id: UserId('test'), name: 'test', title: 'GM', isPatron: true),
   );
   const loading = AsyncLoading<void>();
   const nullData = AsyncData<void>(null);
 
   final client = MockClient((request) {
     if (request.url.path == '/api/account') {
-      return mockResponse(
-        mockApiAccountResponse(testUserSession.user.name),
-        200,
-      );
+      return mockResponse(mockApiAccountResponse(testUserSession.user.name), 200);
     } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
       return mockResponse('ok', 200);
-    } else if (request.method == 'POST' &&
-        request.url.path == '/mobile/unregister') {
+    } else if (request.method == 'POST' && request.url.path == '/mobile/unregister') {
       return mockResponse('ok', 200);
     }
     return mockResponse('', 404);
@@ -75,20 +66,17 @@ void main() {
 
   group('AuthController', () {
     test('sign in', () async {
-      when(() => mockSessionStorage.read())
-          .thenAnswer((_) => Future.value(null));
-      when(() => mockFlutterAppAuth.authorizeAndExchangeCode(any()))
-          .thenAnswer((_) => Future.value(signInResponse));
+      when(() => mockSessionStorage.read()).thenAnswer((_) => Future.value(null));
       when(
-        () => mockSessionStorage.write(any()),
-      ).thenAnswer((_) => Future.value(null));
+        () => mockFlutterAppAuth.authorizeAndExchangeCode(any()),
+      ).thenAnswer((_) => Future.value(signInResponse));
+      when(() => mockSessionStorage.write(any())).thenAnswer((_) => Future.value(null));
 
       final container = await makeContainer(
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider
-              .overrideWith((_) => FakeHttpClientFactory(() => client)),
+          httpClientFactoryProvider.overrideWith((_) => FakeHttpClientFactory(() => client)),
         ],
       );
 
@@ -114,17 +102,12 @@ void main() {
       verifyNoMoreInteractions(listener);
 
       // it should successfully write the session
-      verify(
-        () => mockSessionStorage.write(testUserSession),
-      ).called(1);
+      verify(() => mockSessionStorage.write(testUserSession)).called(1);
     });
 
     test('sign out', () async {
-      when(() => mockSessionStorage.read())
-          .thenAnswer((_) => Future.value(testUserSession));
-      when(
-        () => mockSessionStorage.delete(),
-      ).thenAnswer((_) => Future.value(null));
+      when(() => mockSessionStorage.read()).thenAnswer((_) => Future.value(testUserSession));
+      when(() => mockSessionStorage.delete()).thenAnswer((_) => Future.value(null));
 
       int tokenDeleteCount = 0;
       int unregisterCount = 0;
@@ -133,8 +116,7 @@ void main() {
         if (request.method == 'DELETE' && request.url.path == '/api/token') {
           tokenDeleteCount++;
           return mockResponse('ok', 200);
-        } else if (request.method == 'POST' &&
-            request.url.path == '/mobile/unregister') {
+        } else if (request.method == 'POST' && request.url.path == '/mobile/unregister') {
           unregisterCount++;
           return mockResponse('ok', 200);
         }
@@ -145,8 +127,7 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider
-              .overrideWith((_) => FakeHttpClientFactory(() => client)),
+          httpClientFactoryProvider.overrideWith((_) => FakeHttpClientFactory(() => client)),
         ],
         userSession: testUserSession,
       );
@@ -176,9 +157,7 @@ void main() {
       expect(unregisterCount, 1, reason: 'device should be unregistered');
 
       // session should be deleted
-      verify(
-        () => mockSessionStorage.delete(),
-      ).called(1);
+      verify(() => mockSessionStorage.delete()).called(1);
     });
   });
 }

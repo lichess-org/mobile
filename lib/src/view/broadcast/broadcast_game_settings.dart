@@ -21,8 +21,7 @@ class BroadcastGameSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broacdcastGameAnalysisController =
-        broadcastGameControllerProvider(roundId, gameId);
+    final broacdcastGameAnalysisController = broadcastGameControllerProvider(roundId, gameId);
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
@@ -34,34 +33,31 @@ class BroadcastGameSettings extends ConsumerWidget {
       body: ListView(
         children: [
           StockfishSettingsWidget(
-            onToggleLocalEvaluation: () => ref
-                .read(broacdcastGameAnalysisController.notifier)
-                .toggleLocalEvaluation(),
-            onSetEngineSearchTime: (value) => ref
-                .read(broacdcastGameAnalysisController.notifier)
-                .setEngineSearchTime(value),
-            onSetNumEvalLines: (value) => ref
-                .read(broacdcastGameAnalysisController.notifier)
-                .setNumEvalLines(value),
-            onSetEngineCores: (value) => ref
-                .read(broacdcastGameAnalysisController.notifier)
-                .setEngineCores(value),
+            onToggleLocalEvaluation:
+                () => ref.read(broacdcastGameAnalysisController.notifier).toggleLocalEvaluation(),
+            onSetEngineSearchTime:
+                (value) =>
+                    ref.read(broacdcastGameAnalysisController.notifier).setEngineSearchTime(value),
+            onSetNumEvalLines:
+                (value) =>
+                    ref.read(broacdcastGameAnalysisController.notifier).setNumEvalLines(value),
+            onSetEngineCores:
+                (value) =>
+                    ref.read(broacdcastGameAnalysisController.notifier).setEngineCores(value),
           ),
           ListSection(
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.toggleGlyphAnnotations),
                 value: analysisPrefs.showAnnotations,
-                onChanged: (_) => ref
-                    .read(analysisPreferencesProvider.notifier)
-                    .toggleAnnotations(),
+                onChanged:
+                    (_) => ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.mobileShowComments),
                 value: analysisPrefs.showPgnComments,
-                onChanged: (_) => ref
-                    .read(analysisPreferencesProvider.notifier)
-                    .togglePgnComments(),
+                onChanged:
+                    (_) => ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
               ),
             ],
           ),
@@ -69,21 +65,20 @@ class BroadcastGameSettings extends ConsumerWidget {
             children: [
               PlatformListTile(
                 title: Text(context.l10n.openingExplorer),
-                onTap: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  isDismissible: true,
-                  builder: (_) => const OpeningExplorerSettings(),
-                ),
+                onTap:
+                    () => showAdaptiveBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      isDismissible: true,
+                      builder: (_) => const OpeningExplorerSettings(),
+                    ),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.sound),
                 value: isSoundEnabled,
                 onChanged: (value) {
-                  ref
-                      .read(generalPreferencesProvider.notifier)
-                      .toggleSoundEnabled();
+                  ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
                 },
               ),
             ],

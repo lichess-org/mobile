@@ -43,24 +43,21 @@ class SettingsListTile extends StatelessWidget {
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
         additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
-        subtitle: Theme.of(context).platform == TargetPlatform.android
-            ? Text(
-                settingsValue,
-                style: TextStyle(
-                  color: textShade(context, Styles.subtitleOpacity),
-                ),
-              )
-            : explanation != null
+        subtitle:
+            Theme.of(context).platform == TargetPlatform.android
+                ? Text(
+                  settingsValue,
+                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                )
+                : explanation != null
                 ? Text(explanation!, maxLines: 5)
                 : null,
         onTap: onTap,
-        trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const CupertinoListTileChevron()
-            : explanation != null
-                ? _SettingsInfoTooltip(
-                    message: explanation!,
-                    child: const Icon(Icons.info_outline),
-                  )
+        trailing:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : explanation != null
+                ? _SettingsInfoTooltip(message: explanation!, child: const Icon(Icons.info_outline))
                 : null,
       ),
     );
@@ -89,11 +86,7 @@ class SwitchSettingTile extends StatelessWidget {
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle: subtitle,
-      trailing: Switch.adaptive(
-        value: value,
-        onChanged: onChanged,
-        applyCupertinoTheme: true,
-      ),
+      trailing: Switch.adaptive(value: value, onChanged: onChanged, applyCupertinoTheme: true),
     );
   }
 }
@@ -127,8 +120,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       min: 0,
       max: widget.values.length.toDouble() - 1,
       divisions: widget.values.length - 1,
-      label: widget.labelBuilder?.call(widget.values[_index]) ??
-          widget.values[_index].toString(),
+      label: widget.labelBuilder?.call(widget.values[_index]) ?? widget.values[_index].toString(),
       onChanged: (value) {
         final newIndex = value.toInt();
         setState(() {
@@ -143,9 +135,10 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     return PlatformListTile(
       leading: widget.icon,
       title: slider,
-      trailing: widget.labelBuilder != null
-          ? Text(widget.labelBuilder!.call(widget.values[_index]))
-          : null,
+      trailing:
+          widget.labelBuilder != null
+              ? Text(widget.labelBuilder!.call(widget.values[_index]))
+              : null,
     );
   }
 }
@@ -159,22 +152,20 @@ class SettingsSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context).platform == TargetPlatform.iOS
-          ? TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: CupertinoColors.secondaryLabel.resolveFrom(context),
-            )
-          : null,
+      style:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: CupertinoColors.secondaryLabel.resolveFrom(context),
+              )
+              : null,
     );
   }
 }
 
 class _SettingsInfoTooltip extends StatelessWidget {
-  const _SettingsInfoTooltip({
-    required this.message,
-    required this.child,
-  });
+  const _SettingsInfoTooltip({required this.message, required this.child});
 
   final String message;
   final Widget child;
@@ -200,20 +191,13 @@ class _SettingsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
       // forces iOS default font size
-      style: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                fontSize: 17.0,
-              )
-          : null,
+      style:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 17.0)
+              : null,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      child: Text.rich(
-        TextSpan(
-          children: [
-            title.textSpan ?? TextSpan(text: title.data),
-          ],
-        ),
-      ),
+      child: Text.rich(TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)])),
     );
   }
 }
@@ -268,9 +252,7 @@ class ChoicePicker<T> extends StatelessWidget {
             title: titleBuilder(value),
             subtitle: subtitleBuilder?.call(value),
             leading: leadingBuilder?.call(value),
-            onTap: onSelectedItemChanged != null
-                ? () => onSelectedItemChanged!(value)
-                : null,
+            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
           );
         });
         return Opacity(
@@ -278,47 +260,45 @@ class ChoicePicker<T> extends StatelessWidget {
           child: Column(
             children: [
               if (showDividerBetweenTiles)
-                ...ListTile.divideTiles(
-                  context: context,
-                  tiles: tiles,
-                )
+                ...ListTile.divideTiles(context: context, tiles: tiles)
               else
                 ...tiles,
             ],
           ),
         );
       case TargetPlatform.iOS:
-        final tileConstructor =
-            notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
+        final tileConstructor = notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
         return Padding(
           padding: margin ?? Styles.bodySectionPadding,
           child: Opacity(
             opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
             child: CupertinoListSection.insetGrouped(
-              backgroundColor:
-                  CupertinoTheme.of(context).scaffoldBackgroundColor,
+              backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
               decoration: BoxDecoration(
                 color: Styles.cupertinoCardColor.resolveFrom(context),
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
-              separatorColor:
-                  Styles.cupertinoSeparatorColor.resolveFrom(context),
+              separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),
               margin: EdgeInsets.zero,
               additionalDividerMargin: notchedTile ? null : 6.0,
               hasLeading: leadingBuilder != null,
-              children: choices.map((value) {
-                return tileConstructor(
-                  trailing: selectedItem == value
-                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                      : null,
-                  title: titleBuilder(value),
-                  subtitle: subtitleBuilder?.call(value),
-                  leading: leadingBuilder?.call(value),
-                  onTap: onSelectedItemChanged != null
-                      ? () => onSelectedItemChanged!(value)
-                      : null,
-                );
-              }).toList(growable: false),
+              children: choices
+                  .map((value) {
+                    return tileConstructor(
+                      trailing:
+                          selectedItem == value
+                              ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                              : null,
+                      title: titleBuilder(value),
+                      subtitle: subtitleBuilder?.call(value),
+                      leading: leadingBuilder?.call(value),
+                      onTap:
+                          onSelectedItemChanged != null
+                              ? () => onSelectedItemChanged!(value)
+                              : null,
+                    );
+                  })
+                  .toList(growable: false),
             ),
           ),
         );

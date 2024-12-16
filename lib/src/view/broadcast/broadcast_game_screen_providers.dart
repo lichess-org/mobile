@@ -13,18 +13,13 @@ Future<BroadcastGame> broadcastRoundGame(
   BroadcastGameId gameId,
 ) {
   return ref.watch(
-    broadcastRoundControllerProvider(roundId)
-        .selectAsync((round) => round.games[gameId]!),
+    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.games[gameId]!),
   );
 }
 
 @riverpod
-Future<String> broadcastGameScreenTitle(
-  Ref ref,
-  BroadcastRoundId roundId,
-) {
+Future<String> broadcastGameScreenTitle(Ref ref, BroadcastRoundId roundId) {
   return ref.watch(
-    broadcastRoundControllerProvider(roundId)
-        .selectAsync((round) => round.round.name),
+    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
   );
 }

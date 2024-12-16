@@ -6,15 +6,13 @@ import 'package:flutter/widgets.dart';
 /// This method clears the cache before loading the images.
 Future<void> precachePieceImages(PieceSet pieceSet) async {
   try {
-    final devicePixelRatio = WidgetsBinding
-            .instance.platformDispatcher.implicitView?.devicePixelRatio ??
-        1.0;
+    final devicePixelRatio =
+        WidgetsBinding.instance.platformDispatcher.implicitView?.devicePixelRatio ?? 1.0;
 
     ChessgroundImages.instance.clear();
 
     for (final asset in pieceSet.assets.values) {
-      await ChessgroundImages.instance
-          .load(asset, devicePixelRatio: devicePixelRatio);
+      await ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio);
       debugPrint('Preloaded piece image: ${asset.assetName}');
     }
   } catch (e) {

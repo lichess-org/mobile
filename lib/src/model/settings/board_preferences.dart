@@ -12,8 +12,7 @@ part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
 @riverpod
-class BoardPreferences extends _$BoardPreferences
-    with PreferencesStorage<BoardPrefs> {
+class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   PrefCategory get prefCategory => PrefCategory.board;
@@ -48,9 +47,7 @@ class BoardPreferences extends _$BoardPreferences
 
   Future<void> toggleImmersiveModeWhilePlaying() {
     return save(
-      state.copyWith(
-        immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false),
-      ),
+      state.copyWith(immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false)),
     );
   }
 
@@ -75,35 +72,23 @@ class BoardPreferences extends _$BoardPreferences
   }
 
   Future<void> toggleMagnifyDraggedPiece() {
-    return save(
-      state.copyWith(
-        magnifyDraggedPiece: !state.magnifyDraggedPiece,
-      ),
-    );
+    return save(state.copyWith(magnifyDraggedPiece: !state.magnifyDraggedPiece));
   }
 
   Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
     return save(state.copyWith(dragTargetKind: dragTargetKind));
   }
 
-  Future<void> setMaterialDifferenceFormat(
-    MaterialDifferenceFormat materialDifferenceFormat,
-  ) {
-    return save(
-      state.copyWith(materialDifferenceFormat: materialDifferenceFormat),
-    );
+  Future<void> setMaterialDifferenceFormat(MaterialDifferenceFormat materialDifferenceFormat) {
+    return save(state.copyWith(materialDifferenceFormat: materialDifferenceFormat));
   }
 
   Future<void> setClockPosition(ClockPosition clockPosition) {
-    return save(
-      state.copyWith(clockPosition: clockPosition),
-    );
+    return save(state.copyWith(clockPosition: clockPosition));
   }
 
   Future<void> toggleEnableShapeDrawings() {
-    return save(
-      state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
-    );
+    return save(state.copyWith(enableShapeDrawings: !state.enableShapeDrawings));
   }
 
   Future<void> setShapeColor(ShapeColor shapeColor) {
@@ -130,24 +115,15 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     )
     required MaterialDifferenceFormat materialDifferenceFormat,
     required ClockPosition clockPosition,
-    @JsonKey(
-      defaultValue: PieceShiftMethod.either,
-      unknownEnumValue: PieceShiftMethod.either,
-    )
+    @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
-    @JsonKey(
-      defaultValue: DragTargetKind.circle,
-      unknownEnumValue: DragTargetKind.circle,
-    )
+    @JsonKey(defaultValue: DragTargetKind.circle, unknownEnumValue: DragTargetKind.circle)
     required DragTargetKind dragTargetKind,
-    @JsonKey(
-      defaultValue: ShapeColor.green,
-      unknownEnumValue: ShapeColor.green,
-    )
+    @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
   }) = _BoardPrefs;
@@ -175,12 +151,10 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
-      border: showBorder
-          ? BoardBorder(
-              color: darken(boardTheme.colors.darkSquare, 0.2),
-              width: 16.0,
-            )
-          : null,
+      border:
+          showBorder
+              ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
+              : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
@@ -189,10 +163,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
-      drawShape: DrawShapeOptions(
-        enable: enableShapeDrawings,
-        newShapeColor: shapeColor.color,
-      ),
+      drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
     );
   }
 
@@ -211,14 +182,12 @@ enum ShapeColor {
   blue,
   yellow;
 
-  Color get color => Color(
-        switch (this) {
-          ShapeColor.green => 0x15781B,
-          ShapeColor.red => 0x882020,
-          ShapeColor.blue => 0x003088,
-          ShapeColor.yellow => 0xe68f00,
-        },
-      ).withAlpha(0xAA);
+  Color get color => Color(switch (this) {
+    ShapeColor.green => 0x15781B,
+    ShapeColor.red => 0x882020,
+    ShapeColor.blue => 0x003088,
+    ShapeColor.yellow => 0xe68f00,
+  }).withAlpha(0xAA);
 }
 
 /// The chessboard theme.
@@ -306,27 +275,29 @@ enum BoardTheme {
     }
   }
 
-  Widget get thumbnail => this == BoardTheme.system
-      ? SizedBox(
-          height: 44,
-          width: 44 * 6,
-          child: Row(
-            children: [
-              for (final c in const [1, 2, 3, 4, 5, 6])
-                Container(
-                  width: 44,
-                  color: c.isEven
-                      ? BoardTheme.system.colors.darkSquare
-                      : BoardTheme.system.colors.lightSquare,
-                ),
-            ],
-          ),
-        )
-      : Image.asset(
-          'assets/board-thumbnails/$name.jpg',
-          height: 44,
-          errorBuilder: (context, o, st) => const SizedBox.shrink(),
-        );
+  Widget get thumbnail =>
+      this == BoardTheme.system
+          ? SizedBox(
+            height: 44,
+            width: 44 * 6,
+            child: Row(
+              children: [
+                for (final c in const [1, 2, 3, 4, 5, 6])
+                  Container(
+                    width: 44,
+                    color:
+                        c.isEven
+                            ? BoardTheme.system.colors.darkSquare
+                            : BoardTheme.system.colors.lightSquare,
+                  ),
+              ],
+            ),
+          )
+          : Image.asset(
+            'assets/board-thumbnails/$name.jpg',
+            height: 44,
+            errorBuilder: (context, o, st) => const SizedBox.shrink(),
+          );
 }
 
 enum MaterialDifferenceFormat {
@@ -334,20 +305,18 @@ enum MaterialDifferenceFormat {
   capturedPieces(label: 'Captured pieces'),
   hidden(label: 'Hidden');
 
-  const MaterialDifferenceFormat({
-    required this.label,
-  });
+  const MaterialDifferenceFormat({required this.label});
 
   final String label;
 
   bool get visible => this != MaterialDifferenceFormat.hidden;
 
   String l10n(AppLocalizations l10n) => switch (this) {
-        //TODO: Add l10n
-        MaterialDifferenceFormat.materialDifference => materialDifference.label,
-        MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
-        MaterialDifferenceFormat.hidden => hidden.label,
-      };
+    //TODO: Add l10n
+    MaterialDifferenceFormat.materialDifference => materialDifference.label,
+    MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
+    MaterialDifferenceFormat.hidden => hidden.label,
+  };
 }
 
 enum ClockPosition {
@@ -356,13 +325,13 @@ enum ClockPosition {
 
   // TODO: l10n
   String get label => switch (this) {
-        ClockPosition.left => 'Left',
-        ClockPosition.right => 'Right',
-      };
+    ClockPosition.left => 'Left',
+    ClockPosition.right => 'Right',
+  };
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
-      DragTargetKind.circle => 'Circle',
-      DragTargetKind.square => 'Square',
-      DragTargetKind.none => 'None',
-    };
+  DragTargetKind.circle => 'Circle',
+  DragTargetKind.square => 'Square',
+  DragTargetKind.none => 'None',
+};

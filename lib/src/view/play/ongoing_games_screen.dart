@@ -17,26 +17,18 @@ class OngoingGamesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
+    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return Scaffold(
       appBar: ongoingGames.maybeWhen(
-        data: (data) =>
-            AppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
+        data: (data) => AppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
         orElse: () => AppBar(title: const SizedBox.shrink()),
       ),
       body: _Body(),
@@ -49,12 +41,13 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return ongoingGames.maybeWhen(
-      data: (data) => ListView(
-        children: [
-          const SizedBox(height: 8.0),
-          ...data.map((game) => OngoingGamePreview(game: game)),
-        ],
-      ),
+      data:
+          (data) => ListView(
+            children: [
+              const SizedBox(height: 8.0),
+              ...data.map((game) => OngoingGamePreview(game: game)),
+            ],
+          ),
       orElse: () => const SizedBox.shrink(),
     );
   }
@@ -84,17 +77,10 @@ class OngoingGamePreview extends ConsumerWidget {
           Icon(
             game.perf.icon,
             size: 34,
-            color: DefaultTextStyle.of(context)
-                .style
-                .color
-                ?.withValues(alpha: 0.6),
+            color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
           ),
           if (game.secondsLeft != null && game.secondsLeft! > 0)
-            Text(
-              game.isMyTurn
-                  ? context.l10n.yourTurn
-                  : context.l10n.waitingForOpponent,
-            ),
+            Text(game.isMyTurn ? context.l10n.yourTurn : context.l10n.waitingForOpponent),
           if (game.isMyTurn && game.secondsLeft != null)
             Text(
               timeago.format(
@@ -108,12 +94,13 @@ class OngoingGamePreview extends ConsumerWidget {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (context) => GameScreen(
-            initialGameId: game.fullId,
-            loadingFen: game.fen,
-            loadingOrientation: game.orientation,
-            loadingLastMove: game.lastMove,
-          ),
+          builder:
+              (context) => GameScreen(
+                initialGameId: game.fullId,
+                loadingFen: game.fen,
+                loadingOrientation: game.orientation,
+                loadingLastMove: game.lastMove,
+              ),
         ).then((_) {
           if (context.mounted) {
             ref.invalidate(ongoingGamesProvider);

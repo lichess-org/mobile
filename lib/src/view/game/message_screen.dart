@@ -19,11 +19,7 @@ class MessageScreen extends ConsumerStatefulWidget {
   final Widget title;
   final LightUser? me;
 
-  const MessageScreen({
-    required this.id,
-    required this.title,
-    this.me,
-  });
+  const MessageScreen({required this.id, required this.title, this.me});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
@@ -54,10 +50,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: widget.title,
-        centerTitle: true,
-      ),
+      appBar: PlatformAppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
   }
@@ -67,10 +60,7 @@ class _Body extends ConsumerWidget {
   final GameFullId id;
   final LightUser? me;
 
-  const _Body({
-    required this.id,
-    required this.me,
-  });
+  const _Body({required this.id, required this.me});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,9 +74,8 @@ class _Body extends ConsumerWidget {
             onTap: () => FocusScope.of(context).unfocus(),
             child: chatStateAsync.when(
               data: (chatState) {
-                final selectedMessages = chatState.messages
-                    .where((m) => !m.troll && !m.deleted && !isSpam(m))
-                    .toList();
+                final selectedMessages =
+                    chatState.messages.where((m) => !m.troll && !m.deleted && !isSpam(m)).toList();
                 final messagesCount = selectedMessages.length;
                 return ListView.builder(
                   // remove the automatic bottom padding of the ListView, which on iOS
@@ -100,23 +89,13 @@ class _Body extends ConsumerWidget {
                     return (message.username == 'lichess')
                         ? _MessageAction(message: message.message)
                         : (message.username == me?.name)
-                            ? _MessageBubble(
-                                you: true,
-                                message: message.message,
-                              )
-                            : _MessageBubble(
-                                you: false,
-                                message: message.message,
-                              );
+                        ? _MessageBubble(you: true, message: message.message)
+                        : _MessageBubble(you: false, message: message.message);
                   },
                 );
               },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (error, _) => Center(
-                child: Text(error.toString()),
-              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(child: Text(error.toString())),
             ),
           ),
         ),
@@ -138,10 +117,10 @@ class _MessageBubble extends ConsumerWidget {
               ? Theme.of(context).colorScheme.primaryContainer
               : CupertinoColors.systemGrey4.resolveFrom(context)
           : you
-              ? Theme.of(context).colorScheme.primaryContainer
-              : brightness == Brightness.light
-                  ? lighten(LichessColors.grey)
-                  : darken(LichessColors.grey, 0.5);
+          ? Theme.of(context).colorScheme.primaryContainer
+          : brightness == Brightness.light
+          ? lighten(LichessColors.grey)
+          : darken(LichessColors.grey, 0.5);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       Theme.of(context).platform == TargetPlatform.iOS
@@ -149,10 +128,10 @@ class _MessageBubble extends ConsumerWidget {
               ? Theme.of(context).colorScheme.onPrimaryContainer
               : CupertinoColors.label.resolveFrom(context)
           : you
-              ? Theme.of(context).colorScheme.onPrimaryContainer
-              : brightness == Brightness.light
-                  ? Colors.black
-                  : Colors.white;
+          ? Theme.of(context).colorScheme.onPrimaryContainer
+          : brightness == Brightness.light
+          ? Colors.black
+          : Colors.white;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -170,12 +149,7 @@ class _MessageBubble extends ConsumerWidget {
             borderRadius: BorderRadius.circular(16.0),
             color: _bubbleColor(context, brightness),
           ),
-          child: Text(
-            message,
-            style: TextStyle(
-              color: _textColor(context, brightness),
-            ),
-          ),
+          child: Text(message, style: TextStyle(color: _textColor(context, brightness))),
         ),
       ),
     );
@@ -227,40 +201,36 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
     final session = ref.watch(authSessionProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
-      builder: (context, value, child) => PlatformIconButton(
-        onTap: session != null && value.text.isNotEmpty
-            ? () {
-                ref
-                    .read(chatControllerProvider(widget.id).notifier)
-                    .sendMessage(_textController.text);
-                _textController.clear();
-              }
-            : null,
-        icon: Icons.send,
-        padding: EdgeInsets.zero,
-        semanticsLabel: context.l10n.send,
-      ),
+      builder:
+          (context, value, child) => PlatformIconButton(
+            onTap:
+                session != null && value.text.isNotEmpty
+                    ? () {
+                      ref
+                          .read(chatControllerProvider(widget.id).notifier)
+                          .sendMessage(_textController.text);
+                      _textController.clear();
+                    }
+                    : null,
+            icon: Icons.send,
+            padding: EdgeInsets.zero,
+            semanticsLabel: context.l10n.send,
+          ),
     );
-    final placeholder =
-        session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
+    final placeholder = session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: AdaptiveTextField(
           materialDecoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            ),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(
-              color: CupertinoColors.separator.resolveFrom(context),
-            ),
+            border: Border.all(color: CupertinoColors.separator.resolveFrom(context)),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           placeholder: placeholder,
