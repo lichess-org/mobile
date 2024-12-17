@@ -29,10 +29,7 @@ class EditProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
-      body: PopScope(
-        canPop: false,
-        child: _Body(),
-      ),
+      body: PopScope(canPop: false, child: _Body()),
     );
   }
 }
@@ -287,14 +284,12 @@ class _NumericField extends StatefulWidget {
   final int? initialValue;
   final String formKey;
   final String? Function(int?)? validator;
-  final TextInputAction textInputAction;
   final Map<String, dynamic> formData;
   const _NumericField({
     required this.label,
     required this.initialValue,
     required this.formKey,
     required this.validator,
-    this.textInputAction = TextInputAction.next,
     required this.formData,
   });
 
@@ -346,7 +341,6 @@ class __NumericFieldState extends State<_NumericField> {
                 ),
                 materialDecoration:
                     field.errorText != null ? InputDecoration(errorText: field.errorText) : null,
-                textInputAction: widget.textInputAction,
 
                 onChanged: (value) {
                   field.didChange(int.tryParse(value));
