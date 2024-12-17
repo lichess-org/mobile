@@ -42,4 +42,5 @@
   <string name="theme" comment="Graphic theme section in the global app settings.">தீம்</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">கருவிகள்</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">எதிரணி சேர்வதற்காக காத்திருக்கிறது...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">பார்</string>
 </resources>
