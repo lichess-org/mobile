@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_autocomplete.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:result_extensions/result_extensions.dart';
 
@@ -25,11 +26,46 @@ final _cupertinoTextFieldDecoration = BoxDecoration(
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
+  Future<bool?> _showBackDialog(BuildContext context) async {
+    return showAdaptiveDialog<bool>(
+      context: context,
+      builder: (context) {
+        return PlatformAlertDialog(
+          title: Text(context.l10n.mobileAreYouSure),
+          content: const Text('Your changes will be lost.'),
+          actions: [
+            PlatformDialogAction(
+              child: Text(context.l10n.cancel),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            PlatformDialogAction(
+              child: Text(context.l10n.ok),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
-      body: PopScope(canPop: false, child: _Body()),
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, _) async {
+          if (didPop) {
+            return;
+          }
+          final NavigatorState navigator = Navigator.of(context);
+          final bool? shouldPop = await _showBackDialog(context);
+          if (shouldPop ?? false) {
+            navigator.pop();
+          }
+        },
+        child: _Body(),
+      ),
     );
   }
 }
