@@ -32,6 +32,11 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
+  // TODO remove this migration code after a few releases
+  if (installedVersion != null && Version.parse(installedVersion) <= Version(0, 13, 9)) {
+    _migrateThemeSettings();
+  }
+
   if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
@@ -46,6 +51,26 @@ Future<void> setupFirstLaunch() async {
     await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
 
     await prefs.setBool('first_run', false);
+  }
+}
+
+Future<void> _migrateThemeSettings() async {
+  final prefs = LichessBinding.instance.sharedPreferences;
+  try {
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      PrefCategory.general.storageKey,
+    );
+    if (stored == null) {
+      return;
+    }
+    final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
+    final migrated = generalPrefs.copyWith(
+      // ignore: deprecated_member_use_from_same_package
+      appThemeSeed: generalPrefs.systemColors == true ? AppThemeSeed.system : AppThemeSeed.board,
+    );
+    await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
+  } catch (e) {
+    _logger.warning('Failed to migrate theme settings: $e');
   }
 }
 
@@ -86,27 +111,10 @@ Future<void> preloadPieceImages() async {
 ///
 /// This is meant to be called once during app initialization.
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
-  final prefs = LichessBinding.instance.sharedPreferences;
-
-  // On android 12+ get core palette and set the board theme to system if it is not set
+  // On android 12+ set core palette and make system board
   try {
     await DynamicColorPlugin.getCorePalette().then((value) {
       setCorePalette(value);
-
-      if (getCorePalette() != null) {
-        if (prefs.getString(PrefCategory.general.storageKey) == null) {
-          prefs.setString(
-            PrefCategory.general.storageKey,
-            jsonEncode(GeneralPrefs.defaults.copyWith(customThemeEnabled: true)),
-          );
-        }
-        if (prefs.getString(PrefCategory.board.storageKey) == null) {
-          prefs.setString(
-            PrefCategory.board.storageKey,
-            jsonEncode(BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system)),
-          );
-        }
-      }
     });
   } catch (e) {
     _logger.fine('Device does not support core palette: $e');
