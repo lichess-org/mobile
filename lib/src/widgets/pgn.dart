@@ -145,15 +145,20 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
     super.initState();
     pathToCurrentMove = widget.currentPath;
     pathToBroadcastLiveMove = widget.broadcastLivePath;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-        );
-      }
-    });
+
+    // TODO The scroll conflicts with the tab animation and skips it
+    // so it is commented until a solution is found to keep both the
+    // tab animation and the automatic scroll to the current move
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (currentMoveKey.currentContext != null) {
+    //     Scrollable.ensureVisible(
+    //       currentMoveKey.currentContext!,
+    //       alignment: 0.5,
+    //       alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+    //     );
+    //   }
+    // });
   }
 
   @override
