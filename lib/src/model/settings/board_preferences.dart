@@ -105,7 +105,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
   @Assert(
-    'brightness == null || brightness >= -0.5 && brightness <= 0.5, hue == null || hue >= -1 && hue <= 1',
+    'brightness == null || brightness >= -1.0 && brightness <= 1.0, hue == null || hue >= -1 && hue <= 1',
   )
   const factory BoardPrefs({
     required PieceSet pieceSet,

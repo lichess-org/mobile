@@ -314,8 +314,8 @@ class _BodyState extends ConsumerState<_Body> {
                   PlatformListTile(
                     leading: const Icon(Icons.brightness_6),
                     title: Slider.adaptive(
-                      min: -0.5,
-                      max: 0.5,
+                      min: -1.0,
+                      max: 1.0,
                       value: brightness,
                       onChanged: (value) {
                         setState(() {

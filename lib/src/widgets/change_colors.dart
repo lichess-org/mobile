@@ -55,7 +55,7 @@ List<double> _adjustMatrix({required double hue, required double brightness}) {
     ];
     // dart format on
   }
-  final brightnessValue = brightness <= 0 ? brightness * 255 : brightness * 100;
+  final brightnessValue = brightness <= 0 ? brightness * 100 : brightness * 100;
   return List<double>.from(<double>[
     0.213 + cos(hue) * 0.787 + sin(hue) * -0.213,
     0.715 + cos(hue) * -0.715 + sin(hue) * -0.715,
