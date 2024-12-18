@@ -24,10 +24,15 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({required this.roundId, required this.broadcastTitle});
+  const BroadcastBoardsTab({
+    required this.tournamentId,
+    required this.roundId,
+    required this.tournamentSlug,
+  });
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
-  final String broadcastTitle;
+  final String tournamentSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,9 +63,11 @@ class BroadcastBoardsTab extends ConsumerWidget {
               )
               : BroadcastPreview(
                 games: value.games.values.toIList(),
+                tournamentId: tournamentId,
                 roundId: roundId,
-                broadcastTitle: broadcastTitle,
-                roundTitle: value.round.name,
+                title: value.round.name,
+                tournamentSlug: tournamentSlug,
+                roundSlug: value.round.slug,
               ),
         AsyncError(:final error) => SliverFillRemaining(
           child: Center(child: Text('Could not load broadcast: $error')),
@@ -73,20 +80,28 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
 class BroadcastPreview extends StatelessWidget {
   const BroadcastPreview({
+    required this.tournamentId,
     required this.roundId,
     required this.games,
-    required this.broadcastTitle,
-    required this.roundTitle,
+    required this.title,
+    required this.tournamentSlug,
+    required this.roundSlug,
   });
 
-  const BroadcastPreview.loading({required this.roundId, required this.broadcastTitle})
-    : games = null,
-      roundTitle = null;
+  const BroadcastPreview.loading()
+    : tournamentId = const BroadcastTournamentId(''),
+      roundId = const BroadcastRoundId(''),
+      games = null,
+      title = '',
+      tournamentSlug = '',
+      roundSlug = '';
 
+  final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final IList<BroadcastGame>? games;
-  final String broadcastTitle;
-  final String? roundTitle;
+  final String title;
+  final String tournamentSlug;
+  final String roundSlug;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +130,7 @@ class BroadcastPreview extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         childCount: games == null ? numberLoadingBoards : games!.length,
         (context, index) {
-          if (games == null || roundTitle == null) {
+          if (games == null) {
             return ShimmerLoading(
               isLoading: true,
               child: BoardThumbnail.loading(
@@ -134,13 +149,15 @@ class BroadcastPreview extends StatelessWidget {
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: roundTitle,
+                title: title,
                 builder:
                     (context) => BroadcastGameScreen(
+                      tournamentId: tournamentId,
                       roundId: roundId,
                       gameId: game.id,
-                      broadcastTitle: broadcastTitle,
-                      roundTitle: roundTitle!,
+                      tournamentSlug: tournamentSlug,
+                      roundSlug: roundSlug,
+                      title: title,
                     ),
               );
             },

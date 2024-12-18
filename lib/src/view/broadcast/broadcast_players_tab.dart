@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 
@@ -29,7 +31,7 @@ class BroadcastPlayersTab extends ConsumerWidget {
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
-      AsyncData(value: final players) => PlayersList(players),
+      AsyncData(value: final players) => PlayersList(players, tournamentId),
       AsyncError(:final error) => SliverPadding(
         padding: edgeInsets,
         sliver: SliverFillRemaining(child: Center(child: Text('Cannot load players data: $error'))),
@@ -50,9 +52,10 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players);
+  const PlayersList(this.players, this.tournamentId);
 
   final IList<BroadcastPlayerExtended> players;
+  final BroadcastTournamentId tournamentId;
 
   @override
   ConsumerState<PlayersList> createState() => _PlayersListState();
@@ -60,8 +63,26 @@ class PlayersList extends ConsumerStatefulWidget {
 
 class _PlayersListState extends ConsumerState<PlayersList> {
   late IList<BroadcastPlayerExtended> players;
-  _SortingTypes currentSort = _SortingTypes.score;
+  late _SortingTypes currentSort;
   bool reverse = false;
+
+  @override
+  void initState() {
+    super.initState();
+    players = widget.players;
+    currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
+    sort(currentSort);
+  }
+
+  @override
+  void didUpdateWidget(PlayersList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.players != widget.players) {
+      players = widget.players;
+      currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
+      sort(currentSort);
+    }
+  }
 
   void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
@@ -75,7 +96,13 @@ class _PlayersListState extends ConsumerState<PlayersList> {
       _SortingTypes.score => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
         if (a.score == null) return 1;
         if (b.score == null) return -1;
-        return b.score!.compareTo(a.score!);
+
+        final value = b.score!.compareTo(a.score!);
+        if (value == 0) {
+          return a.played.compareTo(b.played);
+        } else {
+          return value;
+        }
       },
     };
 
@@ -91,25 +118,11 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    players = widget.players;
-    sort(_SortingTypes.score);
-  }
-
-  @override
-  void didUpdateWidget(PlayersList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.players != widget.players) {
-      players = widget.players;
-      sort(_SortingTypes.score);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
-    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 70);
+    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
+
+    final firstPlayer = players.firstOrNull;
 
     return SliverList.builder(
       itemCount: players.length + 1,
@@ -148,7 +161,10 @@ class _PlayersListState extends ConsumerState<PlayersList> {
               SizedBox(
                 width: scoreWidth,
                 child: _TableTitleCell(
-                  title: Text(context.l10n.broadcastScore, style: _kHeaderTextStyle),
+                  title: Text(
+                    firstPlayer?.score != null ? context.l10n.broadcastScore : context.l10n.games,
+                    style: _kHeaderTextStyle,
+                  ),
                   onTap:
                       () => sort(
                         _SortingTypes.score,
@@ -164,8 +180,21 @@ class _PlayersListState extends ConsumerState<PlayersList> {
           );
         } else {
           final player = players[index - 1];
-          return Container(
-            decoration: BoxDecoration(
+
+          return GestureDetector(
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                builder:
+                    (context) => BroadcastPlayerResultsScreen(
+                      widget.tournamentId,
+                      player.fideId != null ? player.fideId.toString() : player.name,
+                      player.title,
+                      player.name,
+                    ),
+              );
+            },
+            child: ColoredBox(
               color:
                   Theme.of(context).platform == TargetPlatform.iOS
                       ? index.isEven
@@ -174,49 +203,55 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                       : index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerLow
                       : Theme.of(context).colorScheme.surfaceContainerHigh,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: BroadcastPlayerWidget(
-                      federation: player.federation,
-                      title: player.title,
-                      name: player.name,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child: BroadcastPlayerWidget(
+                        federation: player.federation,
+                        title: player.title,
+                        name: player.name,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: eloWidth,
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child: Row(
-                      children: [
-                        if (player.rating != null) ...[
-                          Text(player.rating.toString()),
-                          const SizedBox(width: 5),
-                          if (player.ratingDiff != null)
-                            ProgressionWidget(player.ratingDiff!, fontSize: 14),
+                  SizedBox(
+                    width: eloWidth,
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child: Row(
+                        children: [
+                          if (player.rating != null) ...[
+                            Text(player.rating.toString()),
+                            const SizedBox(width: 5),
+                            if (player.ratingDiff != null)
+                              ProgressionWidget(player.ratingDiff!, fontSize: 14),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: scoreWidth,
-                  child: Padding(
-                    padding: _kTableRowPadding,
-                    child:
-                        (player.score != null)
-                            ? Text(
-                              '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)}/${player.played}',
-                            )
-                            : const SizedBox.shrink(),
+                  SizedBox(
+                    width: scoreWidth,
+                    child: Padding(
+                      padding: _kTableRowPadding,
+                      child:
+                          (player.score != null)
+                              ? Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                                ),
+                              )
+                              : Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(player.played.toString()),
+                              ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }

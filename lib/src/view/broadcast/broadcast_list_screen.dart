@@ -266,6 +266,7 @@ class BroadcastCard extends StatefulWidget {
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
           name: '',
+          slug: '',
           imageUrl: null,
           description: '',
           information: (
@@ -280,6 +281,7 @@ class BroadcastCard extends StatefulWidget {
         round: BroadcastRound(
           id: BroadcastRoundId(''),
           name: '',
+          slug: '',
           status: RoundStatus.finished,
           startsAt: null,
           finishedAt: null,

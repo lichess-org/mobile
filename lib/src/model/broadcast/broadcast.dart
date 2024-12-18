@@ -44,6 +44,7 @@ class BroadcastTournamentData with _$BroadcastTournamentData {
   const factory BroadcastTournamentData({
     required BroadcastTournamentId id,
     required String name,
+    required String slug,
     required String? imageUrl,
     required String? description,
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
@@ -71,6 +72,7 @@ class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
     required BroadcastRoundId id,
     required String name,
+    required String slug,
     required RoundStatus status,
     required DateTime? startsAt,
     required DateTime? finishedAt,
@@ -126,7 +128,31 @@ class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
     required int played,
     required double? score,
     required int? ratingDiff,
+    required int? performance,
   }) = _BroadcastPlayerExtended;
+}
+
+typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
+
+typedef BroadcastPlayerResults =
+    ({
+      BroadcastPlayerExtended player,
+      BroadcastFideData fideData,
+      IList<BroadcastPlayerResultData> games,
+    });
+
+enum BroadcastPoints { one, half, zero }
+
+@freezed
+class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
+  const factory BroadcastPlayerResultData({
+    required BroadcastRoundId roundId,
+    required BroadcastGameId gameId,
+    required Side color,
+    required BroadcastPoints? points,
+    required int? ratingDiff,
+    required BroadcastPlayer opponent,
+  }) = _BroadcastPlayerResult;
 }
 
 enum RoundStatus { live, finished, upcoming }

@@ -18,14 +18,14 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   const BroadcastGameBottomBar({
     required this.roundId,
     required this.gameId,
-    required this.broadcastTitle,
-    required this.roundTitle,
+    this.tournamentSlug,
+    this.roundSlug,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String broadcastTitle;
-  final String roundTitle;
+  final String? tournamentSlug;
+  final String? roundSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,17 +40,16 @@ class BroadcastGameBottomBar extends ConsumerWidget {
             showAdaptiveActionSheet<void>(
               context: context,
               actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                  onPressed: (context) async {
-                    launchShareDialog(
-                      context,
-                      uri: lichessUri(
-                        '/broadcast/${broadcastTitle.toLowerCase().replaceAll(' ', '-')}/${roundTitle.toLowerCase().replaceAll(' ', '-')}/$roundId/$gameId',
-                      ),
-                    );
-                  },
-                ),
+                if (tournamentSlug != null && roundSlug != null)
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+                    onPressed: (context) async {
+                      launchShareDialog(
+                        context,
+                        uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                      );
+                    },
+                  ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
                   onPressed: (context) async {
