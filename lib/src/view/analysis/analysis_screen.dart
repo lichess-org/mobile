@@ -281,12 +281,6 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
-            ref.read(analysisControllerProvider(options).notifier).toggleBoard();
-          },
-        ),
-        BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.boardEditor),
           onPressed: (context) {
             final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
