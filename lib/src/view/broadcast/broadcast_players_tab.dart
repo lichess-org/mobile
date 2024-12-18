@@ -63,8 +63,26 @@ class PlayersList extends ConsumerStatefulWidget {
 
 class _PlayersListState extends ConsumerState<PlayersList> {
   late IList<BroadcastPlayerExtended> players;
-  _SortingTypes currentSort = _SortingTypes.score;
+  late _SortingTypes currentSort;
   bool reverse = false;
+
+  @override
+  void initState() {
+    super.initState();
+    players = widget.players;
+    currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
+    sort(currentSort);
+  }
+
+  @override
+  void didUpdateWidget(PlayersList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.players != widget.players) {
+      players = widget.players;
+      currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
+      sort(currentSort);
+    }
+  }
 
   void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
@@ -100,25 +118,11 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    players = widget.players;
-    sort(_SortingTypes.score);
-  }
-
-  @override
-  void didUpdateWidget(PlayersList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.players != widget.players) {
-      players = widget.players;
-      sort(_SortingTypes.score);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
+
+    final firstPlayer = players.firstOrNull;
 
     return SliverList.builder(
       itemCount: players.length + 1,
@@ -157,7 +161,10 @@ class _PlayersListState extends ConsumerState<PlayersList> {
               SizedBox(
                 width: scoreWidth,
                 child: _TableTitleCell(
-                  title: Text(context.l10n.broadcastScore, style: _kHeaderTextStyle),
+                  title: Text(
+                    firstPlayer?.score != null ? context.l10n.broadcastScore : context.l10n.games,
+                    style: _kHeaderTextStyle,
+                  ),
                   onTap:
                       () => sort(
                         _SortingTypes.score,
@@ -237,7 +244,10 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                                   '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
                                 ),
                               )
-                              : null,
+                              : Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(player.played.toString()),
+                              ),
                     ),
                   ),
                 ],
