@@ -121,8 +121,11 @@ class _BodyState extends ConsumerState<_Body> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ColorPicker(
+                    HueRingPicker(
                       enableAlpha: false,
+                      colorPickerHeight: 200,
+                      displayThumbColor: false,
+                      portraitOnly: true,
                       pickerColor: color,
                       onColorChanged: (c) {
                         setState(() {

@@ -77,7 +77,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @Deprecated('Use appThemeSeed instead') bool? systemColors,
 
     /// App theme seed
-    @JsonKey(unknownEnumValue: AppThemeSeed.color, defaultValue: AppThemeSeed.color)
+    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
     required AppThemeSeed appThemeSeed,
 
     /// Locale to use in the app, use system locale if null
@@ -90,7 +90,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     customThemeEnabled: false,
-    appThemeSeed: AppThemeSeed.color,
+    appThemeSeed: AppThemeSeed.board,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
