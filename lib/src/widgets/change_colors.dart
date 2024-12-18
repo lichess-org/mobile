@@ -17,10 +17,6 @@ import 'package:flutter/material.dart';
 ///    child: Image.asset('myImage.png'),
 /// );
 /// ```
-///
-/// To achieve a greyscale effect, you may also use the
-/// [ChangeColors.greyscale] constructor.
-///
 class ChangeColors extends StatelessWidget {
   const ChangeColors({this.brightness = 0.0, this.hue = 0.0, required this.child, super.key});
 
