@@ -32,69 +32,70 @@ class AnalysisSettings extends ConsumerWidget {
           appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
           body: ListView(
             children: [
-              ListSection(
-                header: SettingsSectionTitle(context.l10n.computerAnalysis),
-                children: [
-                  SwitchSettingTile(
-                    title: Text(context.l10n.enable),
-                    value: prefs.enableComputerAnalysis,
-                    onChanged: (_) {
-                      ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
-                    },
-                  ),
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 300),
-                    crossFadeState:
-                        value.isComputerAnalysisAllowedAndEnabled
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
-                    firstChild: const SizedBox.shrink(),
-                    secondChild: ListSection(
-                      margin: EdgeInsets.zero,
-                      cupertinoBorderRadius: BorderRadius.zero,
-                      cupertinoClipBehavior: Clip.none,
-                      children: [
-                        SwitchSettingTile(
-                          title: Text(context.l10n.evaluationGauge),
-                          value: prefs.showEvaluationGauge,
-                          onChanged:
-                              (value) =>
-                                  ref
-                                      .read(analysisPreferencesProvider.notifier)
-                                      .toggleShowEvaluationGauge(),
-                        ),
-                        SwitchSettingTile(
-                          title: Text(context.l10n.toggleGlyphAnnotations),
-                          value: prefs.showAnnotations,
-                          onChanged:
-                              (_) =>
-                                  ref
-                                      .read(analysisPreferencesProvider.notifier)
-                                      .toggleAnnotations(),
-                        ),
-                        SwitchSettingTile(
-                          title: Text(context.l10n.mobileShowComments),
-                          value: prefs.showPgnComments,
-                          onChanged:
-                              (_) =>
-                                  ref
-                                      .read(analysisPreferencesProvider.notifier)
-                                      .togglePgnComments(),
-                        ),
-                        SwitchSettingTile(
-                          title: Text(context.l10n.bestMoveArrow),
-                          value: prefs.showBestMoveArrow,
-                          onChanged:
-                              (value) =>
-                                  ref
-                                      .read(analysisPreferencesProvider.notifier)
-                                      .toggleShowBestMoveArrow(),
-                        ),
-                      ],
+              if (value.isComputerAnalysisAllowed)
+                ListSection(
+                  header: SettingsSectionTitle(context.l10n.computerAnalysis),
+                  children: [
+                    SwitchSettingTile(
+                      title: Text(context.l10n.enable),
+                      value: prefs.enableComputerAnalysis,
+                      onChanged: (_) {
+                        ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
+                      },
                     ),
-                  ),
-                ],
-              ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 300),
+                      crossFadeState:
+                          value.isComputerAnalysisAllowedAndEnabled
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                      firstChild: const SizedBox.shrink(),
+                      secondChild: ListSection(
+                        margin: EdgeInsets.zero,
+                        cupertinoBorderRadius: BorderRadius.zero,
+                        cupertinoClipBehavior: Clip.none,
+                        children: [
+                          SwitchSettingTile(
+                            title: Text(context.l10n.evaluationGauge),
+                            value: prefs.showEvaluationGauge,
+                            onChanged:
+                                (value) =>
+                                    ref
+                                        .read(analysisPreferencesProvider.notifier)
+                                        .toggleShowEvaluationGauge(),
+                          ),
+                          SwitchSettingTile(
+                            title: Text(context.l10n.toggleGlyphAnnotations),
+                            value: prefs.showAnnotations,
+                            onChanged:
+                                (_) =>
+                                    ref
+                                        .read(analysisPreferencesProvider.notifier)
+                                        .toggleAnnotations(),
+                          ),
+                          SwitchSettingTile(
+                            title: Text(context.l10n.mobileShowComments),
+                            value: prefs.showPgnComments,
+                            onChanged:
+                                (_) =>
+                                    ref
+                                        .read(analysisPreferencesProvider.notifier)
+                                        .togglePgnComments(),
+                          ),
+                          SwitchSettingTile(
+                            title: Text(context.l10n.bestMoveArrow),
+                            value: prefs.showBestMoveArrow,
+                            onChanged:
+                                (value) =>
+                                    ref
+                                        .read(analysisPreferencesProvider.notifier)
+                                        .toggleShowBestMoveArrow(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
                 crossFadeState:
