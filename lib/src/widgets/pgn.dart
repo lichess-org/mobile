@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -140,25 +142,31 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   /// Path to the last live move in the tree if it is a broadcast game. When widget.broadcastLivePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
   late UciPath? pathToBroadcastLiveMove;
 
+  Timer? _scrollTimer;
+
   @override
   void initState() {
     super.initState();
     pathToCurrentMove = widget.currentPath;
     pathToBroadcastLiveMove = widget.broadcastLivePath;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-        );
-      }
+      _scrollTimer?.cancel();
+      _scrollTimer = Timer(const Duration(milliseconds: 500), () {
+        if (currentMoveKey.currentContext != null) {
+          Scrollable.ensureVisible(
+            currentMoveKey.currentContext!,
+            alignment: 0.5,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          );
+        }
+      });
     });
   }
 
   @override
   void dispose() {
     _debounce.dispose();
+    _scrollTimer?.cancel();
     super.dispose();
   }
 

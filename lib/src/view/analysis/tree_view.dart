@@ -24,19 +24,17 @@ class AnalysisTreeView extends ConsumerWidget {
     // enable computer analysis takes effect here only if it's a lichess game
     final enableComputerAnalysis = !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
 
-    return ListView(
+    return SingleChildScrollView(
       padding: EdgeInsets.zero,
-      children: [
-        DebouncedPgnTreeView(
-          root: root,
-          currentPath: currentPath,
-          pgnRootComments: pgnRootComments,
-          notifier: ref.read(ctrlProvider.notifier),
-          shouldShowComputerVariations: enableComputerAnalysis,
-          shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
-          shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
-        ),
-      ],
+      child: DebouncedPgnTreeView(
+        root: root,
+        currentPath: currentPath,
+        pgnRootComments: pgnRootComments,
+        notifier: ref.read(ctrlProvider.notifier),
+        shouldShowComputerVariations: enableComputerAnalysis,
+        shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
+        shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
+      ),
     );
   }
 }
