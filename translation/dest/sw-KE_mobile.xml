@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Michezo yote</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Una uhakika?</string>
+</resources>
