@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/change_colors.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _kBoardCarouselItemMargin = EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0);
