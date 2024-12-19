@@ -369,7 +369,14 @@ class _PuzzleMenuListTile extends StatelessWidget {
           Theme.of(context).platform == TargetPlatform.iOS
               ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
               : null,
-      leading: Icon(icon, size: Styles.mainListTileIconSize),
+      leading: Icon(
+        icon,
+        size: Styles.mainListTileIconSize,
+        color:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoTheme.of(context).primaryColor
+                : Theme.of(context).colorScheme.primary,
+      ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
       trailing:
