@@ -219,6 +219,7 @@ class _BroadcastWidget extends ConsumerWidget {
     return broadcastList.when(
       data: (data) {
         return ListSection(
+          hasLeading: true,
           header: Text(context.l10n.broadcastBroadcasts),
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
@@ -268,7 +269,16 @@ class _BroadcastTile extends ConsumerWidget {
           builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
         );
       },
-      leading: const Icon(LichessIcons.radio_tower_lichess),
+      leading:
+          broadcast.tour.imageUrl != null
+              ? Image.network(
+                broadcast.tour.imageUrl!,
+                width: 50.0,
+                height: 50.0,
+                fit: BoxFit.cover,
+                errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+              )
+              : const Image(image: kDefaultBroadcastImage),
       subtitle: Row(
         children: [
           Text(broadcast.round.name),
@@ -369,7 +379,7 @@ class _StreamerWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header: Text(context.l10n.streamerLichessStreamers),
+          header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed:
