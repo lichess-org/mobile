@@ -142,8 +142,27 @@ Future<Widget> makeTestProviderScope(
     if (userSession != null) kSessionStorageKey: jsonEncode(userSession.toJson()),
   });
 
+  final flutterTestOnError = FlutterError.onError!;
+
+  void ignoreOverflowErrors(FlutterErrorDetails details) {
+    bool isOverflowError = false;
+    final exception = details.exception;
+
+    if (exception is FlutterError) {
+      isOverflowError = exception.diagnostics.any(
+        (e) => e.value.toString().contains('A RenderFlex overflowed by'),
+      );
+    }
+
+    if (isOverflowError) {
+      // debugPrint('Overflow error detected.');
+    } else {
+      flutterTestOnError(details);
+    }
+  }
+
   // TODO consider loading true fonts as well
-  FlutterError.onError = _ignoreOverflowErrors;
+  FlutterError.onError = ignoreOverflowErrors;
 
   return ProviderScope(
     key: key,
@@ -209,22 +228,4 @@ Future<Widget> makeTestProviderScope(
     ],
     child: TestSurface(size: surfaceSize, child: child),
   );
-}
-
-void _ignoreOverflowErrors(FlutterErrorDetails details, {bool forceReport = false}) {
-  bool isOverflowError = false;
-  final exception = details.exception;
-
-  if (exception is FlutterError) {
-    isOverflowError = exception.diagnostics.any(
-      (e) => e.value.toString().contains('A RenderFlex overflowed by'),
-    );
-  }
-
-  if (isOverflowError) {
-    // debugPrint('Overflow error detected.');
-  } else {
-    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-    throw exception;
-  }
 }
