@@ -36,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
@@ -663,9 +662,9 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                     ],
                     Text(
                       game.secondsLeft != null && game.isMyTurn
-                          ? timeago.format(
+                          ? relativeDate(
+                            context.l10n,
                             DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                            allowFromNow: true,
                           )
                           : game.isMyTurn
                           ? context.l10n.yourTurn

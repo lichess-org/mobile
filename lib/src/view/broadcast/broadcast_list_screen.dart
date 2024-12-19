@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -21,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
 const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
 
 /// A screen that displays a paginated list of broadcasts.
@@ -127,14 +128,14 @@ class _BodyState extends ConsumerState<_Body> {
 
     final highTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: itemsByRow,
-      crossAxisSpacing: 16.0,
+      crossAxisSpacing: 12.0,
       mainAxisSpacing: 16.0,
       childAspectRatio: 1.45,
     );
 
     final lowTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: itemsByRow + 1,
-      crossAxisSpacing: 16.0,
+      crossAxisSpacing: 12.0,
       mainAxisSpacing: 16.0,
       childAspectRatio:
           screenWidth >= 1200
@@ -207,8 +208,11 @@ class _BodyState extends ConsumerState<_Body> {
                         sliver: SliverGrid.builder(
                           gridDelegate: highTierGridDelegate,
                           itemBuilder:
-                              (context, index) =>
-                                  BroadcastCard(worker: _worker!, broadcast: activeHighTier[index]),
+                              (context, index) => BroadcastCard(
+                                worker: _worker!,
+                                broadcast: activeHighTier[index],
+                                aspectRatio: highTierGridDelegate.childAspectRatio,
+                              ),
                           itemCount: activeHighTier.length,
                         ),
                       ),
@@ -218,8 +222,11 @@ class _BodyState extends ConsumerState<_Body> {
                         sliver: SliverGrid.builder(
                           gridDelegate: lowTierGridDelegate,
                           itemBuilder:
-                              (context, index) =>
-                                  BroadcastCard(worker: _worker!, broadcast: activeLowTier[index]),
+                              (context, index) => BroadcastCard(
+                                worker: _worker!,
+                                broadcast: activeLowTier[index],
+                                aspectRatio: lowTierGridDelegate.childAspectRatio,
+                              ),
                           itemCount: activeLowTier.length,
                         ),
                       ),
@@ -236,9 +243,16 @@ class _BodyState extends ConsumerState<_Body> {
                                 (broadcasts.isLoading && index >= pastItemsCount - loadingItems)
                                     ? ShimmerLoading(
                                       isLoading: true,
-                                      child: BroadcastCard.loading(_worker!),
+                                      child: BroadcastCard.loading(
+                                        worker: _worker!,
+                                        aspectRatio: lowTierGridDelegate.childAspectRatio,
+                                      ),
                                     )
-                                    : BroadcastCard(worker: _worker!, broadcast: section.$3[index]),
+                                    : BroadcastCard(
+                                      worker: _worker!,
+                                      broadcast: section.$3[index],
+                                      aspectRatio: lowTierGridDelegate.childAspectRatio,
+                                    ),
                         itemCount: section.$3.length,
                       ),
                     ),
@@ -256,12 +270,18 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class BroadcastCard extends StatefulWidget {
-  const BroadcastCard({required this.broadcast, required this.worker, super.key});
+  const BroadcastCard({
+    required this.broadcast,
+    required this.worker,
+    required this.aspectRatio,
+    super.key,
+  });
 
   final Broadcast broadcast;
   final ImageColorWorker worker;
+  final double aspectRatio;
 
-  const BroadcastCard.loading(this.worker)
+  const BroadcastCard.loading({required this.worker, required this.aspectRatio})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -298,23 +318,7 @@ class BroadcastCard extends StatefulWidget {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
-Future<_CardColors?> _computeImageColors(
-  ImageColorWorker worker,
-  String imageUrl,
-  ByteData imageBytes,
-) async {
-  final response = await worker.getImageColors(imageBytes.buffer.asUint32List());
-  if (response != null) {
-    final (:primaryContainer, :onPrimaryContainer) = response;
-    final cardColors = (
-      primaryContainer: Color(primaryContainer),
-      onPrimaryContainer: Color(onPrimaryContainer),
-    );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
-    return cardColors;
-  }
-  return null;
-}
+final _dateFormat = DateFormat.MMMd().add_jm();
 
 class _BroadcastCartState extends State<BroadcastCard> {
   _CardColors? _cardColors;
@@ -378,7 +382,17 @@ class _BroadcastCartState extends State<BroadcastCard> {
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
     final bgHsl = HSLColor.fromColor(backgroundColor);
     final liveHsl = HSLColor.fromColor(LichessColors.red);
-    final liveColor = (bgHsl.lightness <= 0.5 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
+    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
+
+    String? eventDate;
+    if (widget.broadcast.round.startsAt != null) {
+      final diff = widget.broadcast.round.startsAt!.difference(DateTime.now());
+      if (!diff.isNegative && diff.inDays >= 1) {
+        eventDate = _dateFormat.format(widget.broadcast.round.startsAt!);
+      } else {
+        eventDate = relativeDate(context.l10n, widget.broadcast.round.startsAt!);
+      }
+    }
 
     return GestureDetector(
       onTap: () {
@@ -399,7 +413,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
           duration: const Duration(milliseconds: 500),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: kBroadcastGridItemBorderRadius,
+            borderRadius: kCardBorderRadius,
             color: backgroundColor,
             boxShadow:
                 Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
@@ -449,31 +463,25 @@ class _BroadcastCartState extends State<BroadcastCard> {
                     Padding(
                       padding: kBroadcastGridItemContentPadding,
                       child: Row(
+                        mainAxisAlignment:
+                            widget.broadcast.isLive
+                                ? MainAxisAlignment.spaceBetween
+                                : MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           if (!widget.broadcast.isFinished) ...[
-                            Text(
-                              widget.broadcast.round.name,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: subTitleColor,
-                                letterSpacing: -0.2,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            const SizedBox(width: 5.0),
-                          ],
-                          if (widget.broadcast.round.startsAt != null)
-                            Expanded(
+                            Flexible(
+                              flex: widget.broadcast.isLive ? 1 : 0,
                               child: Text(
-                                relativeDate(widget.broadcast.round.startsAt!),
-                                style: TextStyle(fontSize: 12, color: subTitleColor),
+                                widget.broadcast.round.name,
+                                style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
+                            const SizedBox(width: 5.0),
+                          ],
                           if (widget.broadcast.isLive) ...[
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -509,7 +517,15 @@ class _BroadcastCartState extends State<BroadcastCard> {
                                 ),
                               ],
                             ),
-                          ],
+                          ] else if (eventDate != null)
+                            Flexible(
+                              child: Text(
+                                eventDate,
+                                style: TextStyle(fontSize: 12, color: subTitleColor),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -519,13 +535,12 @@ class _BroadcastCartState extends State<BroadcastCard> {
                       ),
                       child: Text(
                         widget.broadcast.title,
-                        maxLines: 2,
+                        maxLines: widget.aspectRatio == 1.0 ? 3 : 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: titleColor,
                           fontWeight: FontWeight.bold,
                           height: 1.0,
-                          fontSize: 16,
                         ),
                       ),
                     ),
@@ -548,6 +563,24 @@ class _BroadcastCartState extends State<BroadcastCard> {
       ),
     );
   }
+}
+
+Future<_CardColors?> _computeImageColors(
+  ImageColorWorker worker,
+  String imageUrl,
+  ByteData imageBytes,
+) async {
+  final response = await worker.getImageColors(imageBytes.buffer.asUint32List());
+  if (response != null) {
+    final (:primaryContainer, :onPrimaryContainer) = response;
+    final cardColors = (
+      primaryContainer: Color(primaryContainer),
+      onPrimaryContainer: Color(onPrimaryContainer),
+    );
+    _colorsCache[NetworkImage(imageUrl)] = cardColors;
+    return cardColors;
+  }
+  return null;
 }
 
 /// Pre-cache images and extract colors for broadcasts.

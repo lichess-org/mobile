@@ -882,6 +882,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Šaha pulkstenis';
 
   @override
@@ -5566,6 +5569,193 @@ class AppLocalizationsLv extends AppLocalizations {
       other: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēles',
       one: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēli',
       zero: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēles',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'tikko';
+
+  @override
+  String get timeagoRightNow => 'tieši tagad';
+
+  @override
+  String get timeagoCompleted => 'completed';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count sekundēm',
+      one: 'pēc $count sekundes',
+      zero: 'pēc $count sekundēm',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count minūtēm',
+      one: 'pēc $count minūtes',
+      zero: 'pēc $count minūtēm',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count stundām',
+      one: 'pēc $count stundas',
+      zero: 'pēc $count stundām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count dienām',
+      one: 'pēc $count dienas',
+      zero: 'pēc $count dienām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count nedēļām',
+      one: 'pēc $count nedēļas',
+      zero: 'pēc $count nedēļām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count mēnešiem',
+      one: 'pēc $count mēneša',
+      zero: 'pēc $count mēnešiem',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pēc $count gadiem',
+      one: 'pēc $count gada',
+      zero: 'pēc $count gadiem',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count minūtēm',
+      one: 'pirms $count minūtes',
+      zero: 'pirms $count minūtēm',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count stundām',
+      one: 'pirms $count stundas',
+      zero: 'pirms $count stundām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count dienām',
+      one: 'pirms $count dienas',
+      zero: 'pirms $count dienām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count nedēļām',
+      one: 'pirms $count nedēļas',
+      zero: 'pirms $count nedēļām',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count mēnešiem',
+      one: 'pirms $count mēneša',
+      zero: 'pirms $count mēnešiem',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pirms $count gadiem',
+      one: 'pirms $count gada',
+      zero: 'pirms $count gadiem',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes remaining',
+      one: '$count minute remaining',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours remaining',
+      one: '$count hour remaining',
     );
     return '$_temp0';
   }

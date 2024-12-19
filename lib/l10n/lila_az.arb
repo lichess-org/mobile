@@ -1247,5 +1247,7 @@
   "studyNbChapters": "{count, plural, =1{{count} Fəsil} other{{count} Fəsil}}",
   "studyNbGames": "{count, plural, =1{{count} Oyun} other{{count} Oyun}}",
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
+  "timeagoJustNow": "elə indi",
+  "timeagoRightNow": "indicə"
 }

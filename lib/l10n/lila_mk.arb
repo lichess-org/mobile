@@ -1024,5 +1024,20 @@
   "studySave": "Зачувај",
   "studyGoodMove": "Добар потег",
   "studyMistake": "Грешка",
-  "studyBlunder": "Глупа грешка"
+  "studyBlunder": "Глупа грешка",
+  "timeagoJustNow": "тукушто",
+  "timeagoRightNow": "Тукушто",
+  "timeagoInNbSeconds": "{count, plural, =1{За {count} секунди} other{За {count} секунди}}",
+  "timeagoInNbMinutes": "{count, plural, =1{За {count} минута} other{За {count} минути}}",
+  "timeagoInNbHours": "{count, plural, =1{За {count} час} other{За {count} часови}}",
+  "timeagoInNbDays": "{count, plural, =1{За {count} ден} other{За {count} денови}}",
+  "timeagoInNbWeeks": "{count, plural, =1{За {count} седмица} other{За {count} седмици}}",
+  "timeagoInNbMonths": "{count, plural, =1{За {count} месец} other{За {count} месеци}}",
+  "timeagoInNbYears": "{count, plural, =1{За {count} година} other{За {count} години}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{Пред {count} минута} other{Пред {count} минути}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{пред {count} час} other{Пред {count} часа}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{пред {count} ден} other{Пред {count} дена}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{Пред {count} седмица} other{Пред {count} седмици}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{Пред {count} месец} other{Пред {count} месеци}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{Пред {count} година} other{Пред {count} години}}"
 }

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -16,7 +17,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -155,7 +155,7 @@ class _BodyState extends ConsumerState<_Body> {
               final title =
                   DateTime.now().difference(element).inDays >= 15
                       ? _dateFormatter.format(element)
-                      : timeago.format(element);
+                      : relativeDate(context.l10n, element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(

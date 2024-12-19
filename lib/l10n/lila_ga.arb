@@ -1372,5 +1372,20 @@
   "studyNbChapters": "{count, plural, =1{{count} Caibidil} =2{{count} Chaibidil} few{{count} gCaibidil} many{{count} Caibidil} other{{count} Caibidil}}",
   "studyNbGames": "{count, plural, =1{{count} Cluiche} =2{{count} Chluiche} few{{count} gCluiche} many{{count} Cluiche} other{{count} Cluiche}}",
   "studyNbMembers": "{count, plural, =1{{count} Comhalta} =2{{count} Chomhalta} few{{count} gComhalta} many{{count} Comhalta} other{{count} Comhalta}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Greamaigh do théacs PGN anseo, suas le {count} cluiche} =2{Greamaigh do théacs PGN anseo, suas le {count} chluiche} few{Greamaigh do théacs PGN anseo, suas le {count} gcluiche} many{Greamaigh do théacs PGN anseo, suas le {count} cluiche} other{Greamaigh do théacs PGN anseo, suas le {count} cluiche}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Greamaigh do théacs PGN anseo, suas le {count} cluiche} =2{Greamaigh do théacs PGN anseo, suas le {count} chluiche} few{Greamaigh do théacs PGN anseo, suas le {count} gcluiche} many{Greamaigh do théacs PGN anseo, suas le {count} cluiche} other{Greamaigh do théacs PGN anseo, suas le {count} cluiche}}",
+  "timeagoJustNow": "díreach anois",
+  "timeagoRightNow": "anois",
+  "timeagoInNbSeconds": "{count, plural, =1{i soicind amháín} =2{i {count} soicind} few{i {count} soicind} many{i {count} soicind} other{i {count} soicind}}",
+  "timeagoInNbMinutes": "{count, plural, =1{i nóiméad amháin} =2{i {count} nóiméad} few{i {count} nóiméad} many{i {count} nóiméad} other{i {count} nóiméad}}",
+  "timeagoInNbHours": "{count, plural, =1{in uair amháin} =2{i {count} uair} few{i {count} uair} many{i {count} uair} other{i {count} uair}}",
+  "timeagoInNbDays": "{count, plural, =1{i lá amháín} =2{i {count} lá} few{i {count} lá} many{i {count} lá} other{i {count} lá}}",
+  "timeagoInNbWeeks": "{count, plural, =1{i seachtain amháin} =2{i {count} sheachtain} few{i {count} seachtain} many{i {count} seachtain} other{i {count} seachtain}}",
+  "timeagoInNbMonths": "{count, plural, =1{i gceann míosa} =2{i {count} mhí} few{i {count} mhí} many{i {count} mí} other{i {count} mí}}",
+  "timeagoInNbYears": "{count, plural, =1{i gceann bliana} =2{i gceann {count} bhliain} few{i gceann {count} bhliain} many{i gceann {count} mbliain} other{i gceann {count} bliain}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{nóiméad amháin ó shin} =2{{count} nóiméad ó shin} few{{count} nóiméad ó shin} many{{count} nóiméad ó shin} other{{count} nóiméad ó shin}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{uair amháin ó shin} =2{{count} uair ó shin} few{{count} uair ó shin} many{{count} uair ó shin} other{{count} uair ó shin}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{lá amháin ó shin} =2{{count} lá ó shin} few{{count} lá ó shin} many{{count} lá ó shin} other{{count} lá ó shin}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{seachtain amháin ó shin} =2{{count} sheachtain ó shin} few{{count} sheachtain ó shin} many{{count} seachtain ó shin} other{{count} seachtain ó shin}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{mí amháin ó shin} =2{{count} mhí ó shin} few{{count} mí ó shin} many{{count} mí ó shin} other{{count} mí ó shin}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{Bliain amháin ó shin} =2{{count} bhliain ó shin} few{{count} mbliain ó shin} many{{count} mbliain ó shin} other{{count} bliain ó shin}}"
 }

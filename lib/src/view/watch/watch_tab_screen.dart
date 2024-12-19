@@ -280,7 +280,7 @@ class _BroadcastTile extends ConsumerWidget {
             ),
           ] else if (broadcast.round.startsAt != null) ...[
             const SizedBox(width: 5.0),
-            Text(relativeDate(broadcast.round.startsAt!)),
+            Text(relativeDate(context.l10n, broadcast.round.startsAt!)),
           ],
         ],
       ),

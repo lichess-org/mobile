@@ -1512,6 +1512,12 @@ abstract class AppLocalizations {
   /// **'In-game only'**
   String get preferencesInGameOnly;
 
+  /// No description provided for @preferencesExceptInGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Except in-game'**
+  String get preferencesExceptInGame;
+
   /// No description provided for @preferencesChessClock.
   ///
   /// In en, this message translates to:
@@ -9491,6 +9497,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
+
+  /// No description provided for @timeagoJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get timeagoJustNow;
+
+  /// No description provided for @timeagoRightNow.
+  ///
+  /// In en, this message translates to:
+  /// **'right now'**
+  String get timeagoRightNow;
+
+  /// No description provided for @timeagoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get timeagoCompleted;
+
+  /// No description provided for @timeagoInNbSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} second} other{in {count} seconds}}'**
+  String timeagoInNbSeconds(int count);
+
+  /// No description provided for @timeagoInNbMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} minute} other{in {count} minutes}}'**
+  String timeagoInNbMinutes(int count);
+
+  /// No description provided for @timeagoInNbHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} hour} other{in {count} hours}}'**
+  String timeagoInNbHours(int count);
+
+  /// No description provided for @timeagoInNbDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} day} other{in {count} days}}'**
+  String timeagoInNbDays(int count);
+
+  /// No description provided for @timeagoInNbWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} week} other{in {count} weeks}}'**
+  String timeagoInNbWeeks(int count);
+
+  /// No description provided for @timeagoInNbMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} month} other{in {count} months}}'**
+  String timeagoInNbMonths(int count);
+
+  /// No description provided for @timeagoInNbYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} year} other{in {count} years}}'**
+  String timeagoInNbYears(int count);
+
+  /// No description provided for @timeagoNbMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} minute ago} other{{count} minutes ago}}'**
+  String timeagoNbMinutesAgo(int count);
+
+  /// No description provided for @timeagoNbHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} hour ago} other{{count} hours ago}}'**
+  String timeagoNbHoursAgo(int count);
+
+  /// No description provided for @timeagoNbDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} day ago} other{{count} days ago}}'**
+  String timeagoNbDaysAgo(int count);
+
+  /// No description provided for @timeagoNbWeeksAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} week ago} other{{count} weeks ago}}'**
+  String timeagoNbWeeksAgo(int count);
+
+  /// No description provided for @timeagoNbMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} month ago} other{{count} months ago}}'**
+  String timeagoNbMonthsAgo(int count);
+
+  /// No description provided for @timeagoNbYearsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} year ago} other{{count} years ago}}'**
+  String timeagoNbYearsAgo(int count);
+
+  /// No description provided for @timeagoNbMinutesRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}'**
+  String timeagoNbMinutesRemaining(int count);
+
+  /// No description provided for @timeagoNbHoursRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}'**
+  String timeagoNbHoursRemaining(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

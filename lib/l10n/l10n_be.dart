@@ -899,6 +899,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesInGameOnly => 'Выключна ў партыі';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Шахматны гадзіннік';
 
   @override
@@ -5632,6 +5635,210 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
       few: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульні',
       one: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульню',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'зараз';
+
+  @override
+  String get timeagoRightNow => 'прама зараз';
+
+  @override
+  String get timeagoCompleted => 'завершана';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count секунд',
+      many: 'праз $count секунд',
+      few: 'праз $count секунды',
+      one: 'праз $count секунду',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count хвілін',
+      many: 'праз $count хвілін',
+      few: 'праз $count хвіліны',
+      one: 'праз $count хвіліну',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count гадзін',
+      many: 'праз $count гадзін',
+      few: 'праз $count гадзіны',
+      one: 'праз $count гадзіну',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count дзён',
+      many: 'праз $count дзён',
+      few: 'праз $count дні',
+      one: 'праз $count дзень',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count тыдняў',
+      many: 'праз $count тыдняў',
+      few: 'праз $count тыдні',
+      one: 'праз $count тыдзень',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count месяцаў',
+      many: 'праз $count месяцаў',
+      few: 'праз $count месяцы',
+      one: 'праз $count месяц',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count гадоў',
+      many: 'праз $count гадоў',
+      few: 'праз $count гады',
+      one: 'праз $count год',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count хвілін таму',
+      many: '$count хвілін таму',
+      few: '$count хвіліны таму',
+      one: '$count хвіліну таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count гадзін таму',
+      many: '$count гадзін таму',
+      few: '$count гадзіны таму',
+      one: '$count гадзіну таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дзён таму',
+      many: '$count дзён таму',
+      few: '$count дні таму',
+      one: '$count дзень таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count тыдняў таму',
+      many: '$count тыдняў таму',
+      few: '$count тыдні таму',
+      one: '$count тыдзень таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count месяцаў таму',
+      many: '$count месяцаў таму',
+      few: '$count месяцы таму',
+      one: '$count месяц таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count гадоў таму',
+      many: '$count гадоў таму',
+      few: '$count гады таму',
+      one: '$count год таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Засталося $count хвіліны',
+      many: 'Засталося $count хвілін',
+      few: 'Засталося $count хвіліны',
+      one: 'Засталася $count хвіліна',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Засталося $count гадзіны',
+      many: 'Засталося $count гадзін',
+      few: 'Засталося $count гадзіны',
+      one: 'Засталася $count гадзіна',
     );
     return '$_temp0';
   }

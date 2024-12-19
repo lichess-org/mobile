@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   const OfflineCorrespondenceGamesScreen({super.key});
@@ -69,12 +69,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         children: [
           UserFullNameWidget(user: game.opponent.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
-            Text(
-              timeago.format(
-                DateTime.now().add(game.myTimeLeft(lastModified)!),
-                allowFromNow: true,
-              ),
-            ),
+            Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
           Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),
         ],
       ),

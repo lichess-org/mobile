@@ -1391,5 +1391,20 @@
   "studyNbChapters": "{count, plural, =0{{count} Nodaļas} =1{{count} Nodaļa} other{{count} Nodaļas}}",
   "studyNbGames": "{count, plural, =0{{count} Spēles} =1{{count} Spēle} other{{count} Spēles}}",
   "studyNbMembers": "{count, plural, =0{{count} Dalībnieki} =1{{count} Dalībnieks} other{{count} Dalībnieki}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =0{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles} =1{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēli} other{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =0{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles} =1{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēli} other{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles}}",
+  "timeagoJustNow": "tikko",
+  "timeagoRightNow": "tieši tagad",
+  "timeagoInNbSeconds": "{count, plural, =0{pēc {count} sekundēm} =1{pēc {count} sekundes} other{pēc {count} sekundēm}}",
+  "timeagoInNbMinutes": "{count, plural, =0{pēc {count} minūtēm} =1{pēc {count} minūtes} other{pēc {count} minūtēm}}",
+  "timeagoInNbHours": "{count, plural, =0{pēc {count} stundām} =1{pēc {count} stundas} other{pēc {count} stundām}}",
+  "timeagoInNbDays": "{count, plural, =0{pēc {count} dienām} =1{pēc {count} dienas} other{pēc {count} dienām}}",
+  "timeagoInNbWeeks": "{count, plural, =0{pēc {count} nedēļām} =1{pēc {count} nedēļas} other{pēc {count} nedēļām}}",
+  "timeagoInNbMonths": "{count, plural, =0{pēc {count} mēnešiem} =1{pēc {count} mēneša} other{pēc {count} mēnešiem}}",
+  "timeagoInNbYears": "{count, plural, =0{pēc {count} gadiem} =1{pēc {count} gada} other{pēc {count} gadiem}}",
+  "timeagoNbMinutesAgo": "{count, plural, =0{pirms {count} minūtēm} =1{pirms {count} minūtes} other{pirms {count} minūtēm}}",
+  "timeagoNbHoursAgo": "{count, plural, =0{pirms {count} stundām} =1{pirms {count} stundas} other{pirms {count} stundām}}",
+  "timeagoNbDaysAgo": "{count, plural, =0{pirms {count} dienām} =1{pirms {count} dienas} other{pirms {count} dienām}}",
+  "timeagoNbWeeksAgo": "{count, plural, =0{pirms {count} nedēļām} =1{pirms {count} nedēļas} other{pirms {count} nedēļām}}",
+  "timeagoNbMonthsAgo": "{count, plural, =0{pirms {count} mēnešiem} =1{pirms {count} mēneša} other{pirms {count} mēnešiem}}",
+  "timeagoNbYearsAgo": "{count, plural, =0{pirms {count} gadiem} =1{pirms {count} gada} other{pirms {count} gadiem}}"
 }

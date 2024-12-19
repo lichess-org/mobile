@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class OngoingGamesScreen extends ConsumerWidget {
   const OngoingGamesScreen({super.key});
@@ -83,10 +83,7 @@ class OngoingGamePreview extends ConsumerWidget {
             Text(game.isMyTurn ? context.l10n.yourTurn : context.l10n.waitingForOpponent),
           if (game.isMyTurn && game.secondsLeft != null)
             Text(
-              timeago.format(
-                DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                allowFromNow: true,
-              ),
+              relativeDate(context.l10n, DateTime.now().add(Duration(seconds: game.secondsLeft!))),
             ),
         ],
       ),

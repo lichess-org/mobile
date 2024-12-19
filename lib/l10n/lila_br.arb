@@ -1132,5 +1132,20 @@
   "studyNbChapters": "{count, plural, =1{{count} pennad} =2{{count} pennad} few{{count} pennad} many{{count} pennad} other{{count} pennad}}",
   "studyNbGames": "{count, plural, =1{{count} C'hoariadenn} =2{{count} C'hoariadenn} few{{count} C'hoariadenn} many{{count} C'hoariadenn} other{{count} C'hoariadenn}}",
   "studyNbMembers": "{count, plural, =1{{count} Ezel} =2{{count} Ezel} few{{count} Ezel} many{{count} Ezel} other{{count} Ezel}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Pegit testenn ho PGN amañ, betek {count} krogad} =2{Pegit testenn ho PGN amañ, betek {count} grogad} few{Pegit testenn ho PGN amañ, betek {count} krogadoù} many{Pegit testenn ho PGN amañ, betek {count} krogadoù} other{Pegit testenn ho PGN amañ, betek {count} krogadoù}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Pegit testenn ho PGN amañ, betek {count} krogad} =2{Pegit testenn ho PGN amañ, betek {count} grogad} few{Pegit testenn ho PGN amañ, betek {count} krogadoù} many{Pegit testenn ho PGN amañ, betek {count} krogadoù} other{Pegit testenn ho PGN amañ, betek {count} krogadoù}}",
+  "timeagoJustNow": "bremañ",
+  "timeagoRightNow": "bremañ",
+  "timeagoInNbSeconds": "{count, plural, =1{a-benn {count} eilenn} =2{a-benn {count} eilenn} few{a-benn {count} eilenn} many{a-benn {count} eilenn} other{a-benn {count} eilenn}}",
+  "timeagoInNbMinutes": "{count, plural, =1{a-benn {count} vunutenn} =2{a-benn {count} vunutenn} few{a-benn {count} munutenn} many{a-benn {count} munutenn} other{a-benn {count} munutenn}}",
+  "timeagoInNbHours": "{count, plural, =1{a-benn {count} eur} =2{a-benn {count} eur} few{a-benn {count} eur} many{a-benn {count} eur} other{a-benn {count} eur}}",
+  "timeagoInNbDays": "{count, plural, =1{a-benn {count} deiz} =2{a-benn {count} zeiz} few{a-benn {count} deiz} many{a-benn {count} deiz} other{a-benn {count} deiz}}",
+  "timeagoInNbWeeks": "{count, plural, =1{a-benn {count} sizhun} =2{a-benn {count} sizhun} few{a-benn {count} sizhun} many{a-benn {count} sizhun} other{a-benn {count} sizhun}}",
+  "timeagoInNbMonths": "{count, plural, =1{a-benn {count} miz} =2{a-benn {count} viz} few{a-benn {count} miz} many{a-benn {count} miz} other{a-benn {count} miz}}",
+  "timeagoInNbYears": "{count, plural, =1{a-benn {count} bloaz} =2{a-benn {count} vloaz} few{a-benn {count} bloaz} many{a-benn {count} bloaz} other{a-benn {count} bloaz}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} vunutenn zo} =2{{count} vunutenn zo} few{{count} munutenn zo} many{{count} munutenn zo} other{{count} munutenn zo}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} eur zo} =2{{count} eur zo} few{{count} eur zo} many{{count} eur zo} other{{count} eur zo}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} deiz zo} =2{{count} zeiz zo} few{{count} deiz zo} many{{count} deiz zo} other{{count} deiz zo}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} sizhun zo} =2{{count} sizhun zo} few{{count} sizhun zo} many{{count} sizhun zo} other{{count} sizhun zo}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} miz zo} =2{{count} viz zo} few{{count} miz zo} many{{count} miz zo} other{{count} miz zo}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} bloaz zo} =2{{count} vloaz zo} few{{count} bloaz zo} many{{count} bloaz zo} other{{count} bloaz zo}}"
 }

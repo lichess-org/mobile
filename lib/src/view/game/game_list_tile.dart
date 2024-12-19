@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -23,7 +24,6 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
@@ -420,7 +420,7 @@ class ExtendedGameListTile extends StatelessWidget {
         aiLevel: opponent.aiLevel,
         rating: opponent.rating,
       ),
-      subtitle: Text(timeago.format(game.lastMoveAt)),
+      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
