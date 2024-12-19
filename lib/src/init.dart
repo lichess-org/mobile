@@ -55,6 +55,9 @@ Future<void> setupFirstLaunch() async {
 }
 
 Future<void> _migrateThemeSettings() async {
+  if (getCorePalette() == null) {
+    return;
+  }
   final prefs = LichessBinding.instance.sharedPreferences;
   try {
     final stored = LichessBinding.instance.sharedPreferences.getString(
@@ -67,9 +70,7 @@ Future<void> _migrateThemeSettings() async {
     final migrated = generalPrefs.copyWith(
       appThemeSeed:
           // ignore: deprecated_member_use_from_same_package
-          getCorePalette() != null && generalPrefs.systemColors == true
-              ? AppThemeSeed.system
-              : AppThemeSeed.board,
+          generalPrefs.systemColors == true ? AppThemeSeed.system : AppThemeSeed.board,
     );
     await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
   } catch (e) {
