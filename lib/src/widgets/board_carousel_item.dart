@@ -52,7 +52,7 @@ class BoardCarouselItem extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide - _kBoardCarouselItemMargin.horizontal;
-        final card = ChangeColors(
+        final card = BrightnessHueFilter(
           hue: boardPrefs.hue,
           brightness: boardPrefs.brightness,
           child: PlatformCard(

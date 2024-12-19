@@ -11,6 +11,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
+const kBoardDefaultBrightnessFilter = 1.0;
+const kBoardDefaultHueFilter = 0.0;
+
 @riverpod
 class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
@@ -104,9 +107,7 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
 class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
-  @Assert(
-    'brightness == null || brightness >= -1.0 && brightness <= 1.0, hue == null || hue >= -1 && hue <= 1',
-  )
+  @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
@@ -133,8 +134,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
-    @JsonKey(defaultValue: 0.0) required double brightness,
-    @JsonKey(defaultValue: 0.0) required double hue,
+    @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
+    @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double hue,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -154,11 +155,12 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
-    brightness: 0.0,
-    hue: 0.0,
+    brightness: kBoardDefaultBrightnessFilter,
+    hue: kBoardDefaultHueFilter,
   );
 
-  bool get hasColorAdjustments => brightness != 0.0 || hue != 0.0;
+  bool get hasColorAdjustments =>
+      brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(

@@ -183,7 +183,8 @@ class _BodyState extends ConsumerState<_Body> {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final bool hasAjustedColors = brightness != 0.0 || hue != 0.0;
+    final bool hasAjustedColors =
+        brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
@@ -325,8 +326,8 @@ class _BodyState extends ConsumerState<_Body> {
                   PlatformListTile(
                     leading: const Icon(Icons.brightness_6),
                     title: Slider.adaptive(
-                      min: -1.0,
-                      max: 1.0,
+                      min: 0.2,
+                      max: 1.4,
                       value: brightness,
                       onChanged: (value) {
                         setState(() {
@@ -343,8 +344,8 @@ class _BodyState extends ConsumerState<_Body> {
                   PlatformListTile(
                     leading: const Icon(Icons.invert_colors),
                     title: Slider.adaptive(
-                      min: -1.0,
-                      max: 1.0,
+                      min: 0.0,
+                      max: 360.0,
                       value: hue,
                       onChanged: (value) {
                         setState(() {
@@ -369,12 +370,12 @@ class _BodyState extends ConsumerState<_Body> {
                         hasAjustedColors
                             ? () {
                               setState(() {
-                                brightness = 0.0;
-                                hue = 0.0;
+                                brightness = kBoardDefaultBrightnessFilter;
+                                hue = kBoardDefaultHueFilter;
                               });
                               ref
                                   .read(boardPreferencesProvider.notifier)
-                                  .adjustColors(brightness: 0.0, hue: 0.0);
+                                  .adjustColors(brightness: brightness, hue: hue);
                             }
                             : null,
                   ),
@@ -465,7 +466,7 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ChangeColors(
+      child: BrightnessHueFilter(
         brightness: brightness,
         hue: hue,
         child: Chessboard.fixed(
