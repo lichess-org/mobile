@@ -46,10 +46,6 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> toggleCustomTheme() async {
-    await save(state.copyWith(customThemeEnabled: !state.customThemeEnabled));
-  }
-
   Future<void> setCustomThemeSeed(Color? color) {
     return save(state.copyWith(customThemeSeed: color));
   }
@@ -67,9 +63,6 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
-
-    /// Should enable custom theme
-    @JsonKey(defaultValue: false) required bool customThemeEnabled,
 
     /// Custom theme seed color
     @ColorConverter() Color? customThemeSeed,
@@ -89,7 +82,6 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    customThemeEnabled: false,
     appThemeSeed: AppThemeSeed.board,
   );
 

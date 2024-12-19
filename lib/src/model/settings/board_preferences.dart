@@ -135,7 +135,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
-    @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double hue,
+    @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
