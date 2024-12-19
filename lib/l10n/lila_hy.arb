@@ -1379,5 +1379,21 @@
   "studyNbChapters": "{count, plural, =1{{count} գլուխ} other{{count} գլուխ}}",
   "studyNbGames": "{count, plural, =1{{count} պարտիա} other{{count} պարտիա}}",
   "studyNbMembers": "{count, plural, =1{{count} մասնակից} other{{count} մասնակից}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի} other{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի} other{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի}}",
+  "timeagoJustNow": "հենց հիմա",
+  "timeagoRightNow": "հենց հիմա",
+  "timeagoCompleted": "ավարտված",
+  "timeagoInNbSeconds": "{count, plural, =1{{count} վայրկյան հետո} other{{count} վայրկյաններ հետո}}",
+  "timeagoInNbMinutes": "{count, plural, =1{{count} րոպե հետո} other{{count} րոպեներ հետո}}",
+  "timeagoInNbHours": "{count, plural, =1{{count} ժամ հետո} other{{count} ժամ հետո}}",
+  "timeagoInNbDays": "{count, plural, =1{{count} օր հետո} other{{count} օր հետո}}",
+  "timeagoInNbWeeks": "{count, plural, =1{{count} շաբաթ հետո} other{{count} շաբաթ հետո}}",
+  "timeagoInNbMonths": "{count, plural, =1{{count} ամիս հետո} other{{count} ամիս հետո}}",
+  "timeagoInNbYears": "{count, plural, =1{{count} տարի հետո} other{{count} տարի հետո}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} րոպե առաջ} other{{count} րոպե առաջ}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} ժամ առաջ} other{{count} ժամ առաջ}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} օր առաջ} other{{count} օր առաջ}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}"
 }

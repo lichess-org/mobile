@@ -937,6 +937,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesInGameOnly => 'في اللعبة فقط';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'مؤقت الشطرنج';
 
   @override
@@ -5780,6 +5783,240 @@ class AppLocalizationsAr extends AppLocalizations {
       two: 'ألصق نص PGN هنا، حتى $count مباراة',
       one: 'الصق نص الPGN هنا، حتى $count لعبة واحدة',
       zero: 'ألصق نص PGN هنا، حتى $count مباراة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'الان';
+
+  @override
+  String get timeagoRightNow => 'حاليا';
+
+  @override
+  String get timeagoCompleted => 'مكتمل';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count ثانية',
+      many: 'خلال $count ثانية',
+      few: 'خلال $count ثوانٍ',
+      two: 'خلال ثانيتين',
+      one: 'خلال ثانية',
+      zero: 'خلال $count ثانية',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count دقائق',
+      many: 'خلال $count دقائق',
+      few: 'خلال $count دقائق',
+      two: 'خلال $count دقيقتين',
+      one: 'خلال دقيقة',
+      zero: 'خلال $count دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count ساعة',
+      many: 'خلال $count ساعة',
+      few: 'خلال $count ساعات',
+      two: 'خلال ساعتين',
+      one: 'خلال ساعة',
+      zero: 'خلال $count ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count يوم',
+      many: 'خلال $count يوم',
+      few: 'خلال $count أيام',
+      two: 'خلال $count يوم',
+      one: 'خلال $count يوم',
+      zero: 'خلال $count يوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count اسبوع',
+      many: 'خلال $count اسبوع',
+      few: 'خلال $count اسبوع',
+      two: 'خلال $count اسبوع',
+      one: 'خلال $count اسبوع',
+      zero: 'خلال $count أسبوع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count شهر',
+      many: 'خلال $count شهر',
+      few: 'خلال $count شهر',
+      two: 'خلال $count شهر',
+      one: 'خلال $count شهر',
+      zero: 'خلال $count شهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'خلال $count سنة',
+      many: 'خلال $count سنة',
+      few: 'خلال $count سنة',
+      two: 'خلال $count سنة',
+      one: 'خلال $count سنة',
+      zero: 'خلال $count سنة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count دقيقة/دقائق مضت',
+      many: 'منذ $count دقيقة/دقائق مضت',
+      few: 'منذ $count دقيقة/دقائق مضت',
+      two: 'منذ $count دقيقتين',
+      one: 'منذ $count دقيقة',
+      zero: 'منذ $count دقيقة/دقائق مضت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count ساعة/ساعات مضت',
+      many: 'منذ $count ساعة/ساعات مضت',
+      few: 'منذ $count ساعة/ساعات مضت',
+      two: 'منذ $count ساعة/ساعات مضت',
+      one: 'منذ $count ساعة',
+      zero: 'منذ $count ساعة/ساعات مضت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count يوم/أيام',
+      many: 'منذ $count يوم/أيام',
+      few: 'منذ $count يوم/أيام',
+      two: 'منذ $count يوم/أيام',
+      one: 'منذ $count يوم',
+      zero: 'منذ $count يوم/أيام',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count أسابيع',
+      many: 'منذ $count أسابيع',
+      few: 'منذ $count أسابيع',
+      two: 'منذ $count أسابيع',
+      one: 'منذ $count أسابيع',
+      zero: 'منذ $count أسابيع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count شهر',
+      many: 'منذ $count شهر',
+      few: 'منذ $count شهر',
+      two: 'منذ $count شهر',
+      one: 'منذ $count شهر',
+      zero: 'منذ $count شهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count سنة',
+      many: 'منذ $count سنة',
+      few: 'منذ $count سنة',
+      two: 'منذ $count سنة',
+      one: 'منذ $count سنة',
+      zero: 'منذ $count سنة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countدقائق متبقية',
+      many: '$countدقيقة متبقية',
+      few: '$countدقائق متبقية',
+      two: '$countدقيقتان متبقيتان',
+      one: '$countدقيقة متبقية',
+      zero: '$countدقيقة متبقية',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countساعة متبقية',
+      many: '$countساعة متبقية',
+      few: '$count ساعات متبقية',
+      two: '$countساعتان متبقيتان',
+      one: '$countساعة واحدة متبقية',
+      zero: '$countساعة متبقية',
     );
     return '$_temp0';
   }

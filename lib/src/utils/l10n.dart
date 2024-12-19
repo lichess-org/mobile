@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 
 /// Returns a localized string with a single placeholder replaced by a widget.
 ///
@@ -39,22 +40,42 @@ Text l10nWithWidget<T extends Widget>(
   );
 }
 
-final _dayFormatter = DateFormat.E().add_jm();
-final _monthFormatter = DateFormat.MMMd();
-final _dateFormatterWithYear = DateFormat.yMMMd();
+final _dateFormatterWithYear = DateFormat.yMMMMd();
+final _dateFormatterWithYearShort = DateFormat.yMMMd();
 
-String relativeDate(DateTime date) {
-  final diff = date.difference(DateTime.now());
+/// Formats a date as a relative date string from now.
+String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true}) {
+  final now = DateTime.now();
+  final diff = date.difference(now);
 
-  return (!diff.isNegative && diff.inDays == 0)
+  final yearFormatter = shortDate ? _dateFormatterWithYearShort : _dateFormatterWithYear;
+
+  if (diff.isNegative) {
+    return diff.inDays == 0
+        ? diff.inHours == 0
+            ? l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
+            : l10n.timeagoNbHoursAgo(diff.inHours.abs())
+        : diff.inDays == 1
+        ? l10n.yesterday
+        : diff.inDays.abs() <= 7
+        ? l10n.timeagoNbDaysAgo(diff.inDays.abs())
+        : diff.inDays.abs() <= 30
+        ? l10n.timeagoNbWeeksAgo((diff.inDays.abs() / 7).round())
+        : diff.inDays.abs() <= 365
+        ? l10n.timeagoNbMonthsAgo((diff.inDays.abs() / 30).round())
+        : yearFormatter.format(date);
+  }
+  return diff.inDays == 0
       ? diff.inHours == 0
-          ? 'in ${diff.inMinutes} minute${diff.inMinutes > 1 ? 's' : ''}' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
-          : 'in ${diff.inHours} hour${diff.inHours > 1 ? 's' : ''}' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
+          ? l10n.timeagoInNbMinutes(diff.inMinutes)
+          : l10n.timeagoInNbHours(diff.inHours)
       : diff.inDays.abs() <= 7
-      ? _dayFormatter.format(date)
-      : diff.inDays.abs() < 365
-      ? _monthFormatter.format(date)
-      : _dateFormatterWithYear.format(date);
+      ? l10n.timeagoInNbDays(diff.inDays)
+      : diff.inDays.abs() <= 30
+      ? l10n.timeagoInNbWeeks((diff.inDays.abs() / 7).round())
+      : diff.inDays.abs() <= 365
+      ? l10n.timeagoInNbMonths((diff.inDays.abs() / 30).round())
+      : yearFormatter.format(date);
 }
 
 /// Returns a localized locale name.

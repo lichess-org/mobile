@@ -1432,5 +1432,20 @@
   "studyNbChapters": "{count, plural, =1{{count} бөлім} other{{count} бөлім}}",
   "studyNbGames": "{count, plural, =1{{count} ойын} other{{count} ойын}}",
   "studyNbMembers": "{count, plural, =1{{count} мүше} other{{count} мүше}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN мәтінін осында қойыңыз, {count} ойын ғана} other{PGN мәтінін осында қойыңыз, {count} ойынға дейін}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN мәтінін осында қойыңыз, {count} ойын ғана} other{PGN мәтінін осында қойыңыз, {count} ойынға дейін}}",
+  "timeagoJustNow": "жаңа ғана",
+  "timeagoRightNow": "дәл қазір",
+  "timeagoInNbSeconds": "{count, plural, =1{{count} секундта} other{{count} секундта}}",
+  "timeagoInNbMinutes": "{count, plural, =1{{count} минутта} other{{count} минутта}}",
+  "timeagoInNbHours": "{count, plural, =1{{count} сағатта} other{{count} сағатта}}",
+  "timeagoInNbDays": "{count, plural, =1{{count} күннен кейін} other{{count} күннен кейін}}",
+  "timeagoInNbWeeks": "{count, plural, =1{{count} аптадан кейін} other{{count} аптадан кейін}}",
+  "timeagoInNbMonths": "{count, plural, =1{{count} айдан кейін} other{{count} айдан кейін}}",
+  "timeagoInNbYears": "{count, plural, =1{{count} жылдан кейін} other{{count} жылдан кейін}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} минут бұрын} other{{count} минут бұрын}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} сағат бұрын} other{{count} сағат бұрын}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} күн бұрын} other{{count} күн бұрын}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} апта бұрын} other{{count} апта бұрын}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} ай бұрын} other{{count} ай бұрын}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} жыл бұрын} other{{count} жыл бұрын}}"
 }

@@ -567,6 +567,7 @@
   "preferencesDisplayBoardResizeHandle": "Show board resize handle",
   "preferencesOnlyOnInitialPosition": "Only on initial position",
   "preferencesInGameOnly": "In-game only",
+  "preferencesExceptInGame": "Except in-game",
   "preferencesChessClock": "Chess clock",
   "preferencesTenthsOfSeconds": "Tenths of seconds",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",
@@ -3159,6 +3160,129 @@
   },
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoJustNow": "just now",
+  "timeagoRightNow": "right now",
+  "timeagoCompleted": "completed",
+  "timeagoInNbSeconds": "{count, plural, =1{in {count} second} other{in {count} seconds}}",
+  "@timeagoInNbSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMinutes": "{count, plural, =1{in {count} minute} other{in {count} minutes}}",
+  "@timeagoInNbMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbHours": "{count, plural, =1{in {count} hour} other{in {count} hours}}",
+  "@timeagoInNbHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbDays": "{count, plural, =1{in {count} day} other{in {count} days}}",
+  "@timeagoInNbDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbWeeks": "{count, plural, =1{in {count} week} other{in {count} weeks}}",
+  "@timeagoInNbWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMonths": "{count, plural, =1{in {count} month} other{in {count} months}}",
+  "@timeagoInNbMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbYears": "{count, plural, =1{in {count} year} other{in {count} years}}",
+  "@timeagoInNbYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} minute ago} other{{count} minutes ago}}",
+  "@timeagoNbMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} hour ago} other{{count} hours ago}}",
+  "@timeagoNbHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} day ago} other{{count} days ago}}",
+  "@timeagoNbDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} week ago} other{{count} weeks ago}}",
+  "@timeagoNbWeeksAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} month ago} other{{count} months ago}}",
+  "@timeagoNbMonthsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} year ago} other{{count} years ago}}",
+  "@timeagoNbYearsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}",
+  "@timeagoNbMinutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
+  "@timeagoNbHoursRemaining": {
     "placeholders": {
       "count": {
         "type": "int"

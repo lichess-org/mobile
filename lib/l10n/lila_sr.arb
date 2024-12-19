@@ -1241,5 +1241,9 @@
   "studyNbChapters": "{count, plural, =1{{count} Поглавље} few{{count} Поглављa} other{{count} Поглављa}}",
   "studyNbGames": "{count, plural, =1{{count} Партија} few{{count} Партијe} other{{count} Партија}}",
   "studyNbMembers": "{count, plural, =1{{count} Члан} few{{count} Чланa} other{{count} Чланова}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Налепите свој PGN текст овде, до {count} партије} few{Налепите свој PGN текст овде, до {count} партије} other{Налепите свој PGN текст овде, до {count} партија}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Налепите свој PGN текст овде, до {count} партије} few{Налепите свој PGN текст овде, до {count} партије} other{Налепите свој PGN текст овде, до {count} партија}}",
+  "timeagoJustNow": "управо сада",
+  "timeagoRightNow": "управо сад",
+  "timeagoCompleted": "завршено",
+  "timeagoInNbSeconds": "{count, plural, =1{за {count} секунди} few{за {count} сати} other{за {count} дана}}"
 }

@@ -916,6 +916,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Clog fichille';
 
   @override
@@ -5700,6 +5703,219 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Greamaigh do théacs PGN anseo, suas le $count gcluiche',
       two: 'Greamaigh do théacs PGN anseo, suas le $count chluiche',
       one: 'Greamaigh do théacs PGN anseo, suas le $count cluiche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'díreach anois';
+
+  @override
+  String get timeagoRightNow => 'anois';
+
+  @override
+  String get timeagoCompleted => 'completed';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count soicind',
+      many: 'i $count soicind',
+      few: 'i $count soicind',
+      two: 'i $count soicind',
+      one: 'i soicind amháín',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count nóiméad',
+      many: 'i $count nóiméad',
+      few: 'i $count nóiméad',
+      two: 'i $count nóiméad',
+      one: 'i nóiméad amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count uair',
+      many: 'i $count uair',
+      few: 'i $count uair',
+      two: 'i $count uair',
+      one: 'in uair amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count lá',
+      many: 'i $count lá',
+      few: 'i $count lá',
+      two: 'i $count lá',
+      one: 'i lá amháín',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count seachtain',
+      many: 'i $count seachtain',
+      few: 'i $count seachtain',
+      two: 'i $count sheachtain',
+      one: 'i seachtain amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count mí',
+      many: 'i $count mí',
+      few: 'i $count mhí',
+      two: 'i $count mhí',
+      one: 'i gceann míosa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i gceann $count bliain',
+      many: 'i gceann $count mbliain',
+      few: 'i gceann $count bhliain',
+      two: 'i gceann $count bhliain',
+      one: 'i gceann bliana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nóiméad ó shin',
+      many: '$count nóiméad ó shin',
+      few: '$count nóiméad ó shin',
+      two: '$count nóiméad ó shin',
+      one: 'nóiméad amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uair ó shin',
+      many: '$count uair ó shin',
+      few: '$count uair ó shin',
+      two: '$count uair ó shin',
+      one: 'uair amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lá ó shin',
+      many: '$count lá ó shin',
+      few: '$count lá ó shin',
+      two: '$count lá ó shin',
+      one: 'lá amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seachtain ó shin',
+      many: '$count seachtain ó shin',
+      few: '$count sheachtain ó shin',
+      two: '$count sheachtain ó shin',
+      one: 'seachtain amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mí ó shin',
+      many: '$count mí ó shin',
+      few: '$count mí ó shin',
+      two: '$count mhí ó shin',
+      one: 'mí amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bliain ó shin',
+      many: '$count mbliain ó shin',
+      few: '$count mbliain ó shin',
+      two: '$count bhliain ó shin',
+      one: 'Bliain amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes remaining',
+      one: '$count minute remaining',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours remaining',
+      one: '$count hour remaining',
     );
     return '$_temp0';
   }

@@ -865,6 +865,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'দাবার ঘড়ি';
 
   @override
@@ -5496,6 +5499,180 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'PGN টেক্সট এখানে পেস্ট করুন, $count টি খেলা পর্যন্ত',
       one: 'PGN টেক্সট এখানে পেস্ট করুন, $count টি খেলা পর্যন্ত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'এখনই';
+
+  @override
+  String get timeagoRightNow => 'এই মুহূর্তে';
+
+  @override
+  String get timeagoCompleted => 'সম্পন্ন হয়েছে';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সেকেন্ডের মধ্যে',
+      one: '$count সেকেন্ডের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মিনিটের মধ্যে',
+      one: '$count মিনিটের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ঘন্টার মধ্যে',
+      one: '$count ঘন্টার মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count দিনের মধ্যে',
+      one: '$count দিনের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সপ্তাহের মধ্যে',
+      one: '$count সপ্তাহের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মাসের মধ্যে',
+      one: '$count মাসের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count বছরের মধ্যে',
+      one: '$count বছরের মধ্যে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মিনিট আগে',
+      one: '$count মিনিট আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ঘন্টা আগে',
+      one: '$count ঘণ্টা আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count দিন আগে',
+      one: '$count দিন আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সপ্তাহ আগে',
+      one: '$count সপ্তাহ আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মাস আগে',
+      one: '$count মাস আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count বছর আগে',
+      one: '$count বছর আগে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মিনিট বাকি',
+      one: '$count মিনিট বাকি',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ঘন্টা বাকি',
+      one: '$count ঘন্টা বাকি',
     );
     return '$_temp0';
   }

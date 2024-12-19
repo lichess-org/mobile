@@ -40,6 +40,7 @@ const modules = [
   'storm',
   'streamer',
   'study',
+  'timeago',
 ]
 
 // list of keys (per module) to include in the ARB file

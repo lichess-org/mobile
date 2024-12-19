@@ -1397,5 +1397,21 @@
   "studyNbChapters": "{count, plural, =1{{count} Poglavlje} few{{count} Poglavlja} other{{count} Poglavlja}}",
   "studyNbGames": "{count, plural, =1{{count} Partija} few{{count} Partije} other{{count} Partije}}",
   "studyNbMembers": "{count, plural, =1{{count} Član} few{{count} Član} other{{count} Članova}}",
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Ovdje zalijepite svoj PGN tekst, do {count} igre} few{Ovdje zalijepite svoj PGN tekst, do {count} igri} other{Ovdje zalijepite svoj PGN tekst, do {count} igara}}"
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Ovdje zalijepite svoj PGN tekst, do {count} igre} few{Ovdje zalijepite svoj PGN tekst, do {count} igri} other{Ovdje zalijepite svoj PGN tekst, do {count} igara}}",
+  "timeagoJustNow": "upravo sada",
+  "timeagoRightNow": "upravo sada",
+  "timeagoCompleted": "završeno",
+  "timeagoInNbSeconds": "{count, plural, =1{za {count} sekunda} few{za {count} sekundi} other{za {count} sekunda}}",
+  "timeagoInNbMinutes": "{count, plural, =1{za {count} minutu} few{za {count} minute} other{za {count} minuta}}",
+  "timeagoInNbHours": "{count, plural, =1{za {count} sat} few{za {count} sata} other{za {count} sati}}",
+  "timeagoInNbDays": "{count, plural, =1{za {count} dan} few{za {count} dana} other{za {count} dana}}",
+  "timeagoInNbWeeks": "{count, plural, =1{za {count} tjedan} few{za {count} tjedna} other{za {count} tjedana}}",
+  "timeagoInNbMonths": "{count, plural, =1{za {count} mjesec} few{za {count} mjeseca} other{za {count} mjeseci}}",
+  "timeagoInNbYears": "{count, plural, =1{za {count} godinu} few{za {count} godine} other{za {count} godina}}",
+  "timeagoNbMinutesAgo": "{count, plural, =1{prije {count} minutu} few{prije {count} minute} other{prije {count} minuta}}",
+  "timeagoNbHoursAgo": "{count, plural, =1{prije {count} sat} few{prije {count} sata} other{prije {count} sati}}",
+  "timeagoNbDaysAgo": "{count, plural, =1{prije {count} dan} few{prije {count} dana} other{prije {count} dana}}",
+  "timeagoNbWeeksAgo": "{count, plural, =1{prije {count} tjedan} few{prije {count} tjedna} other{prije {count} tjedna}}",
+  "timeagoNbMonthsAgo": "{count, plural, =1{prije {count} mjesec} few{prije {count} mjeseca} other{prije {count} mjeseci}}",
+  "timeagoNbYearsAgo": "{count, plural, =1{prije {count} godinu} few{prije {count} godine} other{prije {count} godina}}"
 }
