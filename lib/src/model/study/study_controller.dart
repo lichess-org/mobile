@@ -137,14 +137,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
       await evaluationService.disposeEngine();
 
       evaluationService
-          .initEngine(
-            _evaluationContext(studyState.variant),
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-            ),
-          )
+          .initEngine(_evaluationContext(studyState.variant), options: _evaluationOptions)
           .then((_) {
             _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
               _startEngineEval();
@@ -199,6 +192,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
   EvaluationContext _evaluationContext(Variant variant) =>
       EvaluationContext(variant: variant, initialPosition: _root.position);
+
+  EvaluationOptions get _evaluationOptions =>
+      ref.read(analysisPreferencesProvider).evaluationOptions;
 
   void onUserMove(NormalMove move) {
     if (!state.hasValue || state.requireValue.position == null) return;
@@ -366,17 +362,9 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     );
 
     if (state.requireValue.isEngineAvailable) {
-      final prefs = ref.read(analysisPreferencesProvider);
       await ref
           .read(evaluationServiceProvider)
-          .initEngine(
-            _evaluationContext(state.requireValue.variant),
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-            ),
-          );
+          .initEngine(_evaluationContext(state.requireValue.variant), options: _evaluationOptions);
       _startEngineEval();
     } else {
       _stopEngineEval();
@@ -389,15 +377,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
     ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _root.updateAll((node) => node.eval = null);
 
@@ -413,15 +393,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   void setEngineCores(int numEngineCores) {
     ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -429,15 +401,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
   void setEngineSearchTime(Duration searchTime) {
     ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: searchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -514,20 +478,34 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     }
   }
 
+  void _refreshCurrentNode() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
+
   void _startEngineEval() {
-    final state = this.state.valueOrNull;
-    if (state == null || !state.isEngineAvailable) return;
+    final curState = state.valueOrNull;
+    if (curState == null || !curState.isEngineAvailable) return;
 
     ref
         .read(evaluationServiceProvider)
         .start(
-          state.currentPath,
-          _root.branchesOn(state.currentPath).map(Step.fromNode),
+          curState.currentPath,
+          _root.branchesOn(curState.currentPath).map(Step.fromNode),
           // Note: AnalysisController passes _root.eval as initialPositionEval here,
           // but for studies this leads to false positive cache hits when switching between chapters.
-          shouldEmit: (work) => work.path == this.state.valueOrNull?.currentPath,
+          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
-        ?.forEach((t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2));
+        ?.forEach((t) {
+          final (work, eval) = t;
+          _root.updateAt(work.path, (node) => node.eval = eval);
+          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
+            _refreshCurrentNode();
+          }
+        });
   }
 
   void _debouncedStartEngineEval() {
@@ -542,11 +520,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     if (!state.hasValue) return;
 
     // update the current node with last cached eval
-    state = AsyncValue.data(
-      state.requireValue.copyWith(
-        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
+    _refreshCurrentNode();
   }
 }
 

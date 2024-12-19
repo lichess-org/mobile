@@ -99,6 +99,9 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
     return _$AnalysisPrefsFromJson(json);
   }
+
+  EvaluationOptions get evaluationOptions =>
+      EvaluationOptions(multiPv: numEvalLines, cores: numEngineCores, searchTime: engineSearchTime);
 }
 
 Duration _searchTimeDefault() {

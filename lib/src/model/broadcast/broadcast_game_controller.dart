@@ -120,20 +120,11 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
     );
 
     if (broadcastState.isLocalEvaluationEnabled) {
-      evaluationService
-          .initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-            ),
-          )
-          .then((_) {
-            _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-              _startEngineEval();
-            });
-          });
+      evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
+        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
+          _startEngineEval();
+        });
+      });
     }
 
     return broadcastState;
@@ -250,6 +241,9 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
 
   EvaluationContext get _evaluationContext =>
       EvaluationContext(variant: Variant.standard, initialPosition: _root.position);
+
+  EvaluationOptions get _evaluationOptions =>
+      ref.read(analysisPreferencesProvider).evaluationOptions;
 
   void onUserMove(NormalMove move) {
     if (!state.hasValue) return;
@@ -388,17 +382,9 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
     );
 
     if (state.requireValue.isLocalEvaluationEnabled) {
-      final prefs = ref.read(analysisPreferencesProvider);
       await ref
           .read(evaluationServiceProvider)
-          .initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-            ),
-          );
+          .initEngine(_evaluationContext, options: _evaluationOptions);
       _startEngineEval();
     } else {
       _stopEngineEval();
@@ -411,15 +397,7 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
 
     ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _root.updateAll((node) => node.eval = null);
 
@@ -435,15 +413,7 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
   void setEngineCores(int numEngineCores) {
     ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -451,15 +421,7 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
   void setEngineSearchTime(Duration searchTime) {
     ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: searchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -540,10 +502,13 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
     }
   }
 
-  void _startEngineEval() {
+  Future<void> _startEngineEval() async {
     if (!state.hasValue) return;
 
     if (!state.requireValue.isLocalEvaluationEnabled) return;
+    await ref
+        .read(evaluationServiceProvider)
+        .ensureEngineInitialized(_evaluationContext, options: _evaluationOptions);
     ref
         .read(evaluationServiceProvider)
         .start(
@@ -552,7 +517,21 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
           initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
-        ?.forEach((t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2));
+        ?.forEach((t) {
+          final (work, eval) = t;
+          _root.updateAt(work.path, (node) => node.eval = eval);
+          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
+            _refreshCurrentNode();
+          }
+        });
+  }
+
+  void _refreshCurrentNode() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
   }
 
   void _debouncedStartEngineEval() {
@@ -566,11 +545,7 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
 
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
-    state = AsyncData(
-      state.requireValue.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
+    _refreshCurrentNode();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
