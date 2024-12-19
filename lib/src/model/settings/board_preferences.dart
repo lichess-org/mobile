@@ -94,12 +94,19 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
+
+  Future<void> adjustColors({double? brightness, double? hue}) {
+    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
+  @Assert(
+    'brightness == null || brightness >= -1.0 && brightness <= 1.0, hue == null || hue >= -1 && hue <= 1',
+  )
   const factory BoardPrefs({
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
@@ -126,6 +133,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
+    @JsonKey(defaultValue: 0.0) required double brightness,
+    @JsonKey(defaultValue: 0.0) required double hue,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -145,12 +154,18 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    brightness: 0.0,
+    hue: 0.0,
   );
+
+  bool get hasColorAdjustments => brightness != 0.0 || hue != 0.0;
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
+      brightness: brightness,
+      hue: hue,
       border:
           showBorder
               ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)

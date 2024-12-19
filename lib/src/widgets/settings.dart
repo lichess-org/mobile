@@ -71,6 +71,7 @@ class SwitchSettingTile extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.leading,
+    this.padding,
     super.key,
   });
 
@@ -79,10 +80,12 @@ class SwitchSettingTile extends StatelessWidget {
   final bool value;
   final void Function(bool value)? onChanged;
   final Widget? leading;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
+      padding: padding,
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle: subtitle,
