@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 class GamePlayer extends StatelessWidget {
   const GamePlayer({
     required this.player,
+    required this.isActiveGameOfCurrentUser,
     this.clock,
     this.materialDiff,
     this.materialDifferenceFormat,
@@ -40,6 +41,10 @@ class GamePlayer extends StatelessWidget {
   });
 
   final Player player;
+
+  /// Whether we're displaying this player as part of an active game of the current user.
+  /// This might influence whether their rating is shown or not, based on the [ShowRatings] setting.
+  final bool isActiveGameOfCurrentUser;
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
   final MaterialDifferenceFormat? materialDifferenceFormat;
@@ -119,6 +124,7 @@ class GamePlayer extends StatelessWidget {
               ],
               if (player.rating != null)
                 RatingPrefAware(
+                  isActiveGameOfCurrentUser: isActiveGameOfCurrentUser,
                   child: Text.rich(
                     TextSpan(
                       text: ' ${player.rating}${player.provisional == true ? '?' : ''}',

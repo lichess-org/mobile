@@ -184,8 +184,16 @@ class _BoardBody extends ConsumerWidget {
 
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final black = GamePlayer(key: const ValueKey('black-player'), player: gameData.black);
-    final white = GamePlayer(key: const ValueKey('white-player'), player: gameData.white);
+    final black = GamePlayer(
+      key: const ValueKey('black-player'),
+      player: gameData.black,
+      isActiveGameOfCurrentUser: false,
+    );
+    final white = GamePlayer(
+      key: const ValueKey('white-player'),
+      player: gameData.white,
+      isActiveGameOfCurrentUser: false,
+    );
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
@@ -204,12 +212,14 @@ class _BoardBody extends ConsumerWidget {
         final black = GamePlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
+          isActiveGameOfCurrentUser: false,
           clock: blackClock != null ? Clock(timeLeft: blackClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
         final white = GamePlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
+          isActiveGameOfCurrentUser: false,
           clock: whiteClock != null ? Clock(timeLeft: whiteClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );

@@ -54,10 +54,10 @@ class UserFullNameWidget extends ConsumerWidget {
     final provisionalStr = provisional == true ? '?' : '';
     final ratingStr = rating != null ? '($rating$provisionalStr)' : null;
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
-    final shouldShowRating = showRatingAsync.maybeWhen(
-      data: (showRating) => showRating,
-      orElse: () => false,
-    );
+    final shouldShowRating = switch (showRatingAsync) {
+      AsyncData(:final value) => value != ShowRatings.no,
+      _ => true,
+    };
 
     final displayName =
         user?.name ??

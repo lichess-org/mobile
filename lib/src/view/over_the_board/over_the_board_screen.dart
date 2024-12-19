@@ -276,6 +276,7 @@ class _Player extends ConsumerWidget {
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
+        isActiveGameOfCurrentUser: true,
         player: Player(
           onGame: true,
           user: LightUser(id: UserId(side.name), name: side.name.capitalize()),
