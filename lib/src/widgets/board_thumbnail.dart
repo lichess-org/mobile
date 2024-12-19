@@ -83,6 +83,8 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                 animationDuration: widget.animationDuration!,
                 pieceAssets: boardPrefs.pieceSet.assets,
                 colorScheme: boardPrefs.boardTheme.colors,
+                hue: boardPrefs.hue,
+                brightness: boardPrefs.brightness,
               ),
             )
             : StaticChessboard(
@@ -95,6 +97,8 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
               boxShadow: boardShadows,
               pieceAssets: boardPrefs.pieceSet.assets,
               colorScheme: boardPrefs.boardTheme.colors,
+              hue: boardPrefs.hue,
+              brightness: boardPrefs.brightness,
             );
 
     final maybeTappableBoard =

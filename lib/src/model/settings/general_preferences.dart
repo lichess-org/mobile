@@ -1,8 +1,8 @@
-import 'dart:ui' show Locale;
+import 'dart:ui' show Color, Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'general_preferences.freezed.dart';
@@ -26,7 +26,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return fetch();
   }
 
-  Future<void> setThemeMode(BackgroundThemeMode themeMode) {
+  Future<void> setBackgroundThemeMode(BackgroundThemeMode themeMode) {
     return save(state.copyWith(themeMode: themeMode));
   }
 
@@ -46,38 +46,13 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> toggleSystemColors() async {
-    await save(state.copyWith(systemColors: !state.systemColors));
-    if (state.systemColors == false) {
-      final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-      if (boardTheme == BoardTheme.system) {
-        await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.brown);
-      }
-    } else {
-      await ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system);
-    }
+  Future<void> setCustomThemeSeed(Color? color) {
+    return save(state.copyWith(customThemeSeed: color));
   }
-}
 
-Map<String, dynamic>? _localeToJson(Locale? locale) {
-  return locale != null
-      ? {
-        'languageCode': locale.languageCode,
-        'countryCode': locale.countryCode,
-        'scriptCode': locale.scriptCode,
-      }
-      : null;
-}
-
-Locale? _localeFromJson(Map<String, dynamic>? json) {
-  if (json == null) {
-    return null;
+  Future<void> setAppThemeSeed(AppThemeSeed seed) {
+    return save(state.copyWith(appThemeSeed: seed));
   }
-  return Locale.fromSubtags(
-    languageCode: json['languageCode'] as String,
-    countryCode: json['countryCode'] as String?,
-    scriptCode: json['scriptCode'] as String?,
-  );
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -89,11 +64,17 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    /// Should enable system color palette (android 12+ only)
-    @JsonKey(defaultValue: true) required bool systemColors,
+    /// Custom theme seed color
+    @ColorConverter() Color? customThemeSeed,
+
+    @Deprecated('Use appThemeSeed instead') bool? systemColors,
+
+    /// App theme seed
+    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
+    required AppThemeSeed appThemeSeed,
 
     /// Locale to use in the app, use system locale if null
-    @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,
+    @LocaleConverter() Locale? locale,
   }) = _GeneralPrefs;
 
   static const defaults = GeneralPrefs(
@@ -101,12 +82,23 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    systemColors: true,
+    appThemeSeed: AppThemeSeed.board,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
     return _$GeneralPrefsFromJson(json);
   }
+}
+
+enum AppThemeSeed {
+  /// The app theme is based on the user's system theme (only available on Android 10+).
+  system,
+
+  /// The app theme is based on the chessboard.
+  board,
+
+  /// The app theme is based on a specific color.
+  color,
 }
 
 /// Describes the background theme of the app.

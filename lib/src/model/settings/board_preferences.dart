@@ -11,6 +11,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
+const kBoardDefaultBrightnessFilter = 1.0;
+const kBoardDefaultHueFilter = 0.0;
+
 @riverpod
 class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
@@ -94,12 +97,17 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
+
+  Future<void> adjustColors({double? brightness, double? hue}) {
+    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
+  @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
@@ -126,6 +134,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
+    @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
+    @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -145,12 +155,19 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    brightness: kBoardDefaultBrightnessFilter,
+    hue: kBoardDefaultHueFilter,
   );
+
+  bool get hasColorAdjustments =>
+      brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
+      brightness: brightness,
+      hue: hue,
       border:
           showBorder
               ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)

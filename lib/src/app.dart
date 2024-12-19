@@ -139,13 +139,22 @@ class _AppState extends ConsumerState<Application> {
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
-        final colorScheme =
-            generalPrefs.systemColors && dynamicColorScheme != null
-                ? dynamicColorScheme
-                : ColorScheme.fromSeed(
+        final ColorScheme colorScheme = switch (generalPrefs.appThemeSeed) {
+          AppThemeSeed.color => ColorScheme.fromSeed(
+            seedColor: generalPrefs.customThemeSeed ?? kDefaultSeedColor,
+            brightness: brightness,
+          ),
+          AppThemeSeed.board => ColorScheme.fromSeed(
+            seedColor: boardTheme.colors.darkSquare,
+            brightness: brightness,
+          ),
+          AppThemeSeed.system =>
+            dynamicColorScheme ??
+                ColorScheme.fromSeed(
                   seedColor: boardTheme.colors.darkSquare,
                   brightness: brightness,
-                );
+                ),
+        };
 
         final cupertinoThemeData = CupertinoThemeData(
           primaryColor: colorScheme.primary,
