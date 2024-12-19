@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -24,8 +25,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-
-const _kBoardSize = 200.0;
 
 class ThemeScreen extends StatelessWidget {
   const ThemeScreen({super.key});
@@ -186,6 +185,8 @@ class _BodyState extends ConsumerState<_Body> {
 
     final bool hasAjustedColors = brightness != 0.0 || hue != 0.0;
 
+    final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
+
     final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
 
     return NotificationListener(
@@ -213,7 +214,12 @@ class _BodyState extends ConsumerState<_Body> {
                     padding:
                         Styles.bodyPadding +
                         EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                    child: _BoardPreview(boardPrefs: boardPrefs, brightness: brightness, hue: hue),
+                    child: _BoardPreview(
+                      size: boardSize,
+                      boardPrefs: boardPrefs,
+                      brightness: brightness,
+                      hue: hue,
+                    ),
                   ),
                 ),
               ),
@@ -223,10 +229,15 @@ class _BodyState extends ConsumerState<_Body> {
               pinned: true,
               title: const Text('Theme'),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(_kBoardSize + 16.0),
+                preferredSize: Size.fromHeight(boardSize + 16.0),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: _BoardPreview(boardPrefs: boardPrefs, brightness: brightness, hue: hue),
+                  child: _BoardPreview(
+                    size: boardSize,
+                    boardPrefs: boardPrefs,
+                    brightness: brightness,
+                    hue: hue,
+                  ),
                 ),
               ),
             ),
@@ -439,11 +450,17 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _BoardPreview extends StatelessWidget {
-  const _BoardPreview({required this.boardPrefs, required this.brightness, required this.hue});
+  const _BoardPreview({
+    required this.size,
+    required this.boardPrefs,
+    required this.brightness,
+    required this.hue,
+  });
 
   final BoardPrefs boardPrefs;
   final double brightness;
   final double hue;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -452,7 +469,7 @@ class _BoardPreview extends StatelessWidget {
         brightness: brightness,
         hue: hue,
         child: Chessboard.fixed(
-          size: _kBoardSize,
+          size: size,
           orientation: Side.white,
           lastMove: const NormalMove(from: Square.e2, to: Square.e4),
           fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
