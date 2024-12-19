@@ -37,6 +37,8 @@ const kClueLessDeviation = 230;
 
 // UI
 
+const kDefaultSeedColor = Color.fromARGB(255, 191, 128, 29);
+
 const kGoldenRatio = 1.61803398875;
 
 /// Flex golden ratio base (flex has to be an int).
