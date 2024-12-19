@@ -483,8 +483,8 @@ class _BoardPreview extends StatelessWidget {
                 ),
               }.lock,
           settings: boardPrefs.toBoardSettings().copyWith(
-            brightness: 0.0,
-            hue: 0.0,
+            brightness: kBoardDefaultBrightnessFilter,
+            hue: kBoardDefaultHueFilter,
             borderRadius: const BorderRadius.all(Radius.circular(4.0)),
             boxShadow: boardShadows,
           ),
