@@ -191,20 +191,11 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     );
 
     if (analysisState.isEngineAvailable) {
-      evaluationService
-          .initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: prefs.engineSearchTime,
-            ),
-          )
-          .then((_) {
-            _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-              _startEngineEval();
-            });
-          });
+      evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
+        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
+          _startEngineEval();
+        });
+      });
     }
 
     return analysisState;
@@ -212,6 +203,9 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
 
   EvaluationContext get _evaluationContext =>
       EvaluationContext(variant: _variant, initialPosition: _root.position);
+
+  EvaluationOptions get _evaluationOptions =>
+      ref.read(analysisPreferencesProvider).evaluationOptions;
 
   void onUserMove(NormalMove move, {bool shouldReplace = false}) {
     if (!state.requireValue.position.isLegal(move)) return;
@@ -360,17 +354,9 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     );
 
     if (state.requireValue.isEngineAvailable) {
-      final prefs = ref.read(analysisPreferencesProvider);
       await ref
           .read(evaluationServiceProvider)
-          .initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: prefs.engineSearchTime,
-            ),
-          );
+          .initEngine(_evaluationContext, options: _evaluationOptions);
       _startEngineEval();
     } else {
       _stopEngineEval();
@@ -381,15 +367,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void setNumEvalLines(int numEvalLines) {
     ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _root.updateAll((node) => node.eval = null);
 
@@ -406,15 +384,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void setEngineCores(int numEngineCores) {
     ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -422,15 +392,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void setEngineSearchTime(Duration searchTime) {
     ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
 
-    ref
-        .read(evaluationServiceProvider)
-        .setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: searchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -553,6 +515,14 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     }
   }
 
+  void _refreshCurrentNode() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
+
   Future<(UciPath, FullOpening)?> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(_variant)) return null;
 
@@ -572,15 +542,16 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
 
     final curState = state.requireValue;
     if (curState.currentPath == path) {
-      state = AsyncData(
-        curState.copyWith(currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(path))),
-      );
+      _refreshCurrentNode();
     }
   }
 
-  void _startEngineEval() {
+  Future<void> _startEngineEval() async {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable) return;
+    await ref
+        .read(evaluationServiceProvider)
+        .ensureEngineInitialized(_evaluationContext, options: _evaluationOptions);
     ref
         .read(evaluationServiceProvider)
         .start(
@@ -589,7 +560,13 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
           initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
-        ?.forEach((t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2));
+        ?.forEach((t) {
+          final (work, eval) = t;
+          _root.updateAt(work.path, (node) => node.eval = eval);
+          if (work.path == curState.currentPath && eval.searchTime >= work.searchTime) {
+            _refreshCurrentNode();
+          }
+        });
   }
 
   void _debouncedStartEngineEval() {
@@ -601,12 +578,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void _stopEngineEval() {
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
-    final curState = state.requireValue;
-    state = AsyncData(
-      curState.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
-      ),
-    );
+    _refreshCurrentNode();
   }
 
   void _listenToServerAnalysisEvents() {

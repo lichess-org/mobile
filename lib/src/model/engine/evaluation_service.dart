@@ -49,6 +49,8 @@ class EvaluationService {
 
   /// Initialize the engine with the given context and options.
   ///
+  /// If the engine is already initialized, it is disposed first.
+  ///
   /// An optional [engineFactory] can be provided, it defaults to Stockfish.
   ///
   /// If [options] is not provided, the default options are used.
@@ -59,7 +61,7 @@ class EvaluationService {
     Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? options,
   }) async {
-    if (context != _context) {
+    if (_context != null || _engine != null) {
       await disposeEngine();
     }
     _context = context;
@@ -79,6 +81,17 @@ class EvaluationService {
         );
       }
     });
+  }
+
+  /// Ensure the engine is initialized with the given context and options.
+  Future<void> ensureEngineInitialized(
+    EvaluationContext context, {
+    Engine Function() engineFactory = StockfishEngine.new,
+    EvaluationOptions? options,
+  }) async {
+    if (_engine == null || _context != context) {
+      await initEngine(context, engineFactory: engineFactory, options: options);
+    }
   }
 
   void setOptions(EvaluationOptions options) {

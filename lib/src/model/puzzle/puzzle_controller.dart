@@ -447,8 +447,9 @@ class PuzzleController extends _$PuzzleController {
     return pgn;
   }
 
-  void _startEngineEval() {
+  Future<void> _startEngineEval() async {
     if (!state.isEngineEnabled) return;
+    await ref.read(evaluationServiceProvider).ensureEngineInitialized(state.evaluationContext);
     _engineEvalDebounce(
       () => ref
           .read(evaluationServiceProvider)
@@ -463,6 +464,9 @@ class PuzzleController extends _$PuzzleController {
             _gameTree.updateAt(work.path, (node) {
               node.eval = eval;
             });
+            if (work.path == state.currentPath && eval.searchTime >= work.searchTime) {
+              state = state.copyWith(node: _gameTree.branchAt(state.currentPath).view);
+            }
           }),
     );
   }
