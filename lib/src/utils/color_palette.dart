@@ -45,10 +45,6 @@ void setCorePalette(CorePalette? palette) {
   }
 }
 
-Color? getCorePalettePrimary() {
-  return _corePalette?.primary != null ? Color(_corePalette!.primary.get(50)) : null;
-}
-
 /// Get the core palette if available (android 12+ only).
 CorePalette? getCorePalette() {
   return _corePalette;
