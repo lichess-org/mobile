@@ -108,80 +108,78 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
       }
     }
 
-    return showRatingAsync.maybeWhen(
-      data: (showRatings) {
-        return SafeArea(
-          child: Padding(
-            padding: Styles.verticalBodyPadding,
-            child: ListView(
-              children: [
-                Column(
-                  children:
-                      pgnHeaders.entries
-                          .where((e) => showRatings || !_ratingHeaders.contains(e.key))
-                          .mapIndexed((index, e) {
-                            return _EditablePgnField(
-                              entry: e,
-                              controller: _controllers[e.key]!,
-                              focusNode: _focusNodes[e.key]!,
-                              onTap: () {
-                                _controllers[e.key]!.selection = TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: _controllers[e.key]!.text.length,
+    return switch (showRatingAsync) {
+      AsyncData(:final value) => SafeArea(
+        child: Padding(
+          padding: Styles.verticalBodyPadding,
+          child: ListView(
+            children: [
+              Column(
+                children:
+                    pgnHeaders.entries
+                        .where((e) => value != ShowRatings.no || !_ratingHeaders.contains(e.key))
+                        .mapIndexed((index, e) {
+                          return _EditablePgnField(
+                            entry: e,
+                            controller: _controllers[e.key]!,
+                            focusNode: _focusNodes[e.key]!,
+                            onTap: () {
+                              _controllers[e.key]!.selection = TextSelection(
+                                baseOffset: 0,
+                                extentOffset: _controllers[e.key]!.text.length,
+                              );
+                              if (e.key == 'Result') {
+                                _showResultChoicePicker(
+                                  e,
+                                  context: context,
+                                  onEntryChanged: () {
+                                    focusAndSelectNextField(index, pgnHeaders);
+                                  },
                                 );
-                                if (e.key == 'Result') {
-                                  _showResultChoicePicker(
-                                    e,
-                                    context: context,
-                                    onEntryChanged: () {
-                                      focusAndSelectNextField(index, pgnHeaders);
-                                    },
-                                  );
-                                } else if (e.key == 'Date') {
-                                  _showDatePicker(
-                                    e,
-                                    context: context,
-                                    onEntryChanged: () {
-                                      focusAndSelectNextField(index, pgnHeaders);
-                                    },
-                                  );
-                                }
-                              },
-                              onSubmitted: (value) {
-                                ref.read(ctrlProvider.notifier).updatePgnHeader(e.key, value);
-                                focusAndSelectNextField(index, pgnHeaders);
-                              },
-                            );
-                          })
-                          .toList(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Builder(
-                    builder: (context) {
-                      return FatButton(
-                        semanticsLabel: 'Share PGN',
-                        onPressed: () {
-                          launchShareDialog(
-                            context,
-                            text:
-                                ref
-                                    .read(analysisControllerProvider(widget.options).notifier)
-                                    .makeExportPgn(),
+                              } else if (e.key == 'Date') {
+                                _showDatePicker(
+                                  e,
+                                  context: context,
+                                  onEntryChanged: () {
+                                    focusAndSelectNextField(index, pgnHeaders);
+                                  },
+                                );
+                              }
+                            },
+                            onSubmitted: (value) {
+                              ref.read(ctrlProvider.notifier).updatePgnHeader(e.key, value);
+                              focusAndSelectNextField(index, pgnHeaders);
+                            },
                           );
-                        },
-                        child: Text(context.l10n.mobileShareGamePGN),
-                      );
-                    },
-                  ),
+                        })
+                        .toList(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Builder(
+                  builder: (context) {
+                    return FatButton(
+                      semanticsLabel: 'Share PGN',
+                      onPressed: () {
+                        launchShareDialog(
+                          context,
+                          text:
+                              ref
+                                  .read(analysisControllerProvider(widget.options).notifier)
+                                  .makeExportPgn(),
+                        );
+                      },
+                      child: Text(context.l10n.mobileShareGamePGN),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
+        ),
+      ),
+      _ => const SizedBox.shrink(),
+    };
   }
 
   Future<void> _showDatePicker(

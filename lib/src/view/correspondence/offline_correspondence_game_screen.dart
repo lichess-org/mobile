@@ -135,6 +135,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     final black = GamePlayer(
       player: game.black,
+      isActiveGameOfCurrentUser: !game.finished,
       materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.black) : null,
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
@@ -153,6 +154,7 @@ class _BodyState extends ConsumerState<_Body> {
     );
     final white = GamePlayer(
       player: game.white,
+      isActiveGameOfCurrentUser: !game.finished,
       materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.white) : null,
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
