@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -19,7 +20,6 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final _logger = Logger('StudyListScreen');
 
@@ -385,7 +385,7 @@ class _StudySubtitle extends StatelessWidget {
             ),
             const TextSpan(text: ' • '),
           ],
-          TextSpan(text: timeago.format(study.updatedAt)),
+          TextSpan(text: relativeDate(context.l10n, study.updatedAt)),
         ],
       ),
     );
