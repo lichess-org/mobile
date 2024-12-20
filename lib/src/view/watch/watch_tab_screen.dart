@@ -260,6 +260,8 @@ class _BroadcastTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
     return PlatformListTile(
       onTap: () {
         pushPlatformRoute(
@@ -275,6 +277,8 @@ class _BroadcastTile extends ConsumerWidget {
                 broadcast.tour.imageUrl!,
                 width: 50.0,
                 height: 50.0,
+                cacheWidth: (50.0 * devicePixelRatio).toInt(),
+                cacheHeight: (50.0 * devicePixelRatio).toInt(),
                 fit: BoxFit.cover,
                 errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
               )

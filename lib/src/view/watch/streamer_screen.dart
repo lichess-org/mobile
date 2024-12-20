@@ -71,6 +71,8 @@ class StreamerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
     return PlatformListTile(
       padding:
           Theme.of(context).platform == TargetPlatform.iOS
@@ -87,7 +89,14 @@ class StreamerListTile extends StatelessWidget {
             Theme.of(context).platform == TargetPlatform.android
                 ? const EdgeInsets.all(5.0)
                 : EdgeInsets.zero,
-        child: Image.network(streamer.image, width: 50, height: 50, fit: BoxFit.cover),
+        child: Image.network(
+          streamer.image,
+          width: 50,
+          height: 50,
+          cacheWidth: (50.0 * devicePixelRatio).toInt(),
+          cacheHeight: (50.0 * devicePixelRatio).toInt(),
+          fit: BoxFit.cover,
+        ),
       ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
