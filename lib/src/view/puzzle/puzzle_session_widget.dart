@@ -107,7 +107,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                                     puzzle: puzzle,
                                   );
 
-                                  ref.read(widget.ctrlProvider.notifier).loadPuzzle(nextContext);
+                                  ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
                                 } finally {
                                   if (mounted) {
                                     setState(() {
