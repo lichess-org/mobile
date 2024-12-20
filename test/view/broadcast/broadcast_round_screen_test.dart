@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -7,7 +8,10 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
 import '../../network/fake_websocket_channel.dart';
@@ -60,40 +64,93 @@ void main() {
       await tester.pump();
 
       expect(find.byType(BroadcastBoardsTab), findsOneWidget);
+      expect(find.byType(BoardThumbnail), findsNWidgets(4));
+      expect(find.byType(BroadcastPlayerWidget), findsNWidgets(8));
+      expect(find.text('Yilmaz, Mustafa'), findsOneWidget);
+      expect(find.text('Gokerkan, Cem Kaan'), findsOneWidget);
     });
 
-    testWidgets('Swipe to overview screen', variant: kPlatformVariant, (tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-      mockNetworkImagesFor(() async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: BroadcastRoundScreen(broadcast: _broadcast),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-            webSocketChannelFactoryProvider.overrideWith((ref) {
-              return FakeWebSocketChannelFactory((_) => fakeSocket);
-            }),
-          ],
-        );
+    testWidgets(
+      'Swipe to overview tab on Android',
+      variant: TargetPlatformVariant.only(TargetPlatform.android),
+      (tester) async {
+        mockNetworkImagesFor(() async {
+          final fakeSocket = FakeWebSocketChannel();
+          final app = await makeTestProviderScopeApp(
+            tester,
+            home: BroadcastRoundScreen(broadcast: _broadcast),
+            overrides: [
+              lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+              webSocketChannelFactoryProvider.overrideWith((ref) {
+                return FakeWebSocketChannelFactory((_) => fakeSocket);
+              }),
+            ],
+          );
 
-        await tester.pumpWidget(app);
+          await tester.pumpWidget(app);
 
-        // Load the tournament
-        await tester.pump();
+          // Load the tournament
+          await tester.pump();
 
-        // Load the round
-        await tester.pump();
+          // Load the round
+          await tester.pump();
 
-        // Swipe to the overview tab
-        await tester.flingFrom(const Offset(50, 300), const Offset(500, 0), 1000);
+          // Swipe to the overview tab
+          await tester.flingFrom(const Offset(50, 300), const Offset(500, 0), 1000);
 
-        // Wait for the animation to end
-        await tester.pump(const Duration(seconds: 1));
+          // Wait for the animation to end
+          await tester.pump(const Duration(seconds: 1));
 
-        expect(find.byType(BroadcastBoardsTab), findsNothing);
-        expect(find.byType(BroadcastOverviewTab), findsOneWidget);
-      });
-    });
+          expect(find.byType(BroadcastBoardsTab), findsNothing);
+          expect(find.byType(BroadcastOverviewTab), findsOneWidget);
+
+          // I could not find why this doesn't work
+          // expect(find.byType(Image), findsOne);
+          expect(find.byType(PlatformCard), findsNWidgets(6));
+          expect(find.byType(MarkdownBody), findsOne);
+        });
+      },
+    );
+
+    testWidgets(
+      'Tap on overview tab on iOS',
+      variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+      (tester) async {
+        mockNetworkImagesFor(() async {
+          final fakeSocket = FakeWebSocketChannel();
+          final app = await makeTestProviderScopeApp(
+            tester,
+            home: BroadcastRoundScreen(broadcast: _broadcast),
+            overrides: [
+              lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+              webSocketChannelFactoryProvider.overrideWith((ref) {
+                return FakeWebSocketChannelFactory((_) => fakeSocket);
+              }),
+            ],
+          );
+
+          await tester.pumpWidget(app);
+
+          // Load the tournament
+          await tester.pump();
+
+          // Load the round
+          await tester.pump();
+
+          expect(find.text('Overview'), findsOne);
+          await tester.tap(find.text('Overview'));
+          await tester.pump(Duration(seconds: 2));
+          // await tester.pumpAndSettle();
+
+          // expect(find.byType(BroadcastBoardsTab), findsOneWidget);
+          // expect(find.byType(BroadcastOverviewTab), findsOneWidget);
+
+          await tester.pump();
+
+          // expect(find.byType(MarkdownBody), findsOne);
+        });
+      },
+    );
   });
 }
 

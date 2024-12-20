@@ -53,8 +53,8 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(BroadcastPlayerWidget), findsNWidgets(2));
-      find.text('Dastan, Muhammed Batuhan');
-      find.text('Gokerkan, Cem Kaan');
+      expect(find.text('Dastan, Muhammed Batuhan'), findsOne);
+      expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
 
     testWidgets('Receives a new move of the game', variant: kPlatformVariant, (tester) async {
