@@ -240,7 +240,9 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void _saveCurrentStreakLocally() {
+    if(state.streak != null) {
     ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
+    }
   }
 
   void _sendStreakResult() {
