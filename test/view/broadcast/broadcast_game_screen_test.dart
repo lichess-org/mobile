@@ -76,17 +76,29 @@ void main() {
 
       expect(find.byKey(const Key('c1-whitebishop')), findsOneWidget);
 
-      fakeSocket.addIncomingMessages([
+      await addSocketMessage(
+        tester,
+        fakeSocket,
         r'''{"v":151,"t":"addNode","d":{"n":{"ply":23,"fen":"rnq2rk1/pp2ppbp/5np1/2P1N3/2N5/4B1P1/PP2PPKP/R2Q1R2 b - - 2 12","id":"%7","uci":"c1e3","san":"Be3","clock":359500},"p":{"chapterId":"G2LUflKg","path":")8aP19YQ(1`Y'*_b.>VF-=F=$3UE3=]O8GOF>EF1)1^]"},"d":"0S 978 TCEJNZ8 WGO 3NV 6xEILQSYZ78 !? UM 5OQZ 2V? XHP","s":false,"relayPath":"!"}}''',
-      ]);
+      );
 
-      // Two pump are required to get the move but I don't know why
-      await tester.pump();
+      // The controller process the message
       await tester.pump();
 
       expect(find.byKey(const Key('e3-whitebishop')), findsOneWidget);
     });
   });
+}
+
+Future<void> addSocketMessage(
+  WidgetTester tester,
+  FakeWebSocketChannel fakeSocket,
+  String message,
+) async {
+  fakeSocket.addIncomingMessages([message]);
+
+  // Send message to the socket
+  await tester.pump();
 }
 
 const _tournamentId = BroadcastTournamentId('RAIoMC7L');

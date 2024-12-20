@@ -51,8 +51,12 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Two pump are required to load boards tab but I don't know why
+      // Load the tournament
       await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the round
       await tester.pump();
 
       expect(find.byType(BroadcastBoardsTab), findsOneWidget);
@@ -74,8 +78,10 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        // Two pump are required to load boards tab but I don't know why
+        // Load the tournament
         await tester.pump();
+
+        // Load the round
         await tester.pump();
 
         // Swipe to the overview tab
