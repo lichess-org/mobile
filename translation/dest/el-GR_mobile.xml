@@ -22,6 +22,7 @@
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Δεν υπάρχουν γρίφοι για τις συγκεκριμένες επιλογές φίλτρων, παρακαλώ δοκιμάστε κάποιες άλλες</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Δεν υπάρχουν στοιχεία. Παίξτε κάποιους γύρους Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Θα χάσετε το τρέχων σερί αποτελεσμάτων σας και η βαθμολογία θα αποθηκευτεί.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Παίξτε γρίφους από τα αγαπημένα σας ανοίγματα, ή επιλέξτε θέμα.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Γρίφοι</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Πρόσφατες αναζητήσεις</string>
