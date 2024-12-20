@@ -139,14 +139,18 @@ void main() {
 
           expect(find.text('Overview'), findsOne);
           await tester.tap(find.text('Overview'));
-          await tester.pump(Duration(seconds: 2));
-          // await tester.pumpAndSettle();
 
-          // expect(find.byType(BroadcastBoardsTab), findsOneWidget);
-          // expect(find.byType(BroadcastOverviewTab), findsOneWidget);
-
+          // No idea why two pumps are needed with second one needing a duration
           await tester.pump();
+          await tester.pump(const Duration(seconds: 1));
 
+          expect(find.byType(BroadcastBoardsTab), findsNothing);
+          expect(find.byType(BroadcastOverviewTab), findsOneWidget);
+
+          // I could not find why this doesn't work
+          // expect(find.byType(Image), findsOne);
+          expect(find.byType(PlatformCard), findsNWidgets(6));
+          // No idea why this doesn't work
           // expect(find.byType(MarkdownBody), findsOne);
         });
       },
