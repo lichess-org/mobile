@@ -140,10 +140,6 @@ class _AppState extends ConsumerState<Application> {
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
         final ColorScheme colorScheme = switch (generalPrefs.appThemeSeed) {
-          AppThemeSeed.color => ColorScheme.fromSeed(
-            seedColor: generalPrefs.customThemeSeed ?? kDefaultSeedColor,
-            brightness: brightness,
-          ),
           AppThemeSeed.board => ColorScheme.fromSeed(
             seedColor: boardTheme.colors.darkSquare,
             brightness: brightness,

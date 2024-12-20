@@ -1,4 +1,4 @@
-import 'dart:ui' show Color, Locale;
+import 'dart:ui' show Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -46,10 +46,6 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> setCustomThemeSeed(Color? color) {
-    return save(state.copyWith(customThemeSeed: color));
-  }
-
   Future<void> setAppThemeSeed(AppThemeSeed seed) {
     return save(state.copyWith(appThemeSeed: seed));
   }
@@ -63,9 +59,6 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
-
-    /// Custom theme seed color
-    @ColorConverter() Color? customThemeSeed,
 
     @Deprecated('Use appThemeSeed instead') bool? systemColors,
 
@@ -96,9 +89,6 @@ enum AppThemeSeed {
 
   /// The app theme is based on the chessboard.
   board,
-
-  /// The app theme is based on a specific color.
-  color,
 }
 
 /// Describes the background theme of the app.

@@ -233,7 +233,7 @@ class _Body extends ConsumerWidget {
           ),
           PlatformListTile(
             leading: const Icon(LichessIcons.chess_board),
-            title: Text(context.l10n.board),
+            title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
             trailing:
                 Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
@@ -241,7 +241,7 @@ class _Body extends ConsumerWidget {
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.board,
+                title: context.l10n.preferencesGameBehavior,
                 builder: (context) => const BoardSettingsScreen(),
               );
             },

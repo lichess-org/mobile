@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -19,10 +18,8 @@ import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class ThemeScreen extends StatelessWidget {
@@ -104,79 +101,6 @@ class _BodyState extends ConsumerState<_Body> {
     return false;
   }
 
-  void _showColorPicker() {
-    final generalPrefs = ref.read(generalPreferencesProvider);
-    showAdaptiveDialog<Object>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        bool useDefault = generalPrefs.customThemeSeed == null;
-        Color color = generalPrefs.customThemeSeed ?? kDefaultSeedColor;
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return PlatformAlertDialog(
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    HueRingPicker(
-                      enableAlpha: false,
-                      colorPickerHeight: 200,
-                      displayThumbColor: false,
-                      portraitOnly: true,
-                      pickerColor: color,
-                      onColorChanged: (c) {
-                        setState(() {
-                          useDefault = false;
-                          color = c;
-                        });
-                      },
-                    ),
-                    SecondaryButton(
-                      semanticsLabel: 'Default color',
-                      onPressed:
-                          !useDefault
-                              ? () {
-                                setState(() {
-                                  useDefault = true;
-                                  color = kDefaultSeedColor;
-                                });
-                              }
-                              : null,
-                      child: const Text('Default color'),
-                    ),
-                    SecondaryButton(
-                      semanticsLabel: context.l10n.cancel,
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Text(context.l10n.cancel),
-                    ),
-                    SecondaryButton(
-                      semanticsLabel: context.l10n.ok,
-                      onPressed: () {
-                        if (useDefault) {
-                          Navigator.of(context).pop(null);
-                        } else {
-                          Navigator.of(context).pop(color);
-                        }
-                      },
-                      child: Text(context.l10n.ok),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    ).then((color) {
-      if (color != false) {
-        ref.read(generalPreferencesProvider.notifier).setCustomThemeSeed(color as Color?);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
@@ -246,6 +170,43 @@ class _BodyState extends ConsumerState<_Body> {
               ListSection(
                 hasLeading: true,
                 children: [
+                  if (getCorePalette() != null)
+                    SettingsListTile(
+                      icon: const Icon(Icons.colorize_outlined),
+                      settingsLabel: const Text('Color scheme'),
+                      settingsValue: switch (generalPrefs.appThemeSeed) {
+                        AppThemeSeed.board => context.l10n.board,
+                        AppThemeSeed.system => context.l10n.mobileSystemColors,
+                      },
+                      onTap: () {
+                        showAdaptiveActionSheet<void>(
+                          context: context,
+                          actions:
+                              AppThemeSeed.values
+                                  .where(
+                                    (t) => t != AppThemeSeed.system || getCorePalette() != null,
+                                  )
+                                  .map(
+                                    (t) => BottomSheetAction(
+                                      makeLabel:
+                                          (context) => switch (t) {
+                                            AppThemeSeed.board => Text(context.l10n.board),
+                                            AppThemeSeed.system => Text(
+                                              context.l10n.mobileSystemColors,
+                                            ),
+                                          },
+                                      onPressed: (context) {
+                                        ref
+                                            .read(generalPreferencesProvider.notifier)
+                                            .setAppThemeSeed(t);
+                                      },
+                                      dismissOnPress: true,
+                                    ),
+                                  )
+                                  .toList(),
+                        );
+                      },
+                    ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.chess_board),
                     settingsLabel: Text(context.l10n.board),
@@ -377,63 +338,6 @@ class _BodyState extends ConsumerState<_Body> {
                                   .adjustColors(brightness: brightness, hue: hue);
                             }
                             : null,
-                  ),
-                  PlatformListTile(
-                    leading: const Icon(Icons.colorize_outlined),
-                    title: const Text('App theme'),
-                    trailing: switch (generalPrefs.appThemeSeed) {
-                      AppThemeSeed.board => Text(context.l10n.board),
-                      AppThemeSeed.system => Text(context.l10n.mobileSystemColors),
-                      AppThemeSeed.color =>
-                        generalPrefs.customThemeSeed != null
-                            ? Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: generalPrefs.customThemeSeed,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                            : Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: kDefaultSeedColor,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                    },
-                    onTap: () {
-                      showAdaptiveActionSheet<void>(
-                        context: context,
-                        actions:
-                            AppThemeSeed.values
-                                .where((t) => t != AppThemeSeed.system || getCorePalette() != null)
-                                .map(
-                                  (t) => BottomSheetAction(
-                                    makeLabel:
-                                        (context) => switch (t) {
-                                          AppThemeSeed.board => Text(context.l10n.board),
-                                          AppThemeSeed.system => Text(
-                                            context.l10n.mobileSystemColors,
-                                          ),
-                                          AppThemeSeed.color => const Text('Custom color'),
-                                        },
-                                    onPressed: (context) {
-                                      ref
-                                          .read(generalPreferencesProvider.notifier)
-                                          .setAppThemeSeed(t);
-
-                                      if (t == AppThemeSeed.color) {
-                                        _showColorPicker();
-                                      }
-                                    },
-                                    dismissOnPress: true,
-                                  ),
-                                )
-                                .toList(),
-                      );
-                    },
                   ),
                 ],
               ),
