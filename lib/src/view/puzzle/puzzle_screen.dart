@@ -411,7 +411,7 @@ class _BottomBar extends ConsumerWidget {
           BottomBarButton(
             onTap:
                 puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
-                    ? () => ref.read(ctrlProvider.notifier).loadPuzzle(puzzleState.nextContext!)
+                    ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
                     : null,
             highlighted: true,
             label: context.l10n.puzzleContinueTraining,
@@ -533,7 +533,7 @@ class _DifficultySelector extends ConsumerWidget {
                                 .read(ctrlProvider.notifier)
                                 .changeDifficulty(selectedDifficulty);
                             if (context.mounted && nextContext != null) {
-                              ref.read(ctrlProvider.notifier).loadPuzzle(nextContext);
+                              ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
                             }
                           });
                         },

@@ -192,10 +192,7 @@ class _Body extends ConsumerWidget {
               (context) => YesNoDialog(
                 title: Text(context.l10n.mobileAreYouSure),
                 content: const Text('No worries, your score will be saved locally.'),
-                onYes: () {
-                  ref.read(ctrlProvider.notifier).saveStreakResultLocally();
-                  return Navigator.of(context).pop(true);
-                },
+                onYes: () => Navigator.of(context).pop(true),
                 onNo: () => Navigator.of(context).pop(false),
               ),
         );
@@ -345,7 +342,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
           if (data != null) {
             ref
                 .read(ctrlProvider.notifier)
-                .loadPuzzle(
+                .onLoadPuzzle(
                   data,
                   nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
                 );
