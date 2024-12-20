@@ -142,7 +142,7 @@ void main() {
 
           // No idea why two pumps are needed with second one needing a duration
           await tester.pump();
-          await tester.pump(const Duration(seconds: 1));
+          await tester.pump(const Duration(seconds: 1)); // pumpAndSettle times out here
 
           expect(find.byType(BroadcastBoardsTab), findsNothing);
           expect(find.byType(BroadcastOverviewTab), findsOneWidget);
@@ -150,9 +150,59 @@ void main() {
           // I could not find why this doesn't work
           // expect(find.byType(Image), findsOne);
           expect(find.byType(PlatformCard), findsNWidgets(6));
-          // No idea why this doesn't work
+          // No idea why this doesn't work either
           // expect(find.byType(MarkdownBody), findsOne);
         });
+      },
+    );
+
+    testWidgets(
+      'Check that overview tab is chosen when there are no boards to show',
+      variant: kPlatformVariant,
+      (tester) async {
+        final client = MockClient((request) {
+          if (request.url.path == '/api/broadcast/RAIoMC7L') {
+            return mockResponse(
+              _tournamentResponse,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }
+          if (request.url.path == '/api/broadcast/-/-/Gv1305pb') {
+            return mockResponse(
+              _roundResponseWithoutGames,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final fakeSocket = FakeWebSocketChannel();
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: BroadcastRoundScreen(broadcast: _broadcast),
+          overrides: [
+            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+            webSocketChannelFactoryProvider.overrideWith((ref) {
+              return FakeWebSocketChannelFactory((_) => fakeSocket);
+            }),
+          ],
+        );
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Load the tournament
+        await tester.pump();
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Load the round
+        await tester.pump();
+
+        expect(find.byType(BroadcastOverviewTab), findsOneWidget);
       },
     );
   });
@@ -198,3 +248,6 @@ const _tournamentResponse =
 
 const _roundResponse =
     '''{"round":{"id":"Gv1305pb","name":"Round 3.2","slug":"round-32","createdAt":1734081593954,"ongoing":true,"startsAt":1734519600000,"url":"https://lichess.org/broadcast/turkish-chess-championship-2024/round-32/Gv1305pb"},"tour":{"id":"RAIoMC7L","name":"Turkish Chess Championship 2024","slug":"turkish-chess-championship-2024","info":{"website":"http://tr2024.tsf.org.tr/","players":"Yılmaz, Şanal, Daştan, Yılmazyerli","location":"Kemer, Turkey","tc":"90 min + 30 sec / move","fideTc":"standard","timeZone":"Turkey","standings":"https://chess-results.com/tnr1080829.aspx?art=1","format":"16-player knockout"},"createdAt":1734081433831,"url":"https://lichess.org/broadcast/turkish-chess-championship-2024/RAIoMC7L","tier":4,"dates":[1734087600000,1734778800000],"image":"https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:RAIoMC7L:7C8IGWzr.webp&w=800&sig=f80b016b5b197796781fac50cce7a774ded9ff38"},"study":{"writeable":false},"games":[{"id":"Sd14H2u2","name":"Yilmaz, Mustafa - Gokerkan, Cem Kaan","fen":"2rq1rk1/1b2bp1p/p1n3p1/1p4B1/4Q3/P4N2/1PB2PPP/3RR1K1 b - - 1 18","players":[{"name":"Yilmaz, Mustafa","title":"GM","rating":2574,"fideId":6302718,"fed":"TUR","clock":113800},{"name":"Gokerkan, Cem Kaan","title":"GM","rating":2486,"fideId":6336760,"fed":"TUR","clock":332000}],"lastMove":"a1d1","thinkTime":258,"status":"*"},{"id":"gnpz7qXV","name":"Sanal, Vahap - Dastan, Muhammed Batuhan","fen":"3q1rk1/p2b1p2/1p2p1p1/3pP1Pp/2n2N1P/P3PP2/1P3K2/1BQ4R w - - 1 24","players":[{"name":"Sanal, Vahap","title":"GM","rating":2553,"fideId":6300545,"fed":"TUR","clock":245200},{"name":"Dastan, Muhammed Batuhan","title":"GM","rating":2560,"fideId":6300014,"fed":"TUR","clock":221600}],"lastMove":"d6c4","thinkTime":135,"status":"*"},{"id":"ECazTlIY","name":"Gunduz, Umut Erdem - Yilmazyerli, Mert","fen":"2r1r3/5kbQ/3pb1N1/8/pp2P3/5P2/PqP5/R3K2R w KQ - 8 28","players":[{"name":"Gunduz, Umut Erdem","title":"IM","rating":2287,"fideId":6381383,"fed":"TUR","clock":351700},{"name":"Yilmazyerli, Mert","title":"GM","rating":2515,"fideId":6305962,"fed":"TUR","clock":411200}],"lastMove":"g8f7","status":"0-1"},{"id":"R7jQwZEQ","name":"Tarhan, Adar - Isik, Alparslan","fen":"r1bB2k1/pp3pp1/1n2r1qp/Q2p4/2pP4/P1P1PN2/5PPP/RR4K1 w - - 10 21","players":[{"name":"Tarhan, Adar","title":"IM","rating":2483,"fideId":34544712,"fed":"TUR","clock":299800},{"name":"Isik, Alparslan","title":"IM","rating":2475,"fideId":34506896,"fed":"TUR","clock":164200}],"lastMove":"c2g6","thinkTime":288,"status":"*"}]}''';
+
+const _roundResponseWithoutGames =
+    '''{"round":{"id":"Gv1305pb","name":"Round 3.2","slug":"round-32","createdAt":1734081593954,"ongoing":true,"startsAt":1734519600000,"url":"https://lichess.org/broadcast/turkish-chess-championship-2024/round-32/Gv1305pb"},"tour":{"id":"RAIoMC7L","name":"Turkish Chess Championship 2024","slug":"turkish-chess-championship-2024","info":{"website":"http://tr2024.tsf.org.tr/","players":"Yılmaz, Şanal, Daştan, Yılmazyerli","location":"Kemer, Turkey","tc":"90 min + 30 sec / move","fideTc":"standard","timeZone":"Turkey","standings":"https://chess-results.com/tnr1080829.aspx?art=1","format":"16-player knockout"},"createdAt":1734081433831,"url":"https://lichess.org/broadcast/turkish-chess-championship-2024/RAIoMC7L","tier":4,"dates":[1734087600000,1734778800000],"image":"https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:RAIoMC7L:7C8IGWzr.webp&w=800&sig=f80b016b5b197796781fac50cce7a774ded9ff38"},"study":{"writeable":false},"games":[]}''';

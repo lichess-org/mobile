@@ -77,6 +77,7 @@ void main() {
       await tester.pumpWidget(app);
 
       await tester.pump();
+      // await tester.pump(); It might be interesting to know why it breaks the test
 
       expect(find.byKey(const Key('c1-whitebishop')), findsOneWidget);
 
