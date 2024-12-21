@@ -119,7 +119,6 @@ class _Body extends ConsumerWidget {
                 // TODO translate
                 'Vibrate when moving pieces or capturing them.',
                 maxLines: 5,
-                textAlign: TextAlign.justify,
               ),
               onChanged: (value) {
                 ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
@@ -141,7 +140,6 @@ class _Body extends ConsumerWidget {
                               title: Text(context.l10n.mobileSettingsImmersiveMode),
                               subtitle: Text(
                                 context.l10n.mobileSettingsImmersiveModeSubtitle,
-                                textAlign: TextAlign.justify,
                                 maxLines: 5,
                               ),
                               value: boardPrefs.immersiveModeWhilePlaying ?? false,
@@ -226,7 +224,6 @@ class _Body extends ConsumerWidget {
                 // TODO: translate
                 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
                 maxLines: 5,
-                textAlign: TextAlign.justify,
               ),
               value: boardPrefs.enableShapeDrawings,
               onChanged: (value) {
