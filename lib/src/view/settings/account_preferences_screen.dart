@@ -111,20 +111,36 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     }
                   },
                 ),
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesShowPlayerRatings),
-                  subtitle: Text(context.l10n.preferencesExplainShowPlayerRatings, maxLines: 5),
-                  value: data.showRatings.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setShowRatings(BooleanPref(value)),
-                            );
-                          },
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
+                  settingsValue: data.showRatings.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: ShowRatings.values,
+                        selectedItem: data.showRatings,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged:
+                            isLoading
+                                ? null
+                                : (ShowRatings? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(accountPreferencesProvider.notifier)
+                                        .setShowRatings(value ?? data.showRatings),
+                                  );
+                                },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesShowPlayerRatings,
+                        builder: (context) => const ShowRatingsSettingsScreen(),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -504,6 +520,67 @@ class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSetti
                                     .setPieceNotation(v ?? data.pieceNotation);
                                 setState(() {
                                   _pendingSetPieceNotation = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class ShowRatingsSettingsScreen extends ConsumerStatefulWidget {
+  const ShowRatingsSettingsScreen({super.key});
+
+  @override
+  ConsumerState<ShowRatingsSettingsScreen> createState() => _ShowRatingsSettingsScreenState();
+}
+
+class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsScreen> {
+  Future<void>? _pendingSetShowRatings;
+
+  @override
+  Widget build(BuildContext context) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
+        }
+
+        return FutureBuilder(
+          future: _pendingSetShowRatings,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                trailing:
+                    snapshot.connectionState == ConnectionState.waiting
+                        ? const CircularProgressIndicator.adaptive()
+                        : null,
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: ShowRatings.values,
+                      selectedItem: data.showRatings,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (ShowRatings? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setShowRatings(v ?? data.showRatings);
+                                setState(() {
+                                  _pendingSetShowRatings = future;
                                 });
                               },
                     ),

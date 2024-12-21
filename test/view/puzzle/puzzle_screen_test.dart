@@ -229,7 +229,7 @@ void main() {
       await tester.pump(const Duration(seconds: 4));
     });
 
-    for (final showRatings in [true, false]) {
+    for (final showRatings in ShowRatings.values) {
       testWidgets('fails a puzzle, (showRatings: $showRatings)', variant: kPlatformVariant, (
         tester,
       ) async {
@@ -319,9 +319,9 @@ void main() {
             'Played ${puzzle2.puzzle.plays.toString().localizeNumbers()} times.';
         expect(
           find.text(
-            showRatings
-                ? 'Rating: ${puzzle2.puzzle.rating}. $expectedPlayedXTimes'
-                : expectedPlayedXTimes,
+            showRatings == ShowRatings.no
+                ? expectedPlayedXTimes
+                : 'Rating: ${puzzle2.puzzle.rating}. $expectedPlayedXTimes',
           ),
           findsOneWidget,
         );

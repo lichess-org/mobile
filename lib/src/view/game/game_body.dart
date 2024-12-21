@@ -111,6 +111,7 @@ class GameBody extends ConsumerWidget {
 
         final black = GamePlayer(
           player: gameState.game.black,
+          isActiveGameOfCurrentUser: !gameState.game.finished,
           materialDiff:
               boardPreferences.materialDifferenceFormat.visible
                   ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -159,6 +160,7 @@ class GameBody extends ConsumerWidget {
         );
         final white = GamePlayer(
           player: gameState.game.white,
+          isActiveGameOfCurrentUser: !gameState.game.finished,
           materialDiff:
               boardPreferences.materialDifferenceFormat.visible
                   ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)

@@ -87,6 +87,7 @@ class _Body extends ConsumerWidget {
 
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
+                  isActiveGameOfCurrentUser: false,
                   clock:
                       gameState.game.clock != null
                           ? CountdownClockBuilder(
@@ -107,6 +108,7 @@ class _Body extends ConsumerWidget {
                 );
                 final whitePlayerWidget = GamePlayer(
                   player: game.white.setOnGame(true),
+                  isActiveGameOfCurrentUser: false,
                   clock:
                       gameState.game.clock != null
                           ? CountdownClockBuilder(
