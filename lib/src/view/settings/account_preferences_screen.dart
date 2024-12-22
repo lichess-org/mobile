@@ -141,6 +141,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       );
                     }
                   },
+                  explanation: context.l10n.preferencesExplainShowPlayerRatings,
                 ),
               ],
             ),
