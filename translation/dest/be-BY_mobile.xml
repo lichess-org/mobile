@@ -10,4 +10,5 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Нядаўнія пошукі</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Поўнаэкранны рэжым</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Налады</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Дошка</string>
 </resources>
