@@ -130,8 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     bottom: MediaQuery.paddingOf(context).bottom + 16.0,
                     right: 8.0,
                     child: FloatingActionButton.extended(
-                      backgroundColor: CupertinoTheme.of(context).primaryColor,
-                      foregroundColor: CupertinoTheme.of(context).primaryContrastingColor,
+                      splashColor: Colors.transparent,
                       onPressed: () {
                         pushPlatformRoute(
                           context,
