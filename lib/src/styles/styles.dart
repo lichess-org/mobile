@@ -58,10 +58,6 @@ abstract class Styles {
     color: Color(0xFFF9F9F9),
     darkColor: Color.fromARGB(255, 36, 36, 36),
   );
-  static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 23, 23, 23),
-  );
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
   static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
@@ -71,10 +67,6 @@ abstract class Styles {
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
-  );
-  static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFFFFFFF),
-    darkColor: Color.fromARGB(255, 44, 44, 46),
   );
   static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
     debugLabel: 'separator',

@@ -373,10 +373,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
+    final defaultBackgroundColor = Theme.of(context).colorScheme.surfaceContainer;
     final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
