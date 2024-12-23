@@ -1,77 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
-const _iconSize = 45.0;
+const _iconSize = 38.0;
 
 class ClockSettings extends ConsumerWidget {
-  const ClockSettings({super.key});
+  const ClockSettings({required this.orientation, super.key});
+
+  final Orientation orientation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(clockControllerProvider.notifier);
-    final buttonsEnabled = ref.watch(
-      clockControllerProvider
-          .select((value) => value.paused || value.currentPlayer == null),
+    final state = ref.watch(clockToolControllerProvider);
+    final buttonsEnabled = !state.started || state.paused;
+
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
+      padding:
+          orientation == Orientation.portrait
+              ? const EdgeInsets.symmetric(vertical: 10.0)
+              : const EdgeInsets.symmetric(horizontal: 10.0),
+      child: (orientation == Orientation.portrait ? Row.new : Column.new)(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const _PlayResumeButton(),
-          PlatformIconButton(
-            semanticsLabel: context.l10n.reset,
+          const _PlayResumeButton(_iconSize),
+          IconButton(
+            tooltip: context.l10n.reset,
             iconSize: _iconSize,
-            onTap: buttonsEnabled ? () => controller.reset() : null,
-            icon: Icons.cached,
+            onPressed:
+                buttonsEnabled
+                    ? () {
+                      ref.read(clockToolControllerProvider.notifier).reset();
+                    }
+                    : null,
+            icon: const Icon(Icons.refresh),
           ),
-          PlatformIconButton(
-            semanticsLabel: context.l10n.settingsSettings,
+          IconButton(
+            tooltip: context.l10n.settingsSettings,
             iconSize: _iconSize,
-            onTap: buttonsEnabled
-                ? () {
-                    final double screenHeight =
-                        MediaQuery.sizeOf(context).height;
-                    showAdaptiveBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      constraints: BoxConstraints(
-                        maxHeight: screenHeight - (screenHeight / 10),
-                      ),
-                      builder: (BuildContext context) {
-                        final options = ref.watch(
-                          clockControllerProvider
-                              .select((value) => value.options),
-                        );
-                        return TimeControlModal(
-                          excludeUltraBullet: true,
-                          value: TimeIncrement(
-                            options.time.inSeconds,
-                            options.increment.inSeconds,
-                          ),
-                          onSelected: (choice) {
-                            controller.updateOptions(choice);
-                          },
-                        );
-                      },
-                    );
-                  }
-                : null,
-            icon: Icons.settings,
+            onPressed:
+                buttonsEnabled
+                    ? () {
+                      final double screenHeight = MediaQuery.sizeOf(context).height;
+                      showAdaptiveBottomSheet<void>(
+                        context: context,
+                        isScrollControlled: true,
+                        showDragHandle: true,
+                        constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+                        builder: (BuildContext context) {
+                          final options = ref.watch(
+                            clockToolControllerProvider.select((value) => value.options),
+                          );
+                          return TimeControlModal(
+                            excludeUltraBullet: true,
+                            value: TimeIncrement(
+                              options.whiteTime.inSeconds,
+                              options.whiteIncrement.inSeconds,
+                            ),
+                            onSelected: (choice) {
+                              ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
+                            },
+                          );
+                        },
+                      );
+                    }
+                    : null,
+            icon: const Icon(Icons.settings),
           ),
-          PlatformIconButton(
-            semanticsLabel: context.l10n.close,
+          IconButton(
             iconSize: _iconSize,
-            onTap: buttonsEnabled ? () => Navigator.of(context).pop() : null,
-            icon: Icons.home,
+            // TODO: translate
+            tooltip: 'Toggle sound',
+            onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+            icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+          ),
+          IconButton(
+            tooltip: context.l10n.close,
+            iconSize: _iconSize,
+            onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
+            icon: const Icon(Icons.home),
           ),
         ],
       ),
@@ -80,25 +95,38 @@ class ClockSettings extends ConsumerWidget {
 }
 
 class _PlayResumeButton extends ConsumerWidget {
-  const _PlayResumeButton();
+  const _PlayResumeButton(this.iconSize);
+
+  final double iconSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(clockControllerProvider.notifier);
-    final state = ref.watch(clockControllerProvider);
-    if (state.paused) {
-      return PlatformIconButton(
-        semanticsLabel: context.l10n.resume,
-        iconSize: 35,
-        onTap: () => controller.resume(),
-        icon: Icons.play_arrow,
+    final controller = ref.read(clockToolControllerProvider.notifier);
+    final state = ref.watch(clockToolControllerProvider);
+
+    if (!state.started) {
+      return IconButton(
+        tooltip: context.l10n.play,
+        iconSize: iconSize,
+        onPressed: () => controller.start(),
+        icon: const Icon(Icons.play_arrow),
       );
     }
-    return PlatformIconButton(
-      semanticsLabel: context.l10n.pause,
-      iconSize: 35,
-      onTap: state.currentPlayer != null ? () => controller.pause() : null,
-      icon: Icons.pause,
+
+    if (state.paused) {
+      return IconButton(
+        tooltip: context.l10n.resume,
+        iconSize: iconSize,
+        onPressed: () => controller.resume(),
+        icon: const Icon(Icons.play_arrow),
+      );
+    }
+
+    return IconButton(
+      tooltip: context.l10n.pause,
+      iconSize: iconSize,
+      onPressed: () => controller.pause(),
+      icon: const Icon(Icons.pause),
     );
   }
 }

@@ -7,9 +7,7 @@ extension AsyncValueUI on AsyncValue<Object?> {
     if (!isRefreshing && hasError) {
       switch (Theme.of(context).platform) {
         case TargetPlatform.android:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error.toString())),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
         case TargetPlatform.iOS:
           showCupertinoSnackBar(
             context: context,
@@ -18,7 +16,6 @@ extension AsyncValueUI on AsyncValue<Object?> {
           );
         default:
           assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-          break;
       }
     }
   }

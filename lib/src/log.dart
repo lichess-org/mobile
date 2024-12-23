@@ -5,12 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
 // to see http requests and websocket connections in terminal
-const _loggersToShowInTerminal = {
-  'HttpClient',
-  'Socket',
-};
+const _loggersToShowInTerminal = {'HttpClient', 'Socket'};
 
-void setupLogger() {
+/// Setup logging
+void setupLogging() {
   if (kDebugMode) {
     Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {
@@ -23,13 +21,11 @@ void setupLogger() {
         stackTrace: record.stackTrace,
       );
 
-      if (_loggersToShowInTerminal.contains(record.loggerName) &&
-          record.level >= Level.INFO) {
+      if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.INFO) {
         debugPrint('[${record.loggerName}] ${record.message}');
       }
 
-      if (!_loggersToShowInTerminal.contains(record.loggerName) &&
-          record.level >= Level.WARNING) {
+      if (!_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.WARNING) {
         debugPrint('[${record.loggerName}] ${record.message}');
       }
     });
@@ -40,22 +36,12 @@ class ProviderLogger extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override
-  void didAddProvider(
-    ProviderBase<Object?> provider,
-    Object? value,
-    ProviderContainer container,
-  ) {
-    _logger.info(
-      '${provider.name ?? provider.runtimeType} initialized',
-      value,
-    );
+  void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
+    _logger.info('${provider.name ?? provider.runtimeType} initialized', value);
   }
 
   @override
-  void didDisposeProvider(
-    ProviderBase<Object?> provider,
-    ProviderContainer container,
-  ) {
+  void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
     _logger.info('${provider.name ?? provider.runtimeType} disposed');
   }
 
@@ -66,10 +52,6 @@ class ProviderLogger extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    _logger.severe(
-      '${provider.name ?? provider.runtimeType} error',
-      error,
-      stackTrace,
-    );
+    _logger.severe('${provider.name ?? provider.runtimeType} error', error, stackTrace);
   }
 }

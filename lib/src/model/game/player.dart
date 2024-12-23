@@ -13,6 +13,7 @@ class Player with _$Player {
 
   const factory Player({
     LightUser? user,
+    String? name,
     int? aiLevel,
     int? rating,
     int? ratingDiff,
@@ -47,11 +48,9 @@ class Player with _$Player {
   /// Returns the name of the player, without title
   String displayName(BuildContext context) =>
       user?.name ??
+      name ??
       (aiLevel != null
-          ? context.l10n.aiNameLevelAiLevel(
-              'Stockfish',
-              aiLevel.toString(),
-            )
+          ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
           : context.l10n.anonymous);
 
   Player setOnGame(bool onGame) {
@@ -75,6 +74,5 @@ class PlayerAnalysis with _$PlayerAnalysis {
     int? accuracy,
   }) = _PlayerAnalysis;
 
-  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) =>
-      _$PlayerAnalysisFromJson(json);
+  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
 }

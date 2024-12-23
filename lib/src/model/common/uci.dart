@@ -24,7 +24,7 @@ class UciCharPair with _$UciCharPair {
   ///
   /// Throws an [ArgumentError] if the move is invalid.
   factory UciCharPair.fromUci(String uci) {
-    final move = Move.fromUci(uci);
+    final move = Move.parse(uci);
     if (move == null) {
       throw ArgumentError('Invalid uci $uci');
     }
@@ -32,43 +32,25 @@ class UciCharPair with _$UciCharPair {
   }
 
   factory UciCharPair.fromMove(Move move) => switch (move) {
-        NormalMove(from: final f, to: final t, promotion: final p) =>
-          UciCharPair(
-            String.fromCharCode(35 + f),
-            String.fromCharCode(
-              p != null
-                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + squareFile(t)
-                  : 35 + t,
-            ),
-          ),
-        DropMove(to: final t, role: final r) => UciCharPair(
-            String.fromCharCode(35 + t),
-            String.fromCharCode(35 + 64 + 8 * 5 + _dropRoles.indexOf(r)),
-          ),
-      };
+    NormalMove(from: final f, to: final t, promotion: final p) => UciCharPair(
+      String.fromCharCode(35 + f),
+      String.fromCharCode(p != null ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + t.file : 35 + t),
+    ),
+    DropMove(to: final t, role: final r) => UciCharPair(
+      String.fromCharCode(35 + t),
+      String.fromCharCode(35 + 64 + 8 * 5 + _dropRoles.indexOf(r)),
+    ),
+  };
 
-  factory UciCharPair.fromJson(Map<String, dynamic> json) =>
-      _$UciCharPairFromJson(json);
+  factory UciCharPair.fromJson(Map<String, dynamic> json) => _$UciCharPairFromJson(json);
 
   @override
   String toString() => '$a$b';
 }
 
-const _promotionRoles = [
-  Role.queen,
-  Role.rook,
-  Role.bishop,
-  Role.knight,
-  Role.king,
-];
+const _promotionRoles = [Role.queen, Role.rook, Role.bishop, Role.knight, Role.king];
 
-const _dropRoles = [
-  Role.queen,
-  Role.rook,
-  Role.bishop,
-  Role.knight,
-  Role.pawn,
-];
+const _dropRoles = [Role.queen, Role.rook, Role.bishop, Role.knight, Role.pawn];
 
 /// Compact representation of a path to a game node made from concatenated
 /// UciCharPair strings.
@@ -90,6 +72,8 @@ class UciPath with _$UciPath {
     return UciPath(path.toString());
   }
 
+  factory UciPath.join(UciPath a, UciPath b) => UciPath(a.value + b.value);
+
   /// Creates a UciPath from a list of UCI moves.
   ///
   /// Throws an [ArgumentError] if any of the moves is invalid.
@@ -109,22 +93,17 @@ class UciPath with _$UciPath {
 
   int get size => value.length ~/ 2;
 
-  UciCharPair? get head =>
-      value.isEmpty ? null : UciCharPair(value[0], value[1]);
+  UciCharPair? get head => value.isEmpty ? null : UciCharPair(value[0], value[1]);
 
-  UciCharPair? get last => value.isEmpty
-      ? null
-      : UciCharPair(value[value.length - 2], value[value.length - 1]);
+  UciCharPair? get last =>
+      value.isEmpty ? null : UciCharPair(value[value.length - 2], value[value.length - 1]);
 
-  UciPath get tail =>
-      value.isEmpty ? UciPath.empty : UciPath(value.substring(2));
+  UciPath get tail => value.isEmpty ? UciPath.empty : UciPath(value.substring(2));
 
-  UciPath get penultimate => value.isEmpty
-      ? UciPath.empty
-      : UciPath(value.substring(0, value.length - 2));
+  UciPath get penultimate =>
+      value.isEmpty ? UciPath.empty : UciPath(value.substring(0, value.length - 2));
 
   bool get isEmpty => value.isEmpty;
 
-  factory UciPath.fromJson(Map<String, dynamic> json) =>
-      _$UciPathFromJson(json);
+  factory UciPath.fromJson(Map<String, dynamic> json) => _$UciPathFromJson(json);
 }

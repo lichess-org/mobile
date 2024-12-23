@@ -1,13 +1,14 @@
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -17,85 +18,110 @@ import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'archived_game_screen_providers.dart';
 
 /// Screen for viewing an archived game.
 class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
-    required this.gameData,
+    this.gameId,
+    this.gameData,
     required this.orientation,
     this.initialCursor,
     super.key,
-  });
+  }) : assert(gameId != null || gameData != null);
 
-  final LightArchivedGame gameData;
+  final LightArchivedGame? gameData;
+  final GameId? gameId;
+
   final Side orientation;
   final int? initialCursor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+    if (gameData != null) {
+      return _Body(gameData: gameData, orientation: orientation, initialCursor: initialCursor);
+    } else {
+      return _LoadGame(gameId: gameId!, orientation: orientation, initialCursor: initialCursor);
+    }
+  }
+}
+
+class _LoadGame extends ConsumerWidget {
+  const _LoadGame({required this.gameId, required this.orientation, required this.initialCursor});
+
+  final GameId gameId;
+  final Side orientation;
+  final int? initialCursor;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final game = ref.watch(archivedGameProvider(id: gameId));
+    return game.when(
+      data: (game) {
+        return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
+      },
+      loading: () => _Body(gameData: null, orientation: orientation, initialCursor: initialCursor),
+      error: (error, stackTrace) {
+        debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
+        switch (error) {
+          case ServerException _ when error.statusCode == 404:
+            return _Body(
+              gameData: null,
+              orientation: orientation,
+              initialCursor: initialCursor,
+              error: 'Game not found.',
+            );
+          default:
+            return _Body(
+              gameData: null,
+              orientation: orientation,
+              initialCursor: initialCursor,
+              error: error,
+            );
+        }
+      },
     );
   }
+}
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _GameTitle(gameData: gameData),
+class _Body extends StatelessWidget {
+  const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
+
+  final LightArchivedGame? gameData;
+  final Object? error;
+  final Side orientation;
+  final int? initialCursor;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
         actions: [
-          BookmarkButton(
-            id: gameData.id,
-          ),
-          ToggleSoundButton(),
+          if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
+          if (gameData != null) BookmarkButton(id: gameData!.id),
+          const ToggleSoundButton(),
         ],
       ),
-      body: _BoardBody(
-        gameData: gameData,
-        orientation: orientation,
-        initialCursor: initialCursor,
-      ),
-      bottomNavigationBar:
-          _BottomBar(gameData: gameData, orientation: orientation),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        middle: _GameTitle(gameData: gameData),
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BookmarkButton(
-              id: gameData.id,
-            ),
-            ToggleSoundButton(),
-          ],
-        ),
-      ),
-      child: SafeArea(
+      body: SafeArea(
         bottom: false,
         child: Column(
           children: [
             Expanded(
               child: _BoardBody(
-                gameData: gameData,
+                archivedGameData: gameData,
                 orientation: orientation,
                 initialCursor: initialCursor,
+                error: error,
               ),
             ),
-            _BottomBar(gameData: gameData, orientation: orientation),
+            _BottomBar(archivedGameData: gameData, orientation: orientation),
           ],
         ),
       ),
@@ -104,25 +130,26 @@ class ArchivedGameScreen extends ConsumerWidget {
 }
 
 class _GameTitle extends StatelessWidget {
-  const _GameTitle({
-    required this.gameData,
-  });
+  const _GameTitle({required this.gameData});
 
   final LightArchivedGame gameData;
+
+  static final _dateFormat = DateFormat.yMMMd();
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          gameData.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
+        if (gameData.source == GameSource.import)
+          Icon(Icons.cloud_upload, color: DefaultTextStyle.of(context).style.color)
+        else
+          Icon(gameData.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
-        Text(
-          '${gameData.clockDisplay} • ${gameData.rated ? context.l10n.rated : context.l10n.casual}',
-        ),
+        if (gameData.source == GameSource.import)
+          Text('Import • ${_dateFormat.format(gameData.createdAt)}')
+        else
+          Text('${gameData.clockDisplay} • ${_dateFormat.format(gameData.lastMoveAt)}'),
       ],
     );
   }
@@ -130,45 +157,42 @@ class _GameTitle extends StatelessWidget {
 
 class _BoardBody extends ConsumerWidget {
   const _BoardBody({
-    required this.gameData,
+    required this.archivedGameData,
     required this.orientation,
+    this.error,
     this.initialCursor,
   });
 
-  final LightArchivedGame gameData;
+  final LightArchivedGame? archivedGameData;
   final Side orientation;
   final int? initialCursor;
+  final Object? error;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final gameData = archivedGameData;
+
+    if (gameData == null) {
+      return BoardTable.empty(showMoveListPlaceholder: true, errorMessage: error?.toString());
+    }
+
     if (initialCursor != null) {
       ref.listen(gameCursorProvider(gameData.id), (prev, cursor) {
         if (prev?.isLoading == true && cursor.hasValue) {
-          ref
-              .read(gameCursorProvider(gameData.id).notifier)
-              .cursorAt(initialCursor!);
+          ref.read(gameCursorProvider(gameData.id).notifier).cursorAt(initialCursor!);
         }
       });
     }
 
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final black = GamePlayer(
-      key: const ValueKey('black-player'),
-      player: gameData.black,
-    );
-    final white = GamePlayer(
-      key: const ValueKey('white-player'),
-      player: gameData.white,
-    );
+    final black = GamePlayer(key: const ValueKey('black-player'), player: gameData.black);
+    final white = GamePlayer(key: const ValueKey('white-player'), player: gameData.white);
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
-      boardData: cg.BoardData(
-        interactableSide: cg.InteractableSide.none,
-        orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
-        fen: gameData.lastFen ?? kInitialBoardFEN,
-      ),
+      orientation: (isBoardTurned ? orientation.opposite : orientation),
+      fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
       topTable: topPlayer,
       bottomTable: bottomPlayer,
       showMoveListPlaceholder: true,
@@ -182,59 +206,40 @@ class _BoardBody extends ConsumerWidget {
         final black = GamePlayer(
           key: const ValueKey('black-player'),
           player: gameData.black,
-          clock: blackClock != null
-              ? CountdownClock(
-                  duration: blackClock,
-                  active: false,
-                )
-              : null,
+          clock: blackClock != null ? Clock(timeLeft: blackClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
         final white = GamePlayer(
           key: const ValueKey('white-player'),
           player: gameData.white,
-          clock: whiteClock != null
-              ? CountdownClock(
-                  duration: whiteClock,
-                  active: false,
-                )
-              : null,
+          clock: whiteClock != null ? Clock(timeLeft: whiteClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );
-        final topPlayer = orientation == Side.white ? black : white;
-        final bottomPlayer = orientation == Side.white ? white : black;
+
+        final topPlayerIsBlack =
+            orientation == Side.white && !isBoardTurned ||
+            orientation == Side.black && isBoardTurned;
+        final topPlayer = topPlayerIsBlack ? black : white;
+        final bottomPlayer = topPlayerIsBlack ? white : black;
 
         final position = game.positionAt(cursor);
 
         return BoardTable(
-          boardData: cg.BoardData(
-            interactableSide: cg.InteractableSide.none,
-            orientation:
-                (isBoardTurned ? orientation.opposite : orientation).cg,
-            fen: position.fen,
-            lastMove: game.moveAt(cursor)?.cg,
-            sideToMove: position.turn.cg,
-            isCheck: position.isCheck,
-          ),
+          orientation: (isBoardTurned ? orientation.opposite : orientation),
+          fen: position.fen,
+          lastMove: game.moveAt(cursor) as NormalMove?,
           topTable: topPlayer,
           bottomTable: bottomPlayer,
-          moves: game.steps
-              .skip(1)
-              .map((e) => e.sanMove!.san)
-              .toList(growable: false),
+          moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
           currentMoveIndex: cursor,
           onSelectMove: (moveIndex) {
-            ref
-                .read(gameCursorProvider(gameData.id).notifier)
-                .cursorAt(moveIndex);
+            ref.read(gameCursorProvider(gameData.id).notifier).cursorAt(moveIndex);
           },
         );
       },
       loading: () => loadingBoard,
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         return loadingBoard;
       },
     );
@@ -242,153 +247,117 @@ class _BoardBody extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.gameData, required this.orientation});
+  const _BottomBar({required this.archivedGameData, required this.orientation});
 
   final Side orientation;
-  final LightArchivedGame gameData;
+  final LightArchivedGame? archivedGameData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final gameData = archivedGameData;
+
+    if (gameData == null) {
+      return const BottomBar(children: []);
+    }
+
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showGameMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              gameCursor.when(
-                data: (data) {
-                  return Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.mobileShowResult,
-                      icon: Icons.info_outline,
-                      onTap: () {
-                        showAdaptiveDialog<void>(
-                          context: context,
-                          builder: (context) =>
-                              ArchivedGameResultDialog(game: data.$1),
-                          barrierDismissible: true,
-                        );
-                      },
-                    ),
-                  );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.gameAnalysis,
-                  onTap: ref.read(gameCursorProvider(gameData.id)).hasValue
-                      ? () {
-                          final (game, cursor) = ref
-                              .read(
-                                gameCursorProvider(gameData.id),
-                              )
-                              .requireValue;
+    Future<void> showGameMenu() {
+      final game = gameCursor.valueOrNull?.$1;
+      final cursor = gameCursor.valueOrNull?.$2;
+      return showAdaptiveActionSheet(
+        context: context,
+        actions: [
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.flipBoard),
+            onPressed: (context) {
+              ref.read(isBoardTurnedProvider.notifier).toggle();
+            },
+          ),
+          if (game != null && cursor != null)
+            ...makeFinishedGameShareActions(
+              game,
+              context: context,
+              ref: ref,
+              currentGamePosition: game.positionAt(cursor),
+              orientation: orientation,
+              lastMove: game.moveAt(cursor),
+            ),
+        ],
+      );
+    }
 
-                          pushPlatformRoute(
-                            context,
-                            builder: (context) => AnalysisScreen(
-                              title: context.l10n.gameAnalysis,
-                              pgnOrId: game.makePgn(),
-                              options: AnalysisOptions(
-                                isLocalEvaluationAllowed: true,
-                                variant: gameData.variant,
-                                initialMoveCursor: cursor,
-                                orientation: orientation,
-                                id: gameData.id,
-                                opening: gameData.opening,
-                                serverAnalysis: game.serverAnalysis,
-                                division: game.meta.division,
-                              ),
+    return BottomBar(
+      children: [
+        BottomBarButton(label: context.l10n.menu, onTap: showGameMenu, icon: Icons.menu),
+        if (gameCursor.hasValue)
+          BottomBarButton(
+            label: context.l10n.mobileShowResult,
+            icon: Icons.info_outline,
+            onTap: () {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) => ArchivedGameResultDialog(game: gameCursor.requireValue.$1),
+                barrierDismissible: true,
+              );
+            },
+          ),
+        BottomBarButton(
+          label: context.l10n.gameAnalysis,
+          onTap:
+              gameCursor.hasValue
+                  ? () {
+                    final cursor = gameCursor.requireValue.$2;
+                    pushPlatformRoute(
+                      context,
+                      builder:
+                          (context) => AnalysisScreen(
+                            options: AnalysisOptions(
+                              orientation: orientation,
+                              gameId: gameData.id,
+                              initialMoveCursor: cursor,
                             ),
-                          );
-                        }
-                      : null,
-                  icon: Icons.biotech,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress:
-                      canGoBackward ? () => _cursorBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('cursor-back'),
-                    // TODO add translation
-                    label: 'Backward',
-                    showTooltip: false,
-                    onTap: canGoBackward ? () => _cursorBackward(ref) : null,
-                    icon: CupertinoIcons.chevron_back,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoForward ? () => _cursorForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('cursor-forward'),
-                    // TODO add translation
-                    label: 'Forward',
-                    showTooltip: false,
-                    onTap: canGoForward ? () => _cursorForward(ref) : null,
-                    icon: CupertinoIcons.chevron_forward,
-                  ),
-                ),
-              ),
-            ],
+                          ),
+                    );
+                  }
+                  : null,
+          icon: Icons.biotech,
+        ),
+        RepeatButton(
+          onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('cursor-back'),
+            // TODO add translation
+            label: 'Backward',
+            showTooltip: false,
+            onTap: canGoBackward ? () => _cursorBackward(ref) : null,
+            icon: CupertinoIcons.chevron_back,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: canGoForward ? () => _cursorForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('cursor-forward'),
+            // TODO add translation
+            label: 'Forward',
+            showTooltip: false,
+            onTap: canGoForward ? () => _cursorForward(ref) : null,
+            icon: CupertinoIcons.chevron_forward,
+          ),
+        ),
+      ],
     );
   }
 
   void _cursorForward(WidgetRef ref) {
-    ref.read(gameCursorProvider(gameData.id).notifier).cursorForward();
+    if (archivedGameData == null) return;
+    ref.read(gameCursorProvider(archivedGameData!.id).notifier).cursorForward();
   }
 
   void _cursorBackward(WidgetRef ref) {
-    ref.read(gameCursorProvider(gameData.id).notifier).cursorBackward();
-  }
-
-  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
-    final game = ref.read(gameCursorProvider(gameData.id)).valueOrNull?.$1;
-    final cursor = ref.read(gameCursorProvider(gameData.id)).valueOrNull?.$2;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
-            ref.read(isBoardTurnedProvider.notifier).toggle();
-          },
-        ),
-        if (game != null && cursor != null)
-          ...makeFinishedGameShareActions(
-            game,
-            context: context,
-            ref: ref,
-            currentGamePosition: game.positionAt(cursor),
-            orientation: orientation,
-            lastMove: game.moveAt(cursor),
-          ),
-      ],
-    );
+    if (archivedGameData == null) return;
+    ref.read(gameCursorProvider(archivedGameData!.id).notifier).cursorBackward();
   }
 }

@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -9,31 +9,86 @@ class AppLocalizationsLt extends AppLocalizations {
   AppLocalizationsLt([String locale = 'lt']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileAllGames => 'All games';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileClearButton => 'Clear';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
-
-  @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileCustomGameJoinAGame => 'Join a game';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
 
   @override
   String get mobileSettingsHapticFeedback => 'Haptic feedback';
@@ -45,104 +100,46 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
-
-  @override
-  String get mobileAllGames => 'All games';
-
-  @override
-  String get mobileRecentSearches => 'Recent searches';
-
-  @override
-  String get mobileClearButton => 'Clear';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'No results';
-
-  @override
-  String get mobileAreYouSure => 'Are you sure?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Share this puzzle';
-
-  @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileSettingsTab => 'Settings';
 
   @override
   String get mobileShareGamePGN => 'Share PGN';
 
   @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileSharePuzzle => 'Share this puzzle';
 
   @override
   String get mobileShowComments => 'Show comments';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobileShowResult => 'Show result';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
-
-  @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
-
-  @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileShowVariations => 'Show variations';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobileToolsTab => 'Tools';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hello, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Watch';
 
   @override
   String get activityActivity => 'Veikla';
@@ -258,6 +255,17 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Užbaigė $count korespondencinių partijų',
       few: 'Užbaigė $count korespondencines partijas',
       one: 'Užbaigė $count korespondencinę partiją',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Completed $count $param2 correspondence games',
+      one: 'Completed $count $param2 correspondence game',
     );
     return '$_temp0';
   }
@@ -383,7 +391,256 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastBroadcasts => 'Transliacijos';
 
   @override
+  String get broadcastMyBroadcasts => 'Mano transliacijos';
+
+  @override
   String get broadcastLiveBroadcasts => 'Vykstančios turnyrų transliacijos';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Transliavimo kalendorius';
+
+  @override
+  String get broadcastNewBroadcast => 'Nauja transliacija';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Prenumeruojamos transliacijos';
+
+  @override
+  String get broadcastAboutBroadcasts => 'Apie transliacijas';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Kaip naudotis Lichess transliacijomis.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'Naujajame ture bus tie patys nariai ir bendradarbiai, kaip ir ankstesniame.';
+
+  @override
+  String get broadcastAddRound => 'Pridėti raundą';
+
+  @override
+  String get broadcastOngoing => 'Vykstančios';
+
+  @override
+  String get broadcastUpcoming => 'Artėjančios';
+
+  @override
+  String get broadcastCompleted => 'Pasibaigę';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess aptiko turo užbaigimą, bet galimai klaidingai. Naudokite tai, norėdami nustatyti rankiniu būdu.';
+
+  @override
+  String get broadcastRoundName => 'Raundo pavadinimas';
+
+  @override
+  String get broadcastRoundNumber => 'Raundo numeris';
+
+  @override
+  String get broadcastTournamentName => 'Turnyro pavadinimas';
+
+  @override
+  String get broadcastTournamentDescription => 'Trumpas turnyro aprašymas';
+
+  @override
+  String get broadcastFullDescription => 'Pilnas renginio aprašymas';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Neprivalomas pilnas transliacijos aprašymas. Galima naudoti $param1. Ilgis negali viršyti $param2 simbolių.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN šaltinio URL';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL, į kurį „Lichess“ kreipsis gauti PGN atnaujinimus. Privalo būti viešai pasiekiamas internete.';
+
+  @override
+  String get broadcastSourceGameIds => 'Iki 64 Lichess žaidimo ID, atskirtų tarpais.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Turnyro pradžia vietos laiku: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Neprivaloma; tik jeigu žinote, kada prasideda renginys';
+
+  @override
+  String get broadcastCurrentGameUrl => 'Dabartinio žaidimo adresas';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Atsisiųsti visus raundus';
+
+  @override
+  String get broadcastResetRound => 'Atstatyti raundą';
+
+  @override
+  String get broadcastDeleteRound => 'Ištrinti raundą';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Užtikrintai ištrinti raundą ir jo partijas.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Ištrinti visas partijas šiame raunde. Norint jas perkurti reikės aktyvaus šaltinio.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Keisti raundo studiją';
+
+  @override
+  String get broadcastDeleteTournament => 'Ištrinti šį turnyrą';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Užtikrintai ištrinti visą turnyrą, visus raundus ir visas jų partijas.';
+
+  @override
+  String get broadcastShowScores => 'Rodyti žaidėjų balus pagal partijų rezultatus';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Pasirenkama: pakeiskite žaidėjų vardus, reitingus ir titulus';
+
+  @override
+  String get broadcastFideFederations => 'FIDE federacijos';
+
+  @override
+  String get broadcastTop10Rating => '10 aukščiausių reitingų';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE žaidėjai';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE žaidėjas nerastas';
+
+  @override
+  String get broadcastFideProfile => 'FIDE profilis';
+
+  @override
+  String get broadcastFederation => 'Federacija';
+
+  @override
+  String get broadcastAgeThisYear => 'Amžius šiemet';
+
+  @override
+  String get broadcastUnrated => 'Nereitinguota(s)';
+
+  @override
+  String get broadcastRecentTournaments => 'Neseniai sukurti turnyrai';
+
+  @override
+  String get broadcastOpenLichess => 'Atverti Lichess-e';
+
+  @override
+  String get broadcastTeams => 'Komandos';
+
+  @override
+  String get broadcastBoards => 'Lentos';
+
+  @override
+  String get broadcastOverview => 'Apžvalga';
+
+  @override
+  String get broadcastSubscribeTitle => 'Užsakykite pranešimą apie kiekvieno turo pradžią. Paskyros nustatymuose galite perjungti transliacijų skambėjimo signalą arba tiesioginius pranešimus.';
+
+  @override
+  String get broadcastUploadImage => 'Įkelkite turnyro paveikslėlį';
+
+  @override
+  String get broadcastNoBoardsYet => 'Dar nėra lentų. Jos bus rodomos, kai bus įkeltos partijos.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Lentas galima įkelti iš šaltinio arba per $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Pradedama po $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'Transliacija prasidės visai netrukus.';
+
+  @override
+  String get broadcastNotYetStarted => 'Transliacija dar neprasidėjo.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Oficialus tinklapis';
+
+  @override
+  String get broadcastStandings => 'Rezultatai';
+
+  @override
+  String get broadcastOfficialStandings => 'Oficialūs rezultatai';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'Daugiau parinkčių $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'žiniatinklio valdytojų puslapis';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'Viešas realaus laiko PGN šaltinis šiam turui. Taip pat siūlome $param greitesniam ir efektyvesniam sinchronizavimui.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Įterpkite šią transliaciją į savo svetainę';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Įterpkite $param į savo svetainę';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Reitingo skirtumas';
+
+  @override
+  String get broadcastGamesThisTournament => 'Partijos šiame turnyre';
+
+  @override
+  String get broadcastScore => 'Taškų skaičius';
+
+  @override
+  String get broadcastAllTeams => 'Visos komandos';
+
+  @override
+  String get broadcastTournamentFormat => 'Turnyro formatas';
+
+  @override
+  String get broadcastTournamentLocation => 'Turnyro vieta';
+
+  @override
+  String get broadcastTopPlayers => 'Geriausi žaidėjai';
+
+  @override
+  String get broadcastTimezone => 'Laiko juosta';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE reitingo kategorija';
+
+  @override
+  String get broadcastOptionalDetails => 'Papildoma informacija';
+
+  @override
+  String get broadcastPastBroadcasts => 'Ankstesnės transliacijos';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'Rodyti visas transliacijas pagal mėnesį';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transliacijų',
+      many: '$count transliacijos',
+      few: '$count transliacijos',
+      one: '$count transliacija',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -644,6 +901,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesInGameOnly => 'Tik žaidimo metu';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Žaidimo laikrodis';
 
   @override
@@ -783,6 +1043,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Pranešimų varpelio garsas';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Užduotys';
@@ -1434,10 +1697,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Priešininkas apribotas ėjimais, kuriuos gali padaryti, ir visi jo ėjimai tik pabloginą jo poziciją.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Visko po truputį';
+  String get puzzleThemeMix => 'Visko po truputį';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Nežinote ko tikėtis, todėl būkite pasiruošę bet kam! Visai kaip tikruose žaidimuose.';
+  String get puzzleThemeMixDescription => 'Nežinote ko tikėtis, todėl būkite pasiruošę bet kam! Visai kaip tikruose žaidimuose.';
 
   @override
   String get puzzleThemePlayerGames => 'Žaidėjų žaidimai';
@@ -1493,7 +1756,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get waitingForOpponent => 'Laukiama varžovo';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Arba leiskite priešininkui nuskanuoti šį QR kodą';
+  String get orLetYourOpponentScanQrCode => 'Arba leiskite priešininkui nuskenuoti šį QR kodą';
 
   @override
   String get waiting => 'Laukiama';
@@ -1510,7 +1773,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get level => 'Lygis';
 
   @override
-  String get strength => 'Stiprumas';
+  String get strength => 'Pasipriešinimo stiprumas';
 
   @override
   String get toggleTheChat => 'Įjungti / išjungti pokalbį';
@@ -1534,10 +1797,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get black => 'Juodieji';
 
   @override
-  String get asWhite => 'kaip baltieji';
+  String get asWhite => 'už baltuosius';
 
   @override
-  String get asBlack => 'kaip juodieji';
+  String get asBlack => 'už juoduosius';
 
   @override
   String get randomColor => 'Atsitiktinė spalva';
@@ -1552,10 +1815,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get blackIsVictorious => 'Juodieji laimėjo';
 
   @override
-  String get youPlayTheWhitePieces => 'Žaidžiate baltomis figūromis';
+  String get youPlayTheWhitePieces => 'Jūs žaidžiate baltosiomis figūromis';
 
   @override
-  String get youPlayTheBlackPieces => 'Žaidžiate juodomis figūromis';
+  String get youPlayTheBlackPieces => 'Jūs žaidžiate juodosiomis figūromis';
 
   @override
   String get itsYourTurn => 'Jūsų ėjimas!';
@@ -1812,9 +2075,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get byCPL => 'Pagal įvertį';
 
   @override
-  String get openStudy => 'Atverti studiją';
-
-  @override
   String get enable => 'Įjungti';
 
   @override
@@ -1840,9 +2100,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get removesTheDepthLimit => 'Panaikina gylio limitą ir neleidžia kompiuteriui atvėsti';
-
-  @override
-  String get engineManager => 'Variklių valdymas';
 
   @override
   String get blunder => 'Šiurkšti klaida';
@@ -1922,7 +2179,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get friends => 'Draugai';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'kiti žaidėjai';
 
   @override
   String get discussions => 'Diskusijos';
@@ -2106,6 +2363,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'sužaistos partijos';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Atšaukti';
@@ -2482,9 +2742,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get unblock => 'Atblokuoti';
 
   @override
-  String get followsYou => 'Seka jus';
-
-  @override
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 pradėjo sekti $param2';
   }
@@ -2756,10 +3013,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get yes => 'Taip';
 
   @override
-  String get website => 'Website';
+  String get website => 'Tinklapis';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobilus';
 
   @override
   String get help => 'Pagalba:';
@@ -2816,7 +3073,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get other => 'Kita';
 
   @override
-  String get reportDescriptionHelp => 'Įdėkite nuorodą į partiją(-as) ir paaiškinkite, kas netinkamo yra šio vartotojo elgsenoje. Paminėkite, kaip priėjote prie tokios išvados. Jūsų pranešimas bus apdorotas greičiau, jei bus pateiktas anglų kalba.';
+  String get reportCheatBoostHelp => 'Įdėkite nuorodą į partiją(-as) ir paaiškinkite, kas netinkamo yra šio vartotojo elgsenoje. Paminėkite, kaip priėjote prie tokios išvados. Jūsų pranešimas bus apdorotas greičiau, jei bus pateiktas anglų kalba.';
+
+  @override
+  String get reportUsernameHelp => 'Paaiškinkite, kuo šis vartotojo vardas yra įžeidžiantis. Nesakykite tiesiog „tai įžeidžia/netinkama“, bet papasakokite, kaip priėjote prie šios išvados, ypač jei įžeidimas yra užmaskuotas, ne anglų kalba, yra slengas arba yra istorinė / kultūrinė nuoroda.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Jūsų pranešimas bus apdorotas greičiau, jei jis bus parašytas anglų kalba.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Pateikite bent vieną nuorodą į partiją, kurioje buvo sukčiauta.';
@@ -4122,6 +4385,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get nothingToSeeHere => 'Nieko naujo.';
 
   @override
+  String get stats => 'Statistika';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4129,7 +4395,7 @@ class AppLocalizationsLt extends AppLocalizations {
       other: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundžių.',
       many: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundžių.',
       few: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundžių.',
-      one: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundės.',
+      one: 'Jūsų varžovas paliko partiją. Galite reikalauti pergalės už $count sekundės.',
     );
     return '$_temp0';
   }
@@ -4856,8 +5122,730 @@ class AppLocalizationsLt extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess transliuotojai';
 
   @override
+  String get studyPrivate => 'Privati';
+
+  @override
+  String get studyMyStudies => 'Mano studijos';
+
+  @override
+  String get studyStudiesIContributeTo => 'Studijos, kuriose prisidedu';
+
+  @override
+  String get studyMyPublicStudies => 'Mano viešos studijos';
+
+  @override
+  String get studyMyPrivateStudies => 'Mano privačios studijos';
+
+  @override
+  String get studyMyFavoriteStudies => 'Mano mėgstamiausios studijos';
+
+  @override
+  String get studyWhatAreStudies => 'Kas yra studijos?';
+
+  @override
+  String get studyAllStudies => 'Visos studijos';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Studijos, sukurtos $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Dar nėra.';
+
+  @override
+  String get studyHot => 'Populiaru dabar';
+
+  @override
+  String get studyDateAddedNewest => 'Sukūrimo data (naujausios)';
+
+  @override
+  String get studyDateAddedOldest => 'Sukūrimo data (seniausios)';
+
+  @override
+  String get studyRecentlyUpdated => 'Neseniai atnaujintos';
+
+  @override
+  String get studyMostPopular => 'Populiariausios';
+
+  @override
+  String get studyAlphabetical => 'Abėcėlės tvarka';
+
+  @override
+  String get studyAddNewChapter => 'Pridėti naują skyrių';
+
+  @override
+  String get studyAddMembers => 'Pridėti narių';
+
+  @override
+  String get studyInviteToTheStudy => 'Pakviesti į studiją';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Kvieskite tik pažįstamus žmones, ir tik norinčius dalyvauti šioje studijoje.';
+
+  @override
+  String get studySearchByUsername => 'Ieškoti pagal naudotojo vardą';
+
+  @override
+  String get studySpectator => 'Žiūrovas';
+
+  @override
+  String get studyContributor => 'Talkininkas';
+
+  @override
+  String get studyKick => 'Išmesti';
+
+  @override
+  String get studyLeaveTheStudy => 'Palikti studiją';
+
+  @override
+  String get studyYouAreNowAContributor => 'Dabar esate talkininkas';
+
+  @override
+  String get studyYouAreNowASpectator => 'Dabar esate žiūrovas';
+
+  @override
+  String get studyPgnTags => 'PGN žymos';
+
+  @override
+  String get studyLike => 'Mėgti';
+
+  @override
+  String get studyUnlike => 'Nebemėgti';
+
+  @override
+  String get studyNewTag => 'Nauja žyma';
+
+  @override
+  String get studyCommentThisPosition => 'Komentuoti šią poziciją';
+
+  @override
+  String get studyCommentThisMove => 'Komentuoti šį ėjimą';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Komentuoti su glifais';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Skyrius yra per trumpas analizei.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Tik studijos talkininkai gali prašyti kompiuterio analizės.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Gaukite pilną pagrindinės linijos kompiuterio analizę.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Įsitikinkite, kad skyrius užbaigtas. Analizės galite prašyti tik kartą.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Visi SYNC nariai lieka toje pačioje pozicijoje';
+
+  @override
+  String get studyShareChanges => 'Dalinkitės pakeitimais su žiūrovais ir saugokite juos serveryje';
+
+  @override
+  String get studyPlaying => 'Žaidžiama';
+
+  @override
+  String get studyShowEvalBar => 'Vertinimo skalė';
+
+  @override
+  String get studyFirst => 'Pirmas';
+
+  @override
+  String get studyPrevious => 'Ankstesnis';
+
+  @override
+  String get studyNext => 'Kitas';
+
+  @override
+  String get studyLast => 'Paskutinis';
+
+  @override
   String get studyShareAndExport => 'Dalintis ir eksportuoti';
 
   @override
+  String get studyCloneStudy => 'Klonuoti';
+
+  @override
+  String get studyStudyPgn => 'Studijos PGN';
+
+  @override
+  String get studyDownloadAllGames => 'Atsisiųsti visus žaidimus';
+
+  @override
+  String get studyChapterPgn => 'Skyriaus PGN';
+
+  @override
+  String get studyCopyChapterPgn => 'Kopijuoti PGN';
+
+  @override
+  String get studyDownloadGame => 'Atsisiųsti žaidimą';
+
+  @override
+  String get studyStudyUrl => 'Studijos URL';
+
+  @override
+  String get studyCurrentChapterUrl => 'Dabartinio skyriaus URL';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Galite įklijuoti šį forume norėdami įterpti';
+
+  @override
+  String get studyStartAtInitialPosition => 'Pradėti pradinėje pozicijoje';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Pradėti nuo $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Įterpti savo svetainėje ar tinklaraštyje';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Skaitykite daugiau apie įterpimą';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Gali būti įterptos tik viešos studijos!';
+
+  @override
+  String get studyOpen => 'Atverti';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1 iš $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Studija nerasta';
+
+  @override
+  String get studyEditChapter => 'Redaguoti skyrių';
+
+  @override
+  String get studyNewChapter => 'Naujas skyrius';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Importuoti iš $param';
+  }
+
+  @override
+  String get studyOrientation => 'Kryptis';
+
+  @override
+  String get studyAnalysisMode => 'Analizės režimas';
+
+  @override
+  String get studyPinnedChapterComment => 'Prisegtas skyriaus komentaras';
+
+  @override
+  String get studySaveChapter => 'Išsaugoti skyrių';
+
+  @override
+  String get studyClearAnnotations => 'Pašalinti anotacijas';
+
+  @override
+  String get studyClearVariations => 'Išvalyti variacijas';
+
+  @override
+  String get studyDeleteChapter => 'Ištrinti skyrių';
+
+  @override
+  String get studyDeleteThisChapter => 'Ištrinti šį skyrių? Nėra kelio atgal!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Išvalyti visus komentarus, ženklus ir figūras šiame skyriuje?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Iš karto po lenta';
+
+  @override
+  String get studyNoPinnedComment => 'Jokio';
+
+  @override
+  String get studyNormalAnalysis => 'Įprasta analizė';
+
+  @override
+  String get studyHideNextMoves => 'Slėpti kitus ėjimus';
+
+  @override
+  String get studyInteractiveLesson => 'Interaktyvi pamoka';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Skyrius $param';
+  }
+
+  @override
+  String get studyEmpty => 'Tuščia';
+
+  @override
+  String get studyStartFromInitialPosition => 'Pradėti nuo pirminės pozicijos';
+
+  @override
+  String get studyEditor => 'Redaktorius';
+
+  @override
+  String get studyStartFromCustomPosition => 'Pradėti nuo tinkintos pozicijos';
+
+  @override
+  String get studyLoadAGameByUrl => 'Pakrauti partijas iš adresų';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Pakrauti poziciją iš FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Pakrauti partijas iš PGN';
+
+  @override
+  String get studyAutomatic => 'Automatinis';
+
+  @override
+  String get studyUrlOfTheGame => 'Partijų adresai, vienas per eilutę';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Pakrauti partijas iš $param1 arba $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Sukurti skyrių';
+
+  @override
+  String get studyCreateStudy => 'Sukurti studiją';
+
+  @override
+  String get studyEditStudy => 'Redaguoti studiją';
+
+  @override
+  String get studyVisibility => 'Matomumas';
+
+  @override
+  String get studyPublic => 'Viešas';
+
+  @override
+  String get studyUnlisted => 'Nėra sąraše';
+
+  @override
+  String get studyInviteOnly => 'Tik su pakvietimu';
+
+  @override
+  String get studyAllowCloning => 'Leisti kopijuoti';
+
+  @override
+  String get studyNobody => 'Niekam';
+
+  @override
+  String get studyOnlyMe => 'Tik man';
+
+  @override
+  String get studyContributors => 'Dalyviams';
+
+  @override
+  String get studyMembers => 'Nariams';
+
+  @override
+  String get studyEveryone => 'Visiems';
+
+  @override
+  String get studyEnableSync => 'Įgalinti sinchronizaciją';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Taip: visiems rodyti tą pačią poziciją';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Ne: leisti žmonėms naršyti laisvai';
+
+  @override
+  String get studyPinnedStudyComment => 'Prisegtas studijos komentaras';
+
+  @override
   String get studyStart => 'Pradėti';
+
+  @override
+  String get studySave => 'Išsaugoti';
+
+  @override
+  String get studyClearChat => 'Išvalyti pokalbį';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Ištrinti studijos pokalbių istoriją? Nėra kelio atgal!';
+
+  @override
+  String get studyDeleteStudy => 'Ištrinti studiją';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Ištrinti visą studiją? Ištrynimas negrįžtamas. Norėdami tęsti įrašykite studijos pavadinimą: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Kur norite tai studijuoti?';
+
+  @override
+  String get studyGoodMove => 'Geras ėjimas';
+
+  @override
+  String get studyMistake => 'Klaida';
+
+  @override
+  String get studyBrilliantMove => 'Puikus ėjimas';
+
+  @override
+  String get studyBlunder => 'Šiurkšti klaida';
+
+  @override
+  String get studyInterestingMove => 'Įdomus ėjimas';
+
+  @override
+  String get studyDubiousMove => 'Abejotinas ėjimas';
+
+  @override
+  String get studyOnlyMove => 'Vienintelis ėjimas';
+
+  @override
+  String get studyZugzwang => 'Cugcvangas';
+
+  @override
+  String get studyEqualPosition => 'Lygi pozicija';
+
+  @override
+  String get studyUnclearPosition => 'Neaiški pozicija';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'Šiek tiek geriau baltiesiems';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Šiek tiek geriau juodiesiems';
+
+  @override
+  String get studyWhiteIsBetter => 'Geriau baltiesiems';
+
+  @override
+  String get studyBlackIsBetter => 'Geriau juodiesiems';
+
+  @override
+  String get studyWhiteIsWinning => 'Laimi baltieji';
+
+  @override
+  String get studyBlackIsWinning => 'Laimi juodieji';
+
+  @override
+  String get studyNovelty => 'Naujovė';
+
+  @override
+  String get studyDevelopment => 'Plėtojimas';
+
+  @override
+  String get studyInitiative => 'Iniciatyva';
+
+  @override
+  String get studyAttack => 'Ataka';
+
+  @override
+  String get studyCounterplay => 'Kontraėjimas';
+
+  @override
+  String get studyTimeTrouble => 'Laiko problemos';
+
+  @override
+  String get studyWithCompensation => 'Su kompensacija';
+
+  @override
+  String get studyWithTheIdea => 'Su mintimi';
+
+  @override
+  String get studyNextChapter => 'Kitas skyrius';
+
+  @override
+  String get studyPrevChapter => 'Ankstenis skyrius';
+
+  @override
+  String get studyStudyActions => 'Studijos veiksmai';
+
+  @override
+  String get studyTopics => 'Temos';
+
+  @override
+  String get studyMyTopics => 'Mano temos';
+
+  @override
+  String get studyPopularTopics => 'Populiarios temos';
+
+  @override
+  String get studyManageTopics => 'Valdyti temas';
+
+  @override
+  String get studyBack => 'Atgal';
+
+  @override
+  String get studyPlayAgain => 'Žaisti dar kartą';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Ar norėtumėte žaisti nuo šios pozicijos?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Sveikiname! Jūs pabaigėte šią pamoką.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param puslapyje';
+  }
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count skyrių',
+      many: '$count skyrių',
+      few: '$count skyriai',
+      one: '$count skyrius',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count partijų',
+      many: '$count partijų',
+      few: '$count partijos',
+      one: '$count partija',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count narių',
+      many: '$count narių',
+      few: '$count nariai',
+      one: '$count narys',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimų',
+      many: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimo',
+      few: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimų',
+      one: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'ką tik';
+
+  @override
+  String get timeagoRightNow => 'dabar';
+
+  @override
+  String get timeagoCompleted => 'užbaigta';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count sekundžių',
+      many: 'po $count sekundės',
+      few: 'po $count sekundžių',
+      one: 'po $count sekundės',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count minučių',
+      many: 'po $count minutės',
+      few: 'po $count minučių',
+      one: 'po $count minutės',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count valandų',
+      many: 'po $count valandos',
+      few: 'po $count valandų',
+      one: 'po $count valandos',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count dienų',
+      many: 'po $count dienos',
+      few: 'po $count dienų',
+      one: 'po $count dienos',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count savaičių',
+      many: 'po $count savaitės',
+      few: 'po $count savaičių',
+      one: 'po $count savaitės',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count mėnesių',
+      many: 'po $count mėnesio',
+      few: 'po $count mėnesių',
+      one: 'po $count mėnesio',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'po $count metų',
+      many: 'po $count metų',
+      few: 'po $count metų',
+      one: 'po $count metų',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count minučių',
+      many: 'Prieš $count minutės',
+      few: 'Prieš $count minutes',
+      one: 'Prieš $count minutę',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count valandų',
+      many: 'Prieš $count valandos',
+      few: 'Prieš $count valandas',
+      one: 'Prieš $count valandą',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count dienų',
+      many: 'Prieš $count dienos',
+      few: 'Prieš $count dienas',
+      one: 'Prieš $count dieną',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count savaičių',
+      many: 'Prieš $count savaitės',
+      few: 'Prieš $count savaites',
+      one: 'Prieš $count savaitę',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count mėnesių',
+      many: 'Prieš $count mėnesio',
+      few: 'Prieš $count mėnesius',
+      one: 'Prieš $count mėnesį',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prieš $count metų',
+      many: 'Prieš $count metų',
+      few: 'Prieš $count metus',
+      one: 'Prieš $count metus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Liko $count minučių',
+      many: 'Liko $count minučių',
+      few: 'Liko $count minutės',
+      one: 'Liko $count minutė',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Liko $count valandų',
+      many: 'Liko $count valandų',
+      few: 'Liko $count valandos',
+      one: 'Liko $count valanda',
+    );
+    return '$_temp0';
+  }
 }

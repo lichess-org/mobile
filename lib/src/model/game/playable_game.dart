@@ -30,9 +30,7 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ArchivedGame] for a game that is finished and not owned by the current user.
 @freezed
-class PlayableGame
-    with _$PlayableGame, BaseGame, IndexableSteps
-    implements BaseGame {
+class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -54,7 +52,7 @@ class PlayableGame
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
-    GamePrefs? prefs,
+    ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
     bool? boosted,
@@ -76,16 +74,18 @@ class PlayableGame
   }
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me => youAre == null
-      ? null
-      : youAre == Side.white
+  Player? get me =>
+      youAre == null
+          ? null
+          : youAre == Side.white
           ? white
           : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent => youAre == null
-      ? null
-      : youAre == Side.white
+  Player? get opponent =>
+      youAre == null
+          ? null
+          : youAre == Side.white
           ? black
           : white;
 
@@ -95,7 +95,8 @@ class PlayableGame
 
   bool get imported => source == GameSource.import;
 
-  bool get isPlayerTurn => lastPosition.turn == youAre;
+  /// Whether it is the current player's turn.
+  bool get isMyTurn => lastPosition.turn == youAre;
 
   /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
@@ -109,12 +110,8 @@ class PlayableGame
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
   bool get drawable =>
-      playable &&
-      lastPosition.fullmoves >= 2 &&
-      !(me?.offeringDraw == true) &&
-      !hasAI;
-  bool get rematchable =>
-      meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
+      playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
+  bool get rematchable => meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
   bool get canTakeback =>
       takebackable &&
       playable &&
@@ -125,18 +122,18 @@ class PlayableGame
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
-      !isPlayerTurn &&
+      !isMyTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 
   bool get userAnalysable =>
-      finished && steps.length > 4 ||
-      (playable && (clock == null || youAre == null));
+      finished && steps.length > 4 || (playable && (clock == null || youAre == null));
 
   ArchivedGame toArchivedGame({required DateTime finishedAt}) {
     return ArchivedGame(
       id: id,
       meta: meta,
+      source: source,
       data: LightArchivedGame(
         id: id,
         variant: meta.variant,
@@ -151,16 +148,17 @@ class PlayableGame
         status: status,
         white: white,
         black: black,
-        clock: meta.clock != null
-            ? (
-                initial: meta.clock!.initial,
-                increment: meta.clock!.increment,
-              )
-            : null,
+        clock:
+            meta.clock != null
+                ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
+                : null,
         opening: meta.opening,
       ),
+      initialFen: initialFen,
       steps: steps,
       status: status,
+      winner: winner,
+      isThreefoldRepetition: isThreefoldRepetition,
       white: white,
       black: black,
       youAre: youAre,
@@ -168,6 +166,23 @@ class PlayableGame
       clocks: clocks,
     );
   }
+}
+
+@freezed
+class PlayableClockData with _$PlayableClockData {
+  const factory PlayableClockData({
+    required bool running,
+    required Duration white,
+    required Duration black,
+
+    /// The network lag of the clock.
+    ///
+    /// Will be sent along with move events.
+    required Duration? lag,
+
+    /// The time when the clock event was received.
+    required DateTime at,
+  }) = _PlayableClockData;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -202,17 +217,15 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
-    source: requiredGamePick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: requiredGamePick(
+      'source',
+    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
-    correspondenceClock:
-        pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
+    correspondenceClock: pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -221,16 +234,14 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
     prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
-    expiration: pick('expiration').letOrNull(
-      (it) {
-        final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
-        return (
-          idle: idle,
-          timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
-          movedAt: DateTime.now().subtract(idle),
-        );
-      },
-    ),
+    expiration: pick('expiration').letOrNull((it) {
+      final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
+      return (
+        idle: idle,
+        timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
+        movedAt: DateTime.now().subtract(idle),
+      );
+    }),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
   );
 }
@@ -250,22 +261,19 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
         moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
       ),
     ),
-    daysPerTurn: pick('correspondence')
-        .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
+    daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
       (it) => ISet(
-        pick.asListOrThrow(
-          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
-        ),
+        pick.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown),
       ),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
   );
 }
 
-GamePrefs _gamePrefsFromPick(RequiredPick pick) {
-  return GamePrefs(
+ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {
+  return ServerGamePrefs(
     showRatings: pick('showRatings').asBoolOrFalse(),
     enablePremove: pick('enablePremove').asBoolOrFalse(),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
@@ -295,6 +303,8 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    lag: pick('lag').letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
+    at: DateTime.now(),
   );
 }
 

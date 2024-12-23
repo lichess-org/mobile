@@ -1,10 +1,9 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -15,7 +14,6 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -23,25 +21,21 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
-  const OfflineCorrespondenceGameScreen({
-    required this.initialGame,
-    super.key,
-  });
+  const OfflineCorrespondenceGameScreen({required this.initialGame, super.key});
 
   final (DateTime, OfflineCorrespondenceGame) initialGame;
 
   @override
-  State<OfflineCorrespondenceGameScreen> createState() =>
-      _OfflineCorrespondenceGameScreenState();
+  State<OfflineCorrespondenceGameScreen> createState() => _OfflineCorrespondenceGameScreenState();
 }
 
-class _OfflineCorrespondenceGameScreenState
-    extends State<OfflineCorrespondenceGameScreen> {
+class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceGameScreen> {
   late (DateTime, OfflineCorrespondenceGame) currentGame;
 
   @override
@@ -58,35 +52,10 @@ class _OfflineCorrespondenceGameScreenState
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
     final (lastModified, game) = currentGame;
-    return Scaffold(
-      appBar: AppBar(title: _Title(game)),
-      body: _Body(
-        game: game,
-        lastModified: lastModified,
-        onGameChanged: goToNextGame,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    final (lastModified, game) = currentGame;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: _Title(game),
-      ),
-      child: _Body(
-        game: game,
-        lastModified: lastModified,
-        onGameChanged: goToNextGame,
-      ),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: _Title(game)),
+      body: _Body(game: game, lastModified: lastModified, onGameChanged: goToNextGame),
     );
   }
 }
@@ -97,20 +66,14 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mode =
-        game.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+    final mode = game.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          game.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
+        Icon(game.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
         if (game.daysPerTurn != null)
-          Text(
-            '${context.l10n.nbDays(game.daysPerTurn!)}$mode',
-          )
+          Text('${context.l10n.nbDays(game.daysPerTurn!)}$mode')
         else
           Text('∞$mode'),
       ],
@@ -119,11 +82,7 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.game,
-    required this.lastModified,
-    required this.onGameChanged,
-  });
+  const _Body({required this.game, required this.lastModified, required this.onGameChanged});
 
   final OfflineCorrespondenceGame game;
   final DateTime lastModified;
@@ -138,6 +97,7 @@ class _BodyState extends ConsumerState<_Body> {
   int stepCursor = 0;
   (String, Move)? moveToConfirm;
   bool isBoardTurned = false;
+  NormalMove? promotionMove;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
@@ -163,14 +123,11 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final shouldShowMaterialDiff = ref.watch(
-      boardPreferencesProvider.select(
-        (prefs) => prefs.showMaterialDifference,
-      ),
+    final materialDifference = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.materialDifferenceFormat),
     );
 
-    final offlineOngoingGames =
-        ref.watch(offlineOngoingCorrespondenceGamesProvider);
+    final offlineOngoingGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
 
     final position = game.positionAt(stepCursor);
     final sideToMove = position.turn;
@@ -178,46 +135,39 @@ class _BodyState extends ConsumerState<_Body> {
 
     final black = GamePlayer(
       player: game.black,
-      materialDiff: shouldShowMaterialDiff
-          ? game.materialDiffAt(stepCursor, Side.black)
-          : null,
+      materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.black) : null,
+      materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.black,
-      confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
-          ? (
-              confirm: confirmMove,
-              cancel: cancelMove,
-            )
-          : null,
-      clock: youAre == Side.black &&
-              game.estimatedTimeLeft(Side.black, widget.lastModified) != null
-          ? CorrespondenceClock(
-              duration:
-                  game.estimatedTimeLeft(Side.black, widget.lastModified)!,
-              active: activeClockSide == Side.black,
-            )
-          : null,
+      confirmMoveCallbacks:
+          youAre == Side.black && moveToConfirm != null
+              ? (confirm: confirmMove, cancel: cancelMove)
+              : null,
+      clock:
+          youAre == Side.black && game.estimatedTimeLeft(Side.black, widget.lastModified) != null
+              ? CorrespondenceClock(
+                duration: game.estimatedTimeLeft(Side.black, widget.lastModified)!,
+                active: activeClockSide == Side.black,
+              )
+              : null,
     );
     final white = GamePlayer(
       player: game.white,
-      materialDiff: shouldShowMaterialDiff
-          ? game.materialDiffAt(stepCursor, Side.white)
-          : null,
+      materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.white) : null,
+      materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.white,
-      confirmMoveCallbacks: youAre == Side.white && moveToConfirm != null
-          ? (
-              confirm: confirmMove,
-              cancel: cancelMove,
-            )
-          : null,
-      clock: game.estimatedTimeLeft(Side.white, widget.lastModified) != null
-          ? CorrespondenceClock(
-              duration:
-                  game.estimatedTimeLeft(Side.white, widget.lastModified)!,
-              active: activeClockSide == Side.white,
-            )
-          : null,
+      confirmMoveCallbacks:
+          youAre == Side.white && moveToConfirm != null
+              ? (confirm: confirmMove, cancel: cancelMove)
+              : null,
+      clock:
+          game.estimatedTimeLeft(Side.white, widget.lastModified) != null
+              ? CorrespondenceClock(
+                duration: game.estimatedTimeLeft(Side.white, widget.lastModified)!,
+                active: activeClockSide == Side.white,
+              )
+              : null,
     );
 
     final topPlayer = youAre == Side.white ? black : white;
@@ -229,28 +179,28 @@ class _BodyState extends ConsumerState<_Body> {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              onMove: (move, {isDrop, isPremove}) {
-                onUserMove(Move.fromUci(move.uci)!);
-              },
-              boardData: cg.BoardData(
-                interactableSide: game.playable && !isReplaying
-                    ? youAre == Side.white
-                        ? cg.InteractableSide.white
-                        : cg.InteractableSide.black
-                    : cg.InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
-                fen: position.fen,
-                lastMove: game.moveAt(stepCursor)?.cg,
+              orientation: isBoardTurned ? youAre.opposite : youAre,
+              fen: position.fen,
+              lastMove: game.moveAt(stepCursor) as NormalMove?,
+              gameData: GameData(
+                playerSide:
+                    game.playable && !isReplaying
+                        ? youAre == Side.white
+                            ? PlayerSide.white
+                            : PlayerSide.black
+                        : PlayerSide.none,
                 isCheck: position.isCheck,
-                sideToMove: sideToMove.cg,
-                validMoves: algebraicLegalMoves(position),
+                sideToMove: sideToMove,
+                validMoves: makeLegalMoves(position, isChess960: game.variant == Variant.chess960),
+                promotionMove: promotionMove,
+                onMove: (move, {isDrop, captured}) {
+                  onUserMove(move);
+                },
+                onPromotionSelection: onPromotionSelection,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
-              moves: game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
+              moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
               currentMoveIndex: stepCursor,
               onSelectMove: (moveIndex) {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
@@ -258,115 +208,91 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        Container(
-          color: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoTheme.of(context).barBackgroundColor
-              : Theme.of(context).bottomAppBarTheme.color,
-          child: SafeArea(
-            top: false,
-            child: SizedBox(
-              height: kBottomBarHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.flipBoard,
-                      onTap: () {
-                        setState(() {
-                          isBoardTurned = !isBoardTurned;
-                        });
-                      },
-                      icon: CupertinoIcons.arrow_2_squarepath,
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.analysis,
-                      onTap: () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (_) => AnalysisScreen(
-                            pgnOrId: game.makePgn(),
-                            options: AnalysisOptions(
-                              isLocalEvaluationAllowed: false,
-                              variant: game.variant,
-                              initialMoveCursor: stepCursor,
-                              orientation: game.youAre,
-                              id: game.id,
-                              division: game.meta.division,
-                            ),
-                            title: context.l10n.analysis,
+        BottomBar(
+          children: [
+            BottomBarButton(
+              label: context.l10n.flipBoard,
+              onTap: () {
+                setState(() {
+                  isBoardTurned = !isBoardTurned;
+                });
+              },
+              icon: CupertinoIcons.arrow_2_squarepath,
+            ),
+            BottomBarButton(
+              label: context.l10n.analysis,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder:
+                      (_) => AnalysisScreen(
+                        options: AnalysisOptions(
+                          orientation: game.youAre,
+                          standalone: (
+                            pgn: game.makePgn(),
+                            isComputerAnalysisAllowed: false,
+                            variant: game.variant,
                           ),
-                        );
-                      },
-                      icon: Icons.biotech,
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: 'Go to the next game',
-                      icon: Icons.skip_next,
-                      onTap: offlineOngoingGames.maybeWhen(
-                        data: (games) {
-                          final nextTurn = games
-                              .whereNot((g) => g.$2.id == game.id)
-                              .firstWhereOrNull((g) => g.$2.isPlayerTurn);
-                          return nextTurn != null
-                              ? () {
-                                  widget.onGameChanged(nextTurn);
-                                }
-                              : null;
-                        },
-                        orElse: () => null,
+                          initialMoveCursor: stepCursor,
+                        ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.mobileCorrespondenceClearSavedMove,
-                      onTap: game.registeredMoveAtPgn != null
-                          ? () {
-                              showConfirmDialog<void>(
-                                context,
-                                title: Text(
-                                  context
-                                      .l10n.mobileCorrespondenceClearSavedMove,
-                                ),
-                                isDestructiveAction: true,
-                                onConfirm: (_) => deleteRegisteredMove(),
-                              );
-                            }
-                          : null,
-                      icon: Icons.save,
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoBackward ? () => moveBackward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoBackward ? () => moveBackward() : null,
-                        label: 'Previous',
-                        icon: CupertinoIcons.chevron_back,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoForward ? () => moveForward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoForward ? () => moveForward() : null,
-                        label: context.l10n.next,
-                        icon: CupertinoIcons.chevron_forward,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                ],
+                );
+              },
+              icon: Icons.biotech,
+            ),
+            BottomBarButton(
+              label: 'Go to the next game',
+              icon: Icons.skip_next,
+              onTap: offlineOngoingGames.maybeWhen(
+                data: (games) {
+                  final nextTurn = games
+                      .whereNot((g) => g.$2.id == game.id)
+                      .firstWhereOrNull((g) => g.$2.isMyTurn);
+                  return nextTurn != null
+                      ? () {
+                        widget.onGameChanged(nextTurn);
+                      }
+                      : null;
+                },
+                orElse: () => null,
               ),
             ),
-          ),
+            BottomBarButton(
+              label: context.l10n.mobileCorrespondenceClearSavedMove,
+              onTap:
+                  game.registeredMoveAtPgn != null
+                      ? () {
+                        showConfirmDialog<void>(
+                          context,
+                          title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
+                          isDestructiveAction: true,
+                          onConfirm: (_) => deleteRegisteredMove(),
+                        );
+                      }
+                      : null,
+              icon: Icons.save,
+            ),
+            RepeatButton(
+              onLongPress: canGoBackward ? () => moveBackward() : null,
+              child: BottomBarButton(
+                onTap: canGoBackward ? () => moveBackward() : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            Expanded(
+              child: RepeatButton(
+                onLongPress: canGoForward ? () => moveForward() : null,
+                child: BottomBarButton(
+                  onTap: canGoForward ? () => moveForward() : null,
+                  label: context.l10n.next,
+                  icon: CupertinoIcons.chevron_forward,
+                  showTooltip: false,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -390,7 +316,14 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void onUserMove(Move move) {
+  void onUserMove(NormalMove move) {
+    if (isPromotionPawnMove(game.lastPosition, move)) {
+      setState(() {
+        promotionMove = move;
+      });
+      return;
+    }
+
     final (newPos, newSan) = game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -401,46 +334,53 @@ class _BodyState extends ConsumerState<_Body> {
 
     setState(() {
       moveToConfirm = (game.sanMoves, move);
-      game = game.copyWith(
-        steps: game.steps.add(newStep),
-      );
+      game = game.copyWith(steps: game.steps.add(newStep));
+      promotionMove = null;
       stepCursor = stepCursor + 1;
     });
 
     _moveFeedback(sanMove);
   }
 
-  void confirmMove() {
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      setState(() {
+        promotionMove = null;
+      });
+      return;
+    }
+    if (promotionMove != null) {
+      final move = promotionMove!.withPromotion(role);
+      onUserMove(move);
+    }
+  }
+
+  Future<void> confirmMove() async {
     setState(() {
-      game = game.copyWith(
-        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2),
-      );
+      game = game.copyWith(registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2));
       moveToConfirm = null;
     });
 
-    ref.read(correspondenceGameStorageProvider).save(game);
+    final storage = await ref.read(correspondenceGameStorageProvider.future);
+    storage.save(game);
   }
 
   void cancelMove() {
     setState(() {
       moveToConfirm = null;
       stepCursor = stepCursor - 1;
-      game = game.copyWith(
-        steps: game.steps.removeLast(),
-      );
+      game = game.copyWith(steps: game.steps.removeLast());
     });
   }
 
-  void deleteRegisteredMove() {
+  Future<void> deleteRegisteredMove() async {
     setState(() {
       stepCursor = stepCursor - 1;
-      game = game.copyWith(
-        steps: game.steps.removeLast(),
-        registeredMoveAtPgn: null,
-      );
+      game = game.copyWith(steps: game.steps.removeLast(), registeredMoveAtPgn: null);
     });
 
-    ref.read(correspondenceGameStorageProvider).save(game);
+    final storage = await ref.read(correspondenceGameStorageProvider.future);
+    storage.save(game);
   }
 
   Side? get activeClockSide {

@@ -21,11 +21,7 @@ class UserListTile extends StatelessWidget {
     this.userPerfs,
   );
 
-  factory UserListTile.fromUser(
-    User user,
-    bool isOnline, {
-    VoidCallback? onTap,
-  }) {
+  factory UserListTile.fromUser(User user, bool isOnline, {VoidCallback? onTap}) {
     return UserListTile._(
       user.username,
       user.title,
@@ -62,9 +58,7 @@ class UserListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
-      padding: Theme.of(context).platform == TargetPlatform.iOS
-          ? Styles.bodyPadding
-          : null,
+      padding: Theme.of(context).platform == TargetPlatform.iOS ? Styles.bodyPadding : null,
       leading: Icon(
         isOnline == true ? Icons.cloud : Icons.cloud_off,
         color: isOnline == true ? context.lichessColors.good : null,
@@ -74,29 +68,17 @@ class UserListTile extends StatelessWidget {
         child: Row(
           children: [
             if (isPatron == true) ...[
-              Icon(
-                LichessIcons.patron,
-                semanticLabel: context.l10n.patronLichessPatron,
-              ),
+              Icon(LichessIcons.patron, semanticLabel: context.l10n.patronLichessPatron),
               const SizedBox(width: 5),
             ],
             if (title != null) ...[
               Text(
                 title!,
-                style: TextStyle(
-                  color: context.lichessColors.brag,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: context.lichessColors.brag, fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 5),
             ],
-            Flexible(
-              child: Text(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                username,
-              ),
-            ),
+            Flexible(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, username)),
             if (flair != null) ...[
               const SizedBox(width: 5),
               CachedNetworkImage(
@@ -121,31 +103,23 @@ class _UserRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values.where((element) {
-      final p = perfs[element];
-      return p != null &&
-          p.numberOfGamesOrRuns > 0 &&
-          p.ratingDeviation < kClueLessDeviation;
-    }).toList(growable: false);
+    List<Perf> userPerfs = Perf.values
+        .where((element) {
+          final p = perfs[element];
+          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+        })
+        .toList(growable: false);
 
     if (userPerfs.isEmpty) return const SizedBox.shrink();
 
     userPerfs.sort(
-      (p1, p2) => perfs[p1]!
-          .numberOfGamesOrRuns
-          .compareTo(perfs[p2]!.numberOfGamesOrRuns),
+      (p1, p2) => perfs[p1]!.numberOfGamesOrRuns.compareTo(perfs[p2]!.numberOfGamesOrRuns),
     );
     userPerfs = userPerfs.reversed.toList();
 
     final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
     final icon = userPerfs.first.icon;
 
-    return Row(
-      children: [
-        Icon(icon, size: 16),
-        const SizedBox(width: 5),
-        Text(rating),
-      ],
-    );
+    return Row(children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)]);
   }
 }

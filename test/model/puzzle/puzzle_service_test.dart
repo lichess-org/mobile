@@ -5,8 +5,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -14,24 +12,15 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
-    final db = await openDb(dbFactory, inMemoryDatabasePath);
-
     return makeContainer(
       overrides: [
-        databaseProvider.overrideWith((ref) {
-          ref.onDispose(db.close);
-          return db;
-        }),
         lichessClientProvider.overrideWith((ref) {
           return LichessClient(mockClient, ref);
         }),
@@ -51,14 +40,10 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 3,
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 3);
 
-      final next = await service.nextPuzzle(
-        userId: null,
-      );
+      final next = await service.nextPuzzle(userId: null);
       expect(nbReq, equals(1));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       final data = await storage.fetch(userId: null);
@@ -66,9 +51,7 @@ void main() {
       expect(data?.unsolved.length, equals(3));
     });
 
-    test(
-        'if local queue is full, it will not download data but still try to fetch rating',
-        () async {
+    test('will not download data if local queue is full', () async {
       int nbReq = 0;
       final mockClient = MockClient((request) {
         nbReq++;
@@ -79,20 +62,13 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
 
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
-      final next = await service.nextPuzzle(
-        userId: null,
-      );
-      expect(nbReq, equals(1));
+      final next = await service.nextPuzzle(userId: null);
+      expect(nbReq, equals(0));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
@@ -110,26 +86,18 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 2,
-      );
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 2);
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
-      final next = await service.nextPuzzle(
-        userId: null,
-      );
+      final next = await service.nextPuzzle(userId: null);
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       expect(nbReq, equals(1));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(2));
     });
 
-    test('nextPuzzle will always get the first puzzle of unsolved queue',
-        () async {
+    test('nextPuzzle will always get the first puzzle of unsolved queue', () async {
       int nbReq = 0;
       final mockClient = MockClient((request) {
         nbReq++;
@@ -137,45 +105,31 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
       expect(nbReq, equals(0));
-      final next = await service.nextPuzzle(
-        userId: null,
-      );
+      final next = await service.nextPuzzle(userId: null);
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));
 
-      final next2 = await service.nextPuzzle(
-        userId: null,
-      );
+      final next2 = await service.nextPuzzle(userId: null);
       expect(next2?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data2 = await storage.fetch(userId: null);
       expect(data2?.unsolved.length, equals(1));
     });
 
-    test('nextPuzzle returns null is unsolved queue is empty and is offline',
-        () async {
+    test('nextPuzzle returns null is unsolved queue is empty and is offline', () async {
       final mockClient = MockClient((request) {
         throw const SocketException('offline');
       });
 
       final container = await makeTestContainer(mockClient);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
 
-      final nextPuzzle = await service.nextPuzzle(
-        userId: null,
-      );
+      final nextPuzzle = await service.nextPuzzle(userId: null);
 
       expect(nextPuzzle, isNull);
     });
@@ -191,26 +145,16 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
-      final next = await service.nextPuzzle(
-        userId: const UserId('testUserId'),
-      );
+      final next = await service.nextPuzzle(userId: const UserId('testUserId'));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(nbReq, equals(1));
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
-      expect(
-        data?.unsolved.length,
-        equals(1),
-      );
+      expect(data?.unsolved.length, equals(1));
     });
 
     test('different batch is saved per angle', () async {
@@ -224,14 +168,9 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
       final next = await service.nextPuzzle(
         angle: const PuzzleTheme(PuzzleThemeKey.opening),
@@ -244,10 +183,7 @@ void main() {
         userId: null,
         angle: const PuzzleTheme(PuzzleThemeKey.opening),
       );
-      expect(
-        data?.unsolved.length,
-        equals(1),
-      );
+      expect(data?.unsolved.length, equals(1));
     });
 
     test('solve puzzle when online, no userId', () async {
@@ -261,22 +197,13 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
-      await storage.save(
-        userId: null,
-        data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(userId: null, data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]));
 
       final next = await service.solve(
         puzzle: samplePuzzle,
-        solution: const PuzzleSolution(
-          id: PuzzleId('pId3'),
-          win: true,
-          rated: true,
-        ),
+        solution: const PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true),
         userId: null,
       );
 
@@ -296,8 +223,7 @@ void main() {
         nbReq++;
         if (request.method == 'POST' &&
             request.url.path == '/api/puzzle/batch/mix' &&
-            request.body ==
-                '{"solutions":[{"id":"pId3","win":true,"rated":true}]}') {
+            request.body == '{"solutions":[{"id":"pId3","win":true,"rated":true}]}') {
           return mockResponse(
             '''{"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"userId":"silverjo","name":"silverjo (1777)","color":"white"},{"userId":"robyarchitetto","name":"Robyarchitetto (1742)","color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}], "glicko":{"rating":1834.54,"deviation":23.45},"rounds":[{"id": "pId3","ratingDiff": 10,"win": true}]}''',
             200,
@@ -307,10 +233,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 1,
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -318,33 +242,21 @@ void main() {
 
       final next = await service.solve(
         puzzle: samplePuzzle,
-        solution: const PuzzleSolution(
-          id: PuzzleId('pId3'),
-          win: true,
-          rated: true,
-        ),
+        solution: const PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true),
         userId: const UserId('testUserId'),
       );
 
       expect(nbReq, equals(1));
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
-      expect(data?.solved, equals(IList(const [])));
+      expect(data?.solved, equals(IList<PuzzleSolution>(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.glicko?.rating, equals(1834.54));
       expect(next?.glicko?.deviation, equals(23.45));
       expect(
         next?.rounds,
-        equals(
-          IList(const [
-            PuzzleRound(
-              id: PuzzleId('pId3'),
-              ratingDiff: 10,
-              win: true,
-            ),
-          ]),
-        ),
+        equals(IList(const [PuzzleRound(id: PuzzleId('pId3'), ratingDiff: 10, win: true)])),
       );
     });
 
@@ -356,20 +268,14 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 2,
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 2);
       await storage.save(
         userId: const UserId('testUserId'),
-        data: _makeUnsolvedPuzzles([
-          const PuzzleId('pId3'),
-          const PuzzleId('pId4'),
-        ]),
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3'), const PuzzleId('pId4')]),
       );
 
-      const solution =
-          PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);
+      const solution = PuzzleSolution(id: PuzzleId('pId3'), win: true, rated: true);
 
       final next = await service.solve(
         puzzle: samplePuzzle,
@@ -396,17 +302,12 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
-        queueLength: 2,
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 2);
 
       await storage.save(
         userId: const UserId('testUserId'),
-        data: _makeUnsolvedPuzzles([
-          const PuzzleId('pId3'),
-          const PuzzleId('pId4'),
-        ]),
+        data: _makeUnsolvedPuzzles([const PuzzleId('pId3'), const PuzzleId('pId4')]),
       );
 
       final next = await service.resetBatch(userId: const UserId('testUserId'));
@@ -447,14 +348,8 @@ final samplePuzzle = Puzzle(
     id: GameId('PrlkCqOv'),
     perf: Perf.blitz,
     rated: true,
-    white: PuzzleGamePlayer(
-      side: Side.white,
-      name: 'user1',
-    ),
-    black: PuzzleGamePlayer(
-      side: Side.black,
-      name: 'user2',
-    ),
+    white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+    black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
     pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
   ),
 );
@@ -477,16 +372,9 @@ PuzzleBatch _makeUnsolvedPuzzles(List<PuzzleId> ids) {
             id: GameId('PrlkCqOv'),
             perf: Perf.blitz,
             rated: true,
-            white: PuzzleGamePlayer(
-              side: Side.white,
-              name: 'user1',
-            ),
-            black: PuzzleGamePlayer(
-              side: Side.black,
-              name: 'user2',
-            ),
-            pgn:
-                'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
+            white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+            black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
+            pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
           ),
         ),
     ]),

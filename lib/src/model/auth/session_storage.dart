@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -8,38 +8,32 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'session_storage.g.dart';
 
+const kSessionStorageKey = '$kLichessHost.userSession';
+
 @Riverpod(keepAlive: true)
-SessionStorage sessionStorage(SessionStorageRef ref) {
-  return SessionStorage(ref);
+SessionStorage sessionStorage(Ref ref) {
+  return const SessionStorage();
 }
 
 class SessionStorage {
-  const SessionStorage(SessionStorageRef ref) : _ref = ref;
-
-  final SessionStorageRef _ref;
-
-  FlutterSecureStorage get _storage => _ref.read(secureStorageProvider);
+  const SessionStorage();
 
   Future<AuthSessionState?> read() async {
-    final string = await _storage.read(key: _kSessionStorageKey);
+    final string = await SecureStorage.instance.read(key: kSessionStorageKey);
     if (string != null) {
-      return AuthSessionState.fromJson(
-        jsonDecode(string) as Map<String, dynamic>,
-      );
+      return AuthSessionState.fromJson(jsonDecode(string) as Map<String, dynamic>);
     }
     return null;
   }
 
   Future<void> write(AuthSessionState session) async {
-    await _storage.write(
-      key: _kSessionStorageKey,
+    await SecureStorage.instance.write(
+      key: kSessionStorageKey,
       value: jsonEncode(session.toJson()),
     );
   }
 
   Future<void> delete() async {
-    await _storage.delete(key: _kSessionStorageKey);
+    await SecureStorage.instance.delete(key: kSessionStorageKey);
   }
 }
-
-const _kSessionStorageKey = '$kLichessHost.userSession';

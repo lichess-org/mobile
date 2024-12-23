@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,15 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
     this.padding,
     this.lastMove,
     this.onTap,
-  });
+  }) : _showLoadingPlaceholder = false;
+
+  const SmallBoardPreview.loading({this.padding})
+    : orientation = Side.white,
+      fen = kEmptyFEN,
+      lastMove = null,
+      description = const SizedBox.shrink(),
+      onTap = null,
+      _showLoadingPlaceholder = true;
 
   /// Side by which the board is oriented.
   final Side orientation;
@@ -32,6 +41,8 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
 
   final EdgeInsetsGeometry? padding;
 
+  final bool _showLoadingPlaceholder;
+
   @override
   ConsumerState<SmallBoardPreview> createState() => _SmallBoardPreviewState();
 }
@@ -45,45 +56,99 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
 
     final content = LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.biggest.shortestSide -
-            (constraints.biggest.shortestSide / 1.618);
+        final boardSize =
+            constraints.biggest.shortestSide - (constraints.biggest.shortestSide / 1.618);
         return Container(
           decoration: BoxDecoration(
-            color: _isPressed
-                ? CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey5,
-                    context,
-                  )
-                : null,
+            color:
+                _isPressed
+                    ? CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context)
+                    : null,
           ),
           child: Padding(
-            padding: widget.padding ??
-                Styles.horizontalBodyPadding
-                    .add(const EdgeInsets.symmetric(vertical: 8.0)),
+            padding:
+                widget.padding ??
+                Styles.horizontalBodyPadding.add(const EdgeInsets.symmetric(vertical: 8.0)),
             child: SizedBox(
               height: boardSize,
               child: Row(
                 children: [
-                  Board(
-                    size: boardSize,
-                    data: BoardData(
-                      interactableSide: InteractableSide.none,
+                  if (widget._showLoadingPlaceholder)
+                    Container(
+                      width: boardSize,
+                      height: boardSize,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      ),
+                    )
+                  else
+                    Chessboard.fixed(
+                      size: boardSize,
                       fen: widget.fen,
                       orientation: widget.orientation,
-                      lastMove: widget.lastMove,
+                      lastMove: widget.lastMove as NormalMove?,
+                      settings: ChessboardSettings(
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                        brightness: boardPrefs.brightness,
+                        hue: boardPrefs.hue,
+                        enableCoordinates: false,
+                        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                        boxShadow: boardShadows,
+                        animationDuration: const Duration(milliseconds: 150),
+                      ),
                     ),
-                    settings: BoardSettings(
-                      enableCoordinates: false,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(4.0)),
-                      boxShadow: boardShadows,
-                      animationDuration: const Duration(milliseconds: 150),
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
-                    ),
-                  ),
                   const SizedBox(width: 10.0),
-                  Expanded(child: widget.description),
+                  if (widget._showLoadingPlaceholder)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 16.0,
+                                width: double.infinity,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                ),
+                              ),
+                              const SizedBox(height: 4.0),
+                              Container(
+                                height: 16.0,
+                                width: MediaQuery.sizeOf(context).width / 3,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 44.0,
+                            width: 44.0,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                          ),
+                          Container(
+                            height: 16.0,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    Expanded(child: widget.description),
                 ],
               ),
             ),
@@ -95,16 +160,13 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
     return widget.onTap != null
         ? Theme.of(context).platform == TargetPlatform.iOS
             ? GestureDetector(
-                onTapDown: (_) => setState(() => _isPressed = true),
-                onTapUp: (_) => setState(() => _isPressed = false),
-                onTapCancel: () => setState(() => _isPressed = false),
-                onTap: widget.onTap,
-                child: content,
-              )
-            : InkWell(
-                onTap: widget.onTap,
-                child: content,
-              )
+              onTapDown: (_) => setState(() => _isPressed = true),
+              onTapUp: (_) => setState(() => _isPressed = false),
+              onTapCancel: () => setState(() => _isPressed = false),
+              onTap: widget.onTap,
+              child: content,
+            )
+            : InkWell(onTap: widget.onTap, child: content)
         : content;
   }
 }

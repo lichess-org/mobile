@@ -12,11 +12,10 @@ import '../../test_container.dart';
 
 void main() {
   final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
 
   group('PuzzleHistoryStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final db = await openAppDatabase(dbFactory, inMemoryDatabasePath);
 
       final container = await makeContainer(
         overrides: [
@@ -27,17 +26,10 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleStorageProvider);
+      final storage = await container.read(puzzleStorageProvider.future);
 
-      await storage.save(
-        puzzle: puzzle,
-      );
-      expect(
-        storage.fetch(
-          puzzleId: const PuzzleId('pId3'),
-        ),
-        completion(equals(puzzle)),
-      );
+      await storage.save(puzzle: puzzle);
+      expect(storage.fetch(puzzleId: const PuzzleId('pId3')), completion(equals(puzzle)));
     });
   });
 }
@@ -55,14 +47,8 @@ final puzzle = Puzzle(
     id: GameId('PrlkCqOv'),
     perf: Perf.blitz,
     rated: true,
-    white: PuzzleGamePlayer(
-      side: Side.white,
-      name: 'user1',
-    ),
-    black: PuzzleGamePlayer(
-      side: Side.black,
-      name: 'user2',
-    ),
+    white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+    black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
     pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
   ),
 );

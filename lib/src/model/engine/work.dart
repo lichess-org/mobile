@@ -20,7 +20,7 @@ class Work with _$Work {
     required int threads,
     int? hashSize,
     required UciPath path,
-    required int maxDepth,
+    required Duration searchTime,
     required int multiPv,
     bool? threatMode,
     required Position initialPosition,
@@ -40,18 +40,11 @@ class Work with _$Work {
 class Step with _$Step {
   const Step._();
 
-  const factory Step({
-    required Position position,
-    required SanMove sanMove,
-    ClientEval? eval,
-  }) = _Step;
+  const factory Step({required Position position, required SanMove sanMove, ClientEval? eval}) =
+      _Step;
 
   factory Step.fromNode(Branch node) {
-    return Step(
-      position: node.position,
-      sanMove: node.sanMove,
-      eval: node.eval,
-    );
+    return Step(position: node.position, sanMove: node.sanMove, eval: node.eval);
   }
 
   /// Stockfish in chess960 mode always needs a "king takes rook" UCI notation.
@@ -69,9 +62,4 @@ class Step with _$Step {
   }
 }
 
-const _castleMoves = {
-  'e1c1': 'e1a1',
-  'e1g1': 'e1h1',
-  'e8c8': 'e8a8',
-  'e8g8': 'e8h8',
-};
+const _castleMoves = {'e1c1': 'e1a1', 'e1g1': 'e1h1', 'e8c8': 'e8a8', 'e8g8': 'e8h8'};

@@ -2,17 +2,19 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_analysis_service.g.dart';
 
 @Riverpod(keepAlive: true)
-ServerAnalysisService serverAnalysisService(ServerAnalysisServiceRef ref) {
+ServerAnalysisService serverAnalysisService(Ref ref) {
   return ServerAnalysisService(ref);
 }
 
@@ -21,7 +23,7 @@ class ServerAnalysisService {
 
   (GameAnyId, StreamSubscription<SocketEvent>)? _socketSubscription;
 
-  final ServerAnalysisServiceRef ref;
+  final Ref ref;
 
   final _currentAnalysis = ValueNotifier<GameId?>(null);
 
@@ -31,18 +33,15 @@ class ServerAnalysisService {
   ValueListenable<GameId?> get currentAnalysis => _currentAnalysis;
 
   /// The last analysis progress event received from the server.
-  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent =>
-      _analysisProgress;
+  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent => _analysisProgress;
 
   /// Request server analysis for a game.
   ///
   /// This will return a future that completes when the server analysis is
   /// launched (but not when it is finished).
-  Future<void> requestAnalysis(GameAnyId id, [Side? side]) async {
+  Future<void> requestAnalysis(GameId id, [Side? side]) async {
     final socketPool = ref.read(socketPoolProvider);
-    final uri = id.isFullId
-        ? Uri(path: '/play/$id/v6')
-        : Uri(path: '/watch/$id/${side?.name ?? Side.white}/v6');
+    final uri = Uri(path: '/watch/$id/${side?.name ?? Side.white}/v6');
     final socketClient = socketPool.open(uri);
 
     _socketSubscription?.$2.cancel();
@@ -51,8 +50,7 @@ class ServerAnalysisService {
       socketClient.stream.listen(
         (event) {
           if (event.topic == 'analysisProgress') {
-            final data =
-                ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+            final data = ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
 
             _analysisProgress.value = (id, data);
 
@@ -69,13 +67,11 @@ class ServerAnalysisService {
           _socketSubscription = null;
         },
         cancelOnError: true,
-      )
+      ),
     );
 
     try {
-      await ref.withClient(
-        (client) => GameRepository(client).requestServerAnalysis(id.gameId),
-      );
+      await ref.withClient((client) => GameRepository(client).requestServerAnalysis(id.gameId));
       _currentAnalysis.value = id.gameId;
     } catch (e) {
       _socketSubscription?.$2.cancel();
@@ -100,8 +96,7 @@ class CurrentAnalysis extends _$CurrentAnalysis {
   }
 
   void _listener() {
-    final gameId =
-        ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
+    final gameId = ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
     if (state != gameId) {
       state = gameId;
     }

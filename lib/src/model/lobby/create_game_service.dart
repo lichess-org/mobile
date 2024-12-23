@@ -1,21 +1,28 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 
+typedef ChallengeResponse =
+    ({GameFullId? gameFullId, Challenge? challenge, ChallengeDeclineReason? declineReason});
+
+/// A provider for the [CreateGameService].
 @riverpod
-CreateGameService createGameService(CreateGameServiceRef ref) {
+CreateGameService createGameService(Ref ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
   ref.onDispose(() {
     service.dispose();
@@ -23,10 +30,11 @@ CreateGameService createGameService(CreateGameServiceRef ref) {
   return service;
 }
 
+/// A service to create a new game from the lobby or from a challenge.
 class CreateGameService {
   CreateGameService(this._log, {required this.ref});
 
-  final CreateGameServiceRef ref;
+  final Ref ref;
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
@@ -39,7 +47,8 @@ class CreateGameService {
     ChallengeId,
     StreamSubscription<void>, // socket connects events
     StreamSubscription<SocketEvent>, // socket events
-  )? _challengeConnection;
+  )?
+  _challengeConnection;
 
   Timer? _challengePingTimer;
 
@@ -79,8 +88,7 @@ class CreateGameService {
     }
 
     try {
-      await LobbyRepository(lichessClient)
-          .createSeek(actualSeek, sri: socketClient.sri);
+      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: socketClient.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       // if the completer is not yet completed, complete it with an error
@@ -97,26 +105,26 @@ class CreateGameService {
     _log.info('Creating new correspondence game');
 
     await ref.withClient(
-      (client) => LobbyRepository(client).createSeek(
-        seek,
-        sri: ref.read(sriProvider),
-      ),
+      (client) => LobbyRepository(
+        client,
+      ).createSeek(seek, sri: ref.read(preloadedDataProvider).requireValue.sri),
     );
   }
 
-  /// Create a new challenge game.
+  /// Create a new real time challenge.
   ///
-  /// Returns the game id or the decline reason if the challenge was declined.
-  Future<(GameFullId?, DeclineReason?)> newChallenge(
-    ChallengeRequest challengeReq,
-  ) async {
+  /// Will listen to the challenge socket and await the response from the destinated user.
+  /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
+  /// or the [ChallengeDeclineReason] if the challenge was declined.
+  Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
+    assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
+
     if (_challengeConnection != null) {
       throw StateError('Already creating a game.');
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<(GameFullId?, DeclineReason?)>()
-      ..future.whenComplete(dispose);
+    final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
 
     try {
       _log.info('Creating new challenge game');
@@ -147,9 +155,17 @@ class CreateGameService {
             try {
               final updatedChallenge = await repo.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
-                completer.complete((updatedChallenge.gameFullId, null));
+                completer.complete((
+                  gameFullId: updatedChallenge.gameFullId,
+                  challenge: null,
+                  declineReason: null,
+                ));
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
-                completer.complete((null, updatedChallenge.declineReason));
+                completer.complete((
+                  gameFullId: null,
+                  challenge: challenge,
+                  declineReason: updatedChallenge.declineReason,
+                ));
               }
             } catch (e) {
               _log.warning('Failed to reload challenge', e);
@@ -168,10 +184,22 @@ class CreateGameService {
     return completer.future;
   }
 
+  /// Create a new correspondence challenge.
+  ///
+  /// Returns the created challenge immediately. If the challenge is accepted,
+  /// a notification will be sent to the user when the game starts.
+  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) async {
+    assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
+
+    _log.info('Creating new correspondence challenge');
+
+    return ref.withClient((client) => ChallengeRepository(client).create(challenge));
+  }
+
   /// Cancel the current game creation.
   Future<void> cancelSeek() async {
     _log.info('Cancelling game creation');
-    final sri = ref.read(sriProvider);
+    final sri = ref.read(preloadedDataProvider).requireValue.sri;
     try {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
     } catch (e) {

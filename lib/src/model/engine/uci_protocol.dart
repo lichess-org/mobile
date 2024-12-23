@@ -13,12 +13,7 @@ const minDepth = 6;
 const maxPlies = 245;
 
 class UCIProtocol {
-  UCIProtocol()
-      : _options = {
-          'Threads': '1',
-          'Hash': '16',
-          'MultiPV': '1',
-        };
+  UCIProtocol() : _options = {'Threads': '1', 'Hash': '16', 'MultiPV': '1'};
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
@@ -95,9 +90,7 @@ class UCIProtocol {
       _work = null;
       _swapWork();
       return;
-    } else if (_work != null &&
-        _stopRequested != true &&
-        parts.first == 'info') {
+    } else if (_work != null && _stopRequested != true && parts.first == 'info') {
       int depth = 0;
       int nodes = 0;
       int multiPv = 1;
@@ -120,8 +113,7 @@ class UCIProtocol {
             isMate = parts[++i] == 'mate';
             povEv = int.parse(parts[++i]);
             if (i + 1 < parts.length &&
-                (parts[i + 1] == 'lowerbound' ||
-                    parts[i + 1] == 'upperbound')) {
+                (parts[i + 1] == 'lowerbound' || parts[i + 1] == 'upperbound')) {
               evalType = parts[++i];
             }
           case 'pv':
@@ -142,16 +134,12 @@ class UCIProtocol {
       // However non-primary pvs may only have an upperbound.
       if (evalType != null && multiPv == 1) return;
 
-      final pvData = PvData(
-        moves: IList(moves),
-        cp: isMate ? null : ev,
-        mate: isMate ? ev : null,
-      );
+      final pvData = PvData(moves: IList(moves), cp: isMate ? null : ev, mate: isMate ? ev : null);
 
       if (multiPv == 1) {
         _currentEval = ClientEval(
           position: _work!.position,
-          maxDepth: _work!.maxDepth,
+          searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,
           nodes: nodes,
           cp: isMate ? null : ev,
@@ -169,14 +157,7 @@ class UCIProtocol {
       if (multiPv == _expectedPvs && _currentEval != null) {
         _evalController.sink.add((_work!, _currentEval!));
 
-        // Depth limits are nice in the user interface, but in clearly decided
-        // positions the usual depth limits are reached very quickly due to
-        // pruning. Therefore not using `go depth ${_work.maxDepth}` and
-        // manually ensuring Stockfish gets to spend a minimum amount of
-        // time/nodes on each position.
-        if (depth >= _work!.maxDepth &&
-            elapsedMs > 8000 &&
-            nodes > 4000 * math.exp(_work!.maxDepth * 0.3)) {
+        if (elapsedMs > _work!.searchTime.inMilliseconds) {
           _stop();
         }
       }
@@ -213,17 +194,11 @@ class UCIProtocol {
           _work!.initialPosition.fen,
           'moves',
           ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960
-                ? s.sanMove.move.uci
-                : s.castleSafeUCI,
+            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
           ),
         ].join(' '),
       );
-      _sendAndLog(
-        _work!.maxDepth >= 99
-            ? 'go depth $maxPlies' // 'go infinite' would not finish even if entire tree search completed
-            : 'go movetime 60000',
-      );
+      _sendAndLog('go movetime ${_work!.searchTime.inMilliseconds}');
       _isComputing.value = true;
     } else {
       _isComputing.value = false;

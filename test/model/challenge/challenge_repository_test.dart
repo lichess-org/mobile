@@ -3,21 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   group('ChallengeRepository', () {
     test('list', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/challenge') {
-          return mockResponse(
-            challengesList,
-            200,
-          );
+          return mockResponse(challengesList, 200);
         }
         return mockResponse('', 404);
       });
@@ -36,10 +33,7 @@ void main() {
     test('show', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/challenge/H9fIRZUk/show') {
-          return mockResponse(
-            challenge,
-            200,
-          );
+          return mockResponse(challenge, 200);
         }
         return mockResponse('', 404);
       });

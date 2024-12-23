@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/openings_database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,31 +16,23 @@ const kOpeningAllowedVariants = ISetConst({
 });
 
 @Riverpod(keepAlive: true)
-OpeningService openingService(OpeningServiceRef ref) {
+OpeningService openingService(Ref ref) {
   return OpeningService(ref);
 }
 
 class OpeningService {
-  OpeningService(this.ref);
+  OpeningService(this._ref);
 
-  final OpeningServiceRef ref;
+  final Ref _ref;
 
-  Future<Database> get _db => ref.read(openingsDatabaseProvider.future);
+  Future<Database> get _db => _ref.read(openingsDatabaseProvider.future);
 
   Future<FullOpening?> fetchFromMoves(Iterable<Move> moves) async {
     final db = await _db;
     final movesString = moves
-        .map(
-          (move) => altCastles.containsKey(move.uci)
-              ? altCastles[move.uci]
-              : move.uci,
-        )
+        .map((move) => altCastles.containsKey(move.uci) ? altCastles[move.uci] : move.uci)
         .join(' ');
-    final list = await db.query(
-      'openings',
-      where: 'uci = ?',
-      whereArgs: [movesString],
-    );
+    final list = await db.query('openings', where: 'uci = ?', whereArgs: [movesString]);
     final first = list.firstOrNull;
 
     if (first != null) {

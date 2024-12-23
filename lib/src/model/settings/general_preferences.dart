@@ -1,137 +1,118 @@
-import 'dart:convert';
+import 'dart:ui' show Locale;
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-const _prefKey = 'preferences.general';
+@riverpod
+class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
+  // ignore: avoid_public_notifier_properties
+  @override
+  final prefCategory = PrefCategory.general;
 
-@Riverpod(keepAlive: true)
-class GeneralPreferences extends _$GeneralPreferences {
-  static GeneralPrefsState fetchFromStorage(SharedPreferences prefs) {
-    final stored = prefs.getString(_prefKey);
-    return stored != null
-        ? GeneralPrefsState.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-          )
-        : GeneralPrefsState.defaults;
-  }
+  // ignore: avoid_public_notifier_properties
+  @override
+  GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override
-  GeneralPrefsState build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    return fetchFromStorage(prefs);
+  GeneralPrefs fromJson(Map<String, dynamic> json) => GeneralPrefs.fromJson(json);
+
+  @override
+  GeneralPrefs build() {
+    return fetch();
   }
 
-  Future<void> setThemeMode(ThemeMode themeMode) {
-    return _save(state.copyWith(themeMode: themeMode));
+  Future<void> setBackgroundThemeMode(BackgroundThemeMode themeMode) {
+    return save(state.copyWith(themeMode: themeMode));
   }
 
   Future<void> toggleSoundEnabled() {
-    return _save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
+    return save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
   }
 
   Future<void> setLocale(Locale? locale) {
-    return _save(state.copyWith(locale: locale));
+    return save(state.copyWith(locale: locale));
   }
 
   Future<void> setSoundTheme(SoundTheme soundTheme) {
-    return _save(state.copyWith(soundTheme: soundTheme));
+    return save(state.copyWith(soundTheme: soundTheme));
   }
 
   Future<void> setMasterVolume(double volume) {
-    return _save(state.copyWith(masterVolume: volume));
+    return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> toggleSystemColors() async {
-    if (defaultTargetPlatform != TargetPlatform.android) {
-      return;
-    }
-    await _save(state.copyWith(systemColors: !state.systemColors));
-    if (state.systemColors == false) {
-      final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-      if (boardTheme == BoardTheme.system) {
-        await ref
-            .read(boardPreferencesProvider.notifier)
-            .setBoardTheme(BoardTheme.brown);
-      }
-    } else {
-      await ref
-          .read(boardPreferencesProvider.notifier)
-          .setBoardTheme(BoardTheme.system);
-    }
-  }
-
-  Future<void> _save(GeneralPrefsState newState) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(
-      _prefKey,
-      jsonEncode(newState.toJson()),
-    );
-    state = newState;
+  Future<void> setAppThemeSeed(AppThemeSeed seed) {
+    return save(state.copyWith(appThemeSeed: seed));
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GeneralPrefsState with _$GeneralPrefsState {
-  const factory GeneralPrefsState({
-    /// Background theme mode to use in the app
-    @JsonKey(unknownEnumValue: ThemeMode.system) required ThemeMode themeMode,
+class GeneralPrefs with _$GeneralPrefs implements Serializable {
+  const factory GeneralPrefs({
+    @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
+    required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
-    @JsonKey(unknownEnumValue: SoundTheme.standard)
-    required SoundTheme soundTheme,
+    @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    /// Should enable system color palette (android 12+ only)
-    required bool systemColors,
+    @Deprecated('Use appThemeSeed instead') bool? systemColors,
+
+    /// App theme seed
+    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
+    required AppThemeSeed appThemeSeed,
 
     /// Locale to use in the app, use system locale if null
-    @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,
-  }) = _GeneralPrefsState;
+    @LocaleConverter() Locale? locale,
+  }) = _GeneralPrefs;
 
-  static const defaults = GeneralPrefsState(
-    themeMode: ThemeMode.system,
+  static const defaults = GeneralPrefs(
+    themeMode: BackgroundThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    systemColors: true,
+    appThemeSeed: AppThemeSeed.board,
   );
 
-  factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$GeneralPrefsStateFromJson(json);
-    } catch (e) {
-      debugPrint('Error parsing GeneralPrefsState: $e');
-      return defaults;
-    }
+  factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
+    return _$GeneralPrefsFromJson(json);
   }
 }
 
-Map<String, dynamic>? _localeToJson(Locale? locale) {
-  return locale != null
-      ? {
-          'languageCode': locale.languageCode,
-          'countryCode': locale.countryCode,
-          'scriptCode': locale.scriptCode,
-        }
-      : null;
+enum AppThemeSeed {
+  /// The app theme is based on the user's system theme (only available on Android 10+).
+  system,
+
+  /// The app theme is based on the chessboard.
+  board,
 }
 
-Locale? _localeFromJson(Map<String, dynamic>? json) {
-  if (json == null) {
-    return null;
-  }
-  return Locale.fromSubtags(
-    languageCode: json['languageCode'] as String,
-    countryCode: json['countryCode'] as String?,
-    scriptCode: json['scriptCode'] as String?,
-  );
+/// Describes the background theme of the app.
+enum BackgroundThemeMode {
+  /// Use either the light or dark theme based on what the user has selected in
+  /// the system settings.
+  system,
+
+  /// Always use the light mode regardless of system preference.
+  light,
+
+  /// Always use the dark mode (if available) regardless of system preference.
+  dark,
+}
+
+enum SoundTheme {
+  standard('Standard'),
+  piano('Piano'),
+  nes('NES'),
+  sfx('SFX'),
+  futuristic('Futuristic'),
+  lisp('Lisp');
+
+  final String label;
+
+  const SoundTheme(this.label);
 }

@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'online_friends.g.dart';
@@ -21,9 +22,7 @@ class OnlineFriends extends _$OnlineFriends {
 
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
-        .then(
-          (event) => _parseFriendsList(event.data as List<dynamic>),
-        );
+        .then((event) => _parseFriendsList(event.data as List<dynamic>));
 
     await _socketClient.firstConnection;
 
@@ -69,9 +68,7 @@ class OnlineFriends extends _$OnlineFriends {
 
     switch (event.topic) {
       case 'following_onlines':
-        state = AsyncValue.data(
-          _parseFriendsList(event.data as List<dynamic>),
-        );
+        state = AsyncValue.data(_parseFriendsList(event.data as List<dynamic>));
 
       case 'following_enters':
         final data = _parseFriend(event.data.toString());
@@ -79,9 +76,7 @@ class OnlineFriends extends _$OnlineFriends {
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(
-          state.requireValue.removeWhere((v) => v.id == data.id),
-        );
+        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.id == data.id));
     }
   }
 
@@ -91,11 +86,7 @@ class OnlineFriends extends _$OnlineFriends {
     final splitted = friend.split(' ');
     final name = splitted.length > 1 ? splitted[1] : splitted[0];
     final title = splitted.length > 1 ? splitted[0] : null;
-    return LightUser(
-      id: UserId.fromUserName(name),
-      name: name,
-      title: title,
-    );
+    return LightUser(id: UserId.fromUserName(name), name: name, title: title);
   }
 
   IList<LightUser> _parseFriendsList(List<dynamic> friends) {

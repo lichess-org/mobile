@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,7 +23,7 @@ class PuzzleActivity extends _$PuzzleActivity {
 
   @override
   Future<PuzzleActivityState> build() async {
-    ref.cacheFor(const Duration(minutes: 30));
+    ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
       _list.clear();
     });
@@ -45,9 +45,7 @@ class PuzzleActivity extends _$PuzzleActivity {
     );
   }
 
-  Map<DateTime, IList<PuzzleHistoryEntry>> _groupByDay(
-    Iterable<PuzzleHistoryEntry> list,
-  ) {
+  Map<DateTime, IList<PuzzleHistoryEntry>> _groupByDay(Iterable<PuzzleHistoryEntry> list) {
     final map = <DateTime, IList<PuzzleHistoryEntry>>{};
     for (final entry in list) {
       final date = DateTime(entry.date.year, entry.date.month, entry.date.day);
@@ -64,19 +62,16 @@ class PuzzleActivity extends _$PuzzleActivity {
     if (!state.hasValue) return;
 
     final currentVal = state.requireValue;
-    if (_list.length < _maxPuzzles) {
+    if (currentVal.hasMore && _list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       Result.capture(
         ref.withClient(
-          (client) => PuzzleRepository(client)
-              .puzzleActivity(_nbPerPage, before: _list.last.date),
+          (client) => PuzzleRepository(client).puzzleActivity(_nbPerPage, before: _list.last.date),
         ),
       ).fold(
         (value) {
           if (value.isEmpty) {
-            state = AsyncData(
-              currentVal.copyWith(hasMore: false, isLoading: false),
-            );
+            state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
             return;
           }
           _list.addAll(value);
@@ -90,8 +85,7 @@ class PuzzleActivity extends _$PuzzleActivity {
           );
         },
         (error, stackTrace) {
-          state =
-              AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+          state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
         },
       );
     }

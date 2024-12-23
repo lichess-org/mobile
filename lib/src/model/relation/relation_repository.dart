@@ -1,8 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 class RelationRepository {
   const RelationRepository(this.client);
@@ -22,10 +22,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to follow user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to follow user: ${response.statusCode}', uri);
     }
   }
 
@@ -34,10 +31,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to unfollow user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to unfollow user: ${response.statusCode}', uri);
     }
   }
 
@@ -46,10 +40,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to block user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to block user: ${response.statusCode}', uri);
     }
   }
 
@@ -58,10 +49,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to unblock user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to unblock user: ${response.statusCode}', uri);
     }
   }
 }

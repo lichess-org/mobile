@@ -22,9 +22,7 @@ class LeaderboardWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           hasLeading: true,
-          header: Text(
-            context.l10n.leaderboard,
-          ),
+          header: Text(context.l10n.leaderboard),
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
               pushPlatformRoute(
@@ -33,16 +31,11 @@ class LeaderboardWidget extends ConsumerWidget {
                 builder: (context) => const LeaderboardScreen(),
               );
             },
-            child: Text(
-              context.l10n.more,
-            ),
+            child: Text(context.l10n.more),
           ),
           children: [
             for (final entry in data.entries)
-              LeaderboardListTile(
-                user: entry.value,
-                perfIcon: entry.key.icon,
-              ),
+              LeaderboardListTile(user: entry.value, perfIcon: entry.key.icon),
           ],
         );
       },
@@ -50,20 +43,18 @@ class LeaderboardWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load leaderboard.'),
+          child: Text('Could not load leaderboard.'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 5,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 5, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

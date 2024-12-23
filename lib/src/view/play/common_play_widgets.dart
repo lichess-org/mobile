@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -49,9 +49,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
       opacity: isRatingRangeAvailable ? 1 : 0.5,
       child: PlatformListTile(
         harmonizeCupertinoTitleStyle: true,
-        title: Text(
-          context.l10n.ratingRange,
-        ),
+        title: Text(context.l10n.ratingRange),
         subtitle: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -61,27 +59,25 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _subtract,
                     values: kSubtractingRatingRange,
-                    onChange: Theme.of(context).platform == TargetPlatform.iOS
-                        ? (num value) {
-                            setState(() {
-                              _subtract = value.toInt();
-                            });
-                          }
-                        : null,
-                    onChangeEnd: isRatingRangeAvailable
-                        ? (num value) {
-                            widget.onRatingDeltaChange(
-                              value.toInt(),
-                              value == 0 && _add == 0
-                                  ? kAddingRatingRange[1]
-                                  : _add,
-                            );
-                          }
-                        : null,
+                    onChange:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? (num value) {
+                              setState(() {
+                                _subtract = value.toInt();
+                              });
+                            }
+                            : null,
+                    onChangeEnd:
+                        isRatingRangeAvailable
+                            ? (num value) {
+                              widget.onRatingDeltaChange(
+                                value.toInt(),
+                                value == 0 && _add == 0 ? kAddingRatingRange[1] : _add,
+                              );
+                            }
+                            : null,
                   ),
-                  Center(
-                    child: Text('${_subtract == 0 ? '-' : ''}$_subtract'),
-                  ),
+                  Center(child: Text('${_subtract == 0 ? '-' : ''}$_subtract')),
                 ],
               ),
             ),
@@ -98,28 +94,27 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _add,
                     values: kAddingRatingRange,
-                    onChange: Theme.of(context).platform == TargetPlatform.iOS
-                        ? (num value) {
-                            setState(() {
-                              _add = value.toInt();
-                            });
-                          }
-                        : null,
-                    onChangeEnd: isRatingRangeAvailable
-                        ? (num value) {
-                            widget.onRatingDeltaChange(
-                              value == 0 && _subtract == 0
-                                  ? kSubtractingRatingRange[
-                                      kSubtractingRatingRange.length - 2]
-                                  : _subtract,
-                              value.toInt(),
-                            );
-                          }
-                        : null,
+                    onChange:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? (num value) {
+                              setState(() {
+                                _add = value.toInt();
+                              });
+                            }
+                            : null,
+                    onChangeEnd:
+                        isRatingRangeAvailable
+                            ? (num value) {
+                              widget.onRatingDeltaChange(
+                                value == 0 && _subtract == 0
+                                    ? kSubtractingRatingRange[kSubtractingRatingRange.length - 2]
+                                    : _subtract,
+                                value.toInt(),
+                              );
+                            }
+                            : null,
                   ),
-                  Center(
-                    child: Text('+$_add'),
-                  ),
+                  Center(child: Text('+$_add')),
                 ],
               ),
             ),

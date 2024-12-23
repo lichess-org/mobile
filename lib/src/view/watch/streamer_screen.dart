@@ -21,51 +21,35 @@ class StreamerScreen extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.mobileLiveStreamers),
-      ),
-      body: ListView(
-        children: [
-          ListSection(
-            showDividerBetweenTiles: true,
-            children: streamers
-                .map(
-                  (e) => StreamerListTile(
-                    streamer: e,
-                    showSubtitle: true,
-                    maxSubtitleLines: 4,
-                  ),
-                )
-                .toList(growable: false),
-          ),
-        ],
+      appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
+      body: ListView.builder(
+        itemCount: streamers.length,
+        itemBuilder:
+            (context, index) => StreamerListTile(
+              streamer: streamers[index],
+              showSubtitle: true,
+              maxSubtitleLines: 4,
+            ),
       ),
     );
   }
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.mobileLiveStreamers),
-      ),
+      navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.mobileLiveStreamers)),
       child: CustomScrollView(
         slivers: [
           SliverSafeArea(
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                ListSection(
-                  hasLeading: true,
-                  children: streamers
-                      .map(
-                        (e) => StreamerListTile(
-                          streamer: e,
-                          showSubtitle: true,
-                          maxSubtitleLines: 4,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ]),
+            sliver: SliverList.separated(
+              separatorBuilder:
+                  (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+              itemCount: streamers.length,
+              itemBuilder:
+                  (context, index) => StreamerListTile(
+                    streamer: streamers[index],
+                    showSubtitle: true,
+                    maxSubtitleLines: 4,
+                  ),
             ),
           ),
         ],
@@ -87,22 +71,32 @@ class StreamerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
     return PlatformListTile(
+      padding:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+              : null,
       onTap: () async {
-        final url =
-            streamer.platform == 'twitch' ? streamer.twitch : streamer.youTube;
-        if (!await launchUrl(
-          Uri.parse(url!),
-          mode: LaunchMode.externalApplication,
-        )) {
+        final url = streamer.platform == 'twitch' ? streamer.twitch : streamer.youTube;
+        if (!await launchUrl(Uri.parse(url!), mode: LaunchMode.externalApplication)) {
           debugPrint('ERROR: [StreamerWidget] Could not launch $url');
         }
       },
       leading: Padding(
-        padding: Theme.of(context).platform == TargetPlatform.android
-            ? const EdgeInsets.all(5.0)
-            : EdgeInsets.zero,
-        child: Image.network(streamer.image),
+        padding:
+            Theme.of(context).platform == TargetPlatform.android
+                ? const EdgeInsets.all(5.0)
+                : EdgeInsets.zero,
+        child: Image.network(
+          streamer.image,
+          width: 50,
+          height: 50,
+          cacheWidth: (50.0 * devicePixelRatio).toInt(),
+          cacheHeight: (50.0 * devicePixelRatio).toInt(),
+          fit: BoxFit.cover,
+        ),
       ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
@@ -111,22 +105,15 @@ class StreamerListTile extends StatelessWidget {
             if (streamer.title != null) ...[
               Text(
                 streamer.title!,
-                style: TextStyle(
-                  color: context.lichessColors.brag,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: context.lichessColors.brag, fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 5),
             ],
-            Flexible(
-              child: Text(streamer.username, overflow: TextOverflow.ellipsis),
-            ),
+            Flexible(child: Text(streamer.username, overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
-      subtitle: showSubtitle
-          ? Text(streamer.status, maxLines: maxSubtitleLines)
-          : null,
+      subtitle: showSubtitle ? Text(streamer.status, maxLines: maxSubtitleLines) : null,
       isThreeLine: showSubtitle && maxSubtitleLines >= 2,
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

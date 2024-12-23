@@ -1,156 +1,70 @@
-import 'dart:convert';
-
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
-import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/utils/badge_service.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:path/path.dart' as path;
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
-import 'firebase_options.dart';
 import 'src/app.dart';
-import 'src/utils/color_palette.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-
-  // logging setup
-  setupLogger();
-
-  // Intl and timeago setup
-  await setupIntl();
-
-  SharedPreferences.setPrefix('lichess.');
-
-  // Firebase setup
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // Crashlytics
-  if (kReleaseMode) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
-
-  // Get android 12+ core palette
-  try {
-    await DynamicColorPlugin.getCorePalette().then((value) {
-      setCorePalette(value);
-    });
-  } catch (e) {
-    debugPrint('Could not get core palette: $e');
-  }
+  final lichessBinding = AppLichessBinding.ensureInitialized();
 
   // Show splash screen until app is ready
   // See src/app.dart for splash screen removal
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    // lock orientation to portrait on android phones
-    final view = widgetsBinding.platformDispatcher.views.first;
-    final data = MediaQueryData.fromView(view);
-    if (data.size.shortestSide < FormFactor.tablet) {
-      await SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp],
-      );
-    }
+  // Old API.
+  // TODO: Remove this once all SharedPreferences usage is migrated to SharedPreferencesAsync.
+  SharedPreferences.setPrefix('lichess.');
+  await migrateSharedPreferences();
 
-    // Sets edge-to-edge system UI mode on Android 12+
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent,
-        systemNavigationBarContrastEnforced: true,
-      ),
-    );
+  await lichessBinding.preloadSharedPreferences();
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await androidDisplayInitialization(widgetsBinding);
   }
 
-  runApp(
-    ProviderScope(
-      observers: [
-        ProviderLogger(),
-      ],
-      child: const AppInitializationScreen(),
-    ),
-  );
+  await preloadPieceImages();
+
+  await setupFirstLaunch();
+
+  await SoundService.initialize();
+
+  final locale = await setupIntl(widgetsBinding);
+
+  await initializeLocalNotifications(locale);
+
+  await lichessBinding.initializeFirebase();
+
+  runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
 }
 
-@pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('Handling a background message: ${message.data}');
-
-  final gameFullId = message.data['lichess.fullId'] as String?;
-  final round = message.data['lichess.round'] as String?;
-
-  // update correspondence game
-  if (gameFullId != null && round != null) {
-    final dbPath = path.join(await getDatabasesPath(), kLichessDatabaseName);
-    final db = await openDb(databaseFactory, dbPath);
-    final fullId = GameFullId(gameFullId);
-    final game = PlayableGame.fromServerJson(
-      jsonDecode(round) as Map<String, dynamic>,
-    );
-    final corresGame = OfflineCorrespondenceGame(
-      id: game.id,
-      fullId: fullId,
-      meta: game.meta,
-      rated: game.meta.rated,
-      steps: game.steps,
-      initialFen: game.initialFen,
-      status: game.status,
-      variant: game.meta.variant,
-      speed: game.meta.speed,
-      perf: game.meta.perf,
-      white: game.white,
-      black: game.black,
-      youAre: game.youAre!,
-      daysPerTurn: game.meta.daysPerTurn,
-      clock: game.correspondenceClock,
-      winner: game.winner,
-      isThreefoldRepetition: game.isThreefoldRepetition,
-    );
-
-    await db.insert(
-      kCorrespondenceStorageTable,
-      {
-        'userId':
-            corresGame.me.user?.id.toString() ?? kCorrespondenceStorageAnonId,
-        'gameId': corresGame.id.toString(),
-        'lastModified': DateTime.now().toIso8601String(),
-        'data': jsonEncode(corresGame.toJson()),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+Future<void> migrateSharedPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  final didMigrate = prefs.getBool('shared_preferences_did_migrate') ?? false;
+  if (didMigrate) {
+    return;
   }
-
-  // update badge
-  final badge = message.data['lichess.iosBadge'] as String?;
-  if (badge != null) {
-    try {
-      BadgeService.instance.setBadge(int.parse(badge));
-    } catch (e) {
-      debugPrint('Could not parse badge: $badge');
+  final newPrefs = SharedPreferencesAsync();
+  for (final key in prefs.getKeys()) {
+    final value = prefs.get(key);
+    if (value is String) {
+      await newPrefs.setString(key, value);
+    } else if (value is int) {
+      await newPrefs.setInt(key, value);
+    } else if (value is double) {
+      await newPrefs.setDouble(key, value);
+    } else if (value is bool) {
+      await newPrefs.setBool(key, value);
+    } else if (value is List<String>) {
+      await newPrefs.setStringList(key, value);
     }
   }
+  await prefs.setBool('shared_preferences_did_migrate', true);
 }

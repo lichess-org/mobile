@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -16,7 +15,8 @@ import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -34,26 +34,10 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(title: Text(context.l10n.players)),
+        body: _Body(),
       ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.players),
-      ),
-      body: _Body(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
     );
   }
 }
@@ -63,17 +47,12 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: const _SearchButton(),
-          ),
-          if (session != null) _OnlineFriendsWidget(),
-          RatingPrefAware(child: LeaderboardWidget()),
-        ],
-      ),
+    return ListView(
+      children: [
+        const Padding(padding: Styles.bodySectionPadding, child: _SearchButton()),
+        if (session != null) _OnlineFriendsWidget(),
+        RatingPrefAware(child: LeaderboardWidget()),
+      ],
     );
   }
 }
@@ -88,26 +67,18 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: (context) => SearchBar(
-        leading: const Icon(Icons.search),
-        hintText: context.l10n.searchSearch,
-        focusNode: AlwaysDisabledFocusNode(),
-        onTap: () => pushPlatformRoute(
-          context,
-          fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
-        ),
-      ),
-      iosBuilder: (context) => CupertinoSearchTextField(
-        placeholder: context.l10n.searchSearch,
-        focusNode: AlwaysDisabledFocusNode(),
-        onTap: () => pushPlatformRoute(
-          context,
-          fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
-        ),
-      ),
+    void onUserTap(LightUser user) =>
+        pushPlatformRoute(context, builder: (ctx) => UserScreen(user: user));
+
+    return PlatformSearchBar(
+      hintText: context.l10n.searchSearch,
+      focusNode: AlwaysDisabledFocusNode(),
+      onTap:
+          () => pushPlatformRoute(
+            context,
+            fullscreenDialog: true,
+            builder: (_) => SearchScreen(onUserTap: onUserTap),
+          ),
     );
   }
 }
@@ -121,21 +92,18 @@ class _OnlineFriendsWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           header: Text(context.l10n.nbFriendsOnline(data.length)),
-          headerTrailing: data.isEmpty
-              ? null
-              : NoPaddingTextButton(
-                  onPressed: () => _handleTap(context, data),
-                  child: Text(
-                    context.l10n.more,
+          headerTrailing:
+              data.isEmpty
+                  ? null
+                  : NoPaddingTextButton(
+                    onPressed: () => _handleTap(context, data),
+                    child: Text(context.l10n.more),
                   ),
-                ),
           children: [
             if (data.isEmpty)
               PlatformListTile(
                 title: Text(context.l10n.friends),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                ),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () => _handleTap(context, data),
               ),
             for (final user in data)
@@ -144,13 +112,12 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),
                 ),
-                onTap: () => pushPlatformRoute(
-                  context,
-                  title: user.name,
-                  builder: (_) => UserScreen(
-                    user: user,
-                  ),
-                ),
+                onTap:
+                    () => pushPlatformRoute(
+                      context,
+                      title: user.name,
+                      builder: (_) => UserScreen(user: user),
+                    ),
               ),
           ],
         );
@@ -159,19 +126,15 @@ class _OnlineFriendsWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PlayerScreen] could not load following online users; $error\n $stackTrace',
         );
-        return const Center(
-          child: Text('Could not load online friends'),
-        );
+        return const Center(child: Text('Could not load online friends'));
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 3,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 3, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 

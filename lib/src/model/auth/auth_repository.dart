@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,16 +16,14 @@ const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['web:mobile'];
 
 @Riverpod(keepAlive: true)
-FlutterAppAuth appAuth(AppAuthRef ref) {
+FlutterAppAuth appAuth(Ref ref) {
   return const FlutterAppAuth();
 }
 
 class AuthRepository {
-  AuthRepository(
-    LichessClient client,
-    FlutterAppAuth appAuth,
-  )   : _client = client,
-        _appAuth = appAuth;
+  AuthRepository(LichessClient client, FlutterAppAuth appAuth)
+    : _client = client,
+      _appAuth = appAuth;
 
   final LichessClient _client;
   final Logger _log = Logger('AuthRepository');
@@ -50,12 +49,6 @@ class AuthRepository {
       ),
     );
 
-    if (authResp == null) {
-      throw Exception(
-        'FlutterAppAuth.authorizeAndExchangeCode failed to get token',
-      );
-    }
-
     _log.fine('Got oAuth response $authResp');
 
     final token = authResp.accessToken;
@@ -66,25 +59,17 @@ class AuthRepository {
 
     final user = await _client.readJson(
       Uri(path: '/api/account'),
-      headers: {
-        'Authorization': 'Bearer ${signBearerToken(token)}',
-      },
+      headers: {'Authorization': 'Bearer ${signBearerToken(token)}'},
       mapper: User.fromServerJson,
     );
-    return AuthSessionState(
-      token: token,
-      user: user.lightUser,
-    );
+    return AuthSessionState(token: token, user: user.lightUser);
   }
 
   Future<void> signOut() async {
     final url = Uri(path: '/api/token');
     final response = await _client.delete(Uri(path: '/api/token'));
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to delete token: ${response.statusCode}',
-        url,
-      );
+      throw http.ClientException('Failed to delete token: ${response.statusCode}', url);
     }
   }
 }

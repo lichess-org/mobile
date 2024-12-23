@@ -4,7 +4,6 @@ import { readFileSync, createWriteStream, writeFileSync, mkdirSync, existsSync }
 import { readdir, unlink } from 'node:fs/promises';
 import { pipeline } from 'stream'
 import { promisify } from 'util'
-import { exec } from 'child_process'
 import colors from 'colors/safe.js'
 import { parseStringPromise } from 'xml2js'
 import fetch from 'node-fetch'
@@ -22,8 +21,6 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 
 const mobileSourcePath = `${__dirname}/../translation/source`
 const mobileTranslationsPath = `${tmpDir}/[lichess-org.mobile] main/translation/dest`
-
-const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
 const modules = [
@@ -43,6 +40,7 @@ const modules = [
   'storm',
   'streamer',
   'study',
+  'timeago',
 ]
 
 // list of keys (per module) to include in the ARB file
@@ -52,10 +50,7 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'study': ['start', 'shareAndExport'],
-  'broadcast': ['broadcasts', 'liveBroadcasts'],
 }
-
 
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'pt-PT' is before 'pt-BR'
@@ -76,10 +71,9 @@ main()
 // --
 
 async function generateLilaTranslationARBs() {
-  // Download translations zip from crowdin
-  const zipFile = createWriteStream(`${tmpDir}/out.zip`)
-  await downloadTranslationsTo(zipFile)
-  await unzipTranslations(`${tmpDir}/out.zip`)
+  // Download zip doesn't work anymore, we need another way to get the translations
+  // This is tracked here: https://github.com/lichess-org/mobile/issues/945
+  // for now we need to manually download the translations and put them in the tmp/translations folder
 
   // load all translations into a single object
   const translations = {}
@@ -145,28 +139,6 @@ async function generateTemplateARB() {
   }
   writeTranslations(`${destDir}/app_en.arb`, template['en-GB']);
   console.log(colors.green('   Template file successfully written.'))
-}
-
-async function downloadTranslationsTo(zipFile) {
-  console.log(colors.blue('Downloading translations...'))
-  const streamPipeline = promisify(pipeline)
-  const response = await fetch('https://crowdin.com/backend/download/project/lichess.zip')
-  if (!response.ok) throw new Error(`unexpected response ${response.statusText}`)
-
-  await streamPipeline(response.body, zipFile)
-  console.log(colors.green('  Download complete.'))
-}
-
-async function unzipTranslations(zipFilePath) {
-  console.log(colors.blue('Unzipping translations...'))
-  return new Promise((resolve, reject) => {
-      exec(`unzip -o ${zipFilePath} -d ${tmpDir}`, {maxBuffer: unzipMaxBufferSize}, (err) => {
-      if (err) {
-        return reject('Unzip failed.')
-      }
-      resolve()
-    })
-  })
 }
 
 async function downloadLilaSourcesTo(dir) {

@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,51 +12,24 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   group('GameStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(gameStorageProvider);
+      final storage = await container.read(gameStorageProvider.future);
 
       await storage.save(game);
-      expect(
-        storage.fetch(
-          gameId: gameId,
-        ),
-        completion(equals(game)),
-      );
+      expect(storage.fetch(gameId: gameId), completion(equals(game)));
     });
 
     test('paginate games', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(gameStorageProvider);
+      final storage = await container.read(gameStorageProvider.future);
 
       for (final game in games) {
         await storage.save(game);
@@ -69,11 +41,7 @@ void main() {
       expect(page1.length, 10);
       expect(page1.last.game.id, const GameId('game0090'));
 
-      final page2 = await storage.page(
-        userId: userId,
-        max: 10,
-        until: page1.last.lastModified,
-      );
+      final page2 = await storage.page(userId: userId, max: 10, until: page1.last.lastModified);
       expect(page2.length, 10);
       expect(page2.last.game.id, const GameId('game0080'));
     });
@@ -107,6 +75,7 @@ final game = ArchivedGame(
     speed: Speed.correspondence,
     variant: Variant.standard,
   ),
+  source: GameSource.lobby,
   data: LightArchivedGame(
     id: gameId,
     variant: Variant.standard,
@@ -116,43 +85,14 @@ final game = ArchivedGame(
     speed: Speed.blitz,
     rated: true,
     status: GameStatus.started,
-    white: const Player(
-      user: LightUser(
-        id: UserId('whiteId'),
-        name: 'White',
-      ),
-      rating: 1500,
-    ),
-    black: const Player(
-      user: LightUser(
-        id: UserId('blackId'),
-        name: 'Black',
-      ),
-      rating: 1500,
-    ),
-    clock: (
-      initial: const Duration(minutes: 2),
-      increment: const Duration(seconds: 3),
-    ),
+    white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+    black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+    clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
   ),
-  steps: _makeSteps(
-    'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-  ),
+  steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
   status: GameStatus.started,
-  white: const Player(
-    user: LightUser(
-      id: UserId('whiteId'),
-      name: 'White',
-    ),
-    rating: 1500,
-  ),
-  black: const Player(
-    user: LightUser(
-      id: UserId('blackId'),
-      name: 'Black',
-    ),
-    rating: 1500,
-  ),
+  white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+  black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
   youAre: Side.white,
 );
 
@@ -167,6 +107,7 @@ final games = List.generate(100, (index) {
       speed: Speed.correspondence,
       variant: Variant.standard,
     ),
+    source: GameSource.lobby,
     data: LightArchivedGame(
       id: id,
       variant: Variant.standard,
@@ -176,43 +117,14 @@ final games = List.generate(100, (index) {
       speed: Speed.blitz,
       rated: true,
       status: GameStatus.started,
-      white: const Player(
-        user: LightUser(
-          id: UserId('whiteId'),
-          name: 'White',
-        ),
-        rating: 1500,
-      ),
-      black: const Player(
-        user: LightUser(
-          id: UserId('blackId'),
-          name: 'Black',
-        ),
-        rating: 1500,
-      ),
-      clock: (
-        initial: const Duration(minutes: 2),
-        increment: const Duration(seconds: 3),
-      ),
+      white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+      black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+      clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
     ),
-    steps: _makeSteps(
-      'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-    ),
+    steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
     status: GameStatus.started,
-    white: const Player(
-      user: LightUser(
-        id: UserId('whiteId'),
-        name: 'White',
-      ),
-      rating: 1500,
-    ),
-    black: const Player(
-      user: LightUser(
-        id: UserId('blackId'),
-        name: 'Black',
-      ),
-      rating: 1500,
-    ),
+    white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+    black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
     youAre: Side.white,
   );
 });

@@ -204,47 +204,41 @@ abstract class AppLocalizations {
     Locale('zh', 'TW')
   ];
 
-  /// No description provided for @mobileHomeTab.
+  /// No description provided for @mobileAllGames.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
-  String get mobileHomeTab;
+  /// **'All games'**
+  String get mobileAllGames;
 
-  /// No description provided for @mobilePuzzlesTab.
+  /// No description provided for @mobileAreYouSure.
   ///
   /// In en, this message translates to:
-  /// **'Puzzles'**
-  String get mobilePuzzlesTab;
+  /// **'Are you sure?'**
+  String get mobileAreYouSure;
 
-  /// No description provided for @mobileToolsTab.
+  /// No description provided for @mobileCancelTakebackOffer.
   ///
   /// In en, this message translates to:
-  /// **'Tools'**
-  String get mobileToolsTab;
+  /// **'Cancel takeback offer'**
+  String get mobileCancelTakebackOffer;
 
-  /// No description provided for @mobileWatchTab.
+  /// No description provided for @mobileClearButton.
   ///
   /// In en, this message translates to:
-  /// **'Watch'**
-  String get mobileWatchTab;
+  /// **'Clear'**
+  String get mobileClearButton;
 
-  /// No description provided for @mobileSettingsTab.
+  /// No description provided for @mobileCorrespondenceClearSavedMove.
   ///
   /// In en, this message translates to:
-  /// **'Settings'**
-  String get mobileSettingsTab;
+  /// **'Clear saved move'**
+  String get mobileCorrespondenceClearSavedMove;
 
-  /// No description provided for @mobileMustBeLoggedIn.
+  /// No description provided for @mobileCustomGameJoinAGame.
   ///
   /// In en, this message translates to:
-  /// **'You must be logged in to view this page.'**
-  String get mobileMustBeLoggedIn;
-
-  /// No description provided for @mobileSystemColors.
-  ///
-  /// In en, this message translates to:
-  /// **'System colors'**
-  String get mobileSystemColors;
+  /// **'Join a game'**
+  String get mobileCustomGameJoinAGame;
 
   /// No description provided for @mobileFeedbackButton.
   ///
@@ -252,11 +246,119 @@ abstract class AppLocalizations {
   /// **'Feedback'**
   String get mobileFeedbackButton;
 
+  /// No description provided for @mobileGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {param}'**
+  String mobileGreeting(String param);
+
+  /// No description provided for @mobileGreetingWithoutName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get mobileGreetingWithoutName;
+
+  /// No description provided for @mobileHideVariation.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide variation'**
+  String get mobileHideVariation;
+
+  /// No description provided for @mobileHomeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get mobileHomeTab;
+
+  /// No description provided for @mobileLiveStreamers.
+  ///
+  /// In en, this message translates to:
+  /// **'Live streamers'**
+  String get mobileLiveStreamers;
+
+  /// No description provided for @mobileMustBeLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be logged in to view this page.'**
+  String get mobileMustBeLoggedIn;
+
+  /// No description provided for @mobileNoSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get mobileNoSearchResults;
+
+  /// No description provided for @mobileNotFollowingAnyUser.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any user.'**
+  String get mobileNotFollowingAnyUser;
+
   /// No description provided for @mobileOkButton.
   ///
   /// In en, this message translates to:
   /// **'OK'**
   String get mobileOkButton;
+
+  /// No description provided for @mobilePlayersMatchingSearchTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Players with \"{param}\"'**
+  String mobilePlayersMatchingSearchTerm(String param);
+
+  /// No description provided for @mobilePrefMagnifyDraggedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnify dragged piece'**
+  String get mobilePrefMagnifyDraggedPiece;
+
+  /// No description provided for @mobilePuzzleStormConfirmEndRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to end this run?'**
+  String get mobilePuzzleStormConfirmEndRun;
+
+  /// No description provided for @mobilePuzzleStormFilterNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show, please change the filters'**
+  String get mobilePuzzleStormFilterNothingToShow;
+
+  /// No description provided for @mobilePuzzleStormNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show. Play some runs of Puzzle Storm.'**
+  String get mobilePuzzleStormNothingToShow;
+
+  /// No description provided for @mobilePuzzleStormSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve as many puzzles as possible in 3 minutes.'**
+  String get mobilePuzzleStormSubtitle;
+
+  /// No description provided for @mobilePuzzleStreakAbortWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You will lose your current streak and your score will be saved.'**
+  String get mobilePuzzleStreakAbortWarning;
+
+  /// No description provided for @mobilePuzzleThemesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play puzzles from your favorite openings, or choose a theme.'**
+  String get mobilePuzzleThemesSubtitle;
+
+  /// No description provided for @mobilePuzzlesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles'**
+  String get mobilePuzzlesTab;
+
+  /// No description provided for @mobileRecentSearches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get mobileRecentSearches;
 
   /// No description provided for @mobileSettingsHapticFeedback.
   ///
@@ -276,71 +378,11 @@ abstract class AppLocalizations {
   /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.'**
   String get mobileSettingsImmersiveModeSubtitle;
 
-  /// No description provided for @mobileNotFollowingAnyUser.
+  /// No description provided for @mobileSettingsTab.
   ///
   /// In en, this message translates to:
-  /// **'You are not following any user.'**
-  String get mobileNotFollowingAnyUser;
-
-  /// No description provided for @mobileAllGames.
-  ///
-  /// In en, this message translates to:
-  /// **'All games'**
-  String get mobileAllGames;
-
-  /// No description provided for @mobileRecentSearches.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent searches'**
-  String get mobileRecentSearches;
-
-  /// No description provided for @mobileClearButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get mobileClearButton;
-
-  /// No description provided for @mobilePlayersMatchingSearchTerm.
-  ///
-  /// In en, this message translates to:
-  /// **'Players with \"{param}\"'**
-  String mobilePlayersMatchingSearchTerm(String param);
-
-  /// No description provided for @mobileNoSearchResults.
-  ///
-  /// In en, this message translates to:
-  /// **'No results'**
-  String get mobileNoSearchResults;
-
-  /// No description provided for @mobileAreYouSure.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure?'**
-  String get mobileAreYouSure;
-
-  /// No description provided for @mobilePuzzleStreakAbortWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'You will lose your current streak and your score will be saved.'**
-  String get mobilePuzzleStreakAbortWarning;
-
-  /// No description provided for @mobilePuzzleStormNothingToShow.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing to show. Play some runs of Puzzle Storm.'**
-  String get mobilePuzzleStormNothingToShow;
-
-  /// No description provided for @mobileSharePuzzle.
-  ///
-  /// In en, this message translates to:
-  /// **'Share this puzzle'**
-  String get mobileSharePuzzle;
-
-  /// No description provided for @mobileShareGameURL.
-  ///
-  /// In en, this message translates to:
-  /// **'Share game URL'**
-  String get mobileShareGameURL;
+  /// **'Settings'**
+  String get mobileSettingsTab;
 
   /// No description provided for @mobileShareGamePGN.
   ///
@@ -348,23 +390,23 @@ abstract class AppLocalizations {
   /// **'Share PGN'**
   String get mobileShareGamePGN;
 
+  /// No description provided for @mobileShareGameURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Share game URL'**
+  String get mobileShareGameURL;
+
   /// No description provided for @mobileSharePositionAsFEN.
   ///
   /// In en, this message translates to:
   /// **'Share position as FEN'**
   String get mobileSharePositionAsFEN;
 
-  /// No description provided for @mobileShowVariations.
+  /// No description provided for @mobileSharePuzzle.
   ///
   /// In en, this message translates to:
-  /// **'Show variations'**
-  String get mobileShowVariations;
-
-  /// No description provided for @mobileHideVariation.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide variation'**
-  String get mobileHideVariation;
+  /// **'Share this puzzle'**
+  String get mobileSharePuzzle;
 
   /// No description provided for @mobileShowComments.
   ///
@@ -372,59 +414,17 @@ abstract class AppLocalizations {
   /// **'Show comments'**
   String get mobileShowComments;
 
-  /// No description provided for @mobilePuzzleStormConfirmEndRun.
+  /// No description provided for @mobileShowResult.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to end this run?'**
-  String get mobilePuzzleStormConfirmEndRun;
+  /// **'Show result'**
+  String get mobileShowResult;
 
-  /// No description provided for @mobilePuzzleStormFilterNothingToShow.
+  /// No description provided for @mobileShowVariations.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to show, please change the filters'**
-  String get mobilePuzzleStormFilterNothingToShow;
-
-  /// No description provided for @mobileCancelTakebackOffer.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel takeback offer'**
-  String get mobileCancelTakebackOffer;
-
-  /// No description provided for @mobileCancelDrawOffer.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel draw offer'**
-  String get mobileCancelDrawOffer;
-
-  /// No description provided for @mobileWaitingForOpponentToJoin.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for opponent to join...'**
-  String get mobileWaitingForOpponentToJoin;
-
-  /// No description provided for @mobileBlindfoldMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Blindfold'**
-  String get mobileBlindfoldMode;
-
-  /// No description provided for @mobileLiveStreamers.
-  ///
-  /// In en, this message translates to:
-  /// **'Live streamers'**
-  String get mobileLiveStreamers;
-
-  /// No description provided for @mobileCustomGameJoinAGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Join a game'**
-  String get mobileCustomGameJoinAGame;
-
-  /// No description provided for @mobileCorrespondenceClearSavedMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear saved move'**
-  String get mobileCorrespondenceClearSavedMove;
+  /// **'Show variations'**
+  String get mobileShowVariations;
 
   /// No description provided for @mobileSomethingWentWrong.
   ///
@@ -432,41 +432,35 @@ abstract class AppLocalizations {
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
 
-  /// No description provided for @mobileShowResult.
+  /// No description provided for @mobileSystemColors.
   ///
   /// In en, this message translates to:
-  /// **'Show result'**
-  String get mobileShowResult;
+  /// **'System colors'**
+  String get mobileSystemColors;
 
-  /// No description provided for @mobilePuzzleThemesSubtitle.
+  /// No description provided for @mobileTheme.
   ///
   /// In en, this message translates to:
-  /// **'Play puzzles from your favorite openings, or choose a theme.'**
-  String get mobilePuzzleThemesSubtitle;
+  /// **'Theme'**
+  String get mobileTheme;
 
-  /// No description provided for @mobilePuzzleStormSubtitle.
+  /// No description provided for @mobileToolsTab.
   ///
   /// In en, this message translates to:
-  /// **'Solve as many puzzles as possible in 3 minutes.'**
-  String get mobilePuzzleStormSubtitle;
+  /// **'Tools'**
+  String get mobileToolsTab;
 
-  /// No description provided for @mobileGreeting.
+  /// No description provided for @mobileWaitingForOpponentToJoin.
   ///
   /// In en, this message translates to:
-  /// **'Hello, {param}'**
-  String mobileGreeting(String param);
+  /// **'Waiting for opponent to join...'**
+  String get mobileWaitingForOpponentToJoin;
 
-  /// No description provided for @mobileGreetingWithoutName.
+  /// No description provided for @mobileWatchTab.
   ///
   /// In en, this message translates to:
-  /// **'Hello'**
-  String get mobileGreetingWithoutName;
-
-  /// No description provided for @mobilePrefMagnifyDraggedPiece.
-  ///
-  /// In en, this message translates to:
-  /// **'Magnify dragged piece'**
-  String get mobilePrefMagnifyDraggedPiece;
+  /// **'Watch'**
+  String get mobileWatchTab;
 
   /// No description provided for @activityActivity.
   ///
@@ -540,6 +534,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}'**
   String activityCompletedNbGames(int count);
 
+  /// No description provided for @activityCompletedNbVariantGames.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Completed {count} {param2} correspondence game} other{Completed {count} {param2} correspondence games}}'**
+  String activityCompletedNbVariantGames(int count, String param2);
+
   /// No description provided for @activityFollowedNbPlayers.
   ///
   /// In en, this message translates to:
@@ -600,11 +600,461 @@ abstract class AppLocalizations {
   /// **'Broadcasts'**
   String get broadcastBroadcasts;
 
+  /// No description provided for @broadcastMyBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'My broadcasts'**
+  String get broadcastMyBroadcasts;
+
   /// No description provided for @broadcastLiveBroadcasts.
   ///
   /// In en, this message translates to:
   /// **'Live tournament broadcasts'**
   String get broadcastLiveBroadcasts;
+
+  /// No description provided for @broadcastBroadcastCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcast calendar'**
+  String get broadcastBroadcastCalendar;
+
+  /// No description provided for @broadcastNewBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'New live broadcast'**
+  String get broadcastNewBroadcast;
+
+  /// No description provided for @broadcastSubscribedBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribed broadcasts'**
+  String get broadcastSubscribedBroadcasts;
+
+  /// No description provided for @broadcastAboutBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'About broadcasts'**
+  String get broadcastAboutBroadcasts;
+
+  /// No description provided for @broadcastHowToUseLichessBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'How to use Lichess Broadcasts.'**
+  String get broadcastHowToUseLichessBroadcasts;
+
+  /// No description provided for @broadcastTheNewRoundHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The new round will have the same members and contributors as the previous one.'**
+  String get broadcastTheNewRoundHelp;
+
+  /// No description provided for @broadcastAddRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a round'**
+  String get broadcastAddRound;
+
+  /// No description provided for @broadcastOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get broadcastOngoing;
+
+  /// No description provided for @broadcastUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get broadcastUpcoming;
+
+  /// No description provided for @broadcastCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get broadcastCompleted;
+
+  /// No description provided for @broadcastCompletedHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess detects round completion, but can get it wrong. Use this to set it manually.'**
+  String get broadcastCompletedHelp;
+
+  /// No description provided for @broadcastRoundName.
+  ///
+  /// In en, this message translates to:
+  /// **'Round name'**
+  String get broadcastRoundName;
+
+  /// No description provided for @broadcastRoundNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Round number'**
+  String get broadcastRoundNumber;
+
+  /// No description provided for @broadcastTournamentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament name'**
+  String get broadcastTournamentName;
+
+  /// No description provided for @broadcastTournamentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Short tournament description'**
+  String get broadcastTournamentDescription;
+
+  /// No description provided for @broadcastFullDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Full tournament description'**
+  String get broadcastFullDescription;
+
+  /// No description provided for @broadcastFullDescriptionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional long description of the tournament. {param1} is available. Length must be less than {param2} characters.'**
+  String broadcastFullDescriptionHelp(String param1, String param2);
+
+  /// No description provided for @broadcastSourceSingleUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'PGN Source URL'**
+  String get broadcastSourceSingleUrl;
+
+  /// No description provided for @broadcastSourceUrlHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.'**
+  String get broadcastSourceUrlHelp;
+
+  /// No description provided for @broadcastSourceGameIds.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 64 Lichess game IDs, separated by spaces.'**
+  String get broadcastSourceGameIds;
+
+  /// No description provided for @broadcastStartDateTimeZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date in the tournament local timezone: {param}'**
+  String broadcastStartDateTimeZone(String param);
+
+  /// No description provided for @broadcastStartDateHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional, if you know when the event starts'**
+  String get broadcastStartDateHelp;
+
+  /// No description provided for @broadcastCurrentGameUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Current game URL'**
+  String get broadcastCurrentGameUrl;
+
+  /// No description provided for @broadcastDownloadAllRounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Download all rounds'**
+  String get broadcastDownloadAllRounds;
+
+  /// No description provided for @broadcastResetRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset this round'**
+  String get broadcastResetRound;
+
+  /// No description provided for @broadcastDeleteRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this round'**
+  String get broadcastDeleteRound;
+
+  /// No description provided for @broadcastDefinitivelyDeleteRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Definitively delete the round and all its games.'**
+  String get broadcastDefinitivelyDeleteRound;
+
+  /// No description provided for @broadcastDeleteAllGamesOfThisRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all games of this round. The source will need to be active in order to re-create them.'**
+  String get broadcastDeleteAllGamesOfThisRound;
+
+  /// No description provided for @broadcastEditRoundStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit round study'**
+  String get broadcastEditRoundStudy;
+
+  /// No description provided for @broadcastDeleteTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this tournament'**
+  String get broadcastDeleteTournament;
+
+  /// No description provided for @broadcastDefinitivelyDeleteTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'Definitively delete the entire tournament, all its rounds and all its games.'**
+  String get broadcastDefinitivelyDeleteTournament;
+
+  /// No description provided for @broadcastShowScores.
+  ///
+  /// In en, this message translates to:
+  /// **'Show players scores based on game results'**
+  String get broadcastShowScores;
+
+  /// No description provided for @broadcastReplacePlayerTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: replace player names, ratings and titles'**
+  String get broadcastReplacePlayerTags;
+
+  /// No description provided for @broadcastFideFederations.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE federations'**
+  String get broadcastFideFederations;
+
+  /// No description provided for @broadcastTop10Rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Top 10 rating'**
+  String get broadcastTop10Rating;
+
+  /// No description provided for @broadcastFidePlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE players'**
+  String get broadcastFidePlayers;
+
+  /// No description provided for @broadcastFidePlayerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE player not found'**
+  String get broadcastFidePlayerNotFound;
+
+  /// No description provided for @broadcastFideProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE profile'**
+  String get broadcastFideProfile;
+
+  /// No description provided for @broadcastFederation.
+  ///
+  /// In en, this message translates to:
+  /// **'Federation'**
+  String get broadcastFederation;
+
+  /// No description provided for @broadcastAgeThisYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Age this year'**
+  String get broadcastAgeThisYear;
+
+  /// No description provided for @broadcastUnrated.
+  ///
+  /// In en, this message translates to:
+  /// **'Unrated'**
+  String get broadcastUnrated;
+
+  /// No description provided for @broadcastRecentTournaments.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent tournaments'**
+  String get broadcastRecentTournaments;
+
+  /// No description provided for @broadcastOpenLichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Lichess'**
+  String get broadcastOpenLichess;
+
+  /// No description provided for @broadcastTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'Teams'**
+  String get broadcastTeams;
+
+  /// No description provided for @broadcastBoards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get broadcastBoards;
+
+  /// No description provided for @broadcastOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get broadcastOverview;
+
+  /// No description provided for @broadcastSubscribeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.'**
+  String get broadcastSubscribeTitle;
+
+  /// No description provided for @broadcastUploadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload tournament image'**
+  String get broadcastUploadImage;
+
+  /// No description provided for @broadcastNoBoardsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No boards yet. These will appear once games are uploaded.'**
+  String get broadcastNoBoardsYet;
+
+  /// No description provided for @broadcastBoardsCanBeLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards can be loaded with a source or via the {param}'**
+  String broadcastBoardsCanBeLoaded(String param);
+
+  /// No description provided for @broadcastStartsAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts after {param}'**
+  String broadcastStartsAfter(String param);
+
+  /// No description provided for @broadcastStartVerySoon.
+  ///
+  /// In en, this message translates to:
+  /// **'The broadcast will start very soon.'**
+  String get broadcastStartVerySoon;
+
+  /// No description provided for @broadcastNotYetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'The broadcast has not yet started.'**
+  String get broadcastNotYetStarted;
+
+  /// No description provided for @broadcastOfficialWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Official website'**
+  String get broadcastOfficialWebsite;
+
+  /// No description provided for @broadcastStandings.
+  ///
+  /// In en, this message translates to:
+  /// **'Standings'**
+  String get broadcastStandings;
+
+  /// No description provided for @broadcastOfficialStandings.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Standings'**
+  String get broadcastOfficialStandings;
+
+  /// No description provided for @broadcastIframeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'More options on the {param}'**
+  String broadcastIframeHelp(String param);
+
+  /// No description provided for @broadcastWebmastersPage.
+  ///
+  /// In en, this message translates to:
+  /// **'webmasters page'**
+  String get broadcastWebmastersPage;
+
+  /// No description provided for @broadcastPgnSourceHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.'**
+  String broadcastPgnSourceHelp(String param);
+
+  /// No description provided for @broadcastEmbedThisBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Embed this broadcast in your website'**
+  String get broadcastEmbedThisBroadcast;
+
+  /// No description provided for @broadcastEmbedThisRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Embed {param} in your website'**
+  String broadcastEmbedThisRound(String param);
+
+  /// No description provided for @broadcastRatingDiff.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating diff'**
+  String get broadcastRatingDiff;
+
+  /// No description provided for @broadcastGamesThisTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'Games in this tournament'**
+  String get broadcastGamesThisTournament;
+
+  /// No description provided for @broadcastScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get broadcastScore;
+
+  /// No description provided for @broadcastAllTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'All teams'**
+  String get broadcastAllTeams;
+
+  /// No description provided for @broadcastTournamentFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament format'**
+  String get broadcastTournamentFormat;
+
+  /// No description provided for @broadcastTournamentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament Location'**
+  String get broadcastTournamentLocation;
+
+  /// No description provided for @broadcastTopPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Top players'**
+  String get broadcastTopPlayers;
+
+  /// No description provided for @broadcastTimezone.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone'**
+  String get broadcastTimezone;
+
+  /// No description provided for @broadcastFideRatingCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'FIDE rating category'**
+  String get broadcastFideRatingCategory;
+
+  /// No description provided for @broadcastOptionalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional details'**
+  String get broadcastOptionalDetails;
+
+  /// No description provided for @broadcastPastBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Past broadcasts'**
+  String get broadcastPastBroadcasts;
+
+  /// No description provided for @broadcastAllBroadcastsByMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'View all broadcasts by month'**
+  String get broadcastAllBroadcastsByMonth;
+
+  /// No description provided for @broadcastNbBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} broadcast} other{{count} broadcasts}}'**
+  String broadcastNbBroadcasts(int count);
 
   /// No description provided for @challengeChallengesX.
   ///
@@ -1062,6 +1512,12 @@ abstract class AppLocalizations {
   /// **'In-game only'**
   String get preferencesInGameOnly;
 
+  /// No description provided for @preferencesExceptInGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Except in-game'**
+  String get preferencesExceptInGame;
+
   /// No description provided for @preferencesChessClock.
   ///
   /// In en, this message translates to:
@@ -1343,6 +1799,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Bell notification sound'**
   String get preferencesBellNotificationSound;
+
+  /// No description provided for @preferencesBlindfold.
+  ///
+  /// In en, this message translates to:
+  /// **'Blindfold'**
+  String get preferencesBlindfold;
 
   /// No description provided for @puzzlePuzzles.
   ///
@@ -2514,17 +2976,17 @@ abstract class AppLocalizations {
   /// **'The opponent is limited in the moves they can make, and all moves worsen their position.'**
   String get puzzleThemeZugzwangDescription;
 
-  /// No description provided for @puzzleThemeHealthyMix.
+  /// No description provided for @puzzleThemeMix.
   ///
   /// In en, this message translates to:
   /// **'Healthy mix'**
-  String get puzzleThemeHealthyMix;
+  String get puzzleThemeMix;
 
-  /// No description provided for @puzzleThemeHealthyMixDescription.
+  /// No description provided for @puzzleThemeMixDescription.
   ///
   /// In en, this message translates to:
   /// **'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.'**
-  String get puzzleThemeHealthyMixDescription;
+  String get puzzleThemeMixDescription;
 
   /// No description provided for @puzzleThemePlayerGames.
   ///
@@ -3246,12 +3708,6 @@ abstract class AppLocalizations {
   /// **'By CPL'**
   String get byCPL;
 
-  /// No description provided for @openStudy.
-  ///
-  /// In en, this message translates to:
-  /// **'Open study'**
-  String get openStudy;
-
   /// No description provided for @enable.
   ///
   /// In en, this message translates to:
@@ -3305,12 +3761,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Removes the depth limit, and keeps your computer warm'**
   String get removesTheDepthLimit;
-
-  /// No description provided for @engineManager.
-  ///
-  /// In en, this message translates to:
-  /// **'Engine manager'**
-  String get engineManager;
 
   /// No description provided for @blunder.
   ///
@@ -3797,6 +4247,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Games played'**
   String get gamesPlayed;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
 
   /// No description provided for @cancel.
   ///
@@ -4494,12 +4950,6 @@ abstract class AppLocalizations {
   /// **'Unblock'**
   String get unblock;
 
-  /// No description provided for @followsYou.
-  ///
-  /// In en, this message translates to:
-  /// **'Follows you'**
-  String get followsYou;
-
   /// No description provided for @xStartedFollowingY.
   ///
   /// In en, this message translates to:
@@ -5130,11 +5580,23 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get other;
 
-  /// No description provided for @reportDescriptionHelp.
+  /// No description provided for @reportCheatBoostHelp.
   ///
   /// In en, this message translates to:
-  /// **'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion. Your report will be processed faster if written in English.'**
-  String get reportDescriptionHelp;
+  /// **'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.'**
+  String get reportCheatBoostHelp;
+
+  /// No description provided for @reportUsernameHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.'**
+  String get reportUsernameHelp;
+
+  /// No description provided for @reportProcessedFasterInEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report will be processed faster if written in English.'**
+  String get reportProcessedFasterInEnglish;
 
   /// No description provided for @error_provideOneCheatedGameLink.
   ///
@@ -7518,6 +7980,12 @@ abstract class AppLocalizations {
   /// **'Nothing to see here at the moment.'**
   String get nothingToSeeHere;
 
+  /// No description provided for @stats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get stats;
+
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
@@ -8094,17 +8562,1049 @@ abstract class AppLocalizations {
   /// **'Lichess streamers'**
   String get streamerLichessStreamers;
 
+  /// No description provided for @studyPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private'**
+  String get studyPrivate;
+
+  /// No description provided for @studyMyStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'My studies'**
+  String get studyMyStudies;
+
+  /// No description provided for @studyStudiesIContributeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Studies I contribute to'**
+  String get studyStudiesIContributeTo;
+
+  /// No description provided for @studyMyPublicStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'My public studies'**
+  String get studyMyPublicStudies;
+
+  /// No description provided for @studyMyPrivateStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'My private studies'**
+  String get studyMyPrivateStudies;
+
+  /// No description provided for @studyMyFavoriteStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'My favourite studies'**
+  String get studyMyFavoriteStudies;
+
+  /// No description provided for @studyWhatAreStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'What are studies?'**
+  String get studyWhatAreStudies;
+
+  /// No description provided for @studyAllStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'All studies'**
+  String get studyAllStudies;
+
+  /// No description provided for @studyStudiesCreatedByX.
+  ///
+  /// In en, this message translates to:
+  /// **'Studies created by {param}'**
+  String studyStudiesCreatedByX(String param);
+
+  /// No description provided for @studyNoneYet.
+  ///
+  /// In en, this message translates to:
+  /// **'None yet.'**
+  String get studyNoneYet;
+
+  /// No description provided for @studyHot.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot'**
+  String get studyHot;
+
+  /// No description provided for @studyDateAddedNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Date added (newest)'**
+  String get studyDateAddedNewest;
+
+  /// No description provided for @studyDateAddedOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Date added (oldest)'**
+  String get studyDateAddedOldest;
+
+  /// No description provided for @studyRecentlyUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated'**
+  String get studyRecentlyUpdated;
+
+  /// No description provided for @studyMostPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular'**
+  String get studyMostPopular;
+
+  /// No description provided for @studyAlphabetical.
+  ///
+  /// In en, this message translates to:
+  /// **'Alphabetical'**
+  String get studyAlphabetical;
+
+  /// No description provided for @studyAddNewChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new chapter'**
+  String get studyAddNewChapter;
+
+  /// No description provided for @studyAddMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Add members'**
+  String get studyAddMembers;
+
+  /// No description provided for @studyInviteToTheStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite to the study'**
+  String get studyInviteToTheStudy;
+
+  /// No description provided for @studyPleaseOnlyInvitePeopleYouKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'Please only invite people who know you, and who actively want to join this study.'**
+  String get studyPleaseOnlyInvitePeopleYouKnow;
+
+  /// No description provided for @studySearchByUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by username'**
+  String get studySearchByUsername;
+
+  /// No description provided for @studySpectator.
+  ///
+  /// In en, this message translates to:
+  /// **'Spectator'**
+  String get studySpectator;
+
+  /// No description provided for @studyContributor.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributor'**
+  String get studyContributor;
+
+  /// No description provided for @studyKick.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick'**
+  String get studyKick;
+
+  /// No description provided for @studyLeaveTheStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the study'**
+  String get studyLeaveTheStudy;
+
+  /// No description provided for @studyYouAreNowAContributor.
+  ///
+  /// In en, this message translates to:
+  /// **'You are now a contributor'**
+  String get studyYouAreNowAContributor;
+
+  /// No description provided for @studyYouAreNowASpectator.
+  ///
+  /// In en, this message translates to:
+  /// **'You are now a spectator'**
+  String get studyYouAreNowASpectator;
+
+  /// No description provided for @studyPgnTags.
+  ///
+  /// In en, this message translates to:
+  /// **'PGN tags'**
+  String get studyPgnTags;
+
+  /// No description provided for @studyLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get studyLike;
+
+  /// No description provided for @studyUnlike.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlike'**
+  String get studyUnlike;
+
+  /// No description provided for @studyNewTag.
+  ///
+  /// In en, this message translates to:
+  /// **'New tag'**
+  String get studyNewTag;
+
+  /// No description provided for @studyCommentThisPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment on this position'**
+  String get studyCommentThisPosition;
+
+  /// No description provided for @studyCommentThisMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment on this move'**
+  String get studyCommentThisMove;
+
+  /// No description provided for @studyAnnotateWithGlyphs.
+  ///
+  /// In en, this message translates to:
+  /// **'Annotate with glyphs'**
+  String get studyAnnotateWithGlyphs;
+
+  /// No description provided for @studyTheChapterIsTooShortToBeAnalysed.
+  ///
+  /// In en, this message translates to:
+  /// **'The chapter is too short to be analysed.'**
+  String get studyTheChapterIsTooShortToBeAnalysed;
+
+  /// No description provided for @studyOnlyContributorsCanRequestAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the study contributors can request a computer analysis.'**
+  String get studyOnlyContributorsCanRequestAnalysis;
+
+  /// No description provided for @studyGetAFullComputerAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a full server-side computer analysis of the mainline.'**
+  String get studyGetAFullComputerAnalysis;
+
+  /// No description provided for @studyMakeSureTheChapterIsComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure the chapter is complete. You can only request analysis once.'**
+  String get studyMakeSureTheChapterIsComplete;
+
+  /// No description provided for @studyAllSyncMembersRemainOnTheSamePosition.
+  ///
+  /// In en, this message translates to:
+  /// **'All SYNC members remain on the same position'**
+  String get studyAllSyncMembersRemainOnTheSamePosition;
+
+  /// No description provided for @studyShareChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Share changes with spectators and save them on the server'**
+  String get studyShareChanges;
+
+  /// No description provided for @studyPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing'**
+  String get studyPlaying;
+
+  /// No description provided for @studyShowEvalBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluation bars'**
+  String get studyShowEvalBar;
+
+  /// No description provided for @studyFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'First'**
+  String get studyFirst;
+
+  /// No description provided for @studyPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get studyPrevious;
+
+  /// No description provided for @studyNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get studyNext;
+
+  /// No description provided for @studyLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last'**
+  String get studyLast;
+
   /// No description provided for @studyShareAndExport.
   ///
   /// In en, this message translates to:
   /// **'Share & export'**
   String get studyShareAndExport;
 
+  /// No description provided for @studyCloneStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Clone'**
+  String get studyCloneStudy;
+
+  /// No description provided for @studyStudyPgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Study PGN'**
+  String get studyStudyPgn;
+
+  /// No description provided for @studyDownloadAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Download all games'**
+  String get studyDownloadAllGames;
+
+  /// No description provided for @studyChapterPgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter PGN'**
+  String get studyChapterPgn;
+
+  /// No description provided for @studyCopyChapterPgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy PGN'**
+  String get studyCopyChapterPgn;
+
+  /// No description provided for @studyDownloadGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Download game'**
+  String get studyDownloadGame;
+
+  /// No description provided for @studyStudyUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Study URL'**
+  String get studyStudyUrl;
+
+  /// No description provided for @studyCurrentChapterUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Current chapter URL'**
+  String get studyCurrentChapterUrl;
+
+  /// No description provided for @studyYouCanPasteThisInTheForumToEmbed.
+  ///
+  /// In en, this message translates to:
+  /// **'You can paste this in the forum or your Lichess blog to embed'**
+  String get studyYouCanPasteThisInTheForumToEmbed;
+
+  /// No description provided for @studyStartAtInitialPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Start at initial position'**
+  String get studyStartAtInitialPosition;
+
+  /// No description provided for @studyStartAtX.
+  ///
+  /// In en, this message translates to:
+  /// **'Start at {param}'**
+  String studyStartAtX(String param);
+
+  /// No description provided for @studyEmbedInYourWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Embed in your website'**
+  String get studyEmbedInYourWebsite;
+
+  /// No description provided for @studyReadMoreAboutEmbedding.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more about embedding'**
+  String get studyReadMoreAboutEmbedding;
+
+  /// No description provided for @studyOnlyPublicStudiesCanBeEmbedded.
+  ///
+  /// In en, this message translates to:
+  /// **'Only public studies can be embedded!'**
+  String get studyOnlyPublicStudiesCanBeEmbedded;
+
+  /// No description provided for @studyOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get studyOpen;
+
+  /// No description provided for @studyXBroughtToYouByY.
+  ///
+  /// In en, this message translates to:
+  /// **'{param1}, brought to you by {param2}'**
+  String studyXBroughtToYouByY(String param1, String param2);
+
+  /// No description provided for @studyStudyNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Study not found'**
+  String get studyStudyNotFound;
+
+  /// No description provided for @studyEditChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit chapter'**
+  String get studyEditChapter;
+
+  /// No description provided for @studyNewChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'New chapter'**
+  String get studyNewChapter;
+
+  /// No description provided for @studyImportFromChapterX.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from {param}'**
+  String studyImportFromChapterX(String param);
+
+  /// No description provided for @studyOrientation.
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation'**
+  String get studyOrientation;
+
+  /// No description provided for @studyAnalysisMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis mode'**
+  String get studyAnalysisMode;
+
+  /// No description provided for @studyPinnedChapterComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned chapter comment'**
+  String get studyPinnedChapterComment;
+
+  /// No description provided for @studySaveChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Save chapter'**
+  String get studySaveChapter;
+
+  /// No description provided for @studyClearAnnotations.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear annotations'**
+  String get studyClearAnnotations;
+
+  /// No description provided for @studyClearVariations.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear variations'**
+  String get studyClearVariations;
+
+  /// No description provided for @studyDeleteChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chapter'**
+  String get studyDeleteChapter;
+
+  /// No description provided for @studyDeleteThisChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chapter. There is no going back!'**
+  String get studyDeleteThisChapter;
+
+  /// No description provided for @studyClearAllCommentsInThisChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all comments, glyphs and drawn shapes in this chapter'**
+  String get studyClearAllCommentsInThisChapter;
+
+  /// No description provided for @studyRightUnderTheBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Right under the board'**
+  String get studyRightUnderTheBoard;
+
+  /// No description provided for @studyNoPinnedComment.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get studyNoPinnedComment;
+
+  /// No description provided for @studyNormalAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal analysis'**
+  String get studyNormalAnalysis;
+
+  /// No description provided for @studyHideNextMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide next moves'**
+  String get studyHideNextMoves;
+
+  /// No description provided for @studyInteractiveLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive lesson'**
+  String get studyInteractiveLesson;
+
+  /// No description provided for @studyChapterX.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {param}'**
+  String studyChapterX(String param);
+
+  /// No description provided for @studyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get studyEmpty;
+
+  /// No description provided for @studyStartFromInitialPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from initial position'**
+  String get studyStartFromInitialPosition;
+
+  /// No description provided for @studyEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Editor'**
+  String get studyEditor;
+
+  /// No description provided for @studyStartFromCustomPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from custom position'**
+  String get studyStartFromCustomPosition;
+
+  /// No description provided for @studyLoadAGameByUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Load games by URLs'**
+  String get studyLoadAGameByUrl;
+
+  /// No description provided for @studyLoadAPositionFromFen.
+  ///
+  /// In en, this message translates to:
+  /// **'Load a position from FEN'**
+  String get studyLoadAPositionFromFen;
+
+  /// No description provided for @studyLoadAGameFromPgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Load games from PGN'**
+  String get studyLoadAGameFromPgn;
+
+  /// No description provided for @studyAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get studyAutomatic;
+
+  /// No description provided for @studyUrlOfTheGame.
+  ///
+  /// In en, this message translates to:
+  /// **'URL of the games, one per line'**
+  String get studyUrlOfTheGame;
+
+  /// No description provided for @studyLoadAGameFromXOrY.
+  ///
+  /// In en, this message translates to:
+  /// **'Load games from {param1} or {param2}'**
+  String studyLoadAGameFromXOrY(String param1, String param2);
+
+  /// No description provided for @studyCreateChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Create chapter'**
+  String get studyCreateChapter;
+
+  /// No description provided for @studyCreateStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Create study'**
+  String get studyCreateStudy;
+
+  /// No description provided for @studyEditStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit study'**
+  String get studyEditStudy;
+
+  /// No description provided for @studyVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility'**
+  String get studyVisibility;
+
+  /// No description provided for @studyPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Public'**
+  String get studyPublic;
+
+  /// No description provided for @studyUnlisted.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlisted'**
+  String get studyUnlisted;
+
+  /// No description provided for @studyInviteOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite only'**
+  String get studyInviteOnly;
+
+  /// No description provided for @studyAllowCloning.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow cloning'**
+  String get studyAllowCloning;
+
+  /// No description provided for @studyNobody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody'**
+  String get studyNobody;
+
+  /// No description provided for @studyOnlyMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Only me'**
+  String get studyOnlyMe;
+
+  /// No description provided for @studyContributors.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributors'**
+  String get studyContributors;
+
+  /// No description provided for @studyMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get studyMembers;
+
+  /// No description provided for @studyEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get studyEveryone;
+
+  /// No description provided for @studyEnableSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable sync'**
+  String get studyEnableSync;
+
+  /// No description provided for @studyYesKeepEveryoneOnTheSamePosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes: keep everyone on the same position'**
+  String get studyYesKeepEveryoneOnTheSamePosition;
+
+  /// No description provided for @studyNoLetPeopleBrowseFreely.
+  ///
+  /// In en, this message translates to:
+  /// **'No: let people browse freely'**
+  String get studyNoLetPeopleBrowseFreely;
+
+  /// No description provided for @studyPinnedStudyComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned study comment'**
+  String get studyPinnedStudyComment;
+
   /// No description provided for @studyStart.
   ///
   /// In en, this message translates to:
   /// **'Start'**
   String get studyStart;
+
+  /// No description provided for @studySave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get studySave;
+
+  /// No description provided for @studyClearChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear chat'**
+  String get studyClearChat;
+
+  /// No description provided for @studyDeleteTheStudyChatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the study chat history? There is no going back!'**
+  String get studyDeleteTheStudyChatHistory;
+
+  /// No description provided for @studyDeleteStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete study'**
+  String get studyDeleteStudy;
+
+  /// No description provided for @studyConfirmDeleteStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the entire study? There is no going back! Type the name of the study to confirm: {param}'**
+  String studyConfirmDeleteStudy(String param);
+
+  /// No description provided for @studyWhereDoYouWantToStudyThat.
+  ///
+  /// In en, this message translates to:
+  /// **'Where do you want to study that?'**
+  String get studyWhereDoYouWantToStudyThat;
+
+  /// No description provided for @studyGoodMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Good move'**
+  String get studyGoodMove;
+
+  /// No description provided for @studyMistake.
+  ///
+  /// In en, this message translates to:
+  /// **'Mistake'**
+  String get studyMistake;
+
+  /// No description provided for @studyBrilliantMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Brilliant move'**
+  String get studyBrilliantMove;
+
+  /// No description provided for @studyBlunder.
+  ///
+  /// In en, this message translates to:
+  /// **'Blunder'**
+  String get studyBlunder;
+
+  /// No description provided for @studyInterestingMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Interesting move'**
+  String get studyInterestingMove;
+
+  /// No description provided for @studyDubiousMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Dubious move'**
+  String get studyDubiousMove;
+
+  /// No description provided for @studyOnlyMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Only move'**
+  String get studyOnlyMove;
+
+  /// No description provided for @studyZugzwang.
+  ///
+  /// In en, this message translates to:
+  /// **'Zugzwang'**
+  String get studyZugzwang;
+
+  /// No description provided for @studyEqualPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal position'**
+  String get studyEqualPosition;
+
+  /// No description provided for @studyUnclearPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Unclear position'**
+  String get studyUnclearPosition;
+
+  /// No description provided for @studyWhiteIsSlightlyBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'White is slightly better'**
+  String get studyWhiteIsSlightlyBetter;
+
+  /// No description provided for @studyBlackIsSlightlyBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Black is slightly better'**
+  String get studyBlackIsSlightlyBetter;
+
+  /// No description provided for @studyWhiteIsBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'White is better'**
+  String get studyWhiteIsBetter;
+
+  /// No description provided for @studyBlackIsBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Black is better'**
+  String get studyBlackIsBetter;
+
+  /// No description provided for @studyWhiteIsWinning.
+  ///
+  /// In en, this message translates to:
+  /// **'White is winning'**
+  String get studyWhiteIsWinning;
+
+  /// No description provided for @studyBlackIsWinning.
+  ///
+  /// In en, this message translates to:
+  /// **'Black is winning'**
+  String get studyBlackIsWinning;
+
+  /// No description provided for @studyNovelty.
+  ///
+  /// In en, this message translates to:
+  /// **'Novelty'**
+  String get studyNovelty;
+
+  /// No description provided for @studyDevelopment.
+  ///
+  /// In en, this message translates to:
+  /// **'Development'**
+  String get studyDevelopment;
+
+  /// No description provided for @studyInitiative.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiative'**
+  String get studyInitiative;
+
+  /// No description provided for @studyAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack'**
+  String get studyAttack;
+
+  /// No description provided for @studyCounterplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Counterplay'**
+  String get studyCounterplay;
+
+  /// No description provided for @studyTimeTrouble.
+  ///
+  /// In en, this message translates to:
+  /// **'Time trouble'**
+  String get studyTimeTrouble;
+
+  /// No description provided for @studyWithCompensation.
+  ///
+  /// In en, this message translates to:
+  /// **'With compensation'**
+  String get studyWithCompensation;
+
+  /// No description provided for @studyWithTheIdea.
+  ///
+  /// In en, this message translates to:
+  /// **'With the idea'**
+  String get studyWithTheIdea;
+
+  /// No description provided for @studyNextChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Next chapter'**
+  String get studyNextChapter;
+
+  /// No description provided for @studyPrevChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous chapter'**
+  String get studyPrevChapter;
+
+  /// No description provided for @studyStudyActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Study actions'**
+  String get studyStudyActions;
+
+  /// No description provided for @studyTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics'**
+  String get studyTopics;
+
+  /// No description provided for @studyMyTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'My topics'**
+  String get studyMyTopics;
+
+  /// No description provided for @studyPopularTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular topics'**
+  String get studyPopularTopics;
+
+  /// No description provided for @studyManageTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage topics'**
+  String get studyManageTopics;
+
+  /// No description provided for @studyBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get studyBack;
+
+  /// No description provided for @studyPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play again'**
+  String get studyPlayAgain;
+
+  /// No description provided for @studyWhatWouldYouPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'What would you play in this position?'**
+  String get studyWhatWouldYouPlay;
+
+  /// No description provided for @studyYouCompletedThisLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You completed this lesson.'**
+  String get studyYouCompletedThisLesson;
+
+  /// No description provided for @studyPerPage.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} per page'**
+  String studyPerPage(String param);
+
+  /// No description provided for @studyNbChapters.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Chapter} other{{count} Chapters}}'**
+  String studyNbChapters(int count);
+
+  /// No description provided for @studyNbGames.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Game} other{{count} Games}}'**
+  String studyNbGames(int count);
+
+  /// No description provided for @studyNbMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Member} other{{count} Members}}'**
+  String studyNbMembers(int count);
+
+  /// No description provided for @studyPasteYourPgnTextHereUpToNbGames.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}'**
+  String studyPasteYourPgnTextHereUpToNbGames(int count);
+
+  /// No description provided for @timeagoJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get timeagoJustNow;
+
+  /// No description provided for @timeagoRightNow.
+  ///
+  /// In en, this message translates to:
+  /// **'right now'**
+  String get timeagoRightNow;
+
+  /// No description provided for @timeagoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get timeagoCompleted;
+
+  /// No description provided for @timeagoInNbSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} second} other{in {count} seconds}}'**
+  String timeagoInNbSeconds(int count);
+
+  /// No description provided for @timeagoInNbMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} minute} other{in {count} minutes}}'**
+  String timeagoInNbMinutes(int count);
+
+  /// No description provided for @timeagoInNbHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} hour} other{in {count} hours}}'**
+  String timeagoInNbHours(int count);
+
+  /// No description provided for @timeagoInNbDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} day} other{in {count} days}}'**
+  String timeagoInNbDays(int count);
+
+  /// No description provided for @timeagoInNbWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} week} other{in {count} weeks}}'**
+  String timeagoInNbWeeks(int count);
+
+  /// No description provided for @timeagoInNbMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} month} other{in {count} months}}'**
+  String timeagoInNbMonths(int count);
+
+  /// No description provided for @timeagoInNbYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in {count} year} other{in {count} years}}'**
+  String timeagoInNbYears(int count);
+
+  /// No description provided for @timeagoNbMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} minute ago} other{{count} minutes ago}}'**
+  String timeagoNbMinutesAgo(int count);
+
+  /// No description provided for @timeagoNbHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} hour ago} other{{count} hours ago}}'**
+  String timeagoNbHoursAgo(int count);
+
+  /// No description provided for @timeagoNbDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} day ago} other{{count} days ago}}'**
+  String timeagoNbDaysAgo(int count);
+
+  /// No description provided for @timeagoNbWeeksAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} week ago} other{{count} weeks ago}}'**
+  String timeagoNbWeeksAgo(int count);
+
+  /// No description provided for @timeagoNbMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} month ago} other{{count} months ago}}'**
+  String timeagoNbMonthsAgo(int count);
+
+  /// No description provided for @timeagoNbYearsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} year ago} other{{count} years ago}}'**
+  String timeagoNbYearsAgo(int count);
+
+  /// No description provided for @timeagoNbMinutesRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}'**
+  String timeagoNbMinutesRemaining(int count);
+
+  /// No description provided for @timeagoNbHoursRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}'**
+  String timeagoNbHoursRemaining(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

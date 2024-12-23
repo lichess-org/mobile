@@ -1,47 +1,42 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
-import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
-import 'fake_notification_service.dart';
-import 'model/common/fake_websocket_channel.dart';
-import 'utils/fake_connectivity_changes.dart';
+import 'binding.dart';
+import 'model/notifications/fake_notification_display.dart';
+import 'network/fake_http_client_factory.dart';
+import 'network/fake_websocket_channel.dart';
+import 'utils/fake_connectivity.dart';
 
-class MockDatabase extends Mock implements Database {}
+/// A mock client that always returns a 200 empty response.
+final testContainerMockClient = MockClient((request) async {
+  return http.Response('', 200);
+});
 
-class MockHttpClient extends Mock implements http.Client {}
-
-const shouldLog = false;
-
-/// Returns a [ProviderContainer] with a mocked [LichessClient] configured with
-/// the given [mockClient].
+/// Returns a [ProviderContainer] with the [httpClientFactoryProvider] configured
+/// with the given [mockClient].
 Future<ProviderContainer> lichessClientContainer(MockClient mockClient) async {
   return makeContainer(
     overrides: [
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
     ],
   );
@@ -52,50 +47,43 @@ Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
 }) async {
-  SharedPreferences.setMockInitialValues({});
-  final sharedPreferences = await SharedPreferences.getInstance();
+  final binding = TestLichessBinding.ensureInitialized();
 
-  FlutterSecureStorage.setMockInitialValues({
-    kSRIStorageKey: 'test',
-  });
-
-  Logger.root.onRecord.listen((record) {
-    if (shouldLog && record.level >= Level.FINE) {
-      final time = DateFormat.Hms().format(record.time);
-      debugPrint(
-        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-      );
-    }
-  });
+  FlutterSecureStorage.setMockInitialValues({kSRIStorageKey: 'test'});
 
   final container = ProviderContainer(
     overrides: [
+      connectivityPluginProvider.overrideWith((_) {
+        return FakeConnectivity();
+      }),
+      notificationDisplayProvider.overrideWith((ref) {
+        return FakeNotificationDisplay();
+      }),
+      databaseProvider.overrideWith((ref) async {
+        final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+        ref.onDispose(db.close);
+        return db;
+      }),
       webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+        return FakeWebSocketChannelFactory((_) => FakeWebSocketChannel());
       }),
       socketPoolProvider.overrideWith((ref) {
         final pool = SocketPool(ref);
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(MockHttpClient(), ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => testContainerMockClient);
       }),
-      connectivityChangesProvider.overrideWith(() {
-        return FakeConnectivityChanges();
-      }),
-      defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
-      appInitializationProvider.overrideWith((ref) {
-        return AppInitializationData(
+      preloadedDataProvider.overrideWith((ref) {
+        return (
+          sri: 'test-sri',
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
-            version: 'test',
-            buildNumber: '0.0.0',
+            version: '0.0.0',
+            buildNumber: '0',
             packageName: 'lichess_mobile_test',
           ),
           deviceInfo: BaseDeviceInfo({
@@ -107,17 +95,15 @@ Future<ProviderContainer> makeContainer({
             'identifierForVendor': 'test',
             'isPhysicalDevice': true,
           }),
-          sharedPreferences: sharedPreferences,
           userSession: userSession,
-          database: MockDatabase(),
-          sri: 'test',
-          engineMaxMemoryInMb: 16,
+          engineMaxMemoryInMb: 256,
         );
       }),
       ...overrides ?? [],
     ],
   );
 
+  addTearDown(binding.reset);
   addTearDown(container.dispose);
 
   return container;

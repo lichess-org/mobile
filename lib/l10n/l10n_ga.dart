@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -9,31 +9,86 @@ class AppLocalizationsGa extends AppLocalizations {
   AppLocalizationsGa([String locale = 'ga']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileAllGames => 'All games';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobileAreYouSure => 'Are you sure?';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileClearButton => 'Clear';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
-
-  @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileCustomGameJoinAGame => 'Join a game';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
 
   @override
   String get mobileSettingsHapticFeedback => 'Haptic feedback';
@@ -45,104 +100,46 @@ class AppLocalizationsGa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
-
-  @override
-  String get mobileAllGames => 'All games';
-
-  @override
-  String get mobileRecentSearches => 'Recent searches';
-
-  @override
-  String get mobileClearButton => 'Clear';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'No results';
-
-  @override
-  String get mobileAreYouSure => 'Are you sure?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Share this puzzle';
-
-  @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileSettingsTab => 'Settings';
 
   @override
   String get mobileShareGamePGN => 'Share PGN';
 
   @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileSharePuzzle => 'Share this puzzle';
 
   @override
   String get mobileShowComments => 'Show comments';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobileShowResult => 'Show result';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
-
-  @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
-
-  @override
-  String get mobileBlindfoldMode => 'Blindfold';
-
-  @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileShowVariations => 'Show variations';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobileTheme => 'Theme';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobileToolsTab => 'Tools';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hello, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Watch';
 
   @override
   String get activityActivity => 'Gníomhaíocht';
@@ -266,6 +263,17 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcluiche comhfhreagrais críochnaithe',
       two: '$count chluiche comhfhreagrais críochnaithe',
       one: '$count cluiche comhfhreagrais críochnaithe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Completed $count $param2 correspondence games',
+      one: 'Completed $count $param2 correspondence game',
     );
     return '$_temp0';
   }
@@ -400,7 +408,254 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastBroadcasts => 'Craoltaí';
 
   @override
+  String get broadcastMyBroadcasts => 'My broadcasts';
+
+  @override
   String get broadcastLiveBroadcasts => 'Craoltaí beo comórtais';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+
+  @override
+  String get broadcastNewBroadcast => 'Craoladh beo nua';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+
+  @override
+  String get broadcastAboutBroadcasts => 'About broadcasts';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'The new round will have the same members and contributors as the previous one.';
+
+  @override
+  String get broadcastAddRound => 'Cuir babhta leis';
+
+  @override
+  String get broadcastOngoing => 'Leanúnach';
+
+  @override
+  String get broadcastUpcoming => 'Le teacht';
+
+  @override
+  String get broadcastCompleted => 'Críochnaithe';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
+
+  @override
+  String get broadcastRoundName => 'Ainm babhta';
+
+  @override
+  String get broadcastRoundNumber => 'Uimhir bhabhta';
+
+  @override
+  String get broadcastTournamentName => 'Ainm comórtas';
+
+  @override
+  String get broadcastTournamentDescription => 'Cur síos gairid ar an gcomórtas';
+
+  @override
+  String get broadcastFullDescription => 'Cur síos iomlán ar an ócáid';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Cur síos fada roghnach ar an craoladh. Tá $param1 ar fáil. Caithfidh an fad a bheith níos lú ná $param2 carachtar.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN Source URL';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL a seiceálfaidh Lichess chun PGN nuashonruithe a fháil. Caithfidh sé a bheith le féiceáil go poiblí ón Idirlíon.';
+
+  @override
+  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Start date in the tournament local timezone: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Roghnach, má tá a fhios agat cathain a thosóidh an ócáid';
+
+  @override
+  String get broadcastCurrentGameUrl => 'URL cluiche reatha';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Íoslódáil gach babhta';
+
+  @override
+  String get broadcastResetRound => 'Athshocraigh an babhta seo';
+
+  @override
+  String get broadcastDeleteRound => 'Scrios an babhta seo';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Scrios go cinntitheach an babhta agus a chuid cluichí.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Scrios gach cluiche den bhabhta seo. Caithfidh an fhoinse a bheith gníomhach chun iad a athchruthú.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Edit round study';
+
+  @override
+  String get broadcastDeleteTournament => 'Delete this tournament';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
+
+  @override
+  String get broadcastShowScores => 'Show players scores based on game results';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+
+  @override
+  String get broadcastFideFederations => 'FIDE federations';
+
+  @override
+  String get broadcastTop10Rating => 'Top 10 rating';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE players';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+
+  @override
+  String get broadcastFideProfile => 'FIDE profile';
+
+  @override
+  String get broadcastFederation => 'Federation';
+
+  @override
+  String get broadcastAgeThisYear => 'Age this year';
+
+  @override
+  String get broadcastUnrated => 'Unrated';
+
+  @override
+  String get broadcastRecentTournaments => 'Recent tournaments';
+
+  @override
+  String get broadcastOpenLichess => 'Open in Lichess';
+
+  @override
+  String get broadcastTeams => 'Teams';
+
+  @override
+  String get broadcastBoards => 'Boards';
+
+  @override
+  String get broadcastOverview => 'Overview';
+
+  @override
+  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+
+  @override
+  String get broadcastUploadImage => 'Upload tournament image';
+
+  @override
+  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Boards can be loaded with a source or via the $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Starts after $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+
+  @override
+  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Official website';
+
+  @override
+  String get broadcastStandings => 'Standings';
+
+  @override
+  String get broadcastOfficialStandings => 'Official Standings';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'More options on the $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'webmasters page';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Embed $param in your website';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Rating diff';
+
+  @override
+  String get broadcastGamesThisTournament => 'Games in this tournament';
+
+  @override
+  String get broadcastScore => 'Score';
+
+  @override
+  String get broadcastAllTeams => 'All teams';
+
+  @override
+  String get broadcastTournamentFormat => 'Tournament format';
+
+  @override
+  String get broadcastTournamentLocation => 'Tournament Location';
+
+  @override
+  String get broadcastTopPlayers => 'Top players';
+
+  @override
+  String get broadcastTimezone => 'Time zone';
+
+  @override
+  String get broadcastFideRatingCategory => 'FIDE rating category';
+
+  @override
+  String get broadcastOptionalDetails => 'Optional details';
+
+  @override
+  String get broadcastPastBroadcasts => 'Past broadcasts';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count broadcasts',
+      one: '$count broadcast',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -661,6 +916,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Clog fichille';
 
   @override
@@ -800,6 +1058,9 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get preferencesBlindfold => 'Blindfold';
 
   @override
   String get puzzlePuzzles => 'Fadhbanna';
@@ -1456,10 +1717,10 @@ class AppLocalizationsGa extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Ciallaíonn Zugzwang gur gá le himreoir a s(h) eans a \nthógáil cé nár mhaith leis nó léi toisc gur laige a bheith a s(h) uíomh cibé beart a dhéanfaidh sé/sí. Ba mhaith leis / léi \"háram\" a rá ach níl sé sin ceadaithe.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Meascán sláintiúil';
+  String get puzzleThemeMix => 'Meascán sláintiúil';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Giota de gach rud. Níl a fhios agat cad tá os do comhair, mar sin fanann tú réidh le haghaidh athan bith! Díreach mar atá i gcluichí fíor.';
+  String get puzzleThemeMixDescription => 'Giota de gach rud. Níl a fhios agat cad tá os do comhair, mar sin fanann tú réidh le haghaidh athan bith! Díreach mar atá i gcluichí fíor.';
 
   @override
   String get puzzleThemePlayerGames => 'Cluichí imreoir';
@@ -1834,9 +2095,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get byCPL => 'De réir CPL';
 
   @override
-  String get openStudy => 'Oscail staidéar';
-
-  @override
   String get enable => 'Cumasaigh';
 
   @override
@@ -1862,9 +2120,6 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get removesTheDepthLimit => 'Faigheann sé réidh leis an teorainn doimhneachta, agus coinníonn sé do ríomhaire te';
-
-  @override
-  String get engineManager => 'Engine manager';
 
   @override
   String get blunder => 'Meancóg';
@@ -2128,6 +2383,9 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Cluichí imeartha';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Cealaigh';
@@ -2504,9 +2762,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get unblock => 'Bain bac de';
 
   @override
-  String get followsYou => 'Do leanúint';
-
-  @override
   String xStartedFollowingY(String param1, String param2) {
     return 'Thosaigh $param1 ag leanúint $param2';
   }
@@ -2838,7 +3093,13 @@ class AppLocalizationsGa extends AppLocalizations {
   String get other => 'Eile';
 
   @override
-  String get reportDescriptionHelp => 'Greamaigh an nasc chuig an gcluiche/na cluichí agus mínigh cad atá cearr le hiompar an úsáideora. Ná habair go díreach go mbíonn \"caimiléireacht\" ar bun acu, ach inis dúinn faoin dóigh a fuair tú amach faoi. Faraor, déanfar do thuairisc a phróiseáil níos tapúla más i mBéarla atá sé.';
+  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+
+  @override
+  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Cuir nasc ar fáil chuig cluiche amháin ar a laghad ar tharla caimiléireacht ann le do thoil.';
@@ -4144,6 +4405,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
 
   @override
+  String get stats => 'Stats';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4916,8 +5180,743 @@ class AppLocalizationsGa extends AppLocalizations {
   String get streamerLichessStreamers => 'Sruthaithe Lichess';
 
   @override
+  String get studyPrivate => 'Cé na daoine! Tá an leathanach seo príobháideach, ní féidir leat é a rochtain';
+
+  @override
+  String get studyMyStudies => 'Mo chuid staidéir';
+
+  @override
+  String get studyStudiesIContributeTo => 'Staidéir atá á n-iarraidh agam';
+
+  @override
+  String get studyMyPublicStudies => 'Mo chuid staidéir phoiblí';
+
+  @override
+  String get studyMyPrivateStudies => 'Mo chuid staidéir phríobháideacha';
+
+  @override
+  String get studyMyFavoriteStudies => 'Na staidéir is fearr liom';
+
+  @override
+  String get studyWhatAreStudies => 'Cad is staidéir ann?';
+
+  @override
+  String get studyAllStudies => 'Gach staidéar';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Staidéir a chruthaigh $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Níl aon cheann fós.';
+
+  @override
+  String get studyHot => 'Te';
+
+  @override
+  String get studyDateAddedNewest => 'Dáta curtha leis (dáta is déanaí)';
+
+  @override
+  String get studyDateAddedOldest => 'Dáta curtha leis (dáta is sinne)';
+
+  @override
+  String get studyRecentlyUpdated => 'Faisnéis nuashonraithe le déanaí';
+
+  @override
+  String get studyMostPopular => 'Móréilimh';
+
+  @override
+  String get studyAlphabetical => 'Aibítre';
+
+  @override
+  String get studyAddNewChapter => 'Cuir caibidil nua leis';
+
+  @override
+  String get studyAddMembers => 'Cuir baill leis';
+
+  @override
+  String get studyInviteToTheStudy => 'Tabhair cuireadh don staidéar';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Ná tabhair cuireadh ach do dhaoine a bhfuil aithne agat orthu, agus ar mian leo go gníomhach a bheith páirteach sa staidéar seo.';
+
+  @override
+  String get studySearchByUsername => 'Cuardaigh de réir ainm úsáideora';
+
+  @override
+  String get studySpectator => 'Breathnóir';
+
+  @override
+  String get studyContributor => 'Rannpháirtí';
+
+  @override
+  String get studyKick => 'Ciceáil';
+
+  @override
+  String get studyLeaveTheStudy => 'Fág an staidéar';
+
+  @override
+  String get studyYouAreNowAContributor => 'Is ranníocóir anois tú';
+
+  @override
+  String get studyYouAreNowASpectator => 'Is lucht féachana anois tú';
+
+  @override
+  String get studyPgnTags => 'Clibeanna PGN';
+
+  @override
+  String get studyLike => 'Is maith liom';
+
+  @override
+  String get studyUnlike => 'Díthogh';
+
+  @override
+  String get studyNewTag => 'Clib nua';
+
+  @override
+  String get studyCommentThisPosition => 'Déan trácht ar an suíomh seo';
+
+  @override
+  String get studyCommentThisMove => 'Déan trácht ar an mbeart seo';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Nodaireacht le glifeanna';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Tá an chaibidil ró-ghearr le hanailís a dhéanamh uirthi.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Ní féidir ach le rannpháirtithe an staidéir anailís ríomhaire a iarraidh.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Faigh anailís ríomhaire iomlán ón freastalaí ar an bpríomhlíne.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Bí cinnte go bhfuil an chaibidil críochnaithe. Ní féidir leat iarr ar anailís ach uair amháin.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Fanann gach ball SYNC sa suíomh céanna';
+
+  @override
+  String get studyShareChanges => 'Roinn athruithe le lucht féachana agus sábháil iad ar an freastalaí';
+
+  @override
+  String get studyPlaying => 'Ag imirt';
+
+  @override
+  String get studyShowEvalBar => 'Evaluation bars';
+
+  @override
+  String get studyFirst => 'Céad';
+
+  @override
+  String get studyPrevious => 'Roimhe';
+
+  @override
+  String get studyNext => 'Ar aghaidh';
+
+  @override
+  String get studyLast => 'Deiridh';
+
+  @override
   String get studyShareAndExport => 'Comhroinn & easpórtáil';
 
   @override
+  String get studyCloneStudy => 'Déan cóip';
+
+  @override
+  String get studyStudyPgn => 'Déan staidéar ar PGN';
+
+  @override
+  String get studyDownloadAllGames => 'Íoslódáil gach cluiche';
+
+  @override
+  String get studyChapterPgn => 'PGN caibidle';
+
+  @override
+  String get studyCopyChapterPgn => 'Cóipeáil PGN';
+
+  @override
+  String get studyDownloadGame => 'Íoslódáil cluiche';
+
+  @override
+  String get studyStudyUrl => 'URL an staidéir';
+
+  @override
+  String get studyCurrentChapterUrl => 'URL caibidil reatha';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Is féidir é seo a ghreamú san fhóram chun leabú';
+
+  @override
+  String get studyStartAtInitialPosition => 'Tosaigh ag an suíomh tosaigh';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Tosú ag $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Leabaithe i do shuíomh Gréasáin nó i do bhlag';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Léigh tuilleadh faoi leabú';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Ní féidir ach staidéir phoiblí a leabú!';
+
+  @override
+  String get studyOpen => 'Oscailte';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1, a thugann $param2 chugat';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Níor aimsíodh staidéar';
+
+  @override
+  String get studyEditChapter => 'Cuir caibidil in eagar';
+
+  @override
+  String get studyNewChapter => 'Caibidil nua';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Iompórtáil ó $param';
+  }
+
+  @override
+  String get studyOrientation => 'Treoshuíomh';
+
+  @override
+  String get studyAnalysisMode => 'Modh anailíse';
+
+  @override
+  String get studyPinnedChapterComment => 'Trácht caibidil greamaithe';
+
+  @override
+  String get studySaveChapter => 'Sábháil caibidil';
+
+  @override
+  String get studyClearAnnotations => 'Glan anótála';
+
+  @override
+  String get studyClearVariations => 'Glan éagsúlachtaí';
+
+  @override
+  String get studyDeleteChapter => 'Scrios caibidil';
+
+  @override
+  String get studyDeleteThisChapter => 'Scrios an chaibidil seo? Níl aon dul ar ais!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Glan gach trácht, glif agus cruthanna tarraingthe sa chaibidil seo?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Díreach faoin gclár';
+
+  @override
+  String get studyNoPinnedComment => 'Faic';
+
+  @override
+  String get studyNormalAnalysis => 'Gnáth-anailís';
+
+  @override
+  String get studyHideNextMoves => 'Folaigh na bearta ina dhiaidh seo';
+
+  @override
+  String get studyInteractiveLesson => 'Ceacht idirghníomhach';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Caibidil $param';
+  }
+
+  @override
+  String get studyEmpty => 'Folamh';
+
+  @override
+  String get studyStartFromInitialPosition => 'Tosaigh ón suíomh tosaigh';
+
+  @override
+  String get studyEditor => 'Eagarthóir';
+
+  @override
+  String get studyStartFromCustomPosition => 'Tosaigh ón suíomh saincheaptha';
+
+  @override
+  String get studyLoadAGameByUrl => 'Lód cluichí le URLanna';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Luchtaigh suíomh ó FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Lódáil cluichí ó PGN';
+
+  @override
+  String get studyAutomatic => 'Uathoibríoch';
+
+  @override
+  String get studyUrlOfTheGame => 'URL na gcluichí, ceann amháin an líne';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Lódáil cluichí ó $param1 nó $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Cruthaigh caibidil';
+
+  @override
+  String get studyCreateStudy => 'Cruthaigh staidéar';
+
+  @override
+  String get studyEditStudy => 'Cuir staidéar in eagar';
+
+  @override
+  String get studyVisibility => 'Infheictheacht';
+
+  @override
+  String get studyPublic => 'Poiblí';
+
+  @override
+  String get studyUnlisted => 'Neamhliostaithe';
+
+  @override
+  String get studyInviteOnly => 'Tabhair cuireadh amháin';
+
+  @override
+  String get studyAllowCloning => 'Lig clónáil';
+
+  @override
+  String get studyNobody => 'Níl einne';
+
+  @override
+  String get studyOnlyMe => 'Mise amháin';
+
+  @override
+  String get studyContributors => 'Rannpháirtithe';
+
+  @override
+  String get studyMembers => 'Baill';
+
+  @override
+  String get studyEveryone => 'Gach duine';
+
+  @override
+  String get studyEnableSync => 'Cuir sinc ar chumas';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Cinnte: coinnigh gach duine ar an suíomh céanna';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Na déan: lig do dhaoine brabhsáil go saor';
+
+  @override
+  String get studyPinnedStudyComment => 'Trácht staidéir greamaithe';
+
+  @override
   String get studyStart => 'Tosú';
+
+  @override
+  String get studySave => 'Sábháil';
+
+  @override
+  String get studyClearChat => 'Glan comhrá';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Scrios an stair comhrá staidéir? Níl aon dul ar ais!';
+
+  @override
+  String get studyDeleteStudy => 'Scrios an staidéar';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Scrios an staidéar iomlán? Níl aon dul ar ais! Clóscríobh ainm an staidéar le deimhniú: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Cá háit ar mhaith leat staidéar a dhéanamh air sin?';
+
+  @override
+  String get studyGoodMove => 'Beart maith';
+
+  @override
+  String get studyMistake => 'Botún';
+
+  @override
+  String get studyBrilliantMove => 'Beart iontach';
+
+  @override
+  String get studyBlunder => 'Botún';
+
+  @override
+  String get studyInterestingMove => 'Beart suimiúil';
+
+  @override
+  String get studyDubiousMove => 'Beart amhrasach';
+
+  @override
+  String get studyOnlyMove => 'Beart dleathach';
+
+  @override
+  String get studyZugzwang => 'Zugzwang';
+
+  @override
+  String get studyEqualPosition => 'Suíomh cothrom';
+
+  @override
+  String get studyUnclearPosition => 'Suíomh doiléir';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'Tá bán píosa beag níos fearr';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Tá dubh píosa beag níos fearr';
+
+  @override
+  String get studyWhiteIsBetter => 'Tá bán níos fearr';
+
+  @override
+  String get studyBlackIsBetter => 'Tá dubh níos fearr';
+
+  @override
+  String get studyWhiteIsWinning => 'Bán ag bua';
+
+  @override
+  String get studyBlackIsWinning => 'Dubh ag bua';
+
+  @override
+  String get studyNovelty => 'Nuaga';
+
+  @override
+  String get studyDevelopment => 'Forbairt';
+
+  @override
+  String get studyInitiative => 'Tionscnamh';
+
+  @override
+  String get studyAttack => 'Ionsaí';
+
+  @override
+  String get studyCounterplay => 'Frithimirt';
+
+  @override
+  String get studyTimeTrouble => 'Trioblóid ama';
+
+  @override
+  String get studyWithCompensation => 'Le cúiteamh';
+
+  @override
+  String get studyWithTheIdea => 'Le smaoineamh';
+
+  @override
+  String get studyNextChapter => 'Céad chaibidil eile';
+
+  @override
+  String get studyPrevChapter => 'Caibidil roimhe seo';
+
+  @override
+  String get studyStudyActions => 'Déan staidéar ar ghníomhartha';
+
+  @override
+  String get studyTopics => 'Topaicí';
+
+  @override
+  String get studyMyTopics => 'Mo thopaicí';
+
+  @override
+  String get studyPopularTopics => 'Topaicí choitianta';
+
+  @override
+  String get studyManageTopics => 'Bainistigh topaicí';
+
+  @override
+  String get studyBack => 'Siar';
+
+  @override
+  String get studyPlayAgain => 'Imir arís';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Cad a dhéanfá sa suíomh seo?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Comhghairdeas! Chríochnaigh tú an ceacht seo.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per page';
+  }
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Caibidil',
+      many: '$count Caibidil',
+      few: '$count gCaibidil',
+      two: '$count Chaibidil',
+      one: '$count Caibidil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Cluiche',
+      many: '$count Cluiche',
+      few: '$count gCluiche',
+      two: '$count Chluiche',
+      one: '$count Cluiche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Comhalta',
+      many: '$count Comhalta',
+      few: '$count gComhalta',
+      two: '$count Chomhalta',
+      one: '$count Comhalta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Greamaigh do théacs PGN anseo, suas le $count cluiche',
+      many: 'Greamaigh do théacs PGN anseo, suas le $count cluiche',
+      few: 'Greamaigh do théacs PGN anseo, suas le $count gcluiche',
+      two: 'Greamaigh do théacs PGN anseo, suas le $count chluiche',
+      one: 'Greamaigh do théacs PGN anseo, suas le $count cluiche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'díreach anois';
+
+  @override
+  String get timeagoRightNow => 'anois';
+
+  @override
+  String get timeagoCompleted => 'completed';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count soicind',
+      many: 'i $count soicind',
+      few: 'i $count soicind',
+      two: 'i $count soicind',
+      one: 'i soicind amháín',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count nóiméad',
+      many: 'i $count nóiméad',
+      few: 'i $count nóiméad',
+      two: 'i $count nóiméad',
+      one: 'i nóiméad amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count uair',
+      many: 'i $count uair',
+      few: 'i $count uair',
+      two: 'i $count uair',
+      one: 'in uair amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count lá',
+      many: 'i $count lá',
+      few: 'i $count lá',
+      two: 'i $count lá',
+      one: 'i lá amháín',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count seachtain',
+      many: 'i $count seachtain',
+      few: 'i $count seachtain',
+      two: 'i $count sheachtain',
+      one: 'i seachtain amháin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count mí',
+      many: 'i $count mí',
+      few: 'i $count mhí',
+      two: 'i $count mhí',
+      one: 'i gceann míosa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i gceann $count bliain',
+      many: 'i gceann $count mbliain',
+      few: 'i gceann $count bhliain',
+      two: 'i gceann $count bhliain',
+      one: 'i gceann bliana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nóiméad ó shin',
+      many: '$count nóiméad ó shin',
+      few: '$count nóiméad ó shin',
+      two: '$count nóiméad ó shin',
+      one: 'nóiméad amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uair ó shin',
+      many: '$count uair ó shin',
+      few: '$count uair ó shin',
+      two: '$count uair ó shin',
+      one: 'uair amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lá ó shin',
+      many: '$count lá ó shin',
+      few: '$count lá ó shin',
+      two: '$count lá ó shin',
+      one: 'lá amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seachtain ó shin',
+      many: '$count seachtain ó shin',
+      few: '$count sheachtain ó shin',
+      two: '$count sheachtain ó shin',
+      one: 'seachtain amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mí ó shin',
+      many: '$count mí ó shin',
+      few: '$count mí ó shin',
+      two: '$count mhí ó shin',
+      one: 'mí amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bliain ó shin',
+      many: '$count mbliain ó shin',
+      few: '$count mbliain ó shin',
+      two: '$count bhliain ó shin',
+      one: 'Bliain amháin ó shin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes remaining',
+      one: '$count minute remaining',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours remaining',
+      one: '$count hour remaining',
+    );
+    return '$_temp0';
+  }
 }

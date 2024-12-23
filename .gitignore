@@ -35,4 +35,9 @@ doc/api/
 *.ipr
 *.iws
 .idea/
-.fvm/flutter_sdk
+
+# FVM Version Cache
+.fvm/
+
+# VS Code
+.vscode/

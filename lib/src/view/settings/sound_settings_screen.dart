@@ -3,49 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-const kMasterVolumeValues = [
-  0.0,
-  0.1,
-  0.2,
-  0.3,
-  0.4,
-  0.5,
-  0.6,
-  0.7,
-  0.8,
-  0.9,
-  1.0,
-];
+const kMasterVolumeValues = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
 class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.sound)),
-      body: _Body(),
-    );
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.sound)), body: _Body());
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
+    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 }
 
@@ -62,42 +40,33 @@ class _Body extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
 
     void onChanged(SoundTheme? value) {
-      ref
-          .read(generalPreferencesProvider.notifier)
-          .setSoundTheme(value ?? SoundTheme.standard);
-      ref.read(soundServiceProvider).changeTheme(
-            value ?? SoundTheme.standard,
-            playSound: true,
-          );
+      ref.read(generalPreferencesProvider.notifier).setSoundTheme(value ?? SoundTheme.standard);
+      ref.read(soundServiceProvider).changeTheme(value ?? SoundTheme.standard, playSound: true);
     }
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          ListSection(
-            children: [
-              SliderSettingsTile(
-                icon: const Icon(Icons.volume_up),
-                value: generalPrefs.masterVolume,
-                values: kMasterVolumeValues,
-                onChangeEnd: (value) {
-                  ref
-                      .read(generalPreferencesProvider.notifier)
-                      .setMasterVolume(value);
-                },
-                labelBuilder: volumeLabel,
-              ),
-            ],
-          ),
-          ChoicePicker(
-            notchedTile: true,
-            choices: SoundTheme.values,
-            selectedItem: generalPrefs.soundTheme,
-            titleBuilder: (t) => Text(soundThemeL10n(context, t)),
-            onSelectedItemChanged: onChanged,
-          ),
-        ],
-      ),
+    return ListView(
+      children: [
+        ListSection(
+          children: [
+            SliderSettingsTile(
+              icon: const Icon(Icons.volume_up),
+              value: generalPrefs.masterVolume,
+              values: kMasterVolumeValues,
+              onChangeEnd: (value) {
+                ref.read(generalPreferencesProvider.notifier).setMasterVolume(value);
+              },
+              labelBuilder: volumeLabel,
+            ),
+          ],
+        ),
+        ChoicePicker(
+          notchedTile: true,
+          choices: SoundTheme.values,
+          selectedItem: generalPrefs.soundTheme,
+          titleBuilder: (t) => Text(soundThemeL10n(context, t)),
+          onSelectedItemChanged: onChanged,
+        ),
+      ],
     );
   }
 }

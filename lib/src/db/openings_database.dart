@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,7 +21,7 @@ const _kDatabaseVersion = 2;
 const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 
 @Riverpod(keepAlive: true)
-Future<Database> openingsDatabase(OpeningsDatabaseRef ref) async {
+Future<Database> openingsDatabase(Ref ref) async {
   final dbPath = p.join(await getDatabasesPath(), _kDatabaseName);
   return _openDb(dbPath);
 }
@@ -44,14 +45,12 @@ Future<Database> _openDb(String path) async {
     });
 
     // Copy from asset
-    final ByteData data =
-        await rootBundle.load(p.url.join('assets', 'chess_openings.db'));
-    final List<int> bytes =
-        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final ByteData data = await rootBundle.load(p.url.join('assets', 'chess_openings.db'));
+    final List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
     // Write and flush the bytes written
     await File(path).writeAsBytes(bytes, flush: true);
   }
 
-  return openDatabase(path, readOnly: true);
+  return databaseFactory.openDatabase(path, options: OpenDatabaseOptions(readOnly: true));
 }

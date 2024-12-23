@@ -1,13 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -15,6 +13,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -25,21 +24,10 @@ class PuzzleDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? const CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: SizedBox.shrink(),
-              trailing: DaysSelector(),
-            ),
-            child: _Body(),
-          )
-        : Scaffold(
-            body: const _Body(),
-            appBar: AppBar(
-              title: const SizedBox.shrink(),
-              actions: const [DaysSelector()],
-            ),
-          );
+    return const PlatformScaffold(
+      body: _Body(),
+      appBar: PlatformAppBar(title: SizedBox.shrink(), actions: [DaysSelector()]),
+    );
   }
 }
 
@@ -48,30 +36,21 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PuzzleDashboardWidget(),
-        ],
-      ),
-    );
+    return ListView(children: [PuzzleDashboardWidget()]);
   }
 }
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard =
-        ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
     return puzzleDashboard.when(
       data: (dashboard) {
         if (dashboard == null) {
           return const SizedBox.shrink();
         }
-        final chartData =
-            dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+        final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,9 +58,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               Text(context.l10n.puzzlePuzzleDashboard),
               Text(
                 context.l10n.puzzlePuzzleDashboardDescription,
-                style: Styles.subtitle.copyWith(
-                  color: textShade(context, Styles.subtitleOpacity),
-                ),
+                style: Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity)),
               ),
             ],
           ),
@@ -89,14 +66,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           cupertinoAdditionalDividerMargin: -14,
           children: [
             Padding(
-              padding: Theme.of(context).platform == TargetPlatform.iOS
-                  ? EdgeInsets.zero
-                  : Styles.horizontalBodyPadding,
+              padding:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? EdgeInsets.zero
+                      : Styles.horizontalBodyPadding,
               child: StatCardRow([
-                StatCard(
-                  context.l10n.performance,
-                  value: dashboard.global.performance.toString(),
-                ),
+                StatCard(context.l10n.performance, value: dashboard.global.performance.toString()),
                 StatCard(
                   context.l10n
                       .puzzleNbPlayed(dashboard.global.nb)
@@ -107,8 +82,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 ),
                 StatCard(
                   context.l10n.puzzleSolved.capitalize(),
-                  value:
-                      '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                  value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
                 ),
               ]),
             ),
@@ -116,10 +90,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: AspectRatio(
-                  aspectRatio:
-                      MediaQuery.sizeOf(context).width > FormFactor.desktop
-                          ? 2.8
-                          : 1.2,
+                  aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
                   child: PuzzleChart(chartData),
                 ),
               ),
@@ -127,18 +98,13 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
-        );
+        debugPrint('SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s');
         return Padding(
           padding: Styles.bodySectionPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                context.l10n.puzzlePuzzleDashboard,
-                style: Styles.sectionTitle,
-              ),
+              Text(context.l10n.puzzlePuzzleDashboard, style: Styles.sectionTitle),
               if (e is ClientException && e.message.contains('404'))
                 Text(context.l10n.puzzleNoPuzzlesToShow)
               else
@@ -197,7 +163,7 @@ class PuzzleChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radarColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+    final radarColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
     return RadarChart(
       RadarChartData(
@@ -207,16 +173,15 @@ class PuzzleChart extends StatelessWidget {
         radarShape: RadarShape.polygon,
         dataSets: [
           RadarDataSet(
-            fillColor: chartColor.withOpacity(0.2),
+            fillColor: chartColor.withValues(alpha: 0.2),
             borderColor: chartColor,
-            dataEntries: puzzleData
-                .map((theme) => RadarEntry(value: theme.performance.toDouble()))
-                .toList(),
+            dataEntries:
+                puzzleData.map((theme) => RadarEntry(value: theme.performance.toDouble())).toList(),
           ),
         ],
-        getTitle: (index, angle) => RadarChartTitle(
-          text: puzzleThemeL10n(context, puzzleData[index].theme).name,
-        ),
+        getTitle:
+            (index, angle) =>
+                RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
         titleTextStyle: const TextStyle(fontSize: 10),
         titlePositionPercentageOffset: 0.09,
         tickCount: 3,
@@ -235,17 +200,18 @@ class DaysSelector extends ConsumerWidget {
     final day = ref.watch(daysProvider);
     return session != null
         ? AppBarTextButton(
-            onPressed: () => showChoicePicker(
-              context,
-              choices: Days.values,
-              selectedItem: day,
-              labelBuilder: (t) => Text(_daysL10n(context, t)),
-              onSelectedItemChanged: (newDay) {
-                ref.read(daysProvider.notifier).state = newDay;
-              },
-            ),
-            child: Text(_daysL10n(context, day)),
-          )
+          onPressed:
+              () => showChoicePicker(
+                context,
+                choices: Days.values,
+                selectedItem: day,
+                labelBuilder: (t) => Text(_daysL10n(context, t)),
+                onSelectedItemChanged: (newDay) {
+                  ref.read(daysProvider.notifier).state = newDay;
+                },
+              ),
+          child: Text(_daysL10n(context, day)),
+        )
         : const SizedBox.shrink();
   }
 }

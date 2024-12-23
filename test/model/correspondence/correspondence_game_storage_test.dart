@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,36 +12,18 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   group('CorrespondenceGameStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(correspondenceGameStorageProvider);
+      final storage = await container.read(correspondenceGameStorageProvider.future);
 
       await storage.save(corresGame);
-      expect(
-        storage.fetch(
-          gameId: gameId,
-        ),
-        completion(equals(corresGame)),
-      );
+      expect(storage.fetch(gameId: gameId), completion(equals(corresGame)));
     });
   });
 }
@@ -75,9 +56,7 @@ final corresGame = OfflineCorrespondenceGame(
     variant: Variant.standard,
   ),
   fullId: const GameFullId('g2bzFol8fgty'),
-  steps: _makeSteps(
-    'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-  ),
+  steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
   clock: const CorrespondenceClockData(
     white: Duration(days: 2, hours: 23, minutes: 59),
     black: Duration(days: 3),
@@ -87,20 +66,8 @@ final corresGame = OfflineCorrespondenceGame(
   variant: Variant.standard,
   speed: Speed.correspondence,
   perf: Perf.classical,
-  white: const Player(
-    user: LightUser(
-      id: UserId('whiteId'),
-      name: 'White',
-    ),
-    rating: 1500,
-  ),
-  black: const Player(
-    user: LightUser(
-      id: UserId('blackId'),
-      name: 'Black',
-    ),
-    rating: 1500,
-  ),
+  white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+  black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
   youAre: Side.white,
   daysPerTurn: 3,
 );

@@ -1,7 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,48 +10,50 @@ import 'account_repository.dart';
 
 part 'account_preferences.g.dart';
 
-typedef AccountPrefState = ({
-  // game display
-  Zen zenMode,
-  PieceNotation pieceNotation,
-  BooleanPref showRatings,
-  // game behavior
-  BooleanPref premove,
-  AutoQueen autoQueen,
-  AutoThreefold autoThreefold,
-  Takeback takeback,
-  BooleanPref confirmResign,
-  SubmitMove submitMove,
-  // clock
-  Moretime moretime,
-  BooleanPref clockSound,
-  // privacy
-  BooleanPref follow,
-});
+typedef AccountPrefState =
+    ({
+      // game display
+      Zen zenMode,
+      PieceNotation pieceNotation,
+      BooleanPref showRatings,
+      // game behavior
+      BooleanPref premove,
+      AutoQueen autoQueen,
+      AutoThreefold autoThreefold,
+      Takeback takeback,
+      BooleanPref confirmResign,
+      SubmitMove submitMove,
+      // clock
+      Moretime moretime,
+      BooleanPref clockSound,
+      // privacy
+      BooleanPref follow,
+      Challenge challenge,
+    });
 
 /// A provider that tells if the user wants to see ratings in the app.
-final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> showRatingsPref(Ref ref) async {
   return ref.watch(
-    accountPreferencesProvider
-        .selectAsync((state) => state?.showRatings.value ?? true),
+    accountPreferencesProvider.selectAsync((state) => state?.showRatings.value ?? true),
   );
-});
+}
 
-final clockSoundProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> clockSound(Ref ref) async {
   return ref.watch(
-    accountPreferencesProvider
-        .selectAsync((state) => state?.clockSound.value ?? true),
+    accountPreferencesProvider.selectAsync((state) => state?.clockSound.value ?? true),
   );
-});
+}
 
-final pieceNotationProvider = FutureProvider<PieceNotation>((ref) async {
+@Riverpod(keepAlive: true)
+Future<PieceNotation> pieceNotation(Ref ref) async {
   return ref.watch(
     accountPreferencesProvider.selectAsync(
-      (state) =>
-          state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
+      (state) => state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
     ),
   );
-});
+}
 
 final defaultAccountPreferences = (
   zenMode: Zen.no,
@@ -63,10 +66,9 @@ final defaultAccountPreferences = (
   moretime: Moretime.always,
   clockSound: const BooleanPref(true),
   confirmResign: const BooleanPref(true),
-  submitMove: SubmitMove({
-    SubmitMoveChoice.correspondence,
-  }),
+  submitMove: SubmitMove({SubmitMoveChoice.correspondence}),
   follow: const BooleanPref(true),
+  challenge: Challenge.registered,
 );
 
 /// Get the account preferences for the current user.
@@ -84,40 +86,31 @@ class AccountPreferences extends _$AccountPreferences {
     }
 
     try {
-      return ref.withClient(
-        (client) => AccountRepository(client).getPreferences(),
-      );
+      return ref.withClient((client) => AccountRepository(client).getPreferences());
     } catch (e) {
-      debugPrint(
-        '[AccountPreferences] Error getting account preferences: $e',
-      );
+      debugPrint('[AccountPreferences] Error getting account preferences: $e');
       return defaultAccountPreferences;
     }
   }
 
   Future<void> setZen(Zen value) => _setPref('zen', value);
-  Future<void> setPieceNotation(PieceNotation value) =>
-      _setPref('pieceNotation', value);
+  Future<void> setPieceNotation(PieceNotation value) => _setPref('pieceNotation', value);
   Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
   Future<void> setAutoQueen(AutoQueen value) => _setPref('autoQueen', value);
-  Future<void> setAutoThreefold(AutoThreefold value) =>
-      _setPref('autoThreefold', value);
+  Future<void> setAutoThreefold(AutoThreefold value) => _setPref('autoThreefold', value);
   Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
-  Future<void> setClockSound(BooleanPref value) =>
-      _setPref('clockSound', value);
-  Future<void> setConfirmResign(BooleanPref value) =>
-      _setPref('confirmResign', value);
+  Future<void> setClockSound(BooleanPref value) => _setPref('clockSound', value);
+  Future<void> setConfirmResign(BooleanPref value) => _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
   Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
+  Future<void> setChallenge(Challenge value) => _setPref('challenge', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    await ref.withClient(
-      (client) => AccountRepository(client).setPreference(key, value),
-    );
+    await ref.withClient((client) => AccountRepository(client).setPreference(key, value));
     ref.invalidateSelf();
   }
 }
@@ -371,9 +364,56 @@ enum Moretime implements AccountPref<int> {
   }
 }
 
+enum Challenge implements AccountPref<int> {
+  never(1),
+  rating(2),
+  friends(3),
+  registered(4),
+  always(5);
+
+  const Challenge(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    switch (this) {
+      case Challenge.never:
+        return context.l10n.never;
+      case Challenge.rating:
+        return context.l10n.ifRatingIsPlusMinusX('300');
+      case Challenge.friends:
+        return context.l10n.onlyFriends;
+      case Challenge.registered:
+        return context.l10n.ifRegistered;
+      case Challenge.always:
+        return context.l10n.always;
+    }
+  }
+
+  static Challenge fromInt(int value) {
+    switch (value) {
+      case 1:
+        return Challenge.never;
+      case 2:
+        return Challenge.rating;
+      case 3:
+        return Challenge.friends;
+      case 4:
+        return Challenge.registered;
+      case 5:
+        return Challenge.always;
+      default:
+        throw Exception('Invalid value for Challenge');
+    }
+  }
+}
+
 class SubmitMove implements AccountPref<int> {
-  SubmitMove(Iterable<SubmitMoveChoice> choices)
-      : choices = ISet(choices.toSet());
+  SubmitMove(Iterable<SubmitMoveChoice> choices) : choices = ISet(choices.toSet());
 
   final ISet<SubmitMoveChoice> choices;
 
@@ -391,10 +431,8 @@ class SubmitMove implements AccountPref<int> {
     return choices.map((choice) => choice.label(context)).join(', ');
   }
 
-  factory SubmitMove.fromInt(int value) => SubmitMove(
-        SubmitMoveChoice.values
-            .where((choice) => _bitPresent(value, choice.value)),
-      );
+  factory SubmitMove.fromInt(int value) =>
+      SubmitMove(SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)));
 }
 
 enum SubmitMoveChoice {

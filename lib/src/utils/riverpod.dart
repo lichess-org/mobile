@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-extension AutoDisposeRefExtension<T> on AutoDisposeRef<T> {
+extension RefExtension on Ref {
   /// Keeps the provider alive for [duration]
   KeepAliveLink cacheFor(Duration duration) {
     final link = keepAlive();
@@ -9,9 +9,7 @@ extension AutoDisposeRefExtension<T> on AutoDisposeRef<T> {
     onDispose(timer.cancel);
     return link;
   }
-}
 
-extension RefExtension on Ref {
   /// Delays an execution by a bit such that if a dependency changes multiple
   /// time rapidly, the rest of the code is only run once.
   Future<void> debounce(Duration duration) {

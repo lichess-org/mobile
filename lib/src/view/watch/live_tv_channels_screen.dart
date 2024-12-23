@@ -5,12 +5,11 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LiveTvChannelsScreen extends ConsumerWidget {
@@ -27,32 +26,10 @@ class LiveTvChannelsScreen extends ConsumerWidget {
           ref.read(liveTvChannelsProvider.notifier).stopWatching();
         }
       },
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
+      child: const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('Lichess TV')),
+        body: _Body(),
       ),
-    );
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lichess TV'),
-      ),
-      body: const _Body(),
-    );
-  }
-
-  Widget _iosBuilder(
-    BuildContext context,
-  ) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('Lichess TV'),
-      ),
-      child: _Body(),
     );
   }
 }
@@ -78,27 +55,27 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => TvScreen(
-                    channel: game.channel,
-                    initialGame: (game.id, game.orientation),
-                  ),
+                  builder:
+                      (_) =>
+                          TvScreen(channel: game.channel, initialGame: (game.id, game.orientation)),
                 );
               },
-              orientation: game.orientation.cg,
+              orientation: game.orientation,
               fen: game.fen ?? kEmptyFen,
-              lastMove: game.lastMove?.cg,
+              lastMove: game.lastMove,
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    game.channel.label,
-                    style: Styles.boardPreviewTitle,
-                  ),
+                  Text(game.channel.label, style: Styles.boardPreviewTitle),
                   Icon(
                     game.channel.icon,
-                    color: context.lichessColors.brag,
+
+                    color:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? CupertinoTheme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.primary,
                     size: 30,
                   ),
                   UserFullNameWidget.player(
@@ -112,12 +89,8 @@ class _Body extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
 }

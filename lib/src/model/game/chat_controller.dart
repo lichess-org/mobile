@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -24,8 +25,7 @@ class ChatController extends _$ChatController {
 
   @override
   Future<ChatState> build(GameFullId id) async {
-    _socketClient =
-        ref.read(socketPoolProvider).open(GameController.gameSocketUri(id));
+    _socketClient = ref.read(socketPoolProvider).open(GameController.gameSocketUri(id));
 
     _subscription?.cancel();
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
@@ -37,9 +37,7 @@ class ChatController extends _$ChatController {
     final messages = await _socketClient.stream
         .firstWhere((event) => event.topic == 'full')
         .then(
-          (event) => pick(event.data, 'chat', 'lines')
-              .asListOrNull(_messageFromPick)
-              ?.toIList(),
+          (event) => pick(event.data, 'chat', 'lines').asListOrNull(_messageFromPick)?.toIList(),
         );
 
     final readMessagesCount = await _getReadMessagesCount();
@@ -52,10 +50,7 @@ class ChatController extends _$ChatController {
 
   /// Sends a message to the chat.
   void sendMessage(String message) {
-    _socketClient.send(
-      'talk',
-      message,
-    );
+    _socketClient.send('talk', message);
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.
@@ -63,13 +58,11 @@ class ChatController extends _$ChatController {
     if (state.hasValue) {
       await _setReadMessagesCount(state.requireValue.messages.length);
     }
-    state = state.whenData(
-      (s) => s.copyWith(unreadMessages: 0),
-    );
+    state = state.whenData((s) => s.copyWith(unreadMessages: 0));
   }
 
   Future<int> _getReadMessagesCount() async {
-    final db = ref.read(databaseProvider);
+    final db = await ref.read(databaseProvider.future);
     final result = await db.query(
       _tableName,
       columns: ['nbRead'],
@@ -80,35 +73,25 @@ class ChatController extends _$ChatController {
   }
 
   Future<void> _setReadMessagesCount(int count) async {
-    final db = ref.read(databaseProvider);
-    await db.insert(
-      _tableName,
-      {
-        'id': _storeKey(id),
-        'lastModified': DateTime.now().toIso8601String(),
-        'nbRead': count,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final db = await ref.read(databaseProvider.future);
+    await db.insert(_tableName, {
+      'id': _storeKey(id),
+      'lastModified': DateTime.now().toIso8601String(),
+      'nbRead': count,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<void> _setMessages(IList<Message> messages) async {
     final readMessagesCount = await _getReadMessagesCount();
 
     state = state.whenData(
-      (s) => s.copyWith(
-        messages: messages,
-        unreadMessages: messages.length - readMessagesCount,
-      ),
+      (s) => s.copyWith(messages: messages, unreadMessages: messages.length - readMessagesCount),
     );
   }
 
   void _addMessage(Message message) {
     state = state.whenData(
-      (s) => s.copyWith(
-        messages: s.messages.add(message),
-        unreadMessages: s.unreadMessages + 1,
-      ),
+      (s) => s.copyWith(messages: s.messages.add(message), unreadMessages: s.unreadMessages + 1),
     );
   }
 
@@ -116,22 +99,14 @@ class ChatController extends _$ChatController {
     if (!state.hasValue) return;
 
     if (event.topic == 'full') {
-      final messages = pick(event.data, 'chat', 'lines')
-          .asListOrNull(_messageFromPick)
-          ?.toIList();
+      final messages = pick(event.data, 'chat', 'lines').asListOrNull(_messageFromPick)?.toIList();
       if (messages != null) {
         _setMessages(messages);
       }
     } else if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;
-      final message = data['t'] as String;
-      final username = data['u'] as String?;
-      _addMessage(
-        (
-          message: message,
-          username: username,
-        ),
-      );
+      final message = _messageFromPick(RequiredPick(data));
+      _addMessage(message);
     }
   }
 }
@@ -140,17 +115,56 @@ class ChatController extends _$ChatController {
 class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({
-    required IList<Message> messages,
-    required int unreadMessages,
-  }) = _ChatState;
+  const factory ChatState({required IList<Message> messages, required int unreadMessages}) =
+      _ChatState;
 }
 
-typedef Message = ({String? username, String message});
+typedef Message = ({String? username, String message, bool troll, bool deleted});
 
 Message _messageFromPick(RequiredPick pick) {
   return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrNull(),
+    troll: pick('r').asBoolOrNull() ?? false,
+    deleted: pick('d').asBoolOrNull() ?? false,
   );
 }
+
+bool isSpam(Message message) {
+  return spamRegex.hasMatch(message.message) || followMeRegex.hasMatch(message.message);
+}
+
+final RegExp spamRegex = RegExp(
+  [
+    'xcamweb.com',
+    '(^|[^i])chess-bot',
+    'chess-cheat',
+    'coolteenbitch',
+    'letcafa.webcam',
+    'tinyurl.com/',
+    'wooga.info/',
+    'bit.ly/',
+    'wbt.link/',
+    'eb.by/',
+    '001.rs/',
+    'shr.name/',
+    'u.to/',
+    '.3-a.net',
+    '.ssl443.org',
+    '.ns02.us',
+    '.myftp.info',
+    '.flinkup.com',
+    '.serveusers.com',
+    'badoogirls.com',
+    'hide.su',
+    'wyon.de',
+    'sexdatingcz.club',
+    'qps.ru',
+    'tiny.cc/',
+    'trasderk.blogspot.com',
+    't.ly/',
+    'shorturl.at/',
+  ].map((url) => url.replaceAll('.', '\\.').replaceAll('/', '\\/')).join('|'),
+);
+
+final followMeRegex = RegExp('follow me|join my team', caseSensitive: false);

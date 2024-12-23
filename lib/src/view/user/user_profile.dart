@@ -10,13 +10,13 @@ import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:linkify/linkify.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'countries.dart';
@@ -24,10 +24,7 @@ import 'countries.dart';
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
 class UserProfileWidget extends ConsumerWidget {
-  const UserProfileWidget({
-    required this.user,
-    this.bioMaxLines = 10,
-  });
+  const UserProfileWidget({required this.user, this.bioMaxLines = 10});
 
   final User user;
 
@@ -36,12 +33,10 @@ class UserProfileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userFullName = user.profile?.realName != null
-        ? Text(
-            user.profile!.realName!,
-            style: _userNameStyle,
-          )
-        : null;
+    final userFullName =
+        user.profile?.realName != null
+            ? Text(user.profile!.realName!, style: _userNameStyle)
+            : null;
 
     return Padding(
       padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
@@ -54,9 +49,7 @@ class UserProfileWidget extends ConsumerWidget {
               child: Row(
                 children: [
                   Icon(Icons.error, color: context.lichessColors.error),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   Flexible(
                     child: Text(
                       context.l10n.thisAccountViolatedTos,
@@ -70,10 +63,7 @@ class UserProfileWidget extends ConsumerWidget {
               ),
             ),
           if (userFullName != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: userFullName,
-            ),
+            Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
           if (user.profile?.bio != null)
             Linkify(
               onOpen: (link) async {
@@ -81,52 +71,37 @@ class UserProfileWidget extends ConsumerWidget {
                   final username = link.originText.substring(1);
                   pushPlatformRoute(
                     context,
-                    builder: (ctx) => UserScreen(
-                      user: LightUser(
-                        id: UserId.fromUserName(username),
-                        name: username,
-                      ),
-                    ),
+                    builder:
+                        (ctx) => UserScreen(
+                          user: LightUser(id: UserId.fromUserName(username), name: username),
+                        ),
                   );
                 } else {
                   launchUrl(Uri.parse(link.url));
                 }
               },
-              linkifiers: const [
-                UrlLinkifier(),
-                EmailLinkifier(),
-                UserTagLinkifier(),
-              ],
+              linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
               text: user.profile!.bio!.replaceAll('\n', ' '),
               maxLines: bioMaxLines,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,
-              linkStyle: const TextStyle(
-                color: Colors.blueAccent,
-                decoration: TextDecoration.none,
-              ),
+              linkStyle: const TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none),
             ),
           const SizedBox(height: 10),
           if (user.profile?.fideRating != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
-              child: Text(
-                '${context.l10n.xRating('FIDE')}: ${user.profile!.fideRating}',
-              ),
+              child: Text('${context.l10n.xRating('FIDE')}: ${user.profile!.fideRating}'),
             ),
           if (user.profile?.uscfRating != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
-              child: Text(
-                '${context.l10n.xRating('USCF')}: ${user.profile!.uscfRating}',
-              ),
+              child: Text('${context.l10n.xRating('USCF')}: ${user.profile!.uscfRating}'),
             ),
           if (user.profile?.ecfRating != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
-              child: Text(
-                '${context.l10n.xRating('ECF')}: ${user.profile!.ecfRating}',
-              ),
+              child: Text('${context.l10n.xRating('ECF')}: ${user.profile!.ecfRating}'),
             ),
           if (user.profile != null)
             Padding(
@@ -134,19 +109,16 @@ class UserProfileWidget extends ConsumerWidget {
               child: Location(profile: user.profile!),
             ),
           if (user.createdAt != null)
-            Text(
-              '${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}',
-            ),
+            Text('${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}'),
           if (user.seenAt != null) ...[
             const SizedBox(height: 5),
-            Text(context.l10n.lastSeenActive(timeago.format(user.seenAt!))),
+            Text(context.l10n.lastSeenActive(relativeDate(context.l10n, user.seenAt!))),
           ],
           if (user.playTime != null) ...[
             const SizedBox(height: 5),
             Text(
               context.l10n.tpTimeSpentPlaying(
-                user.playTime!.total
-                    .toDaysHoursMinutes(AppLocalizations.of(context)),
+                user.playTime!.total.toDaysHoursMinutes(AppLocalizations.of(context)),
               ),
             ),
           ],

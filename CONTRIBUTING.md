@@ -2,11 +2,8 @@
 
 ## I want to contribute code to Lichess Mobile
 
-- [Set up your development environment](https://docs.flutter.dev/get-started/install);
+- [Set up your development environment](https://github.com/lichess-org/mobile/blob/main/docs/setting_dev_env.md);
 - Communicate with other devs on [Discord](https://discord.gg/lichess).
-- You may want to install a local instance of lila, [see lila wiki for that](https://github.com/lichess-org/lila/wiki/Lichess-Development-Onboarding);
-- read the [coding style guide](https://github.com/lichess-org/mobile/blob/main/docs/coding_style.md)
-- don't edit manually the `app_en.arb` file! See [about internationalization](https://github.com/lichess-org/mobile/blob/main/docs/internationalisation.md) in the docs.
 - check the [docs](https://github.com/lichess-org/mobile/tree/main/docs) for more documentation
 
 ### What to work on
@@ -33,6 +30,22 @@ like, but check the existing pull requests to avoid duplicated work. Once you
 start working on an issue, submit a pull request as soon as possible (in draft
 mode if it's not ready yet) to let others know that you're working on it.
 
+## Before submitting a Pull Request
+
+- Make sure your code follows the [coding style guide](https://github.com/lichess-org/mobile/blob/main/docs/coding_style.md)
+- Don't manually edit the `app_en.arb` file! See the [internalizations docs](https://github.com/lichess-org/mobile/blob/main/docs/internationalisation.md) for instructions on how to add new translations.
+- If possible, write a new widget test for your bugfix or new feature.
+- Consider adding a screenshot and/or screen recording to the PR description.
+- Run the linter and tests:
+```sh
+flutter analyze
+flutter test
+```
+- Ensure your code is formatted correctly (or use your editor's "format on save" feature):
+```sh
+dart format --output=none --set-exit-if-changed $(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )
+dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
+```
 
 ## I want to report a bug or a problem about Lichess Mobile
 

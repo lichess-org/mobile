@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';
@@ -21,8 +21,7 @@ class AuthController extends _$AuthController {
     final appAuth = ref.read(appAuthProvider);
 
     try {
-      final session = await ref
-          .withClient((client) => AuthRepository(client, appAuth).signIn());
+      final session = await ref.withClient((client) => AuthRepository(client, appAuth).signIn());
 
       await ref.read(authSessionProvider.notifier).update(session);
 
@@ -46,13 +45,11 @@ class AuthController extends _$AuthController {
     final appAuth = ref.read(appAuthProvider);
 
     try {
-      await ref.withClient(
-        (client) => AuthRepository(client, appAuth).signOut(),
-      );
-      ref.read(notificationServiceProvider).unregister();
-      // force reconnect to the current socket
-      ref.read(socketPoolProvider).currentClient.connect();
+      await ref.read(notificationServiceProvider).unregister();
+      await ref.withClient((client) => AuthRepository(client, appAuth).signOut());
       await ref.read(authSessionProvider.notifier).delete();
+      // force reconnect to the current socket
+      await ref.read(socketPoolProvider).currentClient.connect();
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);

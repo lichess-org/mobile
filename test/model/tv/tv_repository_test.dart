@@ -3,7 +3,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   group('TvRepository.channels', () {
@@ -166,10 +166,7 @@ void main() {
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tv/channels') {
-          return mockResponse(
-            response,
-            200,
-          );
+          return mockResponse(response, 200);
         }
         return mockResponse('', 404);
       });
@@ -183,10 +180,7 @@ void main() {
       // supported channels only
       expect(result.length, 13);
 
-      expect(
-        result[TvChannel.best]?.user.name,
-        'Chessisnotfair',
-      );
+      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
     });
   });
 }

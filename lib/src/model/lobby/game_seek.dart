@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -9,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
@@ -27,16 +26,12 @@ class GameSeek with _$GameSeek {
     'ratingDelta == null || ratingRange == null',
     'Rating delta and rating range cannot be used together',
   )
-  @Assert(
-    'clock != null || days != null',
-    'Either clock or days must be set',
-  )
+  @Assert('clock != null || days != null', 'Either clock or days must be set')
   const factory GameSeek({
     (Duration time, Duration increment)? clock,
     int? days,
     required bool rated,
     Variant? variant,
-    Side? side,
 
     /// Rating range
     (int, int)? ratingRange,
@@ -48,16 +43,13 @@ class GameSeek with _$GameSeek {
   /// Construct a game seek from a predefined time control.
   factory GameSeek.fastPairing(TimeIncrement setup, AuthSessionState? session) {
     return GameSeek(
-      clock: (
-        Duration(seconds: setup.time),
-        Duration(seconds: setup.increment),
-      ),
+      clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
       rated: session != null,
     );
   }
 
-  /// Construct a game seek from saved [GameSetup], using all the custom params.
-  factory GameSeek.custom(GameSetup setup, User? account) {
+  /// Construct a game seek from saved [GameSetupPrefs], using all the custom params.
+  factory GameSeek.custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
         Duration(seconds: setup.customTimeSeconds),
@@ -65,43 +57,29 @@ class GameSeek with _$GameSeek {
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
-          ? null
-          : setup.customSide == PlayableSide.white
-              ? Side.white
-              : Side.black,
-      ratingRange:
-          account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
     );
   }
 
-  /// Construct a correspondence seek from saved [GameSetup].
-  factory GameSeek.correspondence(GameSetup setup, User? account) {
+  /// Construct a correspondence seek from saved [GameSetupPrefs].
+  factory GameSeek.correspondence(GameSetupPrefs setup, User? account) {
     return GameSeek(
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
-          ? null
-          : setup.customSide == PlayableSide.white
-              ? Side.white
-              : Side.black,
-      ratingRange:
-          account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
     );
   }
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetup setup) {
+  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
     return GameSeek(
-      clock: game.meta.clock != null
-          ? (game.meta.clock!.initial, game.meta.clock!.increment)
-          : null,
+      clock:
+          game.meta.clock != null ? (game.meta.clock!.initial, game.meta.clock!.increment) : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
-      ratingDelta:
-          game.source == GameSource.lobby ? setup.customRatingDelta : null,
+      ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,
     );
   }
 
@@ -118,28 +96,20 @@ class GameSeek with _$GameSeek {
     return copyWith(ratingRange: range, ratingDelta: null);
   }
 
-  TimeIncrement? get timeIncrement => clock != null
-      ? TimeIncrement(
-          clock!.$1.inSeconds,
-          clock!.$2.inSeconds,
-        )
-      : null;
+  TimeIncrement? get timeIncrement =>
+      clock != null ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds) : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
-        variant ?? Variant.standard,
-        timeIncrement != null
-            ? Speed.fromTimeIncrement(timeIncrement!)
-            : Speed.correspondence,
-      );
+    variant ?? Variant.standard,
+    timeIncrement != null ? Speed.fromTimeIncrement(timeIncrement!) : Speed.correspondence,
+  );
 
   Map<String, String> get requestBody => {
-        if (clock != null) 'time': (clock!.$1.inSeconds / 60).toString(),
-        if (clock != null) 'increment': clock!.$2.inSeconds.toString(),
-        if (days != null) 'days': days.toString(),
-        'rated': rated.toString(),
-        if (variant != null) 'variant': variant!.name,
-        if (side != null) 'color': side!.name,
-        if (ratingRange != null)
-          'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
-      };
+    if (clock != null) 'time': (clock!.$1.inSeconds / 60).toString(),
+    if (clock != null) 'increment': clock!.$2.inSeconds.toString(),
+    if (days != null) 'days': days.toString(),
+    'rated': rated.toString(),
+    if (variant != null) 'variant': variant!.name,
+    if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
+  };
 }

@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 CorePalette? _corePalette;
 
-BoardColorScheme? _boardColorScheme;
+ChessboardColorScheme? _boardColorScheme;
 
 /// Set the system core palette if available (android 12+ only).
 ///
@@ -17,32 +18,29 @@ void setCorePalette(CorePalette? palette) {
     final darkSquare = Color(palette.secondary.get(60));
     final lightSquare = Color(palette.primary.get(95));
 
-    _boardColorScheme = BoardColorScheme(
+    _boardColorScheme = ChessboardColorScheme(
       darkSquare: darkSquare,
       lightSquare: lightSquare,
-      background: SolidColorBackground(
-        lightSquare: lightSquare,
-        darkSquare: darkSquare,
-      ),
-      whiteCoordBackground: SolidColorBackground(
+      background: SolidColorChessboardBackground(lightSquare: lightSquare, darkSquare: darkSquare),
+      whiteCoordBackground: SolidColorChessboardBackground(
         lightSquare: lightSquare,
         darkSquare: darkSquare,
         coordinates: true,
       ),
-      blackCoordBackground: SolidColorBackground(
+      blackCoordBackground: SolidColorChessboardBackground(
         lightSquare: lightSquare,
         darkSquare: darkSquare,
         coordinates: true,
         orientation: Side.black,
       ),
       lastMove: HighlightDetails(
-        solidColor: Color(palette.tertiary.get(80)).withOpacity(0.6),
+        solidColor: Color(palette.tertiary.get(80)).withValues(alpha: 0.6),
       ),
       selected: HighlightDetails(
-        solidColor: Color(palette.neutral.get(40)).withOpacity(0.80),
+        solidColor: Color(palette.neutral.get(40)).withValues(alpha: 0.80),
       ),
-      validMoves: Color(palette.neutral.get(40)).withOpacity(0.40),
-      validPremoves: Color(palette.error.get(40)).withOpacity(0.30),
+      validMoves: Color(palette.neutral.get(40)).withValues(alpha: 0.40),
+      validPremoves: Color(palette.error.get(40)).withValues(alpha: 0.30),
     );
   }
 }
@@ -53,6 +51,6 @@ CorePalette? getCorePalette() {
 }
 
 /// Get the board colors based on the core palette, if available (android 12+).
-BoardColorScheme? getBoardColorScheme() {
+ChessboardColorScheme? getBoardColorScheme() {
   return _boardColorScheme;
 }

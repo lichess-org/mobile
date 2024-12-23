@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/LichessIcons.ttf
 ///
-/// 
+///
 /// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -33,6 +33,7 @@ class LichessIcons {
   static const _kFontFam = 'LichessIcons';
   static const String? _kFontPkg = null;
 
+  // dart format off
   static const IconData patron = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData target = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData blitz = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -66,6 +67,8 @@ class LichessIcons {
   static const IconData radio_tower_lichess = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData crossed_swords = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData book_lichess = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData study = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData body_cut = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tag = IconData(0xf02b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tags = IconData(0xf02c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData step_backward = IconData(0xf048, fontFamily: _kFontFam, fontPackage: _kFontPkg);

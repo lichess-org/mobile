@@ -1,15 +1,15 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 const testUserId = UserId('test');
 
@@ -18,8 +18,7 @@ void main() {
     test('json read, minimal example', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/user/$testUserId') {
-          return mockResponse(
-            '''
+          return mockResponse('''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -28,9 +27,7 @@ void main() {
   "perfs": {
   }
 }
-''',
-            200,
-          );
+''', 200);
         }
         return mockResponse('', 404);
       });
@@ -48,8 +45,7 @@ void main() {
     test('json read, full example', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/user/$testUserId') {
-          return mockResponse(
-            '''
+          return mockResponse('''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -87,9 +83,7 @@ void main() {
     "links": "http://test.com"
   }
 }
-''',
-            200,
-          );
+''', 200);
         }
         return mockResponse('', 404);
       });
@@ -113,8 +107,7 @@ void main() {
     test('json read, minimal example', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == path) {
-          return mockResponse(
-            '''
+          return mockResponse('''
 {
   "user": {
     "name": "$testUserId"
@@ -143,9 +136,7 @@ void main() {
     }
   }
 }
-''',
-            200,
-          );
+''', 200);
         }
         return mockResponse('', 404);
       });
@@ -163,8 +154,7 @@ void main() {
     test('json read, full example', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == path) {
-          return mockResponse(
-            '''
+          return mockResponse('''
 {
   "user": {
     "name": "testOpponentName"
@@ -400,9 +390,7 @@ void main() {
     }
   }
 }
-''',
-            200,
-          );
+''', 200);
         }
         return mockResponse('', 404);
       });
@@ -423,16 +411,11 @@ void main() {
 
   group('UserRepository.getUsersStatuses', () {
     test('json read, minimal example', () async {
-      final ids = ISet(
-        const {UserId('maia1'), UserId('maia5'), UserId('maia9')},
-      );
+      final ids = ISet(const {UserId('maia1'), UserId('maia5'), UserId('maia9')});
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/users/status') {
-          return mockResponse(
-            '[]',
-            200,
-          );
+          return mockResponse('[]', 200);
         }
         return mockResponse('', 404);
       });
@@ -447,13 +430,10 @@ void main() {
     });
 
     test('json read, full example', () async {
-      final ids = ISet(
-        const {UserId('maia1'), UserId('maia5'), UserId('maia9')},
-      );
+      final ids = ISet(const {UserId('maia1'), UserId('maia5'), UserId('maia9')});
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/users/status') {
-          return mockResponse(
-            '''
+          return mockResponse('''
 [
   {
     "id": "maia1",
@@ -472,9 +452,7 @@ void main() {
     "online": true
   }
 ]
-''',
-            200,
-          );
+''', 200);
         }
         return mockResponse('', 404);
       });

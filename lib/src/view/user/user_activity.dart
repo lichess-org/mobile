@@ -1,12 +1,9 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -15,27 +12,8 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'user_activity.g.dart';
-
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
-
-@riverpod
-Future<IList<UserActivity>> _userActivity(
-  _UserActivityRef ref, {
-  required UserId id,
-}) async {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getActivity(id),
-    // cache is important because the associated widget is in a [ListView] and
-    // the provider may be instanciated multiple times in a short period of time
-    // (e.g. when scrolling)
-    // TODO: consider debouncing the request instead of caching it, or make the
-    // request in the parent widget and pass the result to the child
-    const Duration(minutes: 1),
-  );
-}
+final _dateFormatter = DateFormat.yMMMd();
 
 class UserActivityWidget extends ConsumerWidget {
   const UserActivityWidget({this.user, super.key});
@@ -44,9 +22,10 @@ class UserActivityWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity = user != null
-        ? ref.watch(_userActivityProvider(id: user!.id))
-        : ref.watch(accountActivityProvider);
+    final activity =
+        user != null
+            ? ref.watch(userActivityProvider(id: user!.id))
+            : ref.watch(accountActivityProvider);
 
     return activity.when(
       data: (data) {
@@ -55,30 +34,23 @@ class UserActivityWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header:
-              Text(context.l10n.activityActivity, style: Styles.sectionTitle),
+          header: Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
-          children: nonEmptyActivities
-              .take(10)
-              .map((entry) => UserActivityEntry(entry: entry))
-              .toList(),
+          children:
+              nonEmptyActivities.take(10).map((entry) => UserActivityEntry(entry: entry)).toList(),
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace');
         return const Text('Could not load user activity');
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 10,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 10, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
@@ -92,8 +64,7 @@ class UserActivityEntry extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final leadingIconSize = theme.platform == TargetPlatform.iOS ? 26.0 : 36.0;
-    final emptySubtitle =
-        theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
+    final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
     final redColor = theme.extension<CustomColors>()?.error;
     final greenColor = theme.extension<CustomColors>()?.good;
@@ -102,68 +73,45 @@ class UserActivityEntry extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.only(
-            left: 14.0,
-            top: 16.0,
-            right: 14.0,
-            bottom: 4.0,
-          ),
+          padding: const EdgeInsets.only(left: 14.0, top: 16.0, right: 14.0, bottom: 4.0),
           child: Text(
             _dateFormatter.format(entry.startTime),
-            style: TextStyle(
-              color: context.lichessColors.brag,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: context.lichessColors.brag, fontWeight: FontWeight.bold),
           ),
         ),
         if (entry.games != null)
           for (final gameEntry in entry.games!.entries)
             _UserActivityListTile(
-              leading: Icon(
-                gameEntry.key.icon,
-                size: leadingIconSize,
-              ),
+              leading: Icon(gameEntry.key.icon, size: leadingIconSize),
               title: context.l10n.activityPlayedNbGames(
-                gameEntry.value.win +
-                    gameEntry.value.draw +
-                    gameEntry.value.loss,
+                gameEntry.value.win + gameEntry.value.draw + gameEntry.value.loss,
                 gameEntry.key.title,
               ),
               subtitle: RatingPrefAware(
                 child: Row(
                   children: [
-                    RatingWidget(
-                      deviation: 0,
-                      rating: gameEntry.value.ratingAfter,
-                    ),
+                    RatingWidget(deviation: 0, rating: gameEntry.value.ratingAfter),
                     const SizedBox(width: 3),
-                    if (gameEntry.value.ratingAfter -
-                            gameEntry.value.ratingBefore !=
-                        0) ...[
+                    if (gameEntry.value.ratingAfter - gameEntry.value.ratingBefore != 0) ...[
                       Icon(
-                        gameEntry.value.ratingAfter -
-                                    gameEntry.value.ratingBefore >
-                                0
+                        gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
                             ? LichessIcons.arrow_full_upperright
                             : LichessIcons.arrow_full_lowerright,
-                        color: gameEntry.value.ratingAfter -
-                                    gameEntry.value.ratingBefore >
-                                0
-                            ? greenColor
-                            : redColor,
+                        color:
+                            gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                                ? greenColor
+                                : redColor,
                         size: 12,
                       ),
                       Text(
-                        (gameEntry.value.ratingAfter -
-                                gameEntry.value.ratingBefore)
+                        (gameEntry.value.ratingAfter - gameEntry.value.ratingBefore)
                             .abs()
                             .toString(),
                         style: TextStyle(
-                          color: gameEntry.value.ratingAfter -
-                                      gameEntry.value.ratingBefore >
-                                  0
-                              ? greenColor
-                              : redColor,
+                          color:
+                              gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                                  ? greenColor
+                                  : redColor,
                           fontSize: 11,
                         ),
                       ),
@@ -179,46 +127,31 @@ class UserActivityEntry extends ConsumerWidget {
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
-            leading: Icon(
-              LichessIcons.target,
-              size: leadingIconSize,
-            ),
-            title: context.l10n.activitySolvedNbPuzzles(
-              entry.puzzles!.win + entry.puzzles!.loss,
-            ),
+            leading: Icon(LichessIcons.target, size: leadingIconSize),
+            title: context.l10n.activitySolvedNbPuzzles(entry.puzzles!.win + entry.puzzles!.loss),
             subtitle: RatingPrefAware(
               child: Row(
                 children: [
-                  RatingWidget(
-                    deviation: 0,
-                    rating: entry.puzzles!.ratingAfter,
-                  ),
+                  RatingWidget(deviation: 0, rating: entry.puzzles!.ratingAfter),
                   const SizedBox(width: 3),
-                  if (entry.puzzles!.ratingAfter -
-                          entry.puzzles!.ratingBefore !=
-                      0) ...[
+                  if (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore != 0) ...[
                     Icon(
-                      entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore >
-                              0
+                      entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
                           ? LichessIcons.arrow_full_upperright
                           : LichessIcons.arrow_full_lowerright,
-                      color: entry.puzzles!.ratingAfter -
-                                  entry.puzzles!.ratingBefore >
-                              0
-                          ? greenColor
-                          : redColor,
+                      color:
+                          entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                              ? greenColor
+                              : redColor,
                       size: 12,
                     ),
                     Text(
-                      (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore)
-                          .abs()
-                          .toString(),
+                      (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore).abs().toString(),
                       style: TextStyle(
-                        color: entry.puzzles!.ratingAfter -
-                                    entry.puzzles!.ratingBefore >
-                                0
-                            ? greenColor
-                            : redColor,
+                        color:
+                            entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                                ? greenColor
+                                : redColor,
                         fontSize: 11,
                       ),
                     ),
@@ -234,44 +167,21 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.streak != null)
           _UserActivityListTile(
-            leading: Icon(
-              LichessIcons.streak,
-              size: leadingIconSize,
-            ),
-            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(
-              entry.streak!.runs,
-              'Puzzle Streak',
-            ),
+            leading: Icon(LichessIcons.streak, size: leadingIconSize),
+            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.streak!.runs, 'Puzzle Streak'),
             subtitle: emptySubtitle,
-            trailing: BriefGameResultBox(
-              win: entry.streak!.score,
-              draw: 0,
-              loss: 0,
-            ),
+            trailing: BriefGameResultBox(win: entry.streak!.score, draw: 0, loss: 0),
           ),
         if (entry.storm != null)
           _UserActivityListTile(
-            leading: Icon(
-              LichessIcons.storm,
-              size: leadingIconSize,
-            ),
-            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(
-              entry.storm!.runs,
-              'Puzzle Storm',
-            ),
+            leading: Icon(LichessIcons.storm, size: leadingIconSize),
+            title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.storm!.runs, 'Puzzle Storm'),
             subtitle: emptySubtitle,
-            trailing: BriefGameResultBox(
-              win: entry.storm!.score,
-              draw: 0,
-              loss: 0,
-            ),
+            trailing: BriefGameResultBox(win: entry.storm!.score, draw: 0, loss: 0),
           ),
         if (entry.correspondenceEnds != null)
           _UserActivityListTile(
-            leading: Icon(
-              LichessIcons.correspondence,
-              size: leadingIconSize,
-            ),
+            leading: Icon(LichessIcons.correspondence, size: leadingIconSize),
             title: context.l10n.activityCompletedNbGames(
               entry.correspondenceEnds!.win +
                   entry.correspondenceEnds!.draw +
@@ -284,49 +194,34 @@ class UserActivityEntry extends ConsumerWidget {
               loss: entry.correspondenceEnds!.loss,
             ),
           ),
-        if (entry.correspondenceMovesNb != null &&
-            entry.correspondenceGamesNb != null)
+        if (entry.correspondenceMovesNb != null && entry.correspondenceGamesNb != null)
           _UserActivityListTile(
-            leading: Icon(
-              LichessIcons.correspondence,
-              size: leadingIconSize,
-            ),
-            title: context.l10n.activityPlayedNbMoves(
-              entry.correspondenceMovesNb!,
-            ),
+            leading: Icon(LichessIcons.correspondence, size: leadingIconSize),
+            title: context.l10n.activityPlayedNbMoves(entry.correspondenceMovesNb!),
             subtitle: Text(
-              context.l10n.activityInNbCorrespondenceGames(
-                entry.correspondenceGamesNb!,
-              ),
+              context.l10n.activityInNbCorrespondenceGames(entry.correspondenceGamesNb!),
             ),
           ),
         if (entry.tournamentNb != null)
           _UserActivityListTile(
-            leading: Icon(
-              Icons.emoji_events,
-              size: leadingIconSize,
-            ),
-            title: context.l10n.activityCompetedInNbTournaments(
-              entry.tournamentNb!,
-            ),
-            subtitle: entry.bestTournament != null
-                ? Text(
-                    context.l10n.activityRankedInTournament(
-                      entry.bestTournament!.rank,
-                      entry.bestTournament!.rankPercent.toString(),
-                      entry.bestTournament!.nbGames.toString(),
-                      entry.bestTournament!.name,
-                    ),
-                    maxLines: 2,
-                  )
-                : emptySubtitle,
+            leading: Icon(Icons.emoji_events, size: leadingIconSize),
+            title: context.l10n.activityCompetedInNbTournaments(entry.tournamentNb!),
+            subtitle:
+                entry.bestTournament != null
+                    ? Text(
+                      context.l10n.activityRankedInTournament(
+                        entry.bestTournament!.rank,
+                        entry.bestTournament!.rankPercent.toString(),
+                        entry.bestTournament!.nbGames.toString(),
+                        entry.bestTournament!.name,
+                      ),
+                      maxLines: 2,
+                    )
+                    : emptySubtitle,
           ),
         if (entry.followInNb != null)
           _UserActivityListTile(
-            leading: Icon(
-              Icons.thumb_up,
-              size: leadingIconSize,
-            ),
+            leading: Icon(Icons.thumb_up, size: leadingIconSize),
             title: context.l10n.activityGainedNbFollowers(entry.followInNb!),
             subtitle: emptySubtitle,
           ),
@@ -336,12 +231,7 @@ class UserActivityEntry extends ConsumerWidget {
 }
 
 class _UserActivityListTile extends StatelessWidget {
-  const _UserActivityListTile({
-    required this.title,
-    this.subtitle,
-    this.trailing,
-    this.leading,
-  });
+  const _UserActivityListTile({required this.title, this.subtitle, this.trailing, this.leading});
 
   final String title;
   final Widget? subtitle;
@@ -369,10 +259,7 @@ const _gameStatsFontStyle = TextStyle(
 );
 
 class _ResultBox extends StatelessWidget {
-  const _ResultBox({
-    required this.number,
-    required this.color,
-  });
+  const _ResultBox({required this.number, required this.color});
 
   final int number;
   final Color color;
@@ -390,10 +277,7 @@ class _ResultBox extends StatelessWidget {
         padding: const EdgeInsets.all(1.0),
         child: FittedBox(
           fit: BoxFit.contain,
-          child: Text(
-            number.toString(),
-            style: _gameStatsFontStyle,
-          ),
+          child: Text(number.toString(), style: _gameStatsFontStyle),
         ),
       ),
     );
@@ -401,11 +285,7 @@ class _ResultBox extends StatelessWidget {
 }
 
 class BriefGameResultBox extends StatelessWidget {
-  const BriefGameResultBox({
-    required this.win,
-    required this.draw,
-    required this.loss,
-  });
+  const BriefGameResultBox({required this.win, required this.draw, required this.loss});
 
   final int win;
   final int draw;
@@ -417,39 +297,27 @@ class BriefGameResultBox extends StatelessWidget {
       padding: const EdgeInsets.only(left: 5.0),
       child: SizedBox(
         height: 20,
-        width: (win != 0 ? 1 : 0) * _boxSize +
+        width:
+            (win != 0 ? 1 : 0) * _boxSize +
             (draw != 0 ? 1 : 0) * _boxSize +
             (loss != 0 ? 1 : 0) * _boxSize +
-            ((win != 0 ? 1 : 0) +
-                    (draw != 0 ? 1 : 0) +
-                    (loss != 0 ? 1 : 0) -
-                    1) *
-                _spaceWidth,
+            ((win != 0 ? 1 : 0) + (draw != 0 ? 1 : 0) + (loss != 0 ? 1 : 0) - 1) * _spaceWidth,
         child: Row(
           children: [
             if (win != 0)
               _ResultBox(
                 number: win,
-                color: Theme.of(context).extension<CustomColors>()?.good ??
-                    LichessColors.green,
+                color: Theme.of(context).extension<CustomColors>()?.good ?? LichessColors.green,
               ),
-            if (win != 0 && draw != 0)
-              const SizedBox(
-                width: _spaceWidth,
-              ),
-            if (draw != 0)
-              _ResultBox(
-                number: draw,
-                color: context.lichessColors.brag,
-              ),
+            if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
+            if (draw != 0) _ResultBox(number: draw, color: context.lichessColors.brag),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
-              const SizedBox(
-                width: _spaceWidth,
-              ),
+              const SizedBox(width: _spaceWidth),
             if (loss != 0)
               _ResultBox(
                 number: loss,
-                color: Theme.of(context).extension<CustomColors>()?.error ??
+                color:
+                    Theme.of(context).extension<CustomColors>()?.error ??
                     context.lichessColors.error,
               ),
           ],

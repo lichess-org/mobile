@@ -39,11 +39,6 @@ class LeaderboardUser with _$LeaderboardUser {
     required int progress,
   }) = _LeaderboardUser;
 
-  LightUser get lightUser => LightUser(
-        id: id,
-        name: username,
-        title: title,
-        flair: flair,
-        isPatron: patron,
-      );
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, flair: flair, isPatron: patron);
 }

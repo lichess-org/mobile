@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'lobby_numbers.g.dart';
@@ -21,10 +22,7 @@ class LobbyNumbers extends _$LobbyNumbers {
     _socketSubscription = socketGlobalStream.listen((event) {
       if (event.topic == 'n') {
         final data = event.data as Map<String, int>;
-        state = (
-          nbPlayers: data['nbPlayers']!,
-          nbGames: data['nbGames']!,
-        );
+        state = (nbPlayers: data['nbPlayers']!, nbGames: data['nbGames']!);
       }
     });
 

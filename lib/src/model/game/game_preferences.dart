@@ -1,58 +1,44 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_preferences.freezed.dart';
 part 'game_preferences.g.dart';
 
-const _prefKey = 'game.preferences';
-
 /// Local game preferences, defined client-side only.
 @riverpod
-class GamePreferences extends _$GamePreferences {
+class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePrefs> {
+  // ignore: avoid_public_notifier_properties
   @override
-  GamePrefState build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_prefKey);
-    return stored != null
-        ? GamePrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
-        : GamePrefState.defaults;
+  final prefCategory = PrefCategory.game;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  GamePrefs get defaults => GamePrefs.defaults;
+
+  @override
+  GamePrefs fromJson(Map<String, dynamic> json) => GamePrefs.fromJson(json);
+
+  @override
+  GamePrefs build() {
+    return fetch();
   }
 
   Future<void> toggleChat() {
     final newState = state.copyWith(enableChat: !(state.enableChat ?? false));
-    return _save(newState);
+    return save(newState);
   }
 
   Future<void> toggleBlindfoldMode() {
-    return _save(
-      state.copyWith(blindfoldMode: !(state.blindfoldMode ?? false)),
-    );
-  }
-
-  Future<void> _save(GamePrefState newState) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(
-      _prefKey,
-      jsonEncode(newState.toJson()),
-    );
-    state = newState;
+    return save(state.copyWith(blindfoldMode: !(state.blindfoldMode ?? false)));
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GamePrefState with _$GamePrefState {
-  const factory GamePrefState({
-    bool? enableChat,
-    bool? blindfoldMode,
-  }) = _GamePrefState;
+class GamePrefs with _$GamePrefs implements Serializable {
+  const factory GamePrefs({bool? enableChat, bool? blindfoldMode}) = _GamePrefs;
 
-  static const defaults = GamePrefState(
-    enableChat: true,
-  );
+  static const defaults = GamePrefs(enableChat: true);
 
-  factory GamePrefState.fromJson(Map<String, dynamic> json) =>
-      _$GamePrefStateFromJson(json);
+  factory GamePrefs.fromJson(Map<String, dynamic> json) => _$GamePrefsFromJson(json);
 }

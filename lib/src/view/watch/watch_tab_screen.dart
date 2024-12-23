@@ -4,19 +4,24 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
+import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcasts_list_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -25,9 +30,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'watch_tab_screen.g.dart';
 
 const _featuredChannelsSet = ISetConst({
   TvChannel.best,
@@ -36,31 +38,27 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.rapid,
 });
 
-@riverpod
-Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
-  return ref.withClientCacheFor(
-    (client) async {
-      final channels = await TvRepository(client).channels();
-      return channels.entries
-          .where((channel) => _featuredChannelsSet.contains(channel.key))
-          .map(
-            (entry) => TvGameSnapshot(
-              channel: entry.key,
-              id: entry.value.id,
-              orientation: entry.value.side ?? Side.white,
-              player: FeaturedPlayer(
-                name: entry.value.user.name,
-                title: entry.value.user.title,
-                side: entry.value.side ?? Side.white,
-                rating: entry.value.rating,
-              ),
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+  return ref.withClientCacheFor((client) async {
+    final channels = await TvRepository(client).channels();
+    return channels.entries
+        .where((channel) => _featuredChannelsSet.contains(channel.key))
+        .map(
+          (entry) => TvGameSnapshot(
+            channel: entry.key,
+            id: entry.value.id,
+            orientation: entry.value.side ?? Side.white,
+            player: FeaturedPlayer(
+              name: entry.value.user.name,
+              title: entry.value.user.title,
+              side: entry.value.side ?? Side.white,
+              rating: entry.value.rating,
             ),
-          )
-          .toIList();
-    },
-    const Duration(minutes: 5),
-  );
-}
+          ),
+        )
+        .toIList();
+  }, const Duration(minutes: 5));
+});
 
 class WatchTabScreen extends ConsumerStatefulWidget {
   const WatchTabScreen({super.key});
@@ -80,19 +78,8 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
-
-  List<Widget> get watchTabWidgets => const [
-        // TODO: show widget when broadcasts feature is ready
-        //_BroadcastWidget(),
-        _WatchTvWidget(),
-        _StreamerWidget(),
-      ];
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -103,32 +90,15 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.watch),
-        ),
-        body: RefreshIndicator(
-          key: _androidRefreshKey,
-          onRefresh: refreshData,
-          child: SafeArea(
-            child: OrientationBuilder(
-              builder: (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? ListView(
-                        controller: watchScrollController,
-                        children: watchTabWidgets,
-                      )
-                    : GridView(
-                        controller: watchScrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        children: watchTabWidgets,
-                      );
-              },
-            ),
-          ),
+        appBar: AppBar(title: Text(context.l10n.watch)),
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            return RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: refreshData,
+              child: _Body(orientation),
+            );
+          },
         ),
       ),
     );
@@ -142,31 +112,10 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
             controller: watchScrollController,
             slivers: [
               const CupertinoSliverNavigationBar(
-                padding: EdgeInsetsDirectional.only(
-                  start: 16.0,
-                  end: 8.0,
-                ),
+                padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
               ),
-              CupertinoSliverRefreshControl(
-                onRefresh: refreshData,
-              ),
-              SliverSafeArea(
-                top: false,
-                sliver: orientation == Orientation.portrait
-                    ? SliverList(
-                        delegate: SliverChildListDelegate(
-                          watchTabWidgets,
-                        ),
-                      )
-                    : SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.92,
-                        ),
-                        delegate: SliverChildListDelegate(watchTabWidgets),
-                      ),
-              ),
+              CupertinoSliverRefreshControl(onRefresh: refreshData),
+              SliverSafeArea(top: false, sliver: _Body(orientation)),
             ],
           );
         },
@@ -177,78 +126,193 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Future<void> refreshData() => _refreshData(ref);
 }
 
+class _Body extends ConsumerStatefulWidget {
+  const _Body(this.orientation);
+
+  final Orientation orientation;
+
+  @override
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  ImageColorWorker? _worker;
+  bool _imageAreCached = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _precacheImages();
+  }
+
+  @override
+  void dispose() {
+    _worker?.close();
+    super.dispose();
+  }
+
+  Future<void> _precacheImages() async {
+    _worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+      if (current.hasValue && !_imageAreCached) {
+        _imageAreCached = true;
+        try {
+          await preCacheBroadcastImages(
+            context,
+            broadcasts: current.value!.active,
+            worker: _worker!,
+          );
+        } finally {
+          _worker?.close();
+        }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final featuredChannels = ref.watch(featuredChannelsProvider);
+    final streamers = ref.watch(liveStreamersProvider);
+
+    final content =
+        widget.orientation == Orientation.portrait
+            ? [
+              _BroadcastWidget(broadcastList),
+              _WatchTvWidget(featuredChannels),
+              _StreamerWidget(streamers),
+            ]
+            : [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _BroadcastWidget(broadcastList)),
+                  Expanded(child: _WatchTvWidget(featuredChannels)),
+                ],
+              ),
+              _StreamerWidget(streamers),
+            ];
+
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(delegate: SliverChildListDelegate(content))
+        : ListView(controller: watchScrollController, children: content);
+  }
+}
+
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
-    // TODO uncomment when broadcasts feature is ready
-    // ref.refresh(broadcastsPaginatorProvider.future),
+    ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
 }
 
-// TODO remove this ignore comment when broadcasts feature is ready
-// ignore: unused_element
 class _BroadcastWidget extends ConsumerWidget {
-  const _BroadcastWidget();
+  final AsyncValue<BroadcastList> broadcastList;
+
+  const _BroadcastWidget(this.broadcastList);
 
   static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastList = ref.watch(broadcastsPaginatorProvider);
-
     return broadcastList.when(
       data: (data) {
         return ListSection(
-          header: Text(context.l10n.broadcastBroadcasts),
           hasLeading: true,
+          header: Text(context.l10n.broadcastBroadcasts),
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => const BroadcastsListScreen(),
-              );
+              pushPlatformRoute(context, builder: (context) => const BroadcastListScreen());
             },
-            child: Text(
-              context.l10n.more,
-            ),
+            child: Text(context.l10n.more),
           ),
           children: [
-            ...CombinedIterableView([data.active, data.upcoming, data.past])
-                .take(numberOfItems)
-                .map((broadcast) => BroadcastTile(broadcast: broadcast)),
+            ...CombinedIterableView([
+              data.active,
+              data.past,
+            ]).take(numberOfItems).map((broadcast) => _BroadcastTile(broadcast: broadcast)),
           ],
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace',
-        );
-        return Padding(
+        debugPrint('SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace');
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load broadcasts'),
+          child: Text('Could not load broadcasts'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: numberOfItems,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: numberOfItems, header: true),
+            ),
           ),
-        ),
+    );
+  }
+}
+
+class _BroadcastTile extends ConsumerWidget {
+  const _BroadcastTile({required this.broadcast});
+
+  final Broadcast broadcast;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    return PlatformListTile(
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          title: broadcast.title,
+          rootNavigator: true,
+          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+        );
+      },
+      leading:
+          broadcast.tour.imageUrl != null
+              ? Image.network(
+                broadcast.tour.imageUrl!,
+                width: 50.0,
+                height: 50.0,
+                cacheWidth: (50.0 * devicePixelRatio).toInt(),
+                cacheHeight: (50.0 * devicePixelRatio).toInt(),
+                fit: BoxFit.cover,
+                errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+              )
+              : const Image(image: kDefaultBroadcastImage),
+      subtitle: Row(
+        children: [
+          Text(broadcast.round.name),
+          if (broadcast.isLive) ...[
+            const SizedBox(width: 5.0),
+            Text(
+              'LIVE',
+              style: TextStyle(color: context.lichessColors.error, fontWeight: FontWeight.bold),
+            ),
+          ] else if (broadcast.round.startsAt != null) ...[
+            const SizedBox(width: 5.0),
+            Text(relativeDate(context.l10n, broadcast.round.startsAt!)),
+          ],
+        ],
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: Text(broadcast.title, maxLines: 1, overflow: TextOverflow.ellipsis),
       ),
     );
   }
 }
 
 class _WatchTvWidget extends ConsumerWidget {
-  const _WatchTvWidget();
+  final AsyncValue<IList<TvGameSnapshot>> featuredChannels;
+
+  const _WatchTvWidget(this.featuredChannels);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final featuredChannels = ref.watch(featuredChannelsProvider);
-
     return featuredChannels.when(
       data: (data) {
         if (data.isEmpty) {
@@ -258,79 +322,76 @@ class _WatchTvWidget extends ConsumerWidget {
           header: const Text('Lichess TV'),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => const LiveTvChannelsScreen(),
-            ).then((_) => _refreshData(ref)),
-            child: Text(
-              context.l10n.more,
-            ),
+            onPressed:
+                () => pushPlatformRoute(
+                  context,
+                  builder: (context) => const LiveTvChannelsScreen(),
+                ).then((_) => _refreshData(ref)),
+            child: Text(context.l10n.more),
           ),
-          children: data.map((snapshot) {
-            return PlatformListTile(
-              leading: Icon(snapshot.channel.icon),
-              title: Text(snapshot.channel.label),
-              subtitle: UserFullNameWidget.player(
-                user: snapshot.player.asPlayer.user,
-                aiLevel: snapshot.player.asPlayer.aiLevel,
-                rating: snapshot.player.rating,
-              ),
-              onTap: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => TvScreen(channel: snapshot.channel),
-              ).then((_) => _refreshData(ref)),
-            );
-          }).toList(growable: false),
+          children: data
+              .map((snapshot) {
+                return PlatformListTile(
+                  leading: Icon(snapshot.channel.icon),
+                  title: Text(snapshot.channel.label),
+                  subtitle: UserFullNameWidget.player(
+                    user: snapshot.player.asPlayer.user,
+                    aiLevel: snapshot.player.asPlayer.aiLevel,
+                    rating: snapshot.player.rating,
+                  ),
+                  onTap:
+                      () => pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => TvScreen(channel: snapshot.channel),
+                      ).then((_) => _refreshData(ref)),
+                );
+              })
+              .toList(growable: false),
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace',
-        );
-        return Padding(
+        debugPrint('SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace');
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load TV channels'),
+          child: Text('Could not load TV channels'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 4,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 4, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
 
 class _StreamerWidget extends ConsumerWidget {
-  const _StreamerWidget();
+  final AsyncValue<IList<Streamer>> streamers;
+
+  const _StreamerWidget(this.streamers);
 
   static const int numberOfItems = 10;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streamerState = ref.watch(liveStreamersProvider);
-
-    return streamerState.when(
+    return streamers.when(
       data: (data) {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header: Text(context.l10n.streamerLichessStreamers),
+          header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => StreamerScreen(streamers: data),
-            ),
-            child: Text(
-              context.l10n.more,
-            ),
+            onPressed:
+                () => pushPlatformRoute(
+                  context,
+                  builder: (context) => StreamerScreen(streamers: data),
+                ),
+            child: Text(context.l10n.more),
           ),
           children: [
             ...data
@@ -340,23 +401,19 @@ class _StreamerWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
-        );
-        return Padding(
+        debugPrint('SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace');
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load live streamers'),
+          child: Text('Could not load live streamers'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: numberOfItems,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: numberOfItems, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

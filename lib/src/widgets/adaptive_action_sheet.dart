@@ -64,18 +64,14 @@ Future<T?> showConfirmDialog<T>(
           title: title,
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
+              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
               child: Text(context.l10n.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
+              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
               child: Text(context.l10n.mobileOkButton),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -101,27 +97,29 @@ Future<T?> showCupertinoActionSheet<T>({
     builder: (BuildContext context) {
       return CupertinoActionSheet(
         title: title,
-        actions: actions
-            .map(
-              // Builder is used to retrieve the context immediately surrounding the button
-              // This is necessary to get the correct context for the iPad share dialog
-              // which needs the position of the action to display the share dialog
-              (action) => Builder(
-                builder: (context) {
-                  return CupertinoActionSheetAction(
-                    onPressed: () {
-                      if (action.dismissOnPress) {
-                        Navigator.of(context).pop();
-                      }
-                      action.onPressed(context);
+        actions:
+            actions
+                .map(
+                  // Builder is used to retrieve the context immediately surrounding the button
+                  // This is necessary to get the correct context for the iPad share dialog
+                  // which needs the position of the action to display the share dialog
+                  (action) => Builder(
+                    builder: (context) {
+                      return CupertinoActionSheetAction(
+                        onPressed: () {
+                          if (action.dismissOnPress) {
+                            Navigator.of(context).pop();
+                          }
+                          action.onPressed(context);
+                        },
+                        isDestructiveAction: action.isDestructiveAction,
+                        isDefaultAction: action.isDefaultAction,
+                        child: action.makeLabel(context),
+                      );
                     },
-                    isDestructiveAction: action.isDestructiveAction,
-                    child: action.makeLabel(context),
-                  );
-                },
-              ),
-            )
-            .toList(),
+                  ),
+                )
+                .toList(),
         cancelButton: CupertinoActionSheetAction(
           isDefaultAction: true,
           onPressed: () {
@@ -140,8 +138,7 @@ Future<T?> showMaterialActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
-  final defaultTextStyle =
-      Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 20);
+  final actionTextStyle = Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18);
 
   final screenWidth = MediaQuery.of(context).size.width;
   return showDialog<T>(
@@ -157,20 +154,13 @@ Future<T?> showMaterialActionSheet<T>({
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (title != null) ...[
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(child: title),
-                  ),
+                  Padding(padding: const EdgeInsets.all(16.0), child: Center(child: title)),
                 ],
                 ...actions.mapIndexed<Widget>((index, action) {
                   return InkWell(
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(
-                        index == 0 ? 28 : 0,
-                      ),
-                      bottom: Radius.circular(
-                        index == actions.length - 1 ? 28 : 0,
-                      ),
+                      top: Radius.circular(index == 0 ? 28 : 0),
+                      bottom: Radius.circular(index == actions.length - 1 ? 28 : 0),
                     ),
                     onTap: () {
                       if (action.dismissOnPress) {
@@ -188,10 +178,9 @@ Future<T?> showMaterialActionSheet<T>({
                           ],
                           Expanded(
                             child: DefaultTextStyle(
-                              style: defaultTextStyle,
-                              textAlign: action.leading != null
-                                  ? TextAlign.start
-                                  : TextAlign.center,
+                              style: actionTextStyle,
+                              textAlign:
+                                  action.leading != null ? TextAlign.start : TextAlign.center,
                               child: action.makeLabel(context),
                             ),
                           ),
@@ -233,15 +222,19 @@ class BottomSheetAction {
 
   /// A widget to display after the label.
   ///
-  /// Typically an [Icon] widget. Only for android.
+  /// Typically an [Icon] widget. (Android only).
   final Widget? trailing;
 
   /// A widget to display before the label.
   ///
-  /// Typically an [Icon] or a [CircleAvatar] widget. Only for android.
+  /// Typically an [Icon] or a [CircleAvatar] widget. (Android only).
   final Widget? leading;
 
+  /// Whether the action is destructive. (iOS only).
   final bool isDestructiveAction;
+
+  /// Whether the action is the default action. (iOS only).
+  final bool isDefaultAction;
 
   BottomSheetAction({
     required this.makeLabel,
@@ -250,5 +243,6 @@ class BottomSheetAction {
     this.trailing,
     this.leading,
     this.isDestructiveAction = false,
+    this.isDefaultAction = false,
   });
 }

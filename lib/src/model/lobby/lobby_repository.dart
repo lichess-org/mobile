@@ -1,10 +1,11 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'correspondence_challenge.dart';
@@ -13,12 +14,8 @@ import 'game_seek.dart';
 part 'lobby_repository.g.dart';
 
 @riverpod
-Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
-  CorrespondenceChallengesRef ref,
-) {
-  return ref.withClient(
-    (client) => LobbyRepository(client).getCorrespondenceChallenges(),
-  );
+Future<IList<CorrespondenceChallenge>> correspondenceChallenges(Ref ref) {
+  return ref.withClient((client) => LobbyRepository(client).getCorrespondenceChallenges());
 }
 
 class LobbyRepository {
@@ -30,10 +27,7 @@ class LobbyRepository {
     final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});
     final response = await client.post(uri, body: seek.requestBody);
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to create seek: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to create seek: ${response.statusCode}', uri);
     }
   }
 
@@ -41,10 +35,7 @@ class LobbyRepository {
     final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});
     final response = await client.delete(uri);
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to cancel seek: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to cancel seek: ${response.statusCode}', uri);
     }
   }
 

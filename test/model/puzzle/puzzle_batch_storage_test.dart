@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,63 +10,31 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../test_container.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   group('PuzzleBatchStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      final storage = container.read(puzzleBatchStorageProvider);
-
-      await storage.save(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        data: data,
-      );
+      await storage.save(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix), data: data);
 
       expect(
-        storage.fetch(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
+        storage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
         completion(equals(data)),
       );
     });
 
     test('fetchSavedThemes', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      final storage = container.read(puzzleBatchStorageProvider);
-
-      await storage.save(
-        userId: null,
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        data: data,
-      );
+      await storage.save(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix), data: data);
       await storage.save(
         userId: null,
         angle: const PuzzleTheme(PuzzleThemeKey.rookEndgame),
@@ -85,6 +55,55 @@ void main() {
               PuzzleThemeKey.rookEndgame: 1,
               PuzzleThemeKey.doubleBishopMate: 1,
             }),
+          ),
+        ),
+      );
+    });
+
+    test('fetchSavedOpenings', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      await storage.save(userId: null, angle: const PuzzleOpening('test_opening'), data: data);
+      await storage.save(userId: null, angle: const PuzzleOpening('test_opening2'), data: data);
+
+      expect(
+        storage.fetchSavedOpenings(userId: null),
+        completion(equals(IMap(const {'test_opening': 1, 'test_opening2': 1}))),
+      );
+    });
+
+    test('fetchAll', () async {
+      final container = await makeContainer();
+
+      final database = await container.read(databaseProvider.future);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      Future<void> save(PuzzleAngle angle, PuzzleBatch data, String timestamp) {
+        return database.insert('puzzle_batchs', {
+          'userId': '**anon**',
+          'angle': angle.key,
+          'data': jsonEncode(data.toJson()),
+          'lastModified': timestamp,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+
+      await save(const PuzzleTheme(PuzzleThemeKey.rookEndgame), data, '2021-01-02T00:00:00Z');
+      await save(const PuzzleTheme(PuzzleThemeKey.doubleBishopMate), data, '2021-01-03T00:00:00Z');
+      await save(const PuzzleOpening('test_opening'), data, '2021-01-04T00:00:00Z');
+      await save(const PuzzleOpening('test_opening2'), data, '2021-01-04T80:00:00Z');
+
+      expect(
+        storage.fetchAll(userId: null),
+        completion(
+          equals(
+            [
+              const PuzzleOpening('test_opening2'),
+              const PuzzleOpening('test_opening'),
+              const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
+              const PuzzleTheme(PuzzleThemeKey.rookEndgame),
+            ].map((angle) => (angle, 1)).toIList(),
           ),
         ),
       );
@@ -111,14 +130,8 @@ final data = PuzzleBatch(
         id: GameId('PrlkCqOv'),
         perf: Perf.blitz,
         rated: true,
-        white: PuzzleGamePlayer(
-          side: Side.white,
-          name: 'user1',
-        ),
-        black: PuzzleGamePlayer(
-          side: Side.black,
-          name: 'user2',
-        ),
+        white: PuzzleGamePlayer(side: Side.white, name: 'user1'),
+        black: PuzzleGamePlayer(side: Side.black, name: 'user2'),
         pgn: 'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
       ),
     ),

@@ -21,23 +21,52 @@ Future<T?> showAdaptiveBottomSheet<T>({
     isScrollControlled: isScrollControlled,
     useRootNavigator: useRootNavigator,
     useSafeArea: useSafeArea,
-    shape: Theme.of(context).platform == TargetPlatform.iOS
-        ? const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10.0),
-            ),
-          )
-        : null,
+    shape:
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+            )
+            : null,
     constraints: constraints,
-    backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.tertiarySystemGroupedBackground,
-            context,
-          )
-        : null,
+    backgroundColor:
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? CupertinoDynamicColor.resolve(
+              CupertinoColors.tertiarySystemGroupedBackground,
+              context,
+            )
+            : null,
     elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : null,
     builder: builder,
   );
+}
+
+/// A modal bottom sheet container that adapts to the content size.
+///
+/// This is typically used with [showAdaptiveBottomSheet] to display a
+/// context menu.
+///
+/// This is meant for content that mostly fits on the screen, not for long lists.
+class BottomSheetScrollableContainer extends StatelessWidget {
+  const BottomSheetScrollableContainer({
+    required this.children,
+    this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.scrollController,
+  });
+
+  final List<Widget> children;
+  final EdgeInsetsGeometry? padding;
+  final ScrollController? scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        controller: scrollController,
+        padding: padding,
+        child: ListBody(children: children),
+      ),
+    );
+  }
 }
 
 class BottomSheetContextMenuAction extends StatelessWidget {
@@ -56,8 +85,9 @@ class BottomSheetContextMenuAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      cupertinoBackgroundColor:
-          CupertinoColors.tertiarySystemGroupedBackground.resolveFrom(context),
+      cupertinoBackgroundColor: CupertinoColors.tertiarySystemGroupedBackground.resolveFrom(
+        context,
+      ),
       leading: Icon(icon),
       title: child,
       onTap: () {

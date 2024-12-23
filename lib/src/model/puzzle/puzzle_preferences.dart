@@ -1,47 +1,42 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_preferences.freezed.dart';
 part 'puzzle_preferences.g.dart';
 
-const _prefKey = 'puzzle.preferences';
-
 @riverpod
-class PuzzlePreferences extends _$PuzzlePreferences {
+class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStorage<PuzzlePrefs> {
+  // ignore: avoid_public_notifier_properties
   @override
-  PuzzlePrefState build(UserId? id) {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_makeKey(id));
-    return stored != null
-        ? PuzzlePrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
-        : PuzzlePrefState.defaults(id: id);
+  final prefCategory = PrefCategory.puzzle;
+
+  @override
+  PuzzlePrefs defaults({LightUser? user}) => PuzzlePrefs.defaults(id: user?.id);
+
+  @override
+  PuzzlePrefs fromJson(Map<String, dynamic> json) => PuzzlePrefs.fromJson(json);
+
+  @override
+  PuzzlePrefs build() {
+    return fetch();
   }
 
   Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
-    final newState = state.copyWith(difficulty: difficulty);
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
-    state = newState;
+    save(state.copyWith(difficulty: difficulty));
   }
 
   Future<void> setAutoNext(bool autoNext) async {
-    final newState = state.copyWith(autoNext: autoNext);
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(_makeKey(id), jsonEncode(newState.toJson()));
-    state = newState;
+    save(state.copyWith(autoNext: autoNext));
   }
-
-  String _makeKey(UserId? id) => '$_prefKey.${id ?? ''}';
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzlePrefState with _$PuzzlePrefState {
-  const factory PuzzlePrefState({
+class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
+  const factory PuzzlePrefs({
     required UserId? id,
     required PuzzleDifficulty difficulty,
 
@@ -49,14 +44,10 @@ class PuzzlePrefState with _$PuzzlePrefState {
     /// no effect on puzzle streaks, which always show next puzzle. Defaults to
     /// `false`.
     @Default(false) bool autoNext,
-  }) = _PuzzlePrefState;
+  }) = _PuzzlePrefs;
 
-  factory PuzzlePrefState.defaults({UserId? id}) => PuzzlePrefState(
-        id: id,
-        difficulty: PuzzleDifficulty.normal,
-        autoNext: false,
-      );
+  factory PuzzlePrefs.defaults({UserId? id}) =>
+      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false);
 
-  factory PuzzlePrefState.fromJson(Map<String, dynamic> json) =>
-      _$PuzzlePrefStateFromJson(json);
+  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

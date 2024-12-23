@@ -8,90 +8,9 @@ Contributions to this project are welcome!
 
 If you want to contribute, please read the [contributing guide](./CONTRIBUTING.md).
 
-## Setup
+## Setup and Run
 
-1. Follow the [Flutter guide](https://docs.flutter.dev/get-started/install) to
-   install Flutter and the platform of you choice (iOS and/or Android). **Note, if you're on Linux**, you should install flutter manually because there is an [issue](https://github.com/lichess-org/mobile/issues/123) with snapd when building Stockfish. Note that this project is not meant to be run on web platform.
-2. Switch to the beta channel by running `flutter channel beta` and `flutter
-   upgrade`
-3. Ensure Flutter is correctly configured by running `flutter doctor`
-
-### Flutter version
-
-While the app is in beta we'll use the `beta` channel of Flutter.
-
-#### Flutter Version Management
-
-If you want to use FVM to manage your Flutter versions effectively, please consult the [FVM (Flutter Version Management) guide](https://fvm.app/documentation/getting-started/installation) for comprehensive instructions on installing Flutter on your specific operating system.
-
-**Pro Tip:** Remember to prepend the 'flutter' prefix when using FVM commands, like this: `fvm flutter [command]`.
-
-### Local lila
-
-You will need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app) instance to work on this
-project. You will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws) (websocket server).
-
-Instructions to install both are found in [the lila wiki](https://github.com/lichess-org/lila/wiki).
-
-The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
-
-### Using Lichess dev server
-
-To use the [Lichess dev](https://lichess.dev/) to run this app, run the following command to set up the Lichess host URLs in the app.
-
-```
-flutter run --dart-define=LICHESS_HOST=lichess.dev --dart-define=LICHESS_WS_HOST=socket.lichess.dev
-```
-
-**Note : Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
-
-
-## Run
-
-We don't commit generated code to the repository. So you need to run the code
-generator first:
-
-```sh
-flutter pub get
-dart run build_runner watch
-```
-
-Check you have some connected device with: `flutter devices`.
-If you target an android emulator you need to run these commands so the device can reach the local lila instance.
-
-**Note: Only run the command if you are using a local Lila server; otherwise, there's no need to set up port forwarding.**
-
-```sh
-adb reverse tcp:9663 tcp:9663
-adb reverse tcp:9664 tcp:9664
-```
-
-Then run on your device:
-
-```sh
-flutter run -d <my_device>
-```
-
-You can find more information about emulators [in the documentation](https://github.com/lichess-org/mobile/blob/main/docs/setting_dev_env.md).
-
-You can find more information about the `flutter run` command by running `flutter run --help`.
-
-### Test
-
-Before submitting a pull request, please run the tests:
-
-```sh
-flutter analyze
-flutter test
-```
-
-### Logging
-
-```sh
-dart devtools
-```
-
-Then run the app with the `flutter run` command above, and a link to the logging page will be printed in the console.
+See [the dev environment docs](./docs/setting_dev_env.md) for detailed instructions.
 
 ## Internationalisation
 

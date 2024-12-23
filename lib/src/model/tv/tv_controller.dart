@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -16,6 +15,8 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tv_controller.freezed.dart';
@@ -29,10 +30,7 @@ class TvController extends _$TvController {
   int? _socketEventVersion;
 
   @override
-  Future<TvState> build(
-    TvChannel channel,
-    (GameId id, Side orientation)? initialGame,
-  ) async {
+  Future<TvState> build(TvChannel channel, (GameId id, Side orientation)? initialGame) async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
@@ -51,9 +49,7 @@ class TvController extends _$TvController {
     _socketSubscription?.cancel();
   }
 
-  Future<TvState> _connectWebsocket(
-    (GameId id, Side orientation)? game,
-  ) async {
+  Future<TvState> _connectWebsocket((GameId id, Side orientation)? game) async {
     GameId id;
     Side orientation;
 
@@ -61,29 +57,22 @@ class TvController extends _$TvController {
       id = game.$1;
       orientation = game.$2;
     } else {
-      final channels =
-          await ref.withClient((client) => TvRepository(client).channels());
+      final channels = await ref.withClient((client) => TvRepository(client).channels());
       final channelGame = channels[channel]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
     }
 
-    final socketClient = ref.read(socketPoolProvider).open(
-          Uri(
-            path: '/watch/$id/${orientation.name}/v6',
-          ),
-          forceReconnect: true,
-        );
+    final socketClient = ref
+        .read(socketPoolProvider)
+        .open(Uri(path: '/watch/$id/${orientation.name}/v6'), forceReconnect: true);
 
     _socketSubscription?.cancel();
     _socketEventVersion = null;
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
-    return socketClient.stream
-        .firstWhere((e) => e.topic == 'full')
-        .then((event) {
-      final fullEvent =
-          GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+    return socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
+      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
       _socketEventVersion = fullEvent.socketEventVersion;
 
@@ -100,21 +89,15 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
-  bool canGoBack() =>
-      state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
+  bool canGoBack() => state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
 
   bool canGoForward() =>
-      state.mapOrNull(
-        data: (d) => d.value.stepCursor < d.value.game.steps.length - 1,
-      ) ??
-      false;
+      state.mapOrNull(data: (d) => d.value.stepCursor < d.value.game.steps.length - 1) ?? false;
 
   void toggleBoard() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      state = AsyncValue.data(
-        curState.copyWith(orientation: curState.orientation.opposite),
-      );
+      state = AsyncValue.data(curState.copyWith(orientation: curState.orientation.opposite));
     }
   }
 
@@ -122,9 +105,7 @@ class TvController extends _$TvController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
-        state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor + 1),
-        );
+        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor + 1));
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -137,9 +118,7 @@ class TvController extends _$TvController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor > 0) {
-        state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor - 1),
-        );
+        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor - 1));
         final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -180,10 +159,7 @@ class TvController extends _$TvController {
 
   void _handleSocketTopic(SocketEvent event) {
     if (!state.hasValue) {
-      assert(
-        false,
-        'received a game SocketEvent while TvState is null',
-      );
+      assert(false, 'received a game SocketEvent while TvState is null');
       return;
     }
 
@@ -192,7 +168,7 @@ class TvController extends _$TvController {
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final lastPos = curState.game.lastPosition;
-        final move = Move.fromUci(data.uci)!;
+        final move = Move.parse(data.uci)!;
         final sanMove = SanMove(data.san, move);
         final newPos = lastPos.playUnchecked(move);
         final newStep = GameStep(
@@ -202,21 +178,19 @@ class TvController extends _$TvController {
         );
 
         TvState newState = curState.copyWith(
-          game: curState.game.copyWith(
-            steps: curState.game.steps.add(newStep),
-          ),
+          game: curState.game.copyWith(steps: curState.game.steps.add(newStep)),
         );
 
         if (newState.game.clock != null && data.clock != null) {
           newState = newState.copyWith.game.clock!(
             white: data.clock!.white,
             black: data.clock!.black,
+            lag: data.clock!.lag,
+            at: data.clock!.at,
           );
         }
         if (!curState.isReplaying) {
-          newState = newState.copyWith(
-            stepCursor: newState.stepCursor + 1,
-          );
+          newState = newState.copyWith(stepCursor: newState.stepCursor + 1);
 
           if (data.san.contains('x')) {
             _soundService.play(Sound.capture);
@@ -225,6 +199,21 @@ class TvController extends _$TvController {
           }
         }
 
+        state = AsyncData(newState);
+
+      case 'endData':
+        final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
+        TvState newState = state.requireValue.copyWith(
+          game: state.requireValue.game.copyWith(status: endData.status, winner: endData.winner),
+        );
+        if (endData.clock != null) {
+          newState = newState.copyWith.game.clock!(
+            white: endData.clock!.white,
+            black: endData.clock!.black,
+            at: DateTime.now(),
+            lag: null,
+          );
+        }
         state = AsyncData(newState);
 
       case 'tvSelect':

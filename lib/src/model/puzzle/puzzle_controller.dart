@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:collection/collection.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -22,6 +21,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -41,14 +42,10 @@ class PuzzleController extends _$PuzzleController {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
-  late final _service = ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
-  );
+  Future<PuzzleService> get _service =>
+      ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
   @override
-  PuzzleState build(
-    PuzzleContext initialContext, {
-    PuzzleStreak? initialStreak,
-  }) {
+  PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
     final evaluationService = ref.read(evaluationServiceProvider);
 
     ref.onDispose(() {
@@ -59,16 +56,28 @@ class PuzzleController extends _$PuzzleController {
       evaluationService.disposeEngine();
     });
 
+    // we might not have the user rating yet so let's update it now
+    // then it will be updated on each puzzle completion
+    if (initialContext.userId != null) {
+      _updateUserRating();
+    }
+
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleRepository _repository(LichessClient client) =>
-      PuzzleRepository(client);
+  PuzzleRepository _repository(LichessClient client) => PuzzleRepository(client);
 
-  PuzzleState _loadNewContext(
-    PuzzleContext context,
-    PuzzleStreak? streak,
-  ) {
+  Future<void> _updateUserRating() async {
+    try {
+      final data = await ref.withClient((client) => _repository(client).selectBatch(nb: 0));
+      final glicko = data.glicko;
+      if (glicko != null) {
+        state = state.copyWith(glicko: glicko);
+      }
+    } catch (_) {}
+  }
+
+  PuzzleState _loadNewContext(PuzzleContext context, PuzzleStreak? streak) {
     final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
@@ -79,9 +88,7 @@ class PuzzleController extends _$PuzzleController {
 
     // enable solution button after 4 seconds
     _enableSolutionButtonTimer = Timer(const Duration(seconds: 4), () {
-      state = state.copyWith(
-        canViewSolution: true,
-      );
+      state = state.copyWith(canViewSolution: true);
     });
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
@@ -99,9 +106,7 @@ class PuzzleController extends _$PuzzleController {
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).position.ply.isEven
-          ? Side.white
-          : Side.black,
+      pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -113,24 +118,25 @@ class PuzzleController extends _$PuzzleController {
     );
   }
 
-  Future<void> onUserMove(Move move) async {
+  Future<void> onUserMove(NormalMove move) async {
+    if (isPromotionPawnMove(state.position, move)) {
+      state = state.copyWith(promotionMove: move);
+      return;
+    }
+
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
-      final movesToTest =
-          nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
+      final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
       final isGoodMove = state.puzzle.testSolution(movesToTest);
 
       if (isGoodMove) {
-        state = state.copyWith(
-          feedback: PuzzleFeedback.good,
-        );
+        state = state.copyWith(feedback: PuzzleFeedback.good);
 
         final isCheckmate = movesToTest.last.san.endsWith('#');
-        final nextUci =
-            state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
+        final nextUci = state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
           _completePuzzle();
@@ -138,16 +144,14 @@ class PuzzleController extends _$PuzzleController {
         // another puzzle move: let's continue
         else if (nextUci != null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _addMove(Move.fromUci(nextUci)!);
+          _addMove(Move.parse(nextUci)!);
         }
         // no more puzzle move: it's a win
         else {
           _completePuzzle();
         }
       } else {
-        state = state.copyWith(
-          feedback: PuzzleFeedback.bad,
-        );
+        state = state.copyWith(feedback: PuzzleFeedback.bad);
         _onFailOrWin(PuzzleResult.lose);
         if (initialStreak == null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -157,20 +161,28 @@ class PuzzleController extends _$PuzzleController {
     }
   }
 
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      state = state.copyWith(promotionMove: null);
+      return;
+    }
+    final promotionMove = state.promotionMove;
+    if (promotionMove != null) {
+      final move = promotionMove.withPromotion(role);
+      onUserMove(move);
+    }
+  }
+
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
-    state = state.copyWith(
-      viewedSolutionRecently: false,
-    );
+    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
-    state = state.copyWith(
-      viewedSolutionRecently: false,
-    );
+    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void viewSolution() {
@@ -178,15 +190,11 @@ class PuzzleController extends _$PuzzleController {
 
     _mergeSolution();
 
-    state = state.copyWith(
-      node: _gameTree.branchAt(state.currentPath).view,
-    );
+    state = state.copyWith(node: _gameTree.branchAt(state.currentPath).view);
 
     _onFailOrWin(PuzzleResult.lose);
 
-    state = state.copyWith(
-      mode: PuzzleMode.view,
-    );
+    state = state.copyWith(mode: PuzzleMode.view);
 
     Timer(const Duration(milliseconds: 800), () {
       _goToNextNode();
@@ -205,79 +213,63 @@ class PuzzleController extends _$PuzzleController {
       state = state.copyWith.streak!(hasSkipped: true);
       final moveIndex = state.currentPath.size - state.initialPath.size;
       final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(Move.fromUci(solution)!);
+      onUserMove(NormalMove.fromUci(solution));
     }
   }
 
   Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
-    state = state.copyWith(
-      isChangingDifficulty: true,
-    );
+    state = state.copyWith(isChangingDifficulty: true);
 
-    await ref
-        .read(
-          puzzlePreferencesProvider(initialContext.userId).notifier,
-        )
-        .setDifficulty(difficulty);
+    await ref.read(puzzlePreferencesProvider.notifier).setDifficulty(difficulty);
 
-    final nextPuzzle = _service.resetBatch(
+    final nextPuzzle = (await _service).resetBatch(
       userId: initialContext.userId,
       angle: initialContext.angle,
     );
 
-    state = state.copyWith(
-      isChangingDifficulty: false,
-    );
+    state = state.copyWith(isChangingDifficulty: false);
 
     return nextPuzzle;
   }
 
-  void loadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
+  void onLoadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
     ref.read(evaluationServiceProvider).disposeEngine();
 
     state = _loadNewContext(nextContext, nextStreak ?? state.streak);
+    _saveCurrentStreakLocally();
   }
 
-  void sendStreakResult() {
+  void _saveCurrentStreakLocally() {
+    if (state.streak != null) {
+      ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
+    }
+  }
+
+  void _sendStreakResult() {
+    ref.read(streakStorageProvider(initialContext.userId)).clearActiveStreak();
+
     if (initialContext.userId != null) {
       final streak = state.streak?.index;
       if (streak != null && streak > 0) {
-        ref.withClient(
-          (client) => _repository(client).postStreakRun(streak),
-        );
+        ref.withClient((client) => _repository(client).postStreakRun(streak));
       }
     }
   }
 
-  FutureResult<PuzzleContext?> retryFetchNextStreakPuzzle(
-    PuzzleStreak streak,
-  ) async {
-    state = state.copyWith(
-      nextPuzzleStreakFetchIsRetrying: true,
-    );
+  FutureResult<PuzzleContext?> retryFetchNextStreakPuzzle(PuzzleStreak streak) async {
+    state = state.copyWith(nextPuzzleStreakFetchIsRetrying: true);
 
     final result = await _fetchNextStreakPuzzle(streak);
 
-    state = state.copyWith(
-      nextPuzzleStreakFetchIsRetrying: false,
-    );
+    state = state.copyWith(nextPuzzleStreakFetchIsRetrying: false);
 
     result.match(
       onSuccess: (nextContext) {
         if (nextContext != null) {
-          state = state.copyWith(
-            streak: streak.copyWith(
-              index: streak.index + 1,
-            ),
-          );
+          state = state.copyWith(streak: streak.copyWith(index: streak.index + 1));
         } else {
           // no more puzzle
-          state = state.copyWith(
-            streak: streak.copyWith(
-              index: streak.index + 1,
-              finished: true,
-            ),
-          );
+          state = state.copyWith(streak: streak.copyWith(index: streak.index + 1, finished: true));
         }
       },
     );
@@ -288,25 +280,24 @@ class PuzzleController extends _$PuzzleController {
   FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
     return streak.nextId != null
         ? Result.capture(
-            ref.withClient(
-              (client) => _repository(client).fetch(streak.nextId!).then(
-                    (puzzle) => PuzzleContext(
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                      puzzle: puzzle,
-                      userId: initialContext.userId,
-                    ),
+          ref.withClient(
+            (client) => _repository(client)
+                .fetch(streak.nextId!)
+                .then(
+                  (puzzle) => PuzzleContext(
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    puzzle: puzzle,
+                    userId: initialContext.userId,
                   ),
-            ),
-          )
+                ),
+          ),
+        )
         : Future.value(Result.value(null));
   }
 
   void _goToNextNode({bool replaying = false}) {
     if (state.node.children.isEmpty) return;
-    _setPath(
-      state.currentPath + state.node.children.first.id,
-      replaying: replaying,
-    );
+    _setPath(state.currentPath + state.node.children.first.id, replaying: replaying);
   }
 
   void _goToPreviousNode({bool replaying = false}) {
@@ -314,24 +305,19 @@ class PuzzleController extends _$PuzzleController {
   }
 
   Future<void> _completePuzzle() async {
-    state = state.copyWith(
-      mode: PuzzleMode.view,
-    );
+    state = state.copyWith(mode: PuzzleMode.view);
     await _onFailOrWin(state.result ?? PuzzleResult.win);
   }
 
   Future<void> _onFailOrWin(PuzzleResult result) async {
     if (state.resultSent) return;
 
-    state = state.copyWith(
-      result: result,
-      resultSent: true,
-    );
+    state = state.copyWith(result: result, resultSent: true);
 
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await _service.solve(
+      final next = await (await _service).solve(
         userId: initialContext.userId,
         angle: initialContext.angle,
         puzzle: state.puzzle,
@@ -342,34 +328,23 @@ class PuzzleController extends _$PuzzleController {
         ),
       );
 
-      state = state.copyWith(
-        nextContext: next,
-      );
+      state = state.copyWith(nextContext: next);
 
       ref
-          .read(
-            puzzleSessionProvider(initialContext.userId, initialContext.angle)
-                .notifier,
-          )
-          .addAttempt(
-            state.puzzle.puzzle.id,
-            win: result == PuzzleResult.win,
-          );
+          .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
+          .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
       final rounds = next?.rounds;
       if (rounds != null) {
         ref
-            .read(
-              puzzleSessionProvider(initialContext.userId, initialContext.angle)
-                  .notifier,
-            )
+            .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
             .setRatingDiffs(rounds);
       }
 
       if (next != null &&
           result == PuzzleResult.win &&
-          ref.read(puzzlePreferencesProvider(initialContext.userId)).autoNext) {
-        loadPuzzle(next);
+          ref.read(puzzlePreferencesProvider).autoNext) {
+        onLoadPuzzle(next);
       }
     } else {
       // one fail and streak is over
@@ -381,11 +356,9 @@ class PuzzleController extends _$PuzzleController {
         state = state.copyWith(
           mode: PuzzleMode.view,
           node: _gameTree.branchAt(state.currentPath).view,
-          streak: state.streak!.copyWith(
-            finished: true,
-          ),
+          streak: state.streak!.copyWith(finished: true),
         );
-        sendStreakResult();
+        _sendStreakResult();
       } else {
         if (_nextPuzzleFuture == null) {
           assert(false, 'next puzzle future cannot be null with streak');
@@ -396,22 +369,17 @@ class PuzzleController extends _$PuzzleController {
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
                 soundService.play(Sound.confirmation);
-                loadPuzzle(
+                onLoadPuzzle(
                   nextContext,
-                  nextStreak:
-                      state.streak!.copyWith(index: state.streak!.index + 1),
+                  nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
                 );
               } else {
                 // no more puzzle
-                state = state.copyWith.streak!(
-                  finished: true,
-                );
+                state = state.copyWith.streak!(finished: true);
               }
             },
             onError: (error, _) {
-              state = state.copyWith(
-                nextPuzzleStreakFetchError: true,
-              );
+              state = state.copyWith(nextPuzzleStreakFetchError: true);
             },
           );
         }
@@ -419,11 +387,7 @@ class PuzzleController extends _$PuzzleController {
     }
   }
 
-  void _setPath(
-    UciPath path, {
-    bool replaying = false,
-    bool firstMove = false,
-  }) {
+  void _setPath(UciPath path, {bool replaying = false, bool firstMove = false}) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
@@ -451,6 +415,7 @@ class PuzzleController extends _$PuzzleController {
       currentPath: path,
       node: newNode,
       lastMove: sanMove.move,
+      promotionMove: null,
     );
 
     if (pathChange) {
@@ -459,9 +424,7 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void toggleLocalEvaluation() {
-    state = state.copyWith(
-      isLocalEvalEnabled: !state.isLocalEvalEnabled,
-    );
+    state = state.copyWith(isLocalEvalEnabled: !state.isLocalEvalEnabled);
     if (state.isLocalEvalEnabled) {
       ref.read(evaluationServiceProvider).initEngine(state.evaluationContext);
       _startEngineEval();
@@ -473,9 +436,8 @@ class PuzzleController extends _$PuzzleController {
   String makePgn() {
     final initPosition = _gameTree.nodeAt(state.initialPath).position;
     var currentPosition = initPosition;
-    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([],
-        (List<String> acc, move) {
-      final moveObj = Move.fromUci(move);
+    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([], (List<String> acc, move) {
+      final moveObj = Move.parse(move);
       if (moveObj != null) {
         final String san;
         (currentPosition, san) = currentPosition.makeSan(moveObj);
@@ -488,8 +450,9 @@ class PuzzleController extends _$PuzzleController {
     return pgn;
   }
 
-  void _startEngineEval() {
+  Future<void> _startEngineEval() async {
     if (!state.isEngineEnabled) return;
+    await ref.read(evaluationServiceProvider).ensureEngineInitialized(state.evaluationContext);
     _engineEvalDebounce(
       () => ref
           .read(evaluationServiceProvider)
@@ -500,11 +463,14 @@ class PuzzleController extends _$PuzzleController {
             shouldEmit: (work) => work.path == state.currentPath,
           )
           ?.forEach((t) {
-        final (work, eval) = t;
-        _gameTree.updateAt(work.path, (node) {
-          node.eval = eval;
-        });
-      }),
+            final (work, eval) = t;
+            _gameTree.updateAt(work.path, (node) {
+              node.eval = eval;
+            });
+            if (work.path == state.currentPath && eval.searchTime >= work.searchTime) {
+              state = state.copyWith(node: _gameTree.branchAt(state.currentPath).view);
+            }
+          }),
     );
   }
 
@@ -524,18 +490,10 @@ class PuzzleController extends _$PuzzleController {
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
-        final move = Move.fromUci(uci);
+        final move = Move.parse(uci);
         final (pos, nodes) = previous;
         final (newPos, newSan) = pos.makeSan(move!);
-        return (
-          newPos,
-          nodes.add(
-            Branch(
-              position: newPos,
-              sanMove: SanMove(newSan, move),
-            ),
-          ),
-        );
+        return (newPos, nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, move))));
       },
     );
     _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
@@ -562,6 +520,7 @@ class PuzzleState with _$PuzzleState {
     required Side pov,
     required ViewBranch node,
     Move? lastMove,
+    NormalMove? promotionMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,
@@ -581,16 +540,13 @@ class PuzzleState with _$PuzzleState {
     return mode == PuzzleMode.view && isLocalEvalEnabled;
   }
 
-  EvaluationContext get evaluationContext => EvaluationContext(
-        variant: Variant.standard,
-        initialPosition: initialPosition,
-      );
+  EvaluationContext get evaluationContext =>
+      EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
 
   Position get position => node.position;
   String get fen => node.position.fen;
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
-  bool get canGoBack =>
-      mode == PuzzleMode.view && currentPath.size > initialPath.size;
+  bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }

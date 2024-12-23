@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 
 class YesNoDialog extends StatelessWidget {
   const YesNoDialog({
@@ -20,37 +21,13 @@ class YesNoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        title: title,
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: onNo,
-            child: Text(context.l10n.no),
-          ),
-          CupertinoDialogAction(
-            onPressed: onYes,
-            child: Text(context.l10n.yes),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        title: title,
-        content: content,
-        alignment: alignment,
-        actions: [
-          TextButton(
-            onPressed: onNo,
-            child: Text(context.l10n.no),
-          ),
-          TextButton(
-            onPressed: onYes,
-            child: Text(context.l10n.yes),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      title: title,
+      content: content,
+      actions: [
+        PlatformDialogAction(onPressed: onNo, child: Text(context.l10n.no)),
+        PlatformDialogAction(onPressed: onYes, child: Text(context.l10n.yes)),
+      ],
+    );
   }
 }
