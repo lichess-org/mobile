@@ -89,10 +89,10 @@ class PlatformCard extends StatelessWidget {
       maxScaleFactor: kCardTextScaleFactor,
       child:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? Card(
+              ? Card.filled(
                 margin: margin ?? EdgeInsets.zero,
-                elevation: elevation ?? 0,
-                color: color ?? Styles.cupertinoCardColor.resolveFrom(context),
+                // elevation: elevation ?? 0,
+                color: color,
                 shadowColor: shadowColor,
                 shape:
                     borderRadius != null

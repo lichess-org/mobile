@@ -1,4 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -121,80 +122,72 @@ class _AppState extends ConsumerState<Application> {
     final generalPrefs = ref.watch(generalPreferencesProvider);
 
     final brightness = ref.watch(currentBrightnessProvider);
-    final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
-        // TODO remove this workaround when the dynamic_color colorScheme bug is fixed
-        // See: https://github.com/material-foundation/flutter-packages/issues/574
-        final (fixedLightScheme, fixedDarkScheme) =
-            lightColorScheme != null && darkColorScheme != null
-                ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
-                : (null, null);
-
         final isTablet = isTabletOrLarger(context);
         final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-        final dynamicColorScheme =
-            brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
+        final colorScheme =
+            brightness == Brightness.light ? AppTheme.light.colorScheme : AppTheme.dark.colorScheme;
 
-        final ColorScheme colorScheme = switch (generalPrefs.appThemeSeed) {
-          AppThemeSeed.board => ColorScheme.fromSeed(
-            seedColor: boardTheme.colors.darkSquare,
-            brightness: brightness,
-          ),
-          AppThemeSeed.system =>
-            dynamicColorScheme ??
-                ColorScheme.fromSeed(
-                  seedColor: boardTheme.colors.darkSquare,
-                  brightness: brightness,
-                ),
-        };
+        // final appTheme = brightness == Brightness.light ? AppTheme.light : AppTheme.dark;
 
-        final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: colorScheme.primary,
-          primaryContrastingColor: colorScheme.onPrimary,
-          brightness: brightness,
-          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-            primaryColor: colorScheme.primary,
-            textStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.textStyle.copyWith(color: Styles.cupertinoLabelColor),
-            navTitleTextStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-            navLargeTitleTextStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-          ),
-          scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
-          barBackgroundColor:
-              isTablet ? Styles.cupertinoTabletAppBarColor : Styles.cupertinoAppBarColor,
-        );
+        // final cupertinoThemeData = CupertinoThemeData(
+        //   primaryColor: colorScheme.primary,
+        //   primaryContrastingColor: colorScheme.onPrimary,
+        //   brightness: brightness,
+        //   textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+        //     primaryColor: colorScheme.primary,
+        //     textStyle: CupertinoTheme.of(
+        //       context,
+        //     ).textTheme.textStyle.copyWith(color: colorScheme.onSurface),
+        //     navTitleTextStyle: CupertinoTheme.of(
+        //       context,
+        //     ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+        //     navLargeTitleTextStyle: CupertinoTheme.of(
+        //       context,
+        //     ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+        //   ),
+        //   scaffoldBackgroundColor: colorScheme.surface,
+        //   barBackgroundColor: appTheme.appBarTheme.backgroundColor?.withValues(
+        //     alpha: isTablet ? 1.0 : 0.9,
+        //   ),
+        //   applyThemeToAll: true,
+        // );
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
           onGenerateTitle: (BuildContext context) => 'lichess.org',
           locale: generalPrefs.locale,
-          theme: ThemeData.from(
-            colorScheme: colorScheme,
+          theme: AppTheme.light.copyWith(
             textTheme:
-                isIOS
-                    ? brightness == Brightness.light
-                        ? Typography.blackCupertino
-                        : Styles.whiteCupertinoTextTheme
-                    : null,
-          ).copyWith(
-            splashFactory: isIOS ? NoSplash.splashFactory : null,
-            cupertinoOverrideTheme: cupertinoThemeData,
+                Theme.of(context).platform == TargetPlatform.iOS ? Typography.blackCupertino : null,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
             ),
             extensions: [lichessCustomColors.harmonized(colorScheme)],
           ),
+          darkTheme: AppTheme.dark
+              .copyWith(
+                textTheme:
+                    isIOS
+                        ? brightness == Brightness.light
+                            ? Typography.blackCupertino
+                            : Styles.whiteCupertinoTextTheme
+                        : null,
+              )
+              .copyWith(
+                splashFactory: isIOS ? NoSplash.splashFactory : null,
+                // cupertinoOverrideTheme: cupertinoThemeData,
+                navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+                ),
+                extensions: [lichessCustomColors.harmonized(colorScheme)],
+              ),
           themeMode: switch (generalPrefs.themeMode) {
             BackgroundThemeMode.light => ThemeMode.light,
             BackgroundThemeMode.dark => ThemeMode.dark,
@@ -203,15 +196,16 @@ class _AppState extends ConsumerState<Application> {
           builder:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? (context, child) {
-                    return CupertinoTheme(
-                      data: cupertinoThemeData,
-                      child: IconTheme.merge(
-                        data: IconThemeData(
-                          color: CupertinoTheme.of(context).textTheme.textStyle.color,
-                        ),
-                        child: Material(child: child),
-                      ),
-                    );
+                    // return CupertinoTheme(
+                    //   data: cupertinoThemeData,
+                    //   child: IconTheme.merge(
+                    //     data: IconThemeData(
+                    //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                    //     ),
+                    //     child: Material(child: child),
+                    //   ),
+                    // );
+                    return Material(child: child);
                   }
                   : null,
           home: const BottomNavScaffold(),
@@ -220,6 +214,44 @@ class _AppState extends ConsumerState<Application> {
       },
     );
   }
+}
+
+/// The [AppTheme] defines light and dark themes for the app.
+///
+/// Theme setup for FlexColorScheme package v8.
+/// Use same major flex_color_scheme package version. If you use a
+/// lower minor version, some properties may not be supported.
+/// In that case, remove them after copying this theme to your
+/// app or upgrade package to version 8.0.2.
+///
+/// Use in [MaterialApp] like this:
+///
+/// MaterialApp(
+///  theme: AppTheme.light,
+///  darkTheme: AppTheme.dark,
+///  :
+/// );
+sealed class AppTheme {
+  // The defined light theme.
+  static ThemeData light = FlexThemeData.light(
+    scheme: FlexScheme.espresso,
+    surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
+    blendLevel: 1,
+    appBarStyle: FlexAppBarStyle.background,
+    bottomAppBarElevation: 2.0,
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+  );
+  // The defined dark theme.
+  static ThemeData dark = FlexThemeData.dark(
+    scheme: FlexScheme.espresso,
+    surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
+    blendLevel: 2,
+    appBarStyle: FlexAppBarStyle.background,
+    bottomAppBarElevation: 2.0,
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+  );
 }
 
 // --
