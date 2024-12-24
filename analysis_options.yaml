@@ -7,8 +7,8 @@
 
 # The following lines activate a set of recommended lints.
 include:
-  - package:lint/strict.yaml
   - package:flutter_lints/flutter.yaml
+  - package:lint/strict.yaml
 
 analyzer:
   language:
