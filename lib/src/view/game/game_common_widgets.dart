@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -81,6 +82,7 @@ class GameAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shouldPreventGoingBackAsync =
         id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
@@ -97,7 +99,10 @@ class GameAppBar extends ConsumerWidget {
               : const SizedBox.shrink(),
       actions: [
         const ToggleSoundButton(),
-        if (id != null) ...[BookmarkButton(id: id!.gameId), _SettingButton(id: id!)],
+        if (id != null) ...[
+          if (isLoggedIn) BookmarkButton(id: id!.gameId),
+          _SettingButton(id: id!),
+        ],
       ],
     );
   }
