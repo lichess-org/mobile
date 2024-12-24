@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -26,8 +27,11 @@ import 'game_settings.dart';
 import 'ping_rating.dart';
 
 class BookmarkButton extends ConsumerWidget {
-  const BookmarkButton({required this.id});
+  const BookmarkButton({required this.id, this.bookmarked = false});
+
   final GameId id;
+  final bool bookmarked;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
@@ -35,14 +39,16 @@ class BookmarkButton extends ConsumerWidget {
         ref.withClient((client) => GameRepository(client).bookmark(id, v: 1));
       },
       semanticsLabel: context.l10n.bookmarkThisGame,
-      icon: const Icon(Icons.star_border_rounded),
+      icon: Icon(bookmarked ? Icons.star : Icons.star_outline_rounded),
     );
   }
 }
 
 class _SettingButton extends ConsumerWidget {
   const _SettingButton({required this.id});
+
   final GameFullId id;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
@@ -81,6 +87,7 @@ class GameAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shouldPreventGoingBackAsync =
         id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
@@ -97,7 +104,10 @@ class GameAppBar extends ConsumerWidget {
               : const SizedBox.shrink(),
       actions: [
         const ToggleSoundButton(),
-        if (id != null) ...[BookmarkButton(id: id!.gameId), _SettingButton(id: id!)],
+        if (id != null) ...[
+          if (isLoggedIn) BookmarkButton(id: id!.gameId),
+          _SettingButton(id: id!),
+        ],
       ],
     );
   }

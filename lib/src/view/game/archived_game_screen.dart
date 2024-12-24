@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -44,8 +45,15 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
+
     if (gameData != null) {
-      return _Body(gameData: gameData, orientation: orientation, initialCursor: initialCursor);
+      return _Body(
+        gameData: gameData,
+        orientation: orientation,
+        isLoggedIn: isLoggedIn,
+        initialCursor: initialCursor,
+      );
     } else {
       return _LoadGame(gameId: gameId!, orientation: orientation, initialCursor: initialCursor);
     }
@@ -62,11 +70,24 @@ class _LoadGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
+
     return game.when(
       data: (game) {
-        return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
+        return _Body(
+          gameData: game.data,
+          orientation: orientation,
+          isLoggedIn: isLoggedIn,
+          initialCursor: initialCursor,
+        );
       },
-      loading: () => _Body(gameData: null, orientation: orientation, initialCursor: initialCursor),
+      loading:
+          () => _Body(
+            gameData: null,
+            orientation: orientation,
+            isLoggedIn: isLoggedIn,
+            initialCursor: initialCursor,
+          ),
       error: (error, stackTrace) {
         debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         switch (error) {
@@ -74,6 +95,7 @@ class _LoadGame extends ConsumerWidget {
             return _Body(
               gameData: null,
               orientation: orientation,
+              isLoggedIn: isLoggedIn,
               initialCursor: initialCursor,
               error: 'Game not found.',
             );
@@ -81,6 +103,7 @@ class _LoadGame extends ConsumerWidget {
             return _Body(
               gameData: null,
               orientation: orientation,
+              isLoggedIn: isLoggedIn,
               initialCursor: initialCursor,
               error: error,
             );
@@ -91,10 +114,17 @@ class _LoadGame extends ConsumerWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
+  const _Body({
+    required this.gameData,
+    required this.orientation,
+    required this.isLoggedIn,
+    this.initialCursor,
+    this.error,
+  });
 
   final LightArchivedGame? gameData;
   final Object? error;
+  final bool isLoggedIn;
   final Side orientation;
   final int? initialCursor;
 
@@ -105,7 +135,8 @@ class _Body extends StatelessWidget {
         title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
         actions: [
           if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
-          if (gameData != null) BookmarkButton(id: gameData!.id),
+          if (gameData != null && isLoggedIn)
+            BookmarkButton(id: gameData!.id, bookmarked: gameData!.bookmarked!),
           const ToggleSoundButton(),
         ],
       ),

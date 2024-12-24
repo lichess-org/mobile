@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -74,12 +75,13 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
     final prefs = ref.watch(analysisPreferencesProvider);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     final appBarActions = [
       if (prefs.enableComputerAnalysis)
         EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      if (widget.options.gameId != null) BookmarkButton(id: widget.options.gameId!),
+      if (widget.options.gameId != null && isLoggedIn) BookmarkButton(id: widget.options.gameId!),
       AppBarIconButton(
         onPressed: () {
           pushPlatformRoute(

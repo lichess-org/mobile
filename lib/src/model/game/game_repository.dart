@@ -34,6 +34,7 @@ class GameRepository {
     int max = 20,
     DateTime? until,
     GameFilterState filter = const GameFilterState(),
+    bool withBookmarked = false,
   }) {
     assert(!filter.perfs.contains(Perf.fromPosition));
     assert(!filter.perfs.contains(Perf.puzzle));
@@ -53,6 +54,7 @@ class GameRepository {
               if (filter.perfs.isNotEmpty)
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
+              if (withBookmarked) 'withBookmarked': 'true',
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
@@ -92,11 +94,13 @@ class GameRepository {
     );
   }
 
-  Future<void> bookmark(GameId id, {int v = -1}) async {
-    // if v is -1, toggle the bookmark value on server
-    // otherwise explicitly set the new value
+  Future<void> bookmark(GameId id, {int? v}) async {
+    // if v is not set, toggle the bookmark value on server
+    // otherwise explicitly set the new value with 0 to not
+    // bookmark the game and 1 to bookmark it
+    assert(v == null || v == 0 || v == 1);
     final uri =
-        v == -1
+        v == null
             ? Uri(path: '/bookmark/$id')
             : Uri(path: '/bookmark/$id', queryParameters: {'v': v.toString()});
     final response = await client.post(uri);

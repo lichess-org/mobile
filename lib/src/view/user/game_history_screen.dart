@@ -141,6 +141,7 @@ class _BodyState extends ConsumerState<_Body> {
     final gameListState = ref.watch(
       userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
     );
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return gameListState.when(
       data: (state) {
@@ -173,30 +174,36 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
-                return Slidable(
-                  endActionPane: ActionPane(
-                    motion: const ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          ref.withClient(
-                            (client) => GameRepository(client).bookmark(list[index].game.id, v: 1),
-                          );
-                        },
-                        icon: Icons.star_outline_rounded,
-                        label: 'Bookmark',
-                      ),
-                    ],
-                  ),
-                  child: ExtendedGameListTile(
-                    item: list[index],
-                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                    padding:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-                            : null,
-                  ),
+                final gameTile = ExtendedGameListTile(
+                  item: list[index],
+                  // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                  padding:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                          : null,
                 );
+
+                final game = list[index].game;
+
+                return isLoggedIn
+                    ? Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              ref.withClient(
+                                (client) => GameRepository(client).bookmark(game.id, v: 1),
+                              );
+                            },
+                            icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
+                            label: context.l10n.bookmarkThisGame,
+                          ),
+                        ],
+                      ),
+                      child: gameTile,
+                    )
+                    : gameTile;
               },
             );
       },
