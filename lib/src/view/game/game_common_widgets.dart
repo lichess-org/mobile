@@ -34,7 +34,7 @@ class BookmarkButton extends ConsumerWidget {
       onPressed: () {
         ref.withClient((client) => GameRepository(client).bookmark(id, v: 1));
       },
-      semanticsLabel: 'Bookmark Game',
+      semanticsLabel: context.l10n.bookmarkThisGame,
       icon: const Icon(Icons.star_border_rounded),
     );
   }
