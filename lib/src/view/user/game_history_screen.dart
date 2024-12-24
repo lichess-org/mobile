@@ -1,12 +1,15 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -138,6 +141,7 @@ class _BodyState extends ConsumerState<_Body> {
     final gameListState = ref.watch(
       userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
     );
+    final isLoggedIn = ref.watch(authSessionProvider) == null;
 
     return gameListState.when(
       data: (state) {
@@ -170,15 +174,35 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
-                return ExtendedGameListTile(
+                final gameTile = ExtendedGameListTile(
                   item: list[index],
-                  userId: widget.user?.id,
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
                 );
+
+                return isLoggedIn
+                    ? Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              ref.withClient(
+                                (client) =>
+                                    GameRepository(client).bookmark(list[index].game.id, v: 1),
+                              );
+                            },
+                            icon: Icons.star_outline_rounded,
+                            label: 'Bookmark',
+                          ),
+                        ],
+                      ),
+                      child: gameTile,
+                    )
+                    : gameTile;
               },
             );
       },

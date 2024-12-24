@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -110,6 +111,8 @@ class _ContextMenu extends ConsumerWidget {
     final orientation = mySide;
 
     final customColors = Theme.of(context).extension<CustomColors>();
+
+    final isLoggedIn = ref.watch(authSessionProvider) == null;
 
     return BottomSheetScrollableContainer(
       children: [
@@ -234,6 +237,15 @@ class _ContextMenu extends ConsumerWidget {
           closeOnPressed: false,
           child: Text(context.l10n.mobileShareGameURL),
         ),
+        if (isLoggedIn)
+          BottomSheetContextMenuAction(
+            onPressed: () {
+              ref.withClient((client) => GameRepository(client).bookmark(game.id, v: 1));
+            },
+            icon: Icons.star_border_rounded,
+            closeOnPressed: false,
+            child: const Text('Bookmark Game'),
+          ),
         // Builder is used to retrieve the context immediately surrounding the
         // BottomSheetContextMenuAction
         // This is necessary to get the correct context for the iPad share dialog
@@ -359,11 +371,9 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId, this.padding});
+  const ExtendedGameListTile({required this.item, this.padding});
 
   final LightArchivedGameWithPov item;
-  final UserId? userId;
-
   final EdgeInsetsGeometry? padding;
 
   @override
