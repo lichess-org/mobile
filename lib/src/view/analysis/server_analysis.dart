@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.options);
+  const ServerAnalysisSummary(this.options, {super.key});
 
   final AnalysisOptions options;
 
@@ -295,7 +295,7 @@ class _SummaryPlayerName extends StatelessWidget {
 }
 
 class AcplChart extends ConsumerWidget {
-  const AcplChart(this.options);
+  const AcplChart(this.options, {super.key});
 
   final AnalysisOptions options;
 

@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastGameSettings extends ConsumerWidget {
-  const BroadcastGameSettings(this.roundId, this.gameId);
+  const BroadcastGameSettings(this.roundId, this.gameId, {super.key});
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;

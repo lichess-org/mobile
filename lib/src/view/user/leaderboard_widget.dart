@@ -13,6 +13,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 ///
 /// The title routes to a Leaderboard Screen with the top 10 players for each perf.
 class LeaderboardWidget extends ConsumerWidget {
+  const LeaderboardWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leaderboardState = ref.watch(top1Provider);

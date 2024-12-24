@@ -37,7 +37,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 enum _ViewMode { create, challenges }
 
 class CreateCustomGameScreen extends StatelessWidget {
-  const CreateCustomGameScreen();
+  const CreateCustomGameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

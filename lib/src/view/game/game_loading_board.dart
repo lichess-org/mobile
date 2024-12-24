@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
-  const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
+  const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation, {super.key});
 
   final GameSeek seek;
   final Future<void> Function() cancelGameCreation;
@@ -92,7 +92,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
 }
 
 class ChallengeLoadingContent extends StatelessWidget {
-  const ChallengeLoadingContent(this.challenge, this.cancelChallenge);
+  const ChallengeLoadingContent(this.challenge, this.cancelChallenge, {super.key});
 
   final ChallengeRequest challenge;
   final Future<void> Function() cancelChallenge;
@@ -188,7 +188,7 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
 }
 
 class LoadGameError extends StatelessWidget {
-  const LoadGameError(this.errorMessage);
+  const LoadGameError(this.errorMessage, {super.key});
 
   final String errorMessage;
 
@@ -226,7 +226,7 @@ class LoadGameError extends StatelessWidget {
 
 /// A board that shows a message that a challenge has been declined.
 class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
+  const ChallengeDeclinedBoard({super.key, required this.declineReason, required this.challenge});
 
   final String declineReason;
   final Challenge challenge;

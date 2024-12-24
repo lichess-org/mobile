@@ -62,7 +62,7 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 class AccountPerfCards extends ConsumerWidget {
-  const AccountPerfCards({this.padding});
+  const AccountPerfCards({super.key, this.padding});
 
   final EdgeInsetsGeometry? padding;
 

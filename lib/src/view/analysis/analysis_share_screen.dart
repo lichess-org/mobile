@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
 class AnalysisShareScreen extends StatelessWidget {
-  const AnalysisShareScreen({required this.options});
+  const AnalysisShareScreen({super.key, required this.options});
 
   final AnalysisOptions options;
 

@@ -51,7 +51,7 @@ class _Body extends ConsumerWidget {
       children: [
         const Padding(padding: Styles.bodySectionPadding, child: _SearchButton()),
         if (session != null) _OnlineFriendsWidget(),
-        RatingPrefAware(child: LeaderboardWidget()),
+        const RatingPrefAware(child: LeaderboardWidget()),
       ],
     );
   }

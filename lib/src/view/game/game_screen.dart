@@ -56,13 +56,13 @@ class GameScreen extends ConsumerStatefulWidget {
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
-  _GameSource get source {
+  GameSource get source {
     if (initialGameId != null) {
-      return _GameSource.game;
+      return GameSource.game;
     } else if (challenge != null) {
-      return _GameSource.challenge;
+      return GameSource.challenge;
     } else {
-      return _GameSource.lobby;
+      return GameSource.lobby;
     }
   }
 
@@ -70,7 +70,7 @@ class GameScreen extends ConsumerStatefulWidget {
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
-enum _GameSource { lobby, challenge, game }
+enum GameSource { lobby, challenge, game }
 
 class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
@@ -94,7 +94,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   void didPop() {
-    if (mounted && (widget.source == _GameSource.lobby || widget.source == _GameSource.challenge)) {
+    if (mounted && (widget.source == GameSource.lobby || widget.source == GameSource.challenge)) {
       ref.invalidate(myRecentGamesProvider);
       ref.invalidate(accountProvider);
     }
@@ -126,7 +126,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                         ref.read(provider.notifier).loadGame(id);
                       },
                       onNewOpponentCallback: (game) {
-                        if (widget.source == _GameSource.lobby) {
+                        if (widget.source == GameSource.lobby) {
                           ref.read(provider.notifier).newOpponent();
                         } else {
                           final savedSetup = ref.read(gameSetupPreferencesProvider);

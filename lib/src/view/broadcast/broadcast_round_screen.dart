@@ -23,10 +23,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
 
-  const BroadcastRoundScreen({required this.broadcast});
+  const BroadcastRoundScreen({super.key, required this.broadcast});
 
   @override
-  _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
+  ConsumerState<BroadcastRoundScreen> createState() => _BroadcastRoundScreenState();
 }
 
 enum _CupertinoView { overview, boards, players }

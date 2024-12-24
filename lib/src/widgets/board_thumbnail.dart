@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
   const BoardThumbnail({
+    super.key,
     required this.size,
     required this.orientation,
     required this.fen,
@@ -18,7 +19,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.animationDuration,
   });
 
-  const BoardThumbnail.loading({required this.size, this.header, this.footer})
+  const BoardThumbnail.loading({super.key, required this.size, this.header, this.footer})
     : orientation = Side.white,
       fen = kInitialFEN,
       lastMove = null,
@@ -49,7 +50,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   final Duration? animationDuration;
 
   @override
-  _BoardThumbnailState createState() => _BoardThumbnailState();
+  ConsumerState<BoardThumbnail> createState() => _BoardThumbnailState();
 }
 
 class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {

@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
 
 class OpeningExplorerScreen extends ConsumerWidget {
-  const OpeningExplorerScreen({required this.options});
+  const OpeningExplorerScreen({super.key, required this.options});
 
   final AnalysisOptions options;
 

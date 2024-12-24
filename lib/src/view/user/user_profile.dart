@@ -23,7 +23,7 @@ import 'package:url_launcher/url_launcher.dart';
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
 class UserProfileWidget extends ConsumerWidget {
-  const UserProfileWidget({required this.user, this.bioMaxLines = 10});
+  const UserProfileWidget({super.key, required this.user, this.bioMaxLines = 10});
 
   final User user;
 

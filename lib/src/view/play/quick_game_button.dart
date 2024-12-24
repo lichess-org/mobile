@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class QuickGameButton extends ConsumerWidget {
-  const QuickGameButton();
+  const QuickGameButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

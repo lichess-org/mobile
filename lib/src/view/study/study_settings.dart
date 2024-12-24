@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class StudySettings extends ConsumerWidget {
-  const StudySettings(this.id);
+  const StudySettings(this.id, {super.key});
 
   final StudyId id;
 

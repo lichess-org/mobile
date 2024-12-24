@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 const kNextChapterButtonHeight = 32.0;
 
 class StudyTreeView extends ConsumerWidget {
-  const StudyTreeView(this.id);
+  const StudyTreeView(this.id, {super.key});
 
   final StudyId id;
 

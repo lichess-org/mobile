@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({required this.onTapMove, required this.clientEval, required this.isGameOver});
+  const EngineLines({super.key, required this.onTapMove, required this.clientEval, required this.isGameOver});
   final void Function(NormalMove move) onTapMove;
   final ClientEval? clientEval;
   final bool isGameOver;
@@ -49,9 +49,9 @@ class EngineLines extends ConsumerWidget {
 }
 
 class Engineline extends ConsumerWidget {
-  const Engineline(this.onTapMove, this.fromPosition, this.pvData);
+  const Engineline(this.onTapMove, this.fromPosition, this.pvData, {super.key});
 
-  const Engineline.empty()
+  const Engineline.empty({super.key})
     : onTapMove = null,
       pvData = const PvData(moves: IListConst([])),
       fromPosition = Chess.initial;

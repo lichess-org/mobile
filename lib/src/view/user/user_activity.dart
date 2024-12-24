@@ -285,7 +285,7 @@ class _ResultBox extends StatelessWidget {
 }
 
 class BriefGameResultBox extends StatelessWidget {
-  const BriefGameResultBox({required this.win, required this.draw, required this.loss});
+  const BriefGameResultBox({super.key, required this.win, required this.draw, required this.loss});
 
   final int win;
   final int draw;

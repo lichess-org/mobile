@@ -10,7 +10,7 @@ const double _kCurrCoordOpacity = 0.9;
 const double _kNextCoordOpacity = 0.7;
 
 class CoordinateDisplay extends ConsumerStatefulWidget {
-  const CoordinateDisplay({required this.currentCoord, required this.nextCoord});
+  const CoordinateDisplay({super.key, required this.currentCoord, required this.nextCoord});
 
   final Square currentCoord;
 

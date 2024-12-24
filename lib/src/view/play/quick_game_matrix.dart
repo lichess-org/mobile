@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 const _kMatrixSpacing = 4.0;
 
 class QuickGameMatrix extends StatelessWidget {
-  const QuickGameMatrix();
+  const QuickGameMatrix({super.key});
 
   @override
   Widget build(BuildContext context) {

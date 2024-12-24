@@ -66,7 +66,7 @@ class LagIndicator extends StatelessWidget {
 }
 
 class ConnectivityBanner extends ConsumerWidget {
-  const ConnectivityBanner();
+  const ConnectivityBanner({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -230,7 +230,7 @@ class CupertinoSnackBar extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? backgroundColor;
 
-  const CupertinoSnackBar({required this.message, this.textStyle, this.backgroundColor});
+  const CupertinoSnackBar({super.key, required this.message, this.textStyle, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {

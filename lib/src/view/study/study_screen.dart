@@ -39,7 +39,7 @@ import 'package:logging/logging.dart';
 final _logger = Logger('StudyScreen');
 
 class StudyScreen extends ConsumerWidget {
-  const StudyScreen({required this.id});
+  const StudyScreen({super.key, required this.id});
 
   final StudyId id;
 

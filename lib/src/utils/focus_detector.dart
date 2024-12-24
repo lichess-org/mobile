@@ -49,7 +49,7 @@ class FocusDetector extends StatefulWidget {
   final Widget child;
 
   @override
-  _FocusDetectorState createState() => _FocusDetectorState();
+  State<FocusDetector> createState() => _FocusDetectorState();
 }
 
 class _FocusDetectorState extends State<FocusDetector> with WidgetsBindingObserver {

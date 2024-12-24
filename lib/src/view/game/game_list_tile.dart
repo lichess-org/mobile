@@ -29,7 +29,7 @@ final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
-  const GameListTile({
+  const GameListTile({super.key, 
     required this.game,
     required this.mySide,
     required this.opponentTitle,
@@ -359,7 +359,7 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId, this.padding});
+  const ExtendedGameListTile({super.key, required this.item, this.userId, this.padding});
 
   final LightArchivedGameWithPov item;
   final UserId? userId;

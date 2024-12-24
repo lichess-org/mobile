@@ -456,7 +456,7 @@ class _PuzzleMenu extends ConsumerWidget {
 }
 
 class PuzzleHistoryWidget extends ConsumerWidget {
-  const PuzzleHistoryWidget({this.showHeader = true});
+  const PuzzleHistoryWidget({super.key, this.showHeader = true});
 
   final bool showHeader;
 

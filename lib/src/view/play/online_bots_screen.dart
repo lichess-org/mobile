@@ -37,7 +37,7 @@ final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async 
 });
 
 class OnlineBotsScreen extends StatelessWidget {
-  const OnlineBotsScreen();
+  const OnlineBotsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

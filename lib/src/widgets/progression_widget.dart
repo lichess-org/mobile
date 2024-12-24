@@ -8,7 +8,7 @@ class ProgressionWidget extends StatelessWidget {
   final int progress;
   final double fontSize;
 
-  const ProgressionWidget(this.progress, {this.fontSize = 20});
+  const ProgressionWidget(this.progress, {super.key, this.fontSize = 20});
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 ///
 /// Network requests are debounced and cached to avoid unnecessary requests.
 class OpeningExplorerView extends ConsumerStatefulWidget {
-  const OpeningExplorerView({
+  const OpeningExplorerView({super.key, 
     required this.position,
     required this.onMoveSelected,
     this.opening,

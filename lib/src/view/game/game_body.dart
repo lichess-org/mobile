@@ -46,7 +46,7 @@ import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 /// Handles the immersive mode through focus detection, and the pop scope to
 /// prevent the user from going back to the previous screen.
 class GameBody extends ConsumerWidget {
-  const GameBody({
+  const GameBody({super.key, 
     required this.id,
     required this.whiteClockKey,
     required this.blackClockKey,

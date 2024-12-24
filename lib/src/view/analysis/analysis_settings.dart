@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AnalysisSettings extends ConsumerWidget {
-  const AnalysisSettings(this.options);
+  const AnalysisSettings(this.options, {super.key});
 
   final AnalysisOptions options;
 

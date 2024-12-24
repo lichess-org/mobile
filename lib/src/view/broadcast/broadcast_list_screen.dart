@@ -281,7 +281,7 @@ class BroadcastCard extends StatefulWidget {
   final ImageColorWorker worker;
   final double aspectRatio;
 
-  const BroadcastCard.loading({required this.worker, required this.aspectRatio})
+  const BroadcastCard.loading({super.key, required this.worker, required this.aspectRatio})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),

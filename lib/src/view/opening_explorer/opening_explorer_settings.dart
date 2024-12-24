@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
-  const OpeningExplorerSettings();
+  const OpeningExplorerSettings({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

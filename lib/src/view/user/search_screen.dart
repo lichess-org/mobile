@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap});
+  const SearchScreen({super.key, this.onUserTap});
 
   final void Function(LightUser)? onUserTap;
 

@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerStatefulWidget {
-  const SmallBoardPreview({
+  const SmallBoardPreview({super.key, 
     required this.orientation,
     required this.fen,
     required this.description,
@@ -18,7 +18,7 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
     this.onTap,
   }) : _showLoadingPlaceholder = false;
 
-  const SmallBoardPreview.loading({this.padding})
+  const SmallBoardPreview.loading({super.key, this.padding})
     : orientation = Side.white,
       fen = kEmptyFEN,
       lastMove = null,

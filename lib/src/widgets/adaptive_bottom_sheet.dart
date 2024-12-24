@@ -47,7 +47,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
 ///
 /// This is meant for content that mostly fits on the screen, not for long lists.
 class BottomSheetScrollableContainer extends StatelessWidget {
-  const BottomSheetScrollableContainer({
+  const BottomSheetScrollableContainer({super.key, 
     required this.children,
     this.padding = const EdgeInsets.only(bottom: 16.0),
     this.scrollController,
@@ -70,7 +70,7 @@ class BottomSheetScrollableContainer extends StatelessWidget {
 }
 
 class BottomSheetContextMenuAction extends StatelessWidget {
-  const BottomSheetContextMenuAction({
+  const BottomSheetContextMenuAction({super.key, 
     required this.child,
     this.icon,
     this.onPressed,

@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 class AnalysisBoard extends ConsumerStatefulWidget {
   const AnalysisBoard(
     this.options,
-    this.boardSize, {
+    this.boardSize, {super.key, 
     this.borderRadius,
     this.enableDrawingShapes = true,
     this.shouldReplaceChildOnUserMove = false,

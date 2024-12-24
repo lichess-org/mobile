@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 const kOpeningHeaderHeight = 32.0;
 
 class AnalysisTreeView extends ConsumerWidget {
-  const AnalysisTreeView(this.options);
+  const AnalysisTreeView(this.options, {super.key});
 
   final AnalysisOptions options;
 

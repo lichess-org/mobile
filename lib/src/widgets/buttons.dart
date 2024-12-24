@@ -338,6 +338,7 @@ class AdaptiveInkWell extends StatelessWidget {
 /// `onTap` callback should be handled by the child widget.
 class RepeatButton extends StatefulWidget {
   const RepeatButton({
+    super.key,
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
@@ -362,7 +363,7 @@ class RepeatButton extends StatefulWidget {
   final Duration holdDelay;
 
   @override
-  _RepeatButtonState createState() => _RepeatButtonState();
+  State<RepeatButton> createState() => _RepeatButtonState();
 }
 
 class _RepeatButtonState extends State<RepeatButton> {
@@ -418,6 +419,7 @@ class _RepeatButtonState extends State<RepeatButton> {
 /// Will use [IconButton] on Android and [CupertinoIconButton] on iOS.
 class PlatformIconButton extends StatelessWidget {
   const PlatformIconButton({
+    super.key,
     required this.icon,
     required this.semanticsLabel,
     required this.onTap,

@@ -27,8 +27,9 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
     this.tournamentId,
     this.playerId,
     this.playerTitle,
-    this.playerName,
-  );
+    this.playerName, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

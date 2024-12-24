@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class BroadcastGameBottomBar extends ConsumerWidget {
-  const BroadcastGameBottomBar({
+  const BroadcastGameBottomBar({super.key, 
     required this.roundId,
     required this.gameId,
     this.tournamentSlug,

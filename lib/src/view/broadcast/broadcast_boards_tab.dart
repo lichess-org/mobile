@@ -24,7 +24,7 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({
+  const BroadcastBoardsTab({super.key, 
     required this.tournamentId,
     required this.roundId,
     required this.tournamentSlug,
@@ -79,7 +79,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
 }
 
 class BroadcastPreview extends StatelessWidget {
-  const BroadcastPreview({
+  const BroadcastPreview({super.key, 
     required this.tournamentId,
     required this.roundId,
     required this.games,
@@ -88,7 +88,7 @@ class BroadcastPreview extends StatelessWidget {
     required this.roundSlug,
   });
 
-  const BroadcastPreview.loading()
+  const BroadcastPreview.loading({super.key})
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
       games = null,

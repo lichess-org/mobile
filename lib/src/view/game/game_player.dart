@@ -311,7 +311,7 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
 }
 
 class MaterialDifferenceDisplay extends StatelessWidget {
-  const MaterialDifferenceDisplay({
+  const MaterialDifferenceDisplay({super.key, 
     required this.materialDiff,
     this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
   });

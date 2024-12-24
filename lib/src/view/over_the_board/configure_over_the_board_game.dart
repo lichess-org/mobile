@@ -154,7 +154,7 @@ void showConfigureDisplaySettings(BuildContext context) {
 }
 
 class OverTheBoardDisplaySettings extends ConsumerWidget {
-  const OverTheBoardDisplaySettings();
+  const OverTheBoardDisplaySettings({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -31,7 +31,7 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class CreateChallengeScreen extends StatelessWidget {
-  const CreateChallengeScreen(this.user);
+  const CreateChallengeScreen(this.user, {super.key});
 
   final LightUser user;
 

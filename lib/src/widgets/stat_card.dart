@@ -9,7 +9,7 @@ const _defaultValueFontSize = 18.0;
 
 class StatCard extends StatelessWidget {
   const StatCard(
-    this.stat, {
+    this.stat, {super.key, 
     this.child,
     this.value,
     this.padding,
@@ -66,7 +66,7 @@ class StatCard extends StatelessWidget {
 class StatCardRow extends StatelessWidget {
   final List<StatCard> cards;
 
-  const StatCardRow(this.cards);
+  const StatCardRow(this.cards, {super.key});
 
   @override
   Widget build(BuildContext context) {

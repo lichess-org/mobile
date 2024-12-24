@@ -72,7 +72,7 @@ class OpeningNameHeader extends StatelessWidget {
 
 /// Table of moves for the opening explorer.
 class OpeningExplorerMoveTable extends ConsumerWidget {
-  const OpeningExplorerMoveTable({
+  const OpeningExplorerMoveTable({super.key, 
     required this.moves,
     required this.whiteWins,
     required this.draws,
@@ -81,7 +81,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     this.isIndexing = false,
   }) : _isLoading = false;
 
-  const OpeningExplorerMoveTable.loading()
+  const OpeningExplorerMoveTable.loading({super.key})
     : _isLoading = true,
       moves = const IListConst([]),
       whiteWins = 0,
@@ -274,7 +274,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
 }
 
 class IndexingIndicator extends StatefulWidget {
-  const IndexingIndicator();
+  const IndexingIndicator({super.key});
 
   @override
   State<IndexingIndicator> createState() => _IndexingIndicatorState();

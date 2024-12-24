@@ -31,7 +31,7 @@ typedef EngineGaugeParams =
     });
 
 class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.displayMode, required this.params});
+  const EngineGauge({super.key, required this.displayMode, required this.params});
 
   final EngineGaugeDisplayMode displayMode;
 

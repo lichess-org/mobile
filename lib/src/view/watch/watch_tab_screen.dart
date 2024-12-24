@@ -64,7 +64,7 @@ class WatchTabScreen extends ConsumerStatefulWidget {
   const WatchTabScreen({super.key});
 
   @override
-  _WatchScreenState createState() => _WatchScreenState();
+  ConsumerState<WatchTabScreen> createState() => _WatchScreenState();
 }
 
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {

@@ -4,10 +4,10 @@ class ExpandedSection extends StatefulWidget {
   final Widget child;
   final bool expand;
 
-  const ExpandedSection({this.expand = false, required this.child});
+  const ExpandedSection({super.key, this.expand = false, required this.child});
 
   @override
-  _ExpandedSectionState createState() => _ExpandedSectionState();
+  State<ExpandedSection> createState() => _ExpandedSectionState();
 }
 
 class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {

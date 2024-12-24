@@ -63,7 +63,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 
 /// A screen that displays the full puzzle history.
 class PuzzleHistoryScreen extends StatelessWidget {
-  const PuzzleHistoryScreen();
+  const PuzzleHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +179,7 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class PuzzleHistoryBoard extends ConsumerWidget {
-  const PuzzleHistoryBoard(this.puzzle, this.boardWidth);
+  const PuzzleHistoryBoard(this.puzzle, this.boardWidth, {super.key});
 
   final PuzzleHistoryEntry puzzle;
   final double boardWidth;

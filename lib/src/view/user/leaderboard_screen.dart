@@ -82,7 +82,7 @@ class _Body extends ConsumerWidget {
 ///
 /// Optionaly Provide the [perfIcon] for the Variant of the List
 class LeaderboardListTile extends StatelessWidget {
-  const LeaderboardListTile({required this.user, this.perfIcon});
+  const LeaderboardListTile({super.key, required this.user, this.perfIcon});
   final LeaderboardUser user;
   final IconData? perfIcon;
 

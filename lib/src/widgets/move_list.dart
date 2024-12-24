@@ -14,7 +14,7 @@ const _kMoveListHeight = 40.0;
 enum MoveListType { inline, stacked }
 
 class MoveList extends ConsumerStatefulWidget {
-  const MoveList({
+  const MoveList({super.key, 
     required this.type,
     required this.slicedMoves,
     required this.currentMoveIndex,
@@ -161,7 +161,7 @@ class _MoveListState extends ConsumerState<MoveList> {
 }
 
 class InlineMoveCount extends StatelessWidget {
-  const InlineMoveCount({required this.count, required this.pieceNotation, this.color});
+  const InlineMoveCount({super.key, required this.count, required this.pieceNotation, this.color});
 
   final PieceNotation pieceNotation;
   final int count;
@@ -226,7 +226,7 @@ class InlineMoveItem extends StatelessWidget {
 }
 
 class StackedMoveCount extends StatelessWidget {
-  const StackedMoveCount({required this.count});
+  const StackedMoveCount({super.key, required this.count});
 
   final int count;
 

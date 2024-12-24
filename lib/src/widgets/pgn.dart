@@ -92,6 +92,7 @@ abstract class PgnTreeNotifier {
 /// Similarly, a [_SideLinePart] contains the moves sequence of a sideline where each node has only one child.
 class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   const DebouncedPgnTreeView({
+    super.key,
     required this.root,
     required this.currentPath,
     this.broadcastLivePath,
@@ -233,7 +234,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
 /// and ultimately evaluated in the [InlineMove] widget.
 ///
 /// Grouped in this record to improve readability.
-typedef _PgnTreeViewParams =
+typedef PgnTreeViewParams =
     ({
       /// Path to the currently selected move in the tree.
       UciPath pathToCurrentMove,
@@ -277,7 +278,7 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 }
 
 /// Returns whether this node has a sideline that should not be displayed inline.
-bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params) {
+bool _hasNonInlineSideLine(ViewNode node, PgnTreeViewParams params) {
   final children = _filteredChildren(node, params.shouldShowComputerVariations);
   return children.length > 2 || (children.length == 2 && !_displaySideLineAsInline(children[1]));
 }
@@ -285,7 +286,7 @@ bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params) {
 /// Splits the mainline into parts, where each part is a sequence of moves that are displayed on the same line.
 ///
 /// A part ends when a mainline node has a sideline that should not be displayed inline.
-Iterable<List<ViewNode>> _mainlineParts(ViewRoot root, _PgnTreeViewParams params) =>
+Iterable<List<ViewNode>> _mainlineParts(ViewRoot root, PgnTreeViewParams params) =>
     [root, ...root.mainline]
         .splitAfter((n) => _hasNonInlineSideLine(n, params))
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
@@ -299,7 +300,7 @@ class _PgnTreeView extends StatefulWidget {
   /// Comments associated with the root node
   final IList<PgnComment>? rootComments;
 
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
 
   @override
   State<_PgnTreeView> createState() => _PgnTreeViewState();
@@ -452,7 +453,7 @@ List<InlineSpan> _buildInlineSideLine({
   required UciPath initialPath,
   required TextStyle textStyle,
   required bool followsComment,
-  required _PgnTreeViewParams params,
+  required PgnTreeViewParams params,
 }) {
   textStyle = textStyle.copyWith(
     fontSize: textStyle.fontSize != null ? textStyle.fontSize! - 2.0 : null,
@@ -507,14 +508,14 @@ enum _LineType {
 }
 
 /// Metadata about a move's role in the tree view.
-typedef _LineInfo = ({_LineType type, bool startLine, UciPath pathToLine});
+typedef LineInfo = ({_LineType type, bool startLine, UciPath pathToLine});
 
 List<InlineSpan> _moveWithComment(
   ViewBranch branch, {
   required TextStyle textStyle,
-  required _LineInfo lineInfo,
+  required LineInfo lineInfo,
   required UciPath pathToNode,
-  required _PgnTreeViewParams params,
+  required PgnTreeViewParams params,
 
   /// Optional [GlobalKey] that will be assigned to the [InlineMove] widget.
   ///
@@ -559,7 +560,7 @@ class _SideLinePart extends ConsumerWidget {
   /// This is needed so that the indent guidelines can be drawn correctly.
   final GlobalKey firstMoveKey;
 
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -626,7 +627,7 @@ class _MainLinePart extends ConsumerWidget {
 
   final List<ViewNode> nodes;
 
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -696,7 +697,7 @@ class _SideLine extends StatelessWidget {
   final ViewNode parent;
   final GlobalKey firstMoveKey;
   final UciPath initialPath;
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
   final int nesting;
 
   List<ViewBranch> _getSidelinePartNodes() {
@@ -801,7 +802,7 @@ class _IndentedSideLines extends StatefulWidget {
 
   final UciPath initialPath;
 
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
 
   final int nesting;
 
@@ -953,9 +954,9 @@ class InlineMove extends ConsumerWidget {
 
   final TextStyle textStyle;
 
-  final _LineInfo lineInfo;
+  final LineInfo lineInfo;
 
-  final _PgnTreeViewParams params;
+  final PgnTreeViewParams params;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
@@ -1065,7 +1066,7 @@ class _MoveContextMenu extends ConsumerWidget {
   final String title;
   final UciPath path;
   final ViewBranch branch;
-  final _LineInfo lineInfo;
+  final LineInfo lineInfo;
   final PgnTreeNotifier notifier;
 
   @override

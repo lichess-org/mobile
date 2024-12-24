@@ -741,7 +741,7 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
 }
 
 class PreviewGameList<T> extends StatelessWidget {
-  const PreviewGameList({
+  const PreviewGameList({super.key, 
     required this.list,
     required this.builder,
     required this.moreScreenBuilder,

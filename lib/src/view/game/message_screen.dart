@@ -19,7 +19,7 @@ class MessageScreen extends ConsumerStatefulWidget {
   final Widget title;
   final LightUser? me;
 
-  const MessageScreen({required this.id, required this.title, this.me});
+  const MessageScreen({super.key, required this.id, required this.title, this.me});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();

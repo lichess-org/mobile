@@ -36,11 +36,13 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(children: [PuzzleDashboardWidget()]);
+    return ListView(children: const [PuzzleDashboardWidget()]);
   }
 }
 
 class PuzzleDashboardWidget extends ConsumerWidget {
+  const PuzzleDashboardWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
@@ -157,7 +159,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 }
 
 class PuzzleChart extends StatelessWidget {
-  const PuzzleChart(this.puzzleData);
+  const PuzzleChart(this.puzzleData, {super.key});
 
   final List<PuzzleDashboardData> puzzleData;
 
@@ -192,7 +194,7 @@ class PuzzleChart extends StatelessWidget {
 }
 
 class DaysSelector extends ConsumerWidget {
-  const DaysSelector();
+  const DaysSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

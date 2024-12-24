@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 const _kClockFontSize = 26.0;
 
 class StormClockWidget extends StatefulWidget {
-  const StormClockWidget({required this.clock});
+  const StormClockWidget({super.key, required this.clock});
 
   final StormClock clock;
 
   @override
-  _ClockState createState() => _ClockState();
+  State<StormClockWidget> createState() => _ClockState();
 }
 
 class _ClockState extends State<StormClockWidget> with SingleTickerProviderStateMixin {

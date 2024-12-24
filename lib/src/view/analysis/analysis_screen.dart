@@ -33,7 +33,7 @@ import 'package:logging/logging.dart';
 final _logger = Logger('AnalysisScreen');
 
 class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+  const AnalysisScreen({super.key, required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 

@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StudyBottomBar extends ConsumerWidget {
-  const StudyBottomBar({required this.id});
+  const StudyBottomBar({super.key, required this.id});
 
   final StudyId id;
 

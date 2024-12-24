@@ -5,9 +5,10 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-include: package:lint/strict.yaml
+# The following lines activate a set of recommended lints.
+include:
+  - package:lint/strict.yaml
+  - package:flutter_lints/flutter.yaml
 
 analyzer:
   language:

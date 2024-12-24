@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
 class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.defaultEval});
+  const EngineDepth({super.key, this.defaultEval});
 
   final ClientEval? defaultEval;
 

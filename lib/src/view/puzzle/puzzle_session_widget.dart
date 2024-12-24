@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
-  const PuzzleSessionWidget({required this.initialPuzzleContext, required this.ctrlProvider});
+  const PuzzleSessionWidget({super.key, required this.initialPuzzleContext, required this.ctrlProvider});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleControllerProvider ctrlProvider;

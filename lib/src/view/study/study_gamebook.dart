@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudyGamebook extends StatelessWidget {
-  const StudyGamebook(this.id);
+  const StudyGamebook(this.id, {super.key});
 
   final StudyId id;
 

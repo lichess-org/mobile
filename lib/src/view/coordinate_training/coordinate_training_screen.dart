@@ -353,7 +353,7 @@ class _Button extends StatelessWidget {
 }
 
 class SettingsBottomSheet extends ConsumerWidget {
-  const SettingsBottomSheet();
+  const SettingsBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

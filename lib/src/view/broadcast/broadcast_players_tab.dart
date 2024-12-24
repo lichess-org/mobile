@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 
 /// A tab that displays the players participating in a broadcast tournament.
 class BroadcastPlayersTab extends ConsumerWidget {
-  const BroadcastPlayersTab({required this.tournamentId});
+  const BroadcastPlayersTab({super.key, required this.tournamentId});
 
   final BroadcastTournamentId tournamentId;
 
@@ -52,7 +52,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players, this.tournamentId);
+  const PlayersList(this.players, this.tournamentId, {super.key});
 
   final IList<BroadcastPlayerExtended> players;
   final BroadcastTournamentId tournamentId;

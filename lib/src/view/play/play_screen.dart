@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class PlayScreen extends StatelessWidget {
-  const PlayScreen();
+  const PlayScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

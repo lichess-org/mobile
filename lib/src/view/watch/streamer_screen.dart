@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StreamerScreen extends StatelessWidget {
-  const StreamerScreen({required this.streamers});
+  const StreamerScreen({super.key, required this.streamers});
 
   final IList<Streamer> streamers;
 
@@ -59,7 +59,7 @@ class StreamerScreen extends StatelessWidget {
 }
 
 class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({
+  const StreamerListTile({super.key, 
     required this.streamer,
     this.showSubtitle = false,
     this.maxSubtitleLines = 1,

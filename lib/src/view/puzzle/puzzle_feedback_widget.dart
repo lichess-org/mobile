@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
+  const PuzzleFeedbackWidget({super.key, required this.puzzle, required this.state, required this.onStreak});
 
   final Puzzle puzzle;
   final PuzzleState state;

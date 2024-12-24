@@ -22,7 +22,7 @@ class ListSection extends StatelessWidget {
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
-  ListSection.loading({required int itemsNumber, bool header = false, this.margin})
+  ListSection.loading({super.key, required int itemsNumber, bool header = false, this.margin})
     : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
       headerTrailing = null,
       header = header ? const SizedBox.shrink() : null,
@@ -207,7 +207,7 @@ class ListSection extends StatelessWidget {
 /// Useful to show a divider between [PlatformListTile] widgets when using the
 /// [ListView.separated] constructor.
 class PlatformDivider extends StatelessWidget {
-  const PlatformDivider({
+  const PlatformDivider({super.key, 
     this.height,
     this.thickness,
     this.indent,

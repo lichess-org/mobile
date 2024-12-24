@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
 class CreateGameOptions extends ConsumerWidget {
-  const CreateGameOptions();
+  const CreateGameOptions({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
