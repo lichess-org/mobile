@@ -20,6 +20,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
+import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -30,12 +35,6 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-
-import 'game_common_widgets.dart';
-import 'game_loading_board.dart';
-import 'game_player.dart';
-import 'game_result_dialog.dart';
-import 'game_screen_providers.dart';
 
 /// Game body for the [GameScreen].
 ///
