@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'user.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'leaderboard.freezed.dart';
 

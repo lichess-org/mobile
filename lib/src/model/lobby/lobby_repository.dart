@@ -5,11 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'correspondence_challenge.dart';
-import 'game_seek.dart';
 
 part 'lobby_repository.g.dart';
 

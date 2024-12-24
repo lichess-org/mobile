@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
+import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:stockfish/stockfish.dart';
-
-import 'uci_protocol.dart';
-import 'work.dart';
 
 enum EngineState { initial, loading, idle, computing, error, disposed }
 
