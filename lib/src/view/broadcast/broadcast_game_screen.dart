@@ -39,7 +39,8 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? roundSlug;
   final String? title;
 
-  const BroadcastGameScreen({super.key, 
+  const BroadcastGameScreen({
+    super.key,
     required this.tournamentId,
     required this.roundId,
     required this.gameId,

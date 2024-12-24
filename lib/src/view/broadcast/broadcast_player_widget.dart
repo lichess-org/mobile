@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
 class BroadcastPlayerWidget extends ConsumerWidget {
-  const BroadcastPlayerWidget({super.key, 
+  const BroadcastPlayerWidget({
+    super.key,
     this.federation,
     required this.title,
     required this.name,

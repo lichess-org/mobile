@@ -10,7 +10,8 @@ enum FilterType {
 
 /// Displays a row of choices that can be selected or deselected.
 class Filter<T extends Enum> extends StatelessWidget {
-  const Filter({super.key, 
+  const Filter({
+    super.key,
     this.filterName,
     required this.filterType,
     required this.choices,

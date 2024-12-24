@@ -29,7 +29,8 @@ final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
-  const GameListTile({super.key, 
+  const GameListTile({
+    super.key,
     required this.game,
     required this.mySide,
     required this.opponentTitle,

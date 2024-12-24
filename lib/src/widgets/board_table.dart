@@ -49,7 +49,8 @@ class BoardTable extends ConsumerStatefulWidget {
        );
 
   /// Creates an empty board table (useful for loading).
-  const BoardTable.empty({super.key, 
+  const BoardTable.empty({
+    super.key,
     this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.errorMessage,

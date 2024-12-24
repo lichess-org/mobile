@@ -207,7 +207,8 @@ class ListSection extends StatelessWidget {
 /// Useful to show a divider between [PlatformListTile] widgets when using the
 /// [ListView.separated] constructor.
 class PlatformDivider extends StatelessWidget {
-  const PlatformDivider({super.key, 
+  const PlatformDivider({
+    super.key,
     this.height,
     this.thickness,
     this.indent,

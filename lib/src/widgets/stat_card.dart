@@ -9,7 +9,8 @@ const _defaultValueFontSize = 18.0;
 
 class StatCard extends StatelessWidget {
   const StatCard(
-    this.stat, {super.key, 
+    this.stat, {
+    super.key,
     this.child,
     this.value,
     this.padding,

@@ -11,7 +11,12 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({super.key, required this.onTapMove, required this.clientEval, required this.isGameOver});
+  const EngineLines({
+    super.key,
+    required this.onTapMove,
+    required this.clientEval,
+    required this.isGameOver,
+  });
   final void Function(NormalMove move) onTapMove;
   final ClientEval? clientEval;
   final bool isGameOver;

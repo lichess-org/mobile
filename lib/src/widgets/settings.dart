@@ -95,7 +95,8 @@ class SwitchSettingTile extends StatelessWidget {
 }
 
 class SliderSettingsTile extends StatefulWidget {
-  const SliderSettingsTile({super.key, 
+  const SliderSettingsTile({
+    super.key,
     this.icon,
     required this.value,
     required this.values,

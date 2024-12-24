@@ -6,7 +6,8 @@ import 'package:lichess_mobile/src/constants.dart';
 ///
 /// The height of the bar is always [kBottomBarHeight].
 class BottomBar extends StatelessWidget {
-  const BottomBar({super.key, 
+  const BottomBar({
+    super.key,
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,

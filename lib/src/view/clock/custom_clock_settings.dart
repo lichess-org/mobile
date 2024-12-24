@@ -10,7 +10,12 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({super.key, required this.onSubmit, required this.player, required this.clock});
+  const CustomClockSettings({
+    super.key,
+    required this.onSubmit,
+    required this.player,
+    required this.clock,
+  });
 
   final Side player;
   final TimeIncrement clock;

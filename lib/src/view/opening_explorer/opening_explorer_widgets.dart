@@ -72,7 +72,8 @@ class OpeningNameHeader extends StatelessWidget {
 
 /// Table of moves for the opening explorer.
 class OpeningExplorerMoveTable extends ConsumerWidget {
-  const OpeningExplorerMoveTable({super.key, 
+  const OpeningExplorerMoveTable({
+    super.key,
     required this.moves,
     required this.whiteWins,
     required this.draws,

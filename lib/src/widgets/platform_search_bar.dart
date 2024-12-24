@@ -4,7 +4,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// Displays a [SearchBar] on Android and a [CupertinoSearchTextField] on iOS.
 class PlatformSearchBar extends StatelessWidget {
-  const PlatformSearchBar({super.key, 
+  const PlatformSearchBar({
+    super.key,
     this.controller,
     this.hintText,
     this.autoFocus = false,

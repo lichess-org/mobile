@@ -9,7 +9,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerStatefulWidget {
-  const SmallBoardPreview({super.key, 
+  const SmallBoardPreview({
+    super.key,
     required this.orientation,
     required this.fen,
     required this.description,

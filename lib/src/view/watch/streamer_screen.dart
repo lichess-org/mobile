@@ -59,7 +59,8 @@ class StreamerScreen extends StatelessWidget {
 }
 
 class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({super.key, 
+  const StreamerListTile({
+    super.key,
     required this.streamer,
     this.showSubtitle = false,
     this.maxSubtitleLines = 1,

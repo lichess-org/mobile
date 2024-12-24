@@ -12,7 +12,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 const _kBoardCarouselItemMargin = EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0);
 
 class BoardCarouselItem extends ConsumerWidget {
-  const BoardCarouselItem({super.key, 
+  const BoardCarouselItem({
+    super.key,
     required this.orientation,
     required this.fen,
     required this.description,

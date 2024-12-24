@@ -14,7 +14,8 @@ const _kMoveListHeight = 40.0;
 enum MoveListType { inline, stacked }
 
 class MoveList extends ConsumerStatefulWidget {
-  const MoveList({super.key, 
+  const MoveList({
+    super.key,
     required this.type,
     required this.slicedMoves,
     required this.currentMoveIndex,
