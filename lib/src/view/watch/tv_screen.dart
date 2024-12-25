@@ -86,8 +86,8 @@ class _Body extends ConsumerWidget {
                 final position = gameState.game.positionAt(gameState.stepCursor);
 
                 final blackPlayerWidget = GamePlayer(
-                  player: game.black.setOnGame(true),
-                  isActiveGameOfCurrentUser: false,
+                  game: game.copyWith(black: game.black.setOnGame(true)),
+                  side: Side.black,
                   clock:
                       gameState.game.clock != null
                           ? CountdownClockBuilder(
@@ -107,8 +107,8 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.black),
                 );
                 final whitePlayerWidget = GamePlayer(
-                  player: game.white.setOnGame(true),
-                  isActiveGameOfCurrentUser: false,
+                  game: game.copyWith(white: game.white.setOnGame(true)),
+                  side: Side.white,
                   clock:
                       gameState.game.clock != null
                           ? CountdownClockBuilder(

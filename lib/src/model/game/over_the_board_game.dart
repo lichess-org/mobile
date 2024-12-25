@@ -3,6 +3,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -19,9 +21,16 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   const OverTheBoardGame._();
 
   @override
-  Player get white => const Player();
+  Player get white => Player(
+    onGame: true,
+    user: LightUser(id: UserId(Side.white.name), name: Side.white.name.capitalize()),
+  );
+
   @override
-  Player get black => const Player();
+  Player get black => Player(
+    onGame: true,
+    user: LightUser(id: UserId(Side.black.name), name: Side.black.name.capitalize()),
+  );
 
   @override
   IList<ExternalEval>? get evals => null;

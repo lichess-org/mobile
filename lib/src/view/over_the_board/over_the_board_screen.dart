@@ -7,17 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
@@ -276,11 +272,8 @@ class _Player extends ConsumerWidget {
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
-        isActiveGameOfCurrentUser: true,
-        player: Player(
-          onGame: true,
-          user: LightUser(id: UserId(side.name), name: side.name.capitalize()),
-        ),
+        game: gameState.game,
+        side: side,
         materialDiff:
             boardPreferences.materialDifferenceFormat.visible
                 ? gameState.currentMaterialDiff(side)
