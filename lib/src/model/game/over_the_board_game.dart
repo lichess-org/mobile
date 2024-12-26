@@ -33,6 +33,9 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   );
 
   @override
+  Side? get youAre => null;
+
+  @override
   IList<ExternalEval>? get evals => null;
   @override
   IList<Duration>? get clocks => null;

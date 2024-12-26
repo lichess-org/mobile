@@ -7,10 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -26,7 +24,7 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A widget to display player information above/below the chess board.
-class GamePlayer extends ConsumerWidget {
+class GamePlayer extends StatelessWidget {
   const GamePlayer({
     required this.game,
     required this.side,
@@ -61,13 +59,11 @@ class GamePlayer extends ConsumerWidget {
   final Duration? timeToMove;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final remaingHeight = estimateRemainingHeightLeftBoard(context);
     final playerFontSize = remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
 
     final player = side == Side.white ? game.white : game.black;
-
-    final session = ref.watch(authSessionProvider);
 
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -129,9 +125,7 @@ class GamePlayer extends ConsumerWidget {
               if (player.rating != null)
                 RatingPrefAware(
                   isActiveGameOfCurrentUser:
-                      game.status.value < GameStatus.aborted.value &&
-                      session != null &&
-                      game.playerSideOf(session.user.id) != null,
+                      game.status.value < GameStatus.aborted.value && game.me != null,
                   child: Text.rich(
                     TextSpan(
                       text: ' ${player.rating}${player.provisional == true ? '?' : ''}',

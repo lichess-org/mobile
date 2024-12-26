@@ -181,7 +181,7 @@ class _BodyState extends ConsumerState<_Body> {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              orientation: isBoardTurned ? youAre.opposite : youAre,
+              orientation: isBoardTurned ? youAre!.opposite : youAre!,
               fen: position.fen,
               lastMove: game.moveAt(stepCursor) as NormalMove?,
               gameData: GameData(
@@ -229,7 +229,7 @@ class _BodyState extends ConsumerState<_Body> {
                   builder:
                       (_) => AnalysisScreen(
                         options: AnalysisOptions(
-                          orientation: game.youAre,
+                          orientation: game.youAre!,
                           standalone: (
                             pgn: game.makePgn(),
                             isComputerAnalysisAllowed: false,

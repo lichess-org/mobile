@@ -38,12 +38,32 @@ abstract mixin class BaseGame {
 
   GameStatus get status;
 
+  /// This field is null if the game is being watched as a spectator, and
+  /// represents the side that the current player is playing as otherwise.
+  Side? get youAre;
+
   Side? get winner;
 
   bool? get isThreefoldRepetition;
 
   Player get white;
   Player get black;
+
+  /// Player of the playing point of view. Null if spectating.
+  Player? get me =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? white
+          : black;
+
+  /// Opponent from the playing point of view. Null if spectating.
+  Player? get opponent =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? black
+          : white;
 
   Position get lastPosition;
 

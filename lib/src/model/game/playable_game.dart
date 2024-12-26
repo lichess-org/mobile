@@ -72,22 +72,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
     return _playableGameFromPick(pick(json).required());
   }
 
-  /// Player of the playing point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
-
   Side get sideToMove => lastPosition.turn;
 
   bool get hasAI => white.isAI || black.isAI;
