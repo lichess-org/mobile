@@ -63,7 +63,7 @@ class GamePlayer extends StatelessWidget {
     final remaingHeight = estimateRemainingHeightLeftBoard(context);
     final playerFontSize = remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
 
-    final player = side == Side.white ? game.white : game.black;
+    final player = game.playerOf(side);
 
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
