@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class PlayStockfishScreen extends StatelessWidget {
@@ -55,7 +64,13 @@ class BodyState extends State<Body> {
             },
           ),
           FilledButton(
-            onPressed: () {},
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                title: context.l10n.playWithTheMachine,
+                builder: (_) => CreateChallengeScreen(LightUser(id: const UserId('stockfish level 1'), name: context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toInt().toString()))),
+              );
+              },
             child: Text(
               context.l10n.play,
               style: const TextStyle(
