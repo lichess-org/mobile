@@ -376,6 +376,8 @@ class AdaptiveListTile extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
+    this.isThreeLine = false,
+    this.contentPadding,
     super.key,
   });
 
@@ -384,23 +386,21 @@ class AdaptiveListTile extends StatelessWidget {
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
+  final bool isThreeLine;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          splashFactory:
-              Theme.of(context).platform == TargetPlatform.iOS ? NoSplash.splashFactory : null,
-        ),
-        child: ListTile(
-          leading: leading,
-          title: title,
-          subtitle: subtitle,
-          trailing: trailing,
-          onTap: onTap,
-        ),
+      child: ListTile(
+        leading: leading,
+        title: title,
+        subtitle: subtitle,
+        trailing: trailing,
+        onTap: onTap,
+        isThreeLine: isThreeLine,
+        contentPadding: contentPadding,
       ),
     );
   }
