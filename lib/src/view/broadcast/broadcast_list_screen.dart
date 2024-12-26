@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -25,6 +26,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
+const kBroadcastCarouselItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -272,6 +274,66 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
+const BroadcastList _emptyBroadcasts = (
+  active: IListConst<Broadcast>([]),
+  past: IListConst<Broadcast>([]),
+  nextPage: null,
+);
+
+const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0);
+
+class BroadcastCarousel extends StatelessWidget {
+  const BroadcastCarousel({
+    required this.broadcasts,
+    required this.worker,
+    required this.aspectRatio,
+    super.key,
+  }) : _isLoading = false;
+
+  const BroadcastCarousel.loading({required this.worker, required this.aspectRatio})
+    : _isLoading = true,
+      broadcasts = _emptyBroadcasts;
+
+  final BroadcastList broadcasts;
+  final ImageColorWorker worker;
+  final double aspectRatio;
+  final bool _isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: CarouselView.weighted(
+        shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+        flexWeights: const [1, 7, 1],
+        itemSnapping: true,
+        padding: kBroadcastCarouselItemPadding,
+        onTap: (index) {
+          final broadcast = broadcasts.active[index];
+          pushPlatformRoute(
+            context,
+            title: broadcast.title,
+            rootNavigator: true,
+            builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+          );
+        },
+        children: [
+          if (_isLoading)
+            for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
+              BroadcastCarouselItem.loading(worker: worker),
+          for (final broadcast in broadcasts.active)
+            BroadcastCarouselItem(broadcast: broadcast, worker: worker),
+        ],
+      ),
+    );
+  }
+}
+
+typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
+final Map<ImageProvider, _CardColors?> _colorsCache = {};
+
+final _dateFormat = DateFormat.MMMd().add_jm();
+
 class BroadcastCard extends StatefulWidget {
   const BroadcastCard({
     required this.broadcast,
@@ -316,15 +378,10 @@ class BroadcastCard extends StatefulWidget {
       );
 
   @override
-  State<BroadcastCard> createState() => _BroadcastCartState();
+  State<BroadcastCard> createState() => _BroadcastCardState();
 }
 
-typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
-
-final _dateFormat = DateFormat.MMMd().add_jm();
-
-class _BroadcastCartState extends State<BroadcastCard> {
+class _BroadcastCardState extends State<BroadcastCard> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
@@ -555,6 +612,270 @@ class _BroadcastCartState extends State<BroadcastCard> {
                           maxLines: 1,
                         ),
                       ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BroadcastCarouselItem extends StatefulWidget {
+  const BroadcastCarouselItem({required this.broadcast, required this.worker, super.key});
+
+  final Broadcast broadcast;
+  final ImageColorWorker worker;
+
+  const BroadcastCarouselItem.loading({required this.worker})
+    : broadcast = const Broadcast(
+        tour: BroadcastTournamentData(
+          id: BroadcastTournamentId(''),
+          name: '',
+          slug: '',
+          imageUrl: null,
+          description: '',
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            website: null,
+            location: null,
+            dates: null,
+          ),
+        ),
+        round: BroadcastRound(
+          id: BroadcastRoundId(''),
+          name: '',
+          slug: '',
+          status: RoundStatus.finished,
+          startsAt: null,
+          finishedAt: null,
+          startsAfterPrevious: false,
+        ),
+        group: null,
+        roundToLinkId: BroadcastRoundId(''),
+      );
+
+  @override
+  State<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
+}
+
+class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
+  _CardColors? _cardColors;
+
+  String? get imageUrl => widget.broadcast.tour.imageUrl;
+
+  ImageProvider get imageProvider =>
+      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final cachedColors = _colorsCache[imageProvider];
+    if (_colorsCache.containsKey(imageProvider)) {
+      _cardColors = cachedColors;
+    } else if (imageUrl != null) {
+      _getImageColors(NetworkImage(imageUrl!));
+    }
+  }
+
+  Future<void> _getImageColors(NetworkImage provider) async {
+    if (!mounted) return;
+
+    if (Scrollable.recommendDeferredLoadingForContext(context)) {
+      SchedulerBinding.instance.scheduleFrameCallback((_) {
+        scheduleMicrotask(() => _getImageColors(provider));
+      });
+    } else if (widget.worker.closed == false) {
+      await precacheImage(provider, context);
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      if (response != null) {
+        if (mounted) {
+          setState(() {
+            _cardColors = response;
+          });
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final defaultBackgroundColor =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? Styles.cupertinoCardColor.resolveFrom(context)
+            : Theme.of(context).colorScheme.surfaceContainer;
+    final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
+    final titleColor = _cardColors?.onPrimaryContainer;
+    final subTitleColor =
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+    final bgHsl = HSLColor.fromColor(backgroundColor);
+    final liveHsl = HSLColor.fromColor(LichessColors.red);
+    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
+
+    String? eventDate;
+    if (widget.broadcast.round.startsAt != null) {
+      final diff = widget.broadcast.round.startsAt!.difference(DateTime.now());
+      if (!diff.isNegative && diff.inDays >= 1) {
+        eventDate = _dateFormat.format(widget.broadcast.round.startsAt!);
+      } else {
+        eventDate = relativeDate(context.l10n, widget.broadcast.round.startsAt!);
+      }
+    }
+    final double width = MediaQuery.sizeOf(context).width;
+    final paddingWidth = kBroadcastCarouselItemPadding.horizontal / 2 * 6;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(color: backgroundColor),
+      child: ClipRect(
+        child: OverflowBox(
+          maxWidth: width * 7 / 8 - paddingWidth,
+          minWidth: width * 7 / 8 - paddingWidth,
+          child: Stack(
+            children: [
+              ShaderMask(
+                blendMode: BlendMode.dstOut,
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    begin: const Alignment(0.0, 0.5),
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor.withValues(alpha: 0.0),
+                      backgroundColor.withValues(alpha: 1.0),
+                    ],
+                    stops: const [0.5, 1.10],
+                    tileMode: TileMode.clamp,
+                  ).createShader(bounds);
+                },
+                child: Image(
+                  image: imageProvider,
+                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                    if (wasSynchronouslyLoaded) {
+                      return child;
+                    }
+                    return AnimatedOpacity(
+                      duration: const Duration(milliseconds: 500),
+                      opacity: frame == null ? 0 : 1,
+                      child: child,
+                    );
+                  },
+                  errorBuilder:
+                      (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 8.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: kBroadcastCarouselItemContentPadding,
+                      child: Row(
+                        mainAxisAlignment:
+                            widget.broadcast.isLive
+                                ? MainAxisAlignment.spaceBetween
+                                : MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          if (!widget.broadcast.isFinished) ...[
+                            Flexible(
+                              flex: widget.broadcast.isLive ? 1 : 0,
+                              child: Text(
+                                widget.broadcast.round.name,
+                                style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                                overflow: TextOverflow.clip,
+                                softWrap: false,
+                                maxLines: 1,
+                              ),
+                            ),
+                            const SizedBox(width: 5.0),
+                          ],
+                          if (widget.broadcast.isLive) ...[
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 16,
+                                  color: liveColor,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(0, 1),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text(
+                                  'LIVE',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: liveColor,
+                                    shadows: const [
+                                      Shadow(
+                                        color: Colors.black54,
+                                        offset: Offset(0, 1),
+                                        blurRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ] else if (eventDate != null)
+                            Flexible(
+                              child: Text(
+                                eventDate,
+                                style: TextStyle(fontSize: 12, color: subTitleColor),
+                                overflow: TextOverflow.clip,
+                                softWrap: false,
+                                maxLines: 1,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: kBroadcastCarouselItemContentPadding.add(
+                        const EdgeInsets.only(top: 3.0, bottom: 6.0),
+                      ),
+                      child: Text(
+                        widget.broadcast.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: titleColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          height: 1.0,
+                        ),
+                      ),
+                    ),
+                    if (widget.broadcast.tour.information.players != null)
+                      Padding(
+                        padding: kBroadcastCarouselItemContentPadding,
+                        child: Text(
+                          widget.broadcast.tour.information.players!,
+                          style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                    const SizedBox(height: 4.0),
                   ],
                 ),
               ),

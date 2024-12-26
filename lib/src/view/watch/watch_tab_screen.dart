@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,14 +13,11 @@ import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -76,7 +72,8 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
-        refreshData();
+        ref.invalidate(featuredChannelsProvider);
+        ref.invalidate(liveStreamersProvider);
       }
     });
 
@@ -154,19 +151,16 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    _worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    if (mounted) {
+      setState(() {
+        _worker = worker;
+      });
+    }
     ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
       if (current.hasValue && !_imageAreCached) {
         _imageAreCached = true;
-        try {
-          await preCacheBroadcastImages(
-            context,
-            broadcasts: current.value!.active,
-            worker: _worker!,
-          );
-        } finally {
-          _worker?.close();
-        }
+        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
       }
     });
   }
@@ -180,7 +174,7 @@ class _BodyState extends ConsumerState<_Body> {
     final content =
         widget.orientation == Orientation.portrait
             ? [
-              _BroadcastWidget(broadcastList),
+              if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
               _WatchTvWidget(featuredChannels),
               _StreamerWidget(streamers),
             ]
@@ -188,7 +182,7 @@ class _BodyState extends ConsumerState<_Body> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: _BroadcastWidget(broadcastList)),
+                  if (_worker != null) Expanded(child: _BroadcastWidget(broadcastList, _worker!)),
                   Expanded(child: _WatchTvWidget(featuredChannels)),
                 ],
               ),
@@ -210,11 +204,10 @@ Future<void> _refreshData(WidgetRef ref) {
 }
 
 class _BroadcastWidget extends ConsumerWidget {
+  const _BroadcastWidget(this.broadcastList, this.worker);
+
   final AsyncValue<BroadcastList> broadcastList;
-
-  const _BroadcastWidget(this.broadcastList);
-
-  static const int numberOfItems = 5;
+  final ImageColorWorker worker;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -223,21 +216,41 @@ class _BroadcastWidget extends ConsumerWidget {
         if (data.active.isEmpty && data.past.isEmpty) {
           return const SizedBox.shrink();
         }
-        return ListSection(
-          hasLeading: true,
-          header: Text(context.l10n.broadcastBroadcasts),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () {
-              pushPlatformRoute(context, builder: (context) => const BroadcastListScreen());
-            },
-            child: Text(context.l10n.more),
+        return Padding(
+          padding: Styles.sectionBottomPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8.0)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        context.l10n.broadcastBroadcasts,
+                        style: Styles.sectionTitle,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 6.0),
+                    NoPaddingTextButton(
+                      onPressed: () {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.broadcastBroadcasts,
+                          builder: (context) => const BroadcastListScreen(),
+                        );
+                      },
+                      child: Text(context.l10n.more),
+                    ),
+                  ],
+                ),
+              ),
+              BroadcastCarousel(broadcasts: data, worker: worker, aspectRatio: 1.7),
+            ],
           ),
-          children: [
-            ...CombinedIterableView([
-              data.active,
-              data.past,
-            ]).take(numberOfItems).map((broadcast) => _BroadcastTile(broadcast: broadcast)),
-          ],
         );
       },
       error: (error, stackTrace) {
@@ -251,65 +264,9 @@ class _BroadcastWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(
-                itemsNumber: numberOfItems,
-                header: true,
-                hasLeading: true,
-              ),
+              child: BroadcastCarousel.loading(worker: worker, aspectRatio: 16 / 9),
             ),
           ),
-    );
-  }
-}
-
-class _BroadcastTile extends ConsumerWidget {
-  const _BroadcastTile({required this.broadcast});
-
-  final Broadcast broadcast;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
-
-    return PlatformListTile(
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          title: broadcast.title,
-          rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
-        );
-      },
-      leading:
-          broadcast.tour.imageUrl != null
-              ? Image.network(
-                broadcast.tour.imageUrl!,
-                width: kThumbnailImageSize,
-                height: kThumbnailImageSize,
-                cacheWidth: (kThumbnailImageSize * devicePixelRatio).toInt(),
-                fit: BoxFit.cover,
-                errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
-              )
-              : const Image(image: kDefaultBroadcastImage, width: kThumbnailImageSize),
-      subtitle: Row(
-        children: [
-          Text(broadcast.round.name),
-          if (broadcast.isLive) ...[
-            const SizedBox(width: 5.0),
-            Text(
-              'LIVE',
-              style: TextStyle(color: context.lichessColors.error, fontWeight: FontWeight.bold),
-            ),
-          ] else if (broadcast.round.startsAt != null) ...[
-            const SizedBox(width: 5.0),
-            Text(relativeDate(context.l10n, broadcast.round.startsAt!)),
-          ],
-        ],
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(right: 5.0),
-        child: Text(broadcast.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-      ),
     );
   }
 }
