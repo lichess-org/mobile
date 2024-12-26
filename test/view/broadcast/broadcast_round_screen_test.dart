@@ -39,16 +39,10 @@ final client = MockClient((request) {
 void main() {
   group('Broadcast round screen', () {
     testWidgets('Displays broadcast round screen', variant: kPlatformVariant, (tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _broadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 
       await tester.pumpWidget(app);
@@ -75,16 +69,10 @@ void main() {
       variant: TargetPlatformVariant.only(TargetPlatform.android),
       (tester) async {
         mockNetworkImagesFor(() async {
-          final fakeSocket = FakeWebSocketChannel();
           final app = await makeTestProviderScopeApp(
             tester,
             home: BroadcastRoundScreen(broadcast: _broadcast),
-            overrides: [
-              lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-              webSocketChannelFactoryProvider.overrideWith((ref) {
-                return FakeWebSocketChannelFactory((_) => fakeSocket);
-              }),
-            ],
+            overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
           );
 
           await tester.pumpWidget(app);
@@ -117,16 +105,10 @@ void main() {
       variant: TargetPlatformVariant.only(TargetPlatform.iOS),
       (tester) async {
         mockNetworkImagesFor(() async {
-          final fakeSocket = FakeWebSocketChannel();
           final app = await makeTestProviderScopeApp(
             tester,
             home: BroadcastRoundScreen(broadcast: _broadcast),
-            overrides: [
-              lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-              webSocketChannelFactoryProvider.overrideWith((ref) {
-                return FakeWebSocketChannelFactory((_) => fakeSocket);
-              }),
-            ],
+            overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
           );
 
           await tester.pumpWidget(app);

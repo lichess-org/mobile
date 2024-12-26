@@ -29,7 +29,6 @@ final client = MockClient((request) {
 void main() {
   group('Broadcast game screen', () {
     testWidgets('Displays broadcast game screen', variant: kPlatformVariant, (tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastGameScreen(
@@ -37,12 +36,7 @@ void main() {
           roundId: _roundId,
           gameId: _gameId,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 
       await tester.pumpWidget(app);
