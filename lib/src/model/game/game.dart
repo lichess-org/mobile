@@ -38,6 +38,13 @@ abstract mixin class BaseGame {
 
   GameStatus get status;
 
+  /// Whether the game is properly finished (not aborted).
+  bool get finished => status.value >= GameStatus.mate.value;
+  bool get aborted => status == GameStatus.aborted;
+
+  /// Whether the game is still playable (not finished or aborted and not imported).
+  bool get playable => status.value < GameStatus.aborted.value;
+
   /// This field is null if the game is being watched as a spectator, and
   /// represents the side that the current player is playing as otherwise.
   Side? get youAre;

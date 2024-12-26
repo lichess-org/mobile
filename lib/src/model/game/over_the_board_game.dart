@@ -52,6 +52,4 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
     Side? winner,
     bool? isThreefoldRepetition,
   }) = _OverTheBoardGame;
-
-  bool get finished => status.value >= GameStatus.mate.value;
 }

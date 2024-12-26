@@ -69,8 +69,4 @@ class OfflineCorrespondenceGame
     }
     return null;
   }
-
-  bool get playable => status.value < GameStatus.aborted.value;
-  bool get playing => status.value > GameStatus.started.value;
-  bool get finished => status.value >= GameStatus.mate.value;
 }

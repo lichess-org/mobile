@@ -124,8 +124,7 @@ class GamePlayer extends StatelessWidget {
               ],
               if (player.rating != null)
                 RatingPrefAware(
-                  isActiveGameOfCurrentUser:
-                      game.status.value < GameStatus.aborted.value && game.me != null,
+                  isActiveGameOfCurrentUser: game.me != null && !game.finished && !game.aborted,
                   child: Text.rich(
                     TextSpan(
                       text: ' ${player.rating}${player.provisional == true ? '?' : ''}',
