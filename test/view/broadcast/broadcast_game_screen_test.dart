@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -46,7 +45,6 @@ void main() {
       await tester.pump();
 
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(BroadcastPlayerWidget), findsNWidgets(2));
       expect(find.text('Dastan, Muhammed Batuhan'), findsOne);
       expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
