@@ -1471,6 +1471,7 @@
   "studyPlayAgain": "Играйте отново",
   "studyWhatWouldYouPlay": "Какво бихте играли в тази позиция?",
   "studyYouCompletedThisLesson": "Поздравления! Вие завършихте този урок.",
+  "studyPerPage": "{param} на страница",
   "studyNbChapters": "{count, plural, =1{{count} Глава} other{{count} Глави}}",
   "studyNbGames": "{count, plural, =1{{count} Игра} other{{count} Игри}}",
   "studyNbMembers": "{count, plural, =1{{count} Член} other{{count} Членове}}",

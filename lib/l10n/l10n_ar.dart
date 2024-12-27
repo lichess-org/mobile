@@ -109,7 +109,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileShareGameURL => 'شارك رابط المباراة';
 
   @override
-  String get mobileSharePositionAsFEN => 'مشاركة الموضع كFEN';
+  String get mobileSharePositionAsFEN => 'مشاركة الموضع ك FEN';
 
   @override
   String get mobileSharePuzzle => 'شارك هذا اللغز';
@@ -130,7 +130,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSystemColors => 'ألوان النظام';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'لون الخلفية';
 
   @override
   String get mobileToolsTab => 'أدوات';
@@ -193,7 +193,7 @@ class AppLocalizationsAr extends AppLocalizations {
       other: 'تم حل $count لغز تكتيكي',
       many: 'تم حل $count لغز تكتيكي',
       few: 'تم حل $count ألغاز تكتيكية',
-      two: 'تم حل $count من الالغاز التكتيكية',
+      two: 'تم حل $count من الألغاز التكتيكية',
       one: 'تم حل $count لغز تكتيكي',
       zero: 'تم حل $count لغز تكتيكي',
     );
@@ -2411,7 +2411,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gamesPlayed => 'المباريات الملعوبة';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'حسناً';
 
   @override
   String get cancel => 'إلغاء';
@@ -4431,7 +4431,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get nothingToSeeHere => 'لا يوجد شيء يمكن رؤيته هنا في الوقت الحالي.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'الإحصائيات';
 
   @override
   String opponentLeftCounter(int count) {

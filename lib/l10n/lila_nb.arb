@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Alle partier",
   "mobileAreYouSure": "Er du sikker?",
-  "mobileBlindfoldMode": "Blindsjakk",
   "mobileCancelTakebackOffer": "Avbryt tilbud om å angre",
   "mobileClearButton": "Tøm",
   "mobileCorrespondenceClearSavedMove": "Fjern lagret trekk",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Vis håndtak for brettstørrelse",
   "preferencesOnlyOnInitialPosition": "Kun for utgangsstillingen",
   "preferencesInGameOnly": "Bare under partier",
+  "preferencesExceptInGame": "Ikke under partier",
   "preferencesChessClock": "Sjakkur",
   "preferencesTenthsOfSeconds": "Tidels sekunder",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Når gjenværende tid < 10 sekunder",

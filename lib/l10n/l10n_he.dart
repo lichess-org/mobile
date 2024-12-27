@@ -903,7 +903,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesInGameOnly => 'רק במהלך המשחק';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'למעט בזמן משחק';
 
   @override
   String get preferencesChessClock => 'שעון השחמט';

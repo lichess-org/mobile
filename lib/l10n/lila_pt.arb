@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Todos os jogos",
   "mobileAreYouSure": "Tens a certeza?",
-  "mobileBlindfoldMode": "De olhos vendados",
   "mobileCancelTakebackOffer": "Cancelar pedido de voltar",
   "mobileClearButton": "Limpar",
   "mobileCorrespondenceClearSavedMove": "Limpar movimento salvo",
@@ -39,6 +38,7 @@
   "mobileShowVariations": "Mostrar variações",
   "mobileSomethingWentWrong": "Algo deu errado.",
   "mobileSystemColors": "Cores do sistema",
+  "mobileTheme": "Tema",
   "mobileToolsTab": "Tools",
   "mobileWaitingForOpponentToJoin": "À espera do adversário entrar...",
   "mobileWatchTab": "Assistir",
@@ -217,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Mostrar o cursor de redimensionamento do tabuleiro",
   "preferencesOnlyOnInitialPosition": "Apenas na posição inicial",
   "preferencesInGameOnly": "Apenas em Jogo",
+  "preferencesExceptInGame": "Exceto em jogo",
   "preferencesChessClock": "Relógio de xadrez",
   "preferencesTenthsOfSeconds": "Décimos de segundo",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Quando o tempo restante for < 10 segundos",

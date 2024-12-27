@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "כל המשחקים",
   "mobileAreYouSure": "בטוח?",
-  "mobileBlindfoldMode": "משחק עיוור",
   "mobileCancelTakebackOffer": "ביטול ההצעה להחזיר את המהלך האחרון",
   "mobileClearButton": "ניקוי",
   "mobileCorrespondenceClearSavedMove": "ניקוי המהלך השמור",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "הצג סמן להגדלת הלוח",
   "preferencesOnlyOnInitialPosition": "רק בעמדה ההתחלתית",
   "preferencesInGameOnly": "רק במהלך המשחק",
+  "preferencesExceptInGame": "למעט בזמן משחק",
   "preferencesChessClock": "שעון השחמט",
   "preferencesTenthsOfSeconds": "הצג עשיריות שניה",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "כאשר הזמן שנותר קטן מעשר שניות",

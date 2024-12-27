@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Todos os jogos",
   "mobileAreYouSure": "Você tem certeza?",
-  "mobileBlindfoldMode": "Venda",
   "mobileCancelTakebackOffer": "Cancelar oferta de revanche",
   "mobileClearButton": "Limpar",
   "mobileCorrespondenceClearSavedMove": "Limpar movimento salvos",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Mostrar cursor de redimensionamento do tabuleiro",
   "preferencesOnlyOnInitialPosition": "Apenas na posição inicial",
   "preferencesInGameOnly": "Durante partidas",
+  "preferencesExceptInGame": "Exceto durante a partida",
   "preferencesChessClock": "Relógio",
   "preferencesTenthsOfSeconds": "Décimos de segundo",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Quando o tempo restante < 10 segundos",

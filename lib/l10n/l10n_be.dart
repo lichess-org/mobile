@@ -130,7 +130,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Дошка';
 
   @override
   String get mobileToolsTab => 'Tools';
@@ -4711,7 +4711,7 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count рэйтынгавых гульняў ў рэжыме «$param2»',
+      other: '≥ $count рэйтынгавых гульняў у рэжыме «$param2»',
       many: '≥ $count рэйтынгавых гульняў ў рэжыме «$param2»',
       few: '≥ $count рэйтынгавыя гульні ў рэжыме «$param2»',
       one: '≥ $count рэйтынгавая гульня ў рэжыме «$param2»',

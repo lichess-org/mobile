@@ -530,7 +530,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastNotYetStarted => 'The broadcast has not yet started.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Amptelike webtuiste';
 
   @override
   String get broadcastStandings => 'Standings';
@@ -600,8 +600,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count broadcasts',
-      one: '$count broadcast',
+      other: '$count uitsendings',
+      one: '$count uitsending',
     );
     return '$_temp0';
   }
@@ -865,7 +865,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Behalwe in spel';
 
   @override
   String get preferencesChessClock => 'Skaakklok';

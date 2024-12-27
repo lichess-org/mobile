@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Wszystkie partie",
   "mobileAreYouSure": "Jesteś pewien?",
-  "mobileBlindfoldMode": "Gra na ślepo",
   "mobileCancelTakebackOffer": "Anuluj prośbę cofnięcia ruchu",
   "mobileClearButton": "Wyczyść",
   "mobileCorrespondenceClearSavedMove": "Usuń zapisany ruch",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Pokaż uchwyt od zmiany rozmiaru szachownicy",
   "preferencesOnlyOnInitialPosition": "Tylko w pozycji początkowej",
   "preferencesInGameOnly": "Tylko w partii",
+  "preferencesExceptInGame": "Z wyjątkiem trwania partii",
   "preferencesChessClock": "Zegar szachowy",
   "preferencesTenthsOfSeconds": "Dziesiąte części sekundy",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Kiedy na zegarze jest mniej niż 10 sekund",

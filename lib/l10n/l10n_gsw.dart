@@ -865,7 +865,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesInGameOnly => 'Nur im Schpiel';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Ussert im Schpiel';
 
   @override
   String get preferencesChessClock => 'Schachuhr';
@@ -1796,7 +1796,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get newOpponent => 'En neue Gägner';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'Din Gägner wett es neus Schpil mit dir schpille';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Din Gägner wett es neus Schpiel mit dir schpille';
 
   @override
   String get joinTheGame => 'Gang is Schpiel';

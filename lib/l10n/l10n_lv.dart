@@ -483,28 +483,28 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
 
   @override
-  String get broadcastFideFederations => 'FIDE federations';
+  String get broadcastFideFederations => 'FIDE federācijas';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => '10 labāko spēlētāju reitings';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'FIDE spēlētāji';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+  String get broadcastFidePlayerNotFound => 'FIDE spēlētājs nav atrasts';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'FIDE profils';
 
   @override
-  String get broadcastFederation => 'Federation';
+  String get broadcastFederation => 'Federācija';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Vecums šogad';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'Nevērtēta';
 
   @override
   String get broadcastRecentTournaments => 'Recent tournaments';
@@ -1732,7 +1732,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get waitingForOpponent => 'Gaidām pretinieku';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'Vai arī piedāvā pretiniekam skenēt šo QR kodu';
 
   @override
   String get waiting => 'Gaida';
@@ -1919,16 +1919,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get deleteFromHere => 'Dzēst šo un turpmākos gājienus';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Aizvērt variantus';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Atvērt variantus';
 
   @override
   String get forceVariation => 'Rādīt kā variantu';
 
   @override
-  String get copyVariationPgn => 'Copy variation PGN';
+  String get copyVariationPgn => 'Kopēt varianta PGN';
 
   @override
   String get move => 'Gājiens';
@@ -2057,7 +2057,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get bestMoveArrow => 'Labākā gājiena bulta';
 
   @override
-  String get showVariationArrows => 'Show variation arrows';
+  String get showVariationArrows => 'Rādīt varianta bultiņas';
 
   @override
   String get evaluationGauge => 'Novērtējuma rādītājs';
@@ -2155,7 +2155,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get friends => 'Draugi';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'citiem spēlētājiem';
 
   @override
   String get discussions => 'Sarunas';
@@ -2341,7 +2341,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get gamesPlayed => 'Izspēlētās spēles';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Labi';
 
   @override
   String get cancel => 'Atcelt';
@@ -2657,7 +2657,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get importGameCaveat => 'Variācijas tiks izdzēstas. Lai tās paturētu, importē PGN izmantot izpētes rīku.';
 
   @override
-  String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
+  String get importGameDataPrivacyWarning => 'Jebkurš var piekļūt šim PGN. Lai importētu spēli privāti, izveido izpēti.';
 
   @override
   String get thisIsAChessCaptcha => 'Šis ir šaha CAPTCHA.';
@@ -2684,7 +2684,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get reconnecting => 'Atjauno savienojumu';
 
   @override
-  String get noNetwork => 'Offline';
+  String get noNetwork => 'Bezsaistē';
 
   @override
   String get favoriteOpponents => 'Biežākie pretinieki';
@@ -2841,7 +2841,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get blackWins => 'Melno uzvaras';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Neizšķirtu biežums';
 
   @override
   String get draws => 'Neizšķirti';
@@ -2908,22 +2908,22 @@ class AppLocalizationsLv extends AppLocalizations {
   String get editProfile => 'Labot profilu';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Īstais vārds';
 
   @override
-  String get setFlair => 'Set your flair';
+  String get setFlair => 'Izvēlieties nozīmīti';
 
   @override
-  String get flair => 'Flair';
+  String get flair => 'Nozīmīte';
 
   @override
-  String get youCanHideFlair => 'There is a setting to hide all user flairs across the entire site.';
+  String get youCanHideFlair => 'Iestatījumos ir iespēja slēpt lietotāju nozīmītes visā platformā.';
 
   @override
   String get biography => 'Biogrāfija';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Valsts vai apgabals';
 
   @override
   String get thankYou => 'Paldies!';
@@ -2968,7 +2968,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzles => 'Uzdevumi';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Boti tiešsaistē';
 
   @override
   String get name => 'Nosaukums';
@@ -2989,10 +2989,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get yes => 'Jā';
 
   @override
-  String get website => 'Website';
+  String get website => 'Mājaslapa';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobilā lietotne';
 
   @override
   String get help => 'Palīdzība:';
@@ -3049,13 +3049,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get other => 'Cits';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Ielīmē spēles saiti un paskaidro, kas nav kārtībā ar lietotāja uzvedību. Nepietiks, ja tikai norādīsi, ka \"lietotājs krāpjas\" — lūdzu, pastāsti, kā nonāci pie šī secinājuma.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Paskaidro, kāpēc lietotājvārds ir aizskarošs. Nepietiks, ja teiksi \"tas ir rupjš/nepieklājīgs\"; lūdzu pastāsti, kā nonāci pie šī secinājuma – it īpaši, ja aizvainojums ir slēpts, nav angļu valodā, izmanto žargonu vai atsauci uz vēsturisku notikumu vai kultūru.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Ja ziņojums būs rakstīts angliski, par to varēsim parūpēties ātrāk.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Lūdzu, norādiet vismaz vienu saiti uz spēli, kurā pretinieks ir krāpies.';
@@ -3158,7 +3158,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get outsideTheBoard => 'Galdiņa ārpusē';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Katrā lauciņā';
 
   @override
   String get onSlowGames => 'Lēnajās spēlēs';
@@ -3480,28 +3480,28 @@ class AppLocalizationsLv extends AppLocalizations {
   String get keyNextInaccuracy => 'Nākamā neprecizitāte';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Iepriekšējais zars';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Nākamais zars';
 
   @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
+  String get toggleVariationArrows => 'Rādīt/slēpt varianta bultiņas';
 
   @override
   String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
 
   @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
+  String get toggleGlyphAnnotations => 'Rādīt/slēpt gājienu piezīmes';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Rādīt/slēpt pozīciju piezīmes';
 
   @override
-  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Ar variantu bultiņām vari izskatīt variantus neizmantojot gājienu sarakstu.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'spēlēt atlasīto gājienu';
 
   @override
   String get newTournament => 'Jauns turnīrs';
@@ -3546,7 +3546,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return 'Better than $param1 of $param2 players';
+    return 'Labāk par $param1 starp $param2 spēlētājiem';
   }
 
   @override
@@ -3636,7 +3636,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get kidMode => 'Bērnu režīms';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Bērnu režīms ir ieslēgts.';
 
   @override
   String get kidModeExplanation => 'Runa ir par drošību. Bērnu režīmā jebkāda saziņa ir atspējota. Ieslēdziet šo režīmu, lai pasargātu savus bērnus un skolēnus no citiem interneta lietotājiem.';
@@ -3754,22 +3754,22 @@ class AppLocalizationsLv extends AppLocalizations {
   String get backgroundImageUrl => 'Fona attēla URL:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Galdiņš';
 
   @override
-  String get size => 'Size';
+  String get size => 'Izmērs';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Necaurspīdīgums';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Spilgtums';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Tonis';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Atiestatīt krāsas';
 
   @override
   String get pieceSet => 'Figūru komplekts';
@@ -3961,10 +3961,10 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Saņemta privāta ziņa no Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Klikšķini te, lai to lasītu';
 
   @override
   String get sorry => 'Lūdzu piedodiet :(';
@@ -4349,19 +4349,19 @@ class AppLocalizationsLv extends AppLocalizations {
   String get ourEventTips => 'Pasākumu organizēšanas ieteikumi';
 
   @override
-  String get instructions => 'Instructions';
+  String get instructions => 'Instrukcijas';
 
   @override
-  String get showMeEverything => 'Show me everything';
+  String get showMeEverything => 'Rādīt visu';
 
   @override
   String get lichessPatronInfo => 'Lichess ir labdarības organizācija un pilnībā bezmaksas/brīva atvērtā koda programmatūra.\nVisas izmaksas, izstrādāšanu un saturu finansē vienīgi lietotāju ziedojumi.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Šobrīd te nav, ko parādīt.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
   String opponentLeftCounter(int count) {

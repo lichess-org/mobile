@@ -903,7 +903,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesInGameOnly => 'Только в игре';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Кроме как во время игры';
 
   @override
   String get preferencesChessClock => 'Шахматные часы';
@@ -1945,7 +1945,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteFromHere => 'Удалить с этого места';
 
   @override
-  String get collapseVariations => 'Свернуть варианты';
+  String get collapseVariations => 'Свернуть вариантыуцппцупупцупуц';
 
   @override
   String get expandVariations => 'Развернуть варианты';
