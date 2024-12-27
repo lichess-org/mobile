@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -211,6 +212,7 @@ class _BroadcastWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+<<<<<<< HEAD
     return broadcastList.when(
       data: (data) {
         if (data.active.isEmpty && data.past.isEmpty) {
@@ -246,27 +248,62 @@ class _BroadcastWidget extends ConsumerWidget {
                       child: Text(context.l10n.more),
                     ),
                   ],
+=======
+    final isTablet = isTabletOrLarger(context);
+    final aspectRatio = isTablet ? 1.7 : 1.55;
+
+    return Padding(
+      padding: Styles.sectionBottomPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8.0)),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    context.l10n.broadcastBroadcasts,
+                    style: Styles.sectionTitle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+>>>>>>> 6fee30f9 (More wip on broadcast carousel)
                 ),
-              ),
-              BroadcastCarousel(broadcasts: data, worker: worker, aspectRatio: 1.7),
-            ],
-          ),
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint('SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace');
-        return const Padding(
-          padding: Styles.bodySectionPadding,
-          child: Text('Could not load broadcasts'),
-        );
-      },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: BroadcastCarousel.loading(worker: worker, aspectRatio: 16 / 9),
+                const SizedBox(width: 6.0),
+                NoPaddingTextButton(
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.broadcastBroadcasts,
+                      builder: (context) => const BroadcastListScreen(),
+                    );
+                  },
+                  child: Text(context.l10n.more),
+                ),
+              ],
             ),
           ),
+          switch (broadcastList) {
+            AsyncData(:final value) => BroadcastCarousel(
+              broadcasts: value,
+              worker: worker,
+              aspectRatio: aspectRatio,
+            ),
+            AsyncError() => const Padding(
+              padding: Styles.bodySectionPadding,
+              child: Text('Could not load broadcasts'),
+            ),
+            _ => Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: BroadcastCarousel.loading(worker: worker, aspectRatio: aspectRatio),
+              ),
+            ),
+          },
+        ],
+      ),
     );
   }
 }
