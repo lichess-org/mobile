@@ -566,27 +566,25 @@ class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsS
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: ShowRatings.values,
-                      selectedItem: data.showRatings,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (ShowRatings? v) {
-                                final future = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setShowRatings(v ?? data.showRatings);
-                                setState(() {
-                                  _pendingSetShowRatings = future;
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: ShowRatings.values,
+                    selectedItem: data.showRatings,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (ShowRatings? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setShowRatings(v ?? data.showRatings);
+                              setState(() {
+                                _pendingSetShowRatings = future;
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },
