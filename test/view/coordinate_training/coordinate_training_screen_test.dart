@@ -3,10 +3,12 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
@@ -18,13 +20,11 @@ void main() {
       await tester.tap(find.text('Start Training'));
       await tester.pumpAndSettle();
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
       final controllerProvider = coordinateTrainingControllerProvider;
 
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
-      // This way all squares can be found via find.byKey(ValueKey('${square.name}-empty'))
-      trainingPrefsNotifier.setShowPieces(false);
       await tester.pumpAndSettle();
 
       expect(container.read(controllerProvider).score, 0);
@@ -41,24 +41,22 @@ void main() {
       final app = await makeTestProviderScopeApp(tester, home: const CoordinateTrainingScreen());
       await tester.pumpWidget(app);
 
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
+      trainingPrefsNotifier.setMode(TrainingMode.findSquare);
+      trainingPrefsNotifier.setSideChoice(SideChoice.white);
+
       await tester.tap(find.text('Start Training'));
       await tester.pumpAndSettle();
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
       final controllerProvider = coordinateTrainingControllerProvider;
-
-      final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
-      trainingPrefsNotifier.setMode(TrainingMode.findSquare);
-      // This way all squares can be found via find.byKey(ValueKey('${square.name}-empty'))
-      trainingPrefsNotifier.setShowPieces(false);
-      await tester.pumpAndSettle();
 
       final currentCoord = container.read(controllerProvider).currentCoord;
       final nextCoord = container.read(controllerProvider).nextCoord;
 
       final wrongCoord = Square.values[(currentCoord! + 1) % Square.values.length];
 
-      await tester.tap(find.byKey(ValueKey('${wrongCoord.name}-empty')));
+      await tester.tapAt(squareOffset(wrongCoord, tester.getRect(find.byType(Chessboard))));
       await tester.pump();
 
       expect(container.read(controllerProvider).score, 0);
@@ -76,22 +74,21 @@ void main() {
       final app = await makeTestProviderScopeApp(tester, home: const CoordinateTrainingScreen());
       await tester.pumpWidget(app);
 
-      await tester.tap(find.text('Start Training'));
-      await tester.pumpAndSettle();
-
-      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
-      final controllerProvider = coordinateTrainingControllerProvider;
-
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
-      // This way all squares can be found via find.byKey(ValueKey('${square.name}-empty'))
-      trainingPrefsNotifier.setShowPieces(false);
+      trainingPrefsNotifier.setSideChoice(SideChoice.white);
+
+      final controllerProvider = coordinateTrainingControllerProvider;
+
+      await tester.tap(find.text('Start Training'));
       await tester.pumpAndSettle();
 
       final currentCoord = container.read(controllerProvider).currentCoord;
       final nextCoord = container.read(controllerProvider).nextCoord;
 
-      await tester.tap(find.byKey(ValueKey('${currentCoord!.name}-empty')));
+      await tester.tapAt(squareOffset(currentCoord!, tester.getRect(find.byType(Chessboard))));
+
       await tester.pump();
 
       expect(find.byKey(ValueKey('${currentCoord.name}-highlight')), findsOneWidget);
