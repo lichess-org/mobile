@@ -374,7 +374,7 @@ class _StreamerWidget extends ConsumerWidget {
 
   const _StreamerWidget(this.streamers);
 
-  static const int numberOfItems = 10;
+  static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
