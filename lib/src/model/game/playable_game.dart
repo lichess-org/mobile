@@ -72,22 +72,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
     return _playableGameFromPick(pick(json).required());
   }
 
-  /// Player of the playing point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
-
   Side get sideToMove => lastPosition.turn;
 
   bool get hasAI => white.isAI || black.isAI;
@@ -97,12 +81,6 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   /// Whether it is the current player's turn.
   bool get isMyTurn => lastPosition.turn == youAre;
 
-  /// Whether the game is properly finished (not aborted).
-  bool get finished => status.value >= GameStatus.mate.value;
-  bool get aborted => status == GameStatus.aborted;
-
-  /// Whether the game is still playable (not finished or aborted and not imported).
-  bool get playable => status.value < GameStatus.aborted.value && !imported;
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&

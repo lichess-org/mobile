@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -26,7 +26,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
   const GamePlayer({
-    required this.player,
+    required this.game,
+    required this.side,
     this.clock,
     this.materialDiff,
     this.materialDifferenceFormat,
@@ -39,7 +40,9 @@ class GamePlayer extends StatelessWidget {
     super.key,
   });
 
-  final Player player;
+  final BaseGame game;
+  final Side side;
+
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
   final MaterialDifferenceFormat? materialDifferenceFormat;
@@ -59,6 +62,8 @@ class GamePlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final remaingHeight = estimateRemainingHeightLeftBoard(context);
     final playerFontSize = remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
+
+    final player = game.playerOf(side);
 
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -119,6 +124,7 @@ class GamePlayer extends StatelessWidget {
               ],
               if (player.rating != null)
                 RatingPrefAware(
+                  isActiveGameOfCurrentUser: game.me != null && !game.finished && !game.aborted,
                   child: Text.rich(
                     TextSpan(
                       text: ' ${player.rating}${player.provisional == true ? '?' : ''}',

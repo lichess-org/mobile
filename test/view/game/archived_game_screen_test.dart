@@ -42,7 +42,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
       // wait for game data loading
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.byType(PieceWidget), findsNWidgets(25));
       expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
@@ -61,8 +61,6 @@ void main() {
       // data shown immediately
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
 
       // cannot interact with board
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).game, null);
@@ -82,19 +80,19 @@ void main() {
       // same info still displayed
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
-      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
-      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
 
       // now with the clocks
       expect(find.text('1:46', findRichText: true), findsNWidgets(1));
       expect(find.text('0:46', findRichText: true), findsNWidgets(1));
 
-      // moves are loaded
+      // moves and players are loaded
       expect(find.byType(MoveList), findsOneWidget);
       expect(
         tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
         isNotNull,
       );
+      expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
+      expect(find.widgetWithText(GamePlayer, 'Stockfish level 1'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('navigate game positions', (tester) async {

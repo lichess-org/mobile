@@ -109,7 +109,8 @@ class GameBody extends ConsumerWidget {
         final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
 
         final black = GamePlayer(
-          player: gameState.game.black,
+          game: gameState.game,
+          side: Side.black,
           materialDiff:
               boardPreferences.materialDifferenceFormat.visible
                   ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -157,7 +158,8 @@ class GameBody extends ConsumerWidget {
                   : null,
         );
         final white = GamePlayer(
-          player: gameState.game.white,
+          game: gameState.game,
+          side: Side.white,
           materialDiff:
               boardPreferences.materialDifferenceFormat.visible
                   ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)

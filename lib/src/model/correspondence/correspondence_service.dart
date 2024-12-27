@@ -218,7 +218,7 @@ class CorrespondenceService {
         perf: game.meta.perf,
         white: game.white,
         black: game.black,
-        youAre: game.youAre!,
+        youAre: game.youAre,
         daysPerTurn: game.meta.daysPerTurn,
         clock: game.correspondenceClock,
         winner: game.winner,
