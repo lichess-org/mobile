@@ -334,16 +334,16 @@ class SocketClient {
         _handlePong(pingDelay);
       case 'ack':
         _onServerAck(event);
-    }
-
-    if (event != SocketEvent.pong && event.topic != 'ack') {
-      if (_streamController.hasListener) {
-        _streamController.add(event);
-      }
-      if (_globalStreamController.hasListener &&
-          _globalSocketStreamAllowedTopics.contains(event.topic)) {
-        _globalStreamController.add(event);
-      }
+      case 'batch':
+        _handleBatch(event);
+      case _:
+        if (_streamController.hasListener) {
+          _streamController.add(event);
+        }
+        if (_globalStreamController.hasListener &&
+            _globalSocketStreamAllowedTopics.contains(event.topic)) {
+          _globalStreamController.add(event);
+        }
     }
   }
 
@@ -405,6 +405,16 @@ class SocketClient {
       if (at.isBefore(resendCutoff)) {
         _sink?.add(jsonEncode(ack));
       }
+    }
+  }
+
+  void _handleBatch(SocketEvent batchEvent) {
+    final jsonEventList = batchEvent.data as List<dynamic>;
+
+    for (final jsonEvent in jsonEventList) {
+      final event = SocketEvent.fromJson(jsonEvent as Map<String, dynamic>);
+
+      _streamController.add(event);
     }
   }
 }
