@@ -146,7 +146,7 @@ class _Body extends ConsumerWidget {
     final broadcastState = ref.watch(broadcastGameControllerProvider(roundId, gameId));
 
     switch (broadcastState) {
-      case AsyncData(value: final broadcastState):
+      case AsyncValue(value: final broadcastState?):
         final analysisPrefs = ref.watch(analysisPreferencesProvider);
         final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
         final numEvalLines = analysisPrefs.numEvalLines;
@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
           ),
           children: [_OpeningExplorerTab(roundId, gameId), BroadcastGameTreeView(roundId, gameId)],
         );
-      case AsyncError(:final error):
+      case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
       case _:
         return const CircularProgressIndicator.adaptive();
@@ -356,7 +356,7 @@ class _PlayerWidget extends ConsumerWidget {
     final game = ref.watch(broadcastRoundGameProvider(roundId, gameId));
 
     switch (game) {
-      case AsyncValue(value: final game?, hasValue: true):
+      case AsyncValue(value: final game?):
         final broadcastGameState =
             ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
 
