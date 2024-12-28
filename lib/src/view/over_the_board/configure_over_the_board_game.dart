@@ -169,7 +169,7 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
               (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
-          title: const Text('Flip pieces and oponent info after move'),
+          title: const Text('Flip pieces and opponent info after move'),
           value: prefs.flipPiecesAfterMove,
           onChanged:
               (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
