@@ -50,6 +50,13 @@ class StudySettings extends ConsumerWidget {
           ListSection(
             children: [
               SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: analysisPrefs.inlineNotation,
+                onChanged:
+                    (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
                 value: studyPrefs.showVariationArrows,
                 onChanged:
