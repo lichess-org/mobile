@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">সব গেম</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">আপনি কি নিশ্চিত?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">চাল ফেরত নেওয়ার অফার বাতিল করুন</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">মুছে ফেলুন</string>
+</resources>
