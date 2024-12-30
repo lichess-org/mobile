@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastTournamentId tournamentId;
@@ -155,59 +156,64 @@ class _Body extends ConsumerWidget {
         final isLocalEvaluationEnabled = broadcastState.isLocalEvaluationEnabled;
         final currentNode = broadcastState.currentNode;
 
-        return AnalysisLayout(
-          tabController: tabController,
-          boardBuilder:
-              (context, boardSize, borderRadius) =>
-                  _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
-          boardHeader: _PlayerWidget(
-            tournamentId: tournamentId,
-            roundId: roundId,
-            gameId: gameId,
-            widgetPosition: _PlayerWidgetPosition.top,
-          ),
-          boardFooter: _PlayerWidget(
-            tournamentId: tournamentId,
-            roundId: roundId,
-            gameId: gameId,
-            widgetPosition: _PlayerWidgetPosition.bottom,
-          ),
-          engineGaugeBuilder:
-              isLocalEvaluationEnabled && showEvaluationGauge
-                  ? (context, orientation) {
-                    return orientation == Orientation.portrait
-                        ? EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.horizontal,
-                          params: engineGaugeParams,
-                        )
-                        : Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                          child: EngineGauge(
-                            displayMode: EngineGaugeDisplayMode.vertical,
+        return Shimmer(
+          child: AnalysisLayout(
+            tabController: tabController,
+            boardBuilder:
+                (context, boardSize, borderRadius) =>
+                    _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+            boardHeader: _PlayerWidget(
+              tournamentId: tournamentId,
+              roundId: roundId,
+              gameId: gameId,
+              widgetPosition: _PlayerWidgetPosition.top,
+            ),
+            boardFooter: _PlayerWidget(
+              tournamentId: tournamentId,
+              roundId: roundId,
+              gameId: gameId,
+              widgetPosition: _PlayerWidgetPosition.bottom,
+            ),
+            engineGaugeBuilder:
+                isLocalEvaluationEnabled && showEvaluationGauge
+                    ? (context, orientation) {
+                      return orientation == Orientation.portrait
+                          ? EngineGauge(
+                            displayMode: EngineGaugeDisplayMode.horizontal,
                             params: engineGaugeParams,
-                          ),
-                        );
-                  }
-                  : null,
-          engineLines:
-              isLocalEvaluationEnabled && numEvalLines > 0
-                  ? EngineLines(
-                    clientEval: currentNode.eval,
-                    isGameOver: currentNode.position.isGameOver,
-                    onTapMove:
-                        ref
-                            .read(broadcastGameControllerProvider(roundId, gameId).notifier)
-                            .onUserMove,
-                  )
-                  : null,
-          bottomBar: BroadcastGameBottomBar(
-            roundId: roundId,
-            gameId: gameId,
-            tournamentSlug: tournamentSlug,
-            roundSlug: roundSlug,
+                          )
+                          : Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                            child: EngineGauge(
+                              displayMode: EngineGaugeDisplayMode.vertical,
+                              params: engineGaugeParams,
+                            ),
+                          );
+                    }
+                    : null,
+            engineLines:
+                isLocalEvaluationEnabled && numEvalLines > 0
+                    ? EngineLines(
+                      clientEval: currentNode.eval,
+                      isGameOver: currentNode.position.isGameOver,
+                      onTapMove:
+                          ref
+                              .read(broadcastGameControllerProvider(roundId, gameId).notifier)
+                              .onUserMove,
+                    )
+                    : null,
+            bottomBar: BroadcastGameBottomBar(
+              roundId: roundId,
+              gameId: gameId,
+              tournamentSlug: tournamentSlug,
+              roundSlug: roundSlug,
+            ),
+            children: [
+              _OpeningExplorerTab(roundId, gameId),
+              BroadcastGameTreeView(roundId, gameId),
+            ],
           ),
-          children: [_OpeningExplorerTab(roundId, gameId), BroadcastGameTreeView(roundId, gameId)],
         );
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
@@ -461,7 +467,10 @@ class _PlayerWidget extends ConsumerWidget {
       case AsyncValue(:final error?):
         return Text('Cannot load player data: $error');
       case _:
-        return const SizedBox.shrink();
+        return const ShimmerLoading(
+          isLoading: true,
+          child: SizedBox.expand(child: ColoredBox(color: Colors.black)),
+        );
     }
   }
 }
