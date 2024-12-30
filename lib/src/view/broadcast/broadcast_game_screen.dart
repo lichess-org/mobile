@@ -147,7 +147,7 @@ class _Body extends ConsumerWidget {
     final broadcastState = ref.watch(broadcastGameControllerProvider(roundId, gameId));
 
     switch (broadcastState) {
-      case AsyncValue(value: final broadcastState?):
+      case AsyncValue(value: final broadcastState?, hasValue: true):
         final analysisPrefs = ref.watch(analysisPreferencesProvider);
         final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
         final numEvalLines = analysisPrefs.numEvalLines;
@@ -362,7 +362,7 @@ class _PlayerWidget extends ConsumerWidget {
     final game = ref.watch(broadcastRoundGameProvider(roundId, gameId));
 
     switch (game) {
-      case AsyncValue(value: final game?):
+      case AsyncValue(value: final game?, hasValue: true):
         final broadcastGameState =
             ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
 
