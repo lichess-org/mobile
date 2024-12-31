@@ -357,6 +357,34 @@ void main() {
       // second mainline part has not changed since the current move is not part of it
       expect(identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4), isTrue);
     });
+
+    testWidgets(
+      'Select first move of sideline if mainline part has only one move (regression test)',
+      (tester) async {
+        /// Will be rendered as:
+        /// -------------------
+        /// 1. e4
+        /// |- 1. d4
+        /// |- 1. c4
+        /// -------------------
+        await buildTree(tester, '1. e4 (1. d4) (1. c4)');
+
+        await tester.tap(find.text('1. d4'));
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+
+        final e4NodeBeforeTap = parentText(tester, '1. e4');
+
+        await tester.tap(find.text('1. c4'));
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+
+        final e4NodeAfterTap = parentText(tester, '1. e4');
+
+        // There was a bug where the subtree would not be rebuilt here
+        expect(e4NodeBeforeTap, isNot(e4NodeAfterTap));
+      },
+    );
   });
 }
 

@@ -361,9 +361,15 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
           }
 
           final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
+          final currentMoveIsOnMainline =
+              mainlinePartOfCurrentPath == widget.params.pathToCurrentMove;
+
           final containsCurrentMove =
-              mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
-              mainlinePartOfCurrentPath.size <= path.size;
+              currentMoveIsOnMainline
+                  ? mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
+                      mainlinePartOfCurrentPath.size <= path.size
+                  : mainlinePartOfCurrentPath.size >= mainlineInitialPath.size &&
+                      mainlinePartOfCurrentPath.size < path.size;
 
           if (fullRebuild || subtrees[i].containsCurrentMove || containsCurrentMove) {
             // Skip the first node which is the continuation of the mainline
