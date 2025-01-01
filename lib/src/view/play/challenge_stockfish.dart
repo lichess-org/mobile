@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -23,6 +24,22 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+
+class AIChallenge {
+  const AIChallenge(this.client);
+
+  final LichessClient client;
+
+  Future<String> test(Map<String, String> parameters) async {
+    print('Parameters: $parameters.'); // temporary
+    final uri = Uri(path: '/api/challenge/ai');
+    final response = await client.post(uri, body: parameters);
+    final body = response.body;
+    print('Response: $body.'); // temporary
+
+    return body;
+  }
+}
 
 class ComputerChallengeScreen extends StatelessWidget {
   const ComputerChallengeScreen();
@@ -69,6 +86,8 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
+    final client = ref.watch(lichessClientProvider);
+    int aiLevel = 1;
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
@@ -92,8 +111,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 : Styles.verticalBodyPadding,
             children: [
               Builder(builder: (context) {
-                double aiLevel = 1;
-
                 return StatefulBuilder(builder: (context, setState) {
                   return Center(
                     child: Column(
@@ -101,21 +118,21 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       children: [
                         Text(
                           context.l10n.aiNameLevelAiLevel('Stockfish',
-                              aiLevel.toInt().toString()),
+                              aiLevel.toString()),
                           style: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 18,
                           ),
                         ),
                         Slider(
-                          value: aiLevel,
-                          label: aiLevel.toInt().toString(),
+                          value: aiLevel.toDouble(),
+                          label: aiLevel.toString(),
                           min: 1,
                           max: 8,
                           divisions: 7,
                           onChanged: (double newValue) {
                             setState(() {
-                              aiLevel = newValue;
+                              aiLevel = newValue.toInt();
                             });
                           },
                         ),
@@ -358,7 +375,22 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
                       semanticsLabel: context.l10n.challengeChallengeToPlay,
-                      onPressed: () {},
+                      onPressed: () {
+                        if (isValidPosition && isValidTimeControl) {
+                          final challenge = AIChallenge(client);
+                          final Map<String, String> parameters = {
+                            'level': aiLevel.toString(),
+                            'days': preferences.days.toString(),
+                            'clock.limit': (preferences.timeControl == ChallengeTimeControlType.clock) ? preferences.clock.time.inSeconds.toString() : '',
+                            'clock.increment': (preferences.timeControl == ChallengeTimeControlType.clock) ? preferences.clock.increment.inSeconds.toString() : '',
+                            'color': preferences.sideChoice.name,
+                            'variant': preferences.variant.name,
+                            'fen': '', // TODO
+                          };
+
+                          challenge.test(parameters);
+                        }
+                      },
                       child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                     ),
                   );

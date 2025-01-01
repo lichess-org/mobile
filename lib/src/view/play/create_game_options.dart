@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -12,7 +11,6 @@ import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dar
 import 'package:lichess_mobile/src/view/play/challenge_stockfish.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/online_bots_screen.dart';
-import 'package:lichess_mobile/src/view/play/play_versus_stockfish.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
@@ -61,7 +59,7 @@ class CreateGameOptions extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.playWithTheMachine,
-                  builder: (_) => ComputerChallengeScreen() // const PlayStockfishScreen(),
+                  builder: (_) => const ComputerChallengeScreen() // const PlayStockfishScreen(),
                 );
               }
                   : null,
