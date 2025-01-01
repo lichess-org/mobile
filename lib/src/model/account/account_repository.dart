@@ -114,7 +114,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
   return (
     zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
     pieceNotation: PieceNotation.fromInt(pick('pieceNotation').asIntOrThrow()),
-    showRatings: BooleanPref.fromInt(pick('ratings').asIntOrThrow()),
+    showRatings: ShowRatings.fromInt(pick('ratings').asIntOrThrow()),
     premove: BooleanPref(pick('premove').asBoolOrThrow()),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
     autoThreefold: AutoThreefold.fromInt(pick('autoThreefold').asIntOrThrow()),

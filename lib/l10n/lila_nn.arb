@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Alle spel",
   "mobileAreYouSure": "Er du sikker?",
-  "mobileBlindfoldMode": "Blindsjakk",
   "mobileCancelTakebackOffer": "Avbryt tilbud om angrerett",
   "mobileClearButton": "Tøm",
   "mobileCorrespondenceClearSavedMove": "Fjern lagra trekk",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Vis handtak for brettstorleik",
   "preferencesOnlyOnInitialPosition": "Berre for startstillinga",
   "preferencesInGameOnly": "Berre under eit parti",
+  "preferencesExceptInGame": "Unnateke i partiet",
   "preferencesChessClock": "Sjakkur",
   "preferencesTenthsOfSeconds": "Tidels sekund",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Når det er mindre enn 10 sekundar igjen",

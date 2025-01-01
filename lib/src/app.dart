@@ -135,6 +135,7 @@ class _AppState extends ConsumerState<Application> {
                 : (null, null);
 
         final isTablet = isTabletOrLarger(context);
+        final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
@@ -181,12 +182,13 @@ class _AppState extends ConsumerState<Application> {
           theme: ThemeData.from(
             colorScheme: colorScheme,
             textTheme:
-                Theme.of(context).platform == TargetPlatform.iOS
+                isIOS
                     ? brightness == Brightness.light
                         ? Typography.blackCupertino
                         : Styles.whiteCupertinoTextTheme
                     : null,
           ).copyWith(
+            splashFactory: isIOS ? NoSplash.splashFactory : null,
             cupertinoOverrideTheme: cupertinoThemeData,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,

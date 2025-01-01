@@ -64,7 +64,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Magnifica la peça arrossegada';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Voleu acabar aquesta ronda?';
@@ -97,7 +97,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Mode immersiu';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Amaga la interfície del sistema mentre jugues. Utilitza-ho si et molesta la navegació del sistema a les vores de la pantalla. Aplica a les pantalles de partides i problemes.';
 
   @override
   String get mobileSettingsTab => 'Configuració';
@@ -194,7 +194,7 @@ class AppLocalizationsCa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Ha jugat $count partides $param2',
-      one: 'Has jugat $count partida $param2',
+      one: 'Ha jugat $count partida $param2',
     );
     return '$_temp0';
   }
@@ -248,8 +248,8 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Completed $count $param2 correspondence games',
-      one: 'Completed $count $param2 correspondence game',
+      other: 'Has jugat $count $param2 partides per correspondència',
+      one: 'Has jugat $count $param2 partida per correspondència',
     );
     return '$_temp0';
   }
@@ -337,7 +337,7 @@ class AppLocalizationsCa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Ha jugat en $count tornejos suïssos',
-      one: 'Ha jugat en $count tornejos suïssos',
+      one: 'Ha jugat en $count torneig suís',
     );
     return '$_temp0';
   }
@@ -865,7 +865,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get preferencesInGameOnly => 'Només durant la partida';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Excepte durant la partida';
 
   @override
   String get preferencesChessClock => 'Rellotge d\'escacs';
@@ -1255,7 +1255,7 @@ class AppLocalizationsCa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count punts per sota del teu nivell de problemes',
-      one: '$count punts per sota del teu nivell de problemes',
+      one: '$count punts per sota del teu nivell de problemescata',
     );
     return '$_temp0';
   }
@@ -2319,7 +2319,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gamesPlayed => 'Partides jugades';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'D\'acord';
 
   @override
   String get cancel => 'Cancel·lar';
@@ -4010,10 +4010,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get edit => 'Edita';
 
   @override
-  String get bullet => 'Bullet';
+  String get bullet => 'Bala';
 
   @override
-  String get blitz => 'Blitz';
+  String get blitz => 'Llampec';
 
   @override
   String get rapid => 'Ràpides';

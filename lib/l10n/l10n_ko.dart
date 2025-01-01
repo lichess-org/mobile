@@ -846,7 +846,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesInGameOnly => '게임 도중에만 적용';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => '게임 내 제외';
 
   @override
   String get preferencesChessClock => '체스 시계';

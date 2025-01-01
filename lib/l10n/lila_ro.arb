@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Toate jocurile",
   "mobileAreYouSure": "Ești sigur?",
-  "mobileBlindfoldMode": "Legat la ochi",
   "mobileCancelTakebackOffer": "Anulați propunerea de revanșă",
   "mobileClearButton": "Resetare",
   "mobileCorrespondenceClearSavedMove": "Șterge mutarea salvată",
@@ -194,6 +193,7 @@
   "preferencesDisplayBoardResizeHandle": "Arată indicatorul de redimensionare a tablei",
   "preferencesOnlyOnInitialPosition": "Doar inainte de prima mutare",
   "preferencesInGameOnly": "Doar în joc",
+  "preferencesExceptInGame": "Exceptând în timpul jocului",
   "preferencesChessClock": "Ceasul de șah",
   "preferencesTenthsOfSeconds": "Zecimi de secundă",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Când rămân mai puțin de 10 secunde",

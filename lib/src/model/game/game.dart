@@ -38,12 +38,39 @@ abstract mixin class BaseGame {
 
   GameStatus get status;
 
+  /// Whether the game is properly finished (not aborted).
+  bool get finished => status.value >= GameStatus.mate.value;
+  bool get aborted => status == GameStatus.aborted;
+
+  /// Whether the game is still playable (not finished or aborted and not imported).
+  bool get playable => status.value < GameStatus.aborted.value;
+
+  /// This field is null if the game is being watched as a spectator, and
+  /// represents the side that the current player is playing as otherwise.
+  Side? get youAre;
+
   Side? get winner;
 
   bool? get isThreefoldRepetition;
 
   Player get white;
   Player get black;
+
+  /// Player of the playing point of view. Null if spectating.
+  Player? get me =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? white
+          : black;
+
+  /// Opponent from the playing point of view. Null if spectating.
+  Player? get opponent =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? black
+          : white;
 
   Position get lastPosition;
 

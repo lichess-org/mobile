@@ -114,7 +114,7 @@ class CorrespondenceGameStorage {
   Future<void> save(OfflineCorrespondenceGame game) async {
     try {
       await _db.insert(kCorrespondenceStorageTable, {
-        'userId': game.me.user?.id.toString() ?? kCorrespondenceStorageAnonId,
+        'userId': game.me?.user?.id.toString() ?? kCorrespondenceStorageAnonId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(game.toJson()),

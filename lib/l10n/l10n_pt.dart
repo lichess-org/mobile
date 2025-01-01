@@ -130,7 +130,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSystemColors => 'Cores do sistema';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Tools';
@@ -865,7 +865,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesInGameOnly => 'Apenas em Jogo';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Exceto em jogo';
 
   @override
   String get preferencesChessClock => 'Relógio de xadrez';
@@ -6537,6 +6537,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get preferencesInGameOnly => 'Durante partidas';
+
+  @override
+  String get preferencesExceptInGame => 'Exceto durante a partida';
 
   @override
   String get preferencesChessClock => 'Relógio';

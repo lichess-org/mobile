@@ -63,22 +63,6 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
 
   /// Create an archived game from a local storage JSON.
   factory ArchivedGame.fromJson(Map<String, dynamic> json) => _$ArchivedGameFromJson(json);
-
-  /// Player point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
 }
 
 /// A [LightArchivedGame] associated with a point of view of a player.
