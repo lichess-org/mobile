@@ -220,6 +220,9 @@ class _BroadcastWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return broadcastList.when(
       data: (data) {
+        if (data.active.isEmpty && data.past.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return ListSection(
           hasLeading: true,
           header: Text(context.l10n.broadcastBroadcasts),
