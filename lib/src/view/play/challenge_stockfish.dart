@@ -10,11 +10,14 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -30,14 +33,26 @@ class AIChallenge {
 
   final LichessClient client;
 
-  Future<String> test(Map<String, String> parameters) async {
-    print('Parameters: $parameters.'); // temporary
-    final uri = Uri(path: '/api/challenge/ai');
-    final response = await client.post(uri, body: parameters);
-    final body = response.body;
-    print('Response: $body.'); // temporary
+  Future<void> create(BuildContext context, Map<String, String> parameters) async {
+    final uri = Uri(path: '/api/challenge/ai'); // Uri(path: '/api/challenge/ai');
+    final response = await client.postReadJson(uri, body: parameters, mapper: (json) {
+      return json;
+    });
 
-    return body;
+    // TODO: stream /api/stream/event
+    // TODO: then set fullId to the full id of the game
+
+    /*
+    pushPlatformRoute(
+      context,
+      rootNavigator: true,
+      builder: (BuildContext context) {
+          return GameScreen(
+              initialGameId: GameFullId(fullId),
+          );
+      },
+    );
+    */
   }
 }
 
@@ -388,7 +403,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             'fen': '', // TODO
                           };
 
-                          challenge.test(parameters);
+                          challenge.create(context, parameters);
                         }
                       },
                       child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
