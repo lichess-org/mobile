@@ -11,12 +11,16 @@ This project uses Flutter.
 1. Follow [the flutter install guide](https://docs.flutter.dev/get-started/install).
    This project is meant to run on iOS and Android, so you need to follow the "Platform setup" section of that guide to
    install the iOS and/or Android platform.
+
 > [!WARNING]
-> Installing on Linux using `snapd` might cause some [problems](../../issues/123) building stockfish.
+> Installing on Linux using `snapd` might cause some [problems](https://github.com/lichess-org/mobile/issues/123) building stockfish.
 > Installing flutter manually is a known workaround.
+
 2. Switch to the beta channel by running `flutter channel beta` and `flutter upgrade`
+
 > [!NOTE]
 > We'll use Flutter's `beta` channel while the app itself is in Beta.
+
 3. Ensure Flutter is correctly configured by running `flutter doctor`
 
 Note that this application is not meant to be run on web platform.
@@ -47,68 +51,76 @@ The fastest and most straight-forward way to get started is using [lila-docker](
 
 Instructions to install both `lila` and `lila-ws` locally can be found in [the lila wiki](https://github.com/lichess-org/lila/wiki/Lichess-Development-Onboarding).
 
-**Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
+## Setting up a device
 
-To run the application with a local server, you can use the following command:
+### Real device
 
-```bash
-flutter run --dart-define=LICHESS_HOST=localhost:9663 --dart-define=LICHESS_WS_HOST=localhost:9664
-```
+#### Android
 
-> [!NOTE]
-> The hosts above are the default ports for lila, if you have changed them, you
-will need to adjust the command accordingly.
+To use a real device you will need to [enable developer options](https://developer.android.com/studio/debug/dev-options) on it and have [adb](https://developer.android.com/tools/adb) installed on your computer.
 
-## Setting up the emulators
+Once that done, you can [connect your device](https://developer.android.com/studio/run/device) either with USB or with Wi-Fi.
 
-### iOS
+##### Connect with USB
+
+Enable USB debugging and connect your phone with USB.
+
+Run `adb devices` to check that your device is connected.
+
+##### Connect with Wi-Fi
+
+On your Android phone:
+
+1. Connect your phone to the same wifi network as your host machine
+2. In Developer Options, toggle Wireless Debugging to ON
+3. Tap "Wireless Debugging" to enter its menu
+4. Select **Pair device with pairing code**
+
+On your computer:
+
+1. Pair your phone with `adb pair [phone_ip_address]:[pair_port] [pairing_code]`.
+2. Connect your phone with `adb connect [phone_ip_address]:[connection_port]`.
+   Your phone IP address and connection port should be written on the wireless debugging menu.
+3. Check that your device is connected with `adb devices`
+
+### Emulators
+
+#### iOS
 
 Simply follow the instructions in the flutter guide to install Xcode and the iOS
 simulator.
 
+#### Android
 
-### Android
+##### Troubleshooting
 
-#### When using a manually installed lila server
+- If Chrome crashes, it is likely you need to disable Vulkan in emulator settings:
 
-If you are working with a local `lila` server, you need to expose some ports from the emulator. You can do this by
-running the following command (once the emulator is running):
+  ```bash
+  $ emulator -avd <YourAVD> -feature -Vulkan
+  ```
 
-```bash
-adb reverse tcp:9663 tcp:9663
-adb reverse tcp:9664 tcp:9664
-```
+  You can read more about this issue [here](https://issuetracker.google.com/issues/277651135).
 
-This will allow the app to communicate with the local server. 9663 is for `http`
-and 9664 is for `websocket`. It assumes that the server is running on the
-default ports.
+- If you cannot access internet you can try launching the emulator with a DNS address:
 
-#### When using lila-docker
+  ```bash
+  $ emulator -avd <YourAVD> -dns-server 1.1.1.1
+  ```
 
-When using [lila-docker](https://github.com/lichess-org/lila-docker), first run `./lila-docker hostname` and select your
-computer's IP address. Then, instead of the commands above, use this:
+  If you are on Linux it seems that the emulator will try to read `/etc/resolv.conf` to find DNS servers.
+  You might want to check that your `/etc/resolv.conf` is configured properly rather than using the emulator `dns-server` flag first.
+  If you use systemd-resolved, the recommended mode of handling `/etc/resolv.conf` is to symlink `/etc/resolv.conf` to `/run/systemd/resolve/stub-resolv.conf`.
 
-```bash
-adb reverse tcp:9663 tcp:8080
-adb reverse tcp:9664 tcp:8080
-```
+- If you experience high lags or freezes, check the memory settings and be sure to enable hardware acceleration (`-gpu host`).
+  
+  Also disabling the snapshot storage may help:
 
-#### Troubleshooting
+  ```bash
+  $ emulator -avd <YourAVD> -no-snapshot-load -no-snapstorage -no-snapshot -no-snapshot-save
+  ```
 
-If Chrome instacrashes, it is likely you need to disable vulkan in emulator settings.
-
-If you cannot access internet you can try launching the emulator with a DNS address:
-
-```bash
-$ emulator -avd <YourAVD> -dns-server 1.1.1.1
-```
-
-If you experience high lags or freezes, check the memory settings and be sure to enable hardware acceleration (`-gpu host`)
-Also disabling the snapshot storage may help:
-
-```bash
-$ emulator -avd <YourAVD> -no-snapshot-load -no-snapstorage -no-snapshot -no-snapshot-save'
-```
+- If you use Wayland, the emulator will not work. You can try to use Xwayland instead. The issue is tracked [here](https://issuetracker.google.com/issues/378421876).
 
 ## Code generation
 
@@ -132,7 +144,7 @@ dart run build_runner watch
 
 Flutter comes with an `analyze` command to run static analysis. While developing you can run:
 
-```
+```bash
 flutter analyze --watch
 ```
 
@@ -140,18 +152,77 @@ It will run analysis continuously, watching the filesystem for changes. It is im
 
 ## Run
 
-Use the `flutter run` command to run on an emulator or device. If you need to change the lichess host you can do it like so:
+Use the `flutter run` command to run the app on an emulator or a real device. If you need to change the lichess host you can do it like so:
 
+```bash
+flutter run \
+  --dart-define=LICHESS_HOST=lichess.dev \
+  --dart-define=LICHESS_WS_HOST=socket.lichess.org
 ```
-flutter run --dart-define=LICHESS_HOST=lichess.dev
---dart-define=LICHESS_WS_HOST=socket.lichess.dev
+
+> [!WARNING]
+> Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper method
+
+> [!NOTE]
+> You can also use the production server but note that you will not be able to log in.
+
+### Android
+
+#### When using lila-docker
+
+When using [lila-docker](https://github.com/lichess-org/lila-docker), the easiest solution is to use the adb reverse command:
+
+```bash
+adb reverse tcp:8080 tcp:8080
 ```
+
+You can then run the app with the following hosts:
+
+```bash
+flutter run \
+  --dart-define=LICHESS_HOST=localhost:8080 \
+  --dart-define=LICHESS_WS_HOST=localhost:8080
+```
+
+Another option is to use the `./lila-docker hostname` command and select your computer's IP address.
+
+You can then run the app with the following hosts:
+
+```bash
+flutter run \
+  --dart-define=LICHESS_HOST=[your_computer_ip]:8080 \
+  --dart-define=LICHESS_WS_HOST=[your_computer_ip]:8080
+```
+
+#### When using a manually installed lila server
+
+If you are working with a local `lila` server, you need to map some ports from the remote device to the local lila server.
+Once your device is available, you can do this by running the following command (you can check if your device is available with `adb devices`):
+
+```bash
+adb reverse tcp:9663 tcp:9663
+adb reverse tcp:9664 tcp:9664
+```
+
+This will allow the app to communicate with the local server. 9663 is for `http`
+and 9664 is for `websocket`.
+
+To run the application with the local server, you can use the following command:
+
+```bash
+flutter run \
+  --dart-define=LICHESS_HOST=localhost:9663 \
+  --dart-define=LICHESS_WS_HOST=localhost:9664
+```
+
+> [!NOTE]
+> The ports above are the default ones for lila, if you have changed them, you
+will need to adjust the commands accordingly.
 
 ### Logging
 
-```sh
+```bash
 dart devtools
 ```
 
 Then run the app with the `flutter run` command above, and a link to the logging page will be printed in the console.
-
