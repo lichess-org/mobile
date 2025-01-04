@@ -34,12 +34,26 @@ class AIChallenge {
   final LichessClient client;
 
   Future<void> create(BuildContext context, Map<String, String> parameters) async {
-    final uri = Uri(path: '/api/challenge/ai'); // Uri(path: '/api/challenge/ai');
-    final response = await client.postReadJson(uri, body: parameters, mapper: (json) {
-      return json;
-    });
+    final challengeUri = lichessUri('/api/challenge/ai');
+    final streamEventUri = lichessUri('/api/stream/event');
+
+    final _ = await client.postReadJson(
+      challengeUri,
+      body: parameters,
+      mapper: (json) {
+        return json;
+      }
+    );
 
     // TODO: stream /api/stream/event
+
+    final response = await client.readNdJsonStream(
+      streamEventUri,
+      mapper: (json) {
+        return json;
+      }
+    );
+
     // TODO: then set fullId to the full id of the game
 
     /*
