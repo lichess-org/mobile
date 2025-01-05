@@ -65,6 +65,7 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
     required int days,
     required bool rated,
     required SideChoice sideChoice,
+    required int aiLevel,
   }) = _ChallengePrefs;
 
   static const defaults = ChallengePrefs(
@@ -74,6 +75,7 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
     days: 3,
     rated: false,
     sideChoice: SideChoice.random,
+    aiLevel: 1,
   );
 
   Speed get speed =>
@@ -90,6 +92,7 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
       days: timeControl == ChallengeTimeControlType.correspondence ? days : null,
       rated: rated,
       sideChoice: sideChoice,
+      aiLevel: aiLevel,
       initialFen: initialFen,
     );
   }

@@ -12,12 +12,16 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -27,48 +31,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-
-class AIChallenge {
-  const AIChallenge(this.client);
-
-  final LichessClient client;
-
-  Future<void> create(BuildContext context, Map<String, String> parameters) async {
-    final challengeUri = lichessUri('/api/challenge/ai');
-    final streamEventUri = lichessUri('/api/stream/event');
-
-    final _ = await client.postReadJson(
-      challengeUri,
-      body: parameters,
-      mapper: (json) {
-        return json;
-      }
-    );
-
-    // TODO: stream /api/stream/event
-
-    final response = await client.readNdJsonStream(
-      streamEventUri,
-      mapper: (json) {
-        return json;
-      }
-    );
-
-    // TODO: then set fullId to the full id of the game
-
-    /*
-    pushPlatformRoute(
-      context,
-      rootNavigator: true,
-      builder: (BuildContext context) {
-          return GameScreen(
-              initialGameId: GameFullId(fullId),
-          );
-      },
-    );
-    */
-  }
-}
 
 class ComputerChallengeScreen extends StatelessWidget {
   const ComputerChallengeScreen();
@@ -115,8 +77,8 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
-    final client = ref.watch(lichessClientProvider);
     int aiLevel = 1;
+    String aiName = context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString());
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
@@ -146,8 +108,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          context.l10n.aiNameLevelAiLevel('Stockfish',
-                              aiLevel.toString()),
+                          aiName,
                           style: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 18,
@@ -162,6 +123,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           onChanged: (double newValue) {
                             setState(() {
                               aiLevel = newValue.toInt();
+                              aiName = context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString());
                             });
                           },
                         ),
@@ -404,22 +366,55 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
                       semanticsLabel: context.l10n.challengeChallengeToPlay,
-                      onPressed: () {
-                        if (isValidPosition && isValidTimeControl) {
-                          final challenge = AIChallenge(client);
-                          final Map<String, String> parameters = {
-                            'level': aiLevel.toString(),
-                            'days': preferences.days.toString(),
-                            'clock.limit': (preferences.timeControl == ChallengeTimeControlType.clock) ? preferences.clock.time.inSeconds.toString() : '',
-                            'clock.increment': (preferences.timeControl == ChallengeTimeControlType.clock) ? preferences.clock.increment.inSeconds.toString() : '',
-                            'color': preferences.sideChoice.name,
-                            'variant': preferences.variant.name,
-                            'fen': '', // TODO
-                          };
-
-                          challenge.create(context, parameters);
+                      onPressed:
+                        timeControl == ChallengeTimeControlType.clock
+                            ? isValidTimeControl && isValidPosition
+                            ? () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (BuildContext context) {
+                              return GameScreen(
+                                challenge: preferences.makeRequest(
+                                  LightUser(id: const UserId('ai'), name: aiName),
+                                  preferences.variant != Variant.fromPosition
+                                      ? null
+                                      : fromPositionFenInput,
+                                ),
+                              );
+                            },
+                          );
                         }
-                      },
+                            : null
+                            : timeControl == ChallengeTimeControlType.correspondence &&
+                            snapshot.connectionState != ConnectionState.waiting
+                            ? () async {
+                          final createGameService = ref.read(createGameServiceProvider);
+                          _pendingCorrespondenceChallenge = createGameService
+                              .newCorrespondenceChallenge(
+                            preferences.makeRequest(
+                              LightUser(id: const UserId('ai'), name: aiName),
+                              preferences.variant != Variant.fromPosition
+                                  ? null
+                                  : fromPositionFenInput,
+                            ),
+                          );
+
+                          await _pendingCorrespondenceChallenge!;
+
+                          if (!context.mounted) return;
+
+                          Navigator.of(context).pop();
+
+                          // Switch to the home tab
+                          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+
+                          // Navigate to the challenges screen where
+                          // the new correspondence challenge will be
+                          // displayed
+                          pushPlatformRoute(context, screen: const ChallengeRequestsScreen());
+                        }
+                            : null,
                       child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                     ),
                   );

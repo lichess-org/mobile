@@ -43,7 +43,8 @@ class ChallengeRepository {
   }
 
   Future<Challenge> create(ChallengeRequest challenge) async {
-    final uri = Uri(path: '/api/challenge/${challenge.destUser.id}');
+    final userId = challenge.destUser.id;
+    final uri = Uri(path: '/api/challenge/$userId');
     return client.postReadJson(
       uri,
       body: challenge.toRequestBody,
