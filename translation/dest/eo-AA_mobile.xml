@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Ĉiuj ludoj</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ĉu vi certas?</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Malplenigi</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Prikomentado</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hejmo</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Vi devas esti ensalutata por spekti ĉi tiun paĝon.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Neniu rezultoj</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Vi ne abonas ĉiun uzanton.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Bone</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Ludantanto kun \"%s\"</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzloj</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Lastaj serĉoj</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Tuŝ-retrokuplado</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Enakviĝa reĝimo</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Agordoj</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistemaj koloroj</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Iloj</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Spekti</string>
+</resources>
