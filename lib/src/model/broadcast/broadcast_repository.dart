@@ -95,6 +95,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
       ),
     ),
     website: pick('info', 'website').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
+    standings: pick('info', 'standings').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
   ),
 );
 

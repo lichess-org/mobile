@@ -294,6 +294,7 @@ class BroadcastCard extends StatefulWidget {
             timeControl: null,
             players: null,
             website: null,
+            standings: null,
             location: null,
             dates: null,
           ),
