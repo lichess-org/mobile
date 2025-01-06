@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_string_escapes
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -10,6 +8,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -44,7 +43,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // Load the tournament (only required for iOS)
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the tournament
       await tester.pump();
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -89,55 +90,61 @@ void main() {
     testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
-      final client = MockClient((request) {
-        if (request.url.path == '/api/broadcast/KnP1dgul') {
-          return mockResponse(
-            _upcomingTournamentResponse,
-            200,
-            headers: {'content-type': 'application/json; charset=utf-8'},
-          );
-        }
-        if (request.url.path == '/api/broadcast/-/-/UN587WBI') {
-          return mockResponse(
-            _upcomingRoundResponse,
-            200,
-            headers: {'content-type': 'application/json; charset=utf-8'},
-          );
-        }
-        return mockResponse('', 404);
+      mockNetworkImagesFor(() async {
+        final client = MockClient((request) {
+          if (request.url.path == '/api/broadcast/KnP1dgul') {
+            return mockResponse(
+              _upcomingTournamentResponse,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }
+          if (request.url.path == '/api/broadcast/-/-/UN587WBI') {
+            return mockResponse(
+              _upcomingRoundResponse,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final fakeSocket = FakeWebSocketChannel();
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
+          overrides: [
+            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+            webSocketChannelFactoryProvider.overrideWith((ref) {
+              return FakeWebSocketChannelFactory((_) => fakeSocket);
+            }),
+          ],
+        );
+
+        await tester.pumpWidget(app);
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Load the tournament
+        await tester.pump();
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Load the overview
+        await tester.pump();
+        // await tester.pumpAndSettle();
+
+        expect(find.text('Jan 10 - Jan 18'), findsOneWidget);
+        expect(find.text('9-round Swiss'), findsOneWidget);
+        expect(find.text('90 min + 30 sec / move'), findsOneWidget);
+        expect(find.text('Seville, Spain'), findsOneWidget);
+        expect(find.text('Xu, Bonelli, Jacobson'), findsOneWidget);
+        expect(find.text('Official website'), findsOneWidget);
+        expect(find.text('Standings'), findsOneWidget);
       });
-
-      final fakeSocket = FakeWebSocketChannel();
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the overview
-      await tester.pump();
-      // await tester.pump(Duration(seconds: 1));
-      await tester.pump();
-      // await tester.pumpAndSettle();
-
-      // expect(find.byType(PlatformCard), findsNWidgets(6));
-      expect(find.text('9-round Swiss'), findsOneWidget);
     });
 
+    // TODO: write this test
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
       tester,
     ) async {
@@ -654,7 +661,7 @@ final _upcomingBroadcast = Broadcast(
   group: null,
 );
 
-const _upcomingTournamentResponse = '''
+const _upcomingTournamentResponse = r'''
 {
   "tour": {
     "id": "KnP1dgul",
@@ -757,7 +764,7 @@ const _upcomingTournamentResponse = '''
 }
 ''';
 
-const _upcomingRoundResponse = '''
+const _upcomingRoundResponse = r'''
 {
   "round": {
     "id": "UN587WBI",
