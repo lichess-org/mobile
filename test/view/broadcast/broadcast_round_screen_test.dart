@@ -4,13 +4,10 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
-import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -109,16 +106,10 @@ void main() {
           return mockResponse('', 404);
         });
 
-        final fakeSocket = FakeWebSocketChannel();
         final app = await makeTestProviderScopeApp(
           tester,
           home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-            webSocketChannelFactoryProvider.overrideWith((ref) {
-              return FakeWebSocketChannelFactory((_) => fakeSocket);
-            }),
-          ],
+          overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
         );
 
         await tester.pumpWidget(app);
@@ -144,23 +135,20 @@ void main() {
       });
     });
 
-    // TODO: write this test
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
       tester,
     ) async {
-      return;
-      // ignore: dead_code
       final client = MockClient((request) {
-        if (request.url.path == '/api/broadcast/RAIoMC7L') {
+        if (request.url.path == '/api/broadcast/AAAAAAAA') {
           return mockResponse(
-            _upcomingTournamentResponse,
+            _liveTournamentResponse,
             200,
             headers: {'content-type': 'application/json; charset=utf-8'},
           );
         }
-        if (request.url.path == '/api/broadcast/-/-/Gv1305pb') {
+        if (request.url.path == '/api/broadcast/-/-/00000000') {
           return mockResponse(
-            _upcomingRoundResponse,
+            _liveRoundResponse,
             200,
             headers: {'content-type': 'application/json; charset=utf-8'},
           );
@@ -168,16 +156,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 
       await tester.pumpWidget(app);
@@ -192,7 +174,11 @@ void main() {
       // Load the round
       await tester.pump();
 
-      expect(find.byType(BroadcastOverviewTab), findsOneWidget);
+      expect(find.text('00:08'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.text('00:07'), findsOneWidget);
     });
   });
 }
@@ -801,5 +787,109 @@ const _upcomingRoundResponse = r'''
     "writeable": false
   },
   "games": []
+}
+''';
+
+final _liveBroadcast = Broadcast(
+  tour: BroadcastTournamentData(
+    id: const BroadcastTournamentId('AAAAAAAA'),
+    name: 'Test tournament',
+    slug: 'test-tournament',
+    imageUrl: '',
+    description: null,
+    tier: null,
+    information: (
+      dates: (startsAt: DateTime.fromMillisecondsSinceEpoch(1735671720000), endsAt: null),
+      format: null,
+      location: null,
+      players: null,
+      website: null,
+      standings: null,
+      timeControl: null,
+    ),
+  ),
+  round: const BroadcastRound(
+    id: BroadcastRoundId('00000000'),
+    name: 'Test round',
+    slug: 'test-round',
+    status: RoundStatus.live,
+    startsAt: null,
+    finishedAt: null,
+    startsAfterPrevious: false,
+  ),
+  roundToLinkId: const BroadcastRoundId('00000000'),
+  group: null,
+);
+
+const _liveTournamentResponse = '''
+{
+  "tour": {
+    "id": "AAAAAAAA",
+    "name": "Test tournament",
+    "slug": "test-tournament",
+    "dates": [
+      1735671720000
+    ],
+    "image": ""
+  },
+  "rounds": [
+    {
+      "id": "00000000",
+      "name": "Test round",
+      "slug": "test-round",
+      "ongoing": "true"
+    }
+  ],
+  "defaultRoundId": "00000000"
+}
+''';
+
+const _liveRoundResponse = '''
+{
+  "round": {
+    "id": "00000000",
+    "name": "Test round",
+    "slug": "test-round",
+    "ongoing": true
+  },
+  "tour": {
+    "id": "AAAAAAAA",
+    "name": "Test tournament",
+    "slug": "test-tournament",
+    "dates": [
+      1735671720000
+    ],
+    "image": ""
+  },
+  "study": {
+    "writeable": false
+  },
+  "games": [
+    {
+      "id": "11111111",
+      "name": "Nepomniachtchi, Ian - Carlsen, Magnus",
+      "fen": "8/8/5k2/3K2p1/r5Rp/7P/6P1/8 b - - 1 48",
+      "players": [
+        {
+          "name": "Nepomniachtchi, Ian",
+          "title": "GM",
+          "rating": 2770,
+          "fideId": 4168119,
+          "fed": "RUS",
+          "clock": 2000
+        },
+        {
+          "name": "Carlsen, Magnus",
+          "title": "GM",
+          "rating": 2890,
+          "fideId": 1503014,
+          "fed": "NOR",
+          "clock": 800
+        }
+      ],
+      "lastMove": "c4d5",
+      "status": "*"
+    }
+  ]
 }
 ''';
