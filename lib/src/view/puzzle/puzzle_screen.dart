@@ -258,7 +258,7 @@ class _Body extends ConsumerWidget {
                   puzzleState.isEngineEnabled && evalBestMove != null
                       ? ISet([
                         Arrow(
-                          color: const Color(0x40003088),
+                          color: const Color(0x66003088),
                           orig: evalBestMove.from,
                           dest: evalBestMove.to,
                         ),
