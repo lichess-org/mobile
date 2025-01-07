@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -186,7 +187,7 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
       fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
       lastMove: pick('lastMove').asUciMoveOrNull(),
       status: status,
-      updatedClockAt: DateTime.now(),
+      updatedClockAt: clock.now(),
     ),
   );
 }

@@ -176,7 +176,7 @@ void main() {
 
       expect(find.text('00:08'), findsOneWidget);
 
-      await tester.pump(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 1));
 
       expect(find.text('00:07'), findsOneWidget);
     });
