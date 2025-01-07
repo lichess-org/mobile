@@ -954,10 +954,41 @@ class GameState with _$GameState {
   }) = _GameState;
 
   /// The [Position] and its legal moves at the current cursor.
-  (Position, IMap<Square, ISet<Square>>) get currentPosition {
+  (Position, IMap<Square, ISet<Square>>) getCurrentPosition(
+    CastlingMethod castlingMethod,
+  ) {
     final position = game.positionAt(stepCursor);
-    final legalMoves = makeLegalMoves(position, isChess960: game.meta.variant == Variant.chess960);
-    return (position, legalMoves);
+    final legalMoves = makeLegalMoves(
+      position,
+      isChess960: game.meta.variant == Variant.chess960,
+    );
+
+    final Map<Square, Square> castlingMap = {
+      Square.a1: Square.c1,
+      Square.a8: Square.c8,
+      Square.h1: Square.g1,
+      Square.h8: Square.g8,
+    };
+
+    MapEntry<Square, ISet<Square>> mapper(Square sq, ISet<Square> moves) {
+      return MapEntry(
+        sq,
+        position.board.kings.squares.contains(sq) && //king move
+                position.castles.castlingRights.squares.intersectsWith(
+                  moves, //king can castle
+                )
+            ? (switch (castlingMethod) {
+                CastlingMethod.kingOverRook =>
+                  moves.removeAll(castlingMap.values),
+                CastlingMethod.kingTwoSquares =>
+                  moves.removeAll(castlingMap.keys),
+                _ => moves
+              })
+            : moves,
+      );
+    }
+
+    return (position, legalMoves.map(mapper));
   }
 
   /// Whether the zen mode is active
