@@ -40,6 +40,12 @@ class BoardPreferences extends _$BoardPreferences
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(
+      state.copyWith(castlingMethod: castlingMethod),
+    );
+  }
+
   Future<void> toggleHapticFeedback() {
     return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
@@ -131,6 +137,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: PieceShiftMethod.either,
     )
     required PieceShiftMethod pieceShiftMethod,
+    required CastlingMethod castlingMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -160,6 +167,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     showMaterialDifference: true,
     clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
+    castlingMethod: CastlingMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
@@ -333,6 +341,12 @@ enum ClockPosition {
         ClockPosition.left => 'Left',
         ClockPosition.right => 'Right',
       };
+}
+
+enum CastlingMethod {
+  kingOverRook,
+  kingTwoSquares,
+  either;
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
