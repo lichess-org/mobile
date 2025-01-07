@@ -903,7 +903,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesInGameOnly => 'Tylko w partii';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Z wyjątkiem trwania partii';
 
   @override
   String get preferencesChessClock => 'Zegar szachowy';

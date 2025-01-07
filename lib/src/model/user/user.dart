@@ -3,12 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'profile.dart';
-
 part 'user.freezed.dart';
-
 part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)

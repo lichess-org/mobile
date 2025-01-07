@@ -31,6 +31,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
+const kThumbnailImageSize = 40.0;
+
 const _featuredChannelsSet = ISetConst({
   TvChannel.best,
   TvChannel.bullet,
@@ -218,6 +220,9 @@ class _BroadcastWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return broadcastList.when(
       data: (data) {
+        if (data.active.isEmpty && data.past.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return ListSection(
           hasLeading: true,
           header: Text(context.l10n.broadcastBroadcasts),
@@ -275,14 +280,13 @@ class _BroadcastTile extends ConsumerWidget {
           broadcast.tour.imageUrl != null
               ? Image.network(
                 broadcast.tour.imageUrl!,
-                width: 50.0,
-                height: 50.0,
-                cacheWidth: (50.0 * devicePixelRatio).toInt(),
-                cacheHeight: (50.0 * devicePixelRatio).toInt(),
+                width: kThumbnailImageSize,
+                height: kThumbnailImageSize,
+                cacheWidth: (kThumbnailImageSize * devicePixelRatio).toInt(),
                 fit: BoxFit.cover,
                 errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
               )
-              : const Image(image: kDefaultBroadcastImage),
+              : const Image(image: kDefaultBroadcastImage, width: kThumbnailImageSize),
       subtitle: Row(
         children: [
           Text(broadcast.round.name),
@@ -373,7 +377,7 @@ class _StreamerWidget extends ConsumerWidget {
 
   const _StreamerWidget(this.streamers);
 
-  static const int numberOfItems = 10;
+  static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -396,7 +400,7 @@ class _StreamerWidget extends ConsumerWidget {
           children: [
             ...data
                 .take(numberOfItems)
-                .map((e) => StreamerListTile(streamer: e, showSubtitle: true)),
+                .map((e) => StreamerListTile(streamer: e, thumbnailSize: kThumbnailImageSize)),
           ],
         );
       },

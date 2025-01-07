@@ -865,7 +865,7 @@ class AppLocalizationsNn extends AppLocalizations {
   String get preferencesInGameOnly => 'Berre under eit parti';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Unnateke i partiet';
 
   @override
   String get preferencesChessClock => 'Sjakkur';

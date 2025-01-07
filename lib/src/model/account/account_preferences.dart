@@ -1,12 +1,11 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'account_repository.dart';
 
 part 'account_preferences.g.dart';
 
@@ -15,7 +14,7 @@ typedef AccountPrefState =
       // game display
       Zen zenMode,
       PieceNotation pieceNotation,
-      BooleanPref showRatings,
+      ShowRatings showRatings,
       // game behavior
       BooleanPref premove,
       AutoQueen autoQueen,
@@ -33,9 +32,9 @@ typedef AccountPrefState =
 
 /// A provider that tells if the user wants to see ratings in the app.
 @Riverpod(keepAlive: true)
-Future<bool> showRatingsPref(Ref ref) async {
+Future<ShowRatings> showRatingsPref(Ref ref) async {
   return ref.watch(
-    accountPreferencesProvider.selectAsync((state) => state?.showRatings.value ?? true),
+    accountPreferencesProvider.selectAsync((state) => state?.showRatings ?? ShowRatings.yes),
   );
 }
 
@@ -58,7 +57,7 @@ Future<PieceNotation> pieceNotation(Ref ref) async {
 final defaultAccountPreferences = (
   zenMode: Zen.no,
   pieceNotation: PieceNotation.symbol,
-  showRatings: const BooleanPref(true),
+  showRatings: ShowRatings.yes,
   premove: const BooleanPref(true),
   autoQueen: AutoQueen.premove,
   autoThreefold: AutoThreefold.always,
@@ -95,7 +94,7 @@ class AccountPreferences extends _$AccountPreferences {
 
   Future<void> setZen(Zen value) => _setPref('zen', value);
   Future<void> setPieceNotation(PieceNotation value) => _setPref('pieceNotation', value);
-  Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
+  Future<void> setShowRatings(ShowRatings value) => _setPref('ratings', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
@@ -175,6 +174,44 @@ enum Zen implements AccountPref<int> {
         return Zen.gameAuto;
       default:
         throw Exception('Invalid value for Zen');
+    }
+  }
+}
+
+enum ShowRatings implements AccountPref<int> {
+  no(0),
+  yes(1),
+  exceptInGame(2);
+
+  const ShowRatings(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    switch (this) {
+      case ShowRatings.no:
+        return context.l10n.no;
+      case ShowRatings.yes:
+        return context.l10n.yes;
+      case ShowRatings.exceptInGame:
+        return context.l10n.preferencesExceptInGame;
+    }
+  }
+
+  static ShowRatings fromInt(int value) {
+    switch (value) {
+      case 0:
+        return ShowRatings.no;
+      case 1:
+        return ShowRatings.yes;
+      case 2:
+        return ShowRatings.exceptInGame;
+      default:
+        throw Exception('Invalid value for ShowRatings');
     }
   }
 }

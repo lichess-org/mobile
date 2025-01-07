@@ -884,7 +884,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesInGameOnly => 'Doar în joc';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Exceptând în timpul jocului';
 
   @override
   String get preferencesChessClock => 'Ceasul de șah';

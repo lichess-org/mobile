@@ -130,7 +130,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSystemColors => 'Sistem renkleri';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Araçlar';

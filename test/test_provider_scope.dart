@@ -194,7 +194,7 @@ Future<Widget> makeTestProviderScope(
       // ignore: scoped_providers_should_specify_dependencies
       connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
       // ignore: scoped_providers_should_specify_dependencies
-      showRatingsPrefProvider.overrideWith((ref) => true),
+      showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies

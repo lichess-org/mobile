@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "All games",
   "mobileAreYouSure": "Are you sure?",
-  "mobileBlindfoldMode": "Blindfold",
   "mobileCancelTakebackOffer": "Cancel takeback offer",
   "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Show board resize handle",
   "preferencesOnlyOnInitialPosition": "Only on initial position",
   "preferencesInGameOnly": "In-game only",
+  "preferencesExceptInGame": "Except in-game",
   "preferencesChessClock": "Chess clock",
   "preferencesTenthsOfSeconds": "Tenths of seconds",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
@@ -24,8 +25,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-
-import 'archived_game_screen_providers.dart';
 
 /// Screen for viewing an archived game.
 class ArchivedGameScreen extends ConsumerWidget {
@@ -217,15 +216,9 @@ class _BoardBody extends ConsumerWidget {
 
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final black = GamePlayer(key: const ValueKey('black-player'), player: gameData.black);
-    final white = GamePlayer(key: const ValueKey('white-player'), player: gameData.white);
-    final topPlayer = orientation == Side.white ? black : white;
-    final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
       orientation: (isBoardTurned ? orientation.opposite : orientation),
       fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
-      topTable: topPlayer,
-      bottomTable: bottomPlayer,
       showMoveListPlaceholder: true,
     );
 
@@ -236,13 +229,15 @@ class _BoardBody extends ConsumerWidget {
         final blackClock = game.archivedBlackClockAt(cursor);
         final black = GamePlayer(
           key: const ValueKey('black-player'),
-          player: gameData.black,
+          game: game,
+          side: Side.black,
           clock: blackClock != null ? Clock(timeLeft: blackClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.black),
         );
         final white = GamePlayer(
           key: const ValueKey('white-player'),
-          player: gameData.white,
+          game: game,
+          side: Side.white,
           clock: whiteClock != null ? Clock(timeLeft: whiteClock) : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );

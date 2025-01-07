@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Tüm oyunlar",
   "mobileAreYouSure": "Emin misiniz?",
-  "mobileBlindfoldMode": "Körleme modu",
   "mobileCancelTakebackOffer": "Geri alma teklifini iptal et",
   "mobileClearButton": "Temizle",
   "mobileCorrespondenceClearSavedMove": "Kayıtlı hamleyi sil",
@@ -39,6 +38,7 @@
   "mobileShowVariations": "Varyasyonları göster",
   "mobileSomethingWentWrong": "Birşeyler ters gitti.",
   "mobileSystemColors": "Sistem renkleri",
+  "mobileTheme": "Tema",
   "mobileToolsTab": "Araçlar",
   "mobileWaitingForOpponentToJoin": "Rakip bekleniyor...",
   "mobileWatchTab": "İzle",

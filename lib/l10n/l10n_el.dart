@@ -24,7 +24,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παιχνίδι';
+  String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παρτίδα';
 
   @override
   String get mobileFeedbackButton => 'Πείτε μας τη γνώμη σας';
@@ -79,7 +79,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Θα χάσετε το τρέχων σερί αποτελεσμάτων σας και η βαθμολογία θα αποθηκευτεί.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Παίξτε γρίφους από τα αγαπημένα σας ανοίγματα, ή επιλέξτε θέμα.';
@@ -360,7 +360,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastMyBroadcasts => 'Οι αναμεταδόσεις μου';
 
   @override
-  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνούα';
+  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνουά';
 
   @override
   String get broadcastBroadcastCalendar => 'Ημερολόγιο αναμεταδόσεων';
@@ -369,13 +369,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastNewBroadcast => 'Νέα ζωντανή αναμετάδοση';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Εγγεγραμμένες μεταδώσεις';
+  String get broadcastSubscribedBroadcasts => 'Εγγεγραμμένες αναμεταδόσεις';
 
   @override
-  String get broadcastAboutBroadcasts => 'Σχετικά με εκπομπές';
+  String get broadcastAboutBroadcasts => 'Σχετικά με τις αναμεταδόσεις';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'Πώς να χρησιμοποιήσετε τις εκπομπές Lichess.';
+  String get broadcastHowToUseLichessBroadcasts => 'Πώς να χρησιμοποιήσετε τις αναμεταδόσεις Lichess.';
 
   @override
   String get broadcastTheNewRoundHelp => 'Ο νέος γύρος θα έχει τα ίδια μέλη και τους ίδιους συνεισφέροντες όπως ο προηγούμενος.';
@@ -422,18 +422,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastSourceUrlHelp => 'URL για λήψη PGN ενημερώσεων. Πρέπει να είναι δημόσια προσβάσιμο μέσω διαδικτύου.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'Έως και 64 ταυτότητες παιχνιδιών Lichess, διαχωριζόμενες από κενά.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Ημερομηνία έναρξης του τουρνουά στην τοπική ζώνη ώρας: $param';
   }
 
   @override
   String get broadcastStartDateHelp => 'Προαιρετικό, εάν γνωρίζετε πότε αρχίζει η εκδήλωση';
 
   @override
-  String get broadcastCurrentGameUrl => 'Διεύθυνση URL αυτού του παιχνιδιού';
+  String get broadcastCurrentGameUrl => 'Διεύθυνση URL αυτής της παρτίδας';
 
   @override
   String get broadcastDownloadAllRounds => 'Λήψη όλων των γύρων';
@@ -445,10 +445,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastDeleteRound => 'Διαγραφή αυτού του γύρου';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Σίγουρα διαγράψτε τον γύρο και όλα τα παιχνίδια του.';
+  String get broadcastDefinitivelyDeleteRound => 'Διαγράψτε οριστικά τον γύρο και όλες τις παρτίδες του.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'Διαγράψτε όλα τα παιχνίδια αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τα ξαναδημιουργήσετε.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Διαγράψτε όλες τις παρτίδες αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τα ξαναδημιουργήσετε.';
 
   @override
   String get broadcastEditRoundStudy => 'Επεξεργασία μελέτης γύρου';
@@ -457,19 +457,19 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastDeleteTournament => 'Διαγραφή αυτού του τουρνουά';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Σίγουρα διαγράψτε ολόκληρο τον διαγωνισμό, όλους τους γύρους του και όλα τα παιχνίδια του.';
+  String get broadcastDefinitivelyDeleteTournament => 'Σίγουρα διαγράψτε ολόκληρο τον διαγωνισμό, όλους τους γύρους του και όλες τις παρτίδες του.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Εμφάνιση βαθμολογιών παικτών βάσει των αποτελεσμάτων των παρτίδων.';
 
   @override
-  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+  String get broadcastReplacePlayerTags => 'Προαιρετικό: αντικατάσταση ονομάτων, βαθμολογιών και τίτλων παικτών';
 
   @override
   String get broadcastFideFederations => 'Ομοσπονδίες FIDE';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => 'Κορυφαίες 10 βαθμολογίες';
 
   @override
   String get broadcastFidePlayers => 'Παίκτες FIDE';
@@ -505,17 +505,17 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastOverview => 'Επισκόπηση';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Εγγραφείτε για να ειδοποιείστε όταν ξεκινάει ο κάθε γύρος. Μπορείτε να εναλλάξετε μεταξύ του κουδουνιού ή των push ειδοποιήσεων για αναμεταδόσεις, στις προτιμήσεις του λογαριασμού σας.';
 
   @override
   String get broadcastUploadImage => 'Ανεβάστε εικόνα τουρνουά';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Δεν υπάρχουν διαθέσιμες σκακιέρες ακόμα. Θα εμφανιστούν μόλις φορτωθούν οι παρτίδες.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Οι σκακιέρες μπορούν να φορτωθούν απο μια πηγή ή μέσω του $param';
+    return 'Οι σκακιέρες μπορούν να φορτωθούν από μια πηγή ή μέσω του $param';
   }
 
   @override
@@ -572,25 +572,25 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastAllTeams => 'Όλες οι ομάδες';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Μορφή τουρνουά';
 
   @override
   String get broadcastTournamentLocation => 'Τοποθεσία Τουρνουά';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Κορυφαίοι παίκτες';
 
   @override
   String get broadcastTimezone => 'Ζώνη ώρας';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Κατηγορία αξιολόγησης FIDE';
 
   @override
   String get broadcastOptionalDetails => 'Προαιρετικές λεπτομέρειες';
 
   @override
-  String get broadcastPastBroadcasts => 'Προηγούμενες αναμετάδοσεις';
+  String get broadcastPastBroadcasts => 'Προηγούμενες αναμεταδόσεις';
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των αναμεταδόσεων ανά μήνα';
@@ -5059,7 +5059,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyContributor => 'Συνεισφέρων';
 
   @override
-  String get studyKick => 'Διώξε';
+  String get studyKick => 'Αποβολή';
 
   @override
   String get studyLeaveTheStudy => 'Αποχώρησε από αυτήν την μελέτη';
@@ -5456,7 +5456,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param ανά σελίδα';
   }
 
   @override

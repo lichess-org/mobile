@@ -24,16 +24,15 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-import 'puzzle_screen.dart';
-import 'puzzle_themes_screen.dart';
-import 'storm_screen.dart';
-import 'streak_screen.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;

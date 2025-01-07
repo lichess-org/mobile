@@ -111,20 +111,37 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     }
                   },
                 ),
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesShowPlayerRatings),
-                  subtitle: Text(context.l10n.preferencesExplainShowPlayerRatings, maxLines: 5),
-                  value: data.showRatings.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setShowRatings(BooleanPref(value)),
-                            );
-                          },
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
+                  settingsValue: data.showRatings.label(context),
+                  showCupertinoTrailingValue: false,
+                  onTap: () {
+                    if (Theme.of(context).platform == TargetPlatform.android) {
+                      showChoicePicker(
+                        context,
+                        choices: ShowRatings.values,
+                        selectedItem: data.showRatings,
+                        labelBuilder: (t) => Text(t.label(context)),
+                        onSelectedItemChanged:
+                            isLoading
+                                ? null
+                                : (ShowRatings? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(accountPreferencesProvider.notifier)
+                                        .setShowRatings(value ?? data.showRatings),
+                                  );
+                                },
+                      );
+                    } else {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesShowPlayerRatings,
+                        builder: (context) => const ShowRatingsSettingsScreen(),
+                      );
+                    }
+                  },
+                  explanation: context.l10n.preferencesExplainShowPlayerRatings,
                 ),
               ],
             ),
@@ -423,33 +440,31 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
           navigationBar: CupertinoNavigationBar(
             trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
           ),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: Zen.values,
-                  selectedItem: data.zenMode,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged:
-                      isLoading
-                          ? null
-                          : (Zen? v) async {
+          child: ListView(
+            children: [
+              ChoicePicker(
+                choices: Zen.values,
+                selectedItem: data.zenMode,
+                titleBuilder: (t) => Text(t.label(context)),
+                onSelectedItemChanged:
+                    isLoading
+                        ? null
+                        : (Zen? v) async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setZen(v ?? data.zenMode);
+                          } finally {
                             setState(() {
-                              isLoading = true;
+                              isLoading = false;
                             });
-                            try {
-                              await ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setZen(v ?? data.zenMode);
-                            } finally {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          },
-                ),
-              ],
-            ),
+                          }
+                        },
+              ),
+            ],
           ),
         );
       },
@@ -488,27 +503,84 @@ class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSetti
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: PieceNotation.values,
-                      selectedItem: data.pieceNotation,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (PieceNotation? v) {
-                                final future = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setPieceNotation(v ?? data.pieceNotation);
-                                setState(() {
-                                  _pendingSetPieceNotation = future;
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: PieceNotation.values,
+                    selectedItem: data.pieceNotation,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (PieceNotation? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setPieceNotation(v ?? data.pieceNotation);
+                              setState(() {
+                                _pendingSetPieceNotation = future;
+                              });
+                            },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class ShowRatingsSettingsScreen extends ConsumerStatefulWidget {
+  const ShowRatingsSettingsScreen({super.key});
+
+  @override
+  ConsumerState<ShowRatingsSettingsScreen> createState() => _ShowRatingsSettingsScreenState();
+}
+
+class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsScreen> {
+  Future<void>? _pendingSetShowRatings;
+
+  @override
+  Widget build(BuildContext context) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
+        }
+
+        return FutureBuilder(
+          future: _pendingSetShowRatings,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                trailing:
+                    snapshot.connectionState == ConnectionState.waiting
+                        ? const CircularProgressIndicator.adaptive()
+                        : null,
+              ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: ShowRatings.values,
+                    selectedItem: data.showRatings,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (ShowRatings? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setShowRatings(v ?? data.showRatings);
+                              setState(() {
+                                _pendingSetShowRatings = future;
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },
@@ -543,33 +615,31 @@ class _TakebackSettingsScreenState extends ConsumerState<TakebackSettingsScreen>
           navigationBar: CupertinoNavigationBar(
             trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
           ),
-          child: SafeArea(
-            child: ListView(
-              children: [
-                ChoicePicker(
-                  choices: Takeback.values,
-                  selectedItem: data.takeback,
-                  titleBuilder: (t) => Text(t.label(context)),
-                  onSelectedItemChanged:
-                      isLoading
-                          ? null
-                          : (Takeback? v) async {
+          child: ListView(
+            children: [
+              ChoicePicker(
+                choices: Takeback.values,
+                selectedItem: data.takeback,
+                titleBuilder: (t) => Text(t.label(context)),
+                onSelectedItemChanged:
+                    isLoading
+                        ? null
+                        : (Takeback? v) async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            await ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setTakeback(v ?? data.takeback);
+                          } finally {
                             setState(() {
-                              isLoading = true;
+                              isLoading = false;
                             });
-                            try {
-                              await ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setTakeback(v ?? data.takeback);
-                            } finally {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          },
-                ),
-              ],
-            ),
+                          }
+                        },
+              ),
+            ],
           ),
         );
       },
@@ -608,27 +678,25 @@ class _AutoQueenSettingsScreenState extends ConsumerState<AutoQueenSettingsScree
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: AutoQueen.values,
-                      selectedItem: data.autoQueen,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (AutoQueen? v) {
-                                final future = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setAutoQueen(v ?? data.autoQueen);
-                                setState(() {
-                                  _pendingSetAutoQueen = future;
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: AutoQueen.values,
+                    selectedItem: data.autoQueen,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (AutoQueen? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setAutoQueen(v ?? data.autoQueen);
+                              setState(() {
+                                _pendingSetAutoQueen = future;
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },
@@ -669,27 +737,25 @@ class _AutoThreefoldSettingsScreenState extends ConsumerState<AutoThreefoldSetti
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: AutoThreefold.values,
-                      selectedItem: data.autoThreefold,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (AutoThreefold? v) {
-                                final future = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setAutoThreefold(v ?? data.autoThreefold);
-                                setState(() {
-                                  _pendingSetAutoThreefold = future;
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: AutoThreefold.values,
+                    selectedItem: data.autoThreefold,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (AutoThreefold? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setAutoThreefold(v ?? data.autoThreefold);
+                              setState(() {
+                                _pendingSetAutoThreefold = future;
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },
@@ -730,26 +796,24 @@ class _MoretimeSettingsScreenState extends ConsumerState<MoretimeSettingsScreen>
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: Moretime.values,
-                      selectedItem: data.moretime,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (Moretime? v) {
-                                setState(() {
-                                  _pendingSetMoretime = ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setMoretime(v ?? data.moretime);
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: Moretime.values,
+                    selectedItem: data.moretime,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (Moretime? v) {
+                              setState(() {
+                                _pendingSetMoretime = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setMoretime(v ?? data.moretime);
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },
@@ -790,27 +854,25 @@ class _ChallengeSettingsScreenState extends ConsumerState<_ChallengeSettingsScre
                         ? const CircularProgressIndicator.adaptive()
                         : null,
               ),
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    ChoicePicker(
-                      choices: Challenge.values,
-                      selectedItem: data.challenge,
-                      titleBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              : (Challenge? v) {
-                                final future = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setChallenge(v ?? data.challenge);
-                                setState(() {
-                                  _pendingSetChallenge = future;
-                                });
-                              },
-                    ),
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: Challenge.values,
+                    selectedItem: data.challenge,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : (Challenge? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setChallenge(v ?? data.challenge);
+                              setState(() {
+                                _pendingSetChallenge = future;
+                              });
+                            },
+                  ),
+                ],
               ),
             );
           },

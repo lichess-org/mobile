@@ -524,7 +524,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartVerySoon => 'پخش زنده به زودی آغاز خواهد شد.';
+  String get broadcastStartVerySoon => 'پخش زنده به زودی خواهد آغازید.';
 
   @override
   String get broadcastNotYetStarted => 'پخش زنده هنوز نیاغازیده است.';
@@ -738,7 +738,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get perfStatTournamentGames => 'بازی های مسابقه ای';
 
   @override
-  String get perfStatBerserkedGames => 'بازی‌های جنون آمیز';
+  String get perfStatBerserkedGames => 'بازی‌های دیوانگی';
 
   @override
   String get perfStatTimeSpentPlaying => 'مدت زمان بازی کردن';
@@ -2757,10 +2757,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get emptyTournamentName => 'برای نامیدن مسابقات به نام یک شطرنج‌باز برجسته، خالی بگذارید.';
 
   @override
-  String get makePrivateTournament => 'تورنومنت را به حالت خصوصی در بیاورید و دسترسی را محدود به داشتن پسورد کنید';
+  String get makePrivateTournament => 'خصوصی کردن مسابقات و دسترسی تنها با گذرواژه';
 
   @override
-  String get join => 'ملحق شدن';
+  String get join => 'پیوستن';
 
   @override
   String get withdraw => 'منصرف شدن';
@@ -4306,7 +4306,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get resignTheGame => 'تسلیم';
 
   @override
-  String get youCantStartNewGame => 'شما نمی توانید تا زمانی که این بازی تمام نشده بازی جدیدی آغاز کنید.';
+  String get youCantStartNewGame => 'تا وقتی که این بازی تمام نشده، نمی‌توانید بازی جدیدی را بیاغازید.';
 
   @override
   String get since => 'از وقتی که';

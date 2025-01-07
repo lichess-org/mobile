@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "모든 대국",
   "mobileAreYouSure": "확실하십니까?",
-  "mobileBlindfoldMode": "기물 가리기",
   "mobileCancelTakebackOffer": "무르기 요청 취소",
   "mobileClearButton": "지우기",
   "mobileCorrespondenceClearSavedMove": "저장된 수 삭제",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "보드 크기 재조정 핸들 보이기",
   "preferencesOnlyOnInitialPosition": "초기 상태에서만",
   "preferencesInGameOnly": "게임 도중에만 적용",
+  "preferencesExceptInGame": "게임 내 제외",
   "preferencesChessClock": "체스 시계",
   "preferencesTenthsOfSeconds": "1/10초 단위",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "남은 시간이 10초 미만일 때",

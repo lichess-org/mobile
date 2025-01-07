@@ -1,4 +1,5 @@
 {
+  "mobileAllGames": "Sve partije",
   "activityActivity": "Aktivnost",
   "activityHostedALiveStream": "Bio/la domaćin emitovanja uživo",
   "activityRankedInSwissTournament": "#{param1} u {param2}",

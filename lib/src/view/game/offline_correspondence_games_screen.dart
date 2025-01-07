@@ -67,7 +67,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          UserFullNameWidget(user: game.opponent.user, style: Styles.boardPreviewTitle),
+          UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
             Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
           Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),

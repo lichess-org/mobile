@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Toutes les parties",
   "mobileAreYouSure": "Êtes-vous sûr(e) ?",
-  "mobileBlindfoldMode": "Partie à l'aveugle",
   "mobileCancelTakebackOffer": "Annuler la proposition de reprise du coup",
   "mobileClearButton": "Effacer",
   "mobileCorrespondenceClearSavedMove": "Effacer les coups enregistrés",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Afficher la poignée de redimensionnement de l'échiquier",
   "preferencesOnlyOnInitialPosition": "Seulement dans la position initiale",
   "preferencesInGameOnly": "Seulement durant la partie",
+  "preferencesExceptInGame": "Sauf durant la partie",
   "preferencesChessClock": "Pendule",
   "preferencesTenthsOfSeconds": "Dixièmes de seconde",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Quand il reste moins de 10 secondes",

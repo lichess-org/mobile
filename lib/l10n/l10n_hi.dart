@@ -18,24 +18,24 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'सब हटाएँ';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'सहेजी गयी चाल हटाएं';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'खेल में शामिल हों';
 
   @override
   String get mobileFeedbackButton => 'फीडबैक';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'नमस्कार, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'नमस्कार';
 
   @override
   String get mobileHideVariation => 'वेरिएशन छुपाए';
@@ -53,18 +53,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileNoSearchResults => 'कोई परिणाम नहीं';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'आप किसी यूसर को फ़ाॅलो नहीं करते';
 
   @override
   String get mobileOkButton => 'ओके';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'खिलाड़ी जिनके नाम हैं \"$param\"';
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'चले गये मोहरे को बड़ा करें';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -121,7 +121,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileShowResult => 'Show result';
 
   @override
-  String get mobileShowVariations => 'वेरिएशन देखें';
+  String get mobileShowVariations => 'श्राे वेरिएशन देखें';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';

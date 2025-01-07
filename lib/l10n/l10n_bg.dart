@@ -5456,7 +5456,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param на страница';
   }
 
   @override

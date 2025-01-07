@@ -10,16 +10,15 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-
-import 'puzzle.dart';
-import 'puzzle_angle.dart';
-import 'puzzle_difficulty.dart';
-import 'puzzle_opening.dart';
-import 'puzzle_streak.dart';
-import 'puzzle_theme.dart';
-import 'storm.dart';
 
 part 'puzzle_repository.freezed.dart';
 

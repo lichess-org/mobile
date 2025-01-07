@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "すべて",
   "mobileAreYouSure": "本当にいいですか？",
-  "mobileBlindfoldMode": "めかくしモード",
   "mobileCancelTakebackOffer": "待ったをキャンセル",
   "mobileClearButton": "クリア",
   "mobileCorrespondenceClearSavedMove": "保存した手を削除",
@@ -39,6 +38,7 @@
   "mobileShowVariations": "変化手順を表示",
   "mobileSomethingWentWrong": "問題が発生しました。",
   "mobileSystemColors": "OS と同じ色設定",
+  "mobileTheme": "テーマ",
   "mobileToolsTab": "ツール",
   "mobileWaitingForOpponentToJoin": "対戦相手の参加を待っています…",
   "mobileWatchTab": "見る",

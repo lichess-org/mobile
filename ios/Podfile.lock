@@ -23,7 +23,7 @@ PODS:
   - Firebase/Messaging (11.4.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.4.0)
-  - firebase_core (3.8.1):
+  - firebase_core (3.9.0):
     - Firebase/CoreOnly (= 11.4.0)
     - Flutter
   - firebase_crashlytics (4.2.0):
@@ -239,7 +239,7 @@ SPEC CHECKSUMS:
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_core: 222ad1787f0b9c145a06af2fdaa265a366576c0d
+  firebase_core: 726c34112998e66d1ddaf4b1bef78ed2dd4b9804
   firebase_crashlytics: 1c2e2091a0b06bf6e3d6535010469a98c44c4d67
   firebase_messaging: a538130cb2bca3ea0ff0892b8c948bd7d20ecaed
   FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
@@ -253,7 +253,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_appauth: 914057fda669db5073d3ca9d94ea932e7df3c964
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
-  flutter_native_splash: 576fbd69b830a63594ae678396fa17e43abbc5f8
+  flutter_native_splash: 6cad9122ea0fad137d23137dd14b937f3e90b145
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
@@ -269,7 +269,7 @@ SPEC CHECKSUMS:
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   stockfish: 3125c5e5fdd6789c398bb2d1a29a58ba3c9e5577
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  wakelock_plus: fd58c82b1388f4afe3fe8aa2c856503a262a5b03
+  wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
 
 PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
 

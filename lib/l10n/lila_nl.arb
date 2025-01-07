@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Alle partijen",
   "mobileAreYouSure": "Weet je het zeker?",
-  "mobileBlindfoldMode": "Geblinddoekt",
   "mobileCancelTakebackOffer": "Terugnameaanbod annuleren",
   "mobileClearButton": "Wissen",
   "mobileCorrespondenceClearSavedMove": "Opgeslagen zet wissen",
@@ -217,6 +216,7 @@
   "preferencesDisplayBoardResizeHandle": "Toon de knop om het bordformaat te wijzigen",
   "preferencesOnlyOnInitialPosition": "Enkel tijdens de beginstelling",
   "preferencesInGameOnly": "Alleen tijdens partij",
+  "preferencesExceptInGame": "Uitgezonderd tijdens partijen",
   "preferencesChessClock": "Schaakklok",
   "preferencesTenthsOfSeconds": "Tienden van seconden",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Wanneer resterende tijd < 10 seconden",
