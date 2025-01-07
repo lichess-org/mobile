@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -199,6 +200,44 @@ void main() {
       await expectLater(fakeChannel.sentMessagesExceptPing, emitsInOrder([]));
 
       socketClient.close();
+    });
+
+    test('handles batch message', () async {
+      final fakeChannel = FakeWebSocketChannel();
+
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      socketClient.connect();
+
+      await socketClient.firstConnection;
+
+      const batchMessage = '''
+      {
+         "t":"batch",
+         "d":[
+            {"t":"test1","d":"data"},
+            {"t":"test2","d":"data"},
+            {"t":"test3","d":"data"}
+         ]
+      }
+      ''';
+
+      // start listening to the stream
+      final futureExpect = expectLater(
+        socketClient.stream,
+        emitsInOrder([
+          const SocketEvent(topic: 'test1', data: 'data'),
+          const SocketEvent(topic: 'test2', data: 'data'),
+          const SocketEvent(topic: 'test3', data: 'data'),
+        ]),
+      );
+
+      // server sends a batch message
+      fakeChannel.addIncomingMessages([batchMessage]);
+
+      // check that the messages in the batch were distributed
+      await futureExpect;
+
+      await socketClient.close();
     });
   });
 }
