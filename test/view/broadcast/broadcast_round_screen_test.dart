@@ -87,7 +87,7 @@ void main() {
     testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
-      mockNetworkImagesFor(() async {
+      await mockNetworkImagesFor(() async {
         final client = MockClient((request) {
           if (request.url.path == '/api/broadcast/KnP1dgul') {
             return mockResponse(
@@ -123,7 +123,6 @@ void main() {
 
         // Load the overview
         await tester.pump();
-        // await tester.pumpAndSettle();
 
         expect(find.text('Jan 10 - Jan 18'), findsOneWidget);
         expect(find.text('9-round Swiss'), findsOneWidget);
