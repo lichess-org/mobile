@@ -112,19 +112,19 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           ),
         ],
       ),
-      body:
-          (broadcastRoundGameState.hasValue && broadcastGameState.hasValue)
-              ? _Body(
-                widget.tournamentId,
-                widget.roundId,
-                widget.gameId,
-                widget.tournamentSlug,
-                widget.roundSlug,
-                tabController: _tabController,
-              )
-              : (broadcastGameState.hasError || broadcastRoundGameState.hasError)
-              ? const Center(child: Text('Cannot load broadcast game'))
-              : const Center(child: CircularProgressIndicator.adaptive()),
+      body: switch ((broadcastRoundGameState, broadcastGameState)) {
+        (AsyncData(), AsyncData()) => _Body(
+          widget.tournamentId,
+          widget.roundId,
+          widget.gameId,
+          widget.tournamentSlug,
+          widget.roundSlug,
+          tabController: _tabController,
+        ),
+        (AsyncError(:final error), _) => Center(child: Text('Cannot load broadcast game: $error')),
+        (_, AsyncError(:final error)) => Center(child: Text('Cannot load broadcast game: $error')),
+        _ => const Center(child: CircularProgressIndicator.adaptive()),
+      },
     );
   }
 }
