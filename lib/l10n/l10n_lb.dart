@@ -781,12 +781,12 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String perfStatLongestStreak(String param) {
-    return 'Längsten Erfollegserie: $param';
+    return 'Längste Serie: $param';
   }
 
   @override
   String perfStatCurrentStreak(String param) {
-    return 'Aktuell Erfollegserie: $param';
+    return 'Aktuell Serie: $param';
   }
 
   @override
@@ -865,7 +865,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get preferencesInGameOnly => 'Nëmmen während enger Partie';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Ausser an der Partie';
 
   @override
   String get preferencesChessClock => 'Schachauer';

@@ -6,10 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'offline_correspondence_game.dart';
 
 part 'correspondence_game_storage.g.dart';
 
@@ -115,7 +114,7 @@ class CorrespondenceGameStorage {
   Future<void> save(OfflineCorrespondenceGame game) async {
     try {
       await _db.insert(kCorrespondenceStorageTable, {
-        'userId': game.me.user?.id.toString() ?? kCorrespondenceStorageAnonId,
+        'userId': game.me?.user?.id.toString() ?? kCorrespondenceStorageAnonId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(game.toJson()),

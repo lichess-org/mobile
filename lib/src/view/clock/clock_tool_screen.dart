@@ -7,11 +7,10 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
+import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-
-import 'custom_clock_settings.dart';
 
 class ClockToolScreen extends StatelessWidget {
   const ClockToolScreen({super.key});

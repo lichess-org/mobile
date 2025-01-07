@@ -865,7 +865,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesInGameOnly => 'Só durante a partida';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Excepto durante a partida';
 
   @override
   String get preferencesChessClock => 'Reloxo de xadrez';
@@ -1218,7 +1218,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 crebacabezas atopados en $param2 partidas';
+    return '$param1 crebacabezas atopados nas partidas de $param2';
   }
 
   @override
@@ -5158,7 +5158,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Podes pegar esta URL no foro ou no teu blog de Lichess para incrustala';
 
   @override
-  String get studyStartAtInitialPosition => 'Comezar desde a posición inicial do estudo';
+  String get studyStartAtInitialPosition => 'Comezar desde a posición inicial';
 
   @override
   String studyStartAtX(String param) {

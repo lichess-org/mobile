@@ -311,7 +311,7 @@ class AdaptiveInkWell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platform = Theme.of(context).platform;
-    return InkWell(
+    final inkWell = InkWell(
       onTap: onTap,
       onTapDown: onTapDown,
       onTapUp: onTapUp,
@@ -325,6 +325,10 @@ class AdaptiveInkWell extends StatelessWidget {
       splashFactory: platform == TargetPlatform.iOS ? NoSplash.splashFactory : null,
       child: child,
     );
+
+    return platform == TargetPlatform.iOS
+        ? Material(color: Colors.transparent, child: inkWell)
+        : inkWell;
   }
 }
 

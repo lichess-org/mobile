@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -29,8 +30,6 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
-
-import 'puzzle_feedback_widget.dart';
 
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
@@ -192,10 +191,7 @@ class _Body extends ConsumerWidget {
               (context) => YesNoDialog(
                 title: Text(context.l10n.mobileAreYouSure),
                 content: const Text('No worries, your score will be saved locally.'),
-                onYes: () {
-                  ref.read(ctrlProvider.notifier).saveStreakResultLocally();
-                  return Navigator.of(context).pop(true);
-                },
+                onYes: () => Navigator.of(context).pop(true),
                 onNo: () => Navigator.of(context).pop(false),
               ),
         );
@@ -345,7 +341,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
           if (data != null) {
             ref
                 .read(ctrlProvider.notifier)
-                .loadPuzzle(
+                .onLoadPuzzle(
                   data,
                   nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
                 );

@@ -1,7 +1,6 @@
 {
   "mobileAllGames": "Alle Partien",
   "mobileAreYouSure": "Bist du sicher?",
-  "mobileBlindfoldMode": "Blind spielen",
   "mobileCancelTakebackOffer": "Zugzurücknahme-Angebot abbrechen",
   "mobileClearButton": "Löschen",
   "mobileCorrespondenceClearSavedMove": "Gespeicherten Zug löschen",
@@ -218,6 +217,7 @@
   "preferencesDisplayBoardResizeHandle": "Regler zum Ändern der Brettgröße anzeigen",
   "preferencesOnlyOnInitialPosition": "Nur in der Anfangsstellung",
   "preferencesInGameOnly": "Nur während einer Partie",
+  "preferencesExceptInGame": "Außer in der Partie",
   "preferencesChessClock": "Schachuhr",
   "preferencesTenthsOfSeconds": "Zehntelsekunden",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "Wenn Restzeit < 10 Sekunden",

@@ -23,7 +23,10 @@ class BoardSettingsScreen extends StatelessWidget {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.board)), body: const _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.preferencesGameBehavior)),
+      body: const _Body(),
+    );
   }
 
   Widget _iosBuilder(BuildContext context) {
@@ -43,7 +46,6 @@ class _Body extends ConsumerWidget {
     return ListView(
       children: [
         ListSection(
-          header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
           hasLeading: false,
           showDivider: false,
           children: [
@@ -117,7 +119,6 @@ class _Body extends ConsumerWidget {
                 // TODO translate
                 'Vibrate when moving pieces or capturing them.',
                 maxLines: 5,
-                textAlign: TextAlign.justify,
               ),
               onChanged: (value) {
                 ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
@@ -130,27 +131,6 @@ class _Body extends ConsumerWidget {
                 ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
               },
             ),
-            SwitchSettingTile(
-              // TODO: Add l10n
-              title: const Text('Shape drawing'),
-              subtitle: const Text(
-                // TODO: translate
-                'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
-                maxLines: 5,
-                textAlign: TextAlign.justify,
-              ),
-              value: boardPrefs.enableShapeDrawings,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleEnableShapeDrawings();
-              },
-            ),
-          ],
-        ),
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-          hasLeading: false,
-          showDivider: false,
-          children: [
             if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
               androidVersionAsync.maybeWhen(
                 data:
@@ -160,7 +140,6 @@ class _Body extends ConsumerWidget {
                               title: Text(context.l10n.mobileSettingsImmersiveMode),
                               subtitle: Text(
                                 context.l10n.mobileSettingsImmersiveModeSubtitle,
-                                textAlign: TextAlign.justify,
                                 maxLines: 5,
                               ),
                               value: boardPrefs.immersiveModeWhilePlaying ?? false,
@@ -236,6 +215,19 @@ class _Body extends ConsumerWidget {
                     builder: (context) => const MaterialDifferenceFormatScreen(),
                   );
                 }
+              },
+            ),
+            SwitchSettingTile(
+              // TODO: Add l10n
+              title: const Text('Shape drawing'),
+              subtitle: const Text(
+                // TODO: translate
+                'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
+                maxLines: 5,
+              ),
+              value: boardPrefs.enableShapeDrawings,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleEnableShapeDrawings();
               },
             ),
           ],

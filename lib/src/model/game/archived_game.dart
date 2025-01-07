@@ -8,13 +8,12 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-
-import 'game.dart';
-import 'game_status.dart';
-import 'player.dart';
 
 part 'archived_game.freezed.dart';
 part 'archived_game.g.dart';
@@ -64,22 +63,6 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
 
   /// Create an archived game from a local storage JSON.
   factory ArchivedGame.fromJson(Map<String, dynamic> json) => _$ArchivedGameFromJson(json);
-
-  /// Player point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
 }
 
 /// A [LightArchivedGame] associated with a point of view of a player.

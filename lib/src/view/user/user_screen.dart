@@ -11,16 +11,15 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/view/user/user_activity.dart';
+import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'perf_cards.dart';
-import 'user_activity.dart';
-import 'user_profile.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   const UserScreen({required this.user, super.key});

@@ -1775,7 +1775,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get youPlayTheBlackPieces => 'আপনি কালো গুটি নিয়ে খেলছেন';
 
   @override
-  String get itsYourTurn => 'এবার আপনার পালা!';
+  String get itsYourTurn => 'এবার আপনার চাল!';
 
   @override
   String get cheatDetected => 'প্রতারণা শনাক্ত করা হয়েছে';
@@ -2319,7 +2319,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gamesPlayed => 'খেলা খেলেছেন';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'কোনো সমস্যা নেই';
 
   @override
   String get cancel => 'বাতিল করুন';

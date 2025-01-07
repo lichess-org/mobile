@@ -14,6 +14,9 @@ part 'offline_correspondence_game.freezed.dart';
 part 'offline_correspondence_game.g.dart';
 
 /// An offline correspondence game.
+///
+/// This is always a game of the current user, so [youAre], [me] and [opponent]
+/// are always guaranteed to be non-null.
 @Freezed(fromJson: true, toJson: true)
 class OfflineCorrespondenceGame
     with _$OfflineCorrespondenceGame, BaseGame, IndexableSteps
@@ -35,7 +38,7 @@ class OfflineCorrespondenceGame
     required Perf perf,
     required Player white,
     required Player black,
-    required Side youAre,
+    required Side? youAre,
     int? daysPerTurn,
     Side? winner,
     bool? isThreefoldRepetition,
@@ -45,7 +48,7 @@ class OfflineCorrespondenceGame
   factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
       _$OfflineCorrespondenceGameFromJson(json);
 
-  Side get orientation => youAre;
+  Side get orientation => youAre!;
 
   @override
   IList<Duration>? get clocks => null;
@@ -53,14 +56,11 @@ class OfflineCorrespondenceGame
   @override
   IList<ExternalEval>? get evals => null;
 
-  Player get me => youAre == Side.white ? white : black;
-  Player get opponent => youAre == Side.white ? black : white;
-
   Side get sideToMove => lastPosition.turn;
 
   bool get isMyTurn => sideToMove == youAre;
 
-  Duration? myTimeLeft(DateTime lastModifiedTime) => estimatedTimeLeft(youAre, lastModifiedTime);
+  Duration? myTimeLeft(DateTime lastModifiedTime) => estimatedTimeLeft(youAre!, lastModifiedTime);
 
   Duration? estimatedTimeLeft(Side side, DateTime lastModifiedTime) {
     final timeLeft = side == Side.white ? clock?.white : clock?.black;
@@ -69,8 +69,4 @@ class OfflineCorrespondenceGame
     }
     return null;
   }
-
-  bool get playable => status.value < GameStatus.aborted.value;
-  bool get playing => status.value > GameStatus.started.value;
-  bool get finished => status.value >= GameStatus.mate.value;
 }

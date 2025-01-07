@@ -9,7 +9,7 @@ class AppLocalizationsBs extends AppLocalizations {
   AppLocalizationsBs([String locale = 'bs']) : super(locale);
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Sve partije';
 
   @override
   String get mobileAreYouSure => 'Are you sure?';

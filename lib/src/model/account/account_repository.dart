@@ -2,6 +2,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -12,9 +14,6 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'account_preferences.dart';
-import 'ongoing_game.dart';
 
 part 'account_repository.g.dart';
 
@@ -115,7 +114,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
   return (
     zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
     pieceNotation: PieceNotation.fromInt(pick('pieceNotation').asIntOrThrow()),
-    showRatings: BooleanPref.fromInt(pick('ratings').asIntOrThrow()),
+    showRatings: ShowRatings.fromInt(pick('ratings').asIntOrThrow()),
     premove: BooleanPref(pick('premove').asBoolOrThrow()),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),
     autoThreefold: AutoThreefold.fromInt(pick('autoThreefold').asIntOrThrow()),

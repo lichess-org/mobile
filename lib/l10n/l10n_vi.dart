@@ -846,7 +846,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesInGameOnly => 'Chỉ trong ván cờ';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Ngoại trừ trong khi đấu';
 
   @override
   String get preferencesChessClock => 'Đồng hồ cờ vua';
@@ -1936,7 +1936,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'Các ván đấu OTB của các kỳ thủ có hệ số Rating FIDE $param1+ từ năm $param2 đến $param3';
+    return 'Các ván đấu OTB của các kỳ thủ có hệ số FIDE $param1+ từ năm $param2 đến $param3';
   }
 
   @override

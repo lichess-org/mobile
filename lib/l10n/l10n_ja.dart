@@ -130,7 +130,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'テーマ';
 
   @override
   String get mobileToolsTab => 'ツール';

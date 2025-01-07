@@ -6537,6 +6537,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesInGameOnly => 'In-game only';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Chess clock';
 
   @override

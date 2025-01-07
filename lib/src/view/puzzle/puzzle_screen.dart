@@ -30,6 +30,8 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -41,9 +43,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-
-import 'puzzle_feedback_widget.dart';
-import 'puzzle_session_widget.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
@@ -259,7 +258,7 @@ class _Body extends ConsumerWidget {
                   puzzleState.isEngineEnabled && evalBestMove != null
                       ? ISet([
                         Arrow(
-                          color: const Color(0x40003088),
+                          color: const Color(0x66003088),
                           orig: evalBestMove.from,
                           dest: evalBestMove.to,
                         ),
@@ -411,7 +410,7 @@ class _BottomBar extends ConsumerWidget {
           BottomBarButton(
             onTap:
                 puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
-                    ? () => ref.read(ctrlProvider.notifier).loadPuzzle(puzzleState.nextContext!)
+                    ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
                     : null,
             highlighted: true,
             label: context.l10n.puzzleContinueTraining,
@@ -533,7 +532,7 @@ class _DifficultySelector extends ConsumerWidget {
                                 .read(ctrlProvider.notifier)
                                 .changeDifficulty(selectedDifficulty);
                             if (context.mounted && nextContext != null) {
-                              ref.read(ctrlProvider.notifier).loadPuzzle(nextContext);
+                              ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
                             }
                           });
                         },

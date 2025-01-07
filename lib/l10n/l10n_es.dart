@@ -31,7 +31,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String mobileGreeting(String param) {
-    return 'Hola $param';
+    return 'Hola, $param';
   }
 
   @override
@@ -865,7 +865,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesInGameOnly => 'Solo durante la partida';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Excepto en el juego';
 
   @override
   String get preferencesChessClock => 'Reloj de ajedrez';

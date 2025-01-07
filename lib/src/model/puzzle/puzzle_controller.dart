@@ -232,14 +232,17 @@ class PuzzleController extends _$PuzzleController {
     return nextPuzzle;
   }
 
-  void loadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
+  void onLoadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
     ref.read(evaluationServiceProvider).disposeEngine();
 
     state = _loadNewContext(nextContext, nextStreak ?? state.streak);
+    _saveCurrentStreakLocally();
   }
 
-  void saveStreakResultLocally() {
-    ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
+  void _saveCurrentStreakLocally() {
+    if (state.streak != null) {
+      ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
+    }
   }
 
   void _sendStreakResult() {
@@ -341,7 +344,7 @@ class PuzzleController extends _$PuzzleController {
       if (next != null &&
           result == PuzzleResult.win &&
           ref.read(puzzlePreferencesProvider).autoNext) {
-        loadPuzzle(next);
+        onLoadPuzzle(next);
       }
     } else {
       // one fail and streak is over
@@ -366,7 +369,7 @@ class PuzzleController extends _$PuzzleController {
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
                 soundService.play(Sound.confirmation);
-                loadPuzzle(
+                onLoadPuzzle(
                   nextContext,
                   nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
                 );

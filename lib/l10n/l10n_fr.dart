@@ -865,7 +865,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesInGameOnly => 'Seulement durant la partie';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Sauf durant la partie';
 
   @override
   String get preferencesChessClock => 'Pendule';
