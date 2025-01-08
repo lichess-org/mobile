@@ -103,8 +103,9 @@ class GameBody extends ConsumerWidget {
 
     return gameStateAsync.when(
       data: (gameState) {
-        final (position, legalMoves) =
-            gameState.getCurrentPosition(boardPreferences.castlingMethod);
+        final (position, legalMoves) = gameState.getCurrentPosition(
+          boardPreferences.castlingMethod,
+        );
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
         final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
