@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
@@ -257,17 +256,15 @@ class _TabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer(
-      child: CustomScrollView(
-        slivers: [
-          if (cupertinoTabSwitcher != null)
-            SliverPadding(
-              padding: Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-              sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
-            ),
-          sliver,
-        ],
-      ),
+    return CustomScrollView(
+      slivers: [
+        if (cupertinoTabSwitcher != null)
+          SliverPadding(
+            padding: Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+            sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
+          ),
+        sliver,
+      ],
     );
   }
 }
