@@ -118,6 +118,7 @@ class GameBody extends ConsumerWidget {
           materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.black ? gameState.timeToMove : null,
           mePlaying: youAre == Side.black,
+          canGoForward: gameState.canGoForward, 
           zenMode: gameState.isZenModeActive,
           clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
@@ -167,6 +168,7 @@ class GameBody extends ConsumerWidget {
           materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.white ? gameState.timeToMove : null,
           mePlaying: youAre == Side.white,
+          canGoForward: gameState.canGoForward, 
           zenMode: gameState.isZenModeActive,
           clockPosition: boardPreferences.clockPosition,
           confirmMoveCallbacks:
