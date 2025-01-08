@@ -330,12 +330,15 @@ class SocketClient {
   void _handleEvent(SocketEvent event) {
     switch (event.topic) {
       case '_pong':
+        _handlePong(pingDelay);
       case 'n':
         _handlePong(pingDelay);
+        continue addToStream;
       case 'ack':
         _onServerAck(event);
       case 'batch':
         _handleBatch(event);
+      addToStream:
       case _:
         if (_streamController.hasListener) {
           _streamController.add(event);

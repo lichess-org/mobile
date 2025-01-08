@@ -176,9 +176,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
-      socketClient.connect();
-
-      await socketClient.firstConnection;
+      await socketClient.connect();
 
       // send a message that requires an ack
       socketClient.send('test', {'data': 'ackable'}, ackable: true);
@@ -206,11 +204,9 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
-      socketClient.connect();
+      await socketClient.connect();
 
-      await socketClient.firstConnection;
-
-      const batchMessage = '''
+      const serverMessage = '''
       {
          "t":"batch",
          "d":[
@@ -221,23 +217,62 @@ void main() {
       }
       ''';
 
-      // start listening to the stream
-      final futureExpect = expectLater(
-        socketClient.stream,
-        emitsInOrder([
-          const SocketEvent(topic: 'test1', data: 'data'),
-          const SocketEvent(topic: 'test2', data: 'data'),
-          const SocketEvent(topic: 'test3', data: 'data'),
-        ]),
-      );
-
-      // server sends a batch message
-      fakeChannel.addIncomingMessages([batchMessage]);
+      const eventsToMatch = [
+        SocketEvent(topic: 'test1', data: 'data'),
+        SocketEvent(topic: 'test2', data: 'data'),
+        SocketEvent(topic: 'test3', data: 'data'),
+      ];
 
       // check that the messages in the batch were distributed
-      await futureExpect;
+      await testEventEmitted(socketClient, fakeChannel, serverMessage, eventsToMatch);
 
       await socketClient.close();
     });
   });
+
+  test('should emit events', () async {
+    final fakeChannel = FakeWebSocketChannel();
+
+    final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+    await socketClient.connect();
+
+    // should not emit if _pong
+    await testEventEmitted(socketClient, fakeChannel, '0', []);
+
+    // should emit if n
+    const pongMessage = '{"t":"n","d":10,"r":3}';
+    const pongEvent = SocketEvent(topic: 'n', data: {'nbPlayers': 10, 'nbGames': 3});
+    await testEventEmitted(socketClient, fakeChannel, pongMessage, [pongEvent]);
+
+    // should not emit if ack
+    const ackMessage = '{"t":"n","d":10,"r":3}';
+    await testEventEmitted(socketClient, fakeChannel, ackMessage, []);
+
+    // should not emit if batch
+    const batchMessage = '{"t":"batch","d":[]}';
+    await testEventEmitted(socketClient, fakeChannel, batchMessage, []);
+
+    // should emit if random topic
+    const randomMessage = '{"t":"test","d":"data"}';
+    const randomEvent = SocketEvent(topic: 'test', data: 'data');
+    await testEventEmitted(socketClient, fakeChannel, randomMessage, [randomEvent]);
+
+    await socketClient.close();
+  });
+}
+
+Future<void> testEventEmitted(
+  SocketClient socketClient,
+  FakeWebSocketChannel fakeChannel,
+  String serverMessage,
+  Iterable<SocketEvent> eventsToMatch,
+) async {
+  // start listening to the stream
+  final futureExpect = expectLater(socketClient.stream, emitsInOrder(eventsToMatch));
+
+  // server sends the message
+  fakeChannel.addIncomingMessages([serverMessage]);
+
+  // check that the socket events were emitted in order
+  await futureExpect;
 }
