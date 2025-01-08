@@ -361,6 +361,12 @@ enum CastlingMethod {
   either;
 }
 
+enum CastlingMethod {
+  kingOverRook,
+  kingTwoSquares,
+  either;
+}
+
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
   DragTargetKind.circle => 'Circle',
   DragTargetKind.square => 'Square',

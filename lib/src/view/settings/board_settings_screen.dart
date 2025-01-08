@@ -475,3 +475,16 @@ String castlingMethodl10n(
         context.l10n.preferencesCastleByMovingTwoSquares,
       CastlingMethod.either => 'Either',
     };
+
+String castlingMethodl10n(
+  BuildContext context,
+  CastlingMethod castlingMethod,
+) =>
+    switch (castlingMethod) {
+      // TODO add this to mobile translations
+      CastlingMethod.kingOverRook =>
+        context.l10n.preferencesCastleByMovingOntoTheRook,
+      CastlingMethod.kingTwoSquares =>
+        context.l10n.preferencesCastleByMovingTwoSquares,
+      CastlingMethod.either => 'Either',
+    };
