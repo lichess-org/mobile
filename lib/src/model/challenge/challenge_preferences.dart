@@ -52,6 +52,10 @@ class ChallengePreferences extends _$ChallengePreferences
   Future<void> setRated(bool rated) {
     return save(state.copyWith(rated: rated));
   }
+
+  Future<void> setLevel(int aiLevel) {
+    return save(state.copyWith(aiLevel: aiLevel));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)

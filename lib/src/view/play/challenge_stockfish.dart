@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -77,8 +76,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
-    int aiLevel = 1;
-    String aiName = context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString());
+    String aiName = context.l10n.aiNameLevelAiLevel('Stockfish', preferences.aiLevel.toString());
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
@@ -115,15 +113,19 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           ),
                         ),
                         Slider(
-                          value: aiLevel.toDouble(),
-                          label: aiLevel.toString(),
+                          value: preferences.aiLevel.toDouble(),
+                          label: preferences.aiLevel.toString(),
                           min: 1,
                           max: 8,
                           divisions: 7,
                           onChanged: (double newValue) {
                             setState(() {
-                              aiLevel = newValue.toInt();
-                              aiName = context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString());
+                              ref.read(
+                                challengePreferencesProvider.notifier
+                              ).setLevel(
+                                newValue.toInt()
+                              );
+                              aiName = context.l10n.aiNameLevelAiLevel('Stockfish', preferences.aiLevel.toString());
                             });
                           },
                         ),
