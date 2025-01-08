@@ -954,14 +954,9 @@ class GameState with _$GameState {
   }) = _GameState;
 
   /// The [Position] and its legal moves at the current cursor.
-  (Position, IMap<Square, ISet<Square>>) getCurrentPosition(
-    CastlingMethod castlingMethod,
-  ) {
+  (Position, IMap<Square, ISet<Square>>) getCurrentPosition(CastlingMethod castlingMethod) {
     final position = game.positionAt(stepCursor);
-    final legalMoves = makeLegalMoves(
-      position,
-      isChess960: game.meta.variant == Variant.chess960,
-    );
+    final legalMoves = makeLegalMoves(position, isChess960: game.meta.variant == Variant.chess960);
 
     final Map<Square, Square> castlingMap = {
       Square.a1: Square.c1,
@@ -978,12 +973,10 @@ class GameState with _$GameState {
                   moves, //king can castle
                 )
             ? (switch (castlingMethod) {
-                CastlingMethod.kingOverRook =>
-                  moves.removeAll(castlingMap.values),
-                CastlingMethod.kingTwoSquares =>
-                  moves.removeAll(castlingMap.keys),
-                _ => moves
-              })
+              CastlingMethod.kingOverRook => moves.removeAll(castlingMap.values),
+              CastlingMethod.kingTwoSquares => moves.removeAll(castlingMap.keys),
+              _ => moves,
+            })
             : moves,
       );
     }
