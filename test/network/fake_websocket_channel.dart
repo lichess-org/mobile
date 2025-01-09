@@ -89,7 +89,6 @@ class FakeWebSocketChannel implements WebSocketChannel {
     for (final message in messages) {
       _incomingController.add(message);
     }
-    // await _incomingController.addStream(Stream<dynamic>.fromIterable(messages));
   }
 
   @override
