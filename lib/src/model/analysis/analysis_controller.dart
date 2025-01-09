@@ -48,13 +48,33 @@ class AnalysisOptions with _$AnalysisOptions {
 }
 
 @riverpod
-class AnalysisController extends _$AnalysisController implements PgnTreeNotifier {
+class AnalysisController extends _$AnalysisController
+    with EvaluationNotifier<AnalysisState>
+    implements PgnTreeNotifier {
   late Root _root;
   late Variant _variant;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
   Timer? _startEngineEvalTimer;
+
+  @override
+  void onEngineEmit((Work, ClientEval) tuple) {
+    final (work, eval) = tuple;
+    _root.updateAt(work.path, (node) => node.eval = eval);
+    if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
+      _refreshCurrentNode();
+    }
+  }
+
+  @override
+  void refreshCurrentNode() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
 
   @override
   Future<AnalysisState> build(AnalysisOptions options) async {
@@ -159,12 +179,10 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    final isEngineAllowed = engineSupportedVariants.contains(_variant);
-
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      if (isEngineAllowed) {
+      if (engineSupportedVariants.contains(_variant)) {
         evaluationService.disposeEngine();
       }
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
@@ -188,6 +206,8 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
+      evaluationContext: _evaluationContext,
+      currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
@@ -491,6 +511,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          currentPathSteps: _root.branchesOn(path).map(Step.fromNode),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -503,6 +524,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          currentPathSteps: _root.branchesOn(path).map(Step.fromNode),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -738,6 +760,10 @@ class AnalysisState with _$AnalysisState {
     ///
     /// This is a user preference and acts only on local analysis.
     required bool isLocalEvaluationEnabled,
+
+    required EvaluationContext evaluationContext,
+
+    required Iterable<Step> currentPathSteps,
 
     /// The last move played.
     Move? lastMove,
