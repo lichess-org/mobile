@@ -1,10 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 void main() {
+  final dateFormat = DateFormat('yyyy.MM.dd');
+  String formatDate(int millis) => dateFormat.format(DateTime.fromMillisecondsSinceEpoch(millis));
+
   group('PlayableGame', () {
     test('makePgn, unfinished game', () {
       final game = PlayableGame.fromServerJson(
@@ -14,7 +18,7 @@ void main() {
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
 [Site "https://lichess.dev/Fn9UvVKF"]
-[Date "2024.01.25"]
+[Date "${formatDate(1706204482969)}"]
 [White "chabrot"]
 [Black "veloce"]
 [Result "*"]
@@ -35,7 +39,7 @@ void main() {
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
 [Site "https://lichess.dev/CCW6EEru"]
-[Date "2024.01.25"]
+[Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
 [Result "1-0"]
@@ -102,7 +106,7 @@ void main() {
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
 [Site "https://lichess.dev/CCW6EEru"]
-[Date "2024.01.25"]
+[Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
 [Result "1-0"]
@@ -126,7 +130,7 @@ void main() {
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
 [Site "https://lichess.dev/CCW6EEru"]
-[Date "2024.01.25"]
+[Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
 [Result "1-0"]
