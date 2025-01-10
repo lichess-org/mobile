@@ -182,18 +182,23 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
         orientation: orientation ?? Side.white,
         fen: fen ?? kEmptyFen,
         lastMove: lastMove as NormalMove?,
-        topTable: _LoadingPlayer(),
-        bottomTable: _LoadingPlayer(),
+        topTable: const LoadingPlayerWidget(),
+        bottomTable: const LoadingPlayerWidget(),
         showMoveListPlaceholder: true,
       ),
     );
   }
 }
 
-class _LoadingPlayer extends StatelessWidget {
+/// A widget that shows a loading indicator for a player.
+///
+/// Must be wrapped in a [Shimmer] widget.
+class LoadingPlayerWidget extends StatelessWidget {
+  const LoadingPlayerWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return const ShimmerLoading(
+    return ShimmerLoading(
       isLoading: true,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,16 +208,26 @@ class _LoadingPlayer extends StatelessWidget {
             child: SizedBox(
               height: 24.0,
               width: double.infinity,
-              child: ColoredBox(color: Colors.black),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Flexible(
             flex: 2,
             child: SizedBox(
               height: 38.0,
               width: double.infinity,
-              child: ColoredBox(color: Colors.black),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
             ),
           ),
         ],

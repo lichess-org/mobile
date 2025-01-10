@@ -347,10 +347,19 @@ class _StandaloneGameTitle extends ConsumerWidget {
         );
       },
       loading:
-          () => const Shimmer(
+          () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: SizedBox(height: 24.0, width: 200.0, child: ColoredBox(color: Colors.black)),
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
             ),
           ),
       error: (error, _) => const SizedBox.shrink(),
