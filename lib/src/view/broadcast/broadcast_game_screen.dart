@@ -75,12 +75,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final hasValue = ref.watch(
-      broadcastGameControllerProvider(
-        widget.roundId,
-        widget.gameId,
-      ).select((state) => state.hasValue),
-    );
     final title =
         (widget.title != null)
             ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
@@ -99,15 +93,12 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         actions: [
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           AppBarIconButton(
-            onPressed:
-                hasValue
-                    ? () {
-                      pushPlatformRoute(
-                        context,
-                        screen: BroadcastGameSettings(widget.roundId, widget.gameId),
-                      );
-                    }
-                    : null,
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                screen: BroadcastGameSettings(widget.roundId, widget.gameId),
+              );
+            },
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
