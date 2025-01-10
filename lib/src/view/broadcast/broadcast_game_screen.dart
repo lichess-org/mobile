@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
       case _:
-        return const CircularProgressIndicator.adaptive();
+        return const Center(child: CircularProgressIndicator.adaptive());
     }
   }
 }
