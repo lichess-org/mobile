@@ -39,12 +39,7 @@ enum AnalysisTab {
 
 /// Indicator for the analysis tab, typically shown in the app bar.
 class AppBarAnalysisTabIndicator extends StatefulWidget {
-  const AppBarAnalysisTabIndicator({
-    required this.tabs,
-    required this.controller,
-    this.enable = true,
-    super.key,
-  });
+  const AppBarAnalysisTabIndicator({required this.tabs, required this.controller, super.key});
 
   final TabController controller;
 
@@ -53,8 +48,6 @@ class AppBarAnalysisTabIndicator extends StatefulWidget {
   /// The length of this list must match the [controller]'s [TabController.length]
   /// and the length of the [AnalysisLayout.children] list.
   final List<AnalysisTab> tabs;
-
-  final bool enable;
 
   @override
   State<AppBarAnalysisTabIndicator> createState() => _AppBarAnalysisTabIndicatorState();
@@ -94,24 +87,21 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
     return AppBarIconButton(
       icon: Icon(widget.tabs[widget.controller.index].icon),
       semanticsLabel: widget.tabs[widget.controller.index].l10n(context.l10n),
-      onPressed:
-          (widget.enable)
-              ? () {
-                showAdaptiveActionSheet<void>(
-                  context: context,
-                  actions:
-                      widget.tabs.map((tab) {
-                        return BottomSheetAction(
-                          leading: Icon(tab.icon),
-                          makeLabel: (context) => Text(tab.l10n(context.l10n)),
-                          onPressed: (_) {
-                            widget.controller.animateTo(widget.tabs.indexOf(tab));
-                          },
-                        );
-                      }).toList(),
+      onPressed: () {
+        showAdaptiveActionSheet<void>(
+          context: context,
+          actions:
+              widget.tabs.map((tab) {
+                return BottomSheetAction(
+                  leading: Icon(tab.icon),
+                  makeLabel: (context) => Text(tab.l10n(context.l10n)),
+                  onPressed: (_) {
+                    widget.controller.animateTo(widget.tabs.indexOf(tab));
+                  },
                 );
-              }
-              : null,
+              }).toList(),
+        );
+      },
     );
   }
 }

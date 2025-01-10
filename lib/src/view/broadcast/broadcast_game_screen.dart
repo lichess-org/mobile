@@ -97,7 +97,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       appBar: PlatformAppBar(
         title: title,
         actions: [
-          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController, enable: hasValue),
+          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           AppBarIconButton(
             onPressed:
                 hasValue
