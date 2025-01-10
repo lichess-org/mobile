@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
@@ -176,13 +177,46 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardTable(
-      orientation: orientation ?? Side.white,
-      fen: fen ?? kEmptyFen,
-      lastMove: lastMove as NormalMove?,
-      topTable: const SizedBox.shrink(),
-      bottomTable: const SizedBox.shrink(),
-      showMoveListPlaceholder: true,
+    return Shimmer(
+      child: BoardTable(
+        orientation: orientation ?? Side.white,
+        fen: fen ?? kEmptyFen,
+        lastMove: lastMove as NormalMove?,
+        topTable: _LoadingPlayer(),
+        bottomTable: _LoadingPlayer(),
+        showMoveListPlaceholder: true,
+      ),
+    );
+  }
+}
+
+class _LoadingPlayer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const ShimmerLoading(
+      isLoading: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 6,
+            child: SizedBox(
+              height: 24.0,
+              width: double.infinity,
+              child: ColoredBox(color: Colors.black),
+            ),
+          ),
+          Spacer(),
+          Flexible(
+            flex: 2,
+            child: SizedBox(
+              height: 38.0,
+              width: double.infinity,
+              child: ColoredBox(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

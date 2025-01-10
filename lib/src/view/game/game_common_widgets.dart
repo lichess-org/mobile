@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _gameTitledateFormat = DateFormat.yMMMd();
 
@@ -311,19 +312,19 @@ class _StandaloneGameTitle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final metaAsync = ref.watch(gameMetaProvider(id));
-    return metaAsync.maybeWhen<Widget>(
+    return metaAsync.when(
       data: (meta) {
         final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
         final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
 
         return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
             const SizedBox(width: 4.0),
             if (meta.clock != null)
-              Expanded(
+              Flexible(
                 child: AutoSizeText(
                   '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
                   maxLines: 1,
@@ -331,7 +332,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
                 ),
               )
             else if (meta.daysPerTurn != null)
-              Expanded(
+              Flexible(
                 child: AutoSizeText(
                   '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
                   maxLines: 1,
@@ -339,13 +340,20 @@ class _StandaloneGameTitle extends ConsumerWidget {
                 ),
               )
             else
-              Expanded(
+              Flexible(
                 child: AutoSizeText('${meta.perf.title}$info', maxLines: 1, minFontSize: 14.0),
               ),
           ],
         );
       },
-      orElse: () => const SizedBox.shrink(),
+      loading:
+          () => const Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(height: 24.0, width: 200.0, child: ColoredBox(color: Colors.black)),
+            ),
+          ),
+      error: (error, _) => const SizedBox.shrink(),
     );
   }
 }
