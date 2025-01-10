@@ -13,9 +13,16 @@ class GameRepository {
 
   final LichessClient client;
 
-  Future<ArchivedGame> getGame(GameId id) {
+  Future<ArchivedGame> getGame(GameId id, {bool withBookmarked = false}) {
     return client.readJson(
-      Uri(path: '/game/export/$id', queryParameters: {'clocks': '1', 'accuracy': '1'}),
+      Uri(
+        path: '/game/export/$id',
+        queryParameters: {
+          'clocks': '1',
+          'accuracy': '1',
+          if (withBookmarked) 'withBookmarked': '1',
+        },
+      ),
       headers: {'Accept': 'application/json'},
       mapper: ArchivedGame.fromServerJson,
     );
@@ -94,15 +101,13 @@ class GameRepository {
     );
   }
 
-  Future<void> bookmark(GameId id, {int? v}) async {
-    // if v is not set, toggle the bookmark value on server
-    // otherwise explicitly set the new value with 0 to not
-    // bookmark the game and 1 to bookmark it
-    assert(v == null || v == 0 || v == 1);
+  /// If bookmark is not set, toggle the bookmark value.
+  /// Otherwise it will explicitly set the bookmark value.
+  Future<void> bookmark(GameId id, {bool? bookmark}) async {
     final uri =
-        v == null
+        bookmark == null
             ? Uri(path: '/bookmark/$id')
-            : Uri(path: '/bookmark/$id', queryParameters: {'v': v.toString()});
+            : Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
     final response = await client.post(uri);
     if (response.statusCode >= 400) {
       throw http.ClientException('Failed to bookmark game: ${response.statusCode}', uri);

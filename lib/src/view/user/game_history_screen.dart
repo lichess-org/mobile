@@ -6,10 +6,8 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -138,9 +136,12 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
+    final gameListProvider = userGameHistoryProvider(
+      widget.user?.id,
+      isOnline: widget.isOnline,
+      filter: gameFilterState,
     );
+    final gameListState = ref.watch(gameListProvider);
     final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return gameListState.when(
@@ -192,9 +193,7 @@ class _BodyState extends ConsumerState<_Body> {
                         children: [
                           SlidableAction(
                             onPressed: (BuildContext context) {
-                              ref.withClient(
-                                (client) => GameRepository(client).bookmark(game.id, v: 1),
-                              );
+                              ref.read(gameListProvider.notifier).toggleBookmark(index);
                             },
                             icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
                             label: context.l10n.bookmarkThisGame,

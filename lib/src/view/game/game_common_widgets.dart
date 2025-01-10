@@ -35,7 +35,7 @@ class BookmarkButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
       onPressed: () {
-        ref.withClient((client) => GameRepository(client).bookmark(id, v: 1));
+        ref.withClient((client) => GameRepository(client).bookmark(id, bookmark: true));
       },
       semanticsLabel: context.l10n.bookmarkThisGame,
       icon: Icon(bookmarked ? Icons.star : Icons.star_outline_rounded),

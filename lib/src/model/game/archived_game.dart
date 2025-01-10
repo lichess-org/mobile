@@ -99,6 +99,8 @@ class LightArchivedGame with _$LightArchivedGame {
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
+
+    /// If the game is bookmarked, can only be null if the user is not logged in
     bool? bookmarked,
   }) = _ArchivedGameData;
 

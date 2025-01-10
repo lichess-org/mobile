@@ -60,7 +60,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  final isLoggedIn = ref.watch(authSessionProvider) != null;
+  final isLoggedIn = ref.watch(authSessionProvider.select((session) => session != null));
 
   return ref.withClientCacheFor(
     (client) => GameRepository(client).getUserGames(userId, withBookmarked: isLoggedIn),
@@ -205,6 +205,27 @@ class UserGameHistory extends _$UserGameHistory {
       (error, stackTrace) {
         state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
       },
+    );
+  }
+
+  void toggleBookmark(int index) {
+    if (!state.hasValue) return;
+
+    final gameList = state.requireValue.gameList;
+    final game = gameList[index].game;
+    final pov = gameList[index].pov;
+
+    ref.withClient(
+      (client) => GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
+    );
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        gameList: gameList.replace(index, (
+          game: game.copyWith(bookmarked: !game.bookmarked!),
+          pov: pov,
+        )),
+      ),
     );
   }
 }

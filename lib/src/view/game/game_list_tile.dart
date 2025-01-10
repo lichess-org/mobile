@@ -240,7 +240,7 @@ class _ContextMenu extends ConsumerWidget {
         if (isLoggedIn)
           BottomSheetContextMenuAction(
             onPressed: () {
-              ref.withClient((client) => GameRepository(client).bookmark(game.id, v: 1));
+              ref.withClient((client) => GameRepository(client).bookmark(game.id, bookmark: true));
             },
             icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
             closeOnPressed: false,
