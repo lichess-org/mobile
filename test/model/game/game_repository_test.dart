@@ -46,11 +46,7 @@ void main() {
 {"id":"9WLmxmiB","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806,"ratingDiff":5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772,"ratingDiff":-5}},"winner":"white","clock":{"initial":180,"increment":0,"totalTime":180},"lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
 ''';
 
-      final ids = ISet(const {
-        GameId('Huk88k3D'),
-        GameId('g2bzFol8'),
-        GameId('9WLmxmiB'),
-      });
+      final ids = ISet(const {GameId('Huk88k3D'), GameId('g2bzFol8'), GameId('9WLmxmiB')});
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/games/export/_ids') {

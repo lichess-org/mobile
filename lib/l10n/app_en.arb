@@ -1,52 +1,11 @@
 {
-  "mobileHomeTab": "Home",
-  "mobilePuzzlesTab": "Puzzles",
-  "mobileToolsTab": "Tools",
-  "mobileWatchTab": "Watch",
-  "mobileSettingsTab": "Settings",
-  "mobileMustBeLoggedIn": "You must be logged in to view this page.",
-  "mobileSystemColors": "System colors",
-  "mobileFeedbackButton": "Feedback",
-  "mobileOkButton": "OK",
-  "mobileSettingsHapticFeedback": "Haptic feedback",
-  "mobileSettingsImmersiveMode": "Immersive mode",
-  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.",
-  "mobileNotFollowingAnyUser": "You are not following any user.",
   "mobileAllGames": "All games",
-  "mobileRecentSearches": "Recent searches",
-  "mobileClearButton": "Clear",
-  "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
-  "@mobilePlayersMatchingSearchTerm": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "mobileNoSearchResults": "No results",
   "mobileAreYouSure": "Are you sure?",
-  "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
-  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
-  "mobileSharePuzzle": "Share this puzzle",
-  "mobileShareGameURL": "Share game URL",
-  "mobileShareGamePGN": "Share PGN",
-  "mobileSharePositionAsFEN": "Share position as FEN",
-  "mobileShowVariations": "Show variations",
-  "mobileHideVariation": "Hide variation",
-  "mobileShowComments": "Show comments",
-  "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
-  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
   "mobileCancelTakebackOffer": "Cancel takeback offer",
-  "mobileCancelDrawOffer": "Cancel draw offer",
-  "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
-  "mobileBlindfoldMode": "Blindfold",
-  "mobileLiveStreamers": "Live streamers",
-  "mobileCustomGameJoinAGame": "Join a game",
+  "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
-  "mobileSomethingWentWrong": "Something went wrong.",
-  "mobileShowResult": "Show result",
-  "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
-  "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
+  "mobileCustomGameJoinAGame": "Join a game",
+  "mobileFeedbackButton": "Feedback",
   "mobileGreeting": "Hello, {param}",
   "@mobileGreeting": {
     "placeholders": {
@@ -56,7 +15,47 @@
     }
   },
   "mobileGreetingWithoutName": "Hello",
+  "mobileHideVariation": "Hide variation",
+  "mobileHomeTab": "Home",
+  "mobileLiveStreamers": "Live streamers",
+  "mobileMustBeLoggedIn": "You must be logged in to view this page.",
+  "mobileNoSearchResults": "No results",
+  "mobileNotFollowingAnyUser": "You are not following any user.",
+  "mobileOkButton": "OK",
+  "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
+  "@mobilePlayersMatchingSearchTerm": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
+  "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
+  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
+  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
+  "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
+  "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
+  "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
+  "mobilePuzzlesTab": "Puzzles",
+  "mobileRecentSearches": "Recent searches",
+  "mobileSettingsHapticFeedback": "Haptic feedback",
+  "mobileSettingsImmersiveMode": "Immersive mode",
+  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.",
+  "mobileSettingsTab": "Settings",
+  "mobileShareGamePGN": "Share PGN",
+  "mobileShareGameURL": "Share game URL",
+  "mobileSharePositionAsFEN": "Share position as FEN",
+  "mobileSharePuzzle": "Share this puzzle",
+  "mobileShowComments": "Show comments",
+  "mobileShowResult": "Show result",
+  "mobileShowVariations": "Show variations",
+  "mobileSomethingWentWrong": "Something went wrong.",
+  "mobileSystemColors": "System colors",
+  "mobileTheme": "Theme",
+  "mobileToolsTab": "Tools",
+  "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
+  "mobileWatchTab": "Watch",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
@@ -147,6 +146,17 @@
       }
     }
   },
+  "activityCompletedNbVariantGames": "{count, plural, =1{Completed {count} {param2} correspondence game} other{Completed {count} {param2} correspondence games}}",
+  "@activityCompletedNbVariantGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
   "activityFollowedNbPlayers": "{count, plural, =1{Started following {count} player} other{Started following {count} players}}",
   "@activityFollowedNbPlayers": {
     "placeholders": {
@@ -229,7 +239,141 @@
     }
   },
   "broadcastBroadcasts": "Broadcasts",
+  "broadcastMyBroadcasts": "My broadcasts",
   "broadcastLiveBroadcasts": "Live tournament broadcasts",
+  "broadcastBroadcastCalendar": "Broadcast calendar",
+  "broadcastNewBroadcast": "New live broadcast",
+  "broadcastSubscribedBroadcasts": "Subscribed broadcasts",
+  "broadcastAboutBroadcasts": "About broadcasts",
+  "broadcastHowToUseLichessBroadcasts": "How to use Lichess Broadcasts.",
+  "broadcastTheNewRoundHelp": "The new round will have the same members and contributors as the previous one.",
+  "broadcastAddRound": "Add a round",
+  "broadcastOngoing": "Ongoing",
+  "broadcastUpcoming": "Upcoming",
+  "broadcastCompleted": "Completed",
+  "broadcastCompletedHelp": "Lichess detects round completion, but can get it wrong. Use this to set it manually.",
+  "broadcastRoundName": "Round name",
+  "broadcastRoundNumber": "Round number",
+  "broadcastTournamentName": "Tournament name",
+  "broadcastTournamentDescription": "Short tournament description",
+  "broadcastFullDescription": "Full tournament description",
+  "broadcastFullDescriptionHelp": "Optional long description of the tournament. {param1} is available. Length must be less than {param2} characters.",
+  "@broadcastFullDescriptionHelp": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastSourceSingleUrl": "PGN Source URL",
+  "broadcastSourceUrlHelp": "URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.",
+  "broadcastSourceGameIds": "Up to 64 Lichess game IDs, separated by spaces.",
+  "broadcastStartDateTimeZone": "Start date in the tournament local timezone: {param}",
+  "@broadcastStartDateTimeZone": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastStartDateHelp": "Optional, if you know when the event starts",
+  "broadcastCurrentGameUrl": "Current game URL",
+  "broadcastDownloadAllRounds": "Download all rounds",
+  "broadcastResetRound": "Reset this round",
+  "broadcastDeleteRound": "Delete this round",
+  "broadcastDefinitivelyDeleteRound": "Definitively delete the round and all its games.",
+  "broadcastDeleteAllGamesOfThisRound": "Delete all games of this round. The source will need to be active in order to re-create them.",
+  "broadcastEditRoundStudy": "Edit round study",
+  "broadcastDeleteTournament": "Delete this tournament",
+  "broadcastDefinitivelyDeleteTournament": "Definitively delete the entire tournament, all its rounds and all its games.",
+  "broadcastShowScores": "Show players scores based on game results",
+  "broadcastReplacePlayerTags": "Optional: replace player names, ratings and titles",
+  "broadcastFideFederations": "FIDE federations",
+  "broadcastTop10Rating": "Top 10 rating",
+  "broadcastFidePlayers": "FIDE players",
+  "broadcastFidePlayerNotFound": "FIDE player not found",
+  "broadcastFideProfile": "FIDE profile",
+  "broadcastFederation": "Federation",
+  "broadcastAgeThisYear": "Age this year",
+  "broadcastUnrated": "Unrated",
+  "broadcastRecentTournaments": "Recent tournaments",
+  "broadcastOpenLichess": "Open in Lichess",
+  "broadcastTeams": "Teams",
+  "broadcastBoards": "Boards",
+  "broadcastOverview": "Overview",
+  "broadcastSubscribeTitle": "Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.",
+  "broadcastUploadImage": "Upload tournament image",
+  "broadcastNoBoardsYet": "No boards yet. These will appear once games are uploaded.",
+  "broadcastBoardsCanBeLoaded": "Boards can be loaded with a source or via the {param}",
+  "@broadcastBoardsCanBeLoaded": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastStartsAfter": "Starts after {param}",
+  "@broadcastStartsAfter": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastStartVerySoon": "The broadcast will start very soon.",
+  "broadcastNotYetStarted": "The broadcast has not yet started.",
+  "broadcastOfficialWebsite": "Official website",
+  "broadcastStandings": "Standings",
+  "broadcastOfficialStandings": "Official Standings",
+  "broadcastIframeHelp": "More options on the {param}",
+  "@broadcastIframeHelp": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastWebmastersPage": "webmasters page",
+  "broadcastPgnSourceHelp": "A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.",
+  "@broadcastPgnSourceHelp": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastEmbedThisBroadcast": "Embed this broadcast in your website",
+  "broadcastEmbedThisRound": "Embed {param} in your website",
+  "@broadcastEmbedThisRound": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastRatingDiff": "Rating diff",
+  "broadcastGamesThisTournament": "Games in this tournament",
+  "broadcastScore": "Score",
+  "broadcastAllTeams": "All teams",
+  "broadcastTournamentFormat": "Tournament format",
+  "broadcastTournamentLocation": "Tournament Location",
+  "broadcastTopPlayers": "Top players",
+  "broadcastTimezone": "Time zone",
+  "broadcastFideRatingCategory": "FIDE rating category",
+  "broadcastOptionalDetails": "Optional details",
+  "broadcastPastBroadcasts": "Past broadcasts",
+  "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
+  "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
+  "@broadcastNbBroadcasts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "challengeChallengesX": "Challenges: {param1}",
   "@challengeChallengesX": {
     "placeholders": {
@@ -423,6 +567,7 @@
   "preferencesDisplayBoardResizeHandle": "Show board resize handle",
   "preferencesOnlyOnInitialPosition": "Only on initial position",
   "preferencesInGameOnly": "In-game only",
+  "preferencesExceptInGame": "Except in-game",
   "preferencesChessClock": "Chess clock",
   "preferencesTenthsOfSeconds": "Tenths of seconds",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",
@@ -470,6 +615,7 @@
   "preferencesNotifyWeb": "Browser",
   "preferencesNotifyDevice": "Device",
   "preferencesBellNotificationSound": "Bell notification sound",
+  "preferencesBlindfold": "Blindfold",
   "puzzlePuzzles": "Puzzles",
   "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",
@@ -752,8 +898,8 @@
   "puzzleThemeXRayAttackDescription": "A piece attacks or defends a square, through an enemy piece.",
   "puzzleThemeZugzwang": "Zugzwang",
   "puzzleThemeZugzwangDescription": "The opponent is limited in the moves they can make, and all moves worsen their position.",
-  "puzzleThemeHealthyMix": "Healthy mix",
-  "puzzleThemeHealthyMixDescription": "A bit of everything. You don't know what to expect, so you remain ready for anything! Just like in real games.",
+  "puzzleThemeMix": "Healthy mix",
+  "puzzleThemeMixDescription": "A bit of everything. You don't know what to expect, so you remain ready for anything! Just like in real games.",
   "puzzleThemePlayerGames": "Player games",
   "puzzleThemePlayerGamesDescription": "Lookup puzzles generated from your games, or from another player's games.",
   "puzzleThemePuzzleDownloadInformation": "These puzzles are in the public domain, and can be downloaded from {param}.",
@@ -925,7 +1071,6 @@
   "replayMode": "Replay mode",
   "realtimeReplay": "Realtime",
   "byCPL": "By CPL",
-  "openStudy": "Open study",
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
   "showVariationArrows": "Show variation arrows",
@@ -935,7 +1080,6 @@
   "memory": "Memory",
   "infiniteAnalysis": "Infinite analysis",
   "removesTheDepthLimit": "Removes the depth limit, and keeps your computer warm",
-  "engineManager": "Engine manager",
   "blunder": "Blunder",
   "mistake": "Mistake",
   "inaccuracy": "Inaccuracy",
@@ -1090,6 +1234,7 @@
     }
   },
   "gamesPlayed": "Games played",
+  "ok": "OK",
   "cancel": "Cancel",
   "whiteTimeOut": "White time out",
   "blackTimeOut": "Black time out",
@@ -1318,7 +1463,6 @@
   "block": "Block",
   "blocked": "Blocked",
   "unblock": "Unblock",
-  "followsYou": "Follows you",
   "xStartedFollowingY": "{param1} started following {param2}",
   "@xStartedFollowingY": {
     "placeholders": {
@@ -1483,7 +1627,9 @@
   "cheat": "Cheat",
   "troll": "Troll",
   "other": "Other",
-  "reportDescriptionHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion. Your report will be processed faster if written in English.",
+  "reportCheatBoostHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion.",
+  "reportUsernameHelp": "Explain what about this username is offensive. Don't just say \"it's offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.",
+  "reportProcessedFasterInEnglish": "Your report will be processed faster if written in English.",
   "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
   "by": "by {param}",
   "@by": {
@@ -2333,6 +2479,7 @@
   "showMeEverything": "Show me everything",
   "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.",
   "nothingToSeeHere": "Nothing to see here at the moment.",
+  "stats": "Stats",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -2773,6 +2920,373 @@
     }
   },
   "streamerLichessStreamers": "Lichess streamers",
+  "studyPrivate": "Private",
+  "studyMyStudies": "My studies",
+  "studyStudiesIContributeTo": "Studies I contribute to",
+  "studyMyPublicStudies": "My public studies",
+  "studyMyPrivateStudies": "My private studies",
+  "studyMyFavoriteStudies": "My favourite studies",
+  "studyWhatAreStudies": "What are studies?",
+  "studyAllStudies": "All studies",
+  "studyStudiesCreatedByX": "Studies created by {param}",
+  "@studyStudiesCreatedByX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyNoneYet": "None yet.",
+  "studyHot": "Hot",
+  "studyDateAddedNewest": "Date added (newest)",
+  "studyDateAddedOldest": "Date added (oldest)",
+  "studyRecentlyUpdated": "Recently updated",
+  "studyMostPopular": "Most popular",
+  "studyAlphabetical": "Alphabetical",
+  "studyAddNewChapter": "Add a new chapter",
+  "studyAddMembers": "Add members",
+  "studyInviteToTheStudy": "Invite to the study",
+  "studyPleaseOnlyInvitePeopleYouKnow": "Please only invite people who know you, and who actively want to join this study.",
+  "studySearchByUsername": "Search by username",
+  "studySpectator": "Spectator",
+  "studyContributor": "Contributor",
+  "studyKick": "Kick",
+  "studyLeaveTheStudy": "Leave the study",
+  "studyYouAreNowAContributor": "You are now a contributor",
+  "studyYouAreNowASpectator": "You are now a spectator",
+  "studyPgnTags": "PGN tags",
+  "studyLike": "Like",
+  "studyUnlike": "Unlike",
+  "studyNewTag": "New tag",
+  "studyCommentThisPosition": "Comment on this position",
+  "studyCommentThisMove": "Comment on this move",
+  "studyAnnotateWithGlyphs": "Annotate with glyphs",
+  "studyTheChapterIsTooShortToBeAnalysed": "The chapter is too short to be analysed.",
+  "studyOnlyContributorsCanRequestAnalysis": "Only the study contributors can request a computer analysis.",
+  "studyGetAFullComputerAnalysis": "Get a full server-side computer analysis of the mainline.",
+  "studyMakeSureTheChapterIsComplete": "Make sure the chapter is complete. You can only request analysis once.",
+  "studyAllSyncMembersRemainOnTheSamePosition": "All SYNC members remain on the same position",
+  "studyShareChanges": "Share changes with spectators and save them on the server",
+  "studyPlaying": "Playing",
+  "studyShowEvalBar": "Evaluation bars",
+  "studyFirst": "First",
+  "studyPrevious": "Previous",
+  "studyNext": "Next",
+  "studyLast": "Last",
   "studyShareAndExport": "Share & export",
-  "studyStart": "Start"
+  "studyCloneStudy": "Clone",
+  "studyStudyPgn": "Study PGN",
+  "studyDownloadAllGames": "Download all games",
+  "studyChapterPgn": "Chapter PGN",
+  "studyCopyChapterPgn": "Copy PGN",
+  "studyDownloadGame": "Download game",
+  "studyStudyUrl": "Study URL",
+  "studyCurrentChapterUrl": "Current chapter URL",
+  "studyYouCanPasteThisInTheForumToEmbed": "You can paste this in the forum or your Lichess blog to embed",
+  "studyStartAtInitialPosition": "Start at initial position",
+  "studyStartAtX": "Start at {param}",
+  "@studyStartAtX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmbedInYourWebsite": "Embed in your website",
+  "studyReadMoreAboutEmbedding": "Read more about embedding",
+  "studyOnlyPublicStudiesCanBeEmbedded": "Only public studies can be embedded!",
+  "studyOpen": "Open",
+  "studyXBroughtToYouByY": "{param1}, brought to you by {param2}",
+  "@studyXBroughtToYouByY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "studyStudyNotFound": "Study not found",
+  "studyEditChapter": "Edit chapter",
+  "studyNewChapter": "New chapter",
+  "studyImportFromChapterX": "Import from {param}",
+  "@studyImportFromChapterX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyOrientation": "Orientation",
+  "studyAnalysisMode": "Analysis mode",
+  "studyPinnedChapterComment": "Pinned chapter comment",
+  "studySaveChapter": "Save chapter",
+  "studyClearAnnotations": "Clear annotations",
+  "studyClearVariations": "Clear variations",
+  "studyDeleteChapter": "Delete chapter",
+  "studyDeleteThisChapter": "Delete this chapter. There is no going back!",
+  "studyClearAllCommentsInThisChapter": "Clear all comments, glyphs and drawn shapes in this chapter",
+  "studyRightUnderTheBoard": "Right under the board",
+  "studyNoPinnedComment": "None",
+  "studyNormalAnalysis": "Normal analysis",
+  "studyHideNextMoves": "Hide next moves",
+  "studyInteractiveLesson": "Interactive lesson",
+  "studyChapterX": "Chapter {param}",
+  "@studyChapterX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyEmpty": "Empty",
+  "studyStartFromInitialPosition": "Start from initial position",
+  "studyEditor": "Editor",
+  "studyStartFromCustomPosition": "Start from custom position",
+  "studyLoadAGameByUrl": "Load games by URLs",
+  "studyLoadAPositionFromFen": "Load a position from FEN",
+  "studyLoadAGameFromPgn": "Load games from PGN",
+  "studyAutomatic": "Automatic",
+  "studyUrlOfTheGame": "URL of the games, one per line",
+  "studyLoadAGameFromXOrY": "Load games from {param1} or {param2}",
+  "@studyLoadAGameFromXOrY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "studyCreateChapter": "Create chapter",
+  "studyCreateStudy": "Create study",
+  "studyEditStudy": "Edit study",
+  "studyVisibility": "Visibility",
+  "studyPublic": "Public",
+  "studyUnlisted": "Unlisted",
+  "studyInviteOnly": "Invite only",
+  "studyAllowCloning": "Allow cloning",
+  "studyNobody": "Nobody",
+  "studyOnlyMe": "Only me",
+  "studyContributors": "Contributors",
+  "studyMembers": "Members",
+  "studyEveryone": "Everyone",
+  "studyEnableSync": "Enable sync",
+  "studyYesKeepEveryoneOnTheSamePosition": "Yes: keep everyone on the same position",
+  "studyNoLetPeopleBrowseFreely": "No: let people browse freely",
+  "studyPinnedStudyComment": "Pinned study comment",
+  "studyStart": "Start",
+  "studySave": "Save",
+  "studyClearChat": "Clear chat",
+  "studyDeleteTheStudyChatHistory": "Delete the study chat history? There is no going back!",
+  "studyDeleteStudy": "Delete study",
+  "studyConfirmDeleteStudy": "Delete the entire study? There is no going back! Type the name of the study to confirm: {param}",
+  "@studyConfirmDeleteStudy": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyWhereDoYouWantToStudyThat": "Where do you want to study that?",
+  "studyGoodMove": "Good move",
+  "studyMistake": "Mistake",
+  "studyBrilliantMove": "Brilliant move",
+  "studyBlunder": "Blunder",
+  "studyInterestingMove": "Interesting move",
+  "studyDubiousMove": "Dubious move",
+  "studyOnlyMove": "Only move",
+  "studyZugzwang": "Zugzwang",
+  "studyEqualPosition": "Equal position",
+  "studyUnclearPosition": "Unclear position",
+  "studyWhiteIsSlightlyBetter": "White is slightly better",
+  "studyBlackIsSlightlyBetter": "Black is slightly better",
+  "studyWhiteIsBetter": "White is better",
+  "studyBlackIsBetter": "Black is better",
+  "studyWhiteIsWinning": "White is winning",
+  "studyBlackIsWinning": "Black is winning",
+  "studyNovelty": "Novelty",
+  "studyDevelopment": "Development",
+  "studyInitiative": "Initiative",
+  "studyAttack": "Attack",
+  "studyCounterplay": "Counterplay",
+  "studyTimeTrouble": "Time trouble",
+  "studyWithCompensation": "With compensation",
+  "studyWithTheIdea": "With the idea",
+  "studyNextChapter": "Next chapter",
+  "studyPrevChapter": "Previous chapter",
+  "studyStudyActions": "Study actions",
+  "studyTopics": "Topics",
+  "studyMyTopics": "My topics",
+  "studyPopularTopics": "Popular topics",
+  "studyManageTopics": "Manage topics",
+  "studyBack": "Back",
+  "studyPlayAgain": "Play again",
+  "studyWhatWouldYouPlay": "What would you play in this position?",
+  "studyYouCompletedThisLesson": "Congratulations! You completed this lesson.",
+  "studyPerPage": "{param} per page",
+  "@studyPerPage": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
+  "@studyNbChapters": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyNbGames": "{count, plural, =1{{count} Game} other{{count} Games}}",
+  "@studyNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyNbMembers": "{count, plural, =1{{count} Member} other{{count} Members}}",
+  "@studyNbMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
+  "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoJustNow": "just now",
+  "timeagoRightNow": "right now",
+  "timeagoCompleted": "completed",
+  "timeagoInNbSeconds": "{count, plural, =1{in {count} second} other{in {count} seconds}}",
+  "@timeagoInNbSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMinutes": "{count, plural, =1{in {count} minute} other{in {count} minutes}}",
+  "@timeagoInNbMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbHours": "{count, plural, =1{in {count} hour} other{in {count} hours}}",
+  "@timeagoInNbHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbDays": "{count, plural, =1{in {count} day} other{in {count} days}}",
+  "@timeagoInNbDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbWeeks": "{count, plural, =1{in {count} week} other{in {count} weeks}}",
+  "@timeagoInNbWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMonths": "{count, plural, =1{in {count} month} other{in {count} months}}",
+  "@timeagoInNbMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbYears": "{count, plural, =1{in {count} year} other{in {count} years}}",
+  "@timeagoInNbYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} minute ago} other{{count} minutes ago}}",
+  "@timeagoNbMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} hour ago} other{{count} hours ago}}",
+  "@timeagoNbHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} day ago} other{{count} days ago}}",
+  "@timeagoNbDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} week ago} other{{count} weeks ago}}",
+  "@timeagoNbWeeksAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} month ago} other{{count} months ago}}",
+  "@timeagoNbMonthsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} year ago} other{{count} years ago}}",
+  "@timeagoNbYearsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}",
+  "@timeagoNbMinutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
+  "@timeagoNbHoursRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

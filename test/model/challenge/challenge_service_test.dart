@@ -17,8 +17,7 @@ import '../../network/socket_test.dart';
 import '../../test_container.dart';
 import '../auth/fake_session_storage.dart';
 
-class NotificationDisplayMock extends Mock
-    implements FlutterLocalNotificationsPlugin {}
+class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,15 +30,14 @@ void main() {
 
   test('exposes a challenges stream', () async {
     final fakeChannel = FakeWebSocketChannel();
-    final socketClient =
-        makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+    final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
     await socketClient.connect();
     await socketClient.firstConnection;
 
     fakeChannel.addIncomingMessages([
       '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
-'''
+''',
     ]);
 
     await expectLater(
@@ -52,23 +50,13 @@ void main() {
               id: ChallengeId('H9fIRZUk'),
               status: ChallengeStatus.created,
               challenger: (
-                user: LightUser(
-                  id: UserId('bot1'),
-                  name: 'Bot1',
-                  title: 'BOT',
-                  isOnline: true,
-                ),
+                user: LightUser(id: UserId('bot1'), name: 'Bot1', title: 'BOT', isOnline: true),
                 rating: 1500,
                 provisionalRating: true,
                 lagRating: 4,
               ),
               destUser: (
-                user: LightUser(
-                  id: UserId('bobby'),
-                  name: 'Bobby',
-                  title: 'GM',
-                  isOnline: true,
-                ),
+                user: LightUser(id: UserId('bobby'), name: 'Bobby', title: 'GM', isOnline: true),
                 rating: 1635,
                 provisionalRating: true,
                 lagRating: 4,
@@ -77,10 +65,7 @@ void main() {
               rated: true,
               speed: Speed.rapid,
               timeControl: ChallengeTimeControlType.clock,
-              clock: (
-                time: Duration(seconds: 600),
-                increment: Duration.zero,
-              ),
+              clock: (time: Duration(seconds: 600), increment: Duration.zero),
               sideChoice: SideChoice.random,
               direction: ChallengeDirection.inward,
             ),
@@ -93,23 +78,15 @@ void main() {
     socketClient.close();
   });
 
-  test('Listen to socket and show a notification for any new challenge',
-      () async {
+  test('Listen to socket and show a notification for any new challenge', () async {
     when(
-      () => notificationDisplayMock.show(
-        any(),
-        any(),
-        any(),
-        any(),
-        payload: any(named: 'payload'),
-      ),
+      () =>
+          notificationDisplayMock.show(any(), any(), any(), any(), payload: any(named: 'payload')),
     ).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [
-        notificationDisplayProvider.overrideWithValue(notificationDisplayMock),
-      ],
+      overrides: [notificationDisplayProvider.overrideWithValue(notificationDisplayMock)],
     );
 
     final notificationService = container.read(notificationServiceProvider);
@@ -117,8 +94,7 @@ void main() {
 
     fakeAsync((async) {
       final fakeChannel = FakeWebSocketChannel();
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
       notificationService.start();
       challengeService.start();
@@ -130,7 +106,7 @@ void main() {
       fakeChannel.addIncomingMessages([
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
-'''
+''',
       ]);
 
       async.flushMicrotasks();
@@ -149,27 +125,15 @@ void main() {
       expectLater(
         result.captured[0],
         isA<NotificationDetails>()
-            .having(
-              (details) => details.android?.channelId,
-              'channelId',
-              'challenge',
-            )
-            .having(
-              (d) => d.android?.importance,
-              'importance',
-              Importance.max,
-            )
-            .having(
-              (d) => d.android?.priority,
-              'priority',
-              Priority.high,
-            ),
+            .having((details) => details.android?.channelId, 'channelId', 'challenge')
+            .having((d) => d.android?.importance, 'importance', Importance.max)
+            .having((d) => d.android?.priority, 'priority', Priority.high),
       );
 
       fakeChannel.addIncomingMessages([
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
-'''
+''',
       ]);
 
       async.flushMicrotasks();
@@ -193,26 +157,15 @@ void main() {
 
   test('Cancels the notification for any missing challenge', () async {
     when(
-      () => notificationDisplayMock.show(
-        any(),
-        any(),
-        any(),
-        any(),
-        payload: any(named: 'payload'),
-      ),
+      () =>
+          notificationDisplayMock.show(any(), any(), any(), any(), payload: any(named: 'payload')),
     ).thenAnswer((_) => Future.value());
 
-    when(
-      () => notificationDisplayMock.cancel(
-        any(),
-      ),
-    ).thenAnswer((_) => Future.value());
+    when(() => notificationDisplayMock.cancel(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [
-        notificationDisplayProvider.overrideWithValue(notificationDisplayMock),
-      ],
+      overrides: [notificationDisplayProvider.overrideWithValue(notificationDisplayMock)],
     );
 
     final notificationService = container.read(notificationServiceProvider);
@@ -220,8 +173,7 @@ void main() {
 
     fakeAsync((async) {
       final fakeChannel = FakeWebSocketChannel();
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
       notificationService.start();
       challengeService.start();
@@ -233,7 +185,7 @@ void main() {
       fakeChannel.addIncomingMessages([
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
-'''
+''',
       ]);
 
       async.flushMicrotasks();
@@ -251,15 +203,13 @@ void main() {
       fakeChannel.addIncomingMessages([
         '''
 {"t": "challenges", "d": {"in": [] }, "v": 0 }
-'''
+''',
       ]);
 
       async.flushMicrotasks();
 
       verify(
-        () => notificationDisplayMock.cancel(
-          const ChallengeId('H9fIRZUk').hashCode,
-        ),
+        () => notificationDisplayMock.cancel(const ChallengeId('H9fIRZUk').hashCode),
       ).called(1);
 
       // closing the socket client to be able to flush the timers

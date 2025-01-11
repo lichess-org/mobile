@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -26,9 +27,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
         }
       },
       child: const PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text('Lichess TV'),
-        ),
+        appBar: PlatformAppBar(title: Text('Lichess TV')),
         body: _Body(),
       ),
     );
@@ -56,10 +55,9 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => TvScreen(
-                    channel: game.channel,
-                    initialGame: (game.id, game.orientation),
-                  ),
+                  builder:
+                      (_) =>
+                          TvScreen(channel: game.channel, initialGame: (game.id, game.orientation)),
                 );
               },
               orientation: game.orientation,
@@ -70,13 +68,14 @@ class _Body extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    game.channel.label,
-                    style: Styles.boardPreviewTitle,
-                  ),
+                  Text(game.channel.label, style: Styles.boardPreviewTitle),
                   Icon(
                     game.channel.icon,
-                    color: context.lichessColors.brag,
+
+                    color:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? CupertinoTheme.of(context).primaryColor
+                            : Theme.of(context).colorScheme.primary,
                     size: 30,
                   ),
                   UserFullNameWidget.player(
@@ -90,12 +89,8 @@ class _Body extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
 }

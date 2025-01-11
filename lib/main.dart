@@ -2,14 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'src/app.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +25,10 @@ Future<void> main() async {
 
   await lichessBinding.preloadSharedPreferences();
 
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await androidDisplayInitialization(widgetsBinding);
+  }
+
   await preloadPieceImages();
 
   await setupFirstLaunch();
@@ -38,18 +41,7 @@ Future<void> main() async {
 
   await lichessBinding.initializeFirebase();
 
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    await androidDisplayInitialization(widgetsBinding);
-  }
-
-  runApp(
-    ProviderScope(
-      observers: [
-        ProviderLogger(),
-      ],
-      child: const AppInitializationScreen(),
-    ),
-  );
+  runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
 }
 
 Future<void> migrateSharedPreferences() async {

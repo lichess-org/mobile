@@ -12,6 +12,11 @@ class BottomBar extends StatelessWidget {
     this.expandChildren = true,
   });
 
+  const BottomBar.empty()
+    : children = const [],
+      expandChildren = true,
+      mainAxisAlignment = MainAxisAlignment.spaceAround;
+
   /// Children to display in the bottom bar's [Row]. Typically instances of [BottomBarButton].
   final List<Widget> children;
 
@@ -23,21 +28,33 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: mainAxisAlignment,
-            children: expandChildren
-                ? children.map((child) => Expanded(child: child)).toList()
-                : children,
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return ColoredBox(
+        color: CupertinoTheme.of(context).barBackgroundColor,
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: kBottomBarHeight,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: mainAxisAlignment,
+              children:
+                  expandChildren
+                      ? children.map((child) => Expanded(child: child)).toList()
+                      : children,
+            ),
           ),
         ),
+      );
+    }
+
+    return BottomAppBar(
+      height: kBottomBarHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        children:
+            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
       ),
     );
   }

@@ -2,10 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(
-  start: 16.0,
-  end: 8.0,
-);
+const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
 
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
 ///
@@ -56,19 +53,13 @@ class PlatformAppBar extends StatelessWidget {
     return CupertinoNavigationBar(
       padding: actions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
       middle: title,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: actions,
-      ),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: actions),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 }
 
@@ -80,25 +71,21 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformWidget(
       iosBuilder: (_) => const CircularProgressIndicator.adaptive(),
-      androidBuilder: (_) => const Padding(
-        padding: EdgeInsets.only(right: 16),
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: Center(
-            child: CircularProgressIndicator(),
+      androidBuilder:
+          (_) => const Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: SizedBox(
+              height: 24,
+              width: 24,
+              child: Center(child: CircularProgressIndicator()),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
 
-class _CupertinoNavBarWrapper extends StatelessWidget
-    implements ObstructingPreferredSizeWidget {
-  const _CupertinoNavBarWrapper({
-    required this.child,
-  });
+class _CupertinoNavBarWrapper extends StatelessWidget implements ObstructingPreferredSizeWidget {
+  const _CupertinoNavBarWrapper({required this.child});
 
   final Widget child;
 
@@ -106,8 +93,7 @@ class _CupertinoNavBarWrapper extends StatelessWidget
   Widget build(BuildContext context) => child;
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kMinInteractiveDimensionCupertino);
+  Size get preferredSize => const Size.fromHeight(kMinInteractiveDimensionCupertino);
 
   /// True if the navigation bar's background color has no transparency.
   @override
@@ -126,7 +112,7 @@ class _CupertinoNavBarWrapper extends StatelessWidget
 class PlatformScaffold extends StatelessWidget {
   const PlatformScaffold({
     super.key,
-    required this.appBar,
+    this.appBar,
     required this.body,
     this.resizeToAvoidBottomInset = true,
   });
@@ -134,7 +120,7 @@ class PlatformScaffold extends StatelessWidget {
   /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
   ///
   /// Usually an instance of [PlatformAppBar].
-  final Widget appBar;
+  final Widget? appBar;
 
   /// The main content of the screen, displayed below the navigation bar.
   final Widget body;
@@ -145,10 +131,10 @@ class PlatformScaffold extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: appBar,
-      ),
+      appBar:
+          appBar != null
+              ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
+              : null,
       body: body,
     );
   }
@@ -156,16 +142,13 @@ class PlatformScaffold extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: _CupertinoNavBarWrapper(child: appBar),
+      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
       child: body,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 }

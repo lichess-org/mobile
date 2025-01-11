@@ -3,12 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import 'profile.dart';
-
 part 'user.freezed.dart';
-
 part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
@@ -22,8 +20,7 @@ class LightUser with _$LightUser {
     bool? isOnline,
   }) = _LightUser;
 
-  factory LightUser.fromJson(Map<String, dynamic> json) =>
-      _$LightUserFromJson(json);
+  factory LightUser.fromJson(Map<String, dynamic> json) => _$LightUserFromJson(json);
 }
 
 extension LightUserExtension on Pick {
@@ -34,8 +31,8 @@ extension LightUserExtension on Pick {
       return value;
     }
     if (value is Map<String, dynamic>) {
-      final name = requiredPick('username').asStringOrNull() ??
-          requiredPick('name').asStringOrThrow();
+      final name =
+          requiredPick('username').asStringOrNull() ?? requiredPick('name').asStringOrThrow();
 
       return LightUser(
         id: requiredPick('id').asUserIdOrThrow(),
@@ -46,9 +43,7 @@ extension LightUserExtension on Pick {
         isOnline: requiredPick('online').asBoolOrNull(),
       );
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to LightUser",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to LightUser");
   }
 
   LightUser? asLightUserOrNull() {
@@ -85,24 +80,16 @@ class User with _$User {
     bool? followable,
     bool? following,
     bool? blocking,
-    bool? followsYou,
     bool? canChallenge,
   }) = _User;
 
-  LightUser get lightUser => LightUser(
-        id: id,
-        name: username,
-        title: title,
-        isPatron: isPatron,
-        flair: flair,
-      );
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, isPatron: isPatron, flair: flair);
 
-  factory User.fromServerJson(Map<String, dynamic> json) =>
-      User.fromPick(pick(json).required());
+  factory User.fromServerJson(Map<String, dynamic> json) => User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {
-    final receivedPerfsMap =
-        pick('perfs').asMapOrEmpty<String, Map<String, dynamic>>();
+    final receivedPerfsMap = pick('perfs').asMapOrEmpty<String, Map<String, dynamic>>();
     return User(
       id: pick('id').asUserIdOrThrow(),
       username: pick('username').asStringOrThrow(),
@@ -128,7 +115,6 @@ class User with _$User {
       followable: pick('followable').asBoolOrNull(),
       following: pick('following').asBoolOrNull(),
       blocking: pick('blocking').asBoolOrNull(),
-      followsYou: pick('followsYou').asBoolOrNull(),
       canChallenge: pick('canChallenge').asBoolOrNull(),
     );
   }
@@ -157,32 +143,28 @@ class UserGameCount with _$UserGameCount {
       UserGameCount.fromPick(pick(json).required());
 
   factory UserGameCount.fromPick(RequiredPick pick) => UserGameCount(
-        all: pick('all').asIntOrThrow(),
-        // TODO(#454): enable rest of fields when needed for filtering
-        // rated: pick('rated').asIntOrThrow(),
-        // ai: pick('ai').asIntOrThrow(),
-        // draw: pick('draw').asIntOrThrow(),
-        // drawH: pick('drawH').asIntOrThrow(),
-        // win: pick('win').asIntOrThrow(),
-        // winH: pick('winH').asIntOrThrow(),
-        // loss: pick('loss').asIntOrThrow(),
-        // lossH: pick('lossH').asIntOrThrow(),
-        // bookmark: pick('bookmark').asIntOrThrow(),
-        // playing: pick('playing').asIntOrThrow(),
-        // imported: pick('import').asIntOrThrow(),
-        // me: pick('me').asIntOrThrow(),
-      );
+    all: pick('all').asIntOrThrow(),
+    // TODO(#454): enable rest of fields when needed for filtering
+    // rated: pick('rated').asIntOrThrow(),
+    // ai: pick('ai').asIntOrThrow(),
+    // draw: pick('draw').asIntOrThrow(),
+    // drawH: pick('drawH').asIntOrThrow(),
+    // win: pick('win').asIntOrThrow(),
+    // winH: pick('winH').asIntOrThrow(),
+    // loss: pick('loss').asIntOrThrow(),
+    // lossH: pick('lossH').asIntOrThrow(),
+    // bookmark: pick('bookmark').asIntOrThrow(),
+    // playing: pick('playing').asIntOrThrow(),
+    // imported: pick('import').asIntOrThrow(),
+    // me: pick('me').asIntOrThrow(),
+  );
 }
 
 @freezed
 class PlayTime with _$PlayTime {
-  const factory PlayTime({
-    required Duration total,
-    required Duration tv,
-  }) = _PlayTime;
+  const factory PlayTime({required Duration total, required Duration tv}) = _PlayTime;
 
-  factory PlayTime.fromJson(Map<String, dynamic> json) =>
-      PlayTime.fromPick(pick(json).required());
+  factory PlayTime.fromJson(Map<String, dynamic> json) => PlayTime.fromPick(pick(json).required());
 
   factory PlayTime.fromPick(RequiredPick pick) {
     return PlayTime(
@@ -205,25 +187,24 @@ class UserPerf with _$UserPerf {
     bool? provisional,
   }) = _UserPerf;
 
-  factory UserPerf.fromJson(Map<String, dynamic> json) =>
-      UserPerf.fromPick(pick(json).required());
+  factory UserPerf.fromJson(Map<String, dynamic> json) => UserPerf.fromPick(pick(json).required());
 
   factory UserPerf.fromPick(RequiredPick pick) => UserPerf(
-        rating: pick('rating').asIntOrThrow(),
-        ratingDeviation: pick('rd').asIntOrThrow(),
-        progression: pick('prog').asIntOrThrow(),
-        games: pick('games').asIntOrNull(),
-        runs: pick('runs').asIntOrNull(),
-        provisional: pick('prov').asBoolOrNull(),
-      );
+    rating: pick('rating').asIntOrThrow(),
+    ratingDeviation: pick('rd').asIntOrThrow(),
+    progression: pick('prog').asIntOrThrow(),
+    games: pick('games').asIntOrNull(),
+    runs: pick('runs').asIntOrNull(),
+    provisional: pick('prov').asBoolOrNull(),
+  );
 
   factory UserPerf.fromJsonStreak(Map<String, dynamic> json) => UserPerf(
-        rating: UserActivityStreak.fromJson(json).score,
-        ratingDeviation: 0,
-        progression: 0,
-        runs: UserActivityStreak.fromJson(json).runs,
-        provisional: null,
-      );
+    rating: UserActivityStreak.fromJson(json).score,
+    ratingDeviation: 0,
+    progression: 0,
+    runs: UserActivityStreak.fromJson(json).runs,
+    provisional: null,
+  );
 
   int get numberOfGamesOrRuns => games ?? runs ?? 0;
 }
@@ -241,11 +222,11 @@ class UserStatus with _$UserStatus {
       UserStatus.fromPick(pick(json).required());
 
   factory UserStatus.fromPick(RequiredPick pick) => UserStatus(
-        id: pick('id').asUserIdOrThrow(),
-        name: pick('name').asStringOrThrow(),
-        online: pick('online').asBoolOrNull(),
-        playing: pick('playing').asBoolOrNull(),
-      );
+    id: pick('id').asUserIdOrThrow(),
+    name: pick('name').asStringOrThrow(),
+    online: pick('online').asBoolOrNull(),
+    playing: pick('playing').asBoolOrNull(),
+  );
 }
 
 @freezed
@@ -262,31 +243,25 @@ class UserActivityTournament with _$UserActivityTournament {
   factory UserActivityTournament.fromJson(Map<String, dynamic> json) =>
       UserActivityTournament.fromPick(pick(json).required());
 
-  factory UserActivityTournament.fromPick(RequiredPick pick) =>
-      UserActivityTournament(
-        id: pick('tournament', 'id').asStringOrThrow(),
-        name: pick('tournament', 'name').asStringOrThrow(),
-        nbGames: pick('nbGames').asIntOrThrow(),
-        score: pick('score').asIntOrThrow(),
-        rank: pick('rank').asIntOrThrow(),
-        rankPercent: pick('rankPercent').asIntOrThrow(),
-      );
+  factory UserActivityTournament.fromPick(RequiredPick pick) => UserActivityTournament(
+    id: pick('tournament', 'id').asStringOrThrow(),
+    name: pick('tournament', 'name').asStringOrThrow(),
+    nbGames: pick('nbGames').asIntOrThrow(),
+    score: pick('score').asIntOrThrow(),
+    rank: pick('rank').asIntOrThrow(),
+    rankPercent: pick('rankPercent').asIntOrThrow(),
+  );
 }
 
 @freezed
 class UserActivityStreak with _$UserActivityStreak {
-  const factory UserActivityStreak({
-    required int runs,
-    required int score,
-  }) = _UserActivityStreak;
+  const factory UserActivityStreak({required int runs, required int score}) = _UserActivityStreak;
 
   factory UserActivityStreak.fromJson(Map<String, dynamic> json) =>
       UserActivityStreak.fromPick(pick(json).required());
 
-  factory UserActivityStreak.fromPick(RequiredPick pick) => UserActivityStreak(
-        runs: pick('runs').asIntOrThrow(),
-        score: pick('score').asIntOrThrow(),
-      );
+  factory UserActivityStreak.fromPick(RequiredPick pick) =>
+      UserActivityStreak(runs: pick('runs').asIntOrThrow(), score: pick('score').asIntOrThrow());
 }
 
 @freezed
@@ -303,12 +278,12 @@ class UserActivityScore with _$UserActivityScore {
       UserActivityScore.fromPick(pick(json).required());
 
   factory UserActivityScore.fromPick(RequiredPick pick) => UserActivityScore(
-        win: pick('win').asIntOrThrow(),
-        loss: pick('loss').asIntOrThrow(),
-        draw: pick('draw').asIntOrThrow(),
-        ratingBefore: pick('rp', 'before').asIntOrThrow(),
-        ratingAfter: pick('rp', 'after').asIntOrThrow(),
-      );
+    win: pick('win').asIntOrThrow(),
+    loss: pick('loss').asIntOrThrow(),
+    draw: pick('draw').asIntOrThrow(),
+    ratingBefore: pick('rp', 'before').asIntOrThrow(),
+    ratingAfter: pick('rp', 'after').asIntOrThrow(),
+  );
 }
 
 @freezed
@@ -412,13 +387,10 @@ class UserPerfGame with _$UserPerfGame {
     String? opponentTitle,
   }) = _UserPerfGame;
 
-  LightUser? get opponent => opponentId != null && opponentName != null
-      ? LightUser(
-          id: UserId(opponentId!),
-          name: opponentName!,
-          title: opponentTitle,
-        )
-      : null;
+  LightUser? get opponent =>
+      opponentId != null && opponentName != null
+          ? LightUser(id: UserId(opponentId!), name: opponentName!, title: opponentTitle)
+          : null;
 }
 
 @immutable
@@ -426,10 +398,7 @@ class UserRatingHistoryPerf {
   final Perf perf;
   final IList<UserRatingHistoryPoint> points;
 
-  const UserRatingHistoryPerf({
-    required this.perf,
-    required this.points,
-  });
+  const UserRatingHistoryPerf({required this.perf, required this.points});
 }
 
 @immutable
@@ -437,8 +406,5 @@ class UserRatingHistoryPoint {
   final DateTime date;
   final int elo;
 
-  const UserRatingHistoryPoint({
-    required this.date,
-    required this.elo,
-  });
+  const UserRatingHistoryPoint({required this.date, required this.elo});
 }

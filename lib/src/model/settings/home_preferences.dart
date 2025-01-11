@@ -6,8 +6,7 @@ part 'home_preferences.freezed.dart';
 part 'home_preferences.g.dart';
 
 @riverpod
-class HomePreferences extends _$HomePreferences
-    with PreferencesStorage<HomePrefs> {
+class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   PrefCategory get prefCategory => PrefCategory.home;
@@ -26,32 +25,23 @@ class HomePreferences extends _$HomePreferences
 
   Future<void> toggleWidget(EnabledWidget widget) {
     final newState = state.copyWith(
-      enabledWidgets: state.enabledWidgets.contains(widget)
-          ? state.enabledWidgets.difference({widget})
-          : state.enabledWidgets.union({widget}),
+      enabledWidgets:
+          state.enabledWidgets.contains(widget)
+              ? state.enabledWidgets.difference({widget})
+              : state.enabledWidgets.union({widget}),
     );
     return save(newState);
   }
 }
 
-enum EnabledWidget {
-  hello,
-  perfCards,
-  quickPairing,
-}
+enum EnabledWidget { hello, perfCards, quickPairing }
 
 @Freezed(fromJson: true, toJson: true)
 class HomePrefs with _$HomePrefs implements Serializable {
-  const factory HomePrefs({
-    required Set<EnabledWidget> enabledWidgets,
-  }) = _HomePrefs;
+  const factory HomePrefs({required Set<EnabledWidget> enabledWidgets}) = _HomePrefs;
 
   static const defaults = HomePrefs(
-    enabledWidgets: {
-      EnabledWidget.hello,
-      EnabledWidget.perfCards,
-      EnabledWidget.quickPairing,
-    },
+    enabledWidgets: {EnabledWidget.hello, EnabledWidget.perfCards, EnabledWidget.quickPairing},
   );
 
   factory HomePrefs.fromJson(Map<String, dynamic> json) {

@@ -22,85 +22,68 @@ final client = MockClient((request) {
 
 void main() {
   group('PerfStatsScreen', () {
-    testWidgets(
-      'meets accessibility guidelines',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: PerfStatsScreen(
-            user: fakeUser,
-            perf: testPerf,
-          ),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) {
-              return LichessClient(client, ref);
-            }),
-          ],
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(client, ref);
+          }),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        // wait for auth state and perf stats
-        await tester.pump(const Duration(milliseconds: 50));
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
 
-        await meetsTapTargetGuideline(tester);
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await meetsTapTargetGuideline(tester);
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-          await expectLater(tester, meetsGuideline(textContrastGuideline));
-        }
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      handle.dispose();
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'screen loads, required stats are shown',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: PerfStatsScreen(
-            user: fakeUser,
-            perf: testPerf,
-          ),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) {
-              return LichessClient(client, ref);
-            }),
-          ],
-        );
+    testWidgets('screen loads, required stats are shown', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(client, ref);
+          }),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        // wait for auth state and perf stats
-        await tester.pump(const Duration(milliseconds: 50));
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
 
-        final requiredStatsValues = [
-          '50.24', // Deviation
-          '20', // Progression in last 12 games
-          '0', // Berserked games
-          '0', // Tournament games
-          '3', // Rated games
-          '2', // Won games
-          '2', // Lost games
-          '1', // Drawn games
-          '1', // Disconnections
-        ];
+      final requiredStatsValues = [
+        '50.24', // Deviation
+        '20', // Progression in last 12 games
+        '0', // Berserked games
+        '0', // Tournament games
+        '3', // Rated games
+        '2', // Won games
+        '2', // Lost games
+        '1', // Drawn games
+        '1', // Disconnections
+      ];
 
-        // rating
-        expect(find.text('1500.42'), findsOneWidget);
+      // rating
+      expect(find.text('1500'), findsOneWidget);
 
-        for (final val in requiredStatsValues) {
-          expect(
-            find.widgetWithText(PlatformCard, val),
-            findsAtLeastNWidgets(1),
-          );
-        }
-      },
-      variant: kPlatformVariant,
-    );
+      for (final val in requiredStatsValues) {
+        expect(find.widgetWithText(PlatformCard, val), findsAtLeastNWidgets(1));
+      }
+    }, variant: kPlatformVariant);
   });
 }
 

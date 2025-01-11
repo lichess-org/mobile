@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
+import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,15 +15,16 @@ part 'study_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 StudyRepository studyRepository(Ref ref) {
-  return StudyRepository(ref.read(lichessClientProvider));
+  return StudyRepository(ref, ref.read(lichessClientProvider));
 }
 
 class StudyRepository {
-  StudyRepository(this.client);
+  StudyRepository(this.ref, this.client);
 
   final Client client;
+  final Ref ref;
 
-  Future<IList<StudyPageData>> getStudies({
+  Future<StudyList> getStudies({
     required StudyCategory category,
     required StudyListOrder order,
     int page = 1,
@@ -33,35 +35,28 @@ class StudyRepository {
     );
   }
 
-  Future<IList<StudyPageData>> searchStudies({
-    required String query,
-    int page = 1,
-  }) {
-    return _requestStudies(
-      path: 'search',
-      queryParameters: {'page': page.toString(), 'q': query},
-    );
+  Future<StudyList> searchStudies({required String query, int page = 1}) {
+    return _requestStudies(path: 'search', queryParameters: {'page': page.toString(), 'q': query});
   }
 
-  Future<IList<StudyPageData>> _requestStudies({
+  Future<StudyList> _requestStudies({
     required String path,
     required Map<String, String> queryParameters,
   }) {
     return client.readJson(
-      Uri(
-        path: '/study/$path',
-        queryParameters: queryParameters,
-      ),
+      Uri(path: '/study/$path', queryParameters: queryParameters),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) {
-        final paginator =
-            pick(json, 'paginator').asMapOrThrow<String, dynamic>();
+        final paginator = pick(json, 'paginator').asMapOrThrow<String, dynamic>();
 
-        return pick(paginator, 'currentPageResults')
-            .asListOrThrow(
-              (pick) => StudyPageData.fromJson(pick.asMapOrThrow()),
-            )
-            .toIList();
+        return (
+          studies:
+              pick(
+                paginator,
+                'currentPageResults',
+              ).asListOrThrow((pick) => StudyPageData.fromJson(pick.asMapOrThrow())).toIList(),
+          nextPage: pick(paginator, 'nextPage').asIntOrNull(),
+        );
       },
     );
   }
@@ -73,9 +68,7 @@ class StudyRepository {
     final study = await client.readJson(
       Uri(
         path: (chapterId != null) ? '/study/$id/$chapterId' : '/study/$id',
-        queryParameters: {
-          'chapters': '1',
-        },
+        queryParameters: {'chapters': '1'},
       ),
       headers: {'Accept': 'application/json'},
       mapper: Study.fromServerJson,
@@ -87,5 +80,14 @@ class StudyRepository {
     );
 
     return (study, utf8.decode(pgnBytes));
+  }
+
+  Future<String> getStudyPgn(StudyId id) async {
+    final pgnBytes = await client.readBytes(
+      Uri(path: '/api/study/$id.pgn'),
+      headers: {'Accept': 'application/x-chess-pgn'},
+    );
+
+    return utf8.decode(pgnBytes);
   }
 }

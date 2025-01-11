@@ -5,18 +5,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_opening.g.dart';
 
-typedef PuzzleOpeningFamily = ({
-  String key,
-  String name,
-  int count,
-  IList<PuzzleOpeningData> openings,
-});
+typedef PuzzleOpeningFamily =
+    ({String key, String name, int count, IList<PuzzleOpeningData> openings});
 
-typedef PuzzleOpeningData = ({
-  String key,
-  String name,
-  int count,
-});
+typedef PuzzleOpeningData = ({String key, String name, int count});
 
 /// Returns a flattened list of openings with their respective counts.
 @riverpod
@@ -26,13 +18,7 @@ Future<IList<PuzzleOpeningData>> flatOpeningsList(Ref ref) async {
       .map(
         (f) => [
           (key: f.key, name: f.name, count: f.count),
-          ...f.openings.map(
-            (o) => (
-              key: o.key,
-              name: '${f.name}: ${o.name}',
-              count: o.count,
-            ),
-          ),
+          ...f.openings.map((o) => (key: o.key, name: '${f.name}: ${o.name}', count: o.count)),
         ],
       )
       .expand((e) => e)

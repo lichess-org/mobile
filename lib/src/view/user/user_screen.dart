@@ -11,16 +11,15 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/view/user/user_activity.dart';
+import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'perf_cards.dart';
-import 'user_activity.dart';
-import 'user_profile.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   const UserScreen({required this.user, super.key});
@@ -53,9 +52,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           user: updatedLightUser ?? widget.user,
           shouldShowOnline: updatedLightUser != null,
         ),
-        actions: [
-          if (isLoading) const PlatformAppBarLoadingIndicator(),
-        ],
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: asyncUser.when(
         data: (data) => _UserProfileListView(data.$1, isLoading, setIsLoading),
@@ -91,22 +88,15 @@ class _UserProfileListView extends ConsumerWidget {
     final session = ref.watch(authSessionProvider);
 
     if (user.disabled == true) {
-      return Center(
-        child: Text(
-          context.l10n.settingsThisAccountIsClosed,
-          style: Styles.bold,
-        ),
-      );
+      return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
     }
 
-    Future<void> userAction(
-      Future<void> Function(LichessClient client) action,
-    ) async {
+    Future<void> userAction(Future<void> Function(LichessClient client) action) async {
       setIsLoading(true);
       try {
-        await ref.withClient(action).then(
-              (_) => ref.invalidate(userAndStatusProvider(id: user.id)),
-            );
+        await ref
+            .withClient(action)
+            .then((_) => ref.invalidate(userAndStatusProvider(id: user.id)));
       } finally {
         setIsLoading(false);
       }
@@ -127,8 +117,7 @@ class _UserProfileListView extends ConsumerWidget {
                   onTap: () {
                     pushPlatformRoute(
                       context,
-                      builder: (context) =>
-                          CreateChallengeScreen(user.lightUser),
+                      builder: (context) => CreateChallengeScreen(user.lightUser),
                     );
                   },
                 ),
@@ -136,56 +125,46 @@ class _UserProfileListView extends ConsumerWidget {
                 PlatformListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(context.l10n.follow),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction(
-                            (client) =>
-                                RelationRepository(client).follow(user.id),
-                          ),
+                  onTap:
+                      isLoading
+                          ? null
+                          : () =>
+                              userAction((client) => RelationRepository(client).follow(user.id)),
                 )
               else if (user.following == true)
                 PlatformListTile(
                   leading: const Icon(Icons.person_remove),
                   title: Text(context.l10n.unfollow),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction(
-                            (client) =>
-                                RelationRepository(client).unfollow(user.id),
-                          ),
+                  onTap:
+                      isLoading
+                          ? null
+                          : () =>
+                              userAction((client) => RelationRepository(client).unfollow(user.id)),
                 ),
               if (user.following != true && user.blocking != true)
                 PlatformListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.block),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction(
-                            (client) =>
-                                RelationRepository(client).block(user.id),
-                          ),
+                  onTap:
+                      isLoading
+                          ? null
+                          : () => userAction((client) => RelationRepository(client).block(user.id)),
                 )
               else if (user.blocking == true)
                 PlatformListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.unblock),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction(
-                            (client) =>
-                                RelationRepository(client).unblock(user.id),
-                          ),
+                  onTap:
+                      isLoading
+                          ? null
+                          : () =>
+                              userAction((client) => RelationRepository(client).unblock(user.id)),
                 ),
               PlatformListTile(
                 leading: const Icon(Icons.report_problem),
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {
-                  launchUrl(
-                    lichessUri('/report', {
-                      'username': user.id,
-                      'login': session.user.id,
-                    }),
-                  );
+                  launchUrl(lichessUri('/report', {'username': user.id, 'login': session.user.id}));
                 },
               ),
             ],

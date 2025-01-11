@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -16,9 +15,11 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -29,10 +30,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'account_preferences_screen.dart';
-import 'board_settings_screen.dart';
-import 'sound_settings_screen.dart';
 
 class SettingsTabScreen extends ConsumerWidget {
   const SettingsTabScreen({super.key});
@@ -55,9 +52,7 @@ class SettingsTabScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.settingsSettings),
-        ),
+        appBar: AppBar(title: Text(context.l10n.settingsSettings)),
         body: SafeArea(child: _Body()),
       ),
     );
@@ -67,13 +62,8 @@ class SettingsTabScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
-          CupertinoSliverNavigationBar(
-            largeTitle: Text(context.l10n.settingsSettings),
-          ),
-          SliverSafeArea(
-            top: false,
-            sliver: _Body(),
-          ),
+          CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.settingsSettings)),
+          SliverSafeArea(top: false, sliver: _Body()),
         ],
       ),
     );
@@ -90,41 +80,36 @@ class _Body extends ConsumerWidget {
     });
 
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
-    final packageInfo =
-        ref.read(preloadedDataProvider).requireValue.packageInfo;
+    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
-
-    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     final Widget? donateButton =
         userSession == null || userSession.user.isPatron != true
             ? PlatformListTile(
-                leading: Icon(
-                  LichessIcons.patron,
-                  semanticLabel: context.l10n.patronLichessPatron,
-                  color: context.lichessColors.brag,
-                ),
-                title: Text(
-                  context.l10n.patronDonate,
-                  style: TextStyle(color: context.lichessColors.brag),
-                ),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/patron'));
-                },
-              )
+              leading: Icon(
+                LichessIcons.patron,
+                semanticLabel: context.l10n.patronLichessPatron,
+                color: context.lichessColors.brag,
+              ),
+              title: Text(
+                context.l10n.patronDonate,
+                style: TextStyle(color: context.lichessColors.brag),
+              ),
+              trailing:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+              onTap: () {
+                launchUrl(Uri.parse('https://lichess.org/patron'));
+              },
+            )
             : null;
 
     final List<Widget> content = [
       ListSection(
-        header: userSession != null
-            ? UserFullNameWidget(user: userSession.user)
-            : null,
+        header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
         hasLeading: true,
         showDivider: true,
         children: [
@@ -132,9 +117,10 @@ class _Body extends ConsumerWidget {
             PlatformListTile(
               leading: const Icon(Icons.person_outline),
               title: Text(context.l10n.profile),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
+              trailing:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
               onTap: () {
                 ref.invalidate(accountActivityProvider);
                 pushPlatformRoute(
@@ -147,9 +133,10 @@ class _Body extends ConsumerWidget {
             PlatformListTile(
               leading: const Icon(Icons.manage_accounts_outlined),
               title: Text(context.l10n.preferencesPreferences),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
+              trailing:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
               onTap: () {
                 pushPlatformRoute(
                   context,
@@ -186,8 +173,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
           ],
-          if (Theme.of(context).platform == TargetPlatform.android &&
-              donateButton != null)
+          if (Theme.of(context).platform == TargetPlatform.android && donateButton != null)
             donateButton,
         ],
       ),
@@ -208,40 +194,21 @@ class _Body extends ConsumerWidget {
               );
             },
           ),
-          if (Theme.of(context).platform == TargetPlatform.android)
-            androidVersionAsync.maybeWhen(
-              data: (version) => version != null && version.sdkInt >= 31
-                  ? SwitchSettingTile(
-                      leading: const Icon(Icons.colorize_outlined),
-                      title: Text(context.l10n.mobileSystemColors),
-                      value: generalPrefs.systemColors,
-                      onChanged: (value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .toggleSystemColors();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              orElse: () => const SizedBox.shrink(),
-            ),
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium_outlined),
             settingsLabel: Text(context.l10n.background),
-            settingsValue: AppBackgroundModeScreen.themeTitle(
-              context,
-              generalPrefs.themeMode,
-            ),
+            settingsValue: AppBackgroundModeScreen.themeTitle(context, generalPrefs.themeMode),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
                   context,
                   choices: BackgroundThemeMode.values,
                   selectedItem: generalPrefs.themeMode,
-                  labelBuilder: (t) =>
-                      Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                      .read(generalPreferencesProvider.notifier)
-                      .setThemeMode(value ?? BackgroundThemeMode.system),
+                  labelBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
+                  onSelectedItemChanged:
+                      (BackgroundThemeMode? value) => ref
+                          .read(generalPreferencesProvider.notifier)
+                          .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
                 );
               } else {
                 pushPlatformRoute(
@@ -252,29 +219,28 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
-          SettingsListTile(
-            icon: const Icon(Icons.palette_outlined),
-            settingsLabel: const Text('Theme'),
-            settingsValue:
-                '${boardPrefs.boardTheme.label} / ${boardPrefs.pieceSet.label}',
+          PlatformListTile(
+            leading: const Icon(Icons.palette_outlined),
+            title: Text(context.l10n.mobileTheme),
+            trailing:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: 'Theme',
-                builder: (context) => const ThemeScreen(),
-              );
+              pushPlatformRoute(context, title: 'Theme', builder: (context) => const ThemeScreen());
             },
           ),
           PlatformListTile(
             leading: const Icon(LichessIcons.chess_board),
-            title: Text(context.l10n.board),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
+            trailing:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.board,
+                title: context.l10n.preferencesGameBehavior,
                 builder: (context) => const BoardSettingsScreen(),
               );
             },
@@ -290,12 +256,11 @@ class _Body extends ConsumerWidget {
                 showChoicePicker<Locale>(
                   context,
                   choices: kSupportedLocales,
-                  selectedItem:
-                      generalPrefs.locale ?? Localizations.localeOf(context),
+                  selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                   labelBuilder: (t) => Text(localeToLocalizedName(t)),
-                  onSelectedItemChanged: (Locale? locale) => ref
-                      .read(generalPreferencesProvider.notifier)
-                      .setLocale(locale),
+                  onSelectedItemChanged:
+                      (Locale? locale) =>
+                          ref.read(generalPreferencesProvider.notifier).setLocale(locale),
                 );
               } else {
                 AppSettings.openAppSettings();
@@ -379,11 +344,11 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.storage_outlined),
             title: const Text('Local database size'),
-            subtitle: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : Text(_getSizeString(dbSize.value)),
-            additionalInfo:
-                dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
+            subtitle:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? null
+                    : Text(_getSizeString(dbSize.value)),
+            additionalInfo: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
           ),
         ],
       ),
@@ -394,10 +359,7 @@ class _Body extends ConsumerWidget {
           children: [
             LichessMessage(style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 10),
-            Text(
-              'v${packageInfo.version}',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text('v${packageInfo.version}', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),
@@ -430,18 +392,14 @@ class _Body extends ConsumerWidget {
             title: Text(context.l10n.logOut),
             actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: Theme.of(context).textTheme.labelLarge,
-                ),
+                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
                 child: Text(context.l10n.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: Theme.of(context).textTheme.labelLarge,
-                ),
+                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();
@@ -455,8 +413,7 @@ class _Body extends ConsumerWidget {
     }
   }
 
-  String _getSizeString(int? bytes) =>
-      '${_bytesToMB(bytes ?? (0)).toStringAsFixed(2)}MB';
+  String _getSizeString(int? bytes) => '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
 
@@ -473,9 +430,10 @@ class _OpenInNewIcon extends StatelessWidget {
     return Icon(
       Icons.open_in_new,
       size: 18,
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoColors.systemGrey2.resolveFrom(context)
-          : null,
+      color:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoColors.systemGrey2.resolveFrom(context)
+              : null,
     );
   }
 }

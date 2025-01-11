@@ -14,19 +14,14 @@ void main() {
     final fullEvent = GameFullEvent.fromJson(json);
     final game = fullEvent.game;
     expect(game.id, const GameId('nV3DaALy'));
-    expect(
-      game.clock,
-      const PlayableClockData(
-        running: true,
-        white: Duration(seconds: 149, milliseconds: 50),
-        black: Duration(seconds: 775, milliseconds: 940),
-      ),
-    );
+    expect(game.clock?.running, true);
+    expect(game.clock?.white, const Duration(seconds: 149, milliseconds: 50));
+
+    expect(game.clock?.black, const Duration(seconds: 775, milliseconds: 940));
     expect(
       game.meta,
       GameMeta(
-        createdAt:
-            DateTime.fromMillisecondsSinceEpoch(1685698678928, isUtc: true),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(1685698678928),
         rated: false,
         variant: Variant.standard,
         speed: Speed.classical,

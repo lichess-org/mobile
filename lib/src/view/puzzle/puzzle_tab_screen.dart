@@ -24,16 +24,15 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-import 'puzzle_screen.dart';
-import 'puzzle_themes_screen.dart';
-import 'storm_screen.dart';
-import 'streak_screen.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
@@ -62,7 +61,6 @@ Widget _buildMainListItem(
   int index,
   Animation<double> animation,
   PuzzleAngle Function(int index) getAngle,
-  VoidCallback? onGoingBackFromPuzzleScreen,
 ) {
   switch (index) {
     case 0:
@@ -74,10 +72,7 @@ Widget _buildMainListItem(
               ? Styles.sectionTopPadding
               : EdgeInsets.zero,
         ),
-        child: Text(
-          context.l10n.puzzleDesc,
-          style: Styles.sectionTitle,
-        ),
+        child: Text(context.l10n.puzzleDesc, style: Styles.sectionTitle),
       );
     case 2:
       return const DailyPuzzle();
@@ -88,10 +83,8 @@ Widget _buildMainListItem(
           pushPlatformRoute(
             context,
             rootNavigator: true,
-            builder: (context) => const PuzzleScreen(
-              angle: PuzzleTheme(PuzzleThemeKey.mix),
-            ),
-          ).then((_) => onGoingBackFromPuzzleScreen?.call());
+            builder: (context) => const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix)),
+          );
         },
       );
     default:
@@ -103,7 +96,7 @@ Widget _buildMainListItem(
             context,
             rootNavigator: true,
             builder: (context) => PuzzleScreen(angle: angle),
-          ).then((_) => onGoingBackFromPuzzleScreen?.call());
+          );
         },
       );
   }
@@ -114,10 +107,7 @@ Widget _buildMainListRemovedItem(
   BuildContext context,
   Animation<double> animation,
 ) {
-  return SizeTransition(
-    sizeFactor: animation,
-    child: PuzzleAnglePreview(angle: angle),
-  );
+  return SizeTransition(sizeFactor: animation, child: PuzzleAnglePreview(angle: angle));
 }
 
 // display the main body list for cupertino devices, as a workaround
@@ -132,8 +122,7 @@ class _CupertinoTabBody extends ConsumerStatefulWidget {
 }
 
 class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
-  final GlobalKey<SliverAnimatedListState> _listKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>();
   late SliverAnimatedListModel<PuzzleAngle> _angles;
 
   @override
@@ -177,23 +166,8 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
 
-    Widget buildItem(
-      BuildContext context,
-      int index,
-      Animation<double> animation,
-    ) =>
-        _buildMainListItem(
-          context,
-          index,
-          animation,
-          (index) => _angles[index],
-          isTablet
-              ? () {
-                  ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.home;
-                }
-              : null,
-        );
+    Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
+        _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
     if (isTablet) {
       return Row(
@@ -204,16 +178,11 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
                 controller: puzzlesScrollController,
                 slivers: [
                   CupertinoSliverNavigationBar(
-                    padding: const EdgeInsetsDirectional.only(
-                      start: 16.0,
-                      end: 8.0,
-                    ),
+                    padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
                     largeTitle: Text(context.l10n.puzzles),
                     trailing: const Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _DashboardButton(),
-                      ],
+                      children: [_DashboardButton()],
                     ),
                   ),
                   const SliverToBoxAdapter(child: ConnectivityBanner()),
@@ -236,18 +205,13 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
           ),
           Expanded(
             child: CupertinoPageScaffold(
-              backgroundColor:
-                  CupertinoColors.systemBackground.resolveFrom(context),
+              backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
               navigationBar: CupertinoNavigationBar(
                 transitionBetweenRoutes: false,
                 middle: Text(context.l10n.puzzleHistory),
                 trailing: const _HistoryButton(),
               ),
-              child: ListView(
-                children: const [
-                  PuzzleHistoryWidget(showHeader: false),
-                ],
-              ),
+              child: ListView(children: const [PuzzleHistoryWidget(showHeader: false)]),
             ),
           ),
         ],
@@ -259,18 +223,11 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
-            padding: const EdgeInsetsDirectional.only(
-              start: 16.0,
-              end: 8.0,
-            ),
+            padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
             largeTitle: Text(context.l10n.puzzles),
             trailing: const Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                _DashboardButton(),
-                SizedBox(width: 6.0),
-                _HistoryButton(),
-              ],
+              children: [_DashboardButton(), SizedBox(width: 6.0), _HistoryButton()],
             ),
           ),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
@@ -342,23 +299,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
 
-    Widget buildItem(
-      BuildContext context,
-      int index,
-      Animation<double> animation,
-    ) =>
-        _buildMainListItem(
-          context,
-          index,
-          animation,
-          (index) => _angles[index],
-          isTablet
-              ? () {
-                  ref.read(currentBottomTabProvider.notifier).state =
-                      BottomTab.home;
-                }
-              : null,
-        );
+    Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
+        _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
     return PopScope(
       canPop: false,
@@ -370,45 +312,37 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.l10n.puzzles),
-          actions: const [
-            _DashboardButton(),
-            _HistoryButton(),
-          ],
+          actions: const [_DashboardButton(), _HistoryButton()],
         ),
-        body: isTablet
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: AnimatedList(
-                      key: _listKey,
-                      initialItemCount: _angles.length,
-                      controller: puzzlesScrollController,
-                      itemBuilder: buildItem,
+        body:
+            isTablet
+                ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: AnimatedList(
+                        key: _listKey,
+                        initialItemCount: _angles.length,
+                        controller: puzzlesScrollController,
+                        itemBuilder: buildItem,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: const [
-                        PuzzleHistoryWidget(),
-                      ],
+                    Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+                  ],
+                )
+                : Column(
+                  children: [
+                    const ConnectivityBanner(),
+                    Expanded(
+                      child: AnimatedList(
+                        key: _listKey,
+                        controller: puzzlesScrollController,
+                        initialItemCount: _angles.length,
+                        itemBuilder: buildItem,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  const ConnectivityBanner(),
-                  Expanded(
-                    child: AnimatedList(
-                      key: _listKey,
-                      controller: puzzlesScrollController,
-                      initialItemCount: _angles.length,
-                      itemBuilder: buildItem,
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
       ),
     );
   }
@@ -430,21 +364,24 @@ class _PuzzleMenuListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      padding: Theme.of(context).platform == TargetPlatform.iOS
-          ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
-          : null,
+      padding:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
+              : null,
       leading: Icon(
         icon,
         size: Styles.mainListTileIconSize,
-        color: Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoTheme.of(context).primaryColor
-            : Theme.of(context).colorScheme.primary,
+        color:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoTheme.of(context).primaryColor
+                : Theme.of(context).colorScheme.primary,
       ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
-      trailing: Theme.of(context).platform == TargetPlatform.iOS
-          ? const CupertinoListTileChevron()
-          : null,
+      trailing:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
       onTap: onTap,
     );
   }
@@ -478,19 +415,21 @@ class _PuzzleMenu extends ConsumerWidget {
           child: _PuzzleMenuListTile(
             icon: LichessIcons.streak,
             title: 'Puzzle Streak',
-            subtitle: context.l10n.puzzleStreakDescription.characters
+            subtitle:
+                context.l10n.puzzleStreakDescription.characters
                     .takeWhile((c) => c != '.')
                     .toString() +
                 (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-            onTap: isOnline
-                ? () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (context) => const StreakScreen(),
-                    );
-                  }
-                : null,
+            onTap:
+                isOnline
+                    ? () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => const StreakScreen(),
+                      );
+                    }
+                    : null,
           ),
         ),
         Opacity(
@@ -499,15 +438,16 @@ class _PuzzleMenu extends ConsumerWidget {
             icon: LichessIcons.storm,
             title: 'Puzzle Storm',
             subtitle: context.l10n.mobilePuzzleStormSubtitle,
-            onTap: isOnline
-                ? () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (context) => const StormScreen(),
-                    );
-                  }
-                : null,
+            onTap:
+                isOnline
+                    ? () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => const StormScreen(),
+                      );
+                    }
+                    : null,
           ),
         ),
       ],
@@ -535,10 +475,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             children: [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16.0,
-                    horizontal: 8.0,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
                   child: Text(context.l10n.puzzleNoPuzzlesToShow),
                 ),
               ),
@@ -546,57 +483,49 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           );
         }
 
-        final maxItems = isTablet
-            ? _kNumberOfHistoryItemsOnTablet
-            : _kNumberOfHistoryItemsOnHandset;
+        final maxItems =
+            isTablet ? _kNumberOfHistoryItemsOnTablet : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
-          cupertinoBackgroundColor:
-              CupertinoPageScaffoldBackgroundColor.maybeOf(context),
+          cupertinoBackgroundColor: CupertinoPageScaffoldBackgroundColor.maybeOf(context),
           cupertinoClipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
-          headerTrailing: showHeader
-              ? NoPaddingTextButton(
-                  onPressed: () => pushPlatformRoute(
-                    context,
-                    builder: (context) => const PuzzleHistoryScreen(),
-                  ),
-                  child: Text(
-                    context.l10n.more,
-                  ),
-                )
-              : null,
+          headerTrailing:
+              showHeader
+                  ? NoPaddingTextButton(
+                    onPressed:
+                        () => pushPlatformRoute(
+                          context,
+                          builder: (context) => const PuzzleHistoryScreen(),
+                        ),
+                    child: Text(context.l10n.more),
+                  )
+                  : null,
           children: [
             Padding(
-              padding: Theme.of(context).platform == TargetPlatform.iOS
-                  ? EdgeInsets.zero
-                  : Styles.horizontalBodyPadding,
-              child: PuzzleHistoryPreview(
-                recentActivity.take(maxItems).toIList(),
-                maxRows: 5,
-              ),
+              padding:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? EdgeInsets.zero
+                      : Styles.horizontalBodyPadding,
+              child: PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5),
             ),
           ],
         );
       },
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
-        );
+        debugPrint('SEVERE: [PuzzleHistoryWidget] could not load puzzle history');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load Puzzle history.'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 5,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 5, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
@@ -610,14 +539,17 @@ class _DashboardButton extends ConsumerWidget {
     if (session == null) {
       return const SizedBox.shrink();
     }
-    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
-          online: () => () {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.puzzlePuzzleDashboard,
-              builder: (_) => const PuzzleDashboardScreen(),
-            );
-          },
+    final onPressed = ref
+        .watch(connectivityChangesProvider)
+        .whenIs(
+          online:
+              () => () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.puzzlePuzzleDashboard,
+                  builder: (_) => const PuzzleDashboardScreen(),
+                );
+              },
           offline: () => null,
         );
 
@@ -638,14 +570,17 @@ class _HistoryButton extends ConsumerWidget {
     if (session == null) {
       return const SizedBox.shrink();
     }
-    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
-          online: () => () {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.puzzleHistory,
-              builder: (_) => const PuzzleHistoryScreen(),
-            );
-          },
+    final onPressed = ref
+        .watch(connectivityChangesProvider)
+        .whenIs(
+          online:
+              () => () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.puzzleHistory,
+                  builder: (_) => const PuzzleHistoryScreen(),
+                );
+              },
           offline: () => null,
         );
     return AppBarIconButton(
@@ -669,8 +604,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -687,14 +621,9 @@ class DailyPuzzle extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(context.l10n.puzzlePuzzleOfTheDay, style: Styles.boardPreviewTitle),
                   Text(
-                    context.l10n.puzzlePuzzleOfTheDay,
-                    style: Styles.boardPreviewTitle,
-                  ),
-                  Text(
-                    context.l10n
-                        .puzzlePlayedXTimes(data.puzzle.plays)
-                        .localizeNumbers(),
+                    context.l10n.puzzlePlayedXTimes(data.puzzle.plays).localizeNumbers(),
                     style: _puzzlePreviewSubtitleStyle(context),
                   ),
                 ],
@@ -702,10 +631,7 @@ class DailyPuzzle extends ConsumerWidget {
               Icon(
                 Icons.today,
                 size: 34,
-                color: DefaultTextStyle.of(context)
-                    .style
-                    .color
-                    ?.withValues(alpha: 0.6),
+                color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
               ),
               Text(
                 data.puzzle.sideToMove == Side.white
@@ -719,28 +645,28 @@ class DailyPuzzle extends ConsumerWidget {
             pushPlatformRoute(
               context,
               rootNavigator: true,
-              builder: (context) => PuzzleScreen(
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzleId: data.puzzle.id,
-              ),
+              builder:
+                  (context) => PuzzleScreen(
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    puzzleId: data.puzzle.id,
+                  ),
             );
           },
         );
       },
-      loading: () => isOnline
-          ? const Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SmallBoardPreview.loading(),
-              ),
-            )
-          : const SizedBox.shrink(),
+      loading:
+          () =>
+              isOnline
+                  ? const Shimmer(
+                    child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
+                  )
+                  : const SizedBox.shrink(),
       error: (error, _) {
         return isOnline
             ? const Padding(
-                padding: Styles.bodySectionPadding,
-                child: Text('Could not load the daily puzzle.'),
-              )
+              padding: Styles.bodySectionPadding,
+              child: Text('Could not load the daily puzzle.'),
+            )
             : const SizedBox.shrink();
       },
     );
@@ -764,118 +690,104 @@ class PuzzleAnglePreview extends ConsumerWidget {
 
       return loading
           ? const Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SmallBoardPreview.loading(),
-              ),
-            )
+            child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
+          )
           : Slidable(
-              dragStartBehavior: DragStartBehavior.start,
-              enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
-              endActionPane: ActionPane(
-                motion: const StretchMotion(),
+            dragStartBehavior: DragStartBehavior.start,
+            enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
+            endActionPane: ActionPane(
+              motion: const StretchMotion(),
+              children: [
+                SlidableAction(
+                  icon: Icons.delete,
+                  onPressed: (context) async {
+                    final service = await ref.read(puzzleServiceProvider.future);
+                    if (context.mounted) {
+                      service.deleteBatch(
+                        userId: ref.read(authSessionProvider)?.user.id,
+                        angle: angle,
+                      );
+                    }
+                  },
+                  spacing: 8.0,
+                  backgroundColor: context.lichessColors.error,
+                  foregroundColor: Colors.white,
+                  label: context.l10n.delete,
+                ),
+              ],
+            ),
+            child: SmallBoardPreview(
+              orientation: preview?.orientation ?? Side.white,
+              fen: preview?.initialFen ?? kEmptyFen,
+              lastMove: preview?.initialMove,
+              description: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SlidableAction(
-                    icon: Icons.delete,
-                    onPressed: (context) async {
-                      final service =
-                          await ref.read(puzzleServiceProvider.future);
-                      if (context.mounted) {
-                        service.deleteBatch(
-                          userId: ref.read(authSessionProvider)?.user.id,
-                          angle: angle,
-                        );
-                      }
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: switch (angle) {
+                      PuzzleTheme(themeKey: final themeKey) => [
+                        Text(
+                          themeKey.l10n(context.l10n).name,
+                          style: Styles.boardPreviewTitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          themeKey.l10n(context.l10n).description,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            height: 1.2,
+                            fontSize: 12.0,
+                            color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                      PuzzleOpening(key: final openingKey) => [
+                        Text(
+                          flatOpenings.valueOrNull
+                                  ?.firstWhere(
+                                    (o) => o.key == openingKey,
+                                    orElse:
+                                        () => (
+                                          key: openingKey,
+                                          name: openingKey.replaceAll('_', ''),
+                                          count: 0,
+                                        ),
+                                  )
+                                  .name ??
+                              openingKey.replaceAll('_', ' '),
+                          style: Styles.boardPreviewTitle,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     },
-                    spacing: 8.0,
-                    backgroundColor: context.lichessColors.error,
-                    foregroundColor: Colors.white,
-                    label: context.l10n.delete,
                   ),
+                  Icon(
+                    switch (angle) {
+                      PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
+                      PuzzleOpening() => PuzzleIcons.opening,
+                    },
+                    size: 34,
+                    color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                  ),
+                  if (puzzle != null)
+                    Text(
+                      puzzle.puzzle.sideToMove == Side.white
+                          ? context.l10n.whitePlays
+                          : context.l10n.blackPlays,
+                    )
+                  else
+                    const Text('No puzzles available, please go online to fetch them.'),
                 ],
               ),
-              child: SmallBoardPreview(
-                orientation: preview?.orientation ?? Side.white,
-                fen: preview?.initialFen ?? kEmptyFen,
-                lastMove: preview?.initialMove,
-                description: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: switch (angle) {
-                        PuzzleTheme(themeKey: final themeKey) => [
-                            Text(
-                              themeKey.l10n(context.l10n).name,
-                              style: Styles.boardPreviewTitle,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              themeKey.l10n(context.l10n).description,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                height: 1.2,
-                                fontSize: 12.0,
-                                color: DefaultTextStyle.of(context)
-                                    .style
-                                    .color
-                                    ?.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          ],
-                        PuzzleOpening(key: final openingKey) => [
-                            Text(
-                              flatOpenings.valueOrNull
-                                      ?.firstWhere(
-                                        (o) => o.key == openingKey,
-                                        orElse: () => (
-                                          key: openingKey,
-                                          name: openingKey.replaceAll(
-                                            '_',
-                                            '',
-                                          ),
-                                          count: 0
-                                        ),
-                                      )
-                                      .name ??
-                                  openingKey.replaceAll('_', ' '),
-                              style: Styles.boardPreviewTitle,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                      },
-                    ),
-                    Icon(
-                      switch (angle) {
-                        PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
-                        PuzzleOpening() => PuzzleIcons.opening,
-                      },
-                      size: 34,
-                      color: DefaultTextStyle.of(context)
-                          .style
-                          .color
-                          ?.withValues(alpha: 0.6),
-                    ),
-                    if (puzzle != null)
-                      Text(
-                        puzzle.puzzle.sideToMove == Side.white
-                            ? context.l10n.whitePlays
-                            : context.l10n.blackPlays,
-                      )
-                    else
-                      const Text(
-                        'No puzzles available, please go online to fetch them.',
-                      ),
-                  ],
-                ),
-                onTap: puzzle != null ? onTap : null,
-              ),
-            );
+              onTap: puzzle != null ? onTap : null,
+            ),
+          );
     }
 
     return puzzle.maybeWhen(

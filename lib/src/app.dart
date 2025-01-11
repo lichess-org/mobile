@@ -26,23 +26,20 @@ class AppInitializationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<PreloadedData>>(
-      preloadedDataProvider,
-      (_, state) {
-        if (state.hasValue || state.hasError) {
-          FlutterNativeSplash.remove();
-        }
-      },
-    );
+    ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
+      if (state.hasValue || state.hasError) {
+        FlutterNativeSplash.remove();
+      }
+    });
 
-    return ref.watch(preloadedDataProvider).when(
+    return ref
+        .watch(preloadedDataProvider)
+        .when(
           data: (_) => const Application(),
           // loading screen is handled by the native splash screen
           loading: () => const SizedBox.shrink(),
           error: (err, st) {
-            debugPrint(
-              'SEVERE: [App] could not initialize app; $err\n$st',
-            );
+            debugPrint('SEVERE: [App] could not initialize app; $err\n$st');
             return const SizedBox.shrink();
           },
         );
@@ -88,8 +85,7 @@ class _AppState extends ConsumerState<Application> {
 
       // Play registered moves whenever the app comes back online.
       if (prevWasOffline && currentIsOnline) {
-        final nbMovesPlayed =
-            await ref.read(correspondenceServiceProvider).playRegisteredMoves();
+        final nbMovesPlayed = await ref.read(correspondenceServiceProvider).playRegisteredMoves();
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
@@ -125,9 +121,7 @@ class _AppState extends ConsumerState<Application> {
     final generalPrefs = ref.watch(generalPreferencesProvider);
 
     final brightness = ref.watch(currentBrightnessProvider);
-    final boardTheme = ref.watch(
-      boardPreferencesProvider.select((state) => state.boardTheme),
-    );
+    final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
@@ -135,49 +129,49 @@ class _AppState extends ConsumerState<Application> {
       builder: (lightColorScheme, darkColorScheme) {
         // TODO remove this workaround when the dynamic_color colorScheme bug is fixed
         // See: https://github.com/material-foundation/flutter-packages/issues/574
-        final (
-          fixedLightScheme,
-          fixedDarkScheme
-        ) = lightColorScheme != null && darkColorScheme != null
-            ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
-            : (null, null);
+        final (fixedLightScheme, fixedDarkScheme) =
+            lightColorScheme != null && darkColorScheme != null
+                ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
+                : (null, null);
 
         final isTablet = isTabletOrLarger(context);
+        final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
-        final colorScheme =
-            generalPrefs.systemColors && dynamicColorScheme != null
-                ? dynamicColorScheme
-                : ColorScheme.fromSeed(
-                    seedColor: boardTheme.colors.darkSquare,
-                    brightness: brightness,
-                  );
+        final ColorScheme colorScheme = switch (generalPrefs.appThemeSeed) {
+          AppThemeSeed.board => ColorScheme.fromSeed(
+            seedColor: boardTheme.colors.darkSquare,
+            brightness: brightness,
+          ),
+          AppThemeSeed.system =>
+            dynamicColorScheme ??
+                ColorScheme.fromSeed(
+                  seedColor: boardTheme.colors.darkSquare,
+                  brightness: brightness,
+                ),
+        };
 
         final cupertinoThemeData = CupertinoThemeData(
           primaryColor: colorScheme.primary,
           primaryContrastingColor: colorScheme.onPrimary,
           brightness: brightness,
           textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                primaryColor: colorScheme.primary,
-                textStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .textStyle
-                    .copyWith(color: Styles.cupertinoLabelColor),
-                navTitleTextStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .navTitleTextStyle
-                    .copyWith(color: Styles.cupertinoTitleColor),
-                navLargeTitleTextStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .navLargeTitleTextStyle
-                    .copyWith(color: Styles.cupertinoTitleColor),
-              ),
+            primaryColor: colorScheme.primary,
+            textStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.textStyle.copyWith(color: Styles.cupertinoLabelColor),
+            navTitleTextStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+            navLargeTitleTextStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+          ),
           scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
-          barBackgroundColor: isTablet
-              ? Styles.cupertinoTabletAppBarColor
-              : Styles.cupertinoAppBarColor,
+          barBackgroundColor:
+              isTablet ? Styles.cupertinoTabletAppBarColor : Styles.cupertinoAppBarColor,
         );
 
         return MaterialApp(
@@ -187,47 +181,41 @@ class _AppState extends ConsumerState<Application> {
           locale: generalPrefs.locale,
           theme: ThemeData.from(
             colorScheme: colorScheme,
-            textTheme: Theme.of(context).platform == TargetPlatform.iOS
-                ? brightness == Brightness.light
-                    ? Typography.blackCupertino
-                    : Styles.whiteCupertinoTextTheme
-                : null,
+            textTheme:
+                isIOS
+                    ? brightness == Brightness.light
+                        ? Typography.blackCupertino
+                        : Styles.whiteCupertinoTextTheme
+                    : null,
           ).copyWith(
+            splashFactory: isIOS ? NoSplash.splashFactory : null,
             cupertinoOverrideTheme: cupertinoThemeData,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-              height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                  ? 60
-                  : null,
+              height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
             ),
-            extensions: [
-              lichessCustomColors.harmonized(colorScheme),
-            ],
+            extensions: [lichessCustomColors.harmonized(colorScheme)],
           ),
           themeMode: switch (generalPrefs.themeMode) {
             BackgroundThemeMode.light => ThemeMode.light,
             BackgroundThemeMode.dark => ThemeMode.dark,
             BackgroundThemeMode.system => ThemeMode.system,
           },
-          builder: Theme.of(context).platform == TargetPlatform.iOS
-              ? (context, child) {
-                  return CupertinoTheme(
-                    data: cupertinoThemeData,
-                    child: IconTheme.merge(
-                      data: IconThemeData(
-                        color: CupertinoTheme.of(context)
-                            .textTheme
-                            .textStyle
-                            .color,
+          builder:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? (context, child) {
+                    return CupertinoTheme(
+                      data: cupertinoThemeData,
+                      child: IconTheme.merge(
+                        data: IconThemeData(
+                          color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                        ),
+                        child: Material(child: child),
                       ),
-                      child: Material(child: child),
-                    ),
-                  );
-                }
-              : null,
+                    );
+                  }
+                  : null,
           home: const BottomNavScaffold(),
-          navigatorObservers: [
-            rootNavPageRouteObserver,
-          ],
+          navigatorObservers: [rootNavPageRouteObserver],
         );
       },
     );
@@ -249,28 +237,24 @@ class _AppState extends ConsumerState<Application> {
   final lightAdditionalColours = _extractAdditionalColours(lightBase);
   final darkAdditionalColours = _extractAdditionalColours(darkBase);
 
-  final lightScheme =
-      _insertAdditionalColours(lightBase, lightAdditionalColours);
+  final lightScheme = _insertAdditionalColours(lightBase, lightAdditionalColours);
   final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
 
   return (lightScheme.harmonized(), darkScheme.harmonized());
 }
 
 List<Color> _extractAdditionalColours(ColorScheme scheme) => [
-      scheme.surface,
-      scheme.surfaceDim,
-      scheme.surfaceBright,
-      scheme.surfaceContainerLowest,
-      scheme.surfaceContainerLow,
-      scheme.surfaceContainer,
-      scheme.surfaceContainerHigh,
-      scheme.surfaceContainerHighest,
-    ];
+  scheme.surface,
+  scheme.surfaceDim,
+  scheme.surfaceBright,
+  scheme.surfaceContainerLowest,
+  scheme.surfaceContainerLow,
+  scheme.surfaceContainer,
+  scheme.surfaceContainerHigh,
+  scheme.surfaceContainerHighest,
+];
 
-ColorScheme _insertAdditionalColours(
-  ColorScheme scheme,
-  List<Color> additionalColours,
-) =>
+ColorScheme _insertAdditionalColours(ColorScheme scheme, List<Color> additionalColours) =>
     scheme.copyWith(
       surface: additionalColours[0],
       surfaceDim: additionalColours[1],

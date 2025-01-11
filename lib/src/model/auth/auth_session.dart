@@ -1,9 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'session_storage.dart';
 
 part 'auth_session.freezed.dart';
 part 'auth_session.g.dart';
@@ -30,11 +29,8 @@ class AuthSession extends _$AuthSession {
 
 @Freezed(fromJson: true, toJson: true)
 class AuthSessionState with _$AuthSessionState {
-  const factory AuthSessionState({
-    required LightUser user,
-    required String token,
-  }) = _AuthSessionState;
+  const factory AuthSessionState({required LightUser user, required String token}) =
+      _AuthSessionState;
 
-  factory AuthSessionState.fromJson(Map<String, dynamic> json) =>
-      _$AuthSessionStateFromJson(json);
+  factory AuthSessionState.fromJson(Map<String, dynamic> json) => _$AuthSessionStateFromJson(json);
 }

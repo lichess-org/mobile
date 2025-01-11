@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';
 
-SocketClient makeTestSocketClient(
-  FakeWebSocketChannelFactory fakeChannelFactory,
-) {
+SocketClient makeTestSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
   final client = SocketClient(
     Uri(path: kDefaultSocketRoute),
     channelFactory: fakeChannelFactory,
@@ -44,8 +43,7 @@ void main() {
     test('handles ping/pong', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       int sentPingCount = 0;
@@ -69,7 +67,7 @@ void main() {
     test('reconnects when connection attempt fails', () async {
       int numConnectionAttempts = 0;
 
-      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+      final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         numConnectionAttempts++;
         if (numConnectionAttempts == 1) {
           throw const SocketException('Connection failed');
@@ -95,7 +93,7 @@ void main() {
       // channels per connection attempt
       final Map<int, FakeWebSocketChannel> channels = {};
 
-      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+      final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         numConnectionAttempts++;
         final channel = FakeWebSocketChannel();
         int sentPingCount = 0;
@@ -133,10 +131,9 @@ void main() {
     });
 
     test('computes average lag', () async {
-      final fakeChannel = FakeWebSocketChannel();
+      final fakeChannel = FakeWebSocketChannel(connectionLag: const Duration(milliseconds: 10));
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
       socketClient.connect();
 
       // before the connection is ready the average lag is zero
@@ -152,19 +149,13 @@ void main() {
       await expectLater(fakeChannel.stream, emits('0'));
 
       // after the ping/pong exchange the average lag is computed
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(10));
 
       // wait for more ping/pong exchanges
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
 
       // average lag is still the same
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(10));
 
       // increase the lag of the connection
       fakeChannel.connectionLag = const Duration(milliseconds: 100);
@@ -173,10 +164,7 @@ void main() {
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
 
       // average lag should be higher
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(40),
-      );
+      expect(socketClient.averageLag.value.inMilliseconds, greaterThanOrEqualTo(40));
 
       await socketClient.close();
 
@@ -187,11 +175,8 @@ void main() {
     test('handles ackable messages', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final socketClient =
-          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
-      socketClient.connect();
-
-      await socketClient.firstConnection;
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      await socketClient.connect();
 
       // send a message that requires an ack
       socketClient.send('test', {'data': 'ackable'}, ackable: true);
@@ -210,12 +195,84 @@ void main() {
       fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
 
       // no more messages are expected
-      await expectLater(
-        fakeChannel.sentMessagesExceptPing,
-        emitsInOrder([]),
-      );
+      await expectLater(fakeChannel.sentMessagesExceptPing, emitsInOrder([]));
 
       socketClient.close();
     });
+
+    test('handles batch message', () async {
+      final fakeChannel = FakeWebSocketChannel();
+
+      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      await socketClient.connect();
+
+      const serverMessage = '''
+      {
+         "t":"batch",
+         "d":[
+            {"t":"test1","d":"data"},
+            {"t":"test2","d":"data"},
+            {"t":"test3","d":"data"}
+         ]
+      }
+      ''';
+
+      const eventsToMatch = [
+        SocketEvent(topic: 'test1', data: 'data'),
+        SocketEvent(topic: 'test2', data: 'data'),
+        SocketEvent(topic: 'test3', data: 'data'),
+      ];
+
+      // check that the messages in the batch were distributed
+      await testEventEmitted(socketClient, fakeChannel, serverMessage, eventsToMatch);
+
+      await socketClient.close();
+    });
   });
+
+  test('should emit events', () async {
+    final fakeChannel = FakeWebSocketChannel();
+
+    final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+    await socketClient.connect();
+
+    // should not emit if _pong
+    await testEventEmitted(socketClient, fakeChannel, '0', []);
+
+    // should emit if n
+    const pongMessage = '{"t":"n","d":10,"r":3}';
+    const pongEvent = SocketEvent(topic: 'n', data: {'nbPlayers': 10, 'nbGames': 3});
+    await testEventEmitted(socketClient, fakeChannel, pongMessage, [pongEvent]);
+
+    // should not emit if ack
+    const ackMessage = '{"t":"n","d":10,"r":3}';
+    await testEventEmitted(socketClient, fakeChannel, ackMessage, []);
+
+    // should not emit if batch
+    const batchMessage = '{"t":"batch","d":[]}';
+    await testEventEmitted(socketClient, fakeChannel, batchMessage, []);
+
+    // should emit if random topic
+    const randomMessage = '{"t":"test","d":"data"}';
+    const randomEvent = SocketEvent(topic: 'test', data: 'data');
+    await testEventEmitted(socketClient, fakeChannel, randomMessage, [randomEvent]);
+
+    await socketClient.close();
+  });
+}
+
+Future<void> testEventEmitted(
+  SocketClient socketClient,
+  FakeWebSocketChannel fakeChannel,
+  String serverMessage,
+  Iterable<SocketEvent> eventsToMatch,
+) async {
+  // start listening to the stream
+  final futureExpect = expectLater(socketClient.stream, emitsInOrder(eventsToMatch));
+
+  // server sends the message
+  fakeChannel.addIncomingMessages([serverMessage]);
+
+  // check that the socket events were emitted in order
+  await futureExpect;
 }

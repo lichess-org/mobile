@@ -9,14 +9,9 @@ part 'brightness.g.dart';
 class CurrentBrightness extends _$CurrentBrightness {
   @override
   Brightness build() {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.themeMode,
-      ),
-    );
+    final themeMode = ref.watch(generalPreferencesProvider.select((state) => state.themeMode));
 
-    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged =
-        () {
+    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
       WidgetsBinding.instance.handlePlatformBrightnessChanged();
       if (themeMode == BackgroundThemeMode.system) {
         state = WidgetsBinding.instance.platformDispatcher.platformBrightness;

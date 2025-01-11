@@ -43,36 +43,41 @@ class GameHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
-    final nbGamesAsync = ref.watch(
-      userNumberOfGamesProvider(user, isOnline: isOnline),
-    );
-    final title = filtersInUse.count == 0
-        ? nbGamesAsync.when(
-            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
-            loading: () => const ButtonLoadingIndicator(),
-            error: (e, s) => Text(context.l10n.mobileAllGames),
-          )
-        : Text(filtersInUse.selectionLabel(context));
+    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user, isOnline: isOnline));
+    final title =
+        filtersInUse.count == 0
+            ? nbGamesAsync.when(
+              data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+              loading: () => const ButtonLoadingIndicator(),
+              error: (e, s) => Text(context.l10n.mobileAllGames),
+            )
+            : Text(filtersInUse.selectionLabel(context));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        textStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.bold,
+        ),
         count: filtersInUse.count,
         isLabelVisible: filtersInUse.count > 0,
         child: const Icon(Icons.tune),
       ),
       semanticsLabel: context.l10n.filterGames,
-      onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
-        context: context,
-        builder: (_) => _FilterGames(
-          filter: ref.read(gameFilterProvider(filter: gameFilter)),
-          user: user,
-        ),
-      ).then((value) {
-        if (value != null) {
-          ref
-              .read(gameFilterProvider(filter: gameFilter).notifier)
-              .setFilter(value);
-        }
-      }),
+      onPressed:
+          () => showAdaptiveBottomSheet<GameFilterState>(
+            context: context,
+            isScrollControlled: true,
+            builder:
+                (_) => _FilterGames(
+                  filter: ref.read(gameFilterProvider(filter: gameFilter)),
+                  user: user,
+                ),
+          ).then((value) {
+            if (value != null) {
+              ref.read(gameFilterProvider(filter: gameFilter).notifier).setFilter(value);
+            }
+          }),
     );
 
     final displayMode = ref.watch(
@@ -81,33 +86,27 @@ class GameHistoryScreen extends ConsumerWidget {
     final displayModeButton = AppBarIconButton(
       icon: const Icon(Icons.view_list),
       semanticsLabel: 'Switch view',
-      onPressed: () => showChoicePicker<GameHistoryDisplayMode>(
-        context,
-        choices: GameHistoryDisplayMode.values,
-        selectedItem: displayMode,
-        labelBuilder: (choice) => Text(displayModeL10n(context, choice)),
-        onSelectedItemChanged: (choice) => ref
-            .read(gameHistoryPreferencesProvider.notifier)
-            .setDisplayMode(choice),
-      ),
+      onPressed:
+          () => showChoicePicker<GameHistoryDisplayMode>(
+            context,
+            choices: GameHistoryDisplayMode.values,
+            selectedItem: displayMode,
+            labelBuilder: (choice) => Text(displayModeL10n(context, choice)),
+            onSelectedItemChanged:
+                (choice) =>
+                    ref.read(gameHistoryPreferencesProvider.notifier).setDisplayMode(choice),
+          ),
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [filterBtn, displayModeButton],
-      ),
+      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.user,
-    required this.isOnline,
-    required this.gameFilter,
-  });
+  const _Body({required this.user, required this.isOnline, required this.gameFilter});
 
   final LightUser? user;
   final bool isOnline;
@@ -134,8 +133,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(
         userGameHistoryProvider(
           widget.user?.id,
@@ -167,83 +165,56 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final gameFilterState =
-        ref.watch(gameFilterProvider(filter: widget.gameFilter));
+    final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
     final gameListState = ref.watch(
-      userGameHistoryProvider(
-        widget.user?.id,
-        isOnline: widget.isOnline,
-        filter: gameFilterState,
-      ),
+      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
     );
 
     return gameListState.when(
       data: (state) {
         final list = state.gameList;
 
-        return SafeArea(
-          child: list.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                  child: Center(
-                    child: Text(
-                      'No games found',
-                    ),
-                  ),
-                )
-              : ListView.separated(
-                  controller: _scrollController,
-                  separatorBuilder: (context, index) =>
+        return list.isEmpty
+            ? const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(child: Text('No games found')),
+            )
+            : ListView.separated(
+              controller: _scrollController,
+              separatorBuilder:
+                  (context, index) =>
                       Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(
-                              height: 1,
-                              cupertinoHasLeading: true,
-                            )
-                          : const PlatformDivider(
-                              height: 1,
-                              color: Colors.transparent,
-                            ),
-                  itemCount: list.length + (state.isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (state.isLoading && index == list.length) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: CenterLoadingIndicator(),
-                      );
-                    } else if (state.hasError &&
-                        state.hasMore &&
-                        index == list.length) {
-                      // TODO: add a retry button
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: Center(
-                          child: Text(
-                            'Could not load more games',
-                          ),
-                        ),
-                      );
-                    }
+                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                          : const PlatformDivider(height: 1, color: Colors.transparent),
+              itemCount: list.length + (state.isLoading ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (state.isLoading && index == list.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: CenterLoadingIndicator(),
+                  );
+                } else if (state.hasError && state.hasMore && index == list.length) {
+                  // TODO: add a retry button
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: Center(child: Text('Could not load more games')),
+                  );
+                }
 
-                    final displayMode = ref.watch(
-                      gameHistoryPreferencesProvider
-                          .select((value) => value.displayMode),
-                    );
+                final displayMode = ref.watch(
+                  gameHistoryPreferencesProvider.select((value) => value.displayMode),
+                );
 
-                    final item = list[index];
-                    return switch (displayMode) {
-                      GameHistoryDisplayMode.compact =>
-                        ExtendedGameListTile(item: item),
-                      GameHistoryDisplayMode.detail =>
-                        GameListDetailTile(item: item),
-                    };
-                  },
-                ),
-        );
+                final item = list[index];
+                return switch (displayMode) {
+                  GameHistoryDisplayMode.compact => ExtendedGameListTile(item: item),
+                  GameHistoryDisplayMode.detail => GameListDetailTile(item: item),
+                };
+              },
+            );
       },
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [GameHistoryScreen] could not load game list',
-        );
+        debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
         return const Center(child: Text('Could not load Game History'));
       },
       loading: () => const CenterLoadingIndicator(),
@@ -252,10 +223,7 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _FilterGames extends ConsumerStatefulWidget {
-  const _FilterGames({
-    required this.filter,
-    required this.user,
-  });
+  const _FilterGames({required this.filter, required this.user});
 
   final GameFilterState filter;
   final LightUser? user;
@@ -296,15 +264,16 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     final session = ref.read(authSessionProvider);
     final userId = widget.user?.id ?? session?.user.id;
 
-    final Widget filters = userId != null
-        ? ref.watch(userProvider(id: userId)).when(
-              data: (user) => perfFilter(availablePerfs(user)),
-              loading: () => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-              error: (_, __) => perfFilter(gamePerfs),
-            )
-        : perfFilter(gamePerfs);
+    final Widget filters =
+        userId != null
+            ? ref
+                .watch(userProvider(id: userId))
+                .when(
+                  data: (user) => perfFilter(availablePerfs(user)),
+                  loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+                  error: (_, __) => perfFilter(gamePerfs),
+                )
+            : perfFilter(gamePerfs);
 
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.all(16.0),
@@ -318,15 +287,15 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           filterType: FilterType.singleChoice,
           choices: Side.values,
           choiceSelected: (choice) => filter.side == choice,
-          choiceLabel: (t) => switch (t) {
-            Side.white => Text(context.l10n.white),
-            Side.black => Text(context.l10n.black),
-          },
-          onSelected: (value, selected) => setState(
-            () {
-              filter = filter.copyWith(side: selected ? value : null);
-            },
-          ),
+          choiceLabel:
+              (t) => switch (t) {
+                Side.white => Text(context.l10n.white),
+                Side.black => Text(context.l10n.black),
+              },
+          onSelected:
+              (value, selected) => setState(() {
+                filter = filter.copyWith(side: selected ? value : null);
+              }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -347,31 +316,30 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
   }
 
   List<Perf> availablePerfs(User user) {
-    final perfs = gamePerfs.where((perf) {
-      final p = user.perfs[perf];
-      return p != null && p.numberOfGamesOrRuns > 0;
-    }).toList(growable: false);
+    final perfs = gamePerfs
+        .where((perf) {
+          final p = user.perfs[perf];
+          return p != null && p.numberOfGamesOrRuns > 0;
+        })
+        .toList(growable: false);
     perfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
-          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
     return perfs;
   }
 
   Widget perfFilter(List<Perf> choices) => Filter<Perf>(
-        filterName: context.l10n.variant,
-        filterType: FilterType.multipleChoice,
-        choices: choices,
-        choiceSelected: (choice) => filter.perfs.contains(choice),
-        choiceLabel: (t) => Text(t.shortTitle),
-        onSelected: (value, selected) => setState(
-          () {
-            filter = filter.copyWith(
-              perfs: selected
-                  ? filter.perfs.add(value)
-                  : filter.perfs.remove(value),
-            );
-          },
-        ),
-      );
+    filterName: context.l10n.variant,
+    filterType: FilterType.multipleChoice,
+    choices: choices,
+    choiceSelected: (choice) => filter.perfs.contains(choice),
+    choiceLabel: (t) => Text(t.shortTitle),
+    onSelected:
+        (value, selected) => setState(() {
+          filter = filter.copyWith(
+            perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),
+          );
+        }),
+  );
 }

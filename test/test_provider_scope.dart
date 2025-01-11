@@ -68,10 +68,7 @@ Future<Widget> makeTestProviderScopeApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: home,
       builder: (context, child) {
-        return CupertinoTheme(
-          data: const CupertinoThemeData(),
-          child: Material(child: child),
-        );
+        return CupertinoTheme(data: const CupertinoThemeData(), child: Material(child: child));
       },
     ),
     overrides: overrides,
@@ -89,25 +86,24 @@ Future<Widget> makeOfflineTestProviderScope(
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
-}) =>
-    makeTestProviderScope(
-      tester,
-      child: child,
-      overrides: [
-        httpClientFactoryProvider.overrideWith((ref) {
-          return FakeHttpClientFactory(() => offlineClient);
-        }),
-        ...overrides ?? [],
-      ],
-      userSession: userSession,
-      defaultPreferences: defaultPreferences,
-    );
+}) => makeTestProviderScope(
+  tester,
+  child: child,
+  overrides: [
+    httpClientFactoryProvider.overrideWith((ref) {
+      return FakeHttpClientFactory(() => offlineClient);
+    }),
+    ...overrides ?? [],
+  ],
+  userSession: userSession,
+  defaultPreferences: defaultPreferences,
+);
 
 /// Returns a [ProviderScope] and default mocks, ready for testing.
 ///
 /// The [child] widget is the widget we want to test. It will be wrapped in a
 /// [MediaQuery.new] widget, to simulate a device with a specific size, controlled
-/// by [kTestSurfaceSize].
+/// by [surfaceSize] (which default to [kTestSurfaceSize]).
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [userSession] parameter can be used to set the initial user session state.
@@ -118,46 +114,58 @@ Future<Widget> makeTestProviderScope(
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
+  Size surfaceSize = kTestSurfaceSize,
+  Key? key,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 
   addTearDown(binding.reset);
 
-  await tester.binding.setSurfaceSize(kTestSurfaceSize);
+  await tester.binding.setSurfaceSize(surfaceSize);
+  addTearDown(() {
+    tester.binding.setSurfaceSize(null);
+  });
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  // disable piece animation and drawing shapes to simplify tests
+  // disable piece animation to simplify tests
   final defaultBoardPref = {
-    'preferences.board': jsonEncode(
-      BoardPrefs.defaults
-          .copyWith(
-            pieceAnimation: false,
-            enableShapeDrawings: false,
-          )
-          .toJson(),
-    ),
+    'preferences.board': jsonEncode(BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson()),
   };
 
   await binding.setInitialSharedPreferencesValues(
-    defaultPreferences != null
-        ? {
-            ...defaultBoardPref,
-            ...defaultPreferences,
-          }
-        : defaultBoardPref,
+    defaultPreferences != null ? {...defaultBoardPref, ...defaultPreferences} : defaultBoardPref,
   );
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
-    if (userSession != null)
-      kSessionStorageKey: jsonEncode(userSession.toJson()),
+    if (userSession != null) kSessionStorageKey: jsonEncode(userSession.toJson()),
   });
 
+  final flutterTestOnError = FlutterError.onError!;
+
+  void ignoreOverflowErrors(FlutterErrorDetails details) {
+    bool isOverflowError = false;
+    final exception = details.exception;
+
+    if (exception is FlutterError) {
+      isOverflowError = exception.diagnostics.any(
+        (e) => e.value.toString().contains('A RenderFlex overflowed by'),
+      );
+    }
+
+    if (isOverflowError) {
+      // debugPrint('Overflow error detected.');
+    } else {
+      flutterTestOnError(details);
+    }
+  }
+
   // TODO consider loading true fonts as well
-  FlutterError.onError = _ignoreOverflowErrors;
+  FlutterError.onError = ignoreOverflowErrors;
 
   return ProviderScope(
+    key: key,
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
       notificationDisplayProvider.overrideWith((ref) {
@@ -165,10 +173,7 @@ Future<Widget> makeTestProviderScope(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       databaseProvider.overrideWith((ref) async {
-        final testDb = await openAppDatabase(
-          databaseFactoryFfiNoIsolate,
-          inMemoryDatabasePath,
-        );
+        final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
         ref.onDispose(testDb.close);
         return testDb;
       }),
@@ -178,7 +183,7 @@ Future<Widget> makeTestProviderScope(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+        return FakeWebSocketChannelFactory((_) => FakeWebSocketChannel());
       }),
       // ignore: scoped_providers_should_specify_dependencies
       socketPoolProvider.overrideWith((ref) {
@@ -189,7 +194,7 @@ Future<Widget> makeTestProviderScope(
       // ignore: scoped_providers_should_specify_dependencies
       connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
       // ignore: scoped_providers_should_specify_dependencies
-      showRatingsPrefProvider.overrideWith((ref) => true),
+      showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
@@ -221,35 +226,6 @@ Future<Widget> makeTestProviderScope(
       }),
       ...overrides ?? [],
     ],
-    child: MediaQuery(
-      data: const MediaQueryData(size: kTestSurfaceSize),
-      child: Center(
-        child: SizedBox(
-          width: kTestSurfaceSize.width,
-          height: kTestSurfaceSize.height,
-          child: child,
-        ),
-      ),
-    ),
+    child: TestSurface(size: surfaceSize, child: child),
   );
-}
-
-void _ignoreOverflowErrors(
-  FlutterErrorDetails details, {
-  bool forceReport = false,
-}) {
-  bool isOverflowError = false;
-  final exception = details.exception;
-
-  if (exception is FlutterError) {
-    isOverflowError = exception.diagnostics
-        .any((e) => e.value.toString().contains('A RenderFlex overflowed by'));
-  }
-
-  if (isOverflowError) {
-    // debugPrint('Overflow error detected.');
-  } else {
-    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-    throw exception;
-  }
 }

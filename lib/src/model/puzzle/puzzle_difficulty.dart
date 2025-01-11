@@ -13,8 +13,9 @@ enum PuzzleDifficulty {
   const PuzzleDifficulty(this.ratingDelta);
 }
 
-final IMap<String, PuzzleDifficulty> puzzleDifficultyNameMap =
-    IMap(PuzzleDifficulty.values.asNameMap());
+final IMap<String, PuzzleDifficulty> puzzleDifficultyNameMap = IMap(
+  PuzzleDifficulty.values.asNameMap(),
+);
 
 String puzzleDifficultyL10n(BuildContext context, PuzzleDifficulty difficulty) {
   switch (difficulty) {

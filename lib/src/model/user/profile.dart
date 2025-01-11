@@ -28,55 +28,49 @@ class Profile with _$Profile {
 
   factory Profile.fromPick(RequiredPick pick) {
     const lineSplitter = LineSplitter();
-    final rawLinks = pick('links')
-        .letOrNull((e) => lineSplitter.convert(e.asStringOrThrow()));
+    final rawLinks = pick('links').letOrNull((e) => lineSplitter.convert(e.asStringOrThrow()));
 
     return Profile(
-      country:
-          pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
+      country: pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
       location: pick('location').asStringOrNull(),
       bio: pick('bio').asStringOrNull(),
       realName: pick('realName').asStringOrNull(),
       fideRating: pick('fideRating').asIntOrNull(),
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
-      links: rawLinks
-          ?.where((e) => e.trim().isNotEmpty)
-          .map((e) {
-            final link = SocialLink.fromUrl(e);
-            if (link == null) {
-              final uri = Uri.tryParse(e);
-              if (uri != null) {
-                return SocialLink(site: null, url: uri);
-              }
-              return null;
-            }
-            return link;
-          })
-          .nonNulls
-          .toIList(),
+      links:
+          rawLinks
+              ?.where((e) => e.trim().isNotEmpty)
+              .map((e) {
+                final link = SocialLink.fromUrl(e);
+                if (link == null) {
+                  final uri = Uri.tryParse(e);
+                  if (uri != null) {
+                    return SocialLink(site: null, url: uri);
+                  }
+                  return null;
+                }
+                return link;
+              })
+              .nonNulls
+              .toIList(),
     );
   }
 }
 
 @freezed
 class SocialLink with _$SocialLink {
-  const factory SocialLink({
-    required LinkSite? site,
-    required Uri url,
-  }) = _SocialLink;
+  const factory SocialLink({required LinkSite? site, required Uri url}) = _SocialLink;
 
   const SocialLink._();
 
   static SocialLink? fromUrl(String url) {
-    final updatedUrl = url.startsWith('http://') || url.startsWith('https://')
-        ? url
-        : 'https://$url';
+    final updatedUrl =
+        url.startsWith('http://') || url.startsWith('https://') ? url : 'https://$url';
     final uri = Uri.tryParse(updatedUrl);
     if (uri == null) return null;
     final host = uri.host.replaceAll(RegExp(r'www\.'), '');
-    final site =
-        LinkSite.values.firstWhereOrNull((e) => e.domains.contains(host));
+    final site = LinkSite.values.firstWhereOrNull((e) => e.domains.contains(host));
 
     return site != null ? SocialLink(site: site, url: uri) : null;
   }
@@ -101,6 +95,7 @@ enum LinkSite {
     ]),
   ),
   twitter('Twitter', IListConst(['twitter.com'])),
+  bluesky('Bluesky', IListConst(['bsky.app'])),
   facebook('Facebook', IListConst(['facebook.com'])),
   instagram('Instagram', IListConst(['instagram.com'])),
   youtube('YouTube', IListConst(['youtube.com'])),

@@ -3,12 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/model/user/streamer.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'streamer.dart';
-import 'user.dart';
-import 'user_repository.dart';
 
 part 'user_repository_providers.g.dart';
 
@@ -16,9 +15,7 @@ const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
 Future<User> user(Ref ref, {required UserId id}) async {
-  return ref.withClient(
-    (client) => UserRepository(client).getUser(id),
-  );
+  return ref.withClient((client) => UserRepository(client).getUser(id));
 }
 
 @riverpod
@@ -36,41 +33,23 @@ Future<IList<UserActivity>> userActivity(Ref ref, {required UserId id}) async {
 
 @riverpod
 Future<(User, UserStatus)> userAndStatus(Ref ref, {required UserId id}) async {
-  return ref.withClient(
-    (client) async {
-      final repo = UserRepository(client);
-      return Future.wait(
-        [
-          repo.getUser(id, withCanChallenge: true),
-          repo.getUsersStatuses({id}.lock),
-        ],
-        eagerError: true,
-      ).then(
-        (value) => (value[0] as User, (value[1] as IList<UserStatus>).first),
-      );
-    },
-  );
+  return ref.withClient((client) async {
+    final repo = UserRepository(client);
+    return Future.wait([
+      repo.getUser(id, withCanChallenge: true),
+      repo.getUsersStatuses({id}.lock),
+    ], eagerError: true).then((value) => (value[0] as User, (value[1] as IList<UserStatus>).first));
+  });
 }
 
 @riverpod
-Future<UserPerfStats> userPerfStats(
-  Ref ref, {
-  required UserId id,
-  required Perf perf,
-}) async {
-  return ref.withClient(
-    (client) => UserRepository(client).getPerfStats(id, perf),
-  );
+Future<UserPerfStats> userPerfStats(Ref ref, {required UserId id, required Perf perf}) async {
+  return ref.withClient((client) => UserRepository(client).getPerfStats(id, perf));
 }
 
 @riverpod
-Future<IList<UserStatus>> userStatuses(
-  Ref ref, {
-  required ISet<UserId> ids,
-}) async {
-  return ref.withClient(
-    (client) => UserRepository(client).getUsersStatuses(ids),
-  );
+Future<IList<UserStatus>> userStatuses(Ref ref, {required ISet<UserId> ids}) async {
+  return ref.withClient((client) => UserRepository(client).getUsersStatuses(ids));
 }
 
 @riverpod
@@ -107,16 +86,11 @@ Future<IList<LightUser>> autoCompleteUser(Ref ref, String term) async {
     throw Exception('Cancelled');
   }
 
-  return ref.withClient(
-    (client) => UserRepository(client).autocompleteUser(term),
-  );
+  return ref.withClient((client) => UserRepository(client).autocompleteUser(term));
 }
 
 @riverpod
-Future<IList<UserRatingHistoryPerf>> userRatingHistory(
-  Ref ref, {
-  required UserId id,
-}) async {
+Future<IList<UserRatingHistoryPerf>> userRatingHistory(Ref ref, {required UserId id}) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getRatingHistory(id),
     const Duration(minutes: 1),

@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -9,31 +9,86 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileAllGames => 'Tutte le partite';
 
   @override
-  String get mobilePuzzlesTab => 'Tattiche';
+  String get mobileAreYouSure => 'Sei sicuro?';
 
   @override
-  String get mobileToolsTab => 'Strumenti';
+  String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
-  String get mobileWatchTab => 'Guarda';
+  String get mobileClearButton => 'Elimina';
 
   @override
-  String get mobileSettingsTab => 'Settaggi';
+  String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
 
   @override
-  String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
-
-  @override
-  String get mobileSystemColors => 'Tema app';
+  String get mobileCustomGameJoinAGame => 'Unisciti a una partita';
 
   @override
   String get mobileFeedbackButton => 'Suggerimenti';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Ciao, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Ciao';
+
+  @override
+  String get mobileHideVariation => 'Nascondi variante';
+
+  @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobileLiveStreamers => 'Streamer in diretta';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
+
+  @override
+  String get mobileNoSearchResults => 'Nessun risultato';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
+
+  @override
   String get mobileOkButton => 'Ok';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Giocatori con \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Ingrandisci il pezzo trascinato';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Vuoi terminare questa serie?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nessun risultato, per favore modifica i filtri';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Niente da mostrare. Gioca ad alcune partite di Puzzle Storm.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Risolvi il maggior numero di puzzle in tre minuti.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Perderai la tua serie corrente e il tuo punteggio verrà salvato.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => '.';
+
+  @override
+  String get mobilePuzzlesTab => 'Tattiche';
+
+  @override
+  String get mobileRecentSearches => 'Ricerche recenti';
 
   @override
   String get mobileSettingsHapticFeedback => 'Feedback tattile';
@@ -45,104 +100,46 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
-
-  @override
-  String get mobileAllGames => 'Tutte le partite';
-
-  @override
-  String get mobileRecentSearches => 'Ricerche recenti';
-
-  @override
-  String get mobileClearButton => 'Elimina';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Giocatori con \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Nessun risultato';
-
-  @override
-  String get mobileAreYouSure => 'Sei sicuro?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Perderai la tua serie corrente e il tuo punteggio verrà salvato.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Niente da mostrare. Gioca ad alcune partite di Puzzle Storm.';
-
-  @override
-  String get mobileSharePuzzle => 'Condividi questa tattica';
-
-  @override
-  String get mobileShareGameURL => 'Condividi URL della partita';
+  String get mobileSettingsTab => 'Settaggi';
 
   @override
   String get mobileShareGamePGN => 'Condividi PGN';
 
   @override
+  String get mobileShareGameURL => 'Condividi URL della partita';
+
+  @override
   String get mobileSharePositionAsFEN => 'Condividi posizione come FEN';
 
   @override
-  String get mobileShowVariations => 'Mostra varianti';
-
-  @override
-  String get mobileHideVariation => 'Nascondi variante';
+  String get mobileSharePuzzle => 'Condividi questa tattica';
 
   @override
   String get mobileShowComments => 'Mostra commenti';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Vuoi terminare questa serie?';
+  String get mobileShowResult => 'Mostra il risultato';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nessun risultato, per favore modifica i filtri';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
-
-  @override
-  String get mobileCancelDrawOffer => 'Annulla richiesta di patta';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'In attesa dell\'avversario...';
-
-  @override
-  String get mobileBlindfoldMode => 'Alla cieca';
-
-  @override
-  String get mobileLiveStreamers => 'Streamer in diretta';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Unisciti a una partita';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
+  String get mobileShowVariations => 'Mostra varianti';
 
   @override
   String get mobileSomethingWentWrong => 'Si è verificato un errore.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileSystemColors => 'Tema app';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobileTheme => 'Tema';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobileToolsTab => 'Strumenti';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hello, $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'In attesa dell\'avversario...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Guarda';
 
   @override
   String get activityActivity => 'Attività';
@@ -242,6 +239,17 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha concluso $count partite per corrispondenza',
       one: 'Ha concluso $count partita per corrispondenza',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Partite $count $param2 per corrispondenza completate',
+      one: 'Partita $count $param2 per corrispondenza completata',
     );
     return '$_temp0';
   }
@@ -349,7 +357,254 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastBroadcasts => 'Dirette';
 
   @override
+  String get broadcastMyBroadcasts => 'Le mie trasmissioni';
+
+  @override
   String get broadcastLiveBroadcasts => 'Tornei in diretta';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Calendario trasmissioni';
+
+  @override
+  String get broadcastNewBroadcast => 'Nuova diretta';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Trasmissioni abbonate';
+
+  @override
+  String get broadcastAboutBroadcasts => 'Informazioni sulle trasmissioni';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Istruzioni delle trasmissioni Lichess.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'Il nuovo turno avrà gli stessi membri e contributori del precedente.';
+
+  @override
+  String get broadcastAddRound => 'Aggiungi un turno';
+
+  @override
+  String get broadcastOngoing => 'In corso';
+
+  @override
+  String get broadcastUpcoming => 'Prossimamente';
+
+  @override
+  String get broadcastCompleted => 'Conclusa';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess rileva il completamento del turno a seconda delle partite di origine. Utilizza questo interruttore se non è presente alcuna origine.';
+
+  @override
+  String get broadcastRoundName => 'Nome turno';
+
+  @override
+  String get broadcastRoundNumber => 'Turno numero';
+
+  @override
+  String get broadcastTournamentName => 'Nome del torneo';
+
+  @override
+  String get broadcastTournamentDescription => 'Breve descrizione dell\'evento';
+
+  @override
+  String get broadcastFullDescription => 'Descrizione completa dell\'evento';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return '(Facoltativo) Descrizione completa dell\'evento. $param1 è disponibile. La lunghezza deve essere inferiore a $param2 caratteri.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'Sorgente URL PGN';
+
+  @override
+  String get broadcastSourceUrlHelp => 'L\'URL che Lichess utilizzerà per ottenere gli aggiornamenti dei PGN. Deve essere accessibile pubblicamente su Internet.';
+
+  @override
+  String get broadcastSourceGameIds => 'Fino a 64 ID di partite Lichess, separati da spazi.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Data d\'inizio nel fuso orario locale del torneo: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Facoltativo, se sai quando inizia l\'evento';
+
+  @override
+  String get broadcastCurrentGameUrl => 'URL della partita corrente';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Scarica tutti i round';
+
+  @override
+  String get broadcastResetRound => 'Reimposta questo turno';
+
+  @override
+  String get broadcastDeleteRound => 'Elimina questo turno';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Elimina definitivamente il turno e le sue partite.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Elimina tutte le partite di questo turno. L\'emittente dovrà essere attiva per poterli ricreare.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Modifica lo studio del turno';
+
+  @override
+  String get broadcastDeleteTournament => 'Elimina questo torneo';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Elimina definitivamente l\'intero torneo, tutti i turni e tutte le partite.';
+
+  @override
+  String get broadcastShowScores => 'Mostra i punteggi dei giocatori in base ai risultati del gioco';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Facoltativo: sostituisci i nomi dei giocatori, i punteggi e i titoli';
+
+  @override
+  String get broadcastFideFederations => 'Federazioni FIDE';
+
+  @override
+  String get broadcastTop10Rating => 'Migliori 10 punteggi';
+
+  @override
+  String get broadcastFidePlayers => 'Giocatori FIDE';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'Giocatore FIDE non trovato';
+
+  @override
+  String get broadcastFideProfile => 'Profilo FIDE';
+
+  @override
+  String get broadcastFederation => 'Federazione';
+
+  @override
+  String get broadcastAgeThisYear => 'Età quest\'anno';
+
+  @override
+  String get broadcastUnrated => 'Non classificato';
+
+  @override
+  String get broadcastRecentTournaments => 'Tornei recenti';
+
+  @override
+  String get broadcastOpenLichess => 'Apri con Lichess';
+
+  @override
+  String get broadcastTeams => 'Squadre';
+
+  @override
+  String get broadcastBoards => 'Scacchiere';
+
+  @override
+  String get broadcastOverview => 'Panoramica';
+
+  @override
+  String get broadcastSubscribeTitle => 'Iscriviti per ricevere notifiche sull\'inizio di ogni round. Puoi attivare o disattivare la campanella o le notifiche push per le dirette nelle preferenze del tuo account.';
+
+  @override
+  String get broadcastUploadImage => 'Carica immagine del torneo';
+
+  @override
+  String get broadcastNoBoardsYet => 'Non sono ancora presenti scacchiere. Esse compariranno non appena i giochi saranno stati caricati.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Le scacchiere possono essere caricate con una sorgente o tramite $param';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Inizia tra $param';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'Questa trasmissione inizierà a breve.';
+
+  @override
+  String get broadcastNotYetStarted => 'Questa trasmissione non è ancora cominciata.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Sito web ufficiale';
+
+  @override
+  String get broadcastStandings => 'Classifica';
+
+  @override
+  String get broadcastOfficialStandings => 'Classifica Ufficiale';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'Altre opzioni si trovano nella $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'pagina dei gestori web';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'Una sorgente PGN pubblica per questo round. Viene offerta anche un\'$param per una sincronizzazione più rapida ed efficiente.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Incorpora questa trasmissione nel tuo sito web';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Incorpora $param nel tuo sito web';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Differenza di punteggio';
+
+  @override
+  String get broadcastGamesThisTournament => 'Partite in questo torneo';
+
+  @override
+  String get broadcastScore => 'Punteggio';
+
+  @override
+  String get broadcastAllTeams => 'Tutte le squadre';
+
+  @override
+  String get broadcastTournamentFormat => 'Formato del torneo';
+
+  @override
+  String get broadcastTournamentLocation => 'Luogo del Torneo';
+
+  @override
+  String get broadcastTopPlayers => 'Giocatori migliori';
+
+  @override
+  String get broadcastTimezone => 'Fuso orario';
+
+  @override
+  String get broadcastFideRatingCategory => 'Categoria di punteggio FIDE';
+
+  @override
+  String get broadcastOptionalDetails => 'Dettagli facoltativi';
+
+  @override
+  String get broadcastPastBroadcasts => 'Trasmissioni precedenti';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'Visualizza tutte le trasmissioni per mese';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dirette',
+      one: '$count diretta',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -610,6 +865,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesInGameOnly => 'Solamente durante la partita';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Orologio';
 
   @override
@@ -749,6 +1007,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Tono notifica';
+
+  @override
+  String get preferencesBlindfold => 'Alla cieca';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -1390,10 +1651,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'L\'avversario è limitato nella sua scelta della mossa, e tutte le mosse possibili peggiorano la sua posizione.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Mix generale';
+  String get puzzleThemeMix => 'Mix generale';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Un po\' di tutto. Nessuna aspettativa, affinché si possa rimanere pronti a qualsiasi cosa! Proprio come nelle partite vere.';
+  String get puzzleThemeMixDescription => 'Un po\' di tutto. Nessuna aspettativa, affinché si possa rimanere pronti a qualsiasi cosa! Proprio come nelle partite vere.';
 
   @override
   String get puzzleThemePlayerGames => 'Partite tra giocatori';
@@ -1768,9 +2029,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get byCPL => 'Per CPL';
 
   @override
-  String get openStudy => 'Apri studio';
-
-  @override
   String get enable => 'Abilita';
 
   @override
@@ -1796,9 +2054,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get removesTheDepthLimit => 'Rimuove il limite di profondità di analisi, ma può surriscaldare il tuo computer';
-
-  @override
-  String get engineManager => 'Gestore del motore';
 
   @override
   String get blunder => 'Errore grave';
@@ -1878,7 +2133,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get friends => 'Amici';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'altri giocatori';
 
   @override
   String get discussions => 'Conversazioni';
@@ -2062,6 +2317,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Partite giocate';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Annulla';
@@ -2438,9 +2696,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unblock => 'Sblocca';
 
   @override
-  String get followsYou => 'Ti segue';
-
-  @override
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 ha iniziato a seguire $param2';
   }
@@ -2712,10 +2967,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get yes => 'Sì';
 
   @override
-  String get website => 'Website';
+  String get website => 'Sito';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Cellulare';
 
   @override
   String get help => 'Aiuto:';
@@ -2772,7 +3027,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get other => 'Altro';
 
   @override
-  String get reportDescriptionHelp => 'Incolla il link della partita/e e spiega cosa non va con questo giocatore. Non dire soltanto \"ha imbrogliato\", ma specifica come sei arrivato a questa conclusione. Il tuo report verrà processato più velocemente se scritto in lingua inglese.';
+  String get reportCheatBoostHelp => 'Incolla il link della partita(o partite) e spiega cosa non va sul comportamento di questo utente. Non dire solamente \"ha barato\", ma invece dici come sei arrivato a questa conclusione.';
+
+  @override
+  String get reportUsernameHelp => 'Spiegaci cosa vi è di offensivo in questo nome utente. Non dire solamente \"è offensivo/inappopriato\", ma invece dici come sei arrivato a questa conclusione, soprattutto se l\'insulto è offuscato, non in inglese, in linguaggio giovanile, oppure se è un riferimento storico/culturale.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'La tua segnalazione sarà processata più velocemente se scritta in Inglese.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Si prega di fornire almeno un collegamento link di una partita in cui il giocatore ha imbrogliato.';
@@ -4078,6 +4339,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get nothingToSeeHere => 'Niente da vedere qui al momento.';
 
   @override
+  String get stats => 'Statistiche';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4724,8 +4988,692 @@ class AppLocalizationsIt extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess streamer';
 
   @override
+  String get studyPrivate => 'Privato';
+
+  @override
+  String get studyMyStudies => 'I miei studi';
+
+  @override
+  String get studyStudiesIContributeTo => 'Studi a cui collaboro';
+
+  @override
+  String get studyMyPublicStudies => 'I miei studi pubblici';
+
+  @override
+  String get studyMyPrivateStudies => 'I miei studi privati';
+
+  @override
+  String get studyMyFavoriteStudies => 'I miei studi preferiti';
+
+  @override
+  String get studyWhatAreStudies => 'Cosa sono gli \"studi\"?';
+
+  @override
+  String get studyAllStudies => 'Tutti gli studi';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return 'Studi creati da $param';
+  }
+
+  @override
+  String get studyNoneYet => 'Vuoto.';
+
+  @override
+  String get studyHot => 'Hot';
+
+  @override
+  String get studyDateAddedNewest => 'Data di pubblicazione (dalla più recente)';
+
+  @override
+  String get studyDateAddedOldest => 'Data di pubblicazione (dalla meno recente)';
+
+  @override
+  String get studyRecentlyUpdated => 'Data di aggiornamento (dalla più recente)';
+
+  @override
+  String get studyMostPopular => 'Più popolari';
+
+  @override
+  String get studyAlphabetical => 'Alfabetico';
+
+  @override
+  String get studyAddNewChapter => 'Aggiungi un nuovo capitolo';
+
+  @override
+  String get studyAddMembers => 'Aggiungi membri';
+
+  @override
+  String get studyInviteToTheStudy => 'Invita allo studio';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Invita solo persone che conosci e che desiderano partecipare attivamente a questo studio.';
+
+  @override
+  String get studySearchByUsername => 'Cerca per nome utente';
+
+  @override
+  String get studySpectator => 'Spettatore';
+
+  @override
+  String get studyContributor => 'Partecipante';
+
+  @override
+  String get studyKick => 'Espelli';
+
+  @override
+  String get studyLeaveTheStudy => 'Abbandona lo studio';
+
+  @override
+  String get studyYouAreNowAContributor => 'Ora sei un partecipante';
+
+  @override
+  String get studyYouAreNowASpectator => 'Ora sei uno spettatore';
+
+  @override
+  String get studyPgnTags => 'Tag PGN';
+
+  @override
+  String get studyLike => 'Mi piace';
+
+  @override
+  String get studyUnlike => 'Non mi Piace';
+
+  @override
+  String get studyNewTag => 'Nuovo tag';
+
+  @override
+  String get studyCommentThisPosition => 'Commenta questa posizione';
+
+  @override
+  String get studyCommentThisMove => 'Commenta questa mossa';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Commenta con segni convenzionali';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Il capitolo è troppo breve per essere analizzato.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Solo i partecipanti allo studio possono richiedere un\'analisi del computer.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Richiedi un\'analisi completa del computer della variante principale.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Assicurati che il capitolo sia completo. Puoi richiedere l\'analisi solo una volta.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Tutti i membri in SYNC rimangono sulla stessa posizione';
+
+  @override
+  String get studyShareChanges => 'Condividi le modifiche con gli spettatori e salvale sul server';
+
+  @override
+  String get studyPlaying => 'In corso';
+
+  @override
+  String get studyShowEvalBar => 'Barre di valutazione';
+
+  @override
+  String get studyFirst => 'Primo';
+
+  @override
+  String get studyPrevious => 'Precedente';
+
+  @override
+  String get studyNext => 'Successivo';
+
+  @override
+  String get studyLast => 'Ultimo';
+
+  @override
   String get studyShareAndExport => 'Condividi & esporta';
 
   @override
+  String get studyCloneStudy => 'Duplica';
+
+  @override
+  String get studyStudyPgn => 'PGN dello studio';
+
+  @override
+  String get studyDownloadAllGames => 'Scarica tutte le partite';
+
+  @override
+  String get studyChapterPgn => 'PGN del capitolo';
+
+  @override
+  String get studyCopyChapterPgn => 'Copia in PGN';
+
+  @override
+  String get studyDownloadGame => 'Scarica partita';
+
+  @override
+  String get studyStudyUrl => 'URL dello studio';
+
+  @override
+  String get studyCurrentChapterUrl => 'URL del capitolo corrente';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Puoi incollare questo URL nel forum per creare un rimando';
+
+  @override
+  String get studyStartAtInitialPosition => 'Inizia dalla prima mossa';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Inizia a: $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Incorpora nel tuo sito Web o Blog';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Per saperne di più su come incorporare';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Solo gli studi pubblici possono essere incorporati!';
+
+  @override
+  String get studyOpen => 'Apri';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1 fornito da $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Studio non trovato';
+
+  @override
+  String get studyEditChapter => 'Modifica il capitolo';
+
+  @override
+  String get studyNewChapter => 'Nuovo capitolo';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Importa da $param';
+  }
+
+  @override
+  String get studyOrientation => 'Orientamento';
+
+  @override
+  String get studyAnalysisMode => 'Modalità analisi';
+
+  @override
+  String get studyPinnedChapterComment => 'Commento del capitolo';
+
+  @override
+  String get studySaveChapter => 'Salva capitolo';
+
+  @override
+  String get studyClearAnnotations => 'Cancella annotazioni';
+
+  @override
+  String get studyClearVariations => 'Elimina le varianti';
+
+  @override
+  String get studyDeleteChapter => 'Elimina capitolo';
+
+  @override
+  String get studyDeleteThisChapter => 'Vuoi davvero eliminare questo capitolo? Sarà perso per sempre!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Cancellare tutti i commenti, le annotazioni e i disegni in questo capitolo?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Sotto la scacchiera';
+
+  @override
+  String get studyNoPinnedComment => 'Nessun commento';
+
+  @override
+  String get studyNormalAnalysis => 'Analisi normale';
+
+  @override
+  String get studyHideNextMoves => 'Nascondi le mosse successive';
+
+  @override
+  String get studyInteractiveLesson => 'Lezione interattiva';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Capitolo $param';
+  }
+
+  @override
+  String get studyEmpty => 'Semplice';
+
+  @override
+  String get studyStartFromInitialPosition => 'Parti dalla posizione iniziale';
+
+  @override
+  String get studyEditor => 'Editor';
+
+  @override
+  String get studyStartFromCustomPosition => 'Inizia da una posizione personalizzata';
+
+  @override
+  String get studyLoadAGameByUrl => 'Carica una partita da URL';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Carica una posizione da FEN';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Carica una partita da PGN';
+
+  @override
+  String get studyAutomatic => 'Automatica';
+
+  @override
+  String get studyUrlOfTheGame => 'URL della partita';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Carica una partita da $param1 o $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Crea capitolo';
+
+  @override
+  String get studyCreateStudy => 'Crea studio';
+
+  @override
+  String get studyEditStudy => 'Modifica studio';
+
+  @override
+  String get studyVisibility => 'Visibilità';
+
+  @override
+  String get studyPublic => 'Pubblico';
+
+  @override
+  String get studyUnlisted => 'Non elencato';
+
+  @override
+  String get studyInviteOnly => 'Solo su invito';
+
+  @override
+  String get studyAllowCloning => 'Permetti la clonazione';
+
+  @override
+  String get studyNobody => 'Nessuno';
+
+  @override
+  String get studyOnlyMe => 'Solo io';
+
+  @override
+  String get studyContributors => 'Collaboratori';
+
+  @override
+  String get studyMembers => 'Membri';
+
+  @override
+  String get studyEveryone => 'Tutti';
+
+  @override
+  String get studyEnableSync => 'Abilita sincronizzazione';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Sì: tutti vedranno la stessa posizione';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'No: ognuno potrà scorrere i capitoli indipendentemente';
+
+  @override
+  String get studyPinnedStudyComment => 'Commento dello studio';
+
+  @override
   String get studyStart => 'Inizia';
+
+  @override
+  String get studySave => 'Salva';
+
+  @override
+  String get studyClearChat => 'Cancella chat';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Vuoi davvero eliminare la cronologia della chat? Sarà persa per sempre!';
+
+  @override
+  String get studyDeleteStudy => 'Elimina studio';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Eliminare l\'intero studio? Non sarà possibile annullare l\'operazione! Digitare il nome dello studio per confermare: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Dove vuoi creare lo studio?';
+
+  @override
+  String get studyGoodMove => 'Bella mossa';
+
+  @override
+  String get studyMistake => 'Errore';
+
+  @override
+  String get studyBrilliantMove => 'Mossa geniale';
+
+  @override
+  String get studyBlunder => 'Errore grave';
+
+  @override
+  String get studyInterestingMove => 'Mossa interessante';
+
+  @override
+  String get studyDubiousMove => 'Mossa dubbia';
+
+  @override
+  String get studyOnlyMove => 'Unica mossa';
+
+  @override
+  String get studyZugzwang => 'Zugzwang';
+
+  @override
+  String get studyEqualPosition => 'Posizione equivalente';
+
+  @override
+  String get studyUnclearPosition => 'Posizione non chiara';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'Il bianco è in lieve vantaggio';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Il nero è in lieve vantaggio';
+
+  @override
+  String get studyWhiteIsBetter => 'Il bianco è in vantaggio';
+
+  @override
+  String get studyBlackIsBetter => 'Il nero è in vantaggio';
+
+  @override
+  String get studyWhiteIsWinning => 'Il bianco sta vincendo';
+
+  @override
+  String get studyBlackIsWinning => 'Il nero sta vincendo';
+
+  @override
+  String get studyNovelty => 'Novità';
+
+  @override
+  String get studyDevelopment => 'Sviluppo';
+
+  @override
+  String get studyInitiative => 'Iniziativa';
+
+  @override
+  String get studyAttack => 'Attacco';
+
+  @override
+  String get studyCounterplay => 'Contrattacco';
+
+  @override
+  String get studyTimeTrouble => 'Prolemi di tempo';
+
+  @override
+  String get studyWithCompensation => 'Con compenso';
+
+  @override
+  String get studyWithTheIdea => 'Con l\'idea';
+
+  @override
+  String get studyNextChapter => 'Prossimo capitolo';
+
+  @override
+  String get studyPrevChapter => 'Capitolo precedente';
+
+  @override
+  String get studyStudyActions => 'Studia azioni';
+
+  @override
+  String get studyTopics => 'Discussioni';
+
+  @override
+  String get studyMyTopics => 'Le mie discussioni';
+
+  @override
+  String get studyPopularTopics => 'Argomenti popolari';
+
+  @override
+  String get studyManageTopics => 'Gestisci discussioni';
+
+  @override
+  String get studyBack => 'Indietro';
+
+  @override
+  String get studyPlayAgain => 'Gioca di nuovo';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Cosa giocheresti in questa posizione?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Congratulazioni! Hai completato questa lezione.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per pagina';
+  }
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count capitoli',
+      one: '$count capitolo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count partite',
+      one: '$count partita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count membri',
+      one: '$count membro',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Incolla qui i testi PGN, massimo $count partite',
+      one: 'Incolla qui il testo PGN, massimo $count partita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'adesso';
+
+  @override
+  String get timeagoRightNow => 'adesso';
+
+  @override
+  String get timeagoCompleted => 'completato';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count secondi',
+      one: 'tra $count secondo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count minuti',
+      one: 'tra $count minuto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count ore',
+      one: 'tra $count ora',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count giorni',
+      one: 'tra $count giorno',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count settimane',
+      one: 'tra $count settimana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count mesi',
+      one: 'tra $count mese',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'tra $count anni',
+      one: 'tra $count anno',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuti fa',
+      one: '$count minuto fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ore fa',
+      one: '$count ora fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giorni fa',
+      one: '$count giorno fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count settimane fa',
+      one: '$count settimana fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mesi fa',
+      one: '$count mese fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count anni fa',
+      one: '$count anno fa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuti rimanenti',
+      one: '$count minuto rimanente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ore rimanenti',
+      one: '$count ora rimanente',
+    );
+    return '$_temp0';
+  }
 }

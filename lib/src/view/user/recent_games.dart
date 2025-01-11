@@ -28,16 +28,15 @@ class RecentGamesWidget extends ConsumerWidget {
     final session = ref.watch(authSessionProvider);
     final userId = user?.id ?? session?.user.id;
 
-    final recentGames = user != null
-        ? ref.watch(userRecentGamesProvider(userId: user!.id))
-        : ref.watch(myRecentGamesProvider);
+    final recentGames =
+        user != null
+            ? ref.watch(userRecentGamesProvider(userId: user!.id))
+            : ref.watch(myRecentGamesProvider);
 
-    final nbOfGames = ref
+    final nbOfGames =
+        ref
             .watch(
-              userNumberOfGamesProvider(
-                user,
-                isOnline: connectivity.valueOrNull?.isOnline == true,
-              ),
+              userNumberOfGamesProvider(user, isOnline: connectivity.valueOrNull?.isOnline == true),
             )
             .valueOrNull ??
         0;
@@ -50,45 +49,42 @@ class RecentGamesWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          headerTrailing: nbOfGames > data.length
-              ? NoPaddingTextButton(
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      builder: (context) => GameHistoryScreen(
-                        user: user,
-                        isOnline: connectivity.valueOrNull?.isOnline == true,
-                      ),
-                    );
-                  },
-                  child: Text(
-                    context.l10n.more,
-                  ),
-                )
-              : null,
-          children: data.map((item) {
-            return ExtendedGameListTile(item: item, userId: userId);
-          }).toList(),
+          headerTrailing:
+              nbOfGames > data.length
+                  ? NoPaddingTextButton(
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        builder:
+                            (context) => GameHistoryScreen(
+                              user: user,
+                              isOnline: connectivity.valueOrNull?.isOnline == true,
+                            ),
+                      );
+                    },
+                    child: Text(context.l10n.more),
+                  )
+                  : null,
+          children:
+              data.map((item) {
+                return ExtendedGameListTile(item: item, userId: userId);
+              }).toList(),
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [RecentGames] could not recent games; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [RecentGames] could not recent games; $error\n$stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load recent games.'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 10,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 10, header: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

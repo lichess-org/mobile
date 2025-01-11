@@ -12,11 +12,10 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-
-import 'game_status.dart';
-import 'material_diff.dart';
-import 'player.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
@@ -39,12 +38,39 @@ abstract mixin class BaseGame {
 
   GameStatus get status;
 
+  /// Whether the game is properly finished (not aborted).
+  bool get finished => status.value >= GameStatus.mate.value;
+  bool get aborted => status == GameStatus.aborted;
+
+  /// Whether the game is still playable (not finished or aborted and not imported).
+  bool get playable => status.value < GameStatus.aborted.value;
+
+  /// This field is null if the game is being watched as a spectator, and
+  /// represents the side that the current player is playing as otherwise.
+  Side? get youAre;
+
   Side? get winner;
 
   bool? get isThreefoldRepetition;
 
   Player get white;
   Player get black;
+
+  /// Player of the playing point of view. Null if spectating.
+  Player? get me =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? white
+          : black;
+
+  /// Opponent from the playing point of view. Null if spectating.
+  Player? get opponent =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? black
+          : white;
 
   Position get lastPosition;
 
@@ -78,16 +104,11 @@ abstract mixin class BaseGame {
     for (var i = 1; i < steps.length; i++) {
       final step = steps[i];
       final eval = evals?.elementAtOrNull(i - 1);
-      final pgnEval = eval?.cp != null
-          ? PgnEvaluation.pawns(
-              pawns: cpToPawns(eval!.cp!),
-              depth: eval.depth,
-            )
-          : eval?.mate != null
-              ? PgnEvaluation.mate(
-                  mate: eval!.mate,
-                  depth: eval.depth,
-                )
+      final pgnEval =
+          eval?.cp != null
+              ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
+              : eval?.mate != null
+              ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
               : null;
       final clock = clocks?.elementAtOrNull(i - 1);
       Duration? emt;
@@ -106,17 +127,11 @@ abstract mixin class BaseGame {
         }
       }
 
-      final comment = eval != null || clock != null
-          ? PgnComment(
-              text: eval?.judgment?.comment,
-              clock: clock,
-              emt: emt,
-              eval: pgnEval,
-            )
-          : null;
-      final nag = eval?.judgment != null
-          ? _judgmentNameToNag(eval!.judgment!.name)
-          : null;
+      final comment =
+          eval != null || clock != null
+              ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
+              : null;
+      final nag = eval?.judgment != null ? _judgmentNameToNag(eval!.judgment!.name) : null;
       final nextNode = Branch(
         sanMove: step.sanMove!,
         position: step.position,
@@ -134,10 +149,7 @@ abstract mixin class BaseGame {
         for (final san in moves) {
           final move = position.parseSan(san);
           position = position.playUnchecked(move!);
-          final child = Branch(
-            sanMove: SanMove(san, move),
-            position: position,
-          );
+          final child = Branch(sanMove: SanMove(san, move), position: position);
           variationNode.addChild(child);
           variationNode = child;
         }
@@ -149,11 +161,11 @@ abstract mixin class BaseGame {
   }
 
   int? _judgmentNameToNag(String name) => switch (name) {
-        'Inaccuracy' => 6,
-        'Mistake' => 2,
-        'Blunder' => 4,
-        String() => null,
-      };
+    'Inaccuracy' => 6,
+    'Mistake' => 2,
+    'Blunder' => 4,
+    String() => null,
+  };
 
   String makePgn() {
     final node = makeTree();
@@ -162,35 +174,31 @@ abstract mixin class BaseGame {
         'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
         'Site': lichessUri('/$id').toString(),
         'Date': _dateFormat.format(meta.createdAt),
-        'White': white.user?.name ??
+        'White':
+            white.user?.name ??
             white.name ??
-            (white.aiLevel != null
-                ? 'Stockfish level ${white.aiLevel}'
-                : 'Anonymous'),
-        'Black': black.user?.name ??
+            (white.aiLevel != null ? 'Stockfish level ${white.aiLevel}' : 'Anonymous'),
+        'Black':
+            black.user?.name ??
             black.name ??
-            (black.aiLevel != null
-                ? 'Stockfish level ${black.aiLevel}'
-                : 'Anonymous'),
-        'Result': status.value >= GameStatus.mate.value
-            ? winner == null
-                ? '½-½'
-                : winner == Side.white
+            (black.aiLevel != null ? 'Stockfish level ${black.aiLevel}' : 'Anonymous'),
+        'Result':
+            status.value >= GameStatus.mate.value
+                ? winner == null
+                    ? '½-½'
+                    : winner == Side.white
                     ? '1-0'
                     : '0-1'
-            : '*',
+                : '*',
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)
-          'WhiteRatingDiff':
-              '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
+          'WhiteRatingDiff': '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
-          'BlackRatingDiff':
-              '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
+          'BlackRatingDiff': '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
         'Variant': meta.variant.label,
         if (meta.clock != null)
-          'TimeControl':
-              '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
+          'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
         if (initialFen != null) 'FEN': initialFen!,
         if (meta.opening != null) 'ECO': meta.opening!.eco,
         if (meta.opening != null) 'Opening': meta.opening!.name,
@@ -202,13 +210,9 @@ abstract mixin class BaseGame {
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
-  String get sanMoves => steps
-      .where((e) => e.sanMove != null)
-      .map((e) => e.sanMove!.san)
-      .join(' ');
+  String get sanMoves => steps.where((e) => e.sanMove != null).map((e) => e.sanMove!.san).join(' ');
 
-  MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
-      steps[cursor].diff?.bySide(side);
+  MaterialDiffSide? materialDiffAt(int cursor, Side side) => steps[cursor].diff?.bySide(side);
 
   GameStep stepAt(int cursor) => steps[cursor];
 
@@ -220,11 +224,9 @@ mixin IndexableSteps on BaseGame {
 
   Position positionAt(int cursor) => steps[cursor].position;
 
-  Duration? archivedWhiteClockAt(int cursor) =>
-      steps[cursor].archivedWhiteClock;
+  Duration? archivedWhiteClockAt(int cursor) => steps[cursor].archivedWhiteClock;
 
-  Duration? archivedBlackClockAt(int cursor) =>
-      steps[cursor].archivedBlackClock;
+  Duration? archivedBlackClockAt(int cursor) => steps[cursor].archivedBlackClock;
 
   Move? get lastMove {
     return steps.last.sanMove?.move;
@@ -238,8 +240,7 @@ mixin IndexableSteps on BaseGame {
 
   int get lastPly => steps.last.position.ply;
 
-  MaterialDiffSide? lastMaterialDiffAt(Side side) =>
-      steps.last.diff?.bySide(side);
+  MaterialDiffSide? lastMaterialDiffAt(Side side) => steps.last.diff?.bySide(side);
 }
 
 enum GameSource {
@@ -303,7 +304,8 @@ class GameMeta with _$GameMeta {
 
       /// Time added to the clock by the "add more time" button.
       Duration? moreTime,
-    })? clock,
+    })?
+    clock,
     int? daysPerTurn,
     int? startedAtTurn,
     ISet<GameRule>? rules,
@@ -315,25 +317,13 @@ class GameMeta with _$GameMeta {
     Division? division,
   }) = _GameMeta;
 
-  factory GameMeta.fromJson(Map<String, dynamic> json) =>
-      _$GameMetaFromJson(json);
-}
-
-@freezed
-class PlayableClockData with _$PlayableClockData {
-  const factory PlayableClockData({
-    required bool running,
-    required Duration white,
-    required Duration black,
-  }) = _PlayableClockData;
+  factory GameMeta.fromJson(Map<String, dynamic> json) => _$GameMetaFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 class CorrespondenceClockData with _$CorrespondenceClockData {
-  const factory CorrespondenceClockData({
-    required Duration white,
-    required Duration black,
-  }) = _CorrespondenceClockData;
+  const factory CorrespondenceClockData({required Duration white, required Duration black}) =
+      _CorrespondenceClockData;
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);

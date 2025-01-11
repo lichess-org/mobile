@@ -1,16 +1,15 @@
 import 'dart:ui' show Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
 @riverpod
-class GeneralPreferences extends _$GeneralPreferences
-    with PreferencesStorage<GeneralPrefs> {
+class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.general;
@@ -20,15 +19,14 @@ class GeneralPreferences extends _$GeneralPreferences
   GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override
-  GeneralPrefs fromJson(Map<String, dynamic> json) =>
-      GeneralPrefs.fromJson(json);
+  GeneralPrefs fromJson(Map<String, dynamic> json) => GeneralPrefs.fromJson(json);
 
   @override
   GeneralPrefs build() {
     return fetch();
   }
 
-  Future<void> setThemeMode(BackgroundThemeMode themeMode) {
+  Future<void> setBackgroundThemeMode(BackgroundThemeMode themeMode) {
     return save(state.copyWith(themeMode: themeMode));
   }
 
@@ -48,62 +46,28 @@ class GeneralPreferences extends _$GeneralPreferences
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> toggleSystemColors() async {
-    await save(state.copyWith(systemColors: !state.systemColors));
-    if (state.systemColors == false) {
-      final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-      if (boardTheme == BoardTheme.system) {
-        await ref
-            .read(boardPreferencesProvider.notifier)
-            .setBoardTheme(BoardTheme.brown);
-      }
-    } else {
-      await ref
-          .read(boardPreferencesProvider.notifier)
-          .setBoardTheme(BoardTheme.system);
-    }
+  Future<void> setAppThemeSeed(AppThemeSeed seed) {
+    return save(state.copyWith(appThemeSeed: seed));
   }
-}
-
-Map<String, dynamic>? _localeToJson(Locale? locale) {
-  return locale != null
-      ? {
-          'languageCode': locale.languageCode,
-          'countryCode': locale.countryCode,
-          'scriptCode': locale.scriptCode,
-        }
-      : null;
-}
-
-Locale? _localeFromJson(Map<String, dynamic>? json) {
-  if (json == null) {
-    return null;
-  }
-  return Locale.fromSubtags(
-    languageCode: json['languageCode'] as String,
-    countryCode: json['countryCode'] as String?,
-    scriptCode: json['scriptCode'] as String?,
-  );
 }
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const factory GeneralPrefs({
-    @JsonKey(
-      unknownEnumValue: BackgroundThemeMode.system,
-      defaultValue: BackgroundThemeMode.system,
-    )
+    @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
-    @JsonKey(unknownEnumValue: SoundTheme.standard)
-    required SoundTheme soundTheme,
+    @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    /// Should enable system color palette (android 12+ only)
-    required bool systemColors,
+    @Deprecated('Use appThemeSeed instead') bool? systemColors,
+
+    /// App theme seed
+    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
+    required AppThemeSeed appThemeSeed,
 
     /// Locale to use in the app, use system locale if null
-    @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,
+    @LocaleConverter() Locale? locale,
   }) = _GeneralPrefs;
 
   static const defaults = GeneralPrefs(
@@ -111,12 +75,20 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    systemColors: true,
+    appThemeSeed: AppThemeSeed.board,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
     return _$GeneralPrefsFromJson(json);
   }
+}
+
+enum AppThemeSeed {
+  /// The app theme is based on the user's system theme (only available on Android 10+).
+  system,
+
+  /// The app theme is based on the chessboard.
+  board,
 }
 
 /// Describes the background theme of the app.

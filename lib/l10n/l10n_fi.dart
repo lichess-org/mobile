@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -9,31 +9,86 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Etusivu';
+  String get mobileAllGames => 'Kaikki pelit';
 
   @override
-  String get mobilePuzzlesTab => 'Tehtävät';
+  String get mobileAreYouSure => 'Oletko varma?';
 
   @override
-  String get mobileToolsTab => 'Työkalut';
+  String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
-  String get mobileWatchTab => 'Seuraa';
+  String get mobileClearButton => 'Tyhjennä';
 
   @override
-  String get mobileSettingsTab => 'Asetukset';
+  String get mobileCorrespondenceClearSavedMove => 'Poista tallennettu siirto';
 
   @override
-  String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
-
-  @override
-  String get mobileSystemColors => 'Järjestelmän värit';
+  String get mobileCustomGameJoinAGame => 'Liity peliin';
 
   @override
   String get mobileFeedbackButton => 'Palaute';
 
   @override
+  String mobileGreeting(String param) {
+    return 'Hei $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hei';
+
+  @override
+  String get mobileHideVariation => 'Piilota muunnelma';
+
+  @override
+  String get mobileHomeTab => 'Etusivu';
+
+  @override
+  String get mobileLiveStreamers => 'Live-striimaajat';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
+
+  @override
+  String get mobileNoSearchResults => 'Ei hakutuloksia';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Et seuraa yhtäkään käyttäjää.';
+
+  @override
   String get mobileOkButton => 'OK';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Pelaajat, joiden tunnuksesta löytyy \"$param\"';
+  }
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Suurenna vedettävä nappula';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Ei näytettävää, muuta suodatusehtoja';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Ei näytettävää. Pelaa ensin muutama sarja Puzzle Stormia.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Ratkaise mahdollisimman monta tehtävää 3 minuutissa.';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.';
+
+  @override
+  String get mobilePuzzlesTab => 'Tehtävät';
+
+  @override
+  String get mobileRecentSearches => 'Viimeisimmät haut';
 
   @override
   String get mobileSettingsHapticFeedback => 'Kosketuspalaute';
@@ -45,104 +100,46 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja Puzzle Storm -näkymiin.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Et seuraa yhtäkään käyttäjää.';
-
-  @override
-  String get mobileAllGames => 'Kaikki pelit';
-
-  @override
-  String get mobileRecentSearches => 'Viimeisimmät haut';
-
-  @override
-  String get mobileClearButton => 'Tyhjennä';
-
-  @override
-  String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
-  }
-
-  @override
-  String get mobileNoSearchResults => 'Ei hakutuloksia';
-
-  @override
-  String get mobileAreYouSure => 'Oletko varma?';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.';
-
-  @override
-  String get mobilePuzzleStormNothingToShow => 'Ei näytettävää. Pelaa ensin muutama sarja Puzzle Stormia.';
-
-  @override
-  String get mobileSharePuzzle => 'Jaa tämä tehtävä';
-
-  @override
-  String get mobileShareGameURL => 'Jaa pelin URL';
+  String get mobileSettingsTab => 'Asetukset';
 
   @override
   String get mobileShareGamePGN => 'Jaa PGN';
 
   @override
+  String get mobileShareGameURL => 'Jaa pelin URL';
+
+  @override
   String get mobileSharePositionAsFEN => 'Jaa asema FEN:nä';
 
   @override
-  String get mobileShowVariations => 'Näytä muunnelmat';
-
-  @override
-  String get mobileHideVariation => 'Piilota muunnelma';
+  String get mobileSharePuzzle => 'Jaa tämä tehtävä';
 
   @override
   String get mobileShowComments => 'Näytä kommentit';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
+  String get mobileShowResult => 'Näytä lopputulos';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Ei näytettävää, muuta suodatusehtoja';
-
-  @override
-  String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
-
-  @override
-  String get mobileCancelDrawOffer => 'Peruuta tasapeliehdotus';
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
-
-  @override
-  String get mobileBlindfoldMode => 'Sokko';
-
-  @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
-  String get mobileCustomGameJoinAGame => 'Liity peliin';
-
-  @override
-  String get mobileCorrespondenceClearSavedMove => 'Poista tallennettu siirto';
+  String get mobileShowVariations => 'Näytä muunnelmat';
 
   @override
   String get mobileSomethingWentWrong => 'Jokin meni vikaan.';
 
   @override
-  String get mobileShowResult => 'Näytä lopputulos';
+  String get mobileSystemColors => 'Järjestelmän värit';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.';
+  String get mobileTheme => 'Teema';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Ratkaise mahdollisimman monta tehtävää 3 minuutissa.';
+  String get mobileToolsTab => 'Työkalut';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hei $param';
-  }
+  String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
 
   @override
-  String get mobileGreetingWithoutName => 'Hei';
-
-  @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobileWatchTab => 'Seuraa';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -242,6 +239,17 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: 'Pelasi $count kirjeshakkipeliä',
       one: 'Pelasi $count kirjeshakkipelin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String activityCompletedNbVariantGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Pelasi $count $param2-kirjeshakkipeliä',
+      one: 'Pelasi $count $param2-kirjeshakkipelin',
     );
     return '$_temp0';
   }
@@ -349,7 +357,254 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastBroadcasts => 'Lähetykset';
 
   @override
+  String get broadcastMyBroadcasts => 'Omat lähetykset';
+
+  @override
   String get broadcastLiveBroadcasts => 'Suorat lähetykset turnauksista';
+
+  @override
+  String get broadcastBroadcastCalendar => 'Lähetyskalenteri';
+
+  @override
+  String get broadcastNewBroadcast => 'Uusi livelähetys';
+
+  @override
+  String get broadcastSubscribedBroadcasts => 'Tilatut lähetykset';
+
+  @override
+  String get broadcastAboutBroadcasts => 'Lähetyksistä';
+
+  @override
+  String get broadcastHowToUseLichessBroadcasts => 'Kuinka Lichess-lähetyksiä käytetään.';
+
+  @override
+  String get broadcastTheNewRoundHelp => 'Uudella kierroksella on samat jäsenet ja osallistujat kuin edellisellä.';
+
+  @override
+  String get broadcastAddRound => 'Lisää kierros';
+
+  @override
+  String get broadcastOngoing => 'Käynnissä';
+
+  @override
+  String get broadcastUpcoming => 'Tulossa';
+
+  @override
+  String get broadcastCompleted => 'Päättyneet';
+
+  @override
+  String get broadcastCompletedHelp => 'Lichess tunnistaa lähteenä olevista peleistä, milloin kierros on viety päätökseen. Lähteen puuttuessa voit käyttää tätä asetusta.';
+
+  @override
+  String get broadcastRoundName => 'Kierroksen nimi';
+
+  @override
+  String get broadcastRoundNumber => 'Kierroksen numero';
+
+  @override
+  String get broadcastTournamentName => 'Turnauksen nimi';
+
+  @override
+  String get broadcastTournamentDescription => 'Turnauksen lyhyt kuvaus';
+
+  @override
+  String get broadcastFullDescription => 'Täysimittainen kuvaus tapahtumasta';
+
+  @override
+  String broadcastFullDescriptionHelp(String param1, String param2) {
+    return 'Ei-pakollinen pitkä kuvaus lähetyksestä. $param1-muotoiluja voi käyttää. Pituus voi olla enintään $param2 merkkiä.';
+  }
+
+  @override
+  String get broadcastSourceSingleUrl => 'PGN:n lähde-URL';
+
+  @override
+  String get broadcastSourceUrlHelp => 'URL, josta Lichess hakee PGN-päivitykset. Sen täytyy olla julkisesti saatavilla internetissä.';
+
+  @override
+  String get broadcastSourceGameIds => 'Korkeintaan 64 Lichess-pelin tunnistenumeroa välilyönneillä eroteltuna.';
+
+  @override
+  String broadcastStartDateTimeZone(String param) {
+    return 'Alkamisajankohta turnauksen paikallisella aikavyöhykkeellä: $param';
+  }
+
+  @override
+  String get broadcastStartDateHelp => 'Ei-pakollinen, laita jos tiedät milloin tapahtuma alkaa';
+
+  @override
+  String get broadcastCurrentGameUrl => 'Tämän pelin URL';
+
+  @override
+  String get broadcastDownloadAllRounds => 'Lataa kaikki kierrokset';
+
+  @override
+  String get broadcastResetRound => 'Nollaa tämä kierros';
+
+  @override
+  String get broadcastDeleteRound => 'Poista tämä kierros';
+
+  @override
+  String get broadcastDefinitivelyDeleteRound => 'Poista kierros ja sen pelit lopullisesti.';
+
+  @override
+  String get broadcastDeleteAllGamesOfThisRound => 'Poista kaikki tämän kierroksen pelit. Lähteen on oltava aktiivinen, jotta pelit voidaan luoda uudelleen.';
+
+  @override
+  String get broadcastEditRoundStudy => 'Kierrostutkielman muokkaus';
+
+  @override
+  String get broadcastDeleteTournament => 'Poista tämä turnaus';
+
+  @override
+  String get broadcastDefinitivelyDeleteTournament => 'Poista lopullisesti koko turnaus, sen kaikki kierrokset ja kaikki pelit.';
+
+  @override
+  String get broadcastShowScores => 'Näytä pelaajien pisteet pelien tulosten pohjalta';
+
+  @override
+  String get broadcastReplacePlayerTags => 'Valinnainen: korvaa pelaajien nimet, vahvuusluvut ja arvonimet';
+
+  @override
+  String get broadcastFideFederations => 'FIDEn liitot';
+
+  @override
+  String get broadcastTop10Rating => 'Top 10 -vahvuuslukulista';
+
+  @override
+  String get broadcastFidePlayers => 'FIDE-pelaajat';
+
+  @override
+  String get broadcastFidePlayerNotFound => 'FIDE-pelaajaa ei löytynyt';
+
+  @override
+  String get broadcastFideProfile => 'FIDE-profiili';
+
+  @override
+  String get broadcastFederation => 'Kansallinen liitto';
+
+  @override
+  String get broadcastAgeThisYear => 'Ikä tänä vuonna';
+
+  @override
+  String get broadcastUnrated => 'Pisteyttämätön';
+
+  @override
+  String get broadcastRecentTournaments => 'Viimeisimmät turnaukset';
+
+  @override
+  String get broadcastOpenLichess => 'Avaa Lichessissä';
+
+  @override
+  String get broadcastTeams => 'Joukkueet';
+
+  @override
+  String get broadcastBoards => 'Laudat';
+
+  @override
+  String get broadcastOverview => 'Pääsivu';
+
+  @override
+  String get broadcastSubscribeTitle => 'Tilaa ilmoitukset kunkin kierroksen alkamisesta. Käyttäjätunnuksesi asetuksista voit kytkeä ääni- ja puskuilmoitukset päälle tai pois.';
+
+  @override
+  String get broadcastUploadImage => 'Lisää turnauksen kuva';
+
+  @override
+  String get broadcastNoBoardsYet => 'Pelilautoja ei vielä ole. Ne tulevat näkyviin sitä mukaa, kun pelit ladataan tänne.';
+
+  @override
+  String broadcastBoardsCanBeLoaded(String param) {
+    return 'Laudat voidaan ladata lähteen kautta tai $param kautta';
+  }
+
+  @override
+  String broadcastStartsAfter(String param) {
+    return 'Alkaa $param:n jälkeen';
+  }
+
+  @override
+  String get broadcastStartVerySoon => 'Lähetys alkaa aivan pian.';
+
+  @override
+  String get broadcastNotYetStarted => 'Lähetys ei ole vielä alkanut.';
+
+  @override
+  String get broadcastOfficialWebsite => 'Virallinen verkkosivu';
+
+  @override
+  String get broadcastStandings => 'Tulostaulu';
+
+  @override
+  String get broadcastOfficialStandings => 'Virallinen tulostaulu';
+
+  @override
+  String broadcastIframeHelp(String param) {
+    return 'Lisäasetuksia löytyy $param';
+  }
+
+  @override
+  String get broadcastWebmastersPage => 'webmasterin sivulta';
+
+  @override
+  String broadcastPgnSourceHelp(String param) {
+    return 'Tämän kierroksen julkinen ja reaaliaikainen PGN-tiedosto. Nopeampaan ja tehokkaampaan synkronisointiin on tarjolla myös $param.';
+  }
+
+  @override
+  String get broadcastEmbedThisBroadcast => 'Upota tämä lähetys sivustoosi';
+
+  @override
+  String broadcastEmbedThisRound(String param) {
+    return 'Upota $param sivustoosi';
+  }
+
+  @override
+  String get broadcastRatingDiff => 'Vahvuuslukujen erotus';
+
+  @override
+  String get broadcastGamesThisTournament => 'Pelit tässä turnauksessa';
+
+  @override
+  String get broadcastScore => 'Pisteet';
+
+  @override
+  String get broadcastAllTeams => 'Kaikki joukkueet';
+
+  @override
+  String get broadcastTournamentFormat => 'Turnauksen laji';
+
+  @override
+  String get broadcastTournamentLocation => 'Turnauksen sijainti';
+
+  @override
+  String get broadcastTopPlayers => 'Parhaat pelaajat';
+
+  @override
+  String get broadcastTimezone => 'Aikavyöhyke';
+
+  @override
+  String get broadcastFideRatingCategory => 'Kategoria (FIDE-vahvuuslukujen mukaan)';
+
+  @override
+  String get broadcastOptionalDetails => 'Mahdolliset lisätiedot';
+
+  @override
+  String get broadcastPastBroadcasts => 'Menneet lähetykset';
+
+  @override
+  String get broadcastAllBroadcastsByMonth => 'Näytä kaikki lähetykset kuukausikohtaisesti';
+
+  @override
+  String broadcastNbBroadcasts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lähetystä',
+      one: '$count lähetys',
+    );
+    return '$_temp0';
+  }
 
   @override
   String challengeChallengesX(String param1) {
@@ -610,6 +865,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesInGameOnly => 'Vain pelin aikana';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Shakkikello';
 
   @override
@@ -749,6 +1007,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesBellNotificationSound => 'Ilmoitusten kilahdusääni';
+
+  @override
+  String get preferencesBlindfold => 'Sokko';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -1390,10 +1651,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeZugzwangDescription => 'Vastustajalla on rajoitettu määrä mahdollisia siirtoja, ja niistä kaikki heikentävät hänen asemaansa.';
 
   @override
-  String get puzzleThemeHealthyMix => 'Terve sekoitus';
+  String get puzzleThemeMix => 'Terve sekoitus';
 
   @override
-  String get puzzleThemeHealthyMixDescription => 'Vähän kaikkea. Et tiedä mitä tuleman pitää, joten olet valmiina mihin tahansa! Aivan kuten oikeissa peleissäkin.';
+  String get puzzleThemeMixDescription => 'Vähän kaikkea. Et tiedä mitä tuleman pitää, joten olet valmiina mihin tahansa! Aivan kuten oikeissa peleissäkin.';
 
   @override
   String get puzzleThemePlayerGames => 'Pelaajan peleistä';
@@ -1768,9 +2029,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get byCPL => 'Virheet';
 
   @override
-  String get openStudy => 'Avaa tutkielma';
-
-  @override
   String get enable => 'Käytössä';
 
   @override
@@ -1796,9 +2054,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get removesTheDepthLimit => 'Poistaa syvyysrajoituksen ja pitää koneesi lämpöisenä';
-
-  @override
-  String get engineManager => 'Moottorin hallinta';
 
   @override
   String get blunder => 'Vakava virhe';
@@ -2062,6 +2317,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get gamesPlayed => 'Pelattuja pelejä';
+
+  @override
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Peruuta';
@@ -2438,9 +2696,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get unblock => 'Poista esto';
 
   @override
-  String get followsYou => 'Seuraa sinua';
-
-  @override
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 alkoi seurata $param2';
   }
@@ -2772,7 +3027,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get other => 'Muu';
 
   @override
-  String get reportDescriptionHelp => 'Liitä linkki peliin/peleihin ja kerro, mikä on pielessä tämän käyttäjän käytöksessä. Älä vain sano että \"hän huijaa\", vaan kerro meille miksi ajattelet näin. Raporttisi käydään läpi nopeammin, jos se on kirjoitettu englanniksi.';
+  String get reportCheatBoostHelp => 'Liitä linkki peliin/peleihin ja kerro, mikä tämän käyttäjän toiminnassa on pielessä. Älä vain sano hänen huijaavan, vaan kerro meille, miksi olet päätellyt niin.';
+
+  @override
+  String get reportUsernameHelp => 'Selitä, mikä tässä käyttäjätunnuksessa on loukkaavaa. Älä vain sano sen olevan loukkaava tai sopimaton, vaan kerro meille, mihin näkemyksesi perustuu, varsinkin jos loukkaus on epäsuora, muun kuin englanninkielinen, slangia, tai jos siinä viitataan kulttuuriin tai historiaan.';
+
+  @override
+  String get reportProcessedFasterInEnglish => 'Ilmoituksesi käsitellään nopeammin, jos se on kirjoitettu englanniksi.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Anna ainakin yksi linkki peliin, jossa epäilet huijaamista.';
@@ -4078,6 +4339,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get nothingToSeeHere => 'Täällä ei ole tällä hetkellä mitään nähtävää.';
 
   @override
+  String get stats => 'Tilastot';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4724,8 +4988,692 @@ class AppLocalizationsFi extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess-striimaajat';
 
   @override
+  String get studyPrivate => 'Yksityinen';
+
+  @override
+  String get studyMyStudies => 'Tutkielmani';
+
+  @override
+  String get studyStudiesIContributeTo => 'Tutkielmat joihin olen osallisena';
+
+  @override
+  String get studyMyPublicStudies => 'Julkiset tutkielmani';
+
+  @override
+  String get studyMyPrivateStudies => 'Yksityiset tutkielmani';
+
+  @override
+  String get studyMyFavoriteStudies => 'Suosikkitutkielmani';
+
+  @override
+  String get studyWhatAreStudies => 'Mitä ovat tutkielmat?';
+
+  @override
+  String get studyAllStudies => 'Kaikki tutkielmat';
+
+  @override
+  String studyStudiesCreatedByX(String param) {
+    return '$param luomat tutkielmat';
+  }
+
+  @override
+  String get studyNoneYet => 'Ei mitään.';
+
+  @override
+  String get studyHot => 'Suositut juuri nyt';
+
+  @override
+  String get studyDateAddedNewest => 'Julkaisupäivä (uusimmat)';
+
+  @override
+  String get studyDateAddedOldest => 'Julkaisupäivä (vanhimmat)';
+
+  @override
+  String get studyRecentlyUpdated => 'Viimeksi päivitetyt';
+
+  @override
+  String get studyMostPopular => 'Suosituimmat';
+
+  @override
+  String get studyAlphabetical => 'Aakkosjärjestyksessä';
+
+  @override
+  String get studyAddNewChapter => 'Lisää uusi luku';
+
+  @override
+  String get studyAddMembers => 'Lisää jäseniä';
+
+  @override
+  String get studyInviteToTheStudy => 'Kutsu tutkielmaan';
+
+  @override
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Kutsu vain ihmisiä, jotka tunnet ja jotka haluavat osallistua aktiivisesti.';
+
+  @override
+  String get studySearchByUsername => 'Hae käyttäjätunnuksella';
+
+  @override
+  String get studySpectator => 'Katsoja';
+
+  @override
+  String get studyContributor => 'Osallistuja';
+
+  @override
+  String get studyKick => 'Poista';
+
+  @override
+  String get studyLeaveTheStudy => 'Jätä tutkielma';
+
+  @override
+  String get studyYouAreNowAContributor => 'Olet nyt osallistuja';
+
+  @override
+  String get studyYouAreNowASpectator => 'Olet nyt katsoja';
+
+  @override
+  String get studyPgnTags => 'PGN-tunnisteet';
+
+  @override
+  String get studyLike => 'Tykkää';
+
+  @override
+  String get studyUnlike => 'Poista tykkäys';
+
+  @override
+  String get studyNewTag => 'Uusi tunniste';
+
+  @override
+  String get studyCommentThisPosition => 'Kommentoi asemaa';
+
+  @override
+  String get studyCommentThisMove => 'Kommentoi siirtoa';
+
+  @override
+  String get studyAnnotateWithGlyphs => 'Arvioi symbolein';
+
+  @override
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Luku on liian lyhyt analysoitavaksi.';
+
+  @override
+  String get studyOnlyContributorsCanRequestAnalysis => 'Vain tutkielman osallistujat voivat pyytää tietokoneanalyysin.';
+
+  @override
+  String get studyGetAFullComputerAnalysis => 'Hanki palvelimelta täysi tietokoneanalyysi päälinjasta.';
+
+  @override
+  String get studyMakeSureTheChapterIsComplete => 'Varmista, että luku on valmis. Voit pyytää analyysiä vain kerran.';
+
+  @override
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Kaikki SYNC-jäsenet pysyvät samassa asemassa';
+
+  @override
+  String get studyShareChanges => 'Anna katsojien nähdä muutokset ja tallenna ne palvelimelle';
+
+  @override
+  String get studyPlaying => 'Meneillään';
+
+  @override
+  String get studyShowEvalBar => 'Arviopalkit';
+
+  @override
+  String get studyFirst => 'Alkuun';
+
+  @override
+  String get studyPrevious => 'Edellinen';
+
+  @override
+  String get studyNext => 'Seuraava';
+
+  @override
+  String get studyLast => 'Loppuun';
+
+  @override
   String get studyShareAndExport => 'Jaa & vie';
 
   @override
+  String get studyCloneStudy => 'Kloonaa';
+
+  @override
+  String get studyStudyPgn => 'Tutkielman PGN';
+
+  @override
+  String get studyDownloadAllGames => 'Lataa kaikki pelit';
+
+  @override
+  String get studyChapterPgn => 'Luvun PGN';
+
+  @override
+  String get studyCopyChapterPgn => 'Kopioi PGN';
+
+  @override
+  String get studyDownloadGame => 'Lataa peli';
+
+  @override
+  String get studyStudyUrl => 'Tutkielman URL';
+
+  @override
+  String get studyCurrentChapterUrl => 'Tämän luvun URL';
+
+  @override
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Voit upottaa tämän foorumiin liittämällä';
+
+  @override
+  String get studyStartAtInitialPosition => 'Aloita alkuperäisestä asemasta';
+
+  @override
+  String studyStartAtX(String param) {
+    return 'Aloita siirrosta $param';
+  }
+
+  @override
+  String get studyEmbedInYourWebsite => 'Upota sivustoosi tai blogiisi';
+
+  @override
+  String get studyReadMoreAboutEmbedding => 'Lue lisää upottamisesta';
+
+  @override
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Vain julkiset tutkielmat voidaan upottaa!';
+
+  @override
+  String get studyOpen => 'Avaa';
+
+  @override
+  String studyXBroughtToYouByY(String param1, String param2) {
+    return '$param1, sivustolta $param2';
+  }
+
+  @override
+  String get studyStudyNotFound => 'Tutkielmaa ei löydy';
+
+  @override
+  String get studyEditChapter => 'Muokkaa lukua';
+
+  @override
+  String get studyNewChapter => 'Uusi luku';
+
+  @override
+  String studyImportFromChapterX(String param) {
+    return 'Tuo luvusta $param';
+  }
+
+  @override
+  String get studyOrientation => 'Suunta';
+
+  @override
+  String get studyAnalysisMode => 'Analyysitila';
+
+  @override
+  String get studyPinnedChapterComment => 'Kiinnitetty lukukommentti';
+
+  @override
+  String get studySaveChapter => 'Tallenna luku';
+
+  @override
+  String get studyClearAnnotations => 'Poista kommentit';
+
+  @override
+  String get studyClearVariations => 'Tyhjennä muunnelmat';
+
+  @override
+  String get studyDeleteChapter => 'Poista luku';
+
+  @override
+  String get studyDeleteThisChapter => 'Poistetaanko tämä luku? Et voi palauttaa sitä enää!';
+
+  @override
+  String get studyClearAllCommentsInThisChapter => 'Poista kaikki kommentit, symbolit ja piirtokuviot tästä luvusta?';
+
+  @override
+  String get studyRightUnderTheBoard => 'Heti laudan alla';
+
+  @override
+  String get studyNoPinnedComment => 'Ei';
+
+  @override
+  String get studyNormalAnalysis => 'Tavallinen analyysi';
+
+  @override
+  String get studyHideNextMoves => 'Piilota tulevat siirrot';
+
+  @override
+  String get studyInteractiveLesson => 'Interaktiivinen oppitunti';
+
+  @override
+  String studyChapterX(String param) {
+    return 'Luku $param';
+  }
+
+  @override
+  String get studyEmpty => 'Tyhjä';
+
+  @override
+  String get studyStartFromInitialPosition => 'Aloita alkuasemasta';
+
+  @override
+  String get studyEditor => 'Editori';
+
+  @override
+  String get studyStartFromCustomPosition => 'Aloita haluamastasi asemasta';
+
+  @override
+  String get studyLoadAGameByUrl => 'Lataa peli URL:stä';
+
+  @override
+  String get studyLoadAPositionFromFen => 'Lataa asema FEN:istä';
+
+  @override
+  String get studyLoadAGameFromPgn => 'Ota peli PGN:stä';
+
+  @override
+  String get studyAutomatic => 'Automaattinen';
+
+  @override
+  String get studyUrlOfTheGame => 'URL peliin';
+
+  @override
+  String studyLoadAGameFromXOrY(String param1, String param2) {
+    return 'Lataa peli lähteestä $param1 tai $param2';
+  }
+
+  @override
+  String get studyCreateChapter => 'Aloita luku';
+
+  @override
+  String get studyCreateStudy => 'Luo tutkielma';
+
+  @override
+  String get studyEditStudy => 'Muokkaa tutkielmaa';
+
+  @override
+  String get studyVisibility => 'Näkyvyys';
+
+  @override
+  String get studyPublic => 'Julkinen';
+
+  @override
+  String get studyUnlisted => 'Listaamaton';
+
+  @override
+  String get studyInviteOnly => 'Vain kutsutut';
+
+  @override
+  String get studyAllowCloning => 'Salli kloonaus';
+
+  @override
+  String get studyNobody => 'Ei kukaan';
+
+  @override
+  String get studyOnlyMe => 'Vain minä';
+
+  @override
+  String get studyContributors => 'Osallistujat';
+
+  @override
+  String get studyMembers => 'Jäsenet';
+
+  @override
+  String get studyEveryone => 'Kaikki';
+
+  @override
+  String get studyEnableSync => 'Synkronointi käyttöön';
+
+  @override
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Kyllä: pidä kaikki samassa asemassa';
+
+  @override
+  String get studyNoLetPeopleBrowseFreely => 'Ei: anna ihmisten selata vapaasti';
+
+  @override
+  String get studyPinnedStudyComment => 'Kiinnitetty tutkielmakommentti';
+
+  @override
   String get studyStart => 'Aloita';
+
+  @override
+  String get studySave => 'Tallenna';
+
+  @override
+  String get studyClearChat => 'Tyhjennä keskustelu';
+
+  @override
+  String get studyDeleteTheStudyChatHistory => 'Haluatko poistaa tutkielman keskusteluhistorian? Et voi palauttaa sitä enää!';
+
+  @override
+  String get studyDeleteStudy => 'Poista tutkielma';
+
+  @override
+  String studyConfirmDeleteStudy(String param) {
+    return 'Poistetaanko koko tutkielma? Et voi palauttaa sitä enää. Vahvista poisto kirjoittamalla tutkielman nimen: $param';
+  }
+
+  @override
+  String get studyWhereDoYouWantToStudyThat => 'Missä haluat tutkia tätä?';
+
+  @override
+  String get studyGoodMove => 'Hyvä siirto';
+
+  @override
+  String get studyMistake => 'Virhe';
+
+  @override
+  String get studyBrilliantMove => 'Loistava siirto';
+
+  @override
+  String get studyBlunder => 'Vakava virhe';
+
+  @override
+  String get studyInterestingMove => 'Mielenkiintoinen siirto';
+
+  @override
+  String get studyDubiousMove => 'Kyseenalainen siirto';
+
+  @override
+  String get studyOnlyMove => 'Ainoa siirto';
+
+  @override
+  String get studyZugzwang => 'Siirtopakko';
+
+  @override
+  String get studyEqualPosition => 'Tasainen asema';
+
+  @override
+  String get studyUnclearPosition => 'Epäselvä asema';
+
+  @override
+  String get studyWhiteIsSlightlyBetter => 'Valkealla on pieni etu';
+
+  @override
+  String get studyBlackIsSlightlyBetter => 'Mustalla on pieni etu';
+
+  @override
+  String get studyWhiteIsBetter => 'Valkealla on etu';
+
+  @override
+  String get studyBlackIsBetter => 'Mustalla on etu';
+
+  @override
+  String get studyWhiteIsWinning => 'Valkea on voitolla';
+
+  @override
+  String get studyBlackIsWinning => 'Musta on voitolla';
+
+  @override
+  String get studyNovelty => 'Uutuus';
+
+  @override
+  String get studyDevelopment => 'Kehitys';
+
+  @override
+  String get studyInitiative => 'Aloite';
+
+  @override
+  String get studyAttack => 'Hyökkäys';
+
+  @override
+  String get studyCounterplay => 'Vastapeli';
+
+  @override
+  String get studyTimeTrouble => 'Aikapula';
+
+  @override
+  String get studyWithCompensation => 'Kompensaatio';
+
+  @override
+  String get studyWithTheIdea => 'Ideana';
+
+  @override
+  String get studyNextChapter => 'Seuraava luku';
+
+  @override
+  String get studyPrevChapter => 'Edellinen luku';
+
+  @override
+  String get studyStudyActions => 'Tutkielmatoiminnot';
+
+  @override
+  String get studyTopics => 'Aiheet';
+
+  @override
+  String get studyMyTopics => 'Omat aiheeni';
+
+  @override
+  String get studyPopularTopics => 'Suositut aiheet';
+
+  @override
+  String get studyManageTopics => 'Aiheiden hallinta';
+
+  @override
+  String get studyBack => 'Takaisin';
+
+  @override
+  String get studyPlayAgain => 'Pelaa uudelleen';
+
+  @override
+  String get studyWhatWouldYouPlay => 'Mitä pelaisit tässä asemassa?';
+
+  @override
+  String get studyYouCompletedThisLesson => 'Onnittelut! Olet suorittanut tämän oppiaiheen.';
+
+  @override
+  String studyPerPage(String param) {
+    return '$param per sivu';
+  }
+
+  @override
+  String studyNbChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lukua',
+      one: '$count luku',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count peliä',
+      one: '$count peli',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyNbMembers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jäsentä',
+      one: '$count jäsen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String studyPasteYourPgnTextHereUpToNbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Liitä PGN tähän, enintään $count peliä',
+      one: 'Liitä PGN tähän, enintään $count peli',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'juuri äsken';
+
+  @override
+  String get timeagoRightNow => 'juuri nyt';
+
+  @override
+  String get timeagoCompleted => 'suoritettu';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sekunnin kuluttua',
+      one: '$count sekunnin kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuutin kuluttua',
+      one: '$count minuutin kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tunnin kuluttua',
+      one: '$count tunnin kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count päivän kuluttua',
+      one: '$count päivän kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viikon kuluttua',
+      one: '$count viikon kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kuukauden kuluttua',
+      one: '$count kuukauden kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vuoden kuluttua',
+      one: '$count vuoden kuluttua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuuttia sitten',
+      one: '$count minuutti sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tuntia sitten',
+      one: '$count tunti sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count päivää sitten',
+      one: '$count päivä sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viikkoa sitten',
+      one: '$count viikko sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kuukautta sitten',
+      one: '$count kuukausi sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vuotta sitten',
+      one: '$count vuosi sitten',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuuttia jäljellä',
+      one: '$count minuutti jäljellä',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tuntia jäljellä',
+      one: '$count tunti jäljellä',
+    );
+    return '$_temp0';
+  }
 }

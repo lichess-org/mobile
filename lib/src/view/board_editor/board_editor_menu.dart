@@ -23,21 +23,20 @@ class BoardEditorMenu extends ConsumerWidget {
           padding: Styles.horizontalBodyPadding,
           child: Wrap(
             spacing: 8.0,
-            children: Side.values.map((side) {
-              return ChoiceChip(
-                label: Text(
-                  side == Side.white
-                      ? context.l10n.whitePlays
-                      : context.l10n.blackPlays,
-                ),
-                selected: editorState.sideToPlay == side,
-                onSelected: (selected) {
-                  if (selected) {
-                    ref.read(editorController.notifier).setSideToPlay(side);
-                  }
-                },
-              );
-            }).toList(),
+            children:
+                Side.values.map((side) {
+                  return ChoiceChip(
+                    label: Text(
+                      side == Side.white ? context.l10n.whitePlays : context.l10n.blackPlays,
+                    ),
+                    selected: editorState.sideToPlay == side,
+                    onSelected: (selected) {
+                      if (selected) {
+                        ref.read(editorController.notifier).setSideToPlay(side);
+                      }
+                    },
+                  );
+                }).toList(),
           ),
         ),
         Padding(
@@ -53,25 +52,17 @@ class BoardEditorMenu extends ConsumerWidget {
                 SizedBox(
                   width: 100.0,
                   child: Text(
-                    side == Side.white
-                        ? context.l10n.white
-                        : context.l10n.black,
+                    side == Side.white ? context.l10n.white : context.l10n.black,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 ...[CastlingSide.king, CastlingSide.queen].map((castlingSide) {
                   return ChoiceChip(
-                    label: Text(
-                      castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O',
-                    ),
+                    label: Text(castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O'),
                     selected: editorState.isCastlingAllowed(side, castlingSide),
                     onSelected: (selected) {
-                      ref.read(editorController.notifier).setCastling(
-                            side,
-                            castlingSide,
-                            selected,
-                          );
+                      ref.read(editorController.notifier).setCastling(side, castlingSide, selected);
                     },
                   );
                 }),
@@ -86,17 +77,16 @@ class BoardEditorMenu extends ConsumerWidget {
           ),
           Wrap(
             spacing: 8.0,
-            children: editorState.enPassantOptions.squares.map((square) {
-              return ChoiceChip(
-                label: Text(square.name),
-                selected: editorState.enPassantSquare == square,
-                onSelected: (selected) {
-                  ref
-                      .read(editorController.notifier)
-                      .toggleEnPassantSquare(square);
-                },
-              );
-            }).toList(),
+            children:
+                editorState.enPassantOptions.squares.map((square) {
+                  return ChoiceChip(
+                    label: Text(square.name),
+                    selected: editorState.enPassantSquare == square,
+                    onSelected: (selected) {
+                      ref.read(editorController.notifier).toggleEnPassantSquare(square);
+                    },
+                  );
+                }).toList(),
           ),
         ],
       ],

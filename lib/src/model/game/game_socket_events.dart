@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -14,10 +15,8 @@ part 'game_socket_events.freezed.dart';
 
 @freezed
 class GameFullEvent with _$GameFullEvent {
-  const factory GameFullEvent({
-    required PlayableGame game,
-    required int socketEventVersion,
-  }) = _GameFullEvent;
+  const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
+      _GameFullEvent;
 
   factory GameFullEvent.fromJson(Map<String, dynamic> json) {
     return GameFullEvent(
@@ -40,7 +39,7 @@ class MoveEvent with _$MoveEvent {
     bool? blackOfferingDraw,
     GameStatus? status,
     Side? winner,
-    ({Duration white, Duration black, Duration? lag})? clock,
+    ({Duration white, Duration black, Duration? lag, DateTime at})? clock,
   }) = _MoveEvent;
 
   factory MoveEvent.fromJson(Map<String, dynamic> json) =>
@@ -78,10 +77,10 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
     blackOfferingDraw: pick('bDraw').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
+        at: clock.now(),
         white: it('white').asDurationFromSecondsOrThrow(),
         black: it('black').asDurationFromSecondsOrThrow(),
-        lag: it('lag')
-            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
+        lag: it('lag').letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
       ),
     ),
   );
@@ -107,12 +106,9 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
   return GameEndEvent(
     status: pick('status').asGameStatusOrThrow(),
     winner: pick('winner').asSideOrNull(),
-    ratingDiff: pick('ratingDiff').letOrNull(
-      (it) => (
-        white: it('white').asIntOrThrow(),
-        black: it('black').asIntOrThrow(),
-      ),
-    ),
+    ratingDiff: pick(
+      'ratingDiff',
+    ).letOrNull((it) => (white: it('white').asIntOrThrow(), black: it('black').asIntOrThrow())),
     boosted: pick('boosted').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
@@ -163,12 +159,10 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = node['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
-    final judgment = glyph != null && comment != null
-        ? (
-            name: _nagToJugdmentName(glyph['id'] as int),
-            comment: comment['text'] as String,
-          )
-        : null;
+    final judgment =
+        glyph != null && comment != null
+            ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
+            : null;
 
     final variation = nextVariation;
 
@@ -236,29 +230,19 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
       ),
     ),
     isAnalysisComplete: !isAnalysisIncomplete,
-    division: pick('division').letOrNull(
-      (it) => (
-        middle: it('middle').asIntOrNull(),
-        end: it('end').asIntOrNull(),
-      ),
-    ),
+    division: pick(
+      'division',
+    ).letOrNull((it) => (middle: it('middle').asIntOrNull(), end: it('end').asIntOrNull())),
   );
 }
 
 String _nagToJugdmentName(int nag) => switch (nag) {
-      6 => 'Inaccuracy',
-      2 => 'Mistake',
-      4 => 'Blunder',
-      int() => '',
-    };
+  6 => 'Inaccuracy',
+  2 => 'Mistake',
+  4 => 'Blunder',
+  int() => '',
+};
 
-typedef ServerAnalysis = ({
-  GameId id,
-  PlayerAnalysis white,
-  PlayerAnalysis black,
-});
+typedef ServerAnalysis = ({GameId id, PlayerAnalysis white, PlayerAnalysis black});
 
-typedef GameDivision = ({
-  int? middle,
-  int? end,
-});
+typedef GameDivision = ({int? middle, int? end});

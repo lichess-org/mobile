@@ -16,23 +16,20 @@ class StormClockWidget extends StatefulWidget {
   _ClockState createState() => _ClockState();
 }
 
-class _ClockState extends State<StormClockWidget>
-    with SingleTickerProviderStateMixin {
+class _ClockState extends State<StormClockWidget> with SingleTickerProviderStateMixin {
   // ignore: avoid-late-keyword
   late AnimationController _controller;
 
   // ignore: avoid-late-keyword
-  late final Animation<double> _bonusFadeAnimation =
-      Tween<double>(begin: 1.0, end: 0.0).animate(
-    CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-  );
+  late final Animation<double> _bonusFadeAnimation = Tween<double>(
+    begin: 1.0,
+    end: 0.0,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   // ignore: avoid-late-keyword
   late final Animation<Offset> _bonusSlideAnimation = Tween<Offset>(
     begin: const Offset(0.7, 0.0),
     end: const Offset(0.7, -1.0),
-  ).animate(
-    CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-  );
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
   StreamSubscription<(Duration, int?)>? streamSubscription;
 
@@ -46,10 +43,8 @@ class _ClockState extends State<StormClockWidget>
 
     // declaring as late final causes an error because the widget is being disposed
     // after the clock start
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..addStatusListener((status) {
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))
+      ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           setState(() {
             currentBonusSeconds = null;
@@ -98,9 +93,8 @@ class _ClockState extends State<StormClockWidget>
   @override
   Widget build(BuildContext build) {
     final brightness = Theme.of(context).brightness;
-    final clockStyle = brightness == Brightness.dark
-        ? _ClockStyle.darkThemeStyle
-        : _ClockStyle.lightThemeStyle;
+    final clockStyle =
+        brightness == Brightness.dark ? _ClockStyle.darkThemeStyle : _ClockStyle.lightThemeStyle;
 
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
@@ -120,9 +114,10 @@ class _ClockState extends State<StormClockWidget>
                     child: Text(
                       '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
-                        color: currentBonusSeconds! < 0
-                            ? context.lichessColors.error
-                            : context.lichessColors.good,
+                        color:
+                            currentBonusSeconds! < 0
+                                ? context.lichessColors.error
+                                : context.lichessColors.good,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -139,20 +134,17 @@ class _ClockState extends State<StormClockWidget>
                 ),
                 duration: const Duration(milliseconds: 500),
                 builder: (context, Duration value, _) {
-                  final minutes =
-                      value.inMinutes.remainder(60).toString().padLeft(2, '0');
-                  final seconds =
-                      value.inSeconds.remainder(60).toString().padLeft(2, '0');
+                  final minutes = value.inMinutes.remainder(60).toString().padLeft(2, '0');
+                  final seconds = value.inSeconds.remainder(60).toString().padLeft(2, '0');
                   return Text(
                     '$minutes:$seconds',
                     style: TextStyle(
-                      color: currentBonusSeconds! < 0
-                          ? context.lichessColors.error
-                          : context.lichessColors.good,
+                      color:
+                          currentBonusSeconds! < 0
+                              ? context.lichessColors.error
+                              : context.lichessColors.good,
                       fontSize: _kClockFontSize,
-                      fontFeatures: const [
-                        FontFeature.tabularFigures(),
-                      ],
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   );
                 },
@@ -161,13 +153,9 @@ class _ClockState extends State<StormClockWidget>
               Text(
                 '$minutes:$seconds',
                 style: TextStyle(
-                  color: isActive
-                      ? clockStyle.activeTextColor
-                      : clockStyle.textColor,
+                  color: isActive ? clockStyle.activeTextColor : clockStyle.textColor,
                   fontSize: _kClockFontSize,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
           ],
@@ -178,19 +166,10 @@ class _ClockState extends State<StormClockWidget>
 }
 
 enum _ClockStyle {
-  darkThemeStyle(
-    textColor: Colors.grey,
-    activeTextColor: Colors.white,
-  ),
-  lightThemeStyle(
-    textColor: Colors.grey,
-    activeTextColor: Colors.black,
-  );
+  darkThemeStyle(textColor: Colors.grey, activeTextColor: Colors.white),
+  lightThemeStyle(textColor: Colors.grey, activeTextColor: Colors.black);
 
-  const _ClockStyle({
-    required this.textColor,
-    required this.activeTextColor,
-  });
+  const _ClockStyle({required this.textColor, required this.activeTextColor});
 
   final Color textColor;
   final Color activeTextColor;

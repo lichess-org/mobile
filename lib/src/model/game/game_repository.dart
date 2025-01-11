@@ -15,10 +15,7 @@ class GameRepository {
 
   Future<ArchivedGame> getGame(GameId id) {
     return client.readJson(
-      Uri(
-        path: '/game/export/$id',
-        queryParameters: {'clocks': '1', 'accuracy': '1'},
-      ),
+      Uri(path: '/game/export/$id', queryParameters: {'clocks': '1', 'accuracy': '1'}),
       headers: {'Accept': 'application/json'},
       mapper: ArchivedGame.fromServerJson,
     );
@@ -26,14 +23,9 @@ class GameRepository {
 
   Future<void> requestServerAnalysis(GameId id) async {
     final uri = Uri(path: '/$id/request-analysis');
-    final response = await client.post(
-      Uri(path: '/$id/request-analysis'),
-    );
+    final response = await client.post(Uri(path: '/$id/request-analysis'));
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to request analysis: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to request analysis: ${response.statusCode}', uri);
     }
   }
 
@@ -53,8 +45,7 @@ class GameRepository {
             path: '/api/games/user/$userId',
             queryParameters: {
               'max': max.toString(),
-              if (until != null)
-                'until': until.millisecondsSinceEpoch.toString(),
+              if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
               'moves': 'false',
               'lastFen': 'true',
               'accuracy': 'true',
@@ -68,15 +59,16 @@ class GameRepository {
           mapper: LightArchivedGame.fromServerJson,
         )
         .then(
-          (value) => value
-              .map(
-                (e) => (
-                  game: e,
-                  // we know here user is not null for at least one of the players
-                  pov: e.white.user?.id == userId ? Side.white : Side.black,
-                ),
-              )
-              .toIList(),
+          (value) =>
+              value
+                  .map(
+                    (e) => (
+                      game: e,
+                      // we know here user is not null for at least one of the players
+                      pov: e.white.user?.id == userId ? Side.white : Side.black,
+                    ),
+                  )
+                  .toIList(),
         );
   }
 
@@ -86,22 +78,14 @@ class GameRepository {
       return Future.value(IList<PlayableGame>());
     }
     return client.readJsonList(
-      Uri(
-        path: '/api/mobile/my-games',
-        queryParameters: {
-          'ids': ids.join(','),
-        },
-      ),
+      Uri(path: '/api/mobile/my-games', queryParameters: {'ids': ids.join(',')}),
       mapper: PlayableGame.fromServerJson,
     );
   }
 
   Future<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
     return client.postReadNdJsonList(
-      Uri(
-        path: '/api/games/export/_ids',
-        queryParameters: {'moves': 'false', 'lastFen': 'true'},
-      ),
+      Uri(path: '/api/games/export/_ids', queryParameters: {'moves': 'false', 'lastFen': 'true'}),
       headers: {'Accept': 'application/x-ndjson'},
       body: ids.join(','),
       mapper: LightArchivedGame.fromServerJson,

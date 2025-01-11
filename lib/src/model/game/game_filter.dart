@@ -16,43 +16,39 @@ class GameFilter extends _$GameFilter {
     return filter ?? const GameFilterState();
   }
 
-  void setFilter(GameFilterState filter) => state = state.copyWith(
-        perfs: filter.perfs,
-        side: filter.side,
-      );
+  void setFilter(GameFilterState filter) =>
+      state = state.copyWith(perfs: filter.perfs, side: filter.side);
 }
 
 @freezed
 class GameFilterState with _$GameFilterState {
   const GameFilterState._();
 
-  const factory GameFilterState({
-    @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
-    Side? side,
-  }) = _GameFilterState;
+  const factory GameFilterState({@Default(ISet<Perf>.empty()) ISet<Perf> perfs, Side? side}) =
+      _GameFilterState;
 
   /// Returns a translated label of the selected filters.
   String selectionLabel(BuildContext context) {
     final fields = [side, perfs];
-    final labels = fields
-        .map(
-          (field) => field is ISet<Perf>
-              ? field.map((e) => e.shortTitle).join(', ')
-              : (field as Side?) != null
-                  ? field == Side.white
-                      ? context.l10n.white
-                      : context.l10n.black
-                  : null,
-        )
-        .where((label) => label != null && label.isNotEmpty)
-        .toList();
+    final labels =
+        fields
+            .map(
+              (field) =>
+                  field is ISet<Perf>
+                      ? field.map((e) => e.shortTitle).join(', ')
+                      : (field as Side?) != null
+                      ? field == Side.white
+                          ? context.l10n.white
+                          : context.l10n.black
+                      : null,
+            )
+            .where((label) => label != null && label.isNotEmpty)
+            .toList();
     return labels.isEmpty ? 'All' : labels.join(', ');
   }
 
   int get count {
     final fields = [perfs, side];
-    return fields
-        .where((field) => field is Iterable ? field.isNotEmpty : field != null)
-        .length;
+    return fields.where((field) => field is Iterable ? field.isNotEmpty : field != null).length;
   }
 }

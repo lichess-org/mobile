@@ -36,8 +36,7 @@ class TestLichessBinding extends LichessBinding {
   }
 
   /// The single instance of the binding.
-  static TestLichessBinding get instance =>
-      LichessBinding.checkInstance(_instance);
+  static TestLichessBinding get instance => LichessBinding.checkInstance(_instance);
   static TestLichessBinding? _instance;
 
   @override
@@ -47,9 +46,7 @@ class TestLichessBinding extends LichessBinding {
   }
 
   /// Set the initial values for shared preferences.
-  Future<void> setInitialSharedPreferencesValues(
-    Map<String, Object> values,
-  ) async {
+  Future<void> setInitialSharedPreferencesValues(Map<String, Object> values) async {
     for (final entry in values.entries) {
       if (entry.value is String) {
         await sharedPreferences.setString(entry.key, entry.value as String);
@@ -60,10 +57,7 @@ class TestLichessBinding extends LichessBinding {
       } else if (entry.value is int) {
         await sharedPreferences.setInt(entry.key, entry.value as int);
       } else if (entry.value is List<String>) {
-        await sharedPreferences.setStringList(
-          entry.key,
-          entry.value as List<String>,
-        );
+        await sharedPreferences.setStringList(entry.key, entry.value as List<String>);
       } else {
         throw ArgumentError.value(
           entry.value,
@@ -105,8 +99,7 @@ class TestLichessBinding extends LichessBinding {
   }
 
   @override
-  Stream<RemoteMessage> get firebaseMessagingOnMessage =>
-      firebaseMessaging.onMessage.stream;
+  Stream<RemoteMessage> get firebaseMessagingOnMessage => firebaseMessaging.onMessage.stream;
 
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
@@ -201,15 +194,16 @@ class FakeSharedPreferences implements SharedPreferencesWithCache {
   }
 }
 
-typedef FirebaseMessagingRequestPermissionCall = ({
-  bool alert,
-  bool announcement,
-  bool badge,
-  bool carPlay,
-  bool criticalAlert,
-  bool provisional,
-  bool sound,
-});
+typedef FirebaseMessagingRequestPermissionCall =
+    ({
+      bool alert,
+      bool announcement,
+      bool badge,
+      bool carPlay,
+      bool criticalAlert,
+      bool provisional,
+      bool sound,
+    });
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.
@@ -253,43 +247,30 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     bool provisional = false,
     bool sound = true,
   }) async {
-    _requestPermissionCalls.add(
-      (
-        alert: alert,
-        announcement: announcement,
-        badge: badge,
-        carPlay: carPlay,
-        criticalAlert: criticalAlert,
-        provisional: provisional,
-        sound: sound,
-      ),
-    );
+    _requestPermissionCalls.add((
+      alert: alert,
+      announcement: announcement,
+      badge: badge,
+      carPlay: carPlay,
+      criticalAlert: criticalAlert,
+      provisional: provisional,
+      sound: sound,
+    ));
     return _notificationSettings = NotificationSettings(
-      alert: alert
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
-      announcement: announcement
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
-      authorizationStatus: _willGrantPermission
-          ? AuthorizationStatus.authorized
-          : AuthorizationStatus.denied,
-      badge: badge
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
-      carPlay: carPlay
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
+      alert: alert ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      announcement:
+          announcement ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      authorizationStatus:
+          _willGrantPermission ? AuthorizationStatus.authorized : AuthorizationStatus.denied,
+      badge: badge ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      carPlay: carPlay ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
       lockScreen: AppleNotificationSetting.enabled,
       notificationCenter: AppleNotificationSetting.enabled,
       showPreviews: AppleShowPreviewSetting.whenAuthenticated,
       timeSensitive: AppleNotificationSetting.disabled,
-      criticalAlert: criticalAlert
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
-      sound: sound
-          ? AppleNotificationSetting.enabled
-          : AppleNotificationSetting.disabled,
+      criticalAlert:
+          criticalAlert ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      sound: sound ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
     );
   }
 
@@ -311,13 +292,17 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     _tokenController.add(token);
   }
 
-  final StreamController<String> _tokenController =
-      StreamController<String>.broadcast();
+  final StreamController<String> _tokenController = StreamController<String>.broadcast();
 
   @override
   Future<String?> getToken({String? vapidKey}) async {
     assert(vapidKey == null);
     return _token;
+  }
+
+  @override
+  Future<String?> getAPNSToken() {
+    return Future.value('test-apns-token');
   }
 
   @override
@@ -333,13 +318,11 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   ///
   /// Call [StreamController.add] to simulate a user press on a notification message
   /// sent by FCM.
-  StreamController<RemoteMessage> onMessageOpenedApp =
-      StreamController.broadcast();
+  StreamController<RemoteMessage> onMessageOpenedApp = StreamController.broadcast();
 
   /// Controller for [onBackgroundMessage].
   ///
   /// Call [StreamController.add] to simulate a message received from FCM while
   /// the application is in background.
-  StreamController<RemoteMessage> onBackgroundMessage =
-      StreamController.broadcast();
+  StreamController<RemoteMessage> onBackgroundMessage = StreamController.broadcast();
 }

@@ -1,16 +1,21 @@
 import 'package:chessground/chessground.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
+const kBoardDefaultBrightnessFilter = 1.0;
+const kBoardDefaultHueFilter = 0.0;
+
 @riverpod
-class BoardPreferences extends _$BoardPreferences
-    with PreferencesStorage<BoardPrefs> {
+class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   PrefCategory get prefCategory => PrefCategory.board;
@@ -45,9 +50,7 @@ class BoardPreferences extends _$BoardPreferences
 
   Future<void> toggleImmersiveModeWhilePlaying() {
     return save(
-      state.copyWith(
-        immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false),
-      ),
+      state.copyWith(immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false)),
     );
   }
 
@@ -63,32 +66,40 @@ class BoardPreferences extends _$BoardPreferences
     return save(state.copyWith(coordinates: !state.coordinates));
   }
 
+  Future<void> toggleBorder() {
+    return save(state.copyWith(showBorder: !state.showBorder));
+  }
+
   Future<void> togglePieceAnimation() {
     return save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
   Future<void> toggleMagnifyDraggedPiece() {
-    return save(
-      state.copyWith(
-        magnifyDraggedPiece: !state.magnifyDraggedPiece,
-      ),
-    );
+    return save(state.copyWith(magnifyDraggedPiece: !state.magnifyDraggedPiece));
   }
 
-  Future<void> toggleShowMaterialDifference() {
-    return save(
-      state.copyWith(showMaterialDifference: !state.showMaterialDifference),
-    );
+  Future<void> setDragTargetKind(DragTargetKind dragTargetKind) {
+    return save(state.copyWith(dragTargetKind: dragTargetKind));
+  }
+
+  Future<void> setMaterialDifferenceFormat(MaterialDifferenceFormat materialDifferenceFormat) {
+    return save(state.copyWith(materialDifferenceFormat: materialDifferenceFormat));
+  }
+
+  Future<void> setClockPosition(ClockPosition clockPosition) {
+    return save(state.copyWith(clockPosition: clockPosition));
   }
 
   Future<void> toggleEnableShapeDrawings() {
-    return save(
-      state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
-    );
+    return save(state.copyWith(enableShapeDrawings: !state.enableShapeDrawings));
   }
 
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
+  }
+
+  Future<void> adjustColors({double? brightness, double? hue}) {
+    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
 }
 
@@ -96,6 +107,7 @@ class BoardPreferences extends _$BoardPreferences
 class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
+  @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
@@ -105,21 +117,25 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required bool boardHighlights,
     required bool coordinates,
     required bool pieceAnimation,
-    required bool showMaterialDifference,
     @JsonKey(
-      defaultValue: PieceShiftMethod.either,
-      unknownEnumValue: PieceShiftMethod.either,
+      defaultValue: MaterialDifferenceFormat.materialDifference,
+      unknownEnumValue: MaterialDifferenceFormat.materialDifference,
     )
+    required MaterialDifferenceFormat materialDifferenceFormat,
+    required ClockPosition clockPosition,
+    @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
-    @JsonKey(
-      defaultValue: ShapeColor.green,
-      unknownEnumValue: ShapeColor.green,
-    )
+    @JsonKey(defaultValue: DragTargetKind.circle, unknownEnumValue: DragTargetKind.circle)
+    required DragTargetKind dragTargetKind,
+    @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
+    @JsonKey(defaultValue: false) required bool showBorder,
+    @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
+    @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -131,28 +147,40 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     boardHighlights: true,
     coordinates: true,
     pieceAnimation: true,
-    showMaterialDifference: true,
+    materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
+    clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
+    dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
+    showBorder: false,
+    brightness: kBoardDefaultBrightnessFilter,
+    hue: kBoardDefaultHueFilter,
   );
+
+  bool get hasColorAdjustments =>
+      brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
   ChessboardSettings toBoardSettings() {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
+      brightness: brightness,
+      hue: hue,
+      border:
+          showBorder
+              ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
+              : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
       animationDuration: pieceAnimationDuration,
       dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
-      drawShape: DrawShapeOptions(
-        enable: enableShapeDrawings,
-        newShapeColor: shapeColor.color,
-      ),
+      drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
     );
   }
 
@@ -171,46 +199,45 @@ enum ShapeColor {
   blue,
   yellow;
 
-  Color get color => Color(
-        switch (this) {
-          ShapeColor.green => 0x15781B,
-          ShapeColor.red => 0x882020,
-          ShapeColor.blue => 0x003088,
-          ShapeColor.yellow => 0xe68f00,
-        },
-      ).withAlpha(0xAA);
+  Color get color => Color(switch (this) {
+    ShapeColor.green => 0x15781B,
+    ShapeColor.red => 0x882020,
+    ShapeColor.blue => 0x003088,
+    ShapeColor.yellow => 0xe68f00,
+  }).withAlpha(0xAA);
 }
 
 /// The chessboard theme.
 enum BoardTheme {
-  system('System'),
-  blue('Blue'),
-  blue2('Blue2'),
-  blue3('Blue3'),
-  blueMarble('Blue Marble'),
-  canvas('Canvas'),
-  wood('Wood'),
-  wood2('Wood2'),
-  wood3('Wood3'),
-  wood4('Wood4'),
-  maple('Maple'),
-  maple2('Maple 2'),
-  brown('Brown'),
-  leather('Leather'),
-  green('Green'),
-  marble('Marble'),
-  greenPlastic('Green Plastic'),
-  grey('Grey'),
-  metal('Metal'),
-  olive('Olive'),
-  newspaper('Newspaper'),
-  purpleDiag('Purple-Diag'),
-  pinkPyramid('Pink'),
-  horsey('Horsey');
+  system('System', 'system'),
+  blue('Blue', 'blue'),
+  blue2('Blue 2', 'blue2'),
+  blue3('Blue 3', 'blue3'),
+  blueMarble('Blue Marble', 'blue-marble'),
+  canvas('Canvas', 'canvas'),
+  wood('Wood', 'wood'),
+  wood2('Wood 2', 'wood2'),
+  wood3('Wood 3', 'wood3'),
+  wood4('Wood 4', 'wood4'),
+  maple('Maple', 'maple'),
+  maple2('Maple 2', 'maple2'),
+  brown('Brown', 'brown'),
+  leather('Leather', 'leather'),
+  green('Green', 'green'),
+  marble('Marble', 'marble'),
+  greenPlastic('Green Plastic', 'green-plastic'),
+  grey('Grey', 'grey'),
+  metal('Metal', 'metal'),
+  olive('Olive', 'olive'),
+  newspaper('Newspaper', 'newspaper'),
+  purpleDiag('Purple-Diag', 'purple-diag'),
+  pinkPyramid('Pink', 'pink'),
+  horsey('Horsey', 'horsey');
 
   final String label;
+  final String gifApiName;
 
-  const BoardTheme(this.label);
+  const BoardTheme(this.label, this.gifApiName);
 
   ChessboardColorScheme get colors {
     switch (this) {
@@ -265,25 +292,63 @@ enum BoardTheme {
     }
   }
 
-  Widget get thumbnail => this == BoardTheme.system
-      ? SizedBox(
-          height: 44,
-          width: 44 * 6,
-          child: Row(
-            children: [
-              for (final c in const [1, 2, 3, 4, 5, 6])
-                Container(
-                  width: 44,
-                  color: c.isEven
-                      ? BoardTheme.system.colors.darkSquare
-                      : BoardTheme.system.colors.lightSquare,
-                ),
-            ],
-          ),
-        )
-      : Image.asset(
-          'assets/board-thumbnails/$name.jpg',
-          height: 44,
-          errorBuilder: (context, o, st) => const SizedBox.shrink(),
-        );
+  Widget get thumbnail =>
+      this == BoardTheme.system
+          ? SizedBox(
+            height: 44,
+            width: 44 * 6,
+            child: Row(
+              children: [
+                for (final c in const [1, 2, 3, 4, 5, 6])
+                  Container(
+                    width: 44,
+                    color:
+                        c.isEven
+                            ? BoardTheme.system.colors.darkSquare
+                            : BoardTheme.system.colors.lightSquare,
+                  ),
+              ],
+            ),
+          )
+          : Image.asset(
+            'assets/board-thumbnails/$name.jpg',
+            height: 44,
+            errorBuilder: (context, o, st) => const SizedBox.shrink(),
+          );
 }
+
+enum MaterialDifferenceFormat {
+  materialDifference(label: 'Material difference'),
+  capturedPieces(label: 'Captured pieces'),
+  hidden(label: 'Hidden');
+
+  const MaterialDifferenceFormat({required this.label});
+
+  final String label;
+
+  bool get visible => this != MaterialDifferenceFormat.hidden;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    //TODO: Add l10n
+    MaterialDifferenceFormat.materialDifference => materialDifference.label,
+    MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
+    MaterialDifferenceFormat.hidden => hidden.label,
+  };
+}
+
+enum ClockPosition {
+  left,
+  right;
+
+  // TODO: l10n
+  String get label => switch (this) {
+    ClockPosition.left => 'Left',
+    ClockPosition.right => 'Right',
+  };
+}
+
+String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
+  DragTargetKind.circle => 'Circle',
+  DragTargetKind.square => 'Square',
+  DragTargetKind.none => 'None',
+};

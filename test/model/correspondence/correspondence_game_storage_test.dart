@@ -20,16 +20,10 @@ void main() {
     test('save and fetch data', () async {
       final container = await makeContainer();
 
-      final storage =
-          await container.read(correspondenceGameStorageProvider.future);
+      final storage = await container.read(correspondenceGameStorageProvider.future);
 
       await storage.save(corresGame);
-      expect(
-        storage.fetch(
-          gameId: gameId,
-        ),
-        completion(equals(corresGame)),
-      );
+      expect(storage.fetch(gameId: gameId), completion(equals(corresGame)));
     });
   });
 }
@@ -62,9 +56,7 @@ final corresGame = OfflineCorrespondenceGame(
     variant: Variant.standard,
   ),
   fullId: const GameFullId('g2bzFol8fgty'),
-  steps: _makeSteps(
-    'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-  ),
+  steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
   clock: const CorrespondenceClockData(
     white: Duration(days: 2, hours: 23, minutes: 59),
     black: Duration(days: 3),
@@ -74,20 +66,8 @@ final corresGame = OfflineCorrespondenceGame(
   variant: Variant.standard,
   speed: Speed.correspondence,
   perf: Perf.classical,
-  white: const Player(
-    user: LightUser(
-      id: UserId('whiteId'),
-      name: 'White',
-    ),
-    rating: 1500,
-  ),
-  black: const Player(
-    user: LightUser(
-      id: UserId('blackId'),
-      name: 'Black',
-    ),
-    rating: 1500,
-  ),
+  white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
+  black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
   youAre: Side.white,
   daysPerTurn: 3,
 );

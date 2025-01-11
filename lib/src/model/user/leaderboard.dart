@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'user.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'leaderboard.freezed.dart';
 
@@ -39,11 +39,6 @@ class LeaderboardUser with _$LeaderboardUser {
     required int progress,
   }) = _LeaderboardUser;
 
-  LightUser get lightUser => LightUser(
-        id: id,
-        name: username,
-        title: title,
-        flair: flair,
-        isPatron: patron,
-      );
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, flair: flair, isPatron: patron);
 }

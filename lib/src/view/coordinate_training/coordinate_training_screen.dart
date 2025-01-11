@@ -36,11 +36,11 @@ class CoordinateTrainingScreen extends StatelessWidget {
           AppBarIconButton(
             icon: const Icon(Icons.settings),
             semanticsLabel: context.l10n.settingsSettings,
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) =>
-                  const _CoordinateTrainingMenu(),
-            ),
+            onPressed:
+                () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                ),
           ),
         ],
       ),
@@ -74,26 +74,26 @@ class _BodyState extends ConsumerState<_Body> {
 
     final IMap<Square, SquareHighlight> squareHighlights =
         <Square, SquareHighlight>{
-      if (trainingState.trainingActive)
-        if (trainingPrefs.mode == TrainingMode.findSquare) ...{
-          if (highlightLastGuess != null) ...{
-            highlightLastGuess!: SquareHighlight(
-              details: HighlightDetails(
-                solidColor: (trainingState.lastGuess == Guess.correct
-                        ? context.lichessColors.good
-                        : context.lichessColors.error)
-                    .withValues(alpha: 0.5),
+          if (trainingState.trainingActive)
+            if (trainingPrefs.mode == TrainingMode.findSquare) ...{
+              if (highlightLastGuess != null) ...{
+                highlightLastGuess!: SquareHighlight(
+                  details: HighlightDetails(
+                    solidColor: (trainingState.lastGuess == Guess.correct
+                            ? context.lichessColors.good
+                            : context.lichessColors.error)
+                        .withValues(alpha: 0.5),
+                  ),
+                ),
+              },
+            } else ...{
+              trainingState.currentCoord!: SquareHighlight(
+                details: HighlightDetails(
+                  solidColor: context.lichessColors.good.withValues(alpha: 0.5),
+                ),
               ),
-            ),
-          },
-        } else ...{
-          trainingState.currentCoord!: SquareHighlight(
-            details: HighlightDetails(
-              solidColor: context.lichessColors.good.withValues(alpha: 0.5),
-            ),
-          ),
-        },
-    }.lock;
+            },
+        }.lock;
 
     return SafeArea(
       bottom: false,
@@ -106,16 +106,14 @@ class _BodyState extends ConsumerState<_Body> {
 
                 final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
+                final remainingHeight = constraints.maxHeight - defaultBoardSize;
+                final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                final boardSize =
+                    isTablet || isSmallScreen
+                        ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                        : defaultBoardSize;
 
-                final direction =
-                    aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
                 return Flex(
                   direction: direction,
@@ -127,11 +125,11 @@ class _BodyState extends ConsumerState<_Body> {
                       children: [
                         _TimeBar(
                           maxWidth: boardSize,
-                          timeFractionElapsed:
-                              trainingState.timeFractionElapsed,
-                          color: trainingState.lastGuess == Guess.incorrect
-                              ? context.lichessColors.error
-                              : context.lichessColors.good,
+                          timeFractionElapsed: trainingState.timeFractionElapsed,
+                          color:
+                              trainingState.lastGuess == Guess.incorrect
+                                  ? context.lichessColors.error
+                                  : context.lichessColors.good,
                         ),
                         _TrainingBoard(
                           boardSize: boardSize,
@@ -146,11 +144,8 @@ class _BodyState extends ConsumerState<_Body> {
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.score,
-                        onPressed: ref
-                            .read(
-                              coordinateTrainingControllerProvider.notifier,
-                            )
-                            .abortTraining,
+                        onPressed:
+                            ref.read(coordinateTrainingControllerProvider.notifier).abortTraining,
                         label: 'Abort Training',
                       )
                     else if (trainingState.lastScore != null)
@@ -159,12 +154,8 @@ class _BodyState extends ConsumerState<_Body> {
                         score: trainingState.lastScore!,
                         onPressed: () {
                           ref
-                              .read(
-                                coordinateTrainingControllerProvider.notifier,
-                              )
-                              .startTraining(
-                                trainingPrefs.timeChoice.duration,
-                              );
+                              .read(coordinateTrainingControllerProvider.notifier)
+                              .startTraining(trainingPrefs.timeChoice.duration);
                         },
                         label: 'New Training',
                       )
@@ -174,13 +165,8 @@ class _BodyState extends ConsumerState<_Body> {
                           child: _Button(
                             onPressed: () {
                               ref
-                                  .read(
-                                    coordinateTrainingControllerProvider
-                                        .notifier,
-                                  )
-                                  .startTraining(
-                                    trainingPrefs.timeChoice.duration,
-                                  );
+                                  .read(coordinateTrainingControllerProvider.notifier)
+                                  .startTraining(trainingPrefs.timeChoice.duration);
                             },
                             label: 'Start Training',
                           ),
@@ -212,9 +198,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _onGuess(Square square) {
-    ref
-        .read(coordinateTrainingControllerProvider.notifier)
-        .guessCoordinate(square);
+    ref.read(coordinateTrainingControllerProvider.notifier).guessCoordinate(square);
 
     setState(() {
       highlightLastGuess = square;
@@ -230,11 +214,7 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _TimeBar extends StatelessWidget {
-  const _TimeBar({
-    required this.maxWidth,
-    required this.timeFractionElapsed,
-    required this.color,
-  });
+  const _TimeBar({required this.maxWidth, required this.timeFractionElapsed, required this.color});
 
   final double maxWidth;
   final double? timeFractionElapsed;
@@ -247,9 +227,7 @@ class _TimeBar extends StatelessWidget {
       child: SizedBox(
         width: maxWidth * (timeFractionElapsed ?? 0.0),
         height: 15.0,
-        child: ColoredBox(
-          color: color,
-        ),
+        child: ColoredBox(color: color),
       ),
     );
   }
@@ -271,24 +249,18 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                context.l10n.preferencesDisplay,
-                style: Styles.sectionTitle,
-              ),
+              child: Text(context.l10n.preferencesDisplay, style: Styles.sectionTitle),
             ),
             SwitchSettingTile(
               title: const Text('Show Coordinates'),
               value: trainingPrefs.showCoordinates,
-              onChanged: ref
-                  .read(coordinateTrainingPreferencesProvider.notifier)
-                  .setShowCoordinates,
+              onChanged:
+                  ref.read(coordinateTrainingPreferencesProvider.notifier).setShowCoordinates,
             ),
             SwitchSettingTile(
               title: const Text('Show Pieces'),
               value: trainingPrefs.showPieces,
-              onChanged: ref
-                  .read(coordinateTrainingPreferencesProvider.notifier)
-                  .setShowPieces,
+              onChanged: ref.read(coordinateTrainingPreferencesProvider.notifier).setShowPieces,
             ),
           ],
         ),
@@ -321,14 +293,12 @@ class _ScoreAndTrainingButton extends ConsumerWidget {
           _Score(
             score: score,
             size: scoreSize,
-            color: trainingState.lastGuess == Guess.incorrect
-                ? context.lichessColors.error
-                : context.lichessColors.good,
+            color:
+                trainingState.lastGuess == Guess.incorrect
+                    ? context.lichessColors.error
+                    : context.lichessColors.good,
           ),
-          _Button(
-            label: label,
-            onPressed: onPressed,
-          ),
+          _Button(label: label, onPressed: onPressed),
         ],
       ),
     );
@@ -336,11 +306,7 @@ class _ScoreAndTrainingButton extends ConsumerWidget {
 }
 
 class _Score extends StatelessWidget {
-  const _Score({
-    required this.size,
-    required this.color,
-    required this.score,
-  });
+  const _Score({required this.size, required this.color, required this.score});
 
   final int score;
 
@@ -351,16 +317,10 @@ class _Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 10.0,
-        left: 10.0,
-        right: 10.0,
-      ),
+      padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(4.0),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
           color: color,
         ),
         width: size,
@@ -368,10 +328,7 @@ class _Score extends StatelessWidget {
         child: Center(
           child: Text(
             score.toString(),
-            style: Styles.bold.copyWith(
-              color: Colors.white,
-              fontSize: 24.0,
-            ),
+            style: Styles.bold.copyWith(color: Colors.white, fontSize: 24.0),
           ),
         ),
       ),
@@ -380,10 +337,7 @@ class _Score extends StatelessWidget {
 }
 
 class _Button extends StatelessWidget {
-  const _Button({
-    required this.onPressed,
-    required this.label,
-  });
+  const _Button({required this.onPressed, required this.label});
 
   final VoidCallback onPressed;
   final String label;
@@ -393,10 +347,7 @@ class _Button extends StatelessWidget {
     return FatButton(
       semanticsLabel: label,
       onPressed: onPressed,
-      child: Text(
-        label,
-        style: Styles.bold,
-      ),
+      child: Text(label, style: Styles.bold),
     );
   }
 }
@@ -420,11 +371,7 @@ class SettingsBottomSheet extends ConsumerWidget {
           choiceLabel: (choice) => Text(choice.label(context.l10n)),
           onSelected: (choice, selected) {
             if (selected) {
-              ref
-                  .read(
-                    coordinateTrainingPreferencesProvider.notifier,
-                  )
-                  .setSideChoice(choice);
+              ref.read(coordinateTrainingPreferencesProvider.notifier).setSideChoice(choice);
             }
           },
         ),
@@ -440,11 +387,7 @@ class SettingsBottomSheet extends ConsumerWidget {
           choiceLabel: (choice) => choice.label(context.l10n),
           onSelected: (choice, selected) {
             if (selected) {
-              ref
-                  .read(
-                    coordinateTrainingPreferencesProvider.notifier,
-                  )
-                  .setTimeChoice(choice);
+              ref.read(coordinateTrainingPreferencesProvider.notifier).setTimeChoice(choice);
             }
           },
         ),
@@ -490,30 +433,25 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
           children: [
             ChessboardEditor(
               size: widget.boardSize,
-              pieces: readFen(
-                trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN,
-              ),
+              pieces: readFen(trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN),
               squareHighlights: widget.squareHighlights,
               orientation: widget.orientation,
-              settings: ChessboardEditorSettings(
-                pieceAssets: boardPrefs.pieceSet.assets,
-                colorScheme: boardPrefs.boardTheme.colors,
+              settings: boardPrefs.toBoardSettings().copyWith(
                 enableCoordinates: trainingPrefs.showCoordinates,
-                borderRadius: widget.isTablet
-                    ? const BorderRadius.all(Radius.circular(4.0))
-                    : BorderRadius.zero,
+                borderRadius:
+                    widget.isTablet
+                        ? const BorderRadius.all(Radius.circular(4.0))
+                        : BorderRadius.zero,
                 boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
               ),
               pointerMode: EditorPointerMode.edit,
               onEditedSquare: (square) {
-                if (trainingState.trainingActive &&
-                    trainingPrefs.mode == TrainingMode.findSquare) {
+                if (trainingState.trainingActive && trainingPrefs.mode == TrainingMode.findSquare) {
                   widget.onGuess(square);
                 }
               },
             ),
-            if (trainingState.trainingActive &&
-                trainingPrefs.mode == TrainingMode.findSquare)
+            if (trainingState.trainingActive && trainingPrefs.mode == TrainingMode.findSquare)
               CoordinateDisplay(
                 currentCoord: trainingState.currentCoord!,
                 nextCoord: trainingState.nextCoord!,
@@ -558,21 +496,13 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
                 text:
                     '  • You can analyse a game more effectively if you can quickly recognise coordinates.\n',
               ),
-              TextSpan(
-                text: '\n',
-              ),
-              TextSpan(
-                text: 'Find Square\n',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              TextSpan(text: '\n'),
+              TextSpan(text: 'Find Square\n', style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                 text:
                     'A coordinate appears on the board and you must click on the corresponding square.\n',
               ),
-              TextSpan(
-                text:
-                    'You have 30 seconds to correctly map as many squares as possible!\n',
-              ),
+              TextSpan(text: 'You have 30 seconds to correctly map as many squares as possible!\n'),
             ],
           ),
         ),

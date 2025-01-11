@@ -34,13 +34,11 @@ const _nbPerPage = 20;
 /// stored locally are fetched instead.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
-  final online = await ref
-      .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref.withClientCacheFor(
-      (client) => GameRepository(client)
-          .getUserGames(session.user.id, max: kNumberOfRecentGames),
+      (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
       const Duration(hours: 1),
     );
   } else {
@@ -49,21 +47,19 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
     return storage
         .page(userId: session?.user.id, max: kNumberOfRecentGames)
         .then(
-          (value) => value
-              // we can assume that `youAre` is not null either for logged
-              // in users or for anonymous users
-              .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
-              .toIList(),
+          (value) =>
+              value
+                  // we can assume that `youAre` is not null either for logged
+                  // in users or for anonymous users
+                  .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                  .toIList(),
         );
   }
 }
 
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
-Future<IList<LightArchivedGameWithPov>> userRecentGames(
-  Ref ref, {
-  required UserId userId,
-}) {
+Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
   return ref.withClientCacheFor(
     (client) => GameRepository(client).getUserGames(userId),
     // cache is important because the associated widget is in a [ListView] and
@@ -81,20 +77,13 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(
 /// If the user is not logged in, or there is no connectivity, the number of games
 /// stored locally are fetched instead.
 @riverpod
-Future<int> userNumberOfGames(
-  Ref ref,
-  LightUser? user, {
-  required bool isOnline,
-}) async {
+Future<int> userNumberOfGames(Ref ref, LightUser? user, {required bool isOnline}) async {
   final session = ref.watch(authSessionProvider);
   return user != null
-      ? ref.watch(
-          userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0),
-        )
+      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
       : session != null && isOnline
-          ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
-          : (await ref.watch(gameStorageProvider.future))
-              .count(userId: user?.id);
+      ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
+      : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }
 
 /// A provider that paginates the game history for a given user, or the current app user if no user is provided.
@@ -108,6 +97,7 @@ class UserGameHistory extends _$UserGameHistory {
   @override
   Future<UserGameHistoryState> build(
     UserId? userId, {
+
     /// Whether the history is requested in an online context. Applicable only
     /// when [userId] is null.
     ///
@@ -123,25 +113,23 @@ class UserGameHistory extends _$UserGameHistory {
     });
 
     final session = ref.watch(authSessionProvider);
-    final online = await ref
-        .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = userId ?? session?.user.id;
-    final recentGames = id != null && online
-        ? ref.withClient(
-            (client) => GameRepository(client).getUserGames(id, filter: filter),
-          )
-        : storage.page(userId: id, filter: filter).then(
-              (value) => value
-                  // we can assume that `youAre` is not null either for logged
-                  // in users or for anonymous users
-                  .map(
-                    (e) =>
-                        (game: e.game.data, pov: e.game.youAre ?? Side.white),
-                  )
-                  .toIList(),
-            );
+    final recentGames =
+        id != null && online
+            ? ref.withClient((client) => GameRepository(client).getUserGames(id, filter: filter))
+            : storage
+                .page(userId: id, filter: filter)
+                .then(
+                  (value) =>
+                      value
+                          // we can assume that `youAre` is not null either for logged
+                          // in users or for anonymous users
+                          .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                          .toIList(),
+                );
 
     _list.addAll(await recentGames);
 
@@ -165,42 +153,36 @@ class UserGameHistory extends _$UserGameHistory {
     Result.capture(
       userId != null
           ? ref.withClient(
-              (client) => GameRepository(client).getUserGames(
-                userId!,
-                max: _nbPerPage,
-                until: _list.last.game.createdAt,
-                filter: currentVal.filter,
-              ),
-            )
+            (client) => GameRepository(client).getUserGames(
+              userId!,
+              max: _nbPerPage,
+              until: _list.last.game.createdAt,
+              filter: currentVal.filter,
+            ),
+          )
           : currentVal.online && currentVal.session != null
-              ? ref.withClient(
-                  (client) => GameRepository(client).getUserGames(
-                    currentVal.session!.user.id,
-                    max: _nbPerPage,
-                    until: _list.last.game.createdAt,
-                    filter: currentVal.filter,
-                  ),
-                )
-              : (await ref.watch(gameStorageProvider.future))
-                  .page(max: _nbPerPage, until: _list.last.game.createdAt)
-                  .then(
-                    (value) => value
+          ? ref.withClient(
+            (client) => GameRepository(client).getUserGames(
+              currentVal.session!.user.id,
+              max: _nbPerPage,
+              until: _list.last.game.createdAt,
+              filter: currentVal.filter,
+            ),
+          )
+          : (await ref.watch(gameStorageProvider.future))
+              .page(max: _nbPerPage, until: _list.last.game.createdAt)
+              .then(
+                (value) =>
+                    value
                         // we can assume that `youAre` is not null either for logged
                         // in users or for anonymous users
-                        .map(
-                          (e) => (
-                            game: e.game.data,
-                            pov: e.game.youAre ?? Side.white
-                          ),
-                        )
+                        .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
                         .toIList(),
-                  ),
+              ),
     ).fold(
       (value) {
         if (value.isEmpty) {
-          state = AsyncData(
-            currentVal.copyWith(hasMore: false, isLoading: false),
-          );
+          state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
           return;
         }
 
@@ -215,8 +197,7 @@ class UserGameHistory extends _$UserGameHistory {
         );
       },
       (error, stackTrace) {
-        state =
-            AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+        state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
       },
     );
   }

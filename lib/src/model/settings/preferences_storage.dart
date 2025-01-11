@@ -18,6 +18,7 @@ enum PrefCategory {
   home('preferences.home'),
   board('preferences.board'),
   analysis('preferences.analysis'),
+  study('preferences.study'),
   overTheBoard('preferences.overTheBoard'),
   challenge('preferences.challenge'),
   gameSetup('preferences.gameSetup'),
@@ -25,7 +26,8 @@ enum PrefCategory {
   coordinateTraining('preferences.coordinateTraining'),
   openingExplorer('preferences.opening_explorer'),
   gameHistory('preferences.gameHistory'),
-  puzzle('preferences.puzzle');
+  puzzle('preferences.puzzle'),
+  broadcast('preferences.broadcast');
 
   const PrefCategory(this.storageKey);
 
@@ -40,22 +42,21 @@ mixin PreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
   PrefCategory get prefCategory;
 
   Future<void> save(T value) async {
-    await LichessBinding.instance.sharedPreferences
-        .setString(prefCategory.storageKey, jsonEncode(value.toJson()));
+    await LichessBinding.instance.sharedPreferences.setString(
+      prefCategory.storageKey,
+      jsonEncode(value.toJson()),
+    );
 
     state = value;
   }
 
   T fetch() {
-    final stored = LichessBinding.instance.sharedPreferences
-        .getString(prefCategory.storageKey);
+    final stored = LichessBinding.instance.sharedPreferences.getString(prefCategory.storageKey);
     if (stored == null) {
       return defaults;
     }
     try {
-      return fromJson(
-        jsonDecode(stored) as Map<String, dynamic>,
-      );
+      return fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
       _logger.warning('Failed to decode $prefCategory preferences: $e');
       return defaults;
@@ -64,8 +65,7 @@ mixin PreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences per session.
-mixin SessionPreferencesStorage<T extends Serializable>
-    on AutoDisposeNotifier<T> {
+mixin SessionPreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
   T fromJson(Map<String, dynamic> json);
   T defaults({LightUser? user});
 
@@ -83,15 +83,14 @@ mixin SessionPreferencesStorage<T extends Serializable>
 
   T fetch() {
     final session = ref.watch(authSessionProvider);
-    final stored = LichessBinding.instance.sharedPreferences
-        .getString(key(prefCategory.storageKey, session));
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      key(prefCategory.storageKey, session),
+    );
     if (stored == null) {
       return defaults(user: session?.user);
     }
     try {
-      return fromJson(
-        jsonDecode(stored) as Map<String, dynamic>,
-      );
+      return fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
       _logger.warning('Failed to decode $prefCategory preferences: $e');
       return defaults(user: session?.user);

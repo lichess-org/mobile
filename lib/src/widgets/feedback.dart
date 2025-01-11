@@ -25,10 +25,7 @@ class LagIndicator extends StatelessWidget {
   /// Whether to show a loading indicator when the lag rating is 0.
   final bool showLoadingIndicator;
 
-  static const spinKit = SpinKitThreeBounce(
-    color: Colors.grey,
-    size: 15,
-  );
+  static const spinKit = SpinKitThreeBounce(color: Colors.grey, size: 15);
 
   static const cupertinoLevels = {
     0: CupertinoColors.systemRed,
@@ -37,12 +34,7 @@ class LagIndicator extends StatelessWidget {
     3: CupertinoColors.systemGreen,
   };
 
-  static const materialLevels = {
-    0: Colors.red,
-    1: Colors.yellow,
-    2: Colors.green,
-    3: Colors.green,
-  };
+  static const materialLevels = {0: Colors.red, 1: Colors.yellow, 2: Colors.green, 3: Colors.green};
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +48,15 @@ class LagIndicator extends StatelessWidget {
             maxValue: 4,
             value: lagRating,
             size: size,
-            inactiveColor: Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey,
-                    context,
-                  ).withValues(alpha: 0.2)
-                : Colors.grey.withValues(alpha: 0.2),
-            levels: Theme.of(context).platform == TargetPlatform.iOS
-                ? cupertinoLevels
-                : materialLevels,
+            inactiveColor:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey,
+                      context,
+                    ).withValues(alpha: 0.2)
+                    : Colors.grey.withValues(alpha: 0.2),
+            levels:
+                Theme.of(context).platform == TargetPlatform.iOS ? cupertinoLevels : materialLevels,
           ),
           if (showLoadingIndicator && lagRating == 0) spinKit,
         ],
@@ -88,9 +80,10 @@ class ConnectivityBanner extends ConsumerWidget {
         }
         return Container(
           height: 45,
-          color: theme.platform == TargetPlatform.iOS
-              ? cupertinoTheme.scaffoldBackgroundColor
-              : theme.colorScheme.surfaceContainer,
+          color:
+              theme.platform == TargetPlatform.iOS
+                  ? cupertinoTheme.scaffoldBackgroundColor
+                  : theme.colorScheme.surfaceContainer,
           child: Padding(
             padding: Styles.horizontalBodyPadding,
             child: Row(
@@ -103,9 +96,8 @@ class ConnectivityBanner extends ConsumerWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: theme.platform == TargetPlatform.iOS
-                          ? null
-                          : theme.colorScheme.onSurface,
+                      color:
+                          theme.platform == TargetPlatform.iOS ? null : theme.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -130,9 +122,7 @@ class ButtonLoadingIndicator extends StatelessWidget {
     return const SizedBox(
       height: 20,
       width: 20,
-      child: CircularProgressIndicator.adaptive(
-        strokeWidth: 2,
-      ),
+      child: CircularProgressIndicator.adaptive(strokeWidth: 2),
     );
   }
 }
@@ -143,9 +133,7 @@ class CenterLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
+    return const Center(child: CircularProgressIndicator.adaptive());
   }
 }
 
@@ -154,10 +142,7 @@ class CenterLoadingIndicator extends StatelessWidget {
 /// This widget is intended to be used when a request fails and the user can
 /// retry it.
 class FullScreenRetryRequest extends StatelessWidget {
-  const FullScreenRetryRequest({
-    super.key,
-    required this.onRetry,
-  });
+  const FullScreenRetryRequest({super.key, required this.onRetry});
 
   final VoidCallback onRetry;
 
@@ -169,11 +154,7 @@ class FullScreenRetryRequest extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // TODO translate
-          Text(
-            context.l10n.mobileSomethingWentWrong,
-            style: Styles.sectionTitle,
-          ),
+          Text(context.l10n.mobileSomethingWentWrong, style: Styles.sectionTitle),
           const SizedBox(height: 10),
           SecondaryButton(
             onPressed: onRetry,
@@ -186,11 +167,7 @@ class FullScreenRetryRequest extends StatelessWidget {
   }
 }
 
-enum SnackBarType {
-  error,
-  info,
-  success,
-}
+enum SnackBarType { error, info, success }
 
 void showPlatformSnackbar(
   BuildContext context,
@@ -203,19 +180,13 @@ void showPlatformSnackbar(
         SnackBar(
           content: Text(
             message,
-            style: type == SnackBarType.error
-                ? const TextStyle(color: Colors.white)
-                : null,
+            style: type == SnackBarType.error ? const TextStyle(color: Colors.white) : null,
           ),
           backgroundColor: type == SnackBarType.error ? Colors.red : null,
         ),
       );
     case TargetPlatform.iOS:
-      showCupertinoSnackBar(
-        context: context,
-        message: message,
-        type: type,
-      );
+      showCupertinoSnackBar(context: context, message: message, type: type);
     default:
       assert(false, 'Unexpected platform ${Theme.of(context).platform}');
   }
@@ -229,30 +200,28 @@ void showCupertinoSnackBar({
   Duration duration = const Duration(milliseconds: 4000),
 }) {
   final overlayEntry = OverlayEntry(
-    builder: (context) => Positioned(
-      // default iOS tab bar height + 10
-      bottom: 60.0,
-      left: 8.0,
-      right: 8.0,
-      child: _CupertinoSnackBarManager(
-        snackBar: CupertinoSnackBar(
-          message: message,
-          backgroundColor: (type == SnackBarType.error
-                  ? context.lichessColors.error
-                  : type == SnackBarType.success
+    builder:
+        (context) => Positioned(
+          // default iOS tab bar height + 10
+          bottom: 60.0,
+          left: 8.0,
+          right: 8.0,
+          child: _CupertinoSnackBarManager(
+            snackBar: CupertinoSnackBar(
+              message: message,
+              backgroundColor: (type == SnackBarType.error
+                      ? context.lichessColors.error
+                      : type == SnackBarType.success
                       ? context.lichessColors.good
                       : CupertinoColors.systemGrey.resolveFrom(context))
-              .withValues(alpha: 0.6),
-          textStyle: const TextStyle(color: Colors.white),
+                  .withValues(alpha: 0.6),
+              textStyle: const TextStyle(color: Colors.white),
+            ),
+            duration: duration,
+          ),
         ),
-        duration: duration,
-      ),
-    ),
   );
-  Future.delayed(
-    duration + _snackBarAnimationDuration * 2,
-    overlayEntry.remove,
-  );
+  Future.delayed(duration + _snackBarAnimationDuration * 2, overlayEntry.remove);
   Overlay.of(context).insert(overlayEntry);
 }
 
@@ -261,11 +230,7 @@ class CupertinoSnackBar extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? backgroundColor;
 
-  const CupertinoSnackBar({
-    required this.message,
-    this.textStyle,
-    this.backgroundColor,
-  });
+  const CupertinoSnackBar({required this.message, this.textStyle, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -274,15 +239,8 @@ class CupertinoSnackBar extends StatelessWidget {
       child: ColoredBox(
         color: backgroundColor ?? CupertinoColors.systemGrey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 12.0,
-          ),
-          child: Text(
-            message,
-            style: textStyle,
-            textAlign: TextAlign.center,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Text(message, style: textStyle, textAlign: TextAlign.center),
         ),
       ),
     );
@@ -295,10 +253,7 @@ class _CupertinoSnackBarManager extends StatefulWidget {
   final CupertinoSnackBar snackBar;
   final Duration duration;
 
-  const _CupertinoSnackBarManager({
-    required this.snackBar,
-    required this.duration,
-  });
+  const _CupertinoSnackBarManager({required this.snackBar, required this.duration});
 
   @override
   State<_CupertinoSnackBarManager> createState() => _CupertinoSnackBarState();
@@ -311,14 +266,11 @@ class _CupertinoSnackBarState extends State<_CupertinoSnackBarManager> {
   void initState() {
     super.initState();
     Future.microtask(() => setState(() => _show = true));
-    Future.delayed(
-      widget.duration,
-      () {
-        if (mounted) {
-          setState(() => _show = false);
-        }
-      },
-    );
+    Future.delayed(widget.duration, () {
+      if (mounted) {
+        setState(() => _show = false);
+      }
+    });
   }
 
   @override

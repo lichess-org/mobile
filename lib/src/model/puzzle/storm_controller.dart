@@ -11,13 +11,12 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'puzzle.dart';
-import 'puzzle_repository.dart';
-import 'storm.dart';
 
 part 'storm_controller.freezed.dart';
 part 'storm_controller.g.dart';
@@ -105,12 +104,7 @@ class StormController extends _$StormController {
       }
 
       await Future<void>.delayed(moveDelay);
-      _addMove(
-        state.expectedMove!,
-        ComboState.increase,
-        runStarted: true,
-        userMove: false,
-      );
+      _addMove(state.expectedMove!, ComboState.increase, runStarted: true, userMove: false);
     } else {
       state = state.copyWith(errors: state.errors + 1);
       ref.read(soundServiceProvider).play(Sound.error);
@@ -149,16 +143,11 @@ class StormController extends _$StormController {
     if (session != null) {
       final res = await ref.withClient(
         (client) => Result.capture(
-          PuzzleRepository(client)
-              .postStormRun(stats)
-              .timeout(const Duration(seconds: 2)),
+          PuzzleRepository(client).postStormRun(stats).timeout(const Duration(seconds: 2)),
         ),
       );
 
-      final newState = state.copyWith(
-        stats: stats,
-        mode: StormMode.ended,
-      );
+      final newState = state.copyWith(stats: stats, mode: StormMode.ended);
 
       res.match(
         onSuccess: (newHigh) {
@@ -173,10 +162,7 @@ class StormController extends _$StormController {
         },
       );
     } else {
-      state = state.copyWith(
-        stats: stats,
-        mode: StormMode.ended,
-      );
+      state = state.copyWith(stats: stats, mode: StormMode.ended);
     }
   }
 
@@ -206,12 +192,7 @@ class StormController extends _$StormController {
       ),
     );
     await Future<void>.delayed(moveDelay);
-    _addMove(
-      state.expectedMove!,
-      ComboState.noChange,
-      runStarted: true,
-      userMove: false,
-    );
+    _addMove(state.expectedMove!, ComboState.noChange, runStarted: true, userMove: false);
   }
 
   void _addMove(
@@ -242,24 +223,18 @@ class StormController extends _$StormController {
       ),
       promotionMove: null,
     );
-    Future<void>.delayed(
-        userMove ? Duration.zero : const Duration(milliseconds: 250), () {
+    Future<void>.delayed(userMove ? Duration.zero : const Duration(milliseconds: 250), () {
       if (pos.board.pieceAt(move.to) != null) {
-        ref
-            .read(moveFeedbackServiceProvider)
-            .captureFeedback(check: state.position.isCheck);
+        ref.read(moveFeedbackServiceProvider).captureFeedback(check: state.position.isCheck);
       } else {
-        ref
-            .read(moveFeedbackServiceProvider)
-            .moveFeedback(check: state.position.isCheck);
+        ref.read(moveFeedbackServiceProvider).moveFeedback(check: state.position.isCheck);
       }
     });
   }
 
   StormRunStats _getStats() {
     final wins = state.history.where((e) => e.win == true).toList();
-    final mean = state.history.sumBy((e) => e.solvingTime!.inSeconds) /
-        state.history.length;
+    final mean = state.history.sumBy((e) => e.solvingTime!.inSeconds) / state.history.length;
     final threshold = mean * 1.5;
     return StormRunStats(
       moves: state.moves,
@@ -268,23 +243,26 @@ class StormController extends _$StormController {
       comboBest: state.combo.best,
       time: state.clock.endAt!,
       timePerMove: mean,
-      highest: wins.isNotEmpty
-          ? wins.map((e) => e.rating).reduce(
-                (maxRating, rating) => rating > maxRating ? rating : maxRating,
-              )
-          : 0,
+      highest:
+          wins.isNotEmpty
+              ? wins
+                  .map((e) => e.rating)
+                  .reduce((maxRating, rating) => rating > maxRating ? rating : maxRating)
+              : 0,
       history: state.history,
-      slowPuzzleIds: state.history
-          .where((e) => e.solvingTime!.inSeconds > threshold)
-          .map((e) => e.id)
-          .toIList(),
+      slowPuzzleIds:
+          state.history
+              .where((e) => e.solvingTime!.inSeconds > threshold)
+              .map((e) => e.id)
+              .toIList(),
     );
   }
 
   void _pushToHistory({required bool success}) {
-    final timeTaken = state.lastSolvedTime != null
-        ? DateTime.now().difference(state.lastSolvedTime!)
-        : DateTime.now().difference(state.clock.startAt!);
+    final timeTaken =
+        state.lastSolvedTime != null
+            ? DateTime.now().difference(state.lastSolvedTime!)
+            : DateTime.now().difference(state.clock.startAt!);
     state = state.copyWith(
       history: state.history.add(
         PuzzleHistoryEntry.fromLitePuzzle(state.puzzle, success, timeTaken),
@@ -353,8 +331,7 @@ class StormState with _$StormState {
 
   Move? get expectedMove => Move.parse(puzzle.solution[moveIndex + 1]);
 
-  Move? get lastMove =>
-      moveIndex == -1 ? null : Move.parse(puzzle.solution[moveIndex]);
+  Move? get lastMove => moveIndex == -1 ? null : Move.parse(puzzle.solution[moveIndex]);
 
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 
@@ -370,10 +347,7 @@ enum ComboState { increase, reset, noChange }
 class StormCombo with _$StormCombo {
   const StormCombo._();
 
-  const factory StormCombo({
-    required int current,
-    required int best,
-  }) = _StormCombo;
+  const factory StormCombo({required int current, required int best}) = _StormCombo;
 
   /// List representing the bonus awared at each level
   static const levelBonus = [3, 5, 6, 10];
@@ -394,8 +368,7 @@ class StormCombo with _$StormCombo {
 
   /// Returns the level of the `current + 1` combo count
   int nextLevel() {
-    final lvl =
-        levelsAndBonus.indexWhere((element) => element.level > current + 1);
+    final lvl = levelsAndBonus.indexWhere((element) => element.level > current + 1);
     return lvl >= 0 ? lvl - 1 : levelsAndBonus.length - 1;
   }
 
@@ -407,8 +380,7 @@ class StormCombo with _$StormCombo {
     final lvl = getNext ? nextLevel() : currentLevel();
     final lastLevel = levelsAndBonus.last;
     if (lvl >= levelsAndBonus.length - 1) {
-      final range =
-          lastLevel.level - levelsAndBonus[levelsAndBonus.length - 2].level;
+      final range = lastLevel.level - levelsAndBonus[levelsAndBonus.length - 2].level;
       return (((currentCombo - lastLevel.level) / range) * 100) % 100;
     }
     final bounds = [levelsAndBonus[lvl].level, levelsAndBonus[lvl + 1].level];

@@ -22,9 +22,7 @@ class PuzzleStorage {
   const PuzzleStorage(this._db);
   final Database _db;
 
-  Future<Puzzle?> fetch({
-    required PuzzleId puzzleId,
-  }) async {
+  Future<Puzzle?> fetch({required PuzzleId puzzleId}) async {
     final list = await _db.query(
       _tableName,
       where: 'puzzleId = ?',
@@ -45,17 +43,11 @@ class PuzzleStorage {
     return null;
   }
 
-  Future<void> save({
-    required Puzzle puzzle,
-  }) async {
-    await _db.insert(
-      _tableName,
-      {
-        'puzzleId': puzzle.puzzle.id.toString(),
-        'lastModified': DateTime.now().toIso8601String(),
-        'data': jsonEncode(puzzle.toJson()),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<void> save({required Puzzle puzzle}) async {
+    await _db.insert(_tableName, {
+      'puzzleId': puzzle.puzzle.id.toString(),
+      'lastModified': DateTime.now().toIso8601String(),
+      'data': jsonEncode(puzzle.toJson()),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

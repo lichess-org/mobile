@@ -36,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
@@ -78,31 +77,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       data: (status) {
         final session = ref.watch(authSessionProvider);
         final ongoingGames = ref.watch(ongoingGamesProvider);
-        final emptyRecent = ref.watch(myRecentGamesProvider).maybeWhen(
-              data: (data) => data.isEmpty,
-              orElse: () => false,
-            );
+        final emptyRecent = ref
+            .watch(myRecentGamesProvider)
+            .maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
         final isTablet = isTabletOrLarger(context);
 
         // Show the welcome screen if there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
-        final widgets = emptyRecent
-            ? _welcomeScreenWidgets(
-                session: session,
-                status: status,
-                isTablet: isTablet,
-              )
-            : isTablet
-                ? _tabletWidgets(
-                    session: session,
-                    status: status,
-                    ongoingGames: ongoingGames,
-                  )
-                : _handsetWidgets(
-                    session: session,
-                    status: status,
-                    ongoingGames: ongoingGames,
-                  );
+        final widgets =
+            emptyRecent
+                ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
+                : isTablet
+                ? _tabletWidgets(session: session, status: status, ongoingGames: ongoingGames)
+                : _handsetWidgets(session: session, status: status, ongoingGames: ongoingGames);
 
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoPageScaffold(
@@ -113,26 +100,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   controller: homeScrollController,
                   slivers: [
                     CupertinoSliverNavigationBar(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 16.0,
-                        end: 8.0,
-                      ),
+                      padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
                       largeTitle: Text(context.l10n.mobileHomeTab),
                       leading: CupertinoButton(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          ref.read(editModeProvider.notifier).state =
-                              !isEditing;
+                          ref.read(editModeProvider.notifier).state = !isEditing;
                         },
                         child: Text(isEditing ? 'Done' : 'Edit'),
                       ),
                       trailing: const Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _ChallengeScreenButton(),
-                          _PlayerScreenButton(),
-                        ],
+                        children: [_ChallengeScreenButton(), _PlayerScreenButton()],
                       ),
                     ),
                     CupertinoSliverRefreshControl(
@@ -141,9 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     const SliverToBoxAdapter(child: ConnectivityBanner()),
                     SliverSafeArea(
                       top: false,
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(widgets),
-                      ),
+                      sliver: SliverList(delegate: SliverChildListDelegate(widgets)),
                     ),
                   ],
                 ),
@@ -153,8 +131,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     right: 8.0,
                     child: FloatingActionButton.extended(
                       backgroundColor: CupertinoTheme.of(context).primaryColor,
-                      foregroundColor:
-                          CupertinoTheme.of(context).primaryContrastingColor,
+                      foregroundColor: CupertinoTheme.of(context).primaryContrastingColor,
                       onPressed: () {
                         pushPlatformRoute(
                           context,
@@ -178,9 +155,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   onPressed: () {
                     ref.read(editModeProvider.notifier).state = !isEditing;
                   },
-                  icon: Icon(
-                    isEditing ? Icons.save_outlined : Icons.app_registration,
-                  ),
+                  icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
                   tooltip: isEditing ? 'Save' : 'Edit',
                 ),
                 const _ChallengeScreenButton(),
@@ -193,27 +168,20 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               child: Column(
                 children: [
                   const ConnectivityBanner(),
-                  Expanded(
-                    child: ListView(
-                      controller: homeScrollController,
-                      children: widgets,
-                    ),
-                  ),
+                  Expanded(child: ListView(controller: homeScrollController, children: widgets)),
                 ],
               ),
             ),
-            floatingActionButton: isTablet
-                ? null
-                : FloatingActionButton.extended(
-                    onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        builder: (_) => const PlayScreen(),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
-                    label: Text(context.l10n.play),
-                  ),
+            floatingActionButton:
+                isTablet
+                    ? null
+                    : FloatingActionButton.extended(
+                      onPressed: () {
+                        pushPlatformRoute(context, builder: (_) => const PlayScreen());
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(context.l10n.play),
+                    ),
           );
         }
       },
@@ -228,26 +196,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AsyncValue<IList<OngoingGame>> ongoingGames,
   }) {
     return [
-      const _EditableWidget(
-        widget: EnabledWidget.hello,
-        shouldShow: true,
-        child: _HelloWidget(),
-      ),
+      const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
       if (status.isOnline)
         _EditableWidget(
           widget: EnabledWidget.perfCards,
           shouldShow: session != null,
-          child: const AccountPerfCards(
-            padding: Styles.horizontalBodyPadding,
-          ),
+          child: const AccountPerfCards(padding: Styles.horizontalBodyPadding),
         ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
         shouldShow: status.isOnline,
-        child: const Padding(
-          padding: Styles.bodySectionPadding,
-          child: QuickGameMatrix(),
-        ),
+        child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
       if (status.isOnline)
         _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
@@ -270,17 +229,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       Padding(
         padding: Styles.horizontalBodyPadding,
         child: LichessMessage(
-          style: Theme.of(context).platform == TargetPlatform.iOS
-              ? const TextStyle(fontSize: 18)
-              : Theme.of(context).textTheme.bodyLarge,
+          style:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? const TextStyle(fontSize: 18)
+                  : Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
       ),
       const SizedBox(height: 24.0),
-      if (session == null) ...[
-        const Center(child: _SignInWidget()),
-        const SizedBox(height: 16.0),
-      ],
+      if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
       if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
@@ -309,15 +266,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (isTablet)
         Row(
           children: [
-            if (status.isOnline)
-              const Flexible(
-                child: _TabletCreateAGameSection(),
-              ),
-            Flexible(
-              child: Column(
-                children: welcomeWidgets,
-              ),
-            ),
+            const Flexible(child: _TabletCreateAGameSection()),
+            Flexible(child: Column(children: welcomeWidgets)),
           ],
         )
       else ...[
@@ -325,10 +275,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           const _EditableWidget(
             widget: EnabledWidget.quickPairing,
             shouldShow: true,
-            child: Padding(
-              padding: Styles.bodySectionPadding,
-              child: QuickGameMatrix(),
-            ),
+            child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
         ...welcomeWidgets,
       ],
@@ -341,18 +288,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AsyncValue<IList<OngoingGame>> ongoingGames,
   }) {
     return [
-      const _EditableWidget(
-        widget: EnabledWidget.hello,
-        shouldShow: true,
-        child: _HelloWidget(),
-      ),
+      const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
       if (status.isOnline)
         _EditableWidget(
           widget: EnabledWidget.perfCards,
           shouldShow: session != null,
-          child: const AccountPerfCards(
-            padding: Styles.bodySectionPadding,
-          ),
+          child: const AccountPerfCards(padding: Styles.bodySectionPadding),
         ),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,16 +302,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             child: Column(
               children: [
                 const SizedBox(height: 8.0),
-                if (status.isOnline) const _TabletCreateAGameSection(),
+                const _TabletCreateAGameSection(),
                 if (status.isOnline)
-                  _OngoingGamesPreview(
-                    ongoingGames,
-                    maxGamesToShow: 5,
-                  )
+                  _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                 else
-                  const _OfflineCorrespondencePreview(
-                    maxGamesToShow: 5,
-                  ),
+                  const _OfflineCorrespondencePreview(maxGamesToShow: 5),
               ],
             ),
           ),
@@ -378,10 +314,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 8.0),
-                RecentGamesWidget(),
-              ],
+              children: [SizedBox(height: 8.0), RecentGamesWidget()],
             ),
           ),
         ],
@@ -407,9 +340,10 @@ class _SignInWidget extends ConsumerWidget {
 
     return SecondaryButton(
       semanticsLabel: context.l10n.signIn,
-      onPressed: authController.isLoading
-          ? null
-          : () => ref.read(authControllerProvider.notifier).signIn(),
+      onPressed:
+          authController.isLoading
+              ? null
+              : () => ref.read(authControllerProvider.notifier).signIn(),
       child: Text(context.l10n.signIn),
     );
   }
@@ -429,11 +363,7 @@ class _SignInWidget extends ConsumerWidget {
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({
-    required this.child,
-    required this.widget,
-    required this.shouldShow,
-  });
+  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
 
   final Widget child;
   final EnabledWidget widget;
@@ -451,30 +381,23 @@ class _EditableWidget extends ConsumerWidget {
 
     return isEditing
         ? Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Checkbox.adaptive(
-                  value: isEnabled,
-                  onChanged: (_) {
-                    ref
-                        .read(homePreferencesProvider.notifier)
-                        .toggleWidget(widget);
-                  },
-                ),
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Checkbox.adaptive(
+                value: isEnabled,
+                onChanged: (_) {
+                  ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
+                },
               ),
-              Expanded(
-                child: IgnorePointer(
-                  ignoring: isEditing,
-                  child: child,
-                ),
-              ),
-            ],
-          )
+            ),
+            Expanded(child: IgnorePointer(ignoring: isEditing, child: child)),
+          ],
+        )
         : isEnabled
-            ? child
-            : const SizedBox.shrink();
+        ? child
+        : const SizedBox.shrink();
   }
 }
 
@@ -484,42 +407,33 @@ class _HelloWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final style = Theme.of(context).platform == TargetPlatform.iOS
-        ? const TextStyle(fontSize: 20)
-        : Theme.of(context).textTheme.bodyLarge;
+    final style =
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? const TextStyle(fontSize: 20)
+            : Theme.of(context).textTheme.bodyLarge;
 
-    final iconSize =
-        Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
+    final iconSize = Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
 
     // fetch the account user to be sure we have the latest data (flair, etc.)
-    final accountUser = ref.watch(accountProvider).maybeWhen(
-          data: (data) => data?.lightUser,
-          orElse: () => null,
-        );
+    final accountUser = ref
+        .watch(accountProvider)
+        .maybeWhen(data: (data) => data?.lightUser, orElse: () => null);
 
     final user = accountUser ?? session?.user;
 
     return Padding(
-      padding:
-          Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding).add(
-                const EdgeInsets.only(top: 8.0),
-              ),
+      padding: Styles.horizontalBodyPadding
+          .add(Styles.sectionBottomPadding)
+          .add(const EdgeInsets.only(top: 8.0)),
       child: GestureDetector(
         onTap: () {
           ref.invalidate(accountActivityProvider);
-          pushPlatformRoute(
-            context,
-            builder: (context) => const ProfileScreen(),
-          );
+          pushPlatformRoute(context, builder: (context) => const ProfileScreen());
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.wb_sunny,
-              size: iconSize,
-              color: context.lichessColors.brag,
-            ),
+            Icon(Icons.wb_sunny, size: iconSize, color: context.lichessColors.brag),
             const SizedBox(width: 5.0),
             if (user != null)
               l10nWithWidget(
@@ -547,15 +461,9 @@ class _TabletCreateAGameSection extends StatelessWidget {
         _EditableWidget(
           widget: EnabledWidget.quickPairing,
           shouldShow: true,
-          child: Padding(
-            padding: Styles.bodySectionPadding,
-            child: QuickGameMatrix(),
-          ),
+          child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),
-        Padding(
-          padding: Styles.bodySectionPadding,
-          child: QuickGameButton(),
-        ),
+        Padding(padding: Styles.bodySectionPadding, child: QuickGameButton()),
         CreateGameOptions(),
       ],
     );
@@ -578,21 +486,23 @@ class _OngoingGamesCarousel extends ConsumerWidget {
         }
         return _GamesCarousel<OngoingGame>(
           list: data,
-          builder: (game) => _GamePreviewCarouselItem(
-            game: game,
-            onTap: () {
-              pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => GameScreen(
-                  initialGameId: game.fullId,
-                  loadingFen: game.fen,
-                  loadingOrientation: game.orientation,
-                  loadingLastMove: game.lastMove,
-                ),
-              );
-            },
-          ),
+          builder:
+              (game) => _GamePreviewCarouselItem(
+                game: game,
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder:
+                        (context) => GameScreen(
+                          initialGameId: game.fullId,
+                          loadingFen: game.fen,
+                          loadingOrientation: game.orientation,
+                          loadingLastMove: game.lastMove,
+                        ),
+                  );
+                },
+              ),
           moreScreenBuilder: (_) => const OngoingGamesScreen(),
           maxGamesToShow: maxGamesToShow,
         );
@@ -609,8 +519,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames =
-        ref.watch(offlineOngoingCorrespondenceGamesProvider);
+    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         if (data.isEmpty) {
@@ -618,32 +527,31 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         }
         return _GamesCarousel(
           list: data,
-          builder: (el) => _GamePreviewCarouselItem(
-            game: OngoingGame(
-              id: el.$2.id,
-              fullId: el.$2.fullId,
-              orientation: el.$2.orientation,
-              fen: el.$2.lastPosition.fen,
-              perf: el.$2.perf,
-              speed: el.$2.speed,
-              variant: el.$2.variant,
-              opponent: el.$2.opponent.user,
-              isMyTurn: el.$2.isMyTurn,
-              opponentRating: el.$2.opponent.rating,
-              opponentAiLevel: el.$2.opponent.aiLevel,
-              lastMove: el.$2.lastMove,
-              secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
-            ),
-            onTap: () {
-              pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (_) => OfflineCorrespondenceGameScreen(
-                  initialGame: (el.$1, el.$2),
+          builder:
+              (el) => _GamePreviewCarouselItem(
+                game: OngoingGame(
+                  id: el.$2.id,
+                  fullId: el.$2.fullId,
+                  orientation: el.$2.orientation,
+                  fen: el.$2.lastPosition.fen,
+                  perf: el.$2.perf,
+                  speed: el.$2.speed,
+                  variant: el.$2.variant,
+                  opponent: el.$2.opponent!.user,
+                  isMyTurn: el.$2.isMyTurn,
+                  opponentRating: el.$2.opponent!.rating,
+                  opponentAiLevel: el.$2.opponent!.aiLevel,
+                  lastMove: el.$2.lastMove,
+                  secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
                 ),
-              );
-            },
-          ),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (el.$1, el.$2)),
+                  );
+                },
+              ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
           maxGamesToShow: maxGamesToShow,
         );
@@ -733,7 +641,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.6,
+      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
       child: BoardCarouselItem(
         fen: game.fen,
         orientation: game.orientation,
@@ -749,36 +657,25 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                 Row(
                   children: [
                     if (game.isMyTurn) ...const [
-                      Icon(
-                        Icons.timer,
-                        size: 16.0,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.timer, size: 16.0, color: Colors.white),
                       SizedBox(width: 4.0),
                     ],
                     Text(
                       game.secondsLeft != null && game.isMyTurn
-                          ? timeago.format(
-                              DateTime.now().add(
-                                Duration(seconds: game.secondsLeft!),
-                              ),
-                              allowFromNow: true,
-                            )
+                          ? relativeDate(
+                            context.l10n,
+                            DateTime.now().add(Duration(seconds: game.secondsLeft!)),
+                          )
                           : game.isMyTurn
-                              ? context.l10n.yourTurn
-                              : context.l10n.waitingForOpponent,
-                      style: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            )
-                          : TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.fontSize,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          ? context.l10n.yourTurn
+                          : context.l10n.waitingForOpponent,
+                      style:
+                          Theme.of(context).platform == TargetPlatform.iOS
+                              ? const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
+                              : TextStyle(
+                                fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
+                                fontWeight: FontWeight.w500,
+                              ),
                     ),
                   ],
                 ),
@@ -828,17 +725,13 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames =
-        ref.watch(offlineOngoingCorrespondenceGamesProvider);
+    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         return PreviewGameList(
           list: data,
           maxGamesToShow: maxGamesToShow,
-          builder: (el) => OfflineCorrespondenceGamePreview(
-            game: el.$2,
-            lastModified: el.$1,
-          ),
+          builder: (el) => OfflineCorrespondenceGamePreview(game: el.$2, lastModified: el.$1),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
         );
       },
@@ -869,9 +762,7 @@ class PreviewGameList<T> extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: Styles.horizontalBodyPadding.add(
-            const EdgeInsets.only(top: 16.0),
-          ),
+          padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 16.0)),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -913,24 +804,27 @@ class _PlayerScreenButton extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
 
     return connectivity.maybeWhen(
-      data: (connectivity) => AppBarIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: !connectivity.isOnline
-            ? null
-            : () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.players,
-                  builder: (_) => const PlayerScreen(),
-                );
-              },
-      ),
-      orElse: () => AppBarIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
-      ),
+      data:
+          (connectivity) => AppBarIconButton(
+            icon: const Icon(Icons.group_outlined),
+            semanticsLabel: context.l10n.players,
+            onPressed:
+                !connectivity.isOnline
+                    ? null
+                    : () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.players,
+                        builder: (_) => const PlayerScreen(),
+                      );
+                    },
+          ),
+      orElse:
+          () => AppBarIconButton(
+            icon: const Icon(Icons.group_outlined),
+            semanticsLabel: context.l10n.players,
+            onPressed: null,
+          ),
     );
   }
 }
@@ -951,26 +845,29 @@ class _ChallengeScreenButton extends ConsumerWidget {
     final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
-      data: (connectivity) => AppBarNotificationIconButton(
-        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: !connectivity.isOnline
-            ? null
-            : () {
-                ref.invalidate(challengesProvider);
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.preferencesNotifyChallenge,
-                  builder: (_) => const ChallengeRequestsScreen(),
-                );
-              },
-        count: count ?? 0,
-      ),
-      orElse: () => AppBarIconButton(
-        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: null,
-      ),
+      data:
+          (connectivity) => AppBarNotificationIconButton(
+            icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+            semanticsLabel: context.l10n.preferencesNotifyChallenge,
+            onPressed:
+                !connectivity.isOnline
+                    ? null
+                    : () {
+                      ref.invalidate(challengesProvider);
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.preferencesNotifyChallenge,
+                        builder: (_) => const ChallengeRequestsScreen(),
+                      );
+                    },
+            count: count ?? 0,
+          ),
+      orElse:
+          () => AppBarIconButton(
+            icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+            semanticsLabel: context.l10n.preferencesNotifyChallenge,
+            onPressed: null,
+          ),
     );
   }
 }

@@ -15,19 +15,19 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class AnalysisBoard extends ConsumerStatefulWidget {
   const AnalysisBoard(
-    this.pgn,
     this.options,
     this.boardSize, {
     this.borderRadius,
     this.enableDrawingShapes = true,
+    this.shouldReplaceChildOnUserMove = false,
   });
 
-  final String pgn;
   final AnalysisOptions options;
   final double boardSize;
   final BorderRadiusGeometry? borderRadius;
 
   final bool enableDrawingShapes;
+  final bool shouldReplaceChildOnUserMove;
 
   @override
   ConsumerState<AnalysisBoard> createState() => AnalysisBoardState();
@@ -38,38 +38,33 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final analysisState = ref.watch(ctrlProvider);
+    final ctrlProvider = analysisControllerProvider(widget.options);
+    final analysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select(
-        (value) => value.showBestMoveArrow,
-      ),
-    );
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
-
-    final evalBestMoves = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-    );
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
+    final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
+    final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
+    final evalBestMoves =
+        enableComputerAnalysis
+            ? ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves))
+            : null;
 
     final currentNode = analysisState.currentNode;
-    final annotation = makeAnnotation(currentNode.nags);
+    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
 
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+    final bestMoves = enableComputerAnalysis ? evalBestMoves ?? currentNode.eval?.bestMoves : null;
 
     final sanMove = currentNode.sanMove;
 
-    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
-            analysisState.isEngineAvailable &&
-            bestMoves != null
-        ? computeBestMoveShapes(
-            bestMoves,
-            currentNode.position.turn,
-            boardPrefs.pieceSet.assets,
-          )
-        : ISet();
+    final ISet<Shape> bestMoveShapes =
+        showBestMoveArrow && analysisState.isEngineAvailable && bestMoves != null
+            ? computeBestMoveShapes(
+              bestMoves,
+              currentNode.position.turn,
+              boardPrefs.pieceSet.assets,
+            )
+            : ISet();
 
     return Chessboard(
       size: widget.boardSize,
@@ -77,41 +72,39 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
       game: GameData(
-        playerSide: analysisState.position.isGameOver
-            ? PlayerSide.none
-            : analysisState.position.turn == Side.white
+        playerSide:
+            analysisState.position.isGameOver
+                ? PlayerSide.none
+                : analysisState.position.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
         isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
         sideToMove: analysisState.position.turn,
         validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
-        onMove: (move, {isDrop, captured}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(move),
-        onPromotionSelection: (role) =>
-            ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+        onMove:
+            (move, {isDrop, captured}) => ref
+                .read(ctrlProvider.notifier)
+                .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
+        onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
           showAnnotationsOnBoard && sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({
-                      Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                    })
+                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: widget.enableDrawingShapes,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
+        borderRadius: widget.borderRadius,
+        boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
+        drawShape: DrawShapeOptions(
+          enable: widget.enableDrawingShapes,
+          onCompleteShape: _onCompleteShape,
+          onClearShapes: _onClearShapes,
+          newShapeColor: boardPrefs.shapeColor.color,
+        ),
+      ),
     );
   }
 

@@ -1,5 +1,5 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -10,15 +10,11 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({
-    required this.onSubmit,
-    required this.player,
-    required this.clock,
-  });
+  const CustomClockSettings({required this.onSubmit, required this.player, required this.clock});
 
-  final ClockPlayerType player;
+  final Side player;
   final TimeIncrement clock;
-  final void Function(ClockPlayerType player, TimeIncrement clock) onSubmit;
+  final void Function(Side player, TimeIncrement clock) onSubmit;
 
   @override
   State<CustomClockSettings> createState() => _CustomClockSettingsState();
@@ -50,10 +46,7 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
           child: FatButton(
             semanticsLabel: context.l10n.apply,
             child: Text(context.l10n.apply),
-            onPressed: () => widget.onSubmit(
-              widget.player,
-              TimeIncrement(time, increment),
-            ),
+            onPressed: () => widget.onSubmit(widget.player, TimeIncrement(time, increment)),
           ),
         ),
       ],
@@ -84,29 +77,29 @@ class _PlayerTimeSlider extends StatelessWidget {
             value: clock.time,
             values: kAvailableTimesInSeconds,
             labelBuilder: _clockTimeLabel,
-            onChange: Theme.of(context).platform == TargetPlatform.iOS
-                ? (num value) {
-                    updateTime(value.toInt());
-                  }
-                : null,
+            onChange:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? (num value) {
+                      updateTime(value.toInt());
+                    }
+                    : null,
             onChangeEnd: (num value) {
               updateTime(value.toInt());
             },
           ),
         ),
         PlatformListTile(
-          title: Text(
-            '${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}',
-          ),
+          title: Text('${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}'),
           subtitle: NonLinearSlider(
             value: clock.increment,
             values: kAvailableIncrementsInSeconds,
             labelBuilder: (num sec) => sec.toString(),
-            onChange: Theme.of(context).platform == TargetPlatform.iOS
-                ? (num value) {
-                    updateIncrement(value.toInt());
-                  }
-                : null,
+            onChange:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? (num value) {
+                      updateIncrement(value.toInt());
+                    }
+                    : null,
             onChangeEnd: (num value) {
               updateIncrement(value.toInt());
             },

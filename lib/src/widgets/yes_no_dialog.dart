@@ -25,14 +25,8 @@ class YesNoDialog extends StatelessWidget {
       title: title,
       content: content,
       actions: [
-        PlatformDialogAction(
-          onPressed: onNo,
-          child: Text(context.l10n.no),
-        ),
-        PlatformDialogAction(
-          onPressed: onYes,
-          child: Text(context.l10n.yes),
-        ),
+        PlatformDialogAction(onPressed: onNo, child: Text(context.l10n.no)),
+        PlatformDialogAction(onPressed: onYes, child: Text(context.l10n.yes)),
       ],
     );
   }

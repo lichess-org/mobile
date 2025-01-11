@@ -1,18 +1,17 @@
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'localizations.g.dart';
 
-typedef ActiveLocalizations = ({
-  Locale locale,
-  AppLocalizations strings,
-});
+typedef ActiveLocalizations = ({Locale locale, AppLocalizations strings});
 
 @Riverpod(keepAlive: true)
 class Localizations extends _$Localizations {
   @override
   ActiveLocalizations build() {
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final observer = _LocaleObserver((locales) {
       _update();
     });
@@ -20,19 +19,20 @@ class Localizations extends _$Localizations {
     binding.addObserver(observer);
     ref.onDispose(() => binding.removeObserver(observer));
 
-    return _getLocale();
+    return _getLocale(generalPrefs);
   }
 
   void _update() {
-    state = _getLocale();
+    final generalPrefs = ref.read(generalPreferencesProvider);
+    state = _getLocale(generalPrefs);
   }
 
-  ActiveLocalizations _getLocale() {
+  ActiveLocalizations _getLocale(GeneralPrefs prefs) {
+    if (prefs.locale != null) {
+      return (locale: prefs.locale!, strings: lookupAppLocalizations(prefs.locale!));
+    }
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
-    return (
-      locale: locale,
-      strings: lookupAppLocalizations(locale),
-    );
+    return (locale: locale, strings: lookupAppLocalizations(locale));
   }
 }
 

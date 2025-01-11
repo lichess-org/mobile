@@ -13,12 +13,11 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-
-import 'game_body.dart';
-import 'game_common_widgets.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -39,9 +38,9 @@ class GameScreen extends ConsumerStatefulWidget {
     this.lastMoveAt,
     super.key,
   }) : assert(
-          initialGameId != null || seek != null || challenge != null,
-          'Either a seek, a challenge or an initial game id must be provided.',
-        );
+         initialGameId != null || seek != null || challenge != null,
+         'Either a seek, a challenge or an initial game id must be provided.',
+       );
 
   // tweak
   final GameSeek? seek;
@@ -95,9 +94,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   void didPop() {
-    if (mounted &&
-        (widget.source == _GameSource.lobby ||
-            widget.source == _GameSource.challenge)) {
+    if (mounted && (widget.source == _GameSource.lobby || widget.source == _GameSource.challenge)) {
       ref.invalidate(myRecentGamesProvider);
       ref.invalidate(accountProvider);
     }
@@ -106,105 +103,99 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final provider = currentGameProvider(
-      widget.seek,
-      widget.challenge,
-      widget.initialGameId,
-    );
+    final provider = currentGameProvider(widget.seek, widget.challenge, widget.initialGameId);
 
-    return ref.watch(provider).when(
-      data: (data) {
-        final (
-          gameFullId: gameId,
-          challenge: challenge,
-          declineReason: declineReason
-        ) = data;
-        final body = gameId != null
-            ? GameBody(
-                id: gameId,
-                loadingBoardWidget: StandaloneGameLoadingBoard(
-                  fen: widget.loadingFen,
-                  lastMove: widget.loadingLastMove,
-                  orientation: widget.loadingOrientation,
-                ),
-                whiteClockKey: _whiteClockKey,
-                blackClockKey: _blackClockKey,
-                boardKey: _boardKey,
-                onLoadGameCallback: (id) {
-                  ref.read(provider.notifier).loadGame(id);
-                },
-                onNewOpponentCallback: (game) {
-                  if (widget.source == _GameSource.lobby) {
-                    ref.read(provider.notifier).newOpponent();
-                  } else {
-                    final savedSetup = ref.read(gameSetupPreferencesProvider);
-                    pushReplacementPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (_) => GameScreen(
-                        seek: GameSeek.newOpponentFromGame(game, savedSetup),
+    return ref
+        .watch(provider)
+        .when(
+          data: (data) {
+            final (gameFullId: gameId, challenge: challenge, declineReason: declineReason) = data;
+            final body =
+                gameId != null
+                    ? GameBody(
+                      id: gameId,
+                      loadingBoardWidget: StandaloneGameLoadingBoard(
+                        fen: widget.loadingFen,
+                        lastMove: widget.loadingLastMove,
+                        orientation: widget.loadingOrientation,
                       ),
+                      whiteClockKey: _whiteClockKey,
+                      blackClockKey: _blackClockKey,
+                      boardKey: _boardKey,
+                      onLoadGameCallback: (id) {
+                        ref.read(provider.notifier).loadGame(id);
+                      },
+                      onNewOpponentCallback: (game) {
+                        if (widget.source == _GameSource.lobby) {
+                          ref.read(provider.notifier).newOpponent();
+                        } else {
+                          final savedSetup = ref.read(gameSetupPreferencesProvider);
+                          pushReplacementPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder:
+                                (_) => GameScreen(
+                                  seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                                ),
+                          );
+                        }
+                      },
+                    )
+                    : widget.challenge != null && challenge != null
+                    ? ChallengeDeclinedBoard(
+                      challenge: challenge,
+                      declineReason:
+                          declineReason != null
+                              ? declineReason.label(context.l10n)
+                              : ChallengeDeclineReason.generic.label(context.l10n),
+                    )
+                    : const LoadGameError('Could not create the game.');
+            return PlatformScaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: GameAppBar(id: gameId, lastMoveAt: widget.lastMoveAt),
+              body: body,
+            );
+          },
+          loading: () {
+            final loadingBoard =
+                widget.seek != null
+                    ? LobbyScreenLoadingContent(
+                      widget.seek!,
+                      () => ref.read(createGameServiceProvider).cancelSeek(),
+                    )
+                    : widget.challenge != null
+                    ? ChallengeLoadingContent(
+                      widget.challenge!,
+                      () => ref.read(createGameServiceProvider).cancelChallenge(),
+                    )
+                    : const StandaloneGameLoadingBoard();
+
+            return PlatformScaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
+              body: PopScope(canPop: false, child: loadingBoard),
+            );
+          },
+          error: (e, s) {
+            debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
+
+            // lichess sends a 400 response if user has disallowed challenges
+            final message =
+                e is ServerException && e.statusCode == 400
+                    ? LoadGameError(
+                      'Could not create the game: ${e.jsonError?['error'] as String?}',
+                    )
+                    : const LoadGameError(
+                      'Sorry, we could not create the game. Please try again later.',
                     );
-                  }
-                },
-              )
-            : widget.challenge != null && challenge != null
-                ? ChallengeDeclinedBoard(
-                    challenge: challenge,
-                    declineReason: declineReason != null
-                        ? declineReason.label(context.l10n)
-                        : ChallengeDeclineReason.generic.label(context.l10n),
-                  )
-                : const LoadGameError('Could not create the game.');
-        return PlatformScaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: GameAppBar(id: gameId, lastMoveAt: widget.lastMoveAt),
-          body: body,
-        );
-      },
-      loading: () {
-        final loadingBoard = widget.seek != null
-            ? LobbyScreenLoadingContent(
-                widget.seek!,
-                () => ref.read(createGameServiceProvider).cancelSeek(),
-              )
-            : widget.challenge != null
-                ? ChallengeLoadingContent(
-                    widget.challenge!,
-                    () => ref.read(createGameServiceProvider).cancelChallenge(),
-                  )
-                : const StandaloneGameLoadingBoard();
 
-        return PlatformScaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
-          body: PopScope(
-            canPop: false,
-            child: loadingBoard,
-          ),
-        );
-      },
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [GameScreen] could not create game; $e\n$s',
-        );
+            final body = PopScope(child: message);
 
-        // lichess sends a 400 response if user has disallowed challenges
-        final message = e is ServerException && e.statusCode == 400
-            ? LoadGameError(
-                'Could not create the game: ${e.jsonError?['error'] as String?}',
-              )
-            : const LoadGameError(
-                'Sorry, we could not create the game. Please try again later.',
-              );
-
-        final body = PopScope(child: message);
-
-        return PlatformScaffold(
-          appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
-          body: body,
+            return PlatformScaffold(
+              appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
+              body: body,
+            );
+          },
         );
-      },
-    );
   }
 }

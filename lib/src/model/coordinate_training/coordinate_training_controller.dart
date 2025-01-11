@@ -28,9 +28,7 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
     final sideChoice = ref.watch(
       coordinateTrainingPreferencesProvider.select((value) => value.sideChoice),
     );
-    return CoordinateTrainingState(
-      orientation: _getOrientation(sideChoice),
-    );
+    return CoordinateTrainingState(orientation: _getOrientation(sideChoice));
   }
 
   void startTraining(Duration? timeLimit) {
@@ -51,18 +49,14 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
       if (state.timeLimit != null && _stopwatch.elapsed > state.timeLimit!) {
         _finishTraining();
       } else {
-        state = state.copyWith(
-          elapsed: _stopwatch.elapsed,
-        );
+        state = state.copyWith(elapsed: _stopwatch.elapsed);
       }
     });
   }
 
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
-    final orientation = _getOrientation(
-      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
-    );
+    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
     _updateTimer?.cancel();
     state = CoordinateTrainingState(
       lastGuess: state.lastGuess,
@@ -72,18 +66,16 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
   }
 
   void abortTraining() {
-    final orientation = _getOrientation(
-      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
-    );
+    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
     _updateTimer?.cancel();
     state = CoordinateTrainingState(orientation: orientation);
   }
 
   Side _getOrientation(SideChoice choice) => switch (choice) {
-        SideChoice.white => Side.white,
-        SideChoice.black => Side.black,
-        SideChoice.random => _randomSide(),
-      };
+    SideChoice.white => Side.white,
+    SideChoice.black => Side.black,
+    SideChoice.random => _randomSide(),
+  };
 
   /// Generate a random side
   Side _randomSide() => Side.values[Random().nextInt(Side.values.length)];
@@ -109,9 +101,7 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
       );
     }
 
-    state = state.copyWith(
-      lastGuess: correctGuess ? Guess.correct : Guess.incorrect,
-    );
+    state = state.copyWith(lastGuess: correctGuess ? Guess.correct : Guess.incorrect);
   }
 }
 
@@ -132,7 +122,8 @@ class CoordinateTrainingState with _$CoordinateTrainingState {
 
   bool get trainingActive => elapsed != null;
 
-  double? get timeFractionElapsed => (elapsed != null && timeLimit != null)
-      ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
-      : null;
+  double? get timeFractionElapsed =>
+      (elapsed != null && timeLimit != null)
+          ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
+          : null;
 }
