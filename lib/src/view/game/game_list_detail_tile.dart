@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
@@ -17,13 +18,10 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 /// A list tile that shows more detailed game info than [GameListTile].
 class GameListDetailTile extends StatelessWidget {
-  const GameListDetailTile({
-    required this.item,
-  });
+  const GameListDetailTile({required this.item});
 
   final LightArchivedGameWithPov item;
 
@@ -36,13 +34,7 @@ class GameListDetailTile extends StatelessWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    final dateStyle = TextStyle(
-      color: textShade(
-        context,
-        Styles.subtitleOpacity,
-      ),
-      fontSize: 12,
-    );
+    final dateStyle = TextStyle(color: textShade(context, Styles.subtitleOpacity), fontSize: 12);
 
     return AdaptiveInkWell(
       onLongPress: () {
@@ -52,18 +44,14 @@ class GameListDetailTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => GameContextMenu(
-            game: game,
-            mySide: mySide,
-            showGameSummary: false,
-          ),
+          builder: (context) => GameContextMenu(game: game, mySide: mySide, showGameSummary: false),
         );
       },
       onTap: () => openGameScreen(item.game, item.pov, context),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-          const EdgeInsets.only(bottom: 8.0),
-        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ).add(const EdgeInsets.only(bottom: 8.0)),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final boardSize = constraints.maxWidth / 3;
@@ -98,16 +86,13 @@ class GameListDetailTile extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: ' ${timeago.format(game.lastMoveAt)}',
+                                  text: ' ${relativeDate(context.l10n, game.lastMoveAt)}',
                                   style: dateStyle,
                                 ),
                               ],
                             ),
                           ),
-                          _UsersAndRatings(
-                            white: game.white,
-                            black: game.black,
-                          ),
+                          _UsersAndRatings(white: game.white, black: game.black),
                           if (game.lastFen != null)
                             Text(
                               gameStatusL10n(
@@ -122,9 +107,10 @@ class GameListDetailTile extends StatelessWidget {
                               ),
                               style: TextStyle(
                                 fontSize: 13,
-                                color: game.winner == null
-                                    ? customColors?.brag
-                                    : game.winner == mySide
+                                color:
+                                    game.winner == null
+                                        ? customColors?.brag
+                                        : game.winner == mySide
                                         ? customColors?.good
                                         : customColors?.error,
                               ),
@@ -151,35 +137,32 @@ class GameListDetailTile extends StatelessWidget {
 }
 
 class _RatingAndDiff extends StatelessWidget {
-  const _RatingAndDiff({
-    required this.player,
-  });
+  const _RatingAndDiff({required this.player});
 
   final Player player;
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(
-      fontSize: 13,
-    );
+    const style = TextStyle(fontSize: 13);
 
     return RatingPrefAware(
       child: Text.rich(
         TextSpan(
           children: [
-            if (player.rating != null)
-              TextSpan(
-                text: player.rating.toString(),
-                style: style,
-              ),
+            if (player.rating != null) TextSpan(text: player.rating.toString(), style: style),
             if (player.ratingDiff != null)
               TextSpan(
                 text:
-                    ' ${player.ratingDiff == 0 ? '±' : player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                    ' ${player.ratingDiff == 0
+                        ? '±'
+                        : player.ratingDiff! > 0
+                        ? '+'
+                        : ''}${player.ratingDiff}',
                 style: style.copyWith(
-                  color: player.ratingDiff! > 0
-                      ? LichessColors.green
-                      : player.ratingDiff! < 0
+                  color:
+                      player.ratingDiff! > 0
+                          ? LichessColors.green
+                          : player.ratingDiff! < 0
                           ? LichessColors.error
                           : style.color,
                 ),
@@ -192,34 +175,21 @@ class _RatingAndDiff extends StatelessWidget {
 }
 
 class _User extends StatelessWidget {
-  const _User({
-    required this.user,
-  });
+  const _User({required this.user});
 
   final LightUser? user;
 
   @override
   Widget build(BuildContext context) {
     final longName = user?.name != null && user!.name.length > 10;
-    final style = TextStyle(
-      fontSize: longName ? 8 : 15,
-      fontWeight: FontWeight.w600,
-    );
+    final style = TextStyle(fontSize: longName ? 8 : 15, fontWeight: FontWeight.w600);
 
-    return UserFullNameWidget(
-      user: user,
-      showPatron: false,
-      showFlair: false,
-      style: style,
-    );
+    return UserFullNameWidget(user: user, showPatron: false, showFlair: false, style: style);
   }
 }
 
 class _UsersAndRatings extends StatelessWidget {
-  const _UsersAndRatings({
-    required this.white,
-    required this.black,
-  });
+  const _UsersAndRatings({required this.white, required this.black});
 
   final Player white;
 
@@ -232,28 +202,15 @@ class _UsersAndRatings extends StatelessWidget {
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            _User(
-              user: white.user,
-            ),
-            _RatingAndDiff(player: white),
-          ],
+          children: [_User(user: white.user), _RatingAndDiff(player: white)],
         ),
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Icon(
-            LichessIcons.crossed_swords,
-            size: 18,
-          ),
+          child: Icon(LichessIcons.crossed_swords, size: 18),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _User(
-              user: black.user,
-            ),
-            _RatingAndDiff(player: black),
-          ],
+          children: [_User(user: black.user), _RatingAndDiff(player: black)],
         ),
       ],
     );
@@ -261,9 +218,7 @@ class _UsersAndRatings extends StatelessWidget {
 }
 
 class _Opening extends StatelessWidget {
-  const _Opening({
-    required this.opening,
-  });
+  const _Opening({required this.opening});
 
   final LightOpening? opening;
 
@@ -271,55 +226,37 @@ class _Opening extends StatelessWidget {
   Widget build(BuildContext context) {
     return opening != null
         ? Text(
-            opening!.name,
-            maxLines: 2,
-            style: TextStyle(
-              color: textShade(
-                context,
-                Styles.subtitleOpacity,
-              ),
-              fontSize: 10,
-            ),
-            overflow: TextOverflow.ellipsis,
-          )
+          opening!.name,
+          maxLines: 2,
+          style: TextStyle(color: textShade(context, Styles.subtitleOpacity), fontSize: 10),
+          overflow: TextOverflow.ellipsis,
+        )
         : const SizedBox.shrink();
   }
 }
 
 class _ComputerAnalysisResult extends StatelessWidget {
-  const _ComputerAnalysisResult({
-    required this.analysis,
-  });
+  const _ComputerAnalysisResult({required this.analysis});
 
   final PlayerAnalysis? analysis;
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
-      color: textShade(
-        context,
-        0.6,
-      ),
-      fontSize: 9,
-    );
+    final textStyle = TextStyle(color: textShade(context, 0.6), fontSize: 9);
 
     return analysis != null
         ? Row(
-            children: [
-              Icon(
-                CupertinoIcons.chart_bar_alt_fill,
-                size: 8,
-                color: textShade(context, 0.5),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                analysis?.accuracy != null
-                    ? 'Accuracy: ${analysis?.accuracy}%'
-                    : context.l10n.computerAnalysisAvailable,
-                style: textStyle,
-              ),
-            ],
-          )
+          children: [
+            Icon(CupertinoIcons.chart_bar_alt_fill, size: 8, color: textShade(context, 0.5)),
+            const SizedBox(width: 5),
+            Text(
+              analysis?.accuracy != null
+                  ? 'Accuracy: ${analysis?.accuracy}%'
+                  : context.l10n.computerAnalysisAvailable,
+              style: textStyle,
+            ),
+          ],
+        )
         : const SizedBox.shrink();
   }
 }
