@@ -14,7 +14,7 @@ dependencies:
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^6.2.3
+  chessground: ^6.3.0
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2

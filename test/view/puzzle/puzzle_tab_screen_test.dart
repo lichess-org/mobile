@@ -159,12 +159,12 @@ void main() {
           find
                   .descendant(
                     of: find.byType(PuzzleAnglePreview),
-                    matching: find.byType(Chessboard),
+                    matching: find.byType(StaticChessboard),
                   )
                   .evaluate()
                   .first
                   .widget
-              as Chessboard;
+              as StaticChessboard;
 
       expect(chessboard.fen, equals('4k2r/Q5pp/3bp3/4n3/1r5q/8/PP2B1PP/R1B2R1K b k - 0 21'));
     });
