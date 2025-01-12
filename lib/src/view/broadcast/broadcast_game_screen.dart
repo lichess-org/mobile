@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -134,17 +133,15 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastState = ref.watch(broadcastGameControllerProvider(roundId, gameId));
-
-    switch (broadcastState) {
-      case AsyncValue(value: final broadcastState?, hasValue: true):
+    switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
+      case AsyncValue(value: final state?, hasValue: true):
         final analysisPrefs = ref.watch(analysisPreferencesProvider);
         final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
         final numEvalLines = analysisPrefs.numEvalLines;
 
-        final engineGaugeParams = broadcastState.engineGaugeParams;
-        final isLocalEvaluationEnabled = broadcastState.isLocalEvaluationEnabled;
-        final currentNode = broadcastState.currentNode;
+        final engineGaugeParams = state.engineGaugeParams;
+        final isLocalEvaluationEnabled = state.isLocalEvaluationEnabled;
+        final currentNode = state.currentNode;
 
         return AnalysisLayout(
           tabController: tabController,
@@ -188,7 +185,7 @@ class _Body extends ConsumerWidget {
                     isGameOver: currentNode.position.isGameOver,
                     onTapMove:
                         ref
-                            .read(broadcastGameControllerProvider(roundId, gameId).notifier)
+                            .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
                             .onUserMove,
                   )
                   : null,
@@ -198,13 +195,39 @@ class _Body extends ConsumerWidget {
             tournamentSlug: tournamentSlug,
             roundSlug: roundSlug,
           ),
-          children: [_OpeningExplorerTab(roundId, gameId), BroadcastGameTreeView(roundId, gameId)],
+          children: [_OpeningExplorerTab(roundId, gameId), _BroadcastGameTreeView(roundId, gameId)],
         );
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _BroadcastGameTreeView extends ConsumerWidget {
+  const _BroadcastGameTreeView(this.roundId, this.gameId);
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final state = ref.watch(ctrlProvider).requireValue;
+
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+
+    return SingleChildScrollView(
+      child: DebouncedPgnTreeView(
+        root: state.root,
+        currentPath: state.currentPath,
+        broadcastLivePath: state.broadcastLivePath,
+        pgnRootComments: state.pgnRootComments,
+        shouldShowAnnotations: analysisPrefs.showAnnotations,
+        notifier: ref.read(ctrlProvider.notifier),
+      ),
+    );
   }
 }
 
@@ -216,7 +239,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
     return OpeningExplorerView(
@@ -243,7 +266,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = broadcastGameControllerProvider(widget.roundId, widget.gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
@@ -344,26 +367,24 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final game = ref.watch(broadcastRoundGameProvider(roundId, gameId));
-
-    switch (game) {
+    switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
       case AsyncValue(value: final game?, hasValue: true):
-        final broadcastGameState =
-            ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
+        final broadcastAnalysisState =
+            ref.watch(broadcastAnalysisControllerProvider(roundId, gameId)).requireValue;
 
         final isCursorOnLiveMove =
-            broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
-        final sideToMove = broadcastGameState.position.turn;
+            broadcastAnalysisState.currentPath == broadcastAnalysisState.broadcastLivePath;
+        final sideToMove = broadcastAnalysisState.position.turn;
         final side = switch (widgetPosition) {
-          _PlayerWidgetPosition.bottom => broadcastGameState.pov,
-          _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
+          _PlayerWidgetPosition.bottom => broadcastAnalysisState.pov,
+          _PlayerWidgetPosition.top => broadcastAnalysisState.pov.opposite,
         };
 
         final player = game.players[side]!;
         final liveClock = isCursorOnLiveMove ? player.clock : null;
         final gameStatus = game.status;
 
-        final pastClocks = broadcastGameState.clocks;
+        final pastClocks = broadcastAnalysisState.clocks;
         final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
 
         return GestureDetector(
