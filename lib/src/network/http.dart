@@ -38,7 +38,9 @@ const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
 Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
-    kLichessHost.startsWith('localhost')
+    kLichessHost.startsWith('localhost') ||
+            kLichessHost.startsWith('10.') ||
+            kLichessHost.startsWith('192.168.')
         ? Uri.http(kLichessHost, unencodedPath, queryParameters)
         : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
