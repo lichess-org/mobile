@@ -42,9 +42,14 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
+      // Load the broadcast analysis controller
       await tester.pump();
 
       expect(find.byType(Chessboard), findsOneWidget);
+
+      // Load the broadcast round game provider
+      await tester.pump();
+
       expect(find.text('Dastan, Muhammed Batuhan'), findsOne);
       expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
@@ -68,8 +73,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      // Loading the game screen
-
+      // Load the game analysis controller
       await tester.pump();
 
       expect(find.byKey(const Key('c1-whitebishop')), findsOneWidget);
