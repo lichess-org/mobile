@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
 // to calculate the height of the header and footer of the board
@@ -88,6 +87,7 @@ class BroadcastPreview extends StatelessWidget {
     required this.roundSlug,
   });
 
+  // A circular progress indicator is used instead of shimmers currently
   const BroadcastPreview.loading()
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
@@ -131,13 +131,10 @@ class BroadcastPreview extends StatelessWidget {
         childCount: games == null ? numberLoadingBoards : games!.length,
         (context, index) {
           if (games == null) {
-            return ShimmerLoading(
-              isLoading: true,
-              child: BoardThumbnail.loading(
-                size: boardWidth,
-                header: _PlayerWidgetLoading(width: boardWidth),
-                footer: _PlayerWidgetLoading(width: boardWidth),
-              ),
+            return BoardThumbnail.loading(
+              size: boardWidth,
+              header: _PlayerWidgetLoading(width: boardWidth),
+              footer: _PlayerWidgetLoading(width: boardWidth),
             );
           }
 

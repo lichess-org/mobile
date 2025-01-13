@@ -83,21 +83,19 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                       ),
                     )
                   else
-                    Chessboard.fixed(
+                    StaticChessboard(
                       size: boardSize,
                       fen: widget.fen,
                       orientation: widget.orientation,
                       lastMove: widget.lastMove as NormalMove?,
-                      settings: ChessboardSettings(
-                        pieceAssets: boardPrefs.pieceSet.assets,
-                        colorScheme: boardPrefs.boardTheme.colors,
-                        brightness: boardPrefs.brightness,
-                        hue: boardPrefs.hue,
-                        enableCoordinates: false,
-                        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                        boxShadow: boardShadows,
-                        animationDuration: const Duration(milliseconds: 150),
-                      ),
+                      pieceAssets: boardPrefs.pieceSet.assets,
+                      colorScheme: boardPrefs.boardTheme.colors,
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      enableCoordinates: false,
+                      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                      boxShadow: boardShadows,
+                      animationDuration: const Duration(milliseconds: 150),
                     ),
                   const SizedBox(width: 10.0),
                   if (widget._showLoadingPlaceholder)
