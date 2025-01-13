@@ -90,7 +90,7 @@ dev_dependencies:
   mocktail: ^1.0.0
   network_image_mock: ^2.1.1
   riverpod_generator: ^2.1.0
-  riverpod_lint: ^2.3.3
+  riverpod_lint: ^2.6.4
   sqflite_common_ffi: ^2.2.3
   stream_channel: ^2.1.2
 
