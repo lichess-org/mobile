@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,7 +21,7 @@ class BroadcastGameSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broacdcastGameAnalysisController = broadcastGameControllerProvider(roundId, gameId);
+    final controller = broadcastAnalysisControllerProvider(roundId, gameId);
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
@@ -33,17 +33,11 @@ class BroadcastGameSettings extends ConsumerWidget {
       body: ListView(
         children: [
           StockfishSettingsWidget(
-            onToggleLocalEvaluation:
-                () => ref.read(broacdcastGameAnalysisController.notifier).toggleLocalEvaluation(),
+            onToggleLocalEvaluation: () => ref.read(controller.notifier).toggleLocalEvaluation(),
             onSetEngineSearchTime:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setEngineSearchTime(value),
-            onSetNumEvalLines:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setNumEvalLines(value),
-            onSetEngineCores:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setEngineCores(value),
+                (value) => ref.read(controller.notifier).setEngineSearchTime(value),
+            onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
+            onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
           ),
           ListSection(
             children: [

@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_tree_view.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -74,12 +73,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final broadcastRoundGameState = ref.watch(
-      broadcastRoundGameProvider(widget.roundId, widget.gameId),
-    );
-    final broadcastGameState = ref.watch(
-      broadcastGameControllerProvider(widget.roundId, widget.gameId),
-    );
     final title =
         (widget.title != null)
             ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
@@ -98,33 +91,25 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         actions: [
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           AppBarIconButton(
-            onPressed:
-                (broadcastGameState.hasValue)
-                    ? () {
-                      pushPlatformRoute(
-                        context,
-                        screen: BroadcastGameSettings(widget.roundId, widget.gameId),
-                      );
-                    }
-                    : null,
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                screen: BroadcastGameSettings(widget.roundId, widget.gameId),
+              );
+            },
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
         ],
       ),
-      body: switch ((broadcastRoundGameState, broadcastGameState)) {
-        (AsyncData(), AsyncData()) => _Body(
-          widget.tournamentId,
-          widget.roundId,
-          widget.gameId,
-          widget.tournamentSlug,
-          widget.roundSlug,
-          tabController: _tabController,
-        ),
-        (AsyncError(:final error), _) => Center(child: Text('Cannot load broadcast game: $error')),
-        (_, AsyncError(:final error)) => Center(child: Text('Cannot load broadcast game: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
+      body: _Body(
+        widget.tournamentId,
+        widget.roundId,
+        widget.gameId,
+        widget.tournamentSlug,
+        widget.roundSlug,
+        tabController: _tabController,
+      ),
     );
   }
 }
@@ -148,66 +133,100 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastState = ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
+    switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
+      case AsyncValue(value: final state?, hasValue: true):
+        final analysisPrefs = ref.watch(analysisPreferencesProvider);
+        final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+        final numEvalLines = analysisPrefs.numEvalLines;
+
+        final engineGaugeParams = state.engineGaugeParams;
+        final isLocalEvaluationEnabled = state.isLocalEvaluationEnabled;
+        final currentNode = state.currentNode;
+
+        return AnalysisLayout(
+          tabController: tabController,
+          boardBuilder:
+              (context, boardSize, borderRadius) =>
+                  _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+          boardHeader: _PlayerWidget(
+            tournamentId: tournamentId,
+            roundId: roundId,
+            gameId: gameId,
+            widgetPosition: _PlayerWidgetPosition.top,
+          ),
+          boardFooter: _PlayerWidget(
+            tournamentId: tournamentId,
+            roundId: roundId,
+            gameId: gameId,
+            widgetPosition: _PlayerWidgetPosition.bottom,
+          ),
+          engineGaugeBuilder:
+              isLocalEvaluationEnabled && showEvaluationGauge
+                  ? (context, orientation) {
+                    return orientation == Orientation.portrait
+                        ? EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.horizontal,
+                          params: engineGaugeParams,
+                        )
+                        : Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                          child: EngineGauge(
+                            displayMode: EngineGaugeDisplayMode.vertical,
+                            params: engineGaugeParams,
+                          ),
+                        );
+                  }
+                  : null,
+          engineLines:
+              isLocalEvaluationEnabled && numEvalLines > 0
+                  ? EngineLines(
+                    clientEval: currentNode.eval,
+                    isGameOver: currentNode.position.isGameOver,
+                    onTapMove:
+                        ref
+                            .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
+                            .onUserMove,
+                  )
+                  : null,
+          bottomBar: BroadcastGameBottomBar(
+            roundId: roundId,
+            gameId: gameId,
+            tournamentSlug: tournamentSlug,
+            roundSlug: roundSlug,
+          ),
+          children: [_OpeningExplorerTab(roundId, gameId), _BroadcastGameTreeView(roundId, gameId)],
+        );
+      case AsyncValue(:final error?):
+        return Center(child: Text('Cannot load broadcast game: $error'));
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
+  }
+}
+
+class _BroadcastGameTreeView extends ConsumerWidget {
+  const _BroadcastGameTreeView(this.roundId, this.gameId);
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final state = ref.watch(ctrlProvider).requireValue;
+
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-    final numEvalLines = analysisPrefs.numEvalLines;
 
-    final engineGaugeParams = broadcastState.engineGaugeParams;
-    final isLocalEvaluationEnabled = broadcastState.isLocalEvaluationEnabled;
-    final currentNode = broadcastState.currentNode;
-
-    return AnalysisLayout(
-      tabController: tabController,
-      boardBuilder:
-          (context, boardSize, borderRadius) =>
-              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
-      boardHeader: _PlayerWidget(
-        tournamentId: tournamentId,
-        roundId: roundId,
-        gameId: gameId,
-        widgetPosition: _PlayerWidgetPosition.top,
+    return SingleChildScrollView(
+      child: DebouncedPgnTreeView(
+        root: state.root,
+        currentPath: state.currentPath,
+        broadcastLivePath: state.broadcastLivePath,
+        pgnRootComments: state.pgnRootComments,
+        shouldShowAnnotations: analysisPrefs.showAnnotations,
+        notifier: ref.read(ctrlProvider.notifier),
       ),
-      boardFooter: _PlayerWidget(
-        tournamentId: tournamentId,
-        roundId: roundId,
-        gameId: gameId,
-        widgetPosition: _PlayerWidgetPosition.bottom,
-      ),
-      engineGaugeBuilder:
-          isLocalEvaluationEnabled && showEvaluationGauge
-              ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: engineGaugeParams,
-                    )
-                    : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                        params: engineGaugeParams,
-                      ),
-                    );
-              }
-              : null,
-      engineLines:
-          isLocalEvaluationEnabled && numEvalLines > 0
-              ? EngineLines(
-                clientEval: currentNode.eval,
-                isGameOver: currentNode.position.isGameOver,
-                onTapMove:
-                    ref.read(broadcastGameControllerProvider(roundId, gameId).notifier).onUserMove,
-              )
-              : null,
-      bottomBar: BroadcastGameBottomBar(
-        roundId: roundId,
-        gameId: gameId,
-        tournamentSlug: tournamentSlug,
-        roundSlug: roundSlug,
-      ),
-      children: [_OpeningExplorerTab(roundId, gameId), BroadcastGameTreeView(roundId, gameId)],
     );
   }
 }
@@ -220,7 +239,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
     return OpeningExplorerView(
@@ -247,7 +266,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = broadcastGameControllerProvider(widget.roundId, widget.gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
@@ -348,108 +367,114 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastGameState =
-        ref.watch(broadcastGameControllerProvider(roundId, gameId)).requireValue;
-    final game = ref.watch(broadcastRoundGameProvider(roundId, gameId)).requireValue;
+    switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
+      case AsyncValue(value: final game?, hasValue: true):
+        final broadcastAnalysisState =
+            ref.watch(broadcastAnalysisControllerProvider(roundId, gameId)).requireValue;
 
-    final isCursorOnLiveMove =
-        broadcastGameState.currentPath == broadcastGameState.broadcastLivePath;
-    final sideToMove = broadcastGameState.position.turn;
-    final side = switch (widgetPosition) {
-      _PlayerWidgetPosition.bottom => broadcastGameState.pov,
-      _PlayerWidgetPosition.top => broadcastGameState.pov.opposite,
-    };
+        final isCursorOnLiveMove =
+            broadcastAnalysisState.currentPath == broadcastAnalysisState.broadcastLivePath;
+        final sideToMove = broadcastAnalysisState.position.turn;
+        final side = switch (widgetPosition) {
+          _PlayerWidgetPosition.bottom => broadcastAnalysisState.pov,
+          _PlayerWidgetPosition.top => broadcastAnalysisState.pov.opposite,
+        };
 
-    final player = game.players[side]!;
-    final liveClock = isCursorOnLiveMove ? player.clock : null;
-    final gameStatus = game.status;
+        final player = game.players[side]!;
+        final liveClock = isCursorOnLiveMove ? player.clock : null;
+        final gameStatus = game.status;
 
-    final pastClocks = broadcastGameState.clocks;
-    final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
+        final pastClocks = broadcastAnalysisState.clocks;
+        final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
 
-    return GestureDetector(
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          builder:
-              (context) => BroadcastPlayerResultsScreen(
-                tournamentId,
-                (player.fideId != null) ? player.fideId!.toString() : player.name,
-                player.title,
-                player.name,
-              ),
-        );
-      },
-      child: Container(
-        color:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? Styles.cupertinoCardColor.resolveFrom(context)
-                : Theme.of(context).colorScheme.surfaceContainer,
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Row(
-          children: [
-            if (game.isOver) ...[
-              Text(
-                (gameStatus == BroadcastResult.draw)
-                    ? '½'
-                    : (gameStatus == BroadcastResult.whiteWins)
-                    ? side == Side.white
+        return GestureDetector(
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              builder:
+                  (context) => BroadcastPlayerResultsScreen(
+                    tournamentId,
+                    (player.fideId != null) ? player.fideId!.toString() : player.name,
+                    player.title,
+                    player.name,
+                  ),
+            );
+          },
+          child: Container(
+            color:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? Styles.cupertinoCardColor.resolveFrom(context)
+                    : Theme.of(context).colorScheme.surfaceContainer,
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Row(
+              children: [
+                if (game.isOver) ...[
+                  Text(
+                    (gameStatus == BroadcastResult.draw)
+                        ? '½'
+                        : (gameStatus == BroadcastResult.whiteWins)
+                        ? side == Side.white
+                            ? '1'
+                            : '0'
+                        : side == Side.black
                         ? '1'
-                        : '0'
-                    : side == Side.black
-                    ? '1'
-                    : '0',
-                style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 16.0),
-            ],
-            Expanded(
-              child: BroadcastPlayerWidget(
-                federation: player.federation,
-                title: player.title,
-                name: player.name,
-                rating: player.rating,
-                textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            if (liveClock != null || pastClock != null)
-              Container(
-                height: kAnalysisBoardHeaderOrFooterHeight,
-                color:
-                    (side == sideToMove)
-                        ? isCursorOnLiveMove
-                            ? Theme.of(context).colorScheme.tertiaryContainer
-                            : Theme.of(context).colorScheme.secondaryContainer
-                        : Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: Center(
-                    child:
-                        liveClock != null
-                            ? CountdownClockBuilder(
-                              timeLeft: liveClock,
-                              active: side == sideToMove,
-                              builder:
-                                  (context, timeLeft) => _Clock(
-                                    timeLeft: timeLeft,
-                                    isSideToMove: side == sideToMove,
-                                    isLive: true,
-                                  ),
-                              tickInterval: const Duration(seconds: 1),
-                              clockUpdatedAt: game.updatedClockAt,
-                            )
-                            : _Clock(
-                              timeLeft: pastClock!,
-                              isSideToMove: side == sideToMove,
-                              isLive: false,
-                            ),
+                        : '0',
+                    style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 16.0),
+                ],
+                Expanded(
+                  child: BroadcastPlayerWidget(
+                    federation: player.federation,
+                    title: player.title,
+                    name: player.name,
+                    rating: player.rating,
+                    textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-          ],
-        ),
-      ),
-    );
+                if (liveClock != null || pastClock != null)
+                  Container(
+                    height: kAnalysisBoardHeaderOrFooterHeight,
+                    color:
+                        (side == sideToMove)
+                            ? isCursorOnLiveMove
+                                ? Theme.of(context).colorScheme.tertiaryContainer
+                                : Theme.of(context).colorScheme.secondaryContainer
+                            : Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      child: Center(
+                        child:
+                            liveClock != null
+                                ? CountdownClockBuilder(
+                                  timeLeft: liveClock,
+                                  active: side == sideToMove,
+                                  builder:
+                                      (context, timeLeft) => _Clock(
+                                        timeLeft: timeLeft,
+                                        isSideToMove: side == sideToMove,
+                                        isLive: true,
+                                      ),
+                                  tickInterval: const Duration(seconds: 1),
+                                  clockUpdatedAt: game.updatedClockAt,
+                                )
+                                : _Clock(
+                                  timeLeft: pastClock!,
+                                  isSideToMove: side == sideToMove,
+                                  isLive: false,
+                                ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      case AsyncValue(:final error?):
+        return Text('Cannot load player data: $error');
+      case _:
+        return const SizedBox.shrink();
+    }
   }
 }
 

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -115,9 +116,15 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
                   onTap: () {
+                    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
                     pushPlatformRoute(
                       context,
-                      builder: (context) => CreateChallengeScreen(user.lightUser),
+                      title: context.l10n.challengeChallengesX(user.lightUser.name),
+                      builder:
+                          (context) =>
+                              isOddBot
+                                  ? ChallengeOddBotsScreen(user.lightUser)
+                                  : CreateChallengeScreen(user.lightUser),
                     );
                   },
                 ),

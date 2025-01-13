@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('StudyScreen');
@@ -72,7 +73,23 @@ class StudyScreen extends ConsumerWidget {
         );
       case _:
         return PlatformScaffold(
-          appBar: const PlatformAppBar(title: Text('')),
+          appBar: PlatformAppBar(
+            title: Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SizedBox(
+                  height: 24.0,
+                  width: 200.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
@@ -86,7 +103,7 @@ class StudyScreen extends ConsumerWidget {
                     orientation: Side.white,
                     fen: kEmptyFEN,
                   ),
-              children: const [SizedBox.shrink()],
+              children: const [Center(child: CircularProgressIndicator.adaptive())],
             ),
           ),
         );

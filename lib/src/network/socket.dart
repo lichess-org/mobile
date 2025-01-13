@@ -48,7 +48,9 @@ final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
 Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =>
-    kLichessWSHost.startsWith('localhost')
+    kLichessWSHost.startsWith('localhost') ||
+            kLichessWSHost.startsWith('10.') ||
+            kLichessWSHost.startsWith('192.168.')
         ? Uri(
           scheme: 'ws',
           host: kLichessWSHost.split(':')[0],
@@ -330,20 +332,23 @@ class SocketClient {
   void _handleEvent(SocketEvent event) {
     switch (event.topic) {
       case '_pong':
+        _handlePong(pingDelay);
       case 'n':
         _handlePong(pingDelay);
+        continue addToStream;
       case 'ack':
         _onServerAck(event);
-    }
-
-    if (event != SocketEvent.pong && event.topic != 'ack') {
-      if (_streamController.hasListener) {
-        _streamController.add(event);
-      }
-      if (_globalStreamController.hasListener &&
-          _globalSocketStreamAllowedTopics.contains(event.topic)) {
-        _globalStreamController.add(event);
-      }
+      case 'batch':
+        _handleBatch(event);
+      addToStream:
+      case _:
+        if (_streamController.hasListener) {
+          _streamController.add(event);
+        }
+        if (_globalStreamController.hasListener &&
+            _globalSocketStreamAllowedTopics.contains(event.topic)) {
+          _globalStreamController.add(event);
+        }
     }
   }
 
@@ -405,6 +410,16 @@ class SocketClient {
       if (at.isBefore(resendCutoff)) {
         _sink?.add(jsonEncode(ack));
       }
+    }
+  }
+
+  void _handleBatch(SocketEvent batchEvent) {
+    final jsonEventList = batchEvent.data as List<dynamic>;
+
+    for (final jsonEvent in jsonEventList) {
+      final event = SocketEvent.fromJson(jsonEvent as Map<String, dynamic>);
+
+      _streamController.add(event);
     }
   }
 }
