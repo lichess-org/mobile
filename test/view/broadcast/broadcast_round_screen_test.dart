@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -124,7 +125,11 @@ void main() {
         // Load the overview
         await tester.pump();
 
-        expect(find.text('Jan 10 - Jan 18'), findsOneWidget);
+        final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
+        final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
+        final f = DateFormat.MMMd();
+
+        expect(find.text('${f.format(startsAt)} - ${f.format(endsAt)}'), findsOneWidget);
         expect(find.text('9-round Swiss'), findsOneWidget);
         expect(find.text('90 min + 30 sec / move'), findsOneWidget);
         expect(find.text('Seville, Spain'), findsOneWidget);
