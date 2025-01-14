@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/utils/app_links.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
@@ -126,6 +128,20 @@ class BottomNavScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+
+    ref.listen(appLinksProvider, (_, appLinkUri) {
+      switch (appLinkUri) {
+        case AsyncData(:final Uri value):
+          {
+            final builder = resolveAppLinkUri(value);
+            if (builder != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                pushPlatformRoute(context, rootNavigator: true, builder: builder);
+              });
+            }
+          }
+      }
+    });
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:

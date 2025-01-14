@@ -16,4 +16,5 @@ targets:
           - lib/src/model/**/*.dart
           - lib/src/network/*.dart
           - lib/src/db/*.dart
+          - lib/src/utils/app_links.dart
           - lib/src/**/*_providers.dart
