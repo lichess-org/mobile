@@ -38,11 +38,11 @@ class PlatformBottomBar extends StatelessWidget {
       return ColoredBox(
         color: CupertinoTheme.of(
           context,
-        ).barBackgroundColor.withValues(alpha: transparentCupertinoBar ? 0.0 : 1.0),
-        child: SafeArea(
-          top: false,
-          child: SizedBox(
-            height: kBottomBarHeight,
+        ).barBackgroundColor.withValues(alpha: transparentCupertinoBar ? 0.0 : null),
+        child: SizedBox(
+          height: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          child: SafeArea(
+            top: false,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: mainAxisAlignment,
