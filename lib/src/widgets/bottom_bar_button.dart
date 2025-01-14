@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A bottom bar button.
+///
+/// Typically used in a [PlatformBottomBar].
 class BottomBarButton extends StatelessWidget {
   const BottomBarButton({
     required this.icon,

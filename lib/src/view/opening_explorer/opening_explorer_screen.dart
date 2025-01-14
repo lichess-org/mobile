@@ -252,7 +252,8 @@ class _BottomBar extends ConsumerWidget {
       OpeningDatabase.player => context.l10n.player,
     };
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentCupertinoBar: false,
       children: [
         BottomBarButton(
           label: dbLabel,

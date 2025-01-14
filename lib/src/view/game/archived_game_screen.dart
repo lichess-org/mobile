@@ -251,7 +251,7 @@ class _BottomBar extends ConsumerWidget {
     final gameData = archivedGameData;
 
     if (gameData == null) {
-      return const BottomBar(children: []);
+      return const PlatformBottomBar(children: []);
     }
 
     final canGoForward = ref.watch(canGoForwardProvider(gameData.id));
@@ -283,7 +283,7 @@ class _BottomBar extends ConsumerWidget {
       );
     }
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(label: context.l10n.menu, onTap: showGameMenu, icon: Icons.menu),
         if (gameCursor.hasValue)

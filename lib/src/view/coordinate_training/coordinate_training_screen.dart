@@ -178,7 +178,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
           if (!trainingState.trainingActive)
-            BottomBar(
+            PlatformBottomBar(
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,
