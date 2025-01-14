@@ -70,6 +70,12 @@ class BroadcastOverviewTab extends ConsumerWidget {
                       context.l10n.broadcastOfficialWebsite,
                       information.website,
                     ),
+                  if (information.standings != null)
+                    _BroadcastOverviewCard(
+                      Icons.link,
+                      context.l10n.broadcastStandings,
+                      information.standings,
+                    ),
                 ],
               ),
               if (description != null) ...[
