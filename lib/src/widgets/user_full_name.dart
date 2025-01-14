@@ -18,6 +18,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
+    this.showPatron = true,
     this.style,
     super.key,
   });
@@ -29,6 +30,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
+    this.showPatron = true,
     this.style,
     super.key,
   });
@@ -48,6 +50,9 @@ class UserFullNameWidget extends ConsumerWidget {
 
   /// Whether to show the user's flair. Defaults to `true`.
   final bool showFlair;
+
+  /// If the user is a patron, show the patron icon in front of their name. Defaults to `true`.
+  final bool showPatron;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,7 +81,7 @@ class UserFullNameWidget extends ConsumerWidget {
               color: user?.isOnline == true ? context.lichessColors.good : null,
             ),
           ),
-        if (user?.isPatron == true)
+        if (showPatron && user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
@@ -109,7 +114,10 @@ class UserFullNameWidget extends ConsumerWidget {
             height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),
         ],
-        if (shouldShowRating && ratingStr != null) ...[const SizedBox(width: 5), Text(ratingStr)],
+        if (shouldShowRating && ratingStr != null) ...[
+          const SizedBox(width: 5),
+          Text(ratingStr, style: style),
+        ],
       ],
     );
   }
