@@ -182,7 +182,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
           label: context.l10n.flipBoard,

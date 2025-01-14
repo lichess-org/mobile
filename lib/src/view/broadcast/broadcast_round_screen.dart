@@ -138,7 +138,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               setTournamentId: setTournamentId,
               setRoundId: setRoundId,
             ),
-            _ => const BottomBar.empty(),
+            _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
           },
         ],
       ),
@@ -199,7 +199,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const BottomBar.empty(),
+        _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
       },
     );
   }
@@ -284,7 +284,8 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentCupertinoBar: false,
       children: [
         if (tournament.group != null)
           AdaptiveTextButton(

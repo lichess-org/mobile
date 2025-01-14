@@ -4,15 +4,18 @@ import 'package:lichess_mobile/src/constants.dart';
 
 /// A container in the style of a bottom app bar, containg a [Row] of children widgets.
 ///
+/// It adapts to the current platform, using a [BottomAppBar] on Android and a [ColoredBox] on iOS.
+///
 /// The height of the bar is always [kBottomBarHeight].
-class BottomBar extends StatelessWidget {
-  const BottomBar({
+class PlatformBottomBar extends StatelessWidget {
+  const PlatformBottomBar({
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
+    this.transparentCupertinoBar = true,
   });
 
-  const BottomBar.empty()
+  const PlatformBottomBar.empty({this.transparentCupertinoBar = true})
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -26,11 +29,16 @@ class BottomBar extends StatelessWidget {
   /// Whether to expand the children to fill the available space. Defaults to true.
   final bool expandChildren;
 
+  /// Whether to make the Cupertino bar transparent. Defaults to true.
+  final bool transparentCupertinoBar;
+
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return ColoredBox(
-        color: CupertinoTheme.of(context).barBackgroundColor,
+        color: CupertinoTheme.of(
+          context,
+        ).barBackgroundColor.withValues(alpha: transparentCupertinoBar ? 0.0 : 1.0),
         child: SafeArea(
           top: false,
           child: SizedBox(

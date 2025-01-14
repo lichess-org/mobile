@@ -185,7 +185,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
                   child: BoardTable.empty(showEngineGaugePlaceholder: true),
                 ),
               ),
-              BottomBar.empty(),
+              PlatformBottomBar.empty(),
             ],
           ),
       error: (e, s) {
@@ -346,7 +346,7 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
-    return BottomBar(
+    return PlatformBottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         if (initialPuzzleContext.userId != null &&

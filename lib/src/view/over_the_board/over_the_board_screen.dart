@@ -187,7 +187,7 @@ class _BottomBar extends ConsumerWidget {
 
     final clock = ref.watch(overTheBoardClockProvider);
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
           label: 'Configure game',

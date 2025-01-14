@@ -413,7 +413,7 @@ class _GameBottomBar extends ConsumerWidget {
     final chatStateAsync =
         gamePrefs.enableChat == true ? ref.watch(chatControllerProvider(id)) : null;
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: gameStateAsync.when(
         data: (gameState) {
           final isChatEnabled = chatStateAsync != null && !gameState.isZenModeActive;

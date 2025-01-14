@@ -37,7 +37,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).valueOrNull;
     if (state == null) {
-      return const BottomBar(children: []);
+      return const PlatformBottomBar(children: []);
     }
 
     final onGoForward =
@@ -45,7 +45,8 @@ class _AnalysisBottomBar extends ConsumerWidget {
     final onGoBack =
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentCupertinoBar: false,
       children: [
         _ChapterButton(state: state),
         _NextChapterButton(
@@ -90,7 +91,7 @@ class _GamebookBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
