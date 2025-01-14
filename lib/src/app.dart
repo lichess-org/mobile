@@ -133,30 +133,30 @@ class _AppState extends ConsumerState<Application> {
         final colorScheme =
             brightness == Brightness.light ? AppTheme.light.colorScheme : AppTheme.dark.colorScheme;
 
-        // final appTheme = brightness == Brightness.light ? AppTheme.light : AppTheme.dark;
+        final appTheme = brightness == Brightness.light ? AppTheme.light : AppTheme.dark;
 
-        // final cupertinoThemeData = CupertinoThemeData(
-        //   primaryColor: colorScheme.primary,
-        //   primaryContrastingColor: colorScheme.onPrimary,
-        //   brightness: brightness,
-        //   textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-        //     primaryColor: colorScheme.primary,
-        //     textStyle: CupertinoTheme.of(
-        //       context,
-        //     ).textTheme.textStyle.copyWith(color: colorScheme.onSurface),
-        //     navTitleTextStyle: CupertinoTheme.of(
-        //       context,
-        //     ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-        //     navLargeTitleTextStyle: CupertinoTheme.of(
-        //       context,
-        //     ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-        //   ),
-        //   scaffoldBackgroundColor: colorScheme.surface,
-        //   barBackgroundColor: appTheme.appBarTheme.backgroundColor?.withValues(
-        //     alpha: isTablet ? 1.0 : 0.9,
-        //   ),
-        //   applyThemeToAll: true,
-        // );
+        final cupertinoThemeData = CupertinoThemeData(
+          primaryColor: colorScheme.primary,
+          primaryContrastingColor: colorScheme.onPrimary,
+          brightness: brightness,
+          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+            primaryColor: colorScheme.primary,
+            textStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.textStyle.copyWith(color: colorScheme.onSurface),
+            navTitleTextStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+            navLargeTitleTextStyle: CupertinoTheme.of(
+              context,
+            ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+          ),
+          scaffoldBackgroundColor: colorScheme.surface,
+          barBackgroundColor: appTheme.appBarTheme.backgroundColor?.withValues(
+            alpha: isTablet ? 1.0 : 0.9,
+          ),
+          applyThemeToAll: true,
+        );
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -164,6 +164,7 @@ class _AppState extends ConsumerState<Application> {
           onGenerateTitle: (BuildContext context) => 'lichess.org',
           locale: generalPrefs.locale,
           theme: AppTheme.light.copyWith(
+            cupertinoOverrideTheme: cupertinoThemeData,
             textTheme:
                 Theme.of(context).platform == TargetPlatform.iOS ? Typography.blackCupertino : null,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
@@ -182,7 +183,7 @@ class _AppState extends ConsumerState<Application> {
               )
               .copyWith(
                 splashFactory: isIOS ? NoSplash.splashFactory : null,
-                // cupertinoOverrideTheme: cupertinoThemeData,
+                cupertinoOverrideTheme: cupertinoThemeData,
                 navigationBarTheme: NavigationBarTheme.of(context).copyWith(
                   height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
                 ),
@@ -246,7 +247,7 @@ sealed class AppTheme {
   static ThemeData dark = FlexThemeData.dark(
     scheme: FlexScheme.espresso,
     surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-    blendLevel: 2,
+    blendLevel: 16,
     appBarStyle: FlexAppBarStyle.background,
     bottomAppBarElevation: 2.0,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
