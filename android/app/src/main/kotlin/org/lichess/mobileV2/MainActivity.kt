@@ -2,7 +2,9 @@ package org.lichess.mobileV2
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
+import android.os.Bundle
 import androidx.core.view.ViewCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -11,6 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
   private val GESTURES_CHANNEL = "mobile.lichess.org/gestures_exclusion"
   private val SYSTEM_CHANNEL = "mobile.lichess.org/system"
+  private val APP_LINK_CHANNEL = "mobile.lichess.org/app_links"
 
   override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
@@ -48,6 +51,28 @@ class MainActivity: FlutterActivity() {
           }
       }
     }
+
+    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, APP_LINK_CHANNEL).setMethodCallHandler {
+      call, result ->
+      when (call.method) {
+          "getAppLink" -> {
+            result.success(intent.data?.toString())
+          }
+          else -> {
+            result.notImplemented()
+          }
+      }
+    }
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    MethodChannel(flutterEngine!!.dartExecutor.binaryMessenger, APP_LINK_CHANNEL)
+      .invokeMethod("newAppLink", intent.data?.toString())
   }
 
   private fun decodeExclusionRects(inputRects: List<Map<String, Int>>): List<Rect> =
