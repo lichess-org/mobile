@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -23,6 +25,46 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+
+class BookmarkButton extends ConsumerWidget {
+  const BookmarkButton({required this.id, this.bookmarked = false});
+
+  final GameId id;
+  final bool bookmarked;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBarIconButton(
+      onPressed: () {
+        ref.withClient((client) => GameRepository(client).bookmark(id, bookmark: true));
+      },
+      semanticsLabel: context.l10n.bookmarkThisGame,
+      icon: Icon(bookmarked ? Icons.star : Icons.star_outline_rounded),
+    );
+  }
+}
+
+class _SettingButton extends ConsumerWidget {
+  const _SettingButton({required this.id});
+
+  final GameFullId id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBarIconButton(
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (_) => GameSettings(id: id),
+          ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
+  }
+}
 
 final _gameTitledateFormat = DateFormat.yMMMd();
 
@@ -45,6 +87,7 @@ class GameAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shouldPreventGoingBackAsync =
         id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
@@ -61,20 +104,10 @@ class GameAppBar extends ConsumerWidget {
               : const SizedBox.shrink(),
       actions: [
         const ToggleSoundButton(),
-        if (id != null)
-          AppBarIconButton(
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-                  builder: (_) => GameSettings(id: id!),
-                ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
+        if (id != null) ...[
+          if (isLoggedIn) BookmarkButton(id: id!.gameId),
+          _SettingButton(id: id!),
+        ],
       ],
     );
   }

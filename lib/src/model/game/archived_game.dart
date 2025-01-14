@@ -99,6 +99,9 @@ class LightArchivedGame with _$LightArchivedGame {
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
+
+    /// If the game is bookmarked, can only be null if the user is not logged in
+    bool? bookmarked,
   }) = _ArchivedGameData;
 
   factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
@@ -223,6 +226,7 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
+    bookmarked: pick('bookmarked').asBoolOrFalse(),
   );
 }
 

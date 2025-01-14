@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -135,9 +136,13 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
+    final gameListProvider = userGameHistoryProvider(
+      widget.user?.id,
+      isOnline: widget.isOnline,
+      filter: gameFilterState,
     );
+    final gameListState = ref.watch(gameListProvider);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
 
     return gameListState.when(
       data: (state) {
@@ -170,15 +175,34 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
-                return ExtendedGameListTile(
+                final gameTile = ExtendedGameListTile(
                   item: list[index],
-                  userId: widget.user?.id,
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
                 );
+
+                final game = list[index].game;
+
+                return isLoggedIn
+                    ? Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              ref.read(gameListProvider.notifier).toggleBookmark(index);
+                            },
+                            icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
+                            label: context.l10n.bookmarkThisGame,
+                          ),
+                        ],
+                      ),
+                      child: gameTile,
+                    )
+                    : gameTile;
               },
             );
       },

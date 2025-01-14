@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -25,8 +24,6 @@ class RecentGamesWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
-    final userId = user?.id ?? session?.user.id;
 
     final recentGames =
         user != null
@@ -67,7 +64,7 @@ class RecentGamesWidget extends ConsumerWidget {
                   : null,
           children:
               data.map((item) {
-                return ExtendedGameListTile(item: item, userId: userId);
+                return ExtendedGameListTile(item: item);
               }).toList(),
         );
       },
