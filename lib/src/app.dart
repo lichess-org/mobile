@@ -120,181 +120,134 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-
-    final brightness = ref.watch(currentBrightnessProvider);
-
+    // final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
+    final isTablet = isTabletOrLarger(context);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    return DynamicColorBuilder(
-      builder: (lightColorScheme, darkColorScheme) {
-        final isTablet = isTabletOrLarger(context);
-        final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final flexSchemeLightColors = generalPrefs.appTheme.flexScheme.light;
+    final flexSchemeDarkColors = generalPrefs.appTheme.flexScheme.dark;
 
-        final colorScheme =
-            brightness == Brightness.light ? AppTheme.light.colorScheme : AppTheme.dark.colorScheme;
+    final lightTheme = FlexThemeData.light(
+      colors: flexSchemeLightColors,
+      surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
+      blendLevel: 1,
+      appBarStyle: FlexAppBarStyle.background,
+      bottomAppBarElevation: 2.0,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    );
+    final darkTheme = FlexThemeData.dark(
+      colors: flexSchemeDarkColors,
+      surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
+      blendLevel: 28,
+      appBarStyle: FlexAppBarStyle.background,
+      bottomAppBarElevation: 2.0,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    );
 
-        final appTheme = brightness == Brightness.light ? AppTheme.light : AppTheme.dark;
+    final lightCupertinoTheme = CupertinoThemeData(
+      primaryColor: lightTheme.colorScheme.primary,
+      primaryContrastingColor: lightTheme.colorScheme.onPrimary,
+      brightness: Brightness.light,
+      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+        primaryColor: lightTheme.colorScheme.primary,
+        textStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.textStyle.copyWith(color: lightTheme.colorScheme.onSurface),
+        navTitleTextStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+        navLargeTitleTextStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+      ),
+      scaffoldBackgroundColor: lightTheme.colorScheme.surface,
+      barBackgroundColor: lightTheme.appBarTheme.backgroundColor?.withValues(
+        alpha: isTablet ? 1.0 : 0.9,
+      ),
+      applyThemeToAll: true,
+    );
 
-        final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: colorScheme.primary,
-          primaryContrastingColor: colorScheme.onPrimary,
-          brightness: brightness,
-          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-            primaryColor: colorScheme.primary,
-            textStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.textStyle.copyWith(color: colorScheme.onSurface),
-            navTitleTextStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-            navLargeTitleTextStyle: CupertinoTheme.of(
-              context,
-            ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-          ),
-          scaffoldBackgroundColor: colorScheme.surface,
-          barBackgroundColor: appTheme.appBarTheme.backgroundColor?.withValues(
-            alpha: isTablet ? 1.0 : 0.9,
-          ),
-          applyThemeToAll: true,
-        );
+    final darkCupertinoTheme = CupertinoThemeData(
+      primaryColor: darkTheme.colorScheme.primary,
+      primaryContrastingColor: darkTheme.colorScheme.onPrimary,
+      brightness: Brightness.dark,
+      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+        primaryColor: darkTheme.colorScheme.primary,
+        textStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.textStyle.copyWith(color: darkTheme.colorScheme.onSurface),
+        navTitleTextStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+        navLargeTitleTextStyle: CupertinoTheme.of(
+          context,
+        ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
+      ),
+      scaffoldBackgroundColor: darkTheme.colorScheme.surface,
+      barBackgroundColor: darkTheme.appBarTheme.backgroundColor?.withValues(
+        alpha: isTablet ? 1.0 : 0.9,
+      ),
+      applyThemeToAll: true,
+    );
 
-        return MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: kSupportedLocales,
-          onGenerateTitle: (BuildContext context) => 'lichess.org',
-          locale: generalPrefs.locale,
-          theme: AppTheme.light.copyWith(
-            cupertinoOverrideTheme: cupertinoThemeData,
-            textTheme:
-                Theme.of(context).platform == TargetPlatform.iOS ? Typography.blackCupertino : null,
-            navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-              height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-            ),
-            extensions: [lichessCustomColors.harmonized(colorScheme)],
-          ),
-          darkTheme: AppTheme.dark
-              .copyWith(
-                textTheme:
-                    isIOS
-                        ? brightness == Brightness.light
-                            ? Typography.blackCupertino
-                            : Styles.whiteCupertinoTextTheme
-                        : null,
-              )
-              .copyWith(
-                splashFactory: isIOS ? NoSplash.splashFactory : null,
-                cupertinoOverrideTheme: cupertinoThemeData,
-                navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-                ),
-                extensions: [lichessCustomColors.harmonized(colorScheme)],
-              ),
-          themeMode: switch (generalPrefs.themeMode) {
-            BackgroundThemeMode.light => ThemeMode.light,
-            BackgroundThemeMode.dark => ThemeMode.dark,
-            BackgroundThemeMode.system => ThemeMode.system,
-          },
-          builder:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? (context, child) {
-                    // return CupertinoTheme(
-                    //   data: cupertinoThemeData,
-                    //   child: IconTheme.merge(
-                    //     data: IconThemeData(
-                    //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
-                    //     ),
-                    //     child: Material(child: child),
-                    //   ),
-                    // );
-                    return Material(child: child);
-                  }
-                  : null,
-          home: const BottomNavScaffold(),
-          navigatorObservers: [rootNavPageRouteObserver],
-        );
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: kSupportedLocales,
+      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      locale: generalPrefs.locale,
+      theme: lightTheme.copyWith(
+        cupertinoOverrideTheme: lightCupertinoTheme,
+        splashFactory: isIOS ? NoSplash.splashFactory : null,
+        textTheme: isIOS ? Typography.blackCupertino : null,
+        listTileTheme: ListTileTheme.of(context).copyWith(
+          titleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+          subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+          leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+        ),
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        extensions: [lichessCustomColors.harmonized(lightTheme.colorScheme)],
+      ),
+      darkTheme: darkTheme.copyWith(
+        cupertinoOverrideTheme: darkCupertinoTheme,
+        splashFactory: isIOS ? NoSplash.splashFactory : null,
+        textTheme: isIOS ? Typography.whiteCupertino : null,
+        listTileTheme: ListTileTheme.of(context).copyWith(
+          titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+          subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+          leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+        ),
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        extensions: [lichessCustomColors.harmonized(darkTheme.colorScheme)],
+      ),
+      themeMode: switch (generalPrefs.themeMode) {
+        BackgroundThemeMode.light => ThemeMode.light,
+        BackgroundThemeMode.dark => ThemeMode.dark,
+        BackgroundThemeMode.system => ThemeMode.system,
       },
+      builder:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? (context, child) {
+                // return CupertinoTheme(
+                //   data: cupertinoThemeData,
+                //   child: IconTheme.merge(
+                //     data: IconThemeData(
+                //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                //     ),
+                //     child: Material(child: child),
+                //   ),
+                // );
+                return Material(child: child);
+              }
+              : null,
+      home: const BottomNavScaffold(),
+      navigatorObservers: [rootNavPageRouteObserver],
     );
   }
 }
-
-/// The [AppTheme] defines light and dark themes for the app.
-///
-/// Theme setup for FlexColorScheme package v8.
-/// Use same major flex_color_scheme package version. If you use a
-/// lower minor version, some properties may not be supported.
-/// In that case, remove them after copying this theme to your
-/// app or upgrade package to version 8.0.2.
-///
-/// Use in [MaterialApp] like this:
-///
-/// MaterialApp(
-///  theme: AppTheme.light,
-///  darkTheme: AppTheme.dark,
-///  :
-/// );
-sealed class AppTheme {
-  // The defined light theme.
-  static ThemeData light = FlexThemeData.light(
-    scheme: FlexScheme.espresso,
-    surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-    blendLevel: 1,
-    appBarStyle: FlexAppBarStyle.background,
-    bottomAppBarElevation: 2.0,
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-  );
-  // The defined dark theme.
-  static ThemeData dark = FlexThemeData.dark(
-    scheme: FlexScheme.espresso,
-    surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-    blendLevel: 16,
-    appBarStyle: FlexAppBarStyle.background,
-    bottomAppBarElevation: 2.0,
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-  );
-}
-
-// --
-
-(ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
-  ColorScheme lightDynamic,
-  ColorScheme darkDynamic,
-) {
-  final lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
-  final darkBase = ColorScheme.fromSeed(
-    seedColor: darkDynamic.primary,
-    brightness: Brightness.dark,
-  );
-
-  final lightAdditionalColours = _extractAdditionalColours(lightBase);
-  final darkAdditionalColours = _extractAdditionalColours(darkBase);
-
-  final lightScheme = _insertAdditionalColours(lightBase, lightAdditionalColours);
-  final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
-
-  return (lightScheme.harmonized(), darkScheme.harmonized());
-}
-
-List<Color> _extractAdditionalColours(ColorScheme scheme) => [
-  scheme.surface,
-  scheme.surfaceDim,
-  scheme.surfaceBright,
-  scheme.surfaceContainerLowest,
-  scheme.surfaceContainerLow,
-  scheme.surfaceContainer,
-  scheme.surfaceContainerHigh,
-  scheme.surfaceContainerHighest,
-];
-
-ColorScheme _insertAdditionalColours(ColorScheme scheme, List<Color> additionalColours) =>
-    scheme.copyWith(
-      surface: additionalColours[0],
-      surfaceDim: additionalColours[1],
-      surfaceBright: additionalColours[2],
-      surfaceContainerLowest: additionalColours[3],
-      surfaceContainerLow: additionalColours[4],
-      surfaceContainer: additionalColours[5],
-      surfaceContainerHigh: additionalColours[6],
-      surfaceContainerHighest: additionalColours[7],
-    );

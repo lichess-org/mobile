@@ -182,7 +182,7 @@ class ListSection extends StatelessWidget {
                     decoration: BoxDecoration(
                       color:
                           cupertinoBackgroundColor ??
-                          Theme.of(context).colorScheme.surfaceContainer,
+                          Theme.of(context).colorScheme.surfaceContainerHigh,
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),

@@ -142,7 +142,7 @@ class _ChoiceChip extends StatefulWidget {
 class _ChoiceChipState extends State<_ChoiceChip> {
   @override
   Widget build(BuildContext context) {
-    final cardColor = Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
+    final cardColor = Theme.of(context).colorScheme.surfaceContainerHigh.withValues(alpha: 0.7);
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
