@@ -271,6 +271,7 @@ class ChoicePicker<T> extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final tileConstructor = notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
+        final theme = Theme.of(context);
         return Padding(
           padding: margin ?? Styles.bodySectionPadding,
           child: Opacity(
@@ -278,7 +279,10 @@ class ChoicePicker<T> extends StatelessWidget {
             child: CupertinoListSection.insetGrouped(
               backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainer,
+                color:
+                    theme.brightness == Brightness.light
+                        ? theme.colorScheme.surfaceContainerLowest
+                        : theme.colorScheme.surfaceContainerHighest,
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),

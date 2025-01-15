@@ -2,6 +2,7 @@ import 'dart:ui' show Locale;
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -105,6 +106,9 @@ enum AppTheme {
   /// The app theme is based on the user's system theme (only available on Android 10+).
   system,
 
+  /// The app theme is based on the chess board
+  board,
+
   /// Below values from [FlexScheme]
   blue,
   indigo,
@@ -162,8 +166,12 @@ enum AppTheme {
 
   static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
 
-  FlexSchemeData get flexScheme =>
-      this == AppTheme.system ? getSystemScheme()! : _flexSchemesNameMap[name]!.data;
+  FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
+      this == AppTheme.system
+          ? getSystemScheme()!
+          : this == AppTheme.board
+          ? boardTheme.flexScheme
+          : _flexSchemesNameMap[name]!.data;
 }
 
 /// Describes the background theme of the app.

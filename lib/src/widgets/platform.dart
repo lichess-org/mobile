@@ -102,7 +102,7 @@ class PlatformCard extends StatelessWidget {
                 clipBehavior: clipBehavior,
                 child: child,
               )
-              : Card(
+              : Card.filled(
                 shape:
                     borderRadius != null
                         ? RoundedRectangleBorder(borderRadius: borderRadius!)
@@ -111,7 +111,7 @@ class PlatformCard extends StatelessWidget {
                 shadowColor: shadowColor,
                 semanticContainer: semanticContainer,
                 elevation: elevation,
-                margin: margin,
+                margin: margin ?? EdgeInsets.zero,
                 clipBehavior: clipBehavior,
                 child: child,
               ),
