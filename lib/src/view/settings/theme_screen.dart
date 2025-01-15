@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/settings/app_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -170,43 +171,55 @@ class _BodyState extends ConsumerState<_Body> {
               ListSection(
                 hasLeading: true,
                 children: [
-                  if (getCorePalette() != null)
-                    SettingsListTile(
-                      icon: const Icon(Icons.colorize_outlined),
-                      settingsLabel: const Text('Color scheme'),
-                      settingsValue: switch (generalPrefs.appThemeSeed) {
-                        AppThemeSeed.board => context.l10n.board,
-                        AppThemeSeed.system => context.l10n.mobileSystemColors,
-                      },
-                      onTap: () {
-                        showAdaptiveActionSheet<void>(
-                          context: context,
-                          actions:
-                              AppThemeSeed.values
-                                  .where(
-                                    (t) => t != AppThemeSeed.system || getCorePalette() != null,
-                                  )
-                                  .map(
-                                    (t) => BottomSheetAction(
-                                      makeLabel:
-                                          (context) => switch (t) {
-                                            AppThemeSeed.board => Text(context.l10n.board),
-                                            AppThemeSeed.system => Text(
-                                              context.l10n.mobileSystemColors,
-                                            ),
-                                          },
-                                      onPressed: (context) {
-                                        ref
-                                            .read(generalPreferencesProvider.notifier)
-                                            .setAppThemeSeed(t);
-                                      },
-                                      dismissOnPress: true,
-                                    ),
-                                  )
-                                  .toList(),
-                        );
-                      },
-                    ),
+                  // if (getCorePalette() != null)
+                  //   SettingsListTile(
+                  //     icon: const Icon(Icons.colorize_outlined),
+                  //     settingsLabel: const Text('Color scheme'),
+                  //     settingsValue: switch (generalPrefs.appThemeSeed) {
+                  //       AppThemeSeed.board => context.l10n.board,
+                  //       AppThemeSeed.system => context.l10n.mobileSystemColors,
+                  //     },
+                  //     onTap: () {
+                  //       showAdaptiveActionSheet<void>(
+                  //         context: context,
+                  //         actions:
+                  //             AppThemeSeed.values
+                  //                 .where(
+                  //                   (t) => t != AppThemeSeed.system || getCorePalette() != null,
+                  //                 )
+                  //                 .map(
+                  //                   (t) => BottomSheetAction(
+                  //                     makeLabel:
+                  //                         (context) => switch (t) {
+                  //                           AppThemeSeed.board => Text(context.l10n.board),
+                  //                           AppThemeSeed.system => Text(
+                  //                             context.l10n.mobileSystemColors,
+                  //                           ),
+                  //                         },
+                  //                     onPressed: (context) {
+                  //                       ref
+                  //                           .read(generalPreferencesProvider.notifier)
+                  //                           .setAppThemeSeed(t);
+                  //                     },
+                  //                     dismissOnPress: true,
+                  //                   ),
+                  //                 )
+                  //                 .toList(),
+                  //       );
+                  //     },
+                  //   ),
+                  SettingsListTile(
+                    icon: const Icon(Icons.palette),
+                    settingsLabel: Text('Theme'),
+                    settingsValue: generalPrefs.appTheme.flexScheme.name,
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        title: 'Theme',
+                        builder: (context) => const AppThemeScreen(),
+                      );
+                    },
+                  ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.chess_board),
                     settingsLabel: Text(context.l10n.board),

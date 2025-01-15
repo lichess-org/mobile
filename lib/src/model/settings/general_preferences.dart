@@ -1,7 +1,9 @@
 import 'dart:ui' show Locale;
 
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -49,6 +51,10 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   Future<void> setAppThemeSeed(AppThemeSeed seed) {
     return save(state.copyWith(appThemeSeed: seed));
   }
+
+  Future<void> setAppTheme(AppTheme appTheme) {
+    return save(state.copyWith(appTheme: appTheme));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -61,6 +67,9 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     @Deprecated('Use appThemeSeed instead') bool? systemColors,
+
+    @JsonKey(unknownEnumValue: AppTheme.gold, defaultValue: AppTheme.gold)
+    required AppTheme appTheme,
 
     /// App theme seed
     @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
@@ -76,6 +85,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     appThemeSeed: AppThemeSeed.board,
+    appTheme: AppTheme.gold,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
@@ -89,6 +99,71 @@ enum AppThemeSeed {
 
   /// The app theme is based on the chessboard.
   board,
+}
+
+enum AppTheme {
+  /// The app theme is based on the user's system theme (only available on Android 10+).
+  system,
+
+  /// Below values from [FlexScheme]
+  blue,
+  indigo,
+  hippieBlue,
+  aquaBlue,
+  brandBlue,
+  deepBlue,
+  sakura,
+  mandyRed,
+  red,
+  redWine,
+  purpleBrown,
+  green,
+  money,
+  jungle,
+  greyLaw,
+  wasabi,
+  gold,
+  mango,
+  amber,
+  vesuviusBurn,
+  deepPurple,
+  ebonyClay,
+  barossa,
+  shark,
+  bigStone,
+  damask,
+  bahamaBlue,
+  mallardGreen,
+  espresso,
+  outerSpace,
+  blueWhale,
+  sanJuanBlue,
+  rosewood,
+  blumineBlue,
+  flutterDash,
+  materialBaseline,
+  verdunHemlock,
+  dellGenoa,
+  redM3,
+  pinkM3,
+  purpleM3,
+  indigoM3,
+  blueM3,
+  cyanM3,
+  tealM3,
+  greenM3,
+  limeM3,
+  yellowM3,
+  orangeM3,
+  deepOrangeM3,
+  blackWhite,
+  greys,
+  sepia;
+
+  static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
+
+  FlexSchemeData get flexScheme =>
+      this == AppTheme.system ? getSystemScheme()! : _flexSchemesNameMap[name]!.data;
 }
 
 /// Describes the background theme of the app.
