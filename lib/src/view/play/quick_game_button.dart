@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -22,6 +21,7 @@ class QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    const buttonTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
     return Row(
       children: [
@@ -88,7 +88,7 @@ class QuickGameButton extends ConsumerWidget {
                               );
                             }
                             : null,
-                    child: Text(context.l10n.play, style: Styles.bold),
+                    child: Text(context.l10n.play, style: buttonTextStyle),
                   )
                   : FilledButton(
                     onPressed:
@@ -109,7 +109,7 @@ class QuickGameButton extends ConsumerWidget {
                             : null,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(context.l10n.play, style: Styles.bold),
+                      child: Text(context.l10n.play, style: buttonTextStyle),
                     ),
                   ),
         ),

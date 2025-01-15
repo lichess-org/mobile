@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -121,24 +119,26 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    // final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
+    final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
     final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final flexSchemeLightColors = generalPrefs.appTheme.flexScheme.light;
-    final flexSchemeDarkColors = generalPrefs.appTheme.flexScheme.dark;
+    final flexScheme = generalPrefs.appTheme.getFlexScheme(boardTheme);
+    final flexSchemeLightColors = flexScheme.light;
+    final flexSchemeDarkColors = flexScheme.dark;
 
     final lightTheme = FlexThemeData.light(
       colors: flexSchemeLightColors,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
-      blendLevel: 2,
+      surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
+      blendLevel: 6,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
-      surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-      blendLevel: 8,
+      surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
+      blendLevel: 12,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );

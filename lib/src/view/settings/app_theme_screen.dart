@@ -2,6 +2,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -28,6 +29,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appTheme = ref.watch(generalPreferencesProvider.select((p) => p.appTheme));
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final hasSystemColors = getCorePalette() != null;
 
@@ -49,7 +51,7 @@ class _Body extends ConsumerWidget {
     return ListView.separated(
       itemBuilder: (context, index) {
         final t = choices[index];
-        final fsd = t.flexScheme;
+        final fsd = t.getFlexScheme(boardPrefs.boardTheme);
 
         return AdaptiveListTile(
           // selected: t == appTheme,

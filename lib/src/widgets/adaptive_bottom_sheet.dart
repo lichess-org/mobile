@@ -28,13 +28,6 @@ Future<T?> showAdaptiveBottomSheet<T>({
             )
             : null,
     constraints: constraints,
-    backgroundColor:
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoDynamicColor.resolve(
-              CupertinoColors.tertiarySystemGroupedBackground,
-              context,
-            )
-            : null,
     elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : null,
     builder: builder,
   );
@@ -85,9 +78,6 @@ class BottomSheetContextMenuAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      cupertinoBackgroundColor: CupertinoColors.tertiarySystemGroupedBackground.resolveFrom(
-        context,
-      ),
       leading: Icon(icon),
       title: child,
       onTap: () {
