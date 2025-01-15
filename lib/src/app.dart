@@ -2,6 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -130,21 +131,16 @@ class _AppState extends ConsumerState<Application> {
 
     final lightTheme = FlexThemeData.light(
       colors: flexSchemeLightColors,
-      surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-      blendLevel: 1,
-      appBarStyle: FlexAppBarStyle.background,
-      bottomAppBarElevation: 2.0,
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
+      blendLevel: 2,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
       surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-      blendLevel: 28,
-      appBarStyle: FlexAppBarStyle.background,
-      bottomAppBarElevation: 2.0,
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      blendLevel: 8,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
 
     final lightCupertinoTheme = CupertinoThemeData(
@@ -163,7 +159,7 @@ class _AppState extends ConsumerState<Application> {
           context,
         ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
       ),
-      scaffoldBackgroundColor: lightTheme.colorScheme.surface,
+      scaffoldBackgroundColor: lightTheme.scaffoldBackgroundColor,
       barBackgroundColor: lightTheme.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
@@ -186,68 +182,74 @@ class _AppState extends ConsumerState<Application> {
           context,
         ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
       ),
-      scaffoldBackgroundColor: darkTheme.colorScheme.surface,
+      scaffoldBackgroundColor: darkTheme.scaffoldBackgroundColor,
       barBackgroundColor: darkTheme.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
       applyThemeToAll: true,
     );
 
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
-      onGenerateTitle: (BuildContext context) => 'lichess.org',
-      locale: generalPrefs.locale,
-      theme: lightTheme.copyWith(
-        cupertinoOverrideTheme: lightCupertinoTheme,
-        splashFactory: isIOS ? NoSplash.splashFactory : null,
-        textTheme: isIOS ? Typography.blackCupertino : null,
-        listTileTheme: ListTileTheme.of(context).copyWith(
-          titleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-          subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-          leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-        ),
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-        extensions: [lichessCustomColors.harmonized(lightTheme.colorScheme)],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: FlexColorScheme.themedSystemNavigationBar(
+        context,
+        systemNavBarStyle: FlexSystemNavBarStyle.transparent,
       ),
-      darkTheme: darkTheme.copyWith(
-        cupertinoOverrideTheme: darkCupertinoTheme,
-        splashFactory: isIOS ? NoSplash.splashFactory : null,
-        textTheme: isIOS ? Typography.whiteCupertino : null,
-        listTileTheme: ListTileTheme.of(context).copyWith(
-          titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
-          subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
-          leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: kSupportedLocales,
+        onGenerateTitle: (BuildContext context) => 'lichess.org',
+        locale: generalPrefs.locale,
+        theme: lightTheme.copyWith(
+          cupertinoOverrideTheme: lightCupertinoTheme,
+          splashFactory: isIOS ? NoSplash.splashFactory : null,
+          textTheme: isIOS ? Typography.blackCupertino : null,
+          listTileTheme: ListTileTheme.of(context).copyWith(
+            titleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
+          ),
+          navigationBarTheme: NavigationBarTheme.of(
+            context,
+          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+          extensions: [lichessCustomColors.harmonized(lightTheme.colorScheme)],
         ),
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-        extensions: [lichessCustomColors.harmonized(darkTheme.colorScheme)],
+        darkTheme: darkTheme.copyWith(
+          cupertinoOverrideTheme: darkCupertinoTheme,
+          splashFactory: isIOS ? NoSplash.splashFactory : null,
+          textTheme: isIOS ? Typography.whiteCupertino : null,
+          listTileTheme: ListTileTheme.of(context).copyWith(
+            titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+          ),
+          navigationBarTheme: NavigationBarTheme.of(
+            context,
+          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+          extensions: [lichessCustomColors.harmonized(darkTheme.colorScheme)],
+        ),
+        themeMode: switch (generalPrefs.themeMode) {
+          BackgroundThemeMode.light => ThemeMode.light,
+          BackgroundThemeMode.dark => ThemeMode.dark,
+          BackgroundThemeMode.system => ThemeMode.system,
+        },
+        builder:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? (context, child) {
+                  // return CupertinoTheme(
+                  //   data: cupertinoThemeData,
+                  //   child: IconTheme.merge(
+                  //     data: IconThemeData(
+                  //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                  //     ),
+                  //     child: Material(child: child),
+                  //   ),
+                  // );
+                  return Material(child: child);
+                }
+                : null,
+        home: const BottomNavScaffold(),
+        navigatorObservers: [rootNavPageRouteObserver],
       ),
-      themeMode: switch (generalPrefs.themeMode) {
-        BackgroundThemeMode.light => ThemeMode.light,
-        BackgroundThemeMode.dark => ThemeMode.dark,
-        BackgroundThemeMode.system => ThemeMode.system,
-      },
-      builder:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? (context, child) {
-                // return CupertinoTheme(
-                //   data: cupertinoThemeData,
-                //   child: IconTheme.merge(
-                //     data: IconThemeData(
-                //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
-                //     ),
-                //     child: Material(child: child),
-                //   ),
-                // );
-                return Material(child: child);
-              }
-              : null,
-      home: const BottomNavScaffold(),
-      navigatorObservers: [rootNavPageRouteObserver],
     );
   }
 }

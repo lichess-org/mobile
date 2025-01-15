@@ -44,9 +44,7 @@ class BroadcastListScreen extends StatelessWidget {
             navigationBar: CupertinoNavigationBar(
               middle: title,
               automaticBackgroundVisibility: false,
-              backgroundColor: Styles.cupertinoAppBarColor
-                  .resolveFrom(context)
-                  .withValues(alpha: 0.0),
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
               border: null,
             ),
             child: const _Body(),
