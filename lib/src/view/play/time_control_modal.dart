@@ -240,10 +240,7 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context)
-                : Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border:
             selected

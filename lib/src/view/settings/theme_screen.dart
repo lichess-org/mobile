@@ -170,7 +170,7 @@ class _BodyState extends ConsumerState<_Body> {
                   SettingsListTile(
                     icon: const Icon(Icons.palette),
                     settingsLabel: const Text('Theme'),
-                    settingsValue: generalPrefs.appTheme.flexScheme.name,
+                    settingsValue: generalPrefs.appTheme.getFlexScheme(boardPrefs.boardTheme).name,
                     onTap: () {
                       pushPlatformRoute(
                         context,

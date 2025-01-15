@@ -72,7 +72,8 @@ class ListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
+    final theme = Theme.of(context);
+    switch (theme.platform) {
       case TargetPlatform.android:
         return _isLoading
             ? Padding(
@@ -182,7 +183,9 @@ class ListSection extends StatelessWidget {
                     decoration: BoxDecoration(
                       color:
                           cupertinoBackgroundColor ??
-                          Theme.of(context).colorScheme.surfaceContainer,
+                          (theme.brightness == Brightness.light
+                              ? theme.colorScheme.surfaceContainerLowest
+                              : theme.colorScheme.surfaceContainerHighest),
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -196,7 +199,7 @@ class ListSection extends StatelessWidget {
               ),
             );
       default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
+        assert(false, 'Unexpected platform ${theme.platform}');
         return const SizedBox.shrink();
     }
   }
@@ -335,6 +338,7 @@ class PlatformListTile extends StatelessWidget {
                   selected == true
                       ? CupertinoColors.systemGrey4.resolveFrom(context)
                       : cupertinoBackgroundColor,
+              // backgroundColorActivated: Theme.of(context).colorScheme.surfaceContainerHighest,
               leading: leading,
               title:
                   harmonizeCupertinoTitleStyle
