@@ -217,7 +217,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
           inlineDecoration:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? BoxDecoration(
-                    color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                    color: CupertinoTheme.of(context).barBackgroundColor,
                     border: const Border(bottom: BorderSide(color: Color(0x4D000000), width: 0.0)),
                   )
                   : null,

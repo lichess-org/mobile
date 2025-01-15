@@ -48,7 +48,7 @@ class CreateCustomGameScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticBackgroundVisibility: false,
-        backgroundColor: Styles.cupertinoAppBarColor.resolveFrom(context).withValues(alpha: 0.0),
+        backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
         border: null,
       ),
       child: const _CupertinoBody(),
@@ -210,14 +210,14 @@ class _TabView extends StatelessWidget {
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
         Styles.verticalBodyPadding;
-    final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
+    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     return CustomScrollView(
       slivers: [
         if (cupertinoTabSwitcher != null)
           PinnedHeaderSliver(
             child: ClipRect(
               child: BackdropFilter(
-                enabled: backgroundColor.alpha != 0xFF,
+                enabled: backgroundColor.a != 1,
                 filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
