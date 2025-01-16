@@ -19,13 +19,11 @@ class StudyGamebook extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [_Comment(id: id), _Hint(id: id)],
-                ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [_Comment(id: id), _Hint(id: id)],
               ),
             ),
           ),

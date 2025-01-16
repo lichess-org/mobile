@@ -38,7 +38,7 @@ class OpeningNameHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceDim),
       child: GestureDetector(
         onTap:
             opening.name == context.l10n.startPosition
@@ -47,17 +47,14 @@ class OpeningNameHeader extends StatelessWidget {
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
-              Icon(
-                Icons.open_in_browser_outlined,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
+              Icon(Icons.open_in_browser_outlined, color: Theme.of(context).colorScheme.onSurface),
               const SizedBox(width: 6.0),
             ],
             Expanded(
               child: Text(
                 opening.name,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 1,
@@ -119,7 +116,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       columnWidths: columnWidths,
       children: [
         TableRow(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceDim),
           children: [
             Padding(
               padding: _kTableRowPadding,
@@ -324,7 +321,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceDim),
       child: child,
     );
   }

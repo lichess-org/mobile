@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -89,10 +88,10 @@ class PlatformCard extends StatelessWidget {
       maxScaleFactor: kCardTextScaleFactor,
       child:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? Card(
+              ? Card.filled(
                 margin: margin ?? EdgeInsets.zero,
-                elevation: elevation ?? 0,
-                color: color ?? Styles.cupertinoCardColor.resolveFrom(context),
+                // elevation: elevation ?? 0,
+                color: color,
                 shadowColor: shadowColor,
                 shape:
                     borderRadius != null
@@ -102,7 +101,7 @@ class PlatformCard extends StatelessWidget {
                 clipBehavior: clipBehavior,
                 child: child,
               )
-              : Card(
+              : (Theme.of(context).brightness == Brightness.dark ? Card.filled : Card.new)(
                 shape:
                     borderRadius != null
                         ? RoundedRectangleBorder(borderRadius: borderRadius!)
@@ -111,7 +110,7 @@ class PlatformCard extends StatelessWidget {
                 shadowColor: shadowColor,
                 semanticContainer: semanticContainer,
                 elevation: elevation,
-                margin: margin,
+                margin: margin ?? EdgeInsets.zero,
                 clipBehavior: clipBehavior,
                 child: child,
               ),

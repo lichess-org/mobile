@@ -396,13 +396,10 @@ class _UserGameWidget extends StatelessWidget {
     // TODO: Implement functionality to view game on tap.
     // (Return a button? Wrap with InkWell?)
     const defaultDateFontSize = 16.0;
-    final defaultDateStyle = TextStyle(
-      color: Theme.of(context).colorScheme.tertiary,
-      fontSize: defaultDateFontSize,
-    );
+    const defaultDateStyle = TextStyle(fontSize: defaultDateFontSize);
 
     return game == null
-        ? Text('?', style: defaultDateStyle)
+        ? const Text('?', style: defaultDateStyle)
         : Text(_dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
   }
 }
@@ -720,7 +717,7 @@ class _EloChartState extends State<_EloChart> {
   @override
   Widget build(BuildContext context) {
     final borderColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
-    final chartColor = Theme.of(context).colorScheme.tertiary;
+    final chartColor = Theme.of(context).colorScheme.secondary;
     final chartDateFormatter = switch (_selectedRange) {
       DateRange.oneWeek => DateFormat.MMMd(),
       DateRange.oneMonth => DateFormat.MMMd(),
@@ -883,7 +880,7 @@ class _RangeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chartColor = Theme.of(context).colorScheme.tertiary;
+    final chartColor = Theme.of(context).colorScheme.secondary;
 
     return PlatformCard(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,

@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
@@ -217,7 +216,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
           inlineDecoration:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? BoxDecoration(
-                    color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                    color: CupertinoTheme.of(context).barBackgroundColor,
                     border: const Border(bottom: BorderSide(color: Color(0x4D000000), width: 0.0)),
                   )
                   : null,

@@ -1,6 +1,6 @@
 import 'package:chessground/chessground.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -290,6 +290,46 @@ enum BoardTheme {
       case BoardTheme.horsey:
         return ChessboardColorScheme.horsey;
     }
+  }
+
+  FlexSchemeData get flexScheme {
+    final lightScheme = SeedColorScheme.fromSeeds(
+      primaryKey: colors.darkSquare,
+      secondaryKey: colors.lightSquare,
+      brightness: Brightness.light,
+    );
+    final darkScheme = SeedColorScheme.fromSeeds(
+      primaryKey: colors.darkSquare,
+      secondaryKey: colors.lightSquare,
+      brightness: Brightness.dark,
+    );
+    return FlexSchemeData(
+      name: 'Chessboard',
+      description: 'Chessboard based theme: $label',
+      light: FlexSchemeColor(
+        primary: lightScheme.primary,
+        primaryContainer: lightScheme.primaryContainer,
+        secondary: lightScheme.secondary,
+        secondaryContainer: lightScheme.secondaryContainer,
+        tertiary: lightScheme.tertiary,
+        tertiaryContainer: lightScheme.tertiaryContainer,
+        error: lightScheme.error,
+        errorContainer: lightScheme.errorContainer,
+      ),
+      dark: FlexSchemeColor(
+        primary: darkScheme.primary,
+        primaryContainer: darkScheme.primaryContainer,
+        primaryLightRef: lightScheme.primary,
+        secondary: darkScheme.secondary,
+        secondaryContainer: darkScheme.secondaryContainer,
+        secondaryLightRef: lightScheme.secondary,
+        tertiary: darkScheme.tertiary,
+        tertiaryContainer: darkScheme.tertiaryContainer,
+        tertiaryLightRef: lightScheme.tertiary,
+        error: darkScheme.error,
+        errorContainer: darkScheme.errorContainer,
+      ),
+    );
   }
 
   Widget get thumbnail =>
