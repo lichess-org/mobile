@@ -101,7 +101,7 @@ class PlatformCard extends StatelessWidget {
                 clipBehavior: clipBehavior,
                 child: child,
               )
-              : Card.filled(
+              : (Theme.of(context).brightness == Brightness.dark ? Card.filled : Card.new)(
                 shape:
                     borderRadius != null
                         ? RoundedRectangleBorder(borderRadius: borderRadius!)

@@ -44,6 +44,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
+    final cardColor = Theme.of(context).platform == TargetPlatform.iOS ? Colors.transparent : null;
 
     return puzzleDashboard.when(
       data: (dashboard) {
@@ -74,7 +75,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 StatCard(
                   context.l10n.performance,
                   value: dashboard.global.performance.toString(),
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: cardColor,
                 ),
                 StatCard(
                   context.l10n
@@ -83,12 +84,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       .trim()
                       .capitalize(),
                   value: dashboard.global.nb.toString().localizeNumbers(),
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: cardColor,
                 ),
                 StatCard(
                   context.l10n.puzzleSolved.capitalize(),
                   value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: cardColor,
                 ),
               ]),
             ),
