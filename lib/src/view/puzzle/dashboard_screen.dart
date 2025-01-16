@@ -71,7 +71,11 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       ? EdgeInsets.zero
                       : Styles.horizontalBodyPadding,
               child: StatCardRow([
-                StatCard(context.l10n.performance, value: dashboard.global.performance.toString()),
+                StatCard(
+                  context.l10n.performance,
+                  value: dashboard.global.performance.toString(),
+                  backgroundColor: Colors.transparent,
+                ),
                 StatCard(
                   context.l10n
                       .puzzleNbPlayed(dashboard.global.nb)
@@ -79,10 +83,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       .trim()
                       .capitalize(),
                   value: dashboard.global.nb.toString().localizeNumbers(),
+                  backgroundColor: Colors.transparent,
                 ),
                 StatCard(
                   context.l10n.puzzleSolved.capitalize(),
                   value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                  backgroundColor: Colors.transparent,
                 ),
               ]),
             ),

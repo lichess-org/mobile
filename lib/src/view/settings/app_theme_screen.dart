@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -17,7 +18,7 @@ class AppThemeScreen extends StatelessWidget {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Theme')), body: _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.mobileTheme)), body: _Body());
   }
 
   Widget _iosBuilder(BuildContext context) {

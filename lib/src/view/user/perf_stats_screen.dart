@@ -396,13 +396,10 @@ class _UserGameWidget extends StatelessWidget {
     // TODO: Implement functionality to view game on tap.
     // (Return a button? Wrap with InkWell?)
     const defaultDateFontSize = 16.0;
-    final defaultDateStyle = TextStyle(
-      color: Theme.of(context).colorScheme.secondary,
-      fontSize: defaultDateFontSize,
-    );
+    const defaultDateStyle = TextStyle(fontSize: defaultDateFontSize);
 
     return game == null
-        ? Text('?', style: defaultDateStyle)
+        ? const Text('?', style: defaultDateStyle)
         : Text(_dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
   }
 }

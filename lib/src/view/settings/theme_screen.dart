@@ -148,7 +148,7 @@ class _BodyState extends ConsumerState<_Body> {
           else
             SliverAppBar(
               pinned: true,
-              title: const Text('Theme'),
+              title: Text(context.l10n.mobileTheme),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(boardSize + 16.0),
                 child: Padding(
@@ -169,12 +169,12 @@ class _BodyState extends ConsumerState<_Body> {
                 children: [
                   SettingsListTile(
                     icon: const Icon(Icons.palette),
-                    settingsLabel: const Text('Theme'),
+                    settingsLabel: Text(context.l10n.mobileTheme),
                     settingsValue: generalPrefs.appTheme.getFlexScheme(boardPrefs.boardTheme).name,
                     onTap: () {
                       pushPlatformRoute(
                         context,
-                        title: 'Theme',
+                        title: context.l10n.mobileTheme,
                         builder: (context) => const AppThemeScreen(),
                       );
                     },
