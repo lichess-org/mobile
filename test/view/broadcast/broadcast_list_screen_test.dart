@@ -46,7 +46,7 @@ final client = MockClient((request) {
 void main() {
   group('BroadcastListScreen', () {
     testWidgets('Displays broadcast tournament screen', variant: kPlatformVariant, (tester) async {
-      mockNetworkImagesFor(() async {
+      await mockNetworkImagesFor(() async {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const BroadcastListScreen(),
@@ -62,15 +62,16 @@ void main() {
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // wait for broadcast tournaments to load
+        // Wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
         expect(find.byType(BroadcastListTile), findsAtLeast(1));
       });
     });
 
+    // TODO: Fix test for iOS
     testWidgets('Scroll broadcast tournament screen', variant: kPlatformVariant, (tester) async {
-      mockNetworkImagesFor(() async {
+      await mockNetworkImagesFor(() async {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const BroadcastListScreen(),
@@ -86,7 +87,7 @@ void main() {
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // wait for broadcast tournaments to load
+        // Wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
         await tester.scrollUntilVisible(find.text('Past broadcasts'), 100.0);

@@ -119,7 +119,7 @@ void main() {
     testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
-      mockNetworkImagesFor(() async {
+      await mockNetworkImagesFor(() async {
         final client = MockClient((request) {
           if (request.url.path == '/api/broadcast/KnP1dgul') {
             return mockResponse(
