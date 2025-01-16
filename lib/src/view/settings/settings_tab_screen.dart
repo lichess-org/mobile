@@ -227,7 +227,11 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(context, title: 'Theme', builder: (context) => const ThemeScreen());
+              pushPlatformRoute(
+                context,
+                title: context.l10n.mobileTheme,
+                builder: (context) => const ThemeScreen(),
+              );
             },
           ),
           PlatformListTile(

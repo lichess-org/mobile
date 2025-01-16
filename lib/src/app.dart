@@ -133,7 +133,7 @@ class _AppState extends ConsumerState<Application> {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-      blendLevel: 6,
+      blendLevel: 7,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,

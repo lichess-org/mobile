@@ -49,10 +49,6 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> setAppThemeSeed(AppThemeSeed seed) {
-    return save(state.copyWith(appThemeSeed: seed));
-  }
-
   Future<void> setAppTheme(AppTheme appTheme) {
     return save(state.copyWith(appTheme: appTheme));
   }
@@ -67,12 +63,11 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    @Deprecated('Use appThemeSeed instead') bool? systemColors,
-
     @JsonKey(unknownEnumValue: AppTheme.gold, defaultValue: AppTheme.gold)
     required AppTheme appTheme,
 
     /// App theme seed
+    @Deprecated('Use appTheme instead')
     @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
     required AppThemeSeed appThemeSeed,
 
