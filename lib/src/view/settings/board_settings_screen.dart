@@ -19,8 +19,7 @@ class BoardSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-        androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 
   Widget _androidBuilder(BuildContext context) {
@@ -31,8 +30,7 @@ class BoardSettingsScreen extends StatelessWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return const CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(), child: _Body());
+    return const CupertinoPageScaffold(navigationBar: CupertinoNavigationBar(), child: _Body());
   }
 }
 
@@ -53,8 +51,7 @@ class _Body extends ConsumerWidget {
           children: [
             SettingsListTile(
               settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
-              settingsValue:
-                  pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
+              settingsValue: pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
               showCupertinoTrailingValue: false,
               onTap: () {
                 if (Theme.of(context).platform == TargetPlatform.android) {
@@ -66,24 +63,21 @@ class _Body extends ConsumerWidget {
                     onSelectedItemChanged: (PieceShiftMethod? value) {
                       ref
                           .read(boardPreferencesProvider.notifier)
-                          .setPieceShiftMethod(
-                              value ?? PieceShiftMethod.either);
+                          .setPieceShiftMethod(value ?? PieceShiftMethod.either);
                     },
                   );
                 } else {
                   pushPlatformRoute(
                     context,
                     title: context.l10n.preferencesHowDoYouMovePieces,
-                    builder: (context) =>
-                        const PieceShiftMethodSettingsScreen(),
+                    builder: (context) => const PieceShiftMethodSettingsScreen(),
                   );
                 }
               },
             ),
             SettingsListTile(
               settingsLabel: Text(
-                context.l10n
-                    .preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
+                context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
               ),
               settingsValue: boardPrefs.castlingMethod.name,
               showCupertinoTrailingValue: false,
@@ -103,8 +97,7 @@ class _Body extends ConsumerWidget {
                 } else {
                   pushPlatformRoute(
                     context,
-                    title: context.l10n
-                        .preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
+                    title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
                     builder: (context) => const CastlingMethodSettingsScreen(),
                   );
                 }
@@ -114,9 +107,7 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
               value: boardPrefs.magnifyDraggedPiece,
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleMagnifyDraggedPiece();
+                ref.read(boardPreferencesProvider.notifier).toggleMagnifyDraggedPiece();
               },
             ),
             SettingsListTile(
@@ -158,38 +149,35 @@ class _Body extends ConsumerWidget {
                 maxLines: 5,
               ),
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleHapticFeedback();
+                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
               },
             ),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesPieceAnimation),
               value: boardPrefs.pieceAnimation,
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .togglePieceAnimation();
+                ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
               },
             ),
-            if (Theme.of(context).platform == TargetPlatform.android &&
-                !isTabletOrLarger(context))
+            if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
               androidVersionAsync.maybeWhen(
-                data: (version) => version != null && version.sdkInt >= 29
-                    ? SwitchSettingTile(
-                        title: Text(context.l10n.mobileSettingsImmersiveMode),
-                        subtitle: Text(
-                          context.l10n.mobileSettingsImmersiveModeSubtitle,
-                          maxLines: 5,
-                        ),
-                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
-                        onChanged: (value) {
-                          ref
-                              .read(boardPreferencesProvider.notifier)
-                              .toggleImmersiveModeWhilePlaying();
-                        },
-                      )
-                    : const SizedBox.shrink(),
+                data:
+                    (version) =>
+                        version != null && version.sdkInt >= 29
+                            ? SwitchSettingTile(
+                              title: Text(context.l10n.mobileSettingsImmersiveMode),
+                              subtitle: Text(
+                                context.l10n.mobileSettingsImmersiveModeSubtitle,
+                                maxLines: 5,
+                              ),
+                              value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                              onChanged: (value) {
+                                ref
+                                    .read(boardPreferencesProvider.notifier)
+                                    .toggleImmersiveModeWhilePlaying();
+                              },
+                            )
+                            : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
             SettingsListTile(
@@ -203,9 +191,10 @@ class _Body extends ConsumerWidget {
                     choices: ClockPosition.values,
                     selectedItem: boardPrefs.clockPosition,
                     labelBuilder: (t) => Text(t.label),
-                    onSelectedItemChanged: (ClockPosition? value) => ref
-                        .read(boardPreferencesProvider.notifier)
-                        .setClockPosition(value ?? ClockPosition.right),
+                    onSelectedItemChanged:
+                        (ClockPosition? value) => ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setClockPosition(value ?? ClockPosition.right),
                   );
                 } else {
                   pushPlatformRoute(
@@ -220,24 +209,19 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.preferencesPieceDestinations),
               value: boardPrefs.showLegalMoves,
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleShowLegalMoves();
+                ref.read(boardPreferencesProvider.notifier).toggleShowLegalMoves();
               },
             ),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesBoardHighlights),
               value: boardPrefs.boardHighlights,
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleBoardHighlights();
+                ref.read(boardPreferencesProvider.notifier).toggleBoardHighlights();
               },
             ),
             SettingsListTile(
               settingsLabel: const Text('Material'), //TODO: l10n
-              settingsValue: boardPrefs.materialDifferenceFormat
-                  .l10n(AppLocalizations.of(context)),
+              settingsValue: boardPrefs.materialDifferenceFormat.l10n(AppLocalizations.of(context)),
               onTap: () {
                 if (Theme.of(context).platform == TargetPlatform.android) {
                   showChoicePicker(
@@ -245,20 +229,18 @@ class _Body extends ConsumerWidget {
                     choices: MaterialDifferenceFormat.values,
                     selectedItem: boardPrefs.materialDifferenceFormat,
                     labelBuilder: (t) => Text(t.label),
-                    onSelectedItemChanged: (MaterialDifferenceFormat? value) =>
-                        ref
+                    onSelectedItemChanged:
+                        (MaterialDifferenceFormat? value) => ref
                             .read(boardPreferencesProvider.notifier)
                             .setMaterialDifferenceFormat(
-                              value ??
-                                  MaterialDifferenceFormat.materialDifference,
+                              value ?? MaterialDifferenceFormat.materialDifference,
                             ),
                   );
                 } else {
                   pushPlatformRoute(
                     context,
                     title: 'Material',
-                    builder: (context) =>
-                        const MaterialDifferenceFormatScreen(),
+                    builder: (context) => const MaterialDifferenceFormatScreen(),
                   );
                 }
               },
@@ -273,9 +255,7 @@ class _Body extends ConsumerWidget {
               ),
               value: boardPrefs.enableShapeDrawings,
               onChanged: (value) {
-                ref
-                    .read(boardPreferencesProvider.notifier)
-                    .toggleEnableShapeDrawings();
+                ref.read(boardPreferencesProvider.notifier).toggleEnableShapeDrawings();
               },
             ),
           ],
@@ -329,9 +309,7 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
     );
 
     void onChanged(CastlingMethod? value) {
-      ref
-          .read(boardPreferencesProvider.notifier)
-          .setCastlingMethod(value ?? CastlingMethod.either);
+      ref.read(boardPreferencesProvider.notifier).setCastlingMethod(value ?? CastlingMethod.either);
     }
 
     return CupertinoPageScaffold(
@@ -361,9 +339,8 @@ class BoardClockPositionScreen extends ConsumerWidget {
     final clockPosition = ref.watch(
       boardPreferencesProvider.select((state) => state.clockPosition),
     );
-    void onChanged(ClockPosition? value) => ref
-        .read(boardPreferencesProvider.notifier)
-        .setClockPosition(value ?? ClockPosition.right);
+    void onChanged(ClockPosition? value) =>
+        ref.read(boardPreferencesProvider.notifier).setClockPosition(value ?? ClockPosition.right);
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
       child: SafeArea(
@@ -388,12 +365,11 @@ class MaterialDifferenceFormatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final materialDifferenceFormat = ref.watch(
-      boardPreferencesProvider
-          .select((state) => state.materialDifferenceFormat),
+      boardPreferencesProvider.select((state) => state.materialDifferenceFormat),
     );
-    void onChanged(MaterialDifferenceFormat? value) =>
-        ref.read(boardPreferencesProvider.notifier).setMaterialDifferenceFormat(
-            value ?? MaterialDifferenceFormat.materialDifference);
+    void onChanged(MaterialDifferenceFormat? value) => ref
+        .read(boardPreferencesProvider.notifier)
+        .setMaterialDifferenceFormat(value ?? MaterialDifferenceFormat.materialDifference);
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
       child: ListView(
@@ -420,9 +396,7 @@ class DragTargetKindSettingsScreen extends ConsumerWidget {
     );
 
     void onChanged(DragTargetKind? value) {
-      ref
-          .read(boardPreferencesProvider.notifier)
-          .setDragTargetKind(value ?? DragTargetKind.circle);
+      ref.read(boardPreferencesProvider.notifier).setDragTargetKind(value ?? DragTargetKind.circle);
     }
 
     return CupertinoPageScaffold(
@@ -431,10 +405,8 @@ class DragTargetKindSettingsScreen extends ConsumerWidget {
         child: ListView(
           children: [
             Padding(
-              padding:
-                  Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-              child: const Text(
-                  'How the target square is highlighted when dragging a piece.'),
+              padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+              child: const Text('How the target square is highlighted when dragging a piece.'),
             ),
             ChoicePicker(
               notchedTile: true,
@@ -450,8 +422,7 @@ class DragTargetKindSettingsScreen extends ConsumerWidget {
   }
 }
 
-String pieceShiftMethodl10n(
-        BuildContext context, PieceShiftMethod pieceShiftMethod) =>
+String pieceShiftMethodl10n(BuildContext context, PieceShiftMethod pieceShiftMethod) =>
     switch (pieceShiftMethod) {
       // TODO add this to mobile translations
       PieceShiftMethod.either => 'Either tap or drag',
@@ -459,13 +430,10 @@ String pieceShiftMethodl10n(
       PieceShiftMethod.tapTwoSquares => 'Tap two squares',
     };
 
-String castlingMethodl10n(
-        BuildContext context, CastlingMethod castlingMethod) =>
+String castlingMethodl10n(BuildContext context, CastlingMethod castlingMethod) =>
     switch (castlingMethod) {
       // TODO add this to mobile translations
-      CastlingMethod.kingOverRook =>
-        context.l10n.preferencesCastleByMovingOntoTheRook,
-      CastlingMethod.kingTwoSquares =>
-        context.l10n.preferencesCastleByMovingTwoSquares,
+      CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
+      CastlingMethod.kingTwoSquares => context.l10n.preferencesCastleByMovingTwoSquares,
       CastlingMethod.either => 'Either',
     };
