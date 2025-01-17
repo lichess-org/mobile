@@ -353,7 +353,18 @@ enum ClockPosition {
   };
 }
 
-enum CastlingMethod { kingOverRook, kingTwoSquares, either }
+enum CastlingMethod {
+  kingOverRook,
+  kingTwoSquares,
+  either;
+
+  // TODO: l10n
+  String get label => switch (this) {
+    CastlingMethod.kingOverRook => 'Move king over rook',
+    CastlingMethod.kingTwoSquares => 'Move king two squares',
+    CastlingMethod.either => 'Either',
+  };
+}
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
   DragTargetKind.circle => 'Circle',

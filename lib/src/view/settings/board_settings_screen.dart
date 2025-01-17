@@ -93,7 +93,7 @@ class _Body extends ConsumerWidget {
                     context,
                     choices: CastlingMethod.values,
                     selectedItem: boardPrefs.castlingMethod,
-                    labelBuilder: (t) => Text(t.name),
+                    labelBuilder: (t) => Text(t.label),
                     onSelectedItemChanged: (CastlingMethod? value) {
                       ref
                           .read(boardPreferencesProvider.notifier)
@@ -343,7 +343,7 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
               notchedTile: true,
               choices: CastlingMethod.values,
               selectedItem: castlingMethod,
-              titleBuilder: (t) => Text(t.name), //TODO labels and l10n
+              titleBuilder: (t) => Text(t.label),
               onSelectedItemChanged: onChanged,
             ),
           ],
