@@ -69,7 +69,6 @@ void main() {
       });
     });
 
-    // TODO: Fix test for iOS
     testWidgets('Scroll broadcast tournament screen', variant: kPlatformVariant, (tester) async {
       await mockNetworkImagesFor(() async {
         final app = await makeTestProviderScopeApp(
@@ -90,7 +89,7 @@ void main() {
         // Wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
-        await tester.scrollUntilVisible(find.text('Past broadcasts'), 100.0);
+        await tester.scrollUntilVisible(find.byKey(const ValueKey('past')), 100.0);
       });
     });
   });
