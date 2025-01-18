@@ -18,7 +18,14 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ओके</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">खिलाड़ी जिनके नाम हैं \"%s\"</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">चले गये मोहरे को बड़ा करें</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">क्या आप इस रन को खत्म करना चाहते है?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">दिखाने के लिए कुछ नहीं है, प्लीज फिल्टर बदलें</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">दिखाने के लिए कुछ नहीं है। पजल स्टॉर्म के कुछ रन खेलें।</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 मिनट में ज्यादा से ज्यादा पजल सॉल्व करें।</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">आप अपनी ये स्ट्रीक खो देंगे और आपका स्कोर सेव कर दिया जाएगा।</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">अपने मनपसंद ओपनिंग्स से पजल सॉल्व करें, या एक थीम चुनें।</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">पज़ल</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">हाल के सर्च</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">कंपन फीडबैक</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">इमर्सिव मोड</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">सेटिंग</string>
