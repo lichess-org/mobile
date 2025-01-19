@@ -101,13 +101,9 @@ class GameRepository {
     );
   }
 
-  /// If bookmark is not set, toggle the bookmark value.
-  /// Otherwise it will explicitly set the bookmark value.
-  Future<void> bookmark(GameId id, {bool? bookmark}) async {
-    final uri =
-        bookmark == null
-            ? Uri(path: '/bookmark/$id')
-            : Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
+  /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
+  Future<void> bookmark(GameId id, {required bool bookmark}) async {
+    final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
     final response = await client.post(uri);
     if (response.statusCode >= 400) {
       throw http.ClientException('Failed to bookmark game: ${response.statusCode}', uri);
