@@ -72,6 +72,7 @@ class _Body extends ConsumerWidget {
               optionButtonPadding: EdgeInsets.zero,
               optionButtonMargin: EdgeInsets.zero,
               optionButtonBorderRadius: 4,
+              onSelect: () => onChanged(t),
             ),
           ),
           trailing: t == appTheme ? checkedIcon : null,
