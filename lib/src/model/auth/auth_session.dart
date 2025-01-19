@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -33,4 +34,9 @@ class AuthSessionState with _$AuthSessionState {
       _AuthSessionState;
 
   factory AuthSessionState.fromJson(Map<String, dynamic> json) => _$AuthSessionStateFromJson(json);
+}
+
+@riverpod
+bool isLoggedIn(Ref ref) {
+  return ref.watch(authSessionProvider.select((authSession) => authSession != null));
 }

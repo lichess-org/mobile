@@ -69,7 +69,7 @@ class _LoadGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return game.when(
       data: (game) {
