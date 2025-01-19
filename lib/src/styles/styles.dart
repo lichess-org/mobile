@@ -50,20 +50,8 @@ abstract class Styles {
       defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
-  static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xE6F9F9F9),
-    darkColor: Color.fromARGB(210, 36, 36, 38),
-  );
-  static const cupertinoTabletAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFF9F9F9),
-    darkColor: Color.fromARGB(255, 36, 36, 36),
-  );
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
-  static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFF000000),
-    darkColor: _cupertinoDarkLabelColor,
-  );
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
@@ -171,11 +159,6 @@ abstract class Styles {
       decoration: TextDecoration.none,
     ),
   );
-
-  // from:
-  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
-  static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
-      CupertinoDynamicColor.withBrightness(color: Color(0x4D000000), darkColor: Color(0x29000000));
 }
 
 /// Retrieve the default text color and apply an opacity to it.
