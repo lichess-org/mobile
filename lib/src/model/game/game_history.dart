@@ -215,10 +215,6 @@ class UserGameHistory extends _$UserGameHistory {
     final game = gameList[index].game;
     final pov = gameList[index].pov;
 
-    ref.withClient(
-      (client) => GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
-    );
-
     state = AsyncData(
       state.requireValue.copyWith(
         gameList: gameList.replace(index, (

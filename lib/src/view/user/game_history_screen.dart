@@ -6,8 +6,10 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -192,8 +194,23 @@ class _BodyState extends ConsumerState<_Body> {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
-                            onPressed: (BuildContext context) {
-                              ref.read(gameListProvider.notifier).toggleBookmark(index);
+                            onPressed: (BuildContext context) async {
+                              try {
+                                await ref.withClient(
+                                  (client) => GameRepository(
+                                    client,
+                                  ).bookmark(game.id, bookmark: !game.bookmarked!),
+                                );
+
+                                ref.read(gameListProvider.notifier).toggleBookmark(index);
+                              } on Exception catch (_) {
+                                if (!context.mounted) return;
+                                showPlatformSnackbar(
+                                  context,
+                                  'Bookmark action failed',
+                                  type: SnackBarType.error,
+                                );
+                              }
                             },
                             icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
                             label: context.l10n.bookmarkThisGame,
