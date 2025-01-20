@@ -112,7 +112,7 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return BottomSheetScrollableContainer(
       children: [

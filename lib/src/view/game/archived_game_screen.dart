@@ -44,13 +44,11 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
-
     if (gameData != null) {
       return _Body(
         gameData: gameData,
         orientation: orientation,
-        isLoggedIn: isLoggedIn,
+        isLoggedIn: ref.watch(isLoggedInProvider),
         initialCursor: initialCursor,
       );
     } else {

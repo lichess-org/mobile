@@ -13,7 +13,7 @@ part 'game_repository_providers.g.dart';
 /// Fetches a game from the local storage if available, otherwise fetches it from the server.
 @riverpod
 Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
-  final isLoggedIn = ref.watch(authSessionProvider.select((session) => session != null));
+  final isLoggedIn = ref.watch(isLoggedInProvider);
   final gameStorage = await ref.watch(gameStorageProvider.future);
   final game = await gameStorage.fetch(gameId: id);
   if (game != null) return game;

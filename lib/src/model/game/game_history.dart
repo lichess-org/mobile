@@ -60,7 +60,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  final isLoggedIn = ref.watch(authSessionProvider.select((session) => session != null));
+  final isLoggedIn = ref.watch(isLoggedInProvider);
 
   return ref.withClientCacheFor(
     (client) => GameRepository(client).getUserGames(userId, withBookmarked: isLoggedIn),

@@ -144,7 +144,7 @@ class _BodyState extends ConsumerState<_Body> {
       filter: gameFilterState,
     );
     final gameListState = ref.watch(gameListProvider);
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return gameListState.when(
       data: (state) {

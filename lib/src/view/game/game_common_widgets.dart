@@ -87,7 +87,7 @@ class GameAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shouldPreventGoingBackAsync =
         id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
