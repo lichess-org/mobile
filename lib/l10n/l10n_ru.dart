@@ -1513,6 +1513,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Вместо того, чтобы сделать ожидаемый ход, сначала делается другой ход, представляющий непосредственную угрозу, на которую противник должен ответить. Также известен как «Zwischenzug» или «Intermezzo».';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Мат «Смертельная коробка»';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Коневой эндшпиль';
 
   @override
@@ -1915,7 +1921,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loadingEngine => 'Загрузка движка...';
 
   @override
-  String get calculatingMoves => 'Идёт расчёт ходов...';
+  String get calculatingMoves => 'Вычисление...';
 
   @override
   String get engineFailed => 'Ошибка загрузки движка';
@@ -1945,7 +1951,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteFromHere => 'Удалить с этого места';
 
   @override
-  String get collapseVariations => 'Свернуть вариантыуцппцупупцупуц';
+  String get collapseVariations => 'Свернуть варианты';
 
   @override
   String get expandVariations => 'Развернуть варианты';
@@ -2964,7 +2970,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inlineNotation => 'Строчная нотация';
 
   @override
-  String get makeAStudy => 'Чтобы сохранить и поделиться, рассмотрите возможность создания Студии.';
+  String get makeAStudy => 'Чтобы сохранить и поделиться, рассмотрите возможность создания студии.';
 
   @override
   String get clearSavedMoves => 'Очистить ходы';
@@ -3491,7 +3497,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get keyEnterOrExitVariation => 'ввести/закрыть вариант';
 
   @override
-  String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь на своих ошибках';
+  String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь над своими ошибками';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Далее (Разобрать свои ошибки)';
@@ -4429,6 +4435,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Зевков',
+      many: '$count Зевков',
+      few: '$count Зевка',
+      one: '$count Зевок',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,6 +4461,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ошибок',
+      many: '$count Ошибок',
+      few: '$count Ошибки',
+      one: '$count Ошибка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4450,6 +4482,19 @@ class AppLocalizationsRu extends AppLocalizations {
       many: '$count неточностей',
       few: '$count неточности',
       one: '$count неточность',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Неточностей',
+      many: '$count Неточностей',
+      few: '$count Неточности',
+      one: '$count Неточность',
     );
     return '$_temp0';
   }
@@ -4539,8 +4584,8 @@ class AppLocalizationsRu extends AppLocalizations {
       locale: localeName,
       other: '$count минут',
       many: '$count минут',
-      few: '$count Минуты',
-      one: '$count Одна минута',
+      few: '$count минуты',
+      one: '$count минута',
     );
     return '$_temp0';
   }
@@ -5247,6 +5292,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Активные';
+
+  @override
+  String get studyShowResults => 'Результаты';
 
   @override
   String get studyShowEvalBar => 'Шкалы оценки';

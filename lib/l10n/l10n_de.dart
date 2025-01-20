@@ -1465,6 +1465,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Anstatt den erwarteten Zug zu spielen, schiebe einen anderen Zug dazwischen, der eine sofortige Drohung aufstellt, welche der Gegner beantworten muss.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Killbox Matt';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springerendspiel';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Grobe Patzer',
+      one: '$count Grober Patzer',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Fehler',
+      one: '$count Fehler',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ungenauigkeiten',
+      one: '$count Ungenauigkeit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5111,6 +5150,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Laufende Partien';
+
+  @override
+  String get studyShowResults => 'Ergebnisse';
 
   @override
   String get studyShowEvalBar => 'Stellungsbewertungs-Balken';

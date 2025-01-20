@@ -1465,6 +1465,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'En lloc de jugar la jugada esperada, interposar un moviment previ que genera un perill imminent al que l\'oponent ha de respondre. També és conegut com \"Zwischenzug\" o \"Jugada intermèdia\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Mat de la caixa de matar';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de cavalls';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Errades greus',
+      one: '$count Errada greu',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Errades',
+      one: '$count Errada',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprecisions',
       one: '$count imprecisió',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprecisions',
+      one: '$count Imprecisió',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Jugant';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Barres d\'avaluació';
