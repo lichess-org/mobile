@@ -84,13 +84,14 @@ class PlatformCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
       child:
           Theme.of(context).platform == TargetPlatform.iOS
               ? Card.filled(
                 margin: margin ?? EdgeInsets.zero,
-                // elevation: elevation ?? 0,
+                elevation: elevation ?? 0,
                 color: color,
                 shadowColor: shadowColor,
                 shape:
@@ -101,7 +102,7 @@ class PlatformCard extends StatelessWidget {
                 clipBehavior: clipBehavior,
                 child: child,
               )
-              : (Theme.of(context).brightness == Brightness.dark ? Card.filled : Card.new)(
+              : (brightness == Brightness.dark ? Card.filled : Card.new)(
                 shape:
                     borderRadius != null
                         ? RoundedRectangleBorder(borderRadius: borderRadius!)

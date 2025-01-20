@@ -18,11 +18,33 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 
   LinearGradient get _defaultGradient {
     final brightness = Theme.of(context).brightness;
+    final colorScheme = Theme.of(context).colorScheme;
     switch (brightness) {
       case Brightness.light:
-        return lightShimmerGradient;
+        return LinearGradient(
+          colors: [
+            colorScheme.surfaceContainer,
+            colorScheme.surfaceContainerLow,
+            colorScheme.surfaceContainerLowest,
+          ],
+          stops: const [0.1, 0.3, 0.4],
+          begin: const Alignment(-1.0, -0.3),
+          end: const Alignment(1.0, 0.3),
+          tileMode: TileMode.clamp,
+        );
+
       case Brightness.dark:
-        return darkShimmerGradient;
+        return LinearGradient(
+          colors: [
+            colorScheme.surfaceContainer,
+            colorScheme.surfaceContainerHigh,
+            colorScheme.surfaceContainerHighest,
+          ],
+          stops: const [0.1, 0.3, 0.4],
+          begin: const Alignment(-1.0, -0.3),
+          end: const Alignment(1.0, 0.3),
+          tileMode: TileMode.clamp,
+        );
     }
   }
 
@@ -139,22 +161,6 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     );
   }
 }
-
-const lightShimmerGradient = LinearGradient(
-  colors: [Color(0xFFE3E3E6), Color(0xFFECECEE), Color(0xFFE3E3E6)],
-  stops: [0.1, 0.3, 0.4],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
-);
-
-const darkShimmerGradient = LinearGradient(
-  colors: [Color(0xFF333333), Color(0xFF3c3c3c), Color(0xFF333333)],
-  stops: [0.1, 0.3, 0.4],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
-);
 
 class _SlidingGradientTransform extends GradientTransform {
   const _SlidingGradientTransform({required this.slidePercent});

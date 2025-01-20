@@ -46,7 +46,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         _ChapterButton(state: state),
         _NextChapterButton(

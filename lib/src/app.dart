@@ -133,7 +133,7 @@ class _AppState extends ConsumerState<Application> {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-      blendLevel: 8,
+      blendLevel: isIOS ? 10 : 8,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
@@ -234,18 +234,7 @@ class _AppState extends ConsumerState<Application> {
         },
         builder:
             Theme.of(context).platform == TargetPlatform.iOS
-                ? (context, child) {
-                  // return CupertinoTheme(
-                  //   data: cupertinoThemeData,
-                  //   child: IconTheme.merge(
-                  //     data: IconThemeData(
-                  //       color: CupertinoTheme.of(context).textTheme.textStyle.color,
-                  //     ),
-                  //     child: Material(child: child),
-                  //   ),
-                  // );
-                  return Material(child: child);
-                }
+                ? (context, child) => Material(child: child)
                 : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],

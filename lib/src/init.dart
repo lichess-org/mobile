@@ -33,7 +33,7 @@ Future<void> setupFirstLaunch() async {
   final installedVersion = prefs.getString('installed_version');
 
   // TODO remove this migration code after a few releases
-  if (installedVersion != null && Version.parse(installedVersion) <= Version(0, 14, 0)) {
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 13, 14)) {
     _migrateThemeSettings();
   }
 
@@ -70,7 +70,7 @@ Future<void> _migrateThemeSettings() async {
     final migrated = generalPrefs.copyWith(
       appTheme:
           // ignore: deprecated_member_use_from_same_package
-          generalPrefs.appThemeSeed == AppThemeSeed.system ? AppTheme.system : AppTheme.gold,
+          generalPrefs.appThemeSeed == AppThemeSeed.system ? AppTheme.system : defaultAppTheme,
     );
     await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
   } catch (e) {
