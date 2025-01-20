@@ -37,7 +37,7 @@ class _Body extends ConsumerWidget {
     final choices = AppTheme.values.where((t) => t != AppTheme.system || hasSystemColors).toList();
 
     void onChanged(AppTheme? value) =>
-        ref.read(generalPreferencesProvider.notifier).setAppTheme(value ?? AppTheme.gold);
+        ref.read(generalPreferencesProvider.notifier).setAppTheme(value ?? defaultAppTheme);
 
     final checkedIcon =
         Theme.of(context).platform == TargetPlatform.android

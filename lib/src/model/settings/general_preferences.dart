@@ -54,6 +54,8 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   }
 }
 
+const defaultAppTheme = AppTheme.espresso;
+
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const factory GeneralPrefs({
@@ -63,7 +65,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    @JsonKey(unknownEnumValue: AppTheme.gold, defaultValue: AppTheme.gold)
+    @JsonKey(unknownEnumValue: defaultAppTheme, defaultValue: defaultAppTheme)
     required AppTheme appTheme,
 
     /// App theme seed
@@ -81,7 +83,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     appThemeSeed: AppThemeSeed.board,
-    appTheme: AppTheme.gold,
+    appTheme: defaultAppTheme,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
