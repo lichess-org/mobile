@@ -212,43 +212,6 @@ class _BroadcastWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-<<<<<<< HEAD
-    return broadcastList.when(
-      data: (data) {
-        if (data.active.isEmpty && data.past.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        return Padding(
-          padding: Styles.sectionBottomPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8.0)),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        context.l10n.broadcastBroadcasts,
-                        style: Styles.sectionTitle,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 6.0),
-                    NoPaddingTextButton(
-                      onPressed: () {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.broadcastBroadcasts,
-                          builder: (context) => const BroadcastListScreen(),
-                        );
-                      },
-                      child: Text(context.l10n.more),
-                    ),
-                  ],
-=======
     final isTablet = isTabletOrLarger(context);
     final aspectRatio = isTablet ? 1.7 : 1.55;
 
@@ -269,7 +232,6 @@ class _BroadcastWidget extends ConsumerWidget {
                     style: Styles.sectionTitle,
                     overflow: TextOverflow.ellipsis,
                   ),
->>>>>>> 6fee30f9 (More wip on broadcast carousel)
                 ),
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(

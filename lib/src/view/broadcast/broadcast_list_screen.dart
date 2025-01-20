@@ -647,6 +647,7 @@ class BroadcastCarouselItem extends StatefulWidget {
             website: null,
             location: null,
             dates: null,
+            standings: null,
           ),
         ),
         round: BroadcastRound(
