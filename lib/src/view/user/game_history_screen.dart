@@ -194,6 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
                             onPressed: (BuildContext context) async {
                               try {
                                 await ref.withClient(
