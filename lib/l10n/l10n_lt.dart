@@ -1511,6 +1511,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Vietoje to, kad būtų padarytas ėjimas, kurio tikėtasi, įterpiamas kitas ėjimas, kuris apgaulingai pateikiamas kaip staigi ataka priešininkui, į kurią jis turi atsakyti. Dar žinomas kaip \"intermezzo\" ar \"zwischenzug\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Žirgų endšpilis';
 
   @override
@@ -4427,6 +4433,19 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Šiurkščių klaidų',
+      many: '$count Šiurkščių klaidų',
+      few: '$count Šiurkščios klaidos',
+      one: '$count Šiurkšti klaida',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4440,6 +4459,19 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Klaidų',
+      many: '$count Klaidų',
+      few: '$count Klaidos',
+      one: '$count Klaida',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4448,6 +4480,19 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count netikslumo',
       few: '$count netikslumai',
       one: '$count netikslumas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Netikslumų',
+      many: '$count Netikslumo',
+      few: '$count Netikslumai',
+      one: '$count Netikslumas',
     );
     return '$_temp0';
   }
@@ -5245,6 +5290,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Žaidžiama';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Vertinimo skalė';

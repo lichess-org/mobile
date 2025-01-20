@@ -31,7 +31,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String mobileGreeting(String param) {
-    return 'Üdv $param!';
+    return 'Üdv $param';
   }
 
   @override
@@ -472,13 +472,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastTop10Rating => 'Top 10 rating';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'FIDE játékosok';
 
   @override
   String get broadcastFidePlayerNotFound => 'FIDE player not found';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'FIDE profil';
 
   @override
   String get broadcastFederation => 'Federation';
@@ -1465,6 +1465,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'A várt lépés megtétele helyett egy olyan lépés beszúrása, amely fenyegetésére az ellenfélnek rögtön válaszolnia kell. Ismert még \"Zwischenzug\"-nak vagy \"Intermezzo\"-nak.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Huszár végjáték';
 
   @override
@@ -1710,7 +1716,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get waitingForOpponent => 'Várakozás az ellenfélre';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Ellenfeled az itt látható QR-kód beolvasásával is csatlakozhat.';
+  String get orLetYourOpponentScanQrCode => 'Ellenfeled az itt látható QR-kód beolvasásával is csatlakozhat';
 
   @override
   String get waiting => 'Várakozás';
@@ -2819,7 +2825,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get blackWins => 'Sötét győzelmek';
 
   @override
-  String get drawRate => 'Döntetlenek aránya:';
+  String get drawRate => 'Döntetlenek aránya';
 
   @override
   String get draws => 'Döntetlenek';
@@ -2934,7 +2940,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get bewareTheGameIsRatedButHasNoClock => 'A játszma értékelt, de nincs időmérés!';
 
   @override
-  String get success => 'Sikerült!';
+  String get success => 'Sikerült';
 
   @override
   String get automaticallyProceedToNextGameAfterMoving => 'Lépés után ugrás a következő játékra';
@@ -2967,10 +2973,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get yes => 'Igen';
 
   @override
-  String get website => 'Website';
+  String get website => 'Weboldal';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobil';
 
   @override
   String get help => 'Segítség';
@@ -3033,7 +3039,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'A jelentésedet hamarabb feldolgozzák, ha angolul írod.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Kérünk, legalább adj meg linket legalább egy csalt játszmához.';
@@ -3136,7 +3142,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get outsideTheBoard => 'A táblán kívül';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'A tábla minden mezőjében';
 
   @override
   String get onSlowGames => 'Lassú játékok esetén';
@@ -3374,7 +3380,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get aboutSimul => 'A szimultán játékban egy játékos játszik több ellen.';
 
   @override
-  String get aboutSimulImage => '50 ellenfél ellen, Fisher 47-szer nyert, kétszer játszott döntetlent és egyszer vesztett';
+  String get aboutSimulImage => '50 ellenfél ellen, Fischer 47-szer nyert, kétszer játszott döntetlent és egyszer vesztett.';
 
   @override
   String get aboutSimulRealLife => 'Ez a fejlesztés a való életre alapoz, ahol a szimultán játékos táblától tábláig megy és egy lépést tesz.';
@@ -3509,7 +3515,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String yourPerfTypeRatingIsRating(String param1, String param2) {
-    return 'A te $param1 pontszámod $param2';
+    return 'A te $param1 pontszámod $param2.';
   }
 
   @override
@@ -3552,12 +3558,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Üzenetet küldtünk a(z) $param e-mail-címre.   \nJelszavad megváltoztatásához kattints az üzenetben lévő linkre.';
+    return 'Üzenetet küldtünk a(z) $param e-mail-címre.\nJelszavad megváltoztatásához kattints az üzenetben lévő linkre.';
   }
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return 'A regisztrációval elfogadod a $param-t';
+    return 'A regisztrációval elfogadod a $param-t.';
   }
 
   @override
@@ -3658,7 +3664,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get zeroAdvertisement => 'Nincsenek hirdetések';
 
   @override
-  String get fullFeatured => 'Teljeskörű funkciók';
+  String get fullFeatured => 'Teljes körű funkciók';
 
   @override
   String get phoneAndTablet => 'Telefon vagy táblagép';
@@ -3942,13 +3948,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get showUnreadLichessMessage => 'Üzeneted jött Lichesstől!';
 
   @override
-  String get clickHereToReadIt => 'Katt ide az olvasáshoz';
+  String get clickHereToReadIt => 'Kattints ide az olvasáshoz';
 
   @override
   String get sorry => 'Sajnáljuk';
 
   @override
-  String get weHadToTimeYouOutForAWhile => 'Kénytelenek vagyunk egy kis időre visszatartani.';
+  String get weHadToTimeYouOutForAWhile => 'Kénytelenek vagyunk egy kis időre kizárni.';
 
   @override
   String get why => 'Miért?';
@@ -4082,7 +4088,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String joinTheTeamXToPost(String param1) {
-    return 'Csatlakozz $param1 csapathoz, hogy írhass ebbe a fórumba.';
+    return 'Csatlakozz $param1 csapathoz, hogy írhass ebbe a fórumba';
   }
 
   @override
@@ -4286,7 +4292,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get emailAssociatedToaccount => 'A fiókhoz rendelt email cím';
 
   @override
-  String get sentEmailWithLink => 'Küldtünk neked egy linket emailben.';
+  String get sentEmailWithLink => 'Küldtünk neked egy linket e-mailben.';
 
   @override
   String get tournamentEntryCode => 'Verseny belépési kód';
@@ -4375,6 +4381,17 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Súlyos hiba',
+      one: '$count Súlyos hiba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Hiba',
+      one: '$count Hiba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count pontatlanság',
       one: '$count pontatlanság',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Pontatlanság',
+      one: '$count Pontatlanság',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Folyamatban';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

@@ -1465,6 +1465,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Anstatt de erwarteti Zug, zerscht en Andere mache, wo diräkt droht, so dass de Gägner muess reagiere. Isch au bekannt als \"Zwüschezug\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill Box Matt';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Schpringer Ändschpil';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Patzer',
+      one: '$count Patzer',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Fähler',
+      one: '$count Fähler',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ungnauigkeite',
+      one: '$count Ungnauigkeit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5111,6 +5150,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Laufend';
+
+  @override
+  String get studyShowResults => 'Resultat';
 
   @override
   String get studyShowEvalBar => 'Bewertigs-Skala';

@@ -408,7 +408,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'スタートデート$param';
   }
 
   @override
@@ -846,7 +846,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInGameOnly => '対局中のみ';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'チェスゲームリクエストアクセプトする';
 
   @override
   String get preferencesChessClock => '時間表示';
@@ -1441,6 +1441,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '当然に見える手を指す代わりに、いったん相手が受けざるを得ない別の手をはさむ問題。';
 
   @override
+  String get puzzleThemeKillBoxMate => 'キルボックスのメイト';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
+
+  @override
   String get puzzleThemeKnightEndgame => 'ナイト・エンドゲーム';
 
   @override
@@ -1674,7 +1680,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playWithAFriend => '友達と対局する';
 
   @override
-  String get playWithTheMachine => 'AI と対局する';
+  String get playWithTheMachine => 'コンピューターとチェスする';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
@@ -3449,7 +3455,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get toggleGlyphAnnotations => '記号での注釈を切り替え';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'わからん';
 
   @override
   String get variationArrowsInfo => '変化手順の矢印があれば棋譜記録を使わずにナビゲーションできます。';
@@ -4348,6 +4354,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 大悪手',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4358,7 +4374,27 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 悪手',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 緩手',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5043,6 +5079,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyPlaying => 'プレイ中';
+
+  @override
+  String get studyShowResults => '結果';
 
   @override
   String get studyShowEvalBar => '評価値バー';

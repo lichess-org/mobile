@@ -1509,6 +1509,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замест чаканага хода, спачатку зрабіце іншы ход, ствараючы непасрэдную пагрозу, на якую супернік павінен адказаць. Таксама вядомы як \"Zwischenzug\" або \"Intermezzo\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Канёвы эндшпіль';
 
   @override
@@ -4425,6 +4431,19 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Позехаў',
+      many: '$count Позехаў',
+      few: '$count Позеха',
+      one: '$count Позех',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4438,6 +4457,19 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Памылак',
+      many: '$count Памылак',
+      few: '$count Памылкі',
+      one: '$count Памылка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4446,6 +4478,19 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count недакладнасцяў',
       few: '$count недакладнасці',
       one: '$count недакладнасць',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Недакладнасцяў',
+      many: '$count Недакладнасцяў',
+      few: '$count Недакладнасці',
+      one: '$count Недакладнасць',
     );
     return '$_temp0';
   }
@@ -5239,6 +5284,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Гуляецца';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Шкалы ацэнкі';

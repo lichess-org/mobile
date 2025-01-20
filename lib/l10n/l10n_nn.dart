@@ -1465,6 +1465,12 @@ class AppLocalizationsNn extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Eit trekk som kjem før det venta trekket og som utgjer eit trugsmål motspelaren straks må svare på.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kassematt';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Eit tårn står ved sida av motspelarens konge og er støtta av ei dronning som i tillegg stengjer fluktfelta til kongen. Tårnet og dronninga fangar motspelarkongen i ei 3x3 «kasse».';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springarsluttspel';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsNn extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Bukkar',
+      one: '$count Bukk',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsNn extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Feil',
+      one: '$count Feil',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count upresise trekk',
       one: '$count upresist trekk',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Upresise trekk',
+      one: '$count Upresist trekk',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsNn extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Spelar no';
+
+  @override
+  String get studyShowResults => 'Resultat';
 
   @override
   String get studyShowEvalBar => 'Evalueringssøyler';
