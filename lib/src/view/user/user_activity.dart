@@ -48,7 +48,7 @@ class UserActivityWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true),
+              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
             ),
           ),
     );

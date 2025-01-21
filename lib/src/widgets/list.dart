@@ -22,19 +22,22 @@ class ListSection extends StatelessWidget {
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
-  ListSection.loading({required int itemsNumber, bool header = false, this.margin})
-    : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
-      headerTrailing = null,
-      header = header ? const SizedBox.shrink() : null,
-      hasLeading = false,
-      showDivider = false,
-      showDividerBetweenTiles = false,
-      dense = false,
-      cupertinoAdditionalDividerMargin = null,
-      cupertinoBackgroundColor = null,
-      cupertinoBorderRadius = null,
-      cupertinoClipBehavior = Clip.hardEdge,
-      _isLoading = true;
+  ListSection.loading({
+    required int itemsNumber,
+    bool header = false,
+    this.margin,
+    this.hasLeading = false,
+  }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+       headerTrailing = null,
+       header = header ? const SizedBox.shrink() : null,
+       showDivider = false,
+       showDividerBetweenTiles = false,
+       dense = false,
+       cupertinoAdditionalDividerMargin = null,
+       cupertinoBackgroundColor = null,
+       cupertinoBorderRadius = null,
+       cupertinoClipBehavior = Clip.hardEdge,
+       _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
   final List<Widget> children;
@@ -139,7 +142,7 @@ class ListSection extends StatelessWidget {
                   if (header != null)
                     // ignore: avoid-wrapping-in-padding
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                       child: Container(
                         width: double.infinity,
                         height: 24,
@@ -149,14 +152,34 @@ class ListSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Container(
-                    width: double.infinity,
-                    height: children.length * 54,
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                  for (int i = 0; i < children.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        children: [
+                          if (hasLeading) ...[
+                            Container(
+                              width: 46,
+                              height: 46,
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                          Expanded(
+                            child: Container(
+                              height: 46,
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             )
@@ -185,7 +208,7 @@ class ListSection extends StatelessWidget {
                           cupertinoBackgroundColor ??
                           (theme.brightness == Brightness.light
                               ? theme.colorScheme.surfaceContainerLowest
-                              : theme.colorScheme.surfaceContainerHighest),
+                              : theme.colorScheme.surfaceContainerHigh),
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -306,12 +329,13 @@ class PlatformListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return ListTile(
           leading: leading,
           title: title,
-          iconColor: Theme.of(context).colorScheme.outline,
+          iconColor: colorScheme.outline,
           subtitle:
               subtitle != null
                   ? DefaultTextStyle.merge(
@@ -329,16 +353,14 @@ class PlatformListTile extends StatelessWidget {
           contentPadding: padding,
         );
       case TargetPlatform.iOS:
+        final activatedColor = colorScheme.surfaceContainerHighest;
         return IconTheme(
           data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor:
-                  selected == true
-                      ? CupertinoColors.systemGrey4.resolveFrom(context)
-                      : cupertinoBackgroundColor,
-              // backgroundColorActivated: Theme.of(context).colorScheme.surfaceContainerHighest,
+              backgroundColor: selected == true ? activatedColor : cupertinoBackgroundColor,
+              backgroundColorActivated: activatedColor,
               leading: leading,
               title:
                   harmonizeCupertinoTitleStyle

@@ -54,7 +54,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   }
 }
 
-const defaultAppTheme = AppTheme.espresso;
+const defaultAppTheme = AppTheme.mango;
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
