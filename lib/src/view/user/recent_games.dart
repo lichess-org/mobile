@@ -18,9 +18,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 /// If [user] is not provided, the current logged in user's recent games are displayed.
 /// If the current user is not logged in, or there is no connectivity, the stored recent games are displayed instead.
 class RecentGamesWidget extends ConsumerWidget {
-  const RecentGamesWidget({this.user, super.key});
+  const RecentGamesWidget({this.user, this.maxGamesToShow = 10, super.key});
 
   final LightUser? user;
+  final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,11 +47,12 @@ class RecentGamesWidget extends ConsumerWidget {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
+        final list = data.take(maxGamesToShow);
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
           headerTrailing:
-              nbOfGames > data.length
+              nbOfGames > list.length
                   ? NoPaddingTextButton(
                     onPressed: () {
                       pushPlatformRoute(
@@ -66,7 +68,7 @@ class RecentGamesWidget extends ConsumerWidget {
                   )
                   : null,
           children:
-              data.map((item) {
+              list.map((item) {
                 return ExtendedGameListTile(item: item, userId: userId);
               }).toList(),
         );
@@ -82,7 +84,7 @@ class RecentGamesWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true),
+              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
             ),
           ),
     );
