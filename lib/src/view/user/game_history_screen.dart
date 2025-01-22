@@ -177,6 +177,27 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
+                final game = list[index].game;
+
+                Future<void> onPressedBookmark(BuildContext context) async {
+                  try {
+                    await ref.withClient(
+                      (client) =>
+                          GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
+                    );
+
+                    ref.read(gameListProvider.notifier).toggleBookmark(index);
+                  } on Exception catch (_) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(
+                        context,
+                        'Bookmark action failed',
+                        type: SnackBarType.error,
+                      );
+                    }
+                  }
+                }
+
                 final gameTile = ExtendedGameListTile(
                   item: list[index],
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
@@ -184,9 +205,8 @@ class _BodyState extends ConsumerState<_Body> {
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
+                  onPressedBookmark: onPressedBookmark,
                 );
-
-                final game = list[index].game;
 
                 return isLoggedIn
                     ? Slidable(
@@ -195,26 +215,9 @@ class _BodyState extends ConsumerState<_Body> {
                         children: [
                           SlidableAction(
                             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                            onPressed: (BuildContext context) async {
-                              try {
-                                await ref.withClient(
-                                  (client) => GameRepository(
-                                    client,
-                                  ).bookmark(game.id, bookmark: !game.bookmarked!),
-                                );
-
-                                ref.read(gameListProvider.notifier).toggleBookmark(index);
-                              } on Exception catch (_) {
-                                if (!context.mounted) return;
-                                showPlatformSnackbar(
-                                  context,
-                                  'Bookmark action failed',
-                                  type: SnackBarType.error,
-                                );
-                              }
-                            },
+                            onPressed: onPressedBookmark,
                             icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
-                            label: context.l10n.bookmarkThisGame,
+                            label: (game.bookmarked!) ? 'Unbookmark' : 'Bookmark',
                           ),
                         ],
                       ),

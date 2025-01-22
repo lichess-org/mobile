@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -34,6 +33,7 @@ class GameListTile extends StatelessWidget {
     required this.game,
     required this.mySide,
     required this.opponentTitle,
+    required this.onPressedBookmark,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -43,9 +43,10 @@ class GameListTile extends StatelessWidget {
 
   final LightArchivedGame game;
   final Side mySide;
+  final Widget opponentTitle;
+  final Future<void> Function(BuildContext context) onPressedBookmark;
 
   final IconData? icon;
-  final Widget opponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
@@ -67,6 +68,7 @@ class GameListTile extends StatelessWidget {
                 game: game,
                 mySide: mySide,
                 oppponentTitle: opponentTitle,
+                onPressedBookmark: onPressedBookmark,
                 icon: icon,
                 subtitle: subtitle,
                 trailing: trailing,
@@ -93,6 +95,7 @@ class _ContextMenu extends ConsumerWidget {
     required this.game,
     required this.mySide,
     required this.oppponentTitle,
+    required this.onPressedBookmark,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -100,9 +103,10 @@ class _ContextMenu extends ConsumerWidget {
 
   final LightArchivedGame game;
   final Side mySide;
+  final Widget oppponentTitle;
+  final Future<void> Function(BuildContext context) onPressedBookmark;
 
   final IconData? icon;
-  final Widget oppponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
 
@@ -239,12 +243,10 @@ class _ContextMenu extends ConsumerWidget {
         ),
         if (isLoggedIn)
           BottomSheetContextMenuAction(
-            onPressed: () {
-              ref.withClient((client) => GameRepository(client).bookmark(game.id, bookmark: true));
-            },
+            futureOnPressed: onPressedBookmark,
             icon: (game.bookmarked!) ? Icons.star : Icons.star_outline_rounded,
-            closeOnPressed: false,
-            child: Text(context.l10n.bookmarkThisGame),
+            closeOnPressed: true,
+            child: Text(game.bookmarked! ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
           ),
         // Builder is used to retrieve the context immediately surrounding the
         // BottomSheetContextMenuAction
@@ -371,10 +373,11 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.padding});
+  const ExtendedGameListTile({required this.item, this.padding, required this.onPressedBookmark});
 
   final LightArchivedGameWithPov item;
   final EdgeInsetsGeometry? padding;
+  final Future<void> Function(BuildContext context) onPressedBookmark;
 
   @override
   Widget build(BuildContext context) {
@@ -430,6 +433,7 @@ class ExtendedGameListTile extends StatelessWidget {
         aiLevel: opponent.aiLevel,
         rating: opponent.rating,
       ),
+      onPressedBookmark: onPressedBookmark,
       subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

@@ -64,7 +64,7 @@ class RecentGamesWidget extends ConsumerWidget {
                   : null,
           children:
               data.map((item) {
-                return ExtendedGameListTile(item: item);
+                return ExtendedGameListTile(item: item, onPressedBookmark: (context) async {});
               }).toList(),
         );
       },

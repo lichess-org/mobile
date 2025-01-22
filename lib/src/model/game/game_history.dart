@@ -37,8 +37,16 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
+    return ref.watch(
+      userGameHistoryProvider(session.user.id, isOnline: true).selectAsync(
+        (userGameHistoryValue) =>
+            userGameHistoryValue.gameList.take(kNumberOfRecentGames).toIList(),
+      ),
+    );
     return ref.withClientCacheFor(
-      (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
+      (client) => GameRepository(
+        client,
+      ).getUserGames(session.user.id, max: kNumberOfRecentGames, withBookmarked: true),
       const Duration(hours: 1),
     );
   } else {
