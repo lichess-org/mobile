@@ -130,14 +130,14 @@ class _AppState extends ConsumerState<Application> {
     final lightTheme = FlexThemeData.light(
       colors: flexSchemeLightColors,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
+      surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
       blendLevel: 10,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
-      surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-      blendLevel: 10,
+      surfaceMode: FlexSurfaceMode.level,
+      blendLevel: 16,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -167,7 +167,7 @@ class _AppState extends ConsumerState<Application> {
 
     final darkCupertinoTheme = CupertinoThemeData(
       primaryColor: darkTheme.colorScheme.primaryFixedDim,
-      primaryContrastingColor: darkTheme.colorScheme.onPrimaryFixed,
+      primaryContrastingColor: darkTheme.colorScheme.onPrimaryFixedVariant,
       brightness: Brightness.dark,
       textTheme: CupertinoTheme.of(context).textTheme.copyWith(
         primaryColor: darkTheme.colorScheme.primaryFixedDim,
@@ -203,6 +203,8 @@ class _AppState extends ConsumerState<Application> {
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.blackCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
+            tileColor: lightTheme.colorScheme.surfaceContainerLow,
+            selectedTileColor: lightTheme.colorScheme.surfaceContainer,
             titleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
             subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
@@ -221,6 +223,8 @@ class _AppState extends ConsumerState<Application> {
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
+            tileColor: darkTheme.colorScheme.surfaceContainerLow,
+            selectedTileColor: darkTheme.colorScheme.surfaceContainer,
             titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
             subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,

@@ -343,7 +343,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.storage_outlined),

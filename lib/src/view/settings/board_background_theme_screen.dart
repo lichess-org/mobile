@@ -71,14 +71,17 @@ class _Body extends ConsumerWidget {
           onTap:
               () => Navigator.of(context, rootNavigator: true)
                   .push(
-                    MaterialPageRoute<bool>(
+                    MaterialPageRoute<double?>(
                       builder: (_) => ConfirmBackgroundScreen(initialIndex: index),
                       fullscreenDialog: true,
                     ),
                   )
                   .then((value) {
-                    if (value == true) {
-                      onChanged(t);
+                    if (context.mounted) {
+                      if (value != null) {
+                        onChanged(choices[value.toInt()]);
+                        Navigator.pop(context);
+                      }
                     }
                   }),
           child: SizedBox.expand(child: ColoredBox(color: theme.scaffoldBackgroundColor)),
@@ -141,11 +144,11 @@ class _ConfirmBackgroundScreenState extends State<ConfirmBackgroundScreen> {
           children: [
             TextButton(
               child: Text(context.l10n.accept),
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: () => Navigator.pop(context, _controller.page),
             ),
             TextButton(
               child: Text(context.l10n.cancel),
-              onPressed: () => Navigator.pop(context, false),
+              onPressed: () => Navigator.pop(context, null),
             ),
           ],
         ),

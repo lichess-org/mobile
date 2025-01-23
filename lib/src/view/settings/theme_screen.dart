@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -27,7 +26,7 @@ class ThemeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.read(boardPreferencesProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
     return wrapper.BoardTheme(
       backgroundTheme: boardPrefs.backgroundTheme,
       child: PlatformWidget(
@@ -107,7 +106,6 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final bool hasAjustedColors =
@@ -187,9 +185,9 @@ class _BodyState extends ConsumerState<_Body> {
                     },
                   ),
                   SettingsListTile(
-                    icon: const Icon(Icons.brightness_medium_outlined),
+                    icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
-                    settingsValue: generalPrefs.appTheme.label,
+                    settingsValue: boardPrefs.backgroundTheme?.label ?? 'Default',
                     onTap: () {
                       pushPlatformRoute(
                         context,

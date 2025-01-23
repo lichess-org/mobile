@@ -43,7 +43,7 @@ class BoardTheme extends ConsumerWidget {
         FlexColorScheme.dark(
           colors: flexSchemeDarkColors,
           surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-          blendLevel: 20,
+          blendLevel: 18,
           cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
           appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
         ).toTheme;
@@ -103,6 +103,13 @@ class BoardTheme extends ConsumerWidget {
     return Theme(
       data: theme.copyWith(
         cupertinoOverrideTheme: cupertinoTheme,
+        listTileTheme: ListTileTheme.of(context).copyWith(
+          tileColor: theme.colorScheme.surfaceContainerLow,
+          selectedTileColor: theme.colorScheme.surfaceContainer,
+          titleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
+          subtitleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
+          leadingAndTrailingTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
+        ),
         splashFactory: isIOS ? NoSplash.splashFactory : null,
         textTheme:
             isIOS

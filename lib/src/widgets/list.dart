@@ -117,6 +117,7 @@ class ListSection extends StatelessWidget {
                 children: [
                   if (header != null)
                     ListTile(
+                      tileColor: theme.scaffoldBackgroundColor,
                       dense: true,
                       title: DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
                       trailing: headerTrailing,
@@ -125,11 +126,7 @@ class ListSection extends StatelessWidget {
                     ...ListTile.divideTiles(context: context, tiles: children)
                   else
                     ...children,
-                  if (showDivider)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Divider(thickness: 0),
-                    ),
+                  if (showDivider) const SizedBox(height: 16.0),
                 ],
               ),
             );
