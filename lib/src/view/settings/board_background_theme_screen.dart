@@ -80,7 +80,11 @@ class _Body extends ConsumerWidget {
                 () => Navigator.of(context, rootNavigator: true)
                     .push(
                       MaterialPageRoute<double?>(
-                        builder: (_) => ConfirmBackgroundScreen(initialIndex: index),
+                        builder:
+                            (_) => ConfirmBackgroundScreen(
+                              boardPrefs: boardPrefs,
+                              initialIndex: index,
+                            ),
                         fullscreenDialog: true,
                       ),
                     )
@@ -122,9 +126,10 @@ class _Body extends ConsumerWidget {
 }
 
 class ConfirmBackgroundScreen extends StatefulWidget {
-  const ConfirmBackgroundScreen({required this.initialIndex, super.key});
+  const ConfirmBackgroundScreen({required this.initialIndex, required this.boardPrefs, super.key});
 
   final int initialIndex;
+  final BoardPrefs boardPrefs;
 
   @override
   State<ConfirmBackgroundScreen> createState() => _ConfirmBackgroundScreenState();
@@ -162,6 +167,7 @@ class _ConfirmBackgroundScreenState extends State<ConfirmBackgroundScreen> {
                 size: MediaQuery.sizeOf(context).width,
                 fen: kInitialFEN,
                 orientation: Side.white,
+                settings: widget.boardPrefs.toBoardSettings(),
               ),
             ),
           ),
