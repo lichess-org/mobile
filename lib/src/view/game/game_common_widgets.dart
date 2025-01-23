@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -28,17 +27,17 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BookmarkButton extends ConsumerWidget {
-  const BookmarkButton({required this.id, this.bookmarked = false, this.onPressed});
+  const BookmarkButton({required this.id, required this.bookmarked});
 
   final GameId id;
   final bool bookmarked;
-  final Function? onPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bookmarkCurrentState = ref.watch(bookmarkNotifierProvider(id)) ?? bookmarked;
+
     return AppBarIconButton(
       onPressed: () async {
-        final bookmarkCurrentState = ref.watch(bookmarkNotifierProvider(id)) ?? bookmarked;
         final newBookmarkValue = !bookmarkCurrentState;
 
         try {
@@ -53,7 +52,7 @@ class BookmarkButton extends ConsumerWidget {
         }
       },
       semanticsLabel: context.l10n.bookmarkThisGame,
-      icon: Icon(bookmarked ? Icons.star : Icons.star_outline_rounded),
+      icon: Icon(bookmarkCurrentState ? Icons.star : Icons.star_outline_rounded),
     );
   }
 }
@@ -83,11 +82,19 @@ class _SettingButton extends ConsumerWidget {
 final _gameTitledateFormat = DateFormat.yMMMd();
 
 class GameAppBar extends ConsumerWidget {
-  const GameAppBar({this.id, this.seek, this.challenge, this.lastMoveAt, super.key});
+  const GameAppBar({
+    this.id,
+    this.seek,
+    this.challenge,
+    this.lastMoveAt,
+    this.bookmarked,
+    super.key,
+  });
 
   final GameSeek? seek;
   final ChallengeRequest? challenge;
   final GameFullId? id;
+  final bool? bookmarked;
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
@@ -101,7 +108,6 @@ class GameAppBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shouldPreventGoingBackAsync =
         id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
-    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return PlatformAppBar(
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
@@ -119,7 +125,7 @@ class GameAppBar extends ConsumerWidget {
       actions: [
         const ToggleSoundButton(),
         if (id != null) ...[
-          if (isLoggedIn) BookmarkButton(id: id!.gameId),
+          if (bookmarked != null) BookmarkButton(id: id!.gameId, bookmarked: bookmarked ?? false),
           _SettingButton(id: id!),
         ],
       ],

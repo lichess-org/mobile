@@ -166,6 +166,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : currentVal.online && currentVal.session != null
@@ -175,6 +176,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : (await ref.watch(gameStorageProvider.future))

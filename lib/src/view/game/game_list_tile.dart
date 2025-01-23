@@ -419,6 +419,7 @@ class ExtendedGameListTile extends StatelessWidget {
                                 loadingLastMove: game.lastMove,
                                 loadingOrientation: youAre,
                                 lastMoveAt: game.lastMoveAt,
+                                bookmarked: game.bookmarked,
                               )
                               : ArchivedGameScreen(gameData: game, orientation: youAre),
                 );
