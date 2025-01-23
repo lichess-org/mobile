@@ -381,7 +381,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Difuzări de turnee în direct';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Calendar de transmisiuni';
 
   @override
   String get broadcastNewBroadcast => 'O nouă difuzare în direct';
@@ -444,7 +444,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Data de start în fusul orar local al turneului: $param';
   }
 
   @override
@@ -517,38 +517,38 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastTeams => 'Echipe';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Table';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Prezentare generală';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Abonează-te pentru a fi notificat când începe fiecare rundă. Poți gestiona notificările sonore sau push pentru transmisiuni din setările contului tău.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Încărcați imaginea turneului';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Încă nu sunt table. Acestea vor apărea după ce partidele vor fi încărcate.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Tablele pot fi încărcate dintr-o sursă sau prin intermediul $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Începe după $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Transmisiunea va începe foarte curând.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Transmisiunea nu a început încă.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Website-ul oficial';
 
   @override
   String get broadcastStandings => 'Clasament';
@@ -558,30 +558,30 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Mai multe opțiuni pe $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'pagina administratorilor de site';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'O sursă publică de PGN în timp real pentru această rundă. De asemenea, oferim un $param pentru o sincronizare mai rapidă și mai eficientă.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Încorporează această transmisiune în site-ul tău';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Încorporează $param în site-ul tău';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Diferență rating';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Jocuri în acest turneu';
 
   @override
   String get broadcastScore => 'Scor';
@@ -596,22 +596,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastTournamentLocation => 'Locație turneu';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Jucători de top';
 
   @override
   String get broadcastTimezone => 'Fus orar';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Categoria de rating FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Detalii opționale';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Transmisii anterioare';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Vezi toate transmisiunile pe fiecare lună';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1489,6 +1489,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'În loc să faci mutarea așteptată, mai întâi intervii cu o altă mutare care e o amenințare imediată, căreia adversarul trebuie să-i răspundă. Cunoscut și ca \"Zwischenzug\" sau \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final cu cai';
 
   @override
@@ -1719,7 +1725,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get playWithAFriend => 'Jucaţi cu un prieten';
+  String get playWithAFriend => 'Jucați cu un prieten';
 
   @override
   String get playWithTheMachine => 'Jucați cu calculatorul';
@@ -1754,13 +1760,13 @@ class AppLocalizationsRo extends AppLocalizations {
   String get strength => 'Putere';
 
   @override
-  String get toggleTheChat => 'Arată/ascunde discuția';
+  String get toggleTheChat => 'Arată/Ascunde discuţia';
 
   @override
   String get chat => 'Discuţie';
 
   @override
-  String get resign => 'Abandonează';
+  String get resign => 'Renunță';
 
   @override
   String get checkmate => 'Şah mat';
@@ -1778,7 +1784,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get asWhite => 'cu albele';
 
   @override
-  String get asBlack => 'cu negrele';
+  String get asBlack => 'ca negrul';
 
   @override
   String get randomColor => 'Culoare aleatorie';
@@ -4402,6 +4408,18 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count De gafe',
+      few: '$count Gafe',
+      one: '$count Gafă',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4414,6 +4432,18 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count De greșeli',
+      few: '$count Greșeli',
+      one: '$count Greșeală',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4421,6 +4451,18 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de inexactități',
       few: '$count inexactități',
       one: '$count inexactitate',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count De inexactități',
+      few: '$count Inexactități',
+      one: '$count Inexactitate',
     );
     return '$_temp0';
   }
@@ -5179,6 +5221,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyPlaying => 'În desfășurare';
+
+  @override
+  String get studyShowResults => 'Rezultate';
 
   @override
   String get studyShowEvalBar => 'Bară de evaluare';

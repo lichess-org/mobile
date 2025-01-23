@@ -232,7 +232,8 @@ class _BottomBar extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentCupertinoBar: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

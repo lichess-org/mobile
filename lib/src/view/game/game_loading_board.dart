@@ -72,7 +72,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -148,7 +148,7 @@ class ChallengeLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -258,7 +258,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -339,7 +339,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),

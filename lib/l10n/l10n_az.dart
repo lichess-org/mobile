@@ -1463,6 +1463,12 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Gözlənilən bir gedişi oynamaq əvəzinə əvvəlcə rəqibin cavab verməyə məcbur olduğu, başqa bir gediş edin. Buna \"Zwischenzug\" və ya \"Ara gediş\" deyilir.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'At sonluğu';
 
   @override
@@ -4373,6 +4379,17 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Kobud səhv',
+      one: '$count Kobud səhv',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4384,12 +4401,34 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Səhv',
+      one: '$count Səhv',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count qeyri-dəqiqlik',
       one: '$count qeyri-dəqiqlik',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Qeyri-dəqiqlik',
+      one: '$count Qeyri-dəqiqlik',
     );
     return '$_temp0';
   }
@@ -5109,6 +5148,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Oynanılan';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

@@ -903,7 +903,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesInGameOnly => 'Iba pri partii';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'S výnimkou počas partie';
 
   @override
   String get preferencesChessClock => 'Šachové hodiny';
@@ -1511,6 +1511,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Namiesto očakávaného ťahu, zahranie ťahu znamenajúceho okamžitú hrozbu, na ktorú musí protihráč reagovať. Nazývaný tiež \"Zwischenzug\".';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Mat na poli smrti';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Veža je vedľa súperovho kráľa a podporuje ju dáma, ktorá zároveň blokuje kráľove únikové polia. Veža a dáma chytia súperovho kráľa do pasce na 3 x 3 „poli smrti“.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Jazdcová koncovka';
@@ -4429,6 +4435,19 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Hrubých chýb',
+      many: '$count Hrubých chýb',
+      few: '$count Hrubé chyby',
+      one: '$count Hrubá chyba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,6 +4461,19 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Chýb',
+      many: '$count Chýb',
+      few: '$count Chyby',
+      one: '$count Chyba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4450,6 +4482,19 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count nepresností',
       few: '$count nepresnosti',
       one: '$count nepresnosť',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Nepresností',
+      many: '$count Nepresností',
+      few: '$count Nepresnosti',
+      one: '$count Nepresnosť',
     );
     return '$_temp0';
   }
@@ -5247,6 +5292,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Práve sa hrá';
+
+  @override
+  String get studyShowResults => 'Výsledky';
 
   @override
   String get studyShowEvalBar => 'Ukazovatele hodnotenia';

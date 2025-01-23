@@ -210,7 +210,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               label: context.l10n.flipBoard,

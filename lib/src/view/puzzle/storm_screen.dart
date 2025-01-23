@@ -528,7 +528,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stormState = ref.watch(ctrl);
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         if (stormState.mode == StormMode.initial)
           BottomBarButton(

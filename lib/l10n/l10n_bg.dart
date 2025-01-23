@@ -130,7 +130,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSystemColors => 'Системни цветове';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Тема';
 
   @override
   String get mobileToolsTab => 'Анализ';
@@ -865,7 +865,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesInGameOnly => 'Само по време на игра';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Освен по време на игра';
 
   @override
   String get preferencesChessClock => 'Шахматен часовник';
@@ -1463,6 +1463,12 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Вместо да се играе очаквания ход, първо се прави друг (междинен) ход, който представлява заплаха за опонента и трябва да бъде предотвратена.';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
   String get puzzleThemeKnightEndgame => 'Конски ендшпил';
@@ -4375,6 +4381,17 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Груби грешки',
+      one: '$count Груба грешка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Грешки',
+      one: '$count Грешка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count неточности',
       one: '$count неточност',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Неточности',
+      one: '$count Неточност',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Играе се';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

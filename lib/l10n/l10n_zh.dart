@@ -481,7 +481,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastTeams => '团队';
 
   @override
-  String get broadcastBoards => '棋板';
+  String get broadcastBoards => '棋盘';
 
   @override
   String get broadcastOverview => '概览';
@@ -506,10 +506,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartVerySoon => '广播将很快开始。';
+  String get broadcastStartVerySoon => '转播将很快开始。';
 
   @override
-  String get broadcastNotYetStarted => '广播尚未开始。';
+  String get broadcastNotYetStarted => '转播尚未开始。';
 
   @override
   String get broadcastOfficialWebsite => '官网';
@@ -1439,6 +1439,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => '不走预期的着法，而是走一着对手必须应对的直接威胁。';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
   String get puzzleThemeKnightEndgame => '马残局';
@@ -4348,6 +4354,16 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次漏着',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4358,7 +4374,27 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次错着',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次失准',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5043,6 +5079,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyPlaying => '正在对局';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => '评估条';
@@ -9935,6 +9974,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次漏著',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -9945,7 +9994,27 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次失誤',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次輕微失誤',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,

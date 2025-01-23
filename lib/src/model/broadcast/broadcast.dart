@@ -61,6 +61,7 @@ typedef BroadcastTournamentInformation =
       String? location,
       BroadcastTournamentDates? dates,
       Uri? website,
+      Uri? standings,
     });
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});

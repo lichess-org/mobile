@@ -1465,6 +1465,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Istället för att spela det förväntade draget, görs ett annat drag som utgör ett omedelbart hot som motståndaren måste svara på. Även känt som \"zwischenzug\" eller \"intermezzo\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springareslutspel';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Blundrar',
+      one: '$count Blunder',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Misstag',
+      one: '$count Misstag',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count felaktigheter',
       one: '$count felaktighet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Felaktigheter',
+      one: '$count Felaktighet',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Spelar';
+
+  @override
+  String get studyShowResults => 'Resultat';
 
   @override
   String get studyShowEvalBar => 'Värderingsfält';
