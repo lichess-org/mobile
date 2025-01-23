@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class AppThemeScreen extends StatelessWidget {
@@ -31,7 +31,6 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appTheme = ref.watch(generalPreferencesProvider.select((p) => p.appTheme));
     final boardPrefs = ref.watch(boardPreferencesProvider);
-
     final hasSystemColors = getCorePalette() != null;
 
     final choices = AppTheme.values.where((t) => t != AppTheme.system || hasSystemColors).toList();
@@ -39,35 +38,36 @@ class _Body extends ConsumerWidget {
     void onChanged(AppTheme? value) =>
         ref.read(generalPreferencesProvider.notifier).setAppTheme(value ?? defaultAppTheme);
 
-    final checkedIcon =
-        Theme.of(context).platform == TargetPlatform.android
-            ? const Icon(Icons.check)
-            : Icon(
-              CupertinoIcons.check_mark_circled_solid,
-              color: CupertinoTheme.of(context).primaryColor,
-            );
-
     final brightness = Theme.of(context).brightness;
 
-    return ListView.separated(
+    const itemsByRow = 4;
+    final width = MediaQuery.sizeOf(context).width;
+    final size = (width - 16 * (itemsByRow + 2)) / itemsByRow;
+
+    return GridView.builder(
+      padding: MediaQuery.paddingOf(context) + Styles.bodyPadding,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: itemsByRow,
+        crossAxisSpacing: 16.0,
+        mainAxisSpacing: 16.0,
+      ),
       itemBuilder: (context, index) {
         final t = choices[index];
         final fsd = t.getFlexScheme(boardPrefs.boardTheme);
 
-        return AdaptiveListTile(
-          // selected: t == appTheme,
-          leading: SizedBox(
-            width: 52,
-            height: 36,
+        return Center(
+          child: SizedBox(
+            width: size,
+            height: size,
             child: FlexThemeModeOptionButton(
               flexSchemeColor: brightness == Brightness.light ? fsd.light : fsd.dark,
-              selected: false,
-              unselectedBorder: BorderSide.none,
-              selectedBorder: BorderSide(color: Theme.of(context).colorScheme.outline, width: 3),
+              selected: t == appTheme,
+              // unselectedBorder: BorderSide.none,
+              // selectedBorder: BorderSide(color: Theme.of(context).colorScheme.outline, width: 3),
               backgroundColor: Theme.of(context).colorScheme.surface,
-              width: 26,
-              height: 18,
               padding: EdgeInsets.zero,
+              width: size / 2,
+              height: size / 2,
               borderRadius: 0,
               optionButtonPadding: EdgeInsets.zero,
               optionButtonMargin: EdgeInsets.zero,
@@ -75,18 +75,8 @@ class _Body extends ConsumerWidget {
               onSelect: () => onChanged(t),
             ),
           ),
-          trailing: t == appTheme ? checkedIcon : null,
-          title: Text(fsd.name),
-          onTap: () => onChanged(t),
         );
       },
-      separatorBuilder:
-          (_, __) => PlatformDivider(
-            height: 1,
-            // on iOS: 52 (leading) + 14 (default indent) + 16 (padding)
-            indent: Theme.of(context).platform == TargetPlatform.iOS ? 52 + 14 + 16 : null,
-            color: Theme.of(context).platform == TargetPlatform.iOS ? null : Colors.transparent,
-          ),
       itemCount: choices.length,
     );
   }
