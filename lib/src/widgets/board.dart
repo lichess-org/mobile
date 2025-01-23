@@ -6,13 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 
 class BoardWidget extends StatelessWidget {
-  const BoardWidget({
+  BoardWidget({
     required this.size,
     required this.boardPrefs,
     required this.fen,
@@ -23,8 +24,10 @@ class BoardWidget extends StatelessWidget {
     required this.settings,
     required this.boardOverlay,
     required this.error,
+
+    required this.annotations,
     this.boardKey,
-  });
+  }) : setup = Setup.parseFen(fen);
 
   final double size;
   final BoardPrefs boardPrefs;
@@ -36,19 +39,60 @@ class BoardWidget extends StatelessWidget {
   final ChessboardSettings settings;
   final String? error;
   final Widget? boardOverlay;
+  final IMap<Square, Annotation>? annotations;
   final GlobalKey? boardKey;
+  final Setup setup;
 
   @override
   Widget build(BuildContext context) {
+    final Map<Square, Square> castlingMap = {
+      Square.a1: Square.c1,
+      Square.a8: Square.c8,
+      Square.h1: Square.g1,
+      Square.h8: Square.g8,
+    };
+
+    GameData? modifiedGameData;
+
+    MapEntry<Square, ISet<Square>> mapper(Square sq, ISet<Square> moves) {
+      return MapEntry(
+        sq,
+        setup.board.kings.squares.contains(sq) && //king move
+                setup.castlingRights.squares.intersectsWith(
+                  moves, //king can castle
+                )
+            ? (switch (boardPrefs.castlingMethod) {
+              CastlingMethod.kingOverRook => moves.removeAll(castlingMap.values),
+              CastlingMethod.kingTwoSquares => moves.removeAll(castlingMap.keys),
+              _ => moves,
+            })
+            : moves,
+      );
+    }
+
+    if (gameData != null) {
+      modifiedGameData = GameData(
+        playerSide: gameData!.playerSide,
+        sideToMove: gameData!.sideToMove,
+        validMoves: gameData!.validMoves.map(mapper),
+        promotionMove: gameData!.promotionMove,
+        onMove: gameData!.onMove,
+        onPromotionSelection: gameData!.onPromotionSelection,
+        premovable: gameData?.premovable,
+        isCheck: gameData?.isCheck,
+      );
+    }
+
     final board = Chessboard(
       key: boardKey,
       size: size,
       fen: fen,
       orientation: orientation,
-      game: gameData,
+      game: modifiedGameData ?? gameData,
       lastMove: lastMove,
       shapes: shapes,
       settings: settings,
+      annotations: annotations,
     );
 
     if (boardOverlay != null) {

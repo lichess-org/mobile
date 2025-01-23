@@ -184,6 +184,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  annotations: null,
                 ),
                 if (widget.engineGauge != null) ...[
                   const SizedBox(width: 4.0),
@@ -282,6 +283,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  annotations: null,
                 ),
               ),
               Expanded(
