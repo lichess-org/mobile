@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -27,16 +28,29 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BookmarkButton extends ConsumerWidget {
-  const BookmarkButton({required this.id, this.bookmarked = false});
+  const BookmarkButton({required this.id, this.bookmarked = false, this.onPressed});
 
   final GameId id;
   final bool bookmarked;
+  final Function? onPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
-      onPressed: () {
-        ref.withClient((client) => GameRepository(client).bookmark(id, bookmark: true));
+      onPressed: () async {
+        final bookmarkCurrentState = ref.watch(bookmarkNotifierProvider(id)) ?? bookmarked;
+        final newBookmarkValue = !bookmarkCurrentState;
+
+        try {
+          await ref.withClient(
+            (client) => GameRepository(client).bookmark(id, bookmark: newBookmarkValue),
+          );
+          ref.read(bookmarkNotifierProvider(id).notifier).state = newBookmarkValue;
+        } on Exception catch (_) {
+          if (context.mounted) {
+            showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);
+          }
+        }
       },
       semanticsLabel: context.l10n.bookmarkThisGame,
       icon: Icon(bookmarked ? Icons.star : Icons.star_outline_rounded),
