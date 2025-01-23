@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_theme.dart' as wrapper;
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardBackgroundThemeScreen extends StatelessWidget {
@@ -170,7 +169,7 @@ class _ConfirmBackgroundScreenState extends State<ConfirmBackgroundScreen> {
             bottom: MediaQuery.paddingOf(context).bottom + 16.0,
             left: 0,
             right: 0,
-            child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
+            child: const Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
           ),
         ],
       ),
