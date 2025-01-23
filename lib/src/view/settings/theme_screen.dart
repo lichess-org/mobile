@@ -13,30 +13,37 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/settings/app_theme_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_background_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/board_theme.dart' as wrapper;
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class ThemeScreen extends StatelessWidget {
+class ThemeScreen extends ConsumerWidget {
   const ThemeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: (context) => const Scaffold(body: _Body()),
-      iosBuilder:
-          (context) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              automaticBackgroundVisibility: false,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-              border: null,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    return wrapper.BoardTheme(
+      backgroundTheme: boardPrefs.backgroundTheme,
+      child: PlatformWidget(
+        androidBuilder: (context) => const Scaffold(body: _Body()),
+        iosBuilder:
+            (context) => CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                automaticBackgroundVisibility: false,
+                backgroundColor: CupertinoTheme.of(
+                  context,
+                ).barBackgroundColor.withValues(alpha: 0.0),
+                border: null,
+              ),
+              child: const _Body(),
             ),
-            child: const _Body(),
-          ),
+      ),
     );
   }
 }
@@ -168,18 +175,6 @@ class _BodyState extends ConsumerState<_Body> {
                 hasLeading: true,
                 children: [
                   SettingsListTile(
-                    icon: const Icon(Icons.palette),
-                    settingsLabel: Text(context.l10n.mobileTheme),
-                    settingsValue: generalPrefs.appTheme.getFlexScheme(boardPrefs.boardTheme).name,
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.mobileTheme,
-                        builder: (context) => const AppThemeScreen(),
-                      );
-                    },
-                  ),
-                  SettingsListTile(
                     icon: const Icon(LichessIcons.chess_board),
                     settingsLabel: Text(context.l10n.board),
                     settingsValue: boardPrefs.boardTheme.label,
@@ -188,6 +183,18 @@ class _BodyState extends ConsumerState<_Body> {
                         context,
                         title: context.l10n.board,
                         builder: (context) => const BoardThemeScreen(),
+                      );
+                    },
+                  ),
+                  SettingsListTile(
+                    icon: const Icon(Icons.brightness_medium_outlined),
+                    settingsLabel: Text(context.l10n.background),
+                    settingsValue: generalPrefs.appTheme.label,
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.background,
+                        builder: (context) => const BoardBackgroundThemeScreen(),
                       );
                     },
                   ),

@@ -101,6 +101,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> adjustColors({double? brightness, double? hue}) {
     return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
+
+  Future<void> setBackgroundTheme(BoardBackgroundTheme? backgroundTheme) {
+    return save(state.copyWith(backgroundTheme: backgroundTheme));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -137,6 +141,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
+    BoardBackgroundTheme? backgroundTheme,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -393,3 +398,68 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
   DragTargetKind.square => 'Square',
   DragTargetKind.none => 'None',
 };
+
+enum BoardBackgroundTheme {
+  /// The app theme is based on the chess board
+  board,
+
+  /// Below values from [FlexScheme]
+  // blue,
+  // indigo,
+  // hippieBlue,
+  // sakura,
+  // mandyRed,
+  // green,
+  // money,
+  // jungle,
+  // greyLaw,
+  // wasabi,
+  // mango,
+  // amber,
+  // vesuviusBurn,
+  // deepPurple,
+  // ebonyClay,
+  // barossa,
+  // shark,
+  // bigStone,
+  // damask,
+  // bahamaBlue,
+  // mallardGreen,
+  // espresso,
+  // outerSpace,
+  // blueWhale,
+  // sanJuanBlue,
+  // rosewood,
+  // blumineBlue,
+  // verdunHemlock,
+  // dellGenoa,
+  redM3,
+  red,
+  redWine,
+  pinkM3,
+  purpleBrown,
+  purpleM3,
+  indigoM3,
+  blueM3,
+  aquaBlue,
+  // brandBlue,
+  // deepBlue,
+  cyanM3,
+  tealM3,
+  greenM3,
+  limeM3,
+  yellowM3,
+  orangeM3,
+  deepOrangeM3,
+  gold,
+  greys,
+  sepia;
+
+  static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
+
+  String get label =>
+      this == BoardBackgroundTheme.board ? 'Chessboard' : _flexSchemesNameMap[name]!.data.name;
+
+  FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
+      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : _flexSchemesNameMap[name]!.data;
+}

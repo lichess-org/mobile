@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/board_theme.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
@@ -150,5 +151,36 @@ class PlatformScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
+  }
+}
+
+class PlatformBoardThemeScaffold extends StatelessWidget {
+  const PlatformBoardThemeScaffold({
+    super.key,
+    this.appBar,
+    required this.body,
+    this.resizeToAvoidBottomInset = true,
+  });
+
+  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
+  ///
+  /// Usually an instance of [PlatformAppBar].
+  final Widget? appBar;
+
+  /// The main content of the screen, displayed below the navigation bar.
+  final Widget body;
+
+  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
+  final bool resizeToAvoidBottomInset;
+
+  @override
+  Widget build(BuildContext context) {
+    return BoardTheme(
+      child: PlatformScaffold(
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        appBar: appBar,
+        body: body,
+      ),
+    );
   }
 }

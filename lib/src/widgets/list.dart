@@ -404,6 +404,7 @@ class AdaptiveListTile extends StatelessWidget {
     this.onTap,
     this.isThreeLine = false,
     this.contentPadding,
+    this.selected = false,
     super.key,
   });
 
@@ -413,6 +414,7 @@ class AdaptiveListTile extends StatelessWidget {
   final Widget? trailing;
   final GestureTapCallback? onTap;
   final bool isThreeLine;
+  final bool selected;
   final EdgeInsetsGeometry? contentPadding;
 
   @override
@@ -425,6 +427,7 @@ class AdaptiveListTile extends StatelessWidget {
         subtitle: subtitle,
         trailing: trailing,
         onTap: onTap,
+        selected: selected,
         isThreeLine: isThreeLine,
         contentPadding: contentPadding,
       ),

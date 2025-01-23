@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/widgets/board_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
@@ -42,17 +43,19 @@ Widget _adaptiveDialog(BuildContext context, Widget content) {
 
   final screenWidth = MediaQuery.of(context).size.width;
   final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
-  return Dialog(
-    backgroundColor:
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoDynamicColor.resolve(dialogColor, context)
-            : null,
-    child: SizedBox(
-      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-      child:
+  return BoardTheme(
+    child: Dialog(
+      backgroundColor:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoPopupSurface(child: paddedContent)
-              : paddedContent,
+              ? CupertinoDynamicColor.resolve(dialogColor, context)
+              : null,
+      child: SizedBox(
+        width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+        child:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoPopupSurface(child: paddedContent)
+                : paddedContent,
+      ),
     ),
   );
 }

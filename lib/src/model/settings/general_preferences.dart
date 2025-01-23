@@ -54,7 +54,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   }
 }
 
-const defaultAppTheme = AppTheme.mango;
+const defaultAppTheme = AppTheme.board;
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
@@ -109,42 +109,40 @@ enum AppTheme {
   /// Below values from [FlexScheme]
   blue,
   indigo,
-  hippieBlue,
-  aquaBlue,
-  brandBlue,
+  // hippieBlue,
+  // aquaBlue,
+  // brandBlue,
   deepBlue,
-  sakura,
-  mandyRed,
-  red,
+  // sakura,
+  // mandyRed,
+  // red,
   redWine,
   purpleBrown,
   green,
-  money,
+  // money,
   jungle,
-  greyLaw,
-  wasabi,
+  // greyLaw,
+  // wasabi,
   gold,
-  mango,
-  amber,
-  vesuviusBurn,
-  deepPurple,
-  ebonyClay,
-  barossa,
-  shark,
+  // mango,
+  // amber,
+  // vesuviusBurn,
+  // deepPurple,
+  // ebonyClay,
+  // barossa,
+  // shark,
   bigStone,
-  damask,
-  bahamaBlue,
-  mallardGreen,
-  espresso,
-  outerSpace,
-  blueWhale,
-  sanJuanBlue,
-  rosewood,
-  blumineBlue,
-  flutterDash,
-  materialBaseline,
-  verdunHemlock,
-  dellGenoa,
+  // damask,
+  // bahamaBlue,
+  // mallardGreen,
+  // espresso,
+  // outerSpace,
+  // blueWhale,
+  // sanJuanBlue,
+  // rosewood,
+  // blumineBlue,
+  // verdunHemlock,
+  // dellGenoa,
   redM3,
   pinkM3,
   purpleM3,
@@ -157,11 +155,19 @@ enum AppTheme {
   yellowM3,
   orangeM3,
   deepOrangeM3,
-  blackWhite,
   greys,
   sepia;
 
   static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
+
+  String get label =>
+      this == AppTheme.system
+          ? 'System'
+          : this == defaultAppTheme
+          ? 'Default'
+          : this == AppTheme.board
+          ? 'Chessboard'
+          : _flexSchemesNameMap[name]!.data.name;
 
   FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
       this == AppTheme.system

@@ -99,7 +99,7 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
         title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
         actions: [

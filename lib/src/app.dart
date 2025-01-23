@@ -11,12 +11,12 @@ import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
@@ -119,12 +119,11 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
     final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final flexScheme = generalPrefs.appTheme.getFlexScheme(boardTheme);
+    final flexScheme = FlexScheme.espresso.data;
     final flexSchemeLightColors = flexScheme.light;
     final flexSchemeDarkColors = flexScheme.dark;
 
@@ -137,8 +136,8 @@ class _AppState extends ConsumerState<Application> {
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
-      surfaceMode: FlexSurfaceMode.level,
-      blendLevel: 40,
+      surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
+      blendLevel: 10,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -167,11 +166,11 @@ class _AppState extends ConsumerState<Application> {
     );
 
     final darkCupertinoTheme = CupertinoThemeData(
-      primaryColor: darkTheme.colorScheme.primary,
-      primaryContrastingColor: darkTheme.colorScheme.onPrimary,
+      primaryColor: darkTheme.colorScheme.primaryFixedDim,
+      primaryContrastingColor: darkTheme.colorScheme.onPrimaryFixed,
       brightness: Brightness.dark,
       textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-        primaryColor: darkTheme.colorScheme.primary,
+        primaryColor: darkTheme.colorScheme.primaryFixedDim,
         textStyle: CupertinoTheme.of(
           context,
         ).textTheme.textStyle.copyWith(color: darkTheme.colorScheme.onSurface),
@@ -208,6 +207,10 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
           ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: LichessColors.brag,
+            foregroundColor: Colors.white,
+          ),
           navigationBarTheme: NavigationBarTheme.of(
             context,
           ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
@@ -221,6 +224,10 @@ class _AppState extends ConsumerState<Application> {
             titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
             subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: LichessColors.brag,
+            foregroundColor: Colors.white,
           ),
           navigationBarTheme: NavigationBarTheme.of(
             context,

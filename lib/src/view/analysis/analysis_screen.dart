@@ -92,7 +92,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return PlatformScaffold(
+        return PlatformBoardThemeScaffold(
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(title: _Title(variant: value.variant), actions: appBarActions),
           body: _Body(
@@ -109,7 +109,7 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
           },
         );
       case _:
-        return PlatformScaffold(
+        return PlatformBoardThemeScaffold(
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
             title: const _Title(variant: Variant.standard),

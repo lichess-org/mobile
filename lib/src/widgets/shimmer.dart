@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 class Shimmer extends StatefulWidget {
   static ShimmerState? of(BuildContext context) {
@@ -18,14 +19,14 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 
   LinearGradient get _defaultGradient {
     final brightness = Theme.of(context).brightness;
-    final colorScheme = Theme.of(context).colorScheme;
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     switch (brightness) {
       case Brightness.light:
         return LinearGradient(
           colors: [
-            colorScheme.surfaceContainer,
-            colorScheme.surfaceContainerLow,
-            colorScheme.surfaceContainerLowest,
+            darken(scaffoldBackgroundColor, 0.1),
+            darken(scaffoldBackgroundColor, 0.2),
+            darken(scaffoldBackgroundColor, 0.3),
           ],
           stops: const [0.1, 0.3, 0.4],
           begin: const Alignment(-1.0, -0.3),
@@ -36,9 +37,9 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
       case Brightness.dark:
         return LinearGradient(
           colors: [
-            colorScheme.surfaceContainer,
-            colorScheme.surfaceContainerHigh,
-            colorScheme.surfaceContainerHighest,
+            lighten(scaffoldBackgroundColor, 0.1),
+            lighten(scaffoldBackgroundColor, 0.2),
+            lighten(scaffoldBackgroundColor, 0.3),
           ],
           stops: const [0.1, 0.3, 0.4],
           begin: const Alignment(-1.0, -0.3),
