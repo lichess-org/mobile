@@ -205,7 +205,7 @@ class ListSection extends StatelessWidget {
                           cupertinoBackgroundColor ??
                           (theme.brightness == Brightness.light
                               ? theme.colorScheme.surfaceContainerLowest
-                              : theme.colorScheme.surfaceContainerHigh),
+                              : theme.colorScheme.surfaceContainer),
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -352,7 +352,7 @@ class PlatformListTile extends StatelessWidget {
       case TargetPlatform.iOS:
         final activatedColor = colorScheme.surfaceContainerHighest;
         return IconTheme(
-          data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
+          data: CupertinoIconThemeData(color: colorScheme.outline),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(

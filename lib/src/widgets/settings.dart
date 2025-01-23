@@ -283,7 +283,7 @@ class ChoicePicker<T> extends StatelessWidget {
                 color:
                     theme.brightness == Brightness.light
                         ? theme.colorScheme.surfaceContainerLowest
-                        : theme.colorScheme.surfaceContainerHigh,
+                        : theme.colorScheme.surfaceContainer,
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),

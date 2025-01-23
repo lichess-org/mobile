@@ -24,9 +24,9 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
       case Brightness.light:
         return LinearGradient(
           colors: [
+            darken(scaffoldBackgroundColor, 0.05),
             darken(scaffoldBackgroundColor, 0.1),
             darken(scaffoldBackgroundColor, 0.2),
-            darken(scaffoldBackgroundColor, 0.3),
           ],
           stops: const [0.1, 0.3, 0.4],
           begin: const Alignment(-1.0, -0.3),

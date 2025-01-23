@@ -404,61 +404,32 @@ enum BoardBackgroundTheme {
   board,
 
   /// Below values from [FlexScheme]
-  // blue,
-  // indigo,
-  // hippieBlue,
-  // sakura,
   // mandyRed,
-  // green,
-  // money,
-  // jungle,
-  // greyLaw,
-  // wasabi,
-  // mango,
-  // amber,
-  // vesuviusBurn,
-  // deepPurple,
-  // ebonyClay,
-  // barossa,
-  // shark,
-  // bigStone,
-  // damask,
-  // bahamaBlue,
-  // mallardGreen,
-  // espresso,
-  // outerSpace,
-  // blueWhale,
-  // sanJuanBlue,
-  // rosewood,
-  // blumineBlue,
-  // verdunHemlock,
-  // dellGenoa,
-  redM3,
-  red,
   redWine,
   pinkM3,
+  // amber,
   purpleBrown,
   purpleM3,
   indigoM3,
   blueM3,
   aquaBlue,
-  // brandBlue,
-  // deepBlue,
-  cyanM3,
+  // cyanM3,
   tealM3,
   greenM3,
-  limeM3,
+  jungle,
+  // limeM3,
   yellowM3,
   orangeM3,
   deepOrangeM3,
-  gold,
-  greys,
+  mango,
+  // gold,
+  // greys,
   sepia;
 
   static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
 
-  String get label =>
-      this == BoardBackgroundTheme.board ? 'Chessboard' : _flexSchemesNameMap[name]!.data.name;
+  String label(AppLocalizations l10n) =>
+      this == BoardBackgroundTheme.board ? l10n.board : _flexSchemesNameMap[name]!.data.name;
 
   FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
       this == BoardBackgroundTheme.board ? boardTheme.flexScheme : _flexSchemesNameMap[name]!.data;

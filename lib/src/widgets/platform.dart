@@ -85,36 +85,22 @@ class PlatformCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
+    final cardFactory = brightness == Brightness.dark ? Card.filled : Card.new;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? Card.filled(
-                margin: margin ?? EdgeInsets.zero,
-                elevation: elevation ?? 0,
-                color: color,
-                shadowColor: shadowColor,
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                semanticContainer: semanticContainer,
-                clipBehavior: clipBehavior,
-                child: child,
-              )
-              : (brightness == Brightness.dark ? Card.filled : Card.new)(
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                color: color,
-                shadowColor: shadowColor,
-                semanticContainer: semanticContainer,
-                elevation: elevation,
-                margin: margin ?? EdgeInsets.zero,
-                clipBehavior: clipBehavior,
-                child: child,
-              ),
+      child: cardFactory(
+        shape:
+            borderRadius != null
+                ? RoundedRectangleBorder(borderRadius: borderRadius!)
+                : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+        color: color,
+        shadowColor: shadowColor,
+        semanticContainer: semanticContainer,
+        elevation: elevation ?? (Theme.of(context).platform == TargetPlatform.iOS ? 0 : null),
+        margin: margin ?? EdgeInsets.zero,
+        clipBehavior: clipBehavior,
+        child: child,
+      ),
     );
   }
 }

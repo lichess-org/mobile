@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_theme.dart' as wrapper;
@@ -67,24 +68,53 @@ class _Body extends ConsumerWidget {
                   blendLevel: 20,
                 );
 
-        return AdaptiveInkWell(
-          onTap:
-              () => Navigator.of(context, rootNavigator: true)
-                  .push(
-                    MaterialPageRoute<double?>(
-                      builder: (_) => ConfirmBackgroundScreen(initialIndex: index),
-                      fullscreenDialog: true,
-                    ),
-                  )
-                  .then((value) {
-                    if (context.mounted) {
-                      if (value != null) {
-                        onChanged(choices[value.toInt()]);
-                        Navigator.pop(context);
+        final autoColor =
+            brightness == Brightness.light
+                ? darken(theme.scaffoldBackgroundColor, 0.2)
+                : lighten(theme.scaffoldBackgroundColor, 0.2);
+
+        return Tooltip(
+          message: 'Background based on chessboard colors.',
+          triggerMode: t == BoardBackgroundTheme.board ? null : TooltipTriggerMode.manual,
+          child: GestureDetector(
+            onTap:
+                () => Navigator.of(context, rootNavigator: true)
+                    .push(
+                      MaterialPageRoute<double?>(
+                        builder: (_) => ConfirmBackgroundScreen(initialIndex: index),
+                        fullscreenDialog: true,
+                      ),
+                    )
+                    .then((value) {
+                      if (context.mounted) {
+                        if (value != null) {
+                          onChanged(choices[value.toInt()]);
+                          Navigator.pop(context);
+                        }
                       }
-                    }
-                  }),
-          child: SizedBox.expand(child: ColoredBox(color: theme.scaffoldBackgroundColor)),
+                    }),
+            child: SizedBox.expand(
+              child: ColoredBox(
+                color: theme.scaffoldBackgroundColor,
+                child:
+                    t == BoardBackgroundTheme.board
+                        ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(LichessIcons.chess_board, color: autoColor),
+                            const SizedBox(height: 8),
+                            Center(
+                              child: Text(
+                                'auto',
+                                style: theme.textTheme.labelSmall?.copyWith(color: autoColor),
+                              ),
+                            ),
+                          ],
+                        )
+                        : null,
+              ),
+            ),
+          ),
         );
       },
       itemCount: choices.length,
@@ -135,6 +165,12 @@ class _ConfirmBackgroundScreenState extends State<ConfirmBackgroundScreen> {
                 orientation: Side.white,
               ),
             ),
+          ),
+          Positioned(
+            bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+            left: 0,
+            right: 0,
+            child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
           ),
         ],
       ),
