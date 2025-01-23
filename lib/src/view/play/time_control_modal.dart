@@ -245,7 +245,7 @@ class _ChoiceChip extends StatelessWidget {
         border:
             selected
                 ? Border.fromBorderSide(
-                  BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
+                  BorderSide(color: Theme.of(context).colorScheme.secondary, width: 2.0),
                 )
                 : const Border.fromBorderSide(BorderSide(color: Colors.transparent, width: 2.0)),
       ),

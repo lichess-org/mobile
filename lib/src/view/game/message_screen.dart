@@ -112,22 +112,14 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.primaryContainer
-              : CupertinoColors.systemGrey4.resolveFrom(context)
-          : you
+      you
           ? Theme.of(context).colorScheme.primaryContainer
           : brightness == Brightness.light
           ? lighten(LichessColors.grey)
           : darken(LichessColors.grey, 0.5);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.onPrimaryContainer
-              : CupertinoColors.label.resolveFrom(context)
-          : you
+      you
           ? Theme.of(context).colorScheme.onPrimaryContainer
           : brightness == Brightness.light
           ? Colors.black
