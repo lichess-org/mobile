@@ -603,6 +603,7 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
                 showTooltip: false,
+                blink: gameState.stepCursor != gameState.game.steps.length - 1,
               ),
             ),
           ];
