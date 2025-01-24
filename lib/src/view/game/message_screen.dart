@@ -113,17 +113,11 @@ class _MessageBubble extends ConsumerWidget {
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
       you
-          ? Theme.of(context).colorScheme.primaryContainer
-          : brightness == Brightness.light
-          ? lighten(LichessColors.grey)
-          : darken(LichessColors.grey, 0.5);
+          ? Theme.of(context).colorScheme.secondary
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      you
-          ? Theme.of(context).colorScheme.onPrimaryContainer
-          : brightness == Brightness.light
-          ? Colors.black
-          : Colors.white;
+      you ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

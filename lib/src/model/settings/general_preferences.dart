@@ -1,10 +1,7 @@
 import 'dart:ui' show Locale;
 
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -48,13 +45,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   Future<void> setMasterVolume(double volume) {
     return save(state.copyWith(masterVolume: volume));
   }
-
-  Future<void> setAppTheme(AppTheme appTheme) {
-    return save(state.copyWith(appTheme: appTheme));
-  }
 }
-
-const defaultAppTheme = AppTheme.board;
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
@@ -65,11 +56,11 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    @JsonKey(unknownEnumValue: defaultAppTheme, defaultValue: defaultAppTheme)
-    required AppTheme appTheme,
+    /// Whether to use system colors on android 10+.
+    bool? systemColors,
 
     /// App theme seed
-    @Deprecated('Use appTheme instead')
+    @Deprecated('Use systemColors instead')
     @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
     required AppThemeSeed appThemeSeed,
 
@@ -83,7 +74,6 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     appThemeSeed: AppThemeSeed.board,
-    appTheme: defaultAppTheme,
   );
 
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
@@ -97,84 +87,6 @@ enum AppThemeSeed {
 
   /// The app theme is based on the chessboard.
   board,
-}
-
-enum AppTheme {
-  /// The app theme is based on the user's system theme (only available on Android 10+).
-  system,
-
-  /// The app theme is based on the chess board
-  board,
-
-  /// Below values from [FlexScheme]
-  blue,
-  indigo,
-  // hippieBlue,
-  // aquaBlue,
-  // brandBlue,
-  deepBlue,
-  // sakura,
-  // mandyRed,
-  // red,
-  redWine,
-  purpleBrown,
-  green,
-  // money,
-  jungle,
-  // greyLaw,
-  // wasabi,
-  gold,
-  // mango,
-  // amber,
-  // vesuviusBurn,
-  // deepPurple,
-  // ebonyClay,
-  // barossa,
-  // shark,
-  bigStone,
-  // damask,
-  // bahamaBlue,
-  // mallardGreen,
-  // espresso,
-  // outerSpace,
-  // blueWhale,
-  // sanJuanBlue,
-  // rosewood,
-  // blumineBlue,
-  // verdunHemlock,
-  // dellGenoa,
-  redM3,
-  pinkM3,
-  purpleM3,
-  indigoM3,
-  blueM3,
-  cyanM3,
-  tealM3,
-  greenM3,
-  limeM3,
-  yellowM3,
-  orangeM3,
-  deepOrangeM3,
-  greys,
-  sepia;
-
-  static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
-
-  String get label =>
-      this == AppTheme.system
-          ? 'System'
-          : this == defaultAppTheme
-          ? 'Default'
-          : this == AppTheme.board
-          ? 'Chessboard'
-          : _flexSchemesNameMap[name]!.data.name;
-
-  FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
-      this == AppTheme.system
-          ? getSystemScheme()!
-          : this == AppTheme.board
-          ? boardTheme.flexScheme
-          : _flexSchemesNameMap[name]!.data;
 }
 
 /// Describes the background theme of the app.

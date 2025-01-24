@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -119,74 +120,8 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
-
-    final flexScheme = FlexScheme.espresso.data;
-    final flexSchemeLightColors = flexScheme.light;
-    final flexSchemeDarkColors = flexScheme.dark;
-
-    final lightTheme = FlexThemeData.light(
-      colors: flexSchemeLightColors,
-      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-      blendLevel: 10,
-    );
-    final darkTheme = FlexThemeData.dark(
-      colors: flexSchemeDarkColors,
-      surfaceMode: FlexSurfaceMode.level,
-      blendLevel: 16,
-      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-    );
-
-    final lightCupertinoTheme = CupertinoThemeData(
-      primaryColor: lightTheme.colorScheme.primary,
-      primaryContrastingColor: lightTheme.colorScheme.onPrimary,
-      brightness: Brightness.light,
-      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-        primaryColor: lightTheme.colorScheme.primary,
-        textStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.textStyle.copyWith(color: lightTheme.colorScheme.onSurface),
-        navTitleTextStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-        navLargeTitleTextStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-      ),
-      scaffoldBackgroundColor: lightTheme.scaffoldBackgroundColor,
-      barBackgroundColor: lightTheme.appBarTheme.backgroundColor?.withValues(
-        alpha: isTablet ? 1.0 : 0.9,
-      ),
-      applyThemeToAll: true,
-    );
-
-    final darkCupertinoTheme = CupertinoThemeData(
-      primaryColor: darkTheme.colorScheme.primaryFixedDim,
-      primaryContrastingColor: darkTheme.colorScheme.onPrimaryFixedVariant,
-      brightness: Brightness.dark,
-      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-        primaryColor: darkTheme.colorScheme.primaryFixedDim,
-        textStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.textStyle.copyWith(color: darkTheme.colorScheme.onSurface),
-        navTitleTextStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.navTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-        navLargeTitleTextStyle: CupertinoTheme.of(
-          context,
-        ).textTheme.navLargeTitleTextStyle.copyWith(color: Styles.cupertinoTitleColor),
-      ),
-      scaffoldBackgroundColor: darkTheme.scaffoldBackgroundColor,
-      barBackgroundColor: darkTheme.appBarTheme.backgroundColor?.withValues(
-        alpha: isTablet ? 1.0 : 0.9,
-      ),
-      applyThemeToAll: true,
-    );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
@@ -198,45 +133,37 @@ class _AppState extends ConsumerState<Application> {
         supportedLocales: kSupportedLocales,
         onGenerateTitle: (BuildContext context) => 'lichess.org',
         locale: generalPrefs.locale,
-        theme: lightTheme.copyWith(
-          cupertinoOverrideTheme: lightCupertinoTheme,
+        theme: AppTheme.light.copyWith(
+          cupertinoOverrideTheme: AppTheme.lightCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.blackCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            tileColor: lightTheme.colorScheme.surfaceContainerLow,
-            selectedTileColor: lightTheme.colorScheme.surfaceContainer,
-            titleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? lightCupertinoTheme.textTheme.textStyle : null,
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: LichessColors.brag,
-            foregroundColor: Colors.white,
+            tileColor: AppTheme.light.colorScheme.surfaceContainerLow,
+            selectedTileColor: AppTheme.light.colorScheme.surfaceContainer,
+            titleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
           ),
           navigationBarTheme: NavigationBarTheme.of(
             context,
           ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-          extensions: [lichessCustomColors.harmonized(lightTheme.colorScheme)],
+          extensions: [lichessCustomColors.harmonized(AppTheme.light.colorScheme)],
         ),
-        darkTheme: darkTheme.copyWith(
-          cupertinoOverrideTheme: darkCupertinoTheme,
+        darkTheme: AppTheme.dark.copyWith(
+          cupertinoOverrideTheme: AppTheme.darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            tileColor: darkTheme.colorScheme.surfaceContainerLow,
-            selectedTileColor: darkTheme.colorScheme.surfaceContainer,
-            titleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? darkCupertinoTheme.textTheme.textStyle : null,
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: LichessColors.brag,
-            foregroundColor: Colors.white,
+            tileColor: AppTheme.dark.colorScheme.surfaceContainerLow,
+            selectedTileColor: AppTheme.dark.colorScheme.surfaceContainer,
+            titleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
           ),
           navigationBarTheme: NavigationBarTheme.of(
             context,
           ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-          extensions: [lichessCustomColors.harmonized(darkTheme.colorScheme)],
+          extensions: [lichessCustomColors.harmonized(AppTheme.dark.colorScheme)],
         ),
         themeMode: switch (generalPrefs.themeMode) {
           BackgroundThemeMode.light => ThemeMode.light,

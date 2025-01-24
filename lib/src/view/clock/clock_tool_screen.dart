@@ -80,19 +80,17 @@ class ClockTile extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final backgroundColor =
         clockState.isFlagged(playerType)
-            ? context.lichessColors.error
+            ? colorScheme.error
             : !clockState.paused && clockState.isPlayersTurn(playerType)
-            ? colorScheme.primary
+            ? colorScheme.primaryFixed
             : clockState.activeSide == playerType
-            ? colorScheme.secondaryContainer
-            : colorScheme.surfaceContainer;
+            ? colorScheme.primaryFixedDim
+            : colorScheme.surface;
 
     final clockStyle = ClockStyle(
       textColor:
-          clockState.activeSide == playerType
-              ? colorScheme.onSecondaryContainer
-              : colorScheme.onSurface,
-      activeTextColor: colorScheme.onPrimary,
+          clockState.activeSide == playerType ? colorScheme.onPrimaryFixed : colorScheme.onSurface,
+      activeTextColor: colorScheme.onPrimaryFixed,
       emergencyTextColor: Colors.white,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,

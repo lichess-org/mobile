@@ -89,7 +89,7 @@ class SwitchSettingTile extends StatelessWidget {
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle: subtitle,
-      trailing: Switch.adaptive(value: value, onChanged: onChanged, applyCupertinoTheme: true),
+      trailing: Switch.adaptive(value: value, onChanged: onChanged),
     );
   }
 }

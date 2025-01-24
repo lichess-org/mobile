@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_theme.dart' as wrapper;
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardBackgroundThemeScreen extends StatelessWidget {
@@ -183,13 +184,13 @@ class _ConfirmBackgroundScreenState extends State<ConfirmBackgroundScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextButton(
-              child: Text(context.l10n.accept),
-              onPressed: () => Navigator.pop(context, _controller.page),
-            ),
-            TextButton(
+            AdaptiveTextButton(
               child: Text(context.l10n.cancel),
               onPressed: () => Navigator.pop(context, null),
+            ),
+            AdaptiveTextButton(
+              child: Text(context.l10n.accept),
+              onPressed: () => Navigator.pop(context, _controller.page),
             ),
           ],
         ),

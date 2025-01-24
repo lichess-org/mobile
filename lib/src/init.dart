@@ -68,9 +68,9 @@ Future<void> _migrateThemeSettings() async {
     }
     final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
     final migrated = generalPrefs.copyWith(
-      appTheme:
+      systemColors:
           // ignore: deprecated_member_use_from_same_package
-          generalPrefs.appThemeSeed == AppThemeSeed.system ? AppTheme.system : defaultAppTheme,
+          generalPrefs.appThemeSeed == AppThemeSeed.system ? true : null,
     );
     await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
   } catch (e) {
