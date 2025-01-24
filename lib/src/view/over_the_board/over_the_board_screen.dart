@@ -265,10 +265,6 @@ class _Player extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle =
-        brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
-
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
@@ -287,7 +283,6 @@ class _Player extends ConsumerWidget {
                   timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
                   key: clockKey,
                   active: clock.activeClock == side,
-                  clockStyle: clockStyle,
                   // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
                   emergencyThreshold: Duration(
                     seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),

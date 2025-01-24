@@ -1,5 +1,6 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -10,6 +11,8 @@ abstract final class AppTheme {
     blendLevel: 10,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    appBarStyle:
+        defaultTargetPlatform == TargetPlatform.iOS ? null : FlexAppBarStyle.scaffoldBackground,
   );
   // The defined dark theme.
   static ThemeData dark = FlexThemeData.dark(
@@ -18,6 +21,8 @@ abstract final class AppTheme {
     blendLevel: 20,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    appBarStyle:
+        defaultTargetPlatform == TargetPlatform.iOS ? null : FlexAppBarStyle.scaffoldBackground,
   );
 
   static final floatingActionButtonTheme = FloatingActionButtonThemeData(
