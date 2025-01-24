@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/game/bookmark_provider.dart';
+import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -180,7 +180,7 @@ class _BodyState extends ConsumerState<_Body> {
 
                 final game = list[index].game;
                 final bookmarkCurrentState =
-                    ref.watch(bookmarkNotifierProvider(game.id)) ?? game.bookmarked!;
+                    ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
 
                 Future<void> onPressedBookmark(BuildContext context) async {
                   final newBookmarkValue = !bookmarkCurrentState;
@@ -190,7 +190,7 @@ class _BodyState extends ConsumerState<_Body> {
                       (client) =>
                           GameRepository(client).bookmark(game.id, bookmark: newBookmarkValue),
                     );
-                    ref.read(bookmarkNotifierProvider(game.id).notifier).state = newBookmarkValue;
+                    ref.read(gameBookmarkProvider(game.id).notifier).state = newBookmarkValue;
                   } on Exception catch (_) {
                     if (context.mounted) {
                       showPlatformSnackbar(

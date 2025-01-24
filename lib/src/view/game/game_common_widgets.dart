@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/game/bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -34,7 +34,7 @@ class BookmarkButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookmarkCurrentState = ref.watch(bookmarkNotifierProvider(id)) ?? bookmarked;
+    final bookmarkCurrentState = ref.watch(gameBookmarkProvider(id)) ?? bookmarked;
 
     return AppBarIconButton(
       onPressed: () async {
@@ -44,7 +44,7 @@ class BookmarkButton extends ConsumerWidget {
           await ref.withClient(
             (client) => GameRepository(client).bookmark(id, bookmark: newBookmarkValue),
           );
-          ref.read(bookmarkNotifierProvider(id).notifier).state = newBookmarkValue;
+          ref.read(gameBookmarkProvider(id).notifier).state = newBookmarkValue;
         } on Exception catch (_) {
           if (context.mounted) {
             showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);

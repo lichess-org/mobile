@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/bookmark_provider.dart';
+import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -119,7 +119,7 @@ class _ContextMenu extends ConsumerWidget {
 
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
-    final bookmarkValue = ref.watch(bookmarkNotifierProvider(game.id)) ?? game.bookmarked!;
+    final bookmarkValue = ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
 
     return BottomSheetScrollableContainer(
       children: [
