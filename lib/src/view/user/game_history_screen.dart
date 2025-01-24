@@ -139,12 +139,9 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListProvider = userGameHistoryProvider(
-      widget.user?.id,
-      isOnline: widget.isOnline,
-      filter: gameFilterState,
+    final gameListState = ref.watch(
+      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
     );
-    final gameListState = ref.watch(gameListProvider);
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return gameListState.when(
@@ -179,11 +176,10 @@ class _BodyState extends ConsumerState<_Body> {
                 }
 
                 final game = list[index].game;
-                final bookmarkCurrentState =
-                    ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
+                final bookmarkValue = ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
 
                 Future<void> onPressedBookmark(BuildContext context) async {
-                  final newBookmarkValue = !bookmarkCurrentState;
+                  final newBookmarkValue = !bookmarkValue;
 
                   try {
                     await ref.withClient(
@@ -220,8 +216,8 @@ class _BodyState extends ConsumerState<_Body> {
                           SlidableAction(
                             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
                             onPressed: onPressedBookmark,
-                            icon: bookmarkCurrentState ? Icons.star : Icons.star_outline_rounded,
-                            label: bookmarkCurrentState ? 'Unbookmark' : 'Bookmark',
+                            icon: bookmarkValue ? Icons.star : Icons.star_outline_rounded,
+                            label: bookmarkValue ? 'Unbookmark' : 'Bookmark',
                           ),
                         ],
                       ),

@@ -57,8 +57,8 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/<id>
-  factory ArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _archivedGameFromPick(pick(json).required());
+  factory ArchivedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+    return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an archived game from a local storage JSON.
@@ -99,13 +99,14 @@ class LightArchivedGame with _$LightArchivedGame {
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
-
-    /// If the game is bookmarked, can only be null if the user is not logged in
     bool? bookmarked,
   }) = _ArchivedGameData;
 
-  factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _lightArchivedGameFromPick(pick(json).required());
+  factory LightArchivedGame.fromServerJson(
+    Map<String, dynamic> json, {
+    bool withBookmarked = false,
+  }) {
+    return _lightArchivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
@@ -132,8 +133,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
       ?.lock;
 }
 
-ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _lightArchivedGameFromPick(pick);
+ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
+  final data = _lightArchivedGameFromPick(pick, withBookmarked: withBookmarked);
   final clocks = pick(
     'clocks',
   ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
@@ -205,7 +206,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   );
 }
 
-LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
+LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
   return LightArchivedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
@@ -226,7 +227,7 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
-    bookmarked: pick('bookmarked').asBoolOrFalse(),
+    bookmarked: withBookmarked ? pick('bookmarked').asBoolOrFalse() : null,
   );
 }
 

@@ -24,7 +24,7 @@ class GameRepository {
         },
       ),
       headers: {'Accept': 'application/json'},
-      mapper: ArchivedGame.fromServerJson,
+      mapper: (json) => ArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
     );
   }
 
@@ -65,7 +65,7 @@ class GameRepository {
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: LightArchivedGame.fromServerJson,
+          mapper: (json) => LightArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
         )
         .then(
           (value) =>
