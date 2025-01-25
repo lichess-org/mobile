@@ -37,7 +37,7 @@ class BoardTheme extends ConsumerWidget {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-      blendLevel: 20,
+      blendLevel: 16,
     );
     final darkTheme =
         FlexColorScheme.dark(

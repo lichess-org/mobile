@@ -199,7 +199,7 @@ class _BodyState extends ConsumerState<_Body> {
                   if (boardPrefs.backgroundTheme != null)
                     PlatformListTile(
                       leading: const Icon(Icons.cancel),
-                      title: const Text('Clear background'),
+                      title: const Text('Reset background'),
                       onTap: () {
                         ref.read(boardPreferencesProvider.notifier).setBackgroundTheme(null);
                       },

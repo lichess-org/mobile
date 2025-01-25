@@ -17,7 +17,8 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart' show getSystemScheme;
+import 'package:lichess_mobile/src/utils/color_palette.dart'
+    show getDynamicColorSchemes, getSystemScheme;
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -127,6 +128,8 @@ class _AppState extends ConsumerState<Application> {
     final flexSchemeLightColors = flexScheme.light;
     final flexSchemeDarkColors = flexScheme.dark;
 
+    final systemColors = generalPrefs.systemColors == true ? getDynamicColorSchemes() : null;
+
     final themeLight = FlexThemeData.light(
       colors: flexSchemeLightColors,
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
@@ -198,6 +201,12 @@ class _AppState extends ConsumerState<Application> {
       ),
     );
 
+    final highBlendThemeLight = FlexThemeData.light(
+      colors: flexSchemeLightColors,
+      surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
+      blendLevel: 20,
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -218,9 +227,12 @@ class _AppState extends ConsumerState<Application> {
             leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
           ),
           floatingActionButtonTheme: floatingActionButtonTheme,
-          navigationBarTheme: NavigationBarTheme.of(
-            context,
-          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+          navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+            height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+            backgroundColor: highBlendThemeLight.colorScheme.surface,
+            indicatorColor: highBlendThemeLight.colorScheme.secondaryContainer,
+            elevation: 3,
+          ),
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
         darkTheme: themeDark.copyWith(

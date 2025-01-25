@@ -147,7 +147,6 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
     boardTheme: BoardTheme.brown,
-    backgroundTheme: BoardBackgroundTheme.board,
     immersiveModeWhilePlaying: false,
     hapticFeedback: true,
     showLegalMoves: true,

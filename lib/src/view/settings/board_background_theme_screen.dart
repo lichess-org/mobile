@@ -60,7 +60,7 @@ class _Body extends ConsumerWidget {
                 ? FlexThemeData.light(
                   colors: fsd.light,
                   surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-                  blendLevel: 20,
+                  blendLevel: 16,
                 )
                 : FlexThemeData.dark(
                   colors: fsd.dark,
