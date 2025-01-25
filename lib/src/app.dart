@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart' show getSystemScheme;
 import 'package:lichess_mobile/src/utils/screen.dart';
 
@@ -120,11 +119,11 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
+    final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final flexScheme =
-        generalPrefs.systemColors == true ? getSystemScheme()! : AppTheme.defaultScheme;
+    final flexScheme = generalPrefs.systemColors == true ? getSystemScheme()! : FlexColor.espresso;
     final flexSchemeLightColors = flexScheme.light;
     final flexSchemeDarkColors = flexScheme.dark;
 
@@ -132,7 +131,6 @@ class _AppState extends ConsumerState<Application> {
       colors: flexSchemeLightColors,
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
       blendLevel: 10,
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -140,8 +138,7 @@ class _AppState extends ConsumerState<Application> {
     final themeDark = FlexThemeData.dark(
       colors: flexSchemeDarkColors,
       surfaceMode: FlexSurfaceMode.level,
-      blendLevel: 20,
-      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      blendLevel: 40,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -154,6 +151,53 @@ class _AppState extends ConsumerState<Application> {
               foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
             );
 
+    const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
+      color: Color(0xFF000000),
+      darkColor: Color(0xFFF5F5F5),
+    );
+
+    final lightCupertino = CupertinoThemeData(
+      primaryColor: themeLight.colorScheme.primary,
+      primaryContrastingColor: themeLight.colorScheme.onPrimary,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: themeLight.scaffoldBackgroundColor,
+      barBackgroundColor: themeLight.appBarTheme.backgroundColor?.withValues(
+        alpha: isTablet ? 1.0 : 0.9,
+      ),
+      textTheme: const CupertinoThemeData().textTheme.copyWith(
+        primaryColor: themeLight.colorScheme.primary,
+        textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
+          color: themeLight.colorScheme.onSurface,
+        ),
+        navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
+          color: cupertinoTitleColor,
+        ),
+        navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle
+            .copyWith(color: cupertinoTitleColor),
+      ),
+    );
+
+    final darkCupertino = CupertinoThemeData(
+      primaryColor: themeDark.colorScheme.primaryFixed,
+      primaryContrastingColor: themeDark.colorScheme.onPrimaryFixed,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
+      barBackgroundColor: themeDark.appBarTheme.backgroundColor?.withValues(
+        alpha: isTablet ? 1.0 : 0.9,
+      ),
+      textTheme: const CupertinoThemeData().textTheme.copyWith(
+        primaryColor: themeDark.colorScheme.primaryFixed,
+        textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
+          color: themeDark.colorScheme.onSurface,
+        ),
+        navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
+          color: cupertinoTitleColor,
+        ),
+        navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle
+            .copyWith(color: cupertinoTitleColor),
+      ),
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -165,13 +209,13 @@ class _AppState extends ConsumerState<Application> {
         onGenerateTitle: (BuildContext context) => 'lichess.org',
         locale: generalPrefs.locale,
         theme: themeLight.copyWith(
-          cupertinoOverrideTheme: AppTheme.lightCupertino,
+          cupertinoOverrideTheme: lightCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.blackCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            titleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
+            titleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
           ),
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(
@@ -180,13 +224,13 @@ class _AppState extends ConsumerState<Application> {
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
         darkTheme: themeDark.copyWith(
-          cupertinoOverrideTheme: AppTheme.darkCupertino,
+          cupertinoOverrideTheme: darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            titleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
+            titleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
+            subtitleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
+            leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
           ),
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(
