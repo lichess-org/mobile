@@ -4,11 +4,14 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart' show FlexSchemeColor, FlexSchemeData;
+import 'package:flutter/material.dart' show ColorScheme;
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 CorePalette? _corePalette;
 
 FlexSchemeData? _systemScheme;
+
+(ColorScheme, ColorScheme)? _colorSchemes;
 
 ChessboardColorScheme? _boardColorScheme;
 
@@ -21,6 +24,8 @@ void setCorePalette(CorePalette? palette) {
   if (palette != null) {
     final lightScheme = palette.toColorScheme();
     final darkScheme = palette.toColorScheme(brightness: Brightness.dark);
+
+    _colorSchemes ??= _generateDynamicColourSchemes(lightScheme, darkScheme);
 
     _systemScheme ??= FlexSchemeData(
       name: 'System',
@@ -90,7 +95,56 @@ FlexSchemeData? getSystemScheme() {
   return _systemScheme;
 }
 
+/// Get the system color schemes based on the core palette, if available (android 12+).
+(ColorScheme light, ColorScheme dark)? getDynamicColorSchemes() {
+  return _colorSchemes;
+}
+
 /// Get the board colors based on the core palette, if available (android 12+).
 ChessboardColorScheme? getBoardColorScheme() {
   return _boardColorScheme;
 }
+
+// --
+
+(ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
+  ColorScheme lightDynamic,
+  ColorScheme darkDynamic,
+) {
+  final lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
+  final darkBase = ColorScheme.fromSeed(
+    seedColor: darkDynamic.primary,
+    brightness: Brightness.dark,
+  );
+
+  final lightAdditionalColours = _extractAdditionalColours(lightBase);
+  final darkAdditionalColours = _extractAdditionalColours(darkBase);
+
+  final lightScheme = _insertAdditionalColours(lightBase, lightAdditionalColours);
+  final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
+
+  return (lightScheme.harmonized(), darkScheme.harmonized());
+}
+
+List<Color> _extractAdditionalColours(ColorScheme scheme) => [
+  scheme.surface,
+  scheme.surfaceDim,
+  scheme.surfaceBright,
+  scheme.surfaceContainerLowest,
+  scheme.surfaceContainerLow,
+  scheme.surfaceContainer,
+  scheme.surfaceContainerHigh,
+  scheme.surfaceContainerHighest,
+];
+
+ColorScheme _insertAdditionalColours(ColorScheme scheme, List<Color> additionalColours) =>
+    scheme.copyWith(
+      surface: additionalColours[0],
+      surfaceDim: additionalColours[1],
+      surfaceBright: additionalColours[2],
+      surfaceContainerLowest: additionalColours[3],
+      surfaceContainerLow: additionalColours[4],
+      surfaceContainer: additionalColours[5],
+      surfaceContainerHigh: additionalColours[6],
+      surfaceContainerHighest: additionalColours[7],
+    );

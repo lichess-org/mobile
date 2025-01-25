@@ -154,7 +154,7 @@ class _BodyState extends ConsumerState<_Body> {
                   (context, index) =>
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                          : const PlatformDivider(height: 1, color: Colors.transparent),
+                          : const SizedBox.shrink(),
               itemCount: list.length + (state.isLoading ? 1 : 0),
               itemBuilder: (context, index) {
                 if (state.isLoading && index == list.length) {

@@ -45,6 +45,10 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   Future<void> setMasterVolume(double volume) {
     return save(state.copyWith(masterVolume: volume));
   }
+
+  Future<void> toggleSystemColors() {
+    return save(state.copyWith(systemColors: !state.systemColors));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -57,7 +61,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Whether to use system colors on android 10+.
-    bool? systemColors,
+    @JsonKey(defaultValue: false) required bool systemColors,
 
     /// App theme seed
     @Deprecated('Use systemColors instead')
@@ -73,6 +77,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
+    systemColors: false,
     appThemeSeed: AppThemeSeed.board,
   );
 

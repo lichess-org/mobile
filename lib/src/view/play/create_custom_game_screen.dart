@@ -312,7 +312,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
         return SliverList.separated(
           itemCount: supportedChallenges.length,
           separatorBuilder:
-              (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+              (context, index) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final challenge = supportedChallenges[index];
             final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;

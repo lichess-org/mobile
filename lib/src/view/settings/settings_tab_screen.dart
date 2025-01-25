@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart' show getCorePalette;
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -194,6 +195,15 @@ class _Body extends ConsumerWidget {
               );
             },
           ),
+          if (getCorePalette() != null)
+            SwitchSettingTile(
+              leading: const Icon(Icons.colorize_outlined),
+              title: Text(context.l10n.mobileSystemColors),
+              value: generalPrefs.systemColors,
+              onChanged: (value) {
+                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+              },
+            ),
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium_outlined),
             settingsLabel: Text(context.l10n.background),

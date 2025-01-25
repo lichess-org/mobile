@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 // ignore: avoid_classes_with_only_static_members
 abstract final class AppTheme {
-  static ThemeData light = FlexThemeData.light(
-    scheme: FlexScheme.greys,
+  static const FlexSchemeData defaultScheme = FlexColor.espresso;
+
+  static final ThemeData _light = FlexThemeData.light(
+    scheme: FlexScheme.espresso,
     surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
     blendLevel: 10,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -15,8 +17,8 @@ abstract final class AppTheme {
         defaultTargetPlatform == TargetPlatform.iOS ? null : FlexAppBarStyle.scaffoldBackground,
   );
   // The defined dark theme.
-  static ThemeData dark = FlexThemeData.dark(
-    scheme: FlexScheme.greys,
+  static final ThemeData _dark = FlexThemeData.dark(
+    scheme: FlexScheme.espresso,
     surfaceMode: FlexSurfaceMode.level,
     blendLevel: 20,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -25,26 +27,21 @@ abstract final class AppTheme {
         defaultTargetPlatform == TargetPlatform.iOS ? null : FlexAppBarStyle.scaffoldBackground,
   );
 
-  static final floatingActionButtonTheme = FloatingActionButtonThemeData(
-    backgroundColor: AppTheme.light.colorScheme.secondaryFixedDim,
-    foregroundColor: AppTheme.light.colorScheme.onSecondaryFixedVariant,
-  );
-
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
   );
 
   static final lightCupertino = CupertinoThemeData(
-    primaryColor: AppTheme.light.colorScheme.primary,
-    primaryContrastingColor: AppTheme.light.colorScheme.onPrimary,
+    primaryColor: _light.colorScheme.primary,
+    primaryContrastingColor: _light.colorScheme.onPrimary,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: AppTheme.light.scaffoldBackgroundColor,
-    barBackgroundColor: AppTheme.light.appBarTheme.backgroundColor,
+    scaffoldBackgroundColor: _light.scaffoldBackgroundColor,
+    barBackgroundColor: _light.appBarTheme.backgroundColor,
     textTheme: const CupertinoThemeData().textTheme.copyWith(
-      primaryColor: AppTheme.light.colorScheme.primary,
+      primaryColor: _light.colorScheme.primary,
       textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
-        color: AppTheme.light.colorScheme.onSurface,
+        color: _light.colorScheme.onSurface,
       ),
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: cupertinoTitleColor,
@@ -56,15 +53,15 @@ abstract final class AppTheme {
   );
 
   static final darkCupertino = CupertinoThemeData(
-    primaryColor: AppTheme.dark.colorScheme.primary,
-    primaryContrastingColor: AppTheme.dark.colorScheme.onPrimary,
+    primaryColor: _dark.colorScheme.primaryFixed,
+    primaryContrastingColor: _dark.colorScheme.onPrimaryFixed,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppTheme.dark.scaffoldBackgroundColor,
-    barBackgroundColor: AppTheme.dark.appBarTheme.backgroundColor,
+    scaffoldBackgroundColor: _dark.scaffoldBackgroundColor,
+    barBackgroundColor: _dark.appBarTheme.backgroundColor,
     textTheme: const CupertinoThemeData().textTheme.copyWith(
-      primaryColor: AppTheme.dark.colorScheme.primary,
+      primaryColor: _dark.colorScheme.primaryFixed,
       textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
-        color: AppTheme.dark.colorScheme.onSurface,
+        color: _dark.colorScheme.onSurface,
       ),
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: cupertinoTitleColor,

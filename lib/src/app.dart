@@ -1,4 +1,5 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart' show getSystemScheme;
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -121,6 +123,37 @@ class _AppState extends ConsumerState<Application> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
+    final flexScheme =
+        generalPrefs.systemColors == true ? getSystemScheme()! : AppTheme.defaultScheme;
+    final flexSchemeLightColors = flexScheme.light;
+    final flexSchemeDarkColors = flexScheme.dark;
+
+    final themeLight = FlexThemeData.light(
+      colors: flexSchemeLightColors,
+      surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+      blendLevel: 10,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
+    );
+    // The defined dark theme.
+    final themeDark = FlexThemeData.dark(
+      colors: flexSchemeDarkColors,
+      surfaceMode: FlexSurfaceMode.level,
+      blendLevel: 20,
+      visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
+    );
+
+    final floatingActionButtonTheme =
+        generalPrefs.systemColors
+            ? null
+            : FloatingActionButtonThemeData(
+              backgroundColor: themeLight.colorScheme.secondaryFixedDim,
+              foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
+            );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -131,37 +164,35 @@ class _AppState extends ConsumerState<Application> {
         supportedLocales: kSupportedLocales,
         onGenerateTitle: (BuildContext context) => 'lichess.org',
         locale: generalPrefs.locale,
-        theme: AppTheme.light.copyWith(
+        theme: themeLight.copyWith(
           cupertinoOverrideTheme: AppTheme.lightCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.blackCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            tileColor: AppTheme.light.colorScheme.surfaceContainerLow,
-            selectedTileColor: AppTheme.light.colorScheme.surfaceContainer,
             titleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
             subtitleTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? AppTheme.lightCupertino.textTheme.textStyle : null,
           ),
+          floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(
             context,
           ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-          extensions: [lichessCustomColors.harmonized(AppTheme.light.colorScheme)],
+          extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
-        darkTheme: AppTheme.dark.copyWith(
+        darkTheme: themeDark.copyWith(
           cupertinoOverrideTheme: AppTheme.darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
           listTileTheme: ListTileTheme.of(context).copyWith(
-            tileColor: AppTheme.dark.colorScheme.surfaceContainerLow,
-            selectedTileColor: AppTheme.dark.colorScheme.surfaceContainer,
             titleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
             subtitleTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? AppTheme.darkCupertino.textTheme.textStyle : null,
           ),
+          floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(
             context,
           ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-          extensions: [lichessCustomColors.harmonized(AppTheme.dark.colorScheme)],
+          extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
         ),
         themeMode: switch (generalPrefs.themeMode) {
           BackgroundThemeMode.light => ThemeMode.light,

@@ -70,7 +70,7 @@ Future<void> _migrateThemeSettings() async {
     final migrated = generalPrefs.copyWith(
       systemColors:
           // ignore: deprecated_member_use_from_same_package
-          generalPrefs.appThemeSeed == AppThemeSeed.system ? true : null,
+          generalPrefs.appThemeSeed == AppThemeSeed.system,
     );
     await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
   } catch (e) {
