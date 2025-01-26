@@ -105,6 +105,81 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> setBackgroundTheme(BoardBackgroundTheme? backgroundTheme) {
     return save(state.copyWith(backgroundTheme: backgroundTheme));
   }
+
+  Future<void> setBackgroundImage(BoardBackgroundImage? backgroundImage) {
+    return save(state.copyWith(backgroundImage: backgroundImage));
+  }
+}
+
+typedef BoardBackgroundImage =
+    ({String path, Matrix4 transform, bool isBlurred, ColorScheme darkColors});
+
+class BoardBackgroundImageConverter
+    implements JsonConverter<BoardBackgroundImage?, Map<String, dynamic>?> {
+  const BoardBackgroundImageConverter();
+
+  @override
+  BoardBackgroundImage? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+
+    final darkColors = ColorScheme(
+      brightness: Brightness.dark,
+      primary: Color(json['darkPrimary'] as int),
+      onPrimary: Color(json['darkOnPrimary'] as int),
+      primaryContainer: Color(json['darkPrimaryContainer'] as int),
+      secondary: Color(json['darkSecondary'] as int),
+      onSecondary: Color(json['darkOnSecondary'] as int),
+      secondaryContainer: Color(json['darkSecondaryContainer'] as int),
+      tertiary: Color(json['darkTertiary'] as int),
+      tertiaryContainer: Color(json['darkTertiaryContainer'] as int),
+      error: Color(json['darkError'] as int),
+      onError: Color(json['darkOnError'] as int),
+      errorContainer: Color(json['darkErrorContainer'] as int),
+      surface: Color(json['darkSurface'] as int),
+      onSurface: Color(json['darkOnSurface'] as int),
+    );
+
+    final transform = json['transform'] as List<dynamic>;
+
+    return (
+      path: json['path'] as String,
+      transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
+      isBlurred: json['isBlurred'] as bool,
+      darkColors: darkColors,
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(BoardBackgroundImage? object) {
+    if (object == null) {
+      return null;
+    }
+
+    final Map<String, int> darkColors = {
+      'darkPrimary': object.darkColors.primary.toARGB32(),
+      'darkOnPrimary': object.darkColors.onPrimary.toARGB32(),
+      'darkPrimaryContainer': object.darkColors.primaryContainer.toARGB32(),
+      'darkSecondary': object.darkColors.secondary.toARGB32(),
+      'darkOnSecondary': object.darkColors.onSecondary.toARGB32(),
+      'darkSecondaryContainer': object.darkColors.secondaryContainer.toARGB32(),
+      'darkTertiary': object.darkColors.tertiary.toARGB32(),
+      'darkTertiaryContainer': object.darkColors.tertiaryContainer.toARGB32(),
+      'darkError': object.darkColors.error.toARGB32(),
+      'darkOnError': object.darkColors.onError.toARGB32(),
+      'darkErrorContainer': object.darkColors.errorContainer.toARGB32(),
+      'darkSurface': object.darkColors.surface.toARGB32(),
+      'darkOnSurface': object.darkColors.onSurface.toARGB32(),
+    };
+
+    return {
+      'path': object.path,
+      'transform': object.transform.storage,
+      'isBlurred': object.isBlurred,
+      ...darkColors,
+    };
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -142,6 +217,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
     BoardBackgroundTheme? backgroundTheme,
+    @BoardBackgroundImageConverter() BoardBackgroundImage? backgroundImage,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -400,30 +476,24 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
 };
 
 enum BoardBackgroundTheme {
-  /// The app theme is based on the chess board
+  /// The background theme is based on the chess board
   board,
 
   /// Below values from [FlexScheme]
-  // mandyRed,
   redWine,
   pinkM3,
-  // amber,
   purpleBrown,
   purpleM3,
   indigoM3,
   blueM3,
   aquaBlue,
-  // cyanM3,
   tealM3,
   greenM3,
   jungle,
-  // limeM3,
   yellowM3,
   orangeM3,
   deepOrangeM3,
   mango,
-  // gold,
-  // greys,
   sepia;
 
   static final _flexSchemesNameMap = FlexScheme.values.asNameMap();

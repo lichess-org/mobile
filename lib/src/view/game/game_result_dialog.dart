@@ -43,19 +43,17 @@ Widget _adaptiveDialog(BuildContext context, Widget content) {
 
   final screenWidth = MediaQuery.of(context).size.width;
   final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
-  return BoardTheme(
-    child: Dialog(
-      backgroundColor:
+  return Dialog(
+    backgroundColor:
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? CupertinoDynamicColor.resolve(dialogColor, context)
+            : null,
+    child: SizedBox(
+      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+      child:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoDynamicColor.resolve(dialogColor, context)
-              : null,
-      child: SizedBox(
-        width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-        child:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoPopupSurface(child: paddedContent)
-                : paddedContent,
-      ),
+              ? CupertinoPopupSurface(child: paddedContent)
+              : paddedContent,
     ),
   );
 }

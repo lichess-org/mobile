@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/view/settings/board_background_theme_screen.d
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/board_theme.dart' as wrapper;
+import 'package:lichess_mobile/src/widgets/board_theme.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -27,7 +27,7 @@ class BoardThemeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    return wrapper.BoardTheme(
+    return BoardBackgroundThemeWidget(
       backgroundTheme: boardPrefs.backgroundTheme,
       child: PlatformWidget(
         androidBuilder: (context) => const Scaffold(body: _Body()),
@@ -187,7 +187,9 @@ class _BodyState extends ConsumerState<_Body> {
                   SettingsListTile(
                     icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
-                    settingsValue: boardPrefs.backgroundTheme?.label(context.l10n) ?? 'Default',
+                    settingsValue:
+                        boardPrefs.backgroundTheme?.label(context.l10n) ??
+                        (boardPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
                       pushPlatformRoute(
                         context,
@@ -196,12 +198,17 @@ class _BodyState extends ConsumerState<_Body> {
                       );
                     },
                   ),
-                  if (boardPrefs.backgroundTheme != null)
+                  if (boardPrefs.backgroundTheme != null || boardPrefs.backgroundImage != null)
                     PlatformListTile(
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
-                        ref.read(boardPreferencesProvider.notifier).setBackgroundTheme(null);
+                        if (ref.read(boardPreferencesProvider).backgroundTheme != null) {
+                          ref.read(boardPreferencesProvider.notifier).setBackgroundTheme(null);
+                        }
+                        if (ref.read(boardPreferencesProvider).backgroundImage != null) {
+                          ref.read(boardPreferencesProvider.notifier).setBackgroundImage(null);
+                        }
                       },
                     ),
                   SettingsListTile(

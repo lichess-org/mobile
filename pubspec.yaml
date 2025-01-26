@@ -52,6 +52,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
   http: ^1.1.0
+  image_picker: ^1.1.2
   intl: ^0.19.0
   json_annotation: ^4.7.0
   linkify: ^5.0.0
@@ -60,6 +61,7 @@ dependencies:
   meta: ^1.8.0
   package_info_plus: ^8.0.0
   path: ^1.8.2
+  path_provider: ^2.1.5
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0

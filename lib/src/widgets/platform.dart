@@ -84,7 +84,9 @@ class PlatformCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
     final brightness = Theme.of(context).brightness;
+    final colorScheme = Theme.of(context).colorScheme;
     final cardFactory = brightness == Brightness.dark ? Card.filled : Card.new;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
@@ -93,10 +95,16 @@ class PlatformCard extends StatelessWidget {
             borderRadius != null
                 ? RoundedRectangleBorder(borderRadius: borderRadius!)
                 : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-        color: color,
+        color:
+            color ??
+            (platform == TargetPlatform.iOS
+                ? brightness == Brightness.light
+                    ? colorScheme.surfaceContainerLowest
+                    : colorScheme.surfaceContainer
+                : null),
         shadowColor: shadowColor,
         semanticContainer: semanticContainer,
-        elevation: elevation ?? (Theme.of(context).platform == TargetPlatform.iOS ? 0 : null),
+        elevation: elevation ?? (platform == TargetPlatform.iOS ? 0 : null),
         margin: margin ?? EdgeInsets.zero,
         clipBehavior: clipBehavior,
         child: child,

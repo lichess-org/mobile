@@ -141,10 +141,13 @@ class PlatformScaffold extends StatelessWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
-      child: body,
+    return Material(
+      color: Colors.transparent,
+      child: CupertinoPageScaffold(
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
+        child: body,
+      ),
     );
   }
 
@@ -175,7 +178,7 @@ class PlatformBoardThemeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardTheme(
+    return BoardBackgroundThemeWidget(
       child: PlatformScaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: appBar,

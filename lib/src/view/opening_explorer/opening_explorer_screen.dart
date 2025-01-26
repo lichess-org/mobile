@@ -40,7 +40,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
       _ => const CenterLoadingIndicator(),
     };
 
-    return BoardTheme(
+    return BoardBackgroundThemeWidget(
       child: PlatformWidget(
         androidBuilder:
             (_) => Scaffold(
@@ -51,13 +51,16 @@ class OpeningExplorerScreen extends ConsumerWidget {
               ),
             ),
         iosBuilder:
-            (_) => CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: Text(context.l10n.openingExplorer),
-                automaticBackgroundVisibility: false,
-                border: null,
+            (_) => Material(
+              color: Colors.transparent,
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: Text(context.l10n.openingExplorer),
+                  automaticBackgroundVisibility: false,
+                  border: null,
+                ),
+                child: body,
               ),
-              child: body,
             ),
       ),
     );

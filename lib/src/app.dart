@@ -17,8 +17,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart'
-    show getDynamicColorSchemes, getSystemScheme;
+import 'package:lichess_mobile/src/utils/color_palette.dart' show getSystemScheme;
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -127,8 +126,6 @@ class _AppState extends ConsumerState<Application> {
     final flexScheme = generalPrefs.systemColors == true ? getSystemScheme()! : FlexColor.espresso;
     final flexSchemeLightColors = flexScheme.light;
     final flexSchemeDarkColors = flexScheme.dark;
-
-    final systemColors = generalPrefs.systemColors == true ? getDynamicColorSchemes() : null;
 
     final themeLight = FlexThemeData.light(
       colors: flexSchemeLightColors,
@@ -255,10 +252,10 @@ class _AppState extends ConsumerState<Application> {
           BackgroundThemeMode.dark => ThemeMode.dark,
           BackgroundThemeMode.system => ThemeMode.system,
         },
-        builder:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? (context, child) => Material(child: child)
-                : null,
+        // builder:
+        //     Theme.of(context).platform == TargetPlatform.iOS
+        //         ? (context, child) => Material(child: child)
+        //         : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],
       ),
