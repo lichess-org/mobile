@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
@@ -150,8 +151,7 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case TargetPlatform.iOS:
         final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-        return Material(
-          color: Colors.transparent,
+        return CupertinoMaterialWrapper(
           child: CupertinoTabScaffold(
             tabBuilder: _iOSTabBuilder,
             controller: _cupertinoTabController,

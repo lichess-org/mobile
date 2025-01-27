@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -40,14 +41,18 @@ class BroadcastListScreen extends StatelessWidget {
     return PlatformWidget(
       androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
       iosBuilder:
-          (_) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-              automaticBackgroundVisibility: false,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-              border: null,
+          (_) => CupertinoMaterialWrapper(
+            child: CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: title,
+                automaticBackgroundVisibility: false,
+                backgroundColor: CupertinoTheme.of(
+                  context,
+                ).barBackgroundColor.withValues(alpha: 0.0),
+                border: null,
+              ),
+              child: const _Body(),
             ),
-            child: const _Body(),
           ),
     );
   }

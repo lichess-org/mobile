@@ -252,10 +252,6 @@ class _AppState extends ConsumerState<Application> {
           BackgroundThemeMode.dark => ThemeMode.dark,
           BackgroundThemeMode.system => ThemeMode.system,
         },
-        // builder:
-        //     Theme.of(context).platform == TargetPlatform.iOS
-        //         ? (context, child) => Material(child: child)
-        //         : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],
       ),

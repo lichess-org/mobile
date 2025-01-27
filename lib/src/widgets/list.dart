@@ -200,9 +200,7 @@ class ListSection extends StatelessWidget {
                     ),
                   CupertinoListSection.insetGrouped(
                     clipBehavior: cupertinoClipBehavior,
-                    backgroundColor:
-                        cupertinoBackgroundColor ??
-                        CupertinoTheme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
                     decoration: BoxDecoration(
                       color:
                           cupertinoBackgroundColor ??

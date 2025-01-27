@@ -1,5 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -102,17 +103,59 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
 
-  Future<void> setBackgroundTheme(BoardBackgroundTheme? backgroundTheme) {
-    return save(state.copyWith(backgroundTheme: backgroundTheme));
-  }
-
-  Future<void> setBackgroundImage(BoardBackgroundImage? backgroundImage) {
-    return save(state.copyWith(backgroundImage: backgroundImage));
+  Future<void> setBackground({
+    BoardBackgroundTheme? backgroundTheme,
+    BoardBackgroundImage? backgroundImage,
+  }) {
+    assert(
+      !(backgroundTheme != null && backgroundImage != null),
+      'Only one of backgroundTheme or backgroundImage should be set',
+    );
+    return save(state.copyWith(backgroundTheme: backgroundTheme, backgroundImage: backgroundImage));
   }
 }
 
-typedef BoardBackgroundImage =
-    ({String path, Matrix4 transform, bool isBlurred, ColorScheme darkColors});
+@freezed
+class BoardBackgroundImage with _$BoardBackgroundImage {
+  const BoardBackgroundImage._();
+
+  const factory BoardBackgroundImage({
+    required String path,
+    required Matrix4 transform,
+    required bool isBlurred,
+    required ColorScheme darkColors,
+    required double meanLuminance,
+  }) = _BoardBackgroundImage;
+
+  static Color getFilterColor(ColorScheme scheme, double meanLuminance) =>
+      scheme.surface.withValues(
+        alpha: switch (meanLuminance) {
+          < 0.2 => 0,
+          < 0.4 => 0.25,
+          < 0.6 => 0.5,
+          _ => 0.8,
+        },
+      );
+
+  static ThemeData getTheme(ColorScheme scheme) => FlexThemeData.dark(
+    colors: FlexSchemeColor(
+      primary: scheme.primary,
+      primaryContainer: scheme.primaryContainer,
+      secondary: scheme.secondary,
+      secondaryContainer: scheme.secondaryContainer,
+      tertiary: scheme.tertiary,
+      tertiaryContainer: scheme.tertiaryContainer,
+      error: scheme.error,
+      errorContainer: scheme.errorContainer,
+    ),
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    appBarOpacity: 0,
+  );
+
+  ThemeData get theme => getTheme(darkColors);
+
+  Color get filterColor => getFilterColor(darkColors, meanLuminance);
+}
 
 class BoardBackgroundImageConverter
     implements JsonConverter<BoardBackgroundImage?, Map<String, dynamic>?> {
@@ -143,11 +186,12 @@ class BoardBackgroundImageConverter
 
     final transform = json['transform'] as List<dynamic>;
 
-    return (
+    return BoardBackgroundImage(
       path: json['path'] as String,
       transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
       isBlurred: json['isBlurred'] as bool,
       darkColors: darkColors,
+      meanLuminance: json['meanLuminance'] as double,
     );
   }
 
@@ -178,6 +222,7 @@ class BoardBackgroundImageConverter
       'transform': object.transform.storage,
       'isBlurred': object.isBlurred,
       ...darkColors,
+      'meanLuminance': object.meanLuminance,
     };
   }
 }
@@ -481,19 +526,19 @@ enum BoardBackgroundTheme {
 
   /// Below values from [FlexScheme]
   redWine,
-  pinkM3,
-  purpleBrown,
-  purpleM3,
-  indigoM3,
-  blueM3,
-  aquaBlue,
-  tealM3,
-  greenM3,
-  jungle,
   yellowM3,
+  pinkM3,
+  purpleM3,
+  // indigoM3,
+  blueM3,
+  // tealM3,
+  greenM3,
+  aquaBlue,
+  jungle,
   orangeM3,
-  deepOrangeM3,
-  mango,
+  // deepOrangeM3,
+  // mango,
+  purpleBrown,
   sepia;
 
   static final _flexSchemesNameMap = FlexScheme.values.asNameMap();

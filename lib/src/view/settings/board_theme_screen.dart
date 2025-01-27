@@ -12,11 +12,11 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_background_theme_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_background_theme_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/board_theme.dart';
+import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -26,9 +26,7 @@ class BoardThemeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
     return BoardBackgroundThemeWidget(
-      backgroundTheme: boardPrefs.backgroundTheme,
       child: PlatformWidget(
         androidBuilder: (context) => const Scaffold(body: _Body()),
         iosBuilder:
@@ -194,7 +192,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pushPlatformRoute(
                         context,
                         title: context.l10n.background,
-                        builder: (context) => const BoardBackgroundThemeScreen(),
+                        builder: (context) => const BoardBackgroundThemeChoiceScreen(),
                       );
                     },
                   ),
@@ -203,12 +201,9 @@ class _BodyState extends ConsumerState<_Body> {
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
-                        if (ref.read(boardPreferencesProvider).backgroundTheme != null) {
-                          ref.read(boardPreferencesProvider.notifier).setBackgroundTheme(null);
-                        }
-                        if (ref.read(boardPreferencesProvider).backgroundImage != null) {
-                          ref.read(boardPreferencesProvider.notifier).setBackgroundImage(null);
-                        }
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setBackground(backgroundTheme: null, backgroundImage: null);
                       },
                     ),
                   SettingsListTile(
