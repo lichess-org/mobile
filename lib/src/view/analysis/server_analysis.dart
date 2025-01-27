@@ -301,11 +301,11 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mainLineColor = Theme.of(context).colorScheme.secondary;
+    final mainLineColor = ColorScheme.of(context).secondary;
     // yes it looks like below/above are inverted in fl_chart
     final brightness = Theme.of(context).brightness;
-    final white = Theme.of(context).colorScheme.surfaceContainerHighest;
-    final black = Theme.of(context).colorScheme.outline;
+    final white = ColorScheme.of(context).surfaceContainerHighest;
+    final black = ColorScheme.of(context).outline;
     // yes it looks like below/above are inverted in fl_chart
     final belowLineColor = brightness == Brightness.light ? white : black;
     final aboveLineColor = brightness == Brightness.light ? black : white;

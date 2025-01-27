@@ -77,7 +77,7 @@ class ClockTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     final backgroundColor =
         clockState.isFlagged(playerType)
             ? context.lichessColors.error

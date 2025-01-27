@@ -376,7 +376,7 @@ class _BroadcastCartState extends State<BroadcastCard> {
     final defaultBackgroundColor =
         Theme.of(context).platform == TargetPlatform.iOS
             ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
+            : ColorScheme.of(context).surfaceContainer;
     final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =

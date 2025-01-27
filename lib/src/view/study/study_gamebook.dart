@@ -126,7 +126,7 @@ class GamebookButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final primary = ColorScheme.of(context).primary;
 
     return Semantics(
       container: true,

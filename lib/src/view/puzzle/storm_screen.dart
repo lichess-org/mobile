@@ -369,7 +369,7 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     final lvl = widget.combo.currentLevel();
-    final indicatorColor = Theme.of(context).colorScheme.secondary;
+    final indicatorColor = ColorScheme.of(context).secondary;
 
     final comboShades = generateShades(
       indicatorColor,
@@ -469,7 +469,7 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                                     style: TextStyle(
                                       color:
                                           isCurrentLevel
-                                              ? Theme.of(context).colorScheme.onSecondary
+                                              ? ColorScheme.of(context).onSecondary
                                               : null,
                                     ),
                                   ),

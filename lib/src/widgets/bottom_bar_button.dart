@@ -37,7 +37,7 @@ class BottomBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final primary = ColorScheme.of(context).primary;
 
     final labelFontSize =
         Theme.of(context).platform == TargetPlatform.iOS
@@ -72,9 +72,9 @@ class BottomBarButton extends StatelessWidget {
                   )
                 else
                   Badge(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    backgroundColor: ColorScheme.of(context).secondary,
                     textStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
+                      color: ColorScheme.of(context).onSecondary,
                       fontWeight: FontWeight.bold,
                     ),
                     isLabelVisible: badgeLabel != null,
@@ -148,9 +148,9 @@ class _BlinkIconState extends State<_BlinkIcon> with SingleTickerProviderStateMi
       animation: _colorAnimation,
       builder: (context, child) {
         return Badge(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: ColorScheme.of(context).secondary,
           textStyle: TextStyle(
-            color: Theme.of(context).colorScheme.onSecondary,
+            color: ColorScheme.of(context).onSecondary,
             fontWeight: FontWeight.bold,
           ),
           isLabelVisible: widget.badgeLabel != null,

@@ -308,7 +308,7 @@ class PlatformListTile extends StatelessWidget {
         return ListTile(
           leading: leading,
           title: title,
-          iconColor: Theme.of(context).colorScheme.outline,
+          iconColor: ColorScheme.of(context).outline,
           subtitle:
               subtitle != null
                   ? DefaultTextStyle.merge(

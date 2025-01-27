@@ -36,7 +36,7 @@ class BoardCarouselItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final brightness = Theme.of(context).colorScheme.brightness;
+    final brightness = ColorScheme.of(context).brightness;
 
     final backgroundColor = lighten(
       boardPrefs.boardTheme.colors.darkSquare,

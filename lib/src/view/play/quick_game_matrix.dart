@@ -145,7 +145,7 @@ class _ChoiceChipState extends State<_ChoiceChip> {
     final cardColor =
         Theme.of(context).platform == TargetPlatform.iOS
             ? Styles.cupertinoCardColor.resolveFrom(context).withValues(alpha: 0.7)
-            : Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
+            : ColorScheme.of(context).surfaceContainer.withValues(alpha: 0.7);
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
