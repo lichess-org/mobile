@@ -132,12 +132,12 @@ class _BoardBackgroundTheme extends StatelessWidget {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-      blendLevel: 16,
+      blendLevel: backgroundTheme.lightBlend,
     );
     final darkTheme = FlexThemeData.dark(
       colors: flexScheme.dark,
       surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-      blendLevel: 20,
+      blendLevel: backgroundTheme.darkBlend,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -182,34 +182,39 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
       transparentScaffold: true,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return InteractiveViewer(
-            transformationController: _controller,
-            constrained: false,
-            minScale: 1,
-            maxScale: 2,
-            panEnabled: false,
-            scaleEnabled: false,
-            child: Container(
-              width: constraints.minWidth,
-              height: constraints.maxHeight,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(File(widget.backgroundImage.path)),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    widget.backgroundImage.filterColor,
-                    BlendMode.srcOver,
+          return Stack(
+            children: [
+              InteractiveViewer(
+                transformationController: _controller,
+                constrained: false,
+                minScale: 1,
+                maxScale: 2,
+                panEnabled: false,
+                scaleEnabled: false,
+                child: Container(
+                  width: constraints.minWidth,
+                  height: constraints.maxHeight,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: FileImage(File(widget.backgroundImage.path)),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        widget.backgroundImage.filterColor,
+                        BlendMode.srcOver,
+                      ),
+                    ),
+                  ),
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      enabled: widget.backgroundImage.isBlurred,
+                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                      child: const SizedBox.expand(),
+                    ),
                   ),
                 ),
               ),
-              child: ClipRect(
-                child: BackdropFilter(
-                  enabled: widget.backgroundImage.isBlurred,
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: widget.child,
-                ),
-              ),
-            ),
+              Positioned.fill(child: widget.child),
+            ],
           );
         },
       ),

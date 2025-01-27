@@ -522,30 +522,32 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
 
 enum BoardBackgroundTheme {
   /// The background theme is based on the chess board
-  board,
+  board(20, 30),
+  blue(30, 36, FlexScheme.blue, 'Blue'),
+  indigo(30, 36, FlexScheme.indigo, 'indigo'),
+  green(30, 36, FlexScheme.jungle, 'Green'),
+  brown(30, 36, FlexScheme.purpleBrown, 'Brown'),
+  gold(30, 36, FlexScheme.gold, 'Gold'),
+  red(36, 36, FlexScheme.redWine, 'Red'),
+  purple(30, 36, FlexScheme.purpleM3, 'Purple'),
+  sepia(28, 36, FlexScheme.sepia, 'Sepia'),
 
-  /// Below values from [FlexScheme]
-  redWine,
-  yellowM3,
-  pinkM3,
-  purpleM3,
-  // indigoM3,
-  blueM3,
-  // tealM3,
-  greenM3,
-  aquaBlue,
-  jungle,
-  orangeM3,
-  // deepOrangeM3,
-  // mango,
-  purpleBrown,
-  sepia;
+  dimRed(16, 20, FlexScheme.redWine, 'Dim Red'),
+  dimPurple(16, 20, FlexScheme.purpleM3, 'Dim Purple'),
+  dimIndigo(16, 20, FlexScheme.indigo, 'Dim indigo'),
+  dimGold(16, 20, FlexScheme.gold, 'Dim Gold'),
+  dimBlue(16, 20, FlexScheme.blue, 'Dim Blue'),
+  dimGreen(16, 20, FlexScheme.greenM3, 'Dim Green');
 
-  static final _flexSchemesNameMap = FlexScheme.values.asNameMap();
+  final int lightBlend;
+  final int darkBlend;
+  final FlexScheme? scheme;
+  final String? _label;
 
-  String label(AppLocalizations l10n) =>
-      this == BoardBackgroundTheme.board ? l10n.board : _flexSchemesNameMap[name]!.data.name;
+  const BoardBackgroundTheme(this.lightBlend, this.darkBlend, [this.scheme, this._label]);
+
+  String label(AppLocalizations l10n) => this == BoardBackgroundTheme.board ? l10n.board : _label!;
 
   FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
-      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : _flexSchemesNameMap[name]!.data;
+      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : scheme!.data;
 }

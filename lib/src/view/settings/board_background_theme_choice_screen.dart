@@ -60,7 +60,6 @@ class _Body extends ConsumerWidget {
             PlatformListTile(
               leading: const Icon(Icons.image_outlined),
               title: const Text('Pick an image'),
-              subtitle: const Text('Choose a dark image for best result.'),
               trailing:
                   Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
@@ -147,12 +146,12 @@ class _Body extends ConsumerWidget {
                         ? FlexThemeData.light(
                           colors: fsd.light,
                           surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-                          blendLevel: 16,
+                          blendLevel: t.lightBlend,
                         )
                         : FlexThemeData.dark(
                           colors: fsd.dark,
                           surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-                          blendLevel: 20,
+                          blendLevel: t.darkBlend,
                         );
 
                 final autoColor =
@@ -365,7 +364,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                     ),
                     child: BackdropFilter(
                       enabled: blur,
-                      filter: ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                      filter: ui.ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                       child: const SizedBox.expand(),
                     ),
                   ),
@@ -389,6 +388,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                   right: 0,
                   child: Center(
                     child: PlatformCard(
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: AdaptiveInkWell(
                         onTap: () {
                           setState(() {
@@ -401,12 +401,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(blur ? Icons.blur_off_outlined : Icons.blur_on_outlined),
-                              const SizedBox(width: 4.0),
-                              Text(
-                                blur ? 'Remove blur' : 'Apply blur',
-                                textAlign: TextAlign.center,
-                              ),
+                              Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
+                              const SizedBox(width: 6.0),
+                              const Text('Blur the image', textAlign: TextAlign.center),
                             ],
                           ),
                         ),

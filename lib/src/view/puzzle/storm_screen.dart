@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -296,14 +295,14 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            Icon(LichessIcons.storm, size: 50.0, color: context.lichessColors.brag),
+            Icon(LichessIcons.storm, size: 50.0, color: ColorScheme.of(context).primary),
             const SizedBox(width: 8),
             Text(
               stormState.numSolved.toString(),
               style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
-                color: context.lichessColors.brag,
+                color: ColorScheme.of(context).primary,
               ),
             ),
             const Spacer(),
@@ -372,8 +371,8 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
     final indicatorColor = Theme.of(context).colorScheme.secondary;
 
     final comboShades = generateShades(
-      indicatorColor,
-      ref.watch(currentBrightnessProvider) == Brightness.light,
+      ColorScheme.of(context).secondary,
+      Theme.of(context).brightness,
     );
     return AnimatedBuilder(
       animation: _controller,
@@ -487,36 +486,17 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
     );
   }
 
-  List<Color> generateShades(Color baseColor, bool light) {
-    final shades = <Color>[];
-
-    final double r = baseColor.r;
-    final double g = baseColor.g;
-    final double b = baseColor.b;
-
-    const int step = 20;
-
-    // Generate darker shades
-    for (int i = 4; i >= 2; i = i - 2) {
-      final double newR = (r - i * step).clamp(0, 255);
-      final double newG = (g - i * step).clamp(0, 255);
-      final double newB = (b - i * step).clamp(0, 255);
-      shades.add(Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB));
-    }
-
-    // Generate lighter shades
-    for (int i = 2; i <= 3; i++) {
-      final double newR = (r + i * step).clamp(0, 255);
-      final double newG = (g + i * step).clamp(0, 255);
-      final double newB = (b + i * step).clamp(0, 255);
-      shades.add(Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB));
-    }
-
-    if (light) {
-      return shades.reversed.toList();
-    }
-
-    return shades;
+  List<Color> generateShades(Color baseColor, Brightness brightness) {
+    return List.generate(4, (index) {
+      final shade = switch (index) {
+        0 => 0.1,
+        1 => 0.3,
+        2 => 0.5,
+        3 => 0.7,
+        _ => 0.0,
+      };
+      return brightness == Brightness.light ? darken(baseColor, shade) : lighten(baseColor, shade);
+    });
   }
 }
 
