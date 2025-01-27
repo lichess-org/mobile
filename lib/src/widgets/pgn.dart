@@ -932,7 +932,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 Color? _textColor(BuildContext context, double opacity, {int? nag}) {
   final defaultColor =
       Theme.of(context).platform == TargetPlatform.android
-          ? Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: opacity)
+          ? TextTheme.of(context).bodyLarge?.color?.withValues(alpha: opacity)
           : CupertinoTheme.of(context).textTheme.textStyle.color?.withValues(alpha: opacity);
 
   return nag != null && nag > 0 ? nagColor(nag) : defaultColor;
@@ -1084,7 +1084,7 @@ class _MoveContextMenu extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: Theme.of(context).textTheme.titleLarge),
+              Text(title, style: TextTheme.of(context).titleLarge),
               if (branch.clock != null)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

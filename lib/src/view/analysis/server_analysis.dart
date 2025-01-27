@@ -317,7 +317,7 @@ class AcplChart extends ConsumerWidget {
       label: VerticalLineLabel(
         style: TextStyle(
           fontSize: 10,
-          color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.3),
+          color: TextTheme.of(context).labelMedium?.color?.withValues(alpha: 0.3),
         ),
         labelResolver: (line) => label,
         padding: const EdgeInsets.only(right: 1),

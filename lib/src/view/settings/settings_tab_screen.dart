@@ -357,9 +357,9 @@ class _Body extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LichessMessage(style: Theme.of(context).textTheme.bodyMedium),
+            LichessMessage(style: TextTheme.of(context).bodyMedium),
             const SizedBox(height: 10),
-            Text('v${packageInfo.version}', style: Theme.of(context).textTheme.bodySmall),
+            Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ],
         ),
       ),
@@ -392,14 +392,14 @@ class _Body extends ConsumerWidget {
             title: Text(context.l10n.logOut),
             actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();

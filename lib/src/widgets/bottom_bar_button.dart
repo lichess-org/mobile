@@ -42,7 +42,7 @@ class BottomBarButton extends StatelessWidget {
     final labelFontSize =
         Theme.of(context).platform == TargetPlatform.iOS
             ? 11.0
-            : Theme.of(context).textTheme.bodySmall?.fontSize;
+            : TextTheme.of(context).bodySmall?.fontSize;
 
     return Semantics(
       container: true,
@@ -67,8 +67,7 @@ class BottomBarButton extends StatelessWidget {
                   _BlinkIcon(
                     badgeLabel: badgeLabel,
                     icon: icon,
-                    color:
-                        highlighted ? primary : Theme.of(context).iconTheme.color ?? Colors.black,
+                    color: highlighted ? primary : IconTheme.of(context).color ?? Colors.black,
                   )
                 else
                   Badge(
