@@ -160,15 +160,15 @@ class Location extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
         if (profile.country != null) ...[
           CachedNetworkImage(
             imageUrl: lichessFlagSrc(profile.country!),
             errorWidget: (_, __, ___) => kEmptyWidget,
           ),
           const SizedBox(width: 5),
-        ] else
-          kEmptyWidget,
-        Text(profile.location ?? countries[profile.country] ?? ''),
+        ],
+        if (countries[profile.country] != null) Text(countries[profile.country]!),
       ],
     );
   }
