@@ -13,11 +13,18 @@ class GameRepository {
 
   final LichessClient client;
 
-  Future<ArchivedGame> getGame(GameId id) {
+  Future<ArchivedGame> getGame(GameId id, {bool withBookmarked = false}) {
     return client.readJson(
-      Uri(path: '/game/export/$id', queryParameters: {'clocks': '1', 'accuracy': '1'}),
+      Uri(
+        path: '/game/export/$id',
+        queryParameters: {
+          'clocks': '1',
+          'accuracy': '1',
+          if (withBookmarked) 'withBookmarked': '1',
+        },
+      ),
       headers: {'Accept': 'application/json'},
-      mapper: ArchivedGame.fromServerJson,
+      mapper: (json) => ArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
     );
   }
 
@@ -34,6 +41,7 @@ class GameRepository {
     int max = 20,
     DateTime? until,
     GameFilterState filter = const GameFilterState(),
+    bool withBookmarked = false,
   }) {
     assert(!filter.perfs.contains(Perf.fromPosition));
     assert(!filter.perfs.contains(Perf.puzzle));
@@ -53,10 +61,11 @@ class GameRepository {
               if (filter.perfs.isNotEmpty)
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
+              if (withBookmarked) 'withBookmarked': 'true',
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: LightArchivedGame.fromServerJson,
+          mapper: (json) => LightArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
         )
         .then(
           (value) =>
@@ -90,5 +99,14 @@ class GameRepository {
       body: ids.join(','),
       mapper: LightArchivedGame.fromServerJson,
     );
+  }
+
+  /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
+  Future<void> bookmark(GameId id, {required bool bookmark}) async {
+    final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
+    final response = await client.post(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException('Failed to bookmark game: ${response.statusCode}', uri);
+    }
   }
 }

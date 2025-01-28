@@ -36,6 +36,7 @@ class GameScreen extends ConsumerStatefulWidget {
     this.loadingLastMove,
     this.loadingOrientation,
     this.lastMoveAt,
+    this.bookmarked,
     super.key,
   }) : assert(
          initialGameId != null || seek != null || challenge != null,
@@ -55,6 +56,8 @@ class GameScreen extends ConsumerStatefulWidget {
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
+
+  final bool? bookmarked;
 
   _GameSource get source {
     if (initialGameId != null) {
@@ -152,7 +155,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     : const LoadGameError('Could not create the game.');
             return PlatformScaffold(
               resizeToAvoidBottomInset: false,
-              appBar: GameAppBar(id: gameId, lastMoveAt: widget.lastMoveAt),
+              appBar: GameAppBar(
+                id: gameId,
+                lastMoveAt: widget.lastMoveAt,
+                bookmarked: widget.bookmarked,
+              ),
               body: body,
             );
           },

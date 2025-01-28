@@ -61,7 +61,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId),
+    (client) => GameRepository(client).getUserGames(userId, withBookmarked: true),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -119,7 +119,10 @@ class UserGameHistory extends _$UserGameHistory {
     final id = userId ?? session?.user.id;
     final recentGames =
         id != null && online
-            ? ref.withClient((client) => GameRepository(client).getUserGames(id, filter: filter))
+            ? ref.withClient(
+              (client) =>
+                  GameRepository(client).getUserGames(id, filter: filter, withBookmarked: true),
+            )
             : storage
                 .page(userId: id, filter: filter)
                 .then(
@@ -158,6 +161,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : currentVal.online && currentVal.session != null
@@ -167,6 +171,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : (await ref.watch(gameStorageProvider.future))
