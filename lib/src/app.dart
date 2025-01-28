@@ -122,21 +122,20 @@ class _AppState extends ConsumerState<Application> {
     final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
-
-    final flexScheme = generalPrefs.systemColors == true ? getSystemScheme()! : FlexColor.espresso;
-    final flexSchemeLightColors = flexScheme.light;
-    final flexSchemeDarkColors = flexScheme.dark;
-
+    final systemScheme = getSystemScheme();
+    final flexScheme =
+        generalPrefs.systemColors == true && systemScheme != null
+            ? systemScheme
+            : FlexColor.espresso;
     final themeLight = FlexThemeData.light(
-      colors: flexSchemeLightColors,
+      colors: flexScheme.light,
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
       blendLevel: 10,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
-    // The defined dark theme.
     final themeDark = FlexThemeData.dark(
-      colors: flexSchemeDarkColors,
+      colors: flexScheme.dark,
       surfaceMode: FlexSurfaceMode.level,
       blendLevel: 40,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
@@ -198,8 +197,9 @@ class _AppState extends ConsumerState<Application> {
       ),
     );
 
+    // The high blend theme is used only for the navigation bar in light mode.
     final highBlendThemeLight = FlexThemeData.light(
-      colors: flexSchemeLightColors,
+      colors: flexScheme.light,
       surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
       blendLevel: 16,
     );
