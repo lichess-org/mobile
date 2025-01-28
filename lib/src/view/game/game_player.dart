@@ -138,7 +138,9 @@ class GamePlayer extends StatelessWidget {
                               color:
                                   player.ratingDiff! > 0
                                       ? context.lichessColors.good
-                                      : context.lichessColors.error,
+                                      : player.ratingDiff! == 0 
+                                          ? context.lichessColors.brag
+                                          : context.lichessColors.error,
                             ),
                           ),
                       ],
