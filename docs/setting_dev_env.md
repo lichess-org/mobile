@@ -160,7 +160,7 @@ Use the `flutter run` command to run the app on an emulator or a real device. If
 
 ```bash
 flutter run \
-  --dart-define=LICHESS_HOST=lichess.dev \
+  --dart-define=LICHESS_HOST=lichess.org \
   --dart-define=LICHESS_WS_HOST=socket.lichess.org
 ```
 
