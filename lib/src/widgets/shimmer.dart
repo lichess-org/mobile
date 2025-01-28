@@ -1,3 +1,5 @@
+import 'dart:math' show max;
+
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
@@ -20,13 +22,17 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   LinearGradient get _defaultGradient {
     final brightness = Theme.of(context).brightness;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final scaffoldOpacity = scaffoldBackgroundColor.a;
+    final effectiveScaffoldBackgroundColor = scaffoldBackgroundColor.withValues(
+      alpha: max(0.2, scaffoldOpacity),
+    );
     switch (brightness) {
-      case Brightness.light:
+      case Brightness.light when scaffoldOpacity > 0:
         return LinearGradient(
           colors: [
-            darken(scaffoldBackgroundColor, 0.05),
-            darken(scaffoldBackgroundColor, 0.1),
-            darken(scaffoldBackgroundColor, 0.2),
+            darken(effectiveScaffoldBackgroundColor, 0.05),
+            darken(effectiveScaffoldBackgroundColor, 0.1),
+            darken(effectiveScaffoldBackgroundColor, 0.2),
           ],
           stops: const [0.1, 0.3, 0.4],
           begin: const Alignment(-1.0, -0.3),
@@ -34,12 +40,12 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
           tileMode: TileMode.clamp,
         );
 
-      case Brightness.dark:
+      case _:
         return LinearGradient(
           colors: [
-            lighten(scaffoldBackgroundColor, 0.05),
-            lighten(scaffoldBackgroundColor, 0.1),
-            lighten(scaffoldBackgroundColor, 0.2),
+            lighten(effectiveScaffoldBackgroundColor, 0.05),
+            lighten(effectiveScaffoldBackgroundColor, 0.1),
+            lighten(effectiveScaffoldBackgroundColor, 0.2),
           ],
           stops: const [0.1, 0.3, 0.4],
           begin: const Alignment(-1.0, -0.3),
@@ -135,6 +141,8 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
       return widget.child;
     }
 
+    final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
+
     final shimmer = Shimmer.of(context)!;
     if (!shimmer.isSized) {
       return const SizedBox();
@@ -147,7 +155,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     );
 
     return ShaderMask(
-      blendMode: BlendMode.srcATop,
+      blendMode: scaffoldOpacity == 0 ? BlendMode.modulate : BlendMode.srcATop,
       shaderCallback: (bounds) {
         return gradient.createShader(
           Rect.fromLTWH(
