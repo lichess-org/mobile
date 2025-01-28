@@ -133,14 +133,14 @@ class GamePlayer extends StatelessWidget {
                       children: [
                         if (player.ratingDiff != null)
                           TextSpan(
-                            text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                            text:
+                                ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
-                              color:
-                                  player.ratingDiff! > 0
-                                      ? context.lichessColors.good
-                                      : player.ratingDiff! == 0 
-                                          ? context.lichessColors.brag
-                                          : context.lichessColors.error,
+                              color: player.ratingDiff! > 0
+                                  ? context.lichessColors.good
+                                  : player.ratingDiff! == 0
+                                      ? context.lichessColors.brag
+                                      : context.lichessColors.error,
                             ),
                           ),
                       ],
