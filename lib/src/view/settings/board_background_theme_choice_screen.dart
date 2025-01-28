@@ -271,7 +271,9 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
                   alignment:
                       orientation == Orientation.portrait ? Alignment.center : Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: landscapeBoardPadding),
+                    padding: EdgeInsets.only(
+                      left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
+                    ),
                     child: Chessboard.fixed(
                       size:
                           orientation == Orientation.portrait
@@ -401,7 +403,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                             : Alignment.centerLeft,
                     child: IgnorePointer(
                       child: Padding(
-                        padding: EdgeInsets.only(left: landscapeBoardPadding),
+                        padding: EdgeInsets.only(
+                          left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
+                        ),
                         child: Chessboard.fixed(
                           size:
                               orientation == Orientation.portrait
