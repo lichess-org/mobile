@@ -246,37 +246,56 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _controller,
-            itemBuilder: (context, index) {
-              final backgroundTheme = colorChoices[index];
-              return BoardBackgroundThemeWidget(
-                backgroundTheme: backgroundTheme,
-                child: const Scaffold(body: SizedBox.expand()),
-              );
-            },
-            itemCount: colorChoices.length,
-          ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: Chessboard.fixed(
-                size: MediaQuery.sizeOf(context).width,
-                fen: kInitialFEN,
-                orientation: Side.white,
-                settings: widget.boardPrefs.toBoardSettings(),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final orientation =
+              constraints.maxWidth > constraints.maxHeight
+                  ? Orientation.landscape
+                  : Orientation.portrait;
+          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
+          return Stack(
+            children: [
+              PageView.builder(
+                controller: _controller,
+                itemBuilder: (context, index) {
+                  final backgroundTheme = colorChoices[index];
+                  return BoardBackgroundThemeWidget(
+                    backgroundTheme: backgroundTheme,
+                    child: const Scaffold(body: SizedBox.expand()),
+                  );
+                },
+                itemCount: colorChoices.length,
               ),
-            ),
-          ),
-          Positioned(
-            bottom: MediaQuery.paddingOf(context).bottom + 16.0,
-            left: 0,
-            right: 0,
-            child: const Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
-          ),
-        ],
+              Positioned.fill(
+                child: Align(
+                  alignment:
+                      orientation == Orientation.portrait ? Alignment.center : Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: landscapeBoardPadding),
+                    child: Chessboard.fixed(
+                      size:
+                          orientation == Orientation.portrait
+                              ? constraints.maxWidth
+                              : constraints.maxHeight - landscapeBoardPadding * 2,
+                      fen: kInitialFEN,
+                      orientation: Side.white,
+                      settings: widget.boardPrefs.toBoardSettings(),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+                left: orientation == Orientation.portrait ? 0 : null,
+                right: 0,
+                child: const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
+                ),
+              ),
+            ],
+          );
+        },
       ),
       persistentFooterButtons: [
         AdaptiveTextButton(
@@ -345,6 +364,11 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
+            final orientation =
+                constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
+            final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
             return Stack(
               children: [
                 InteractiveViewer(
@@ -371,23 +395,33 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 ),
                 Positioned.fill(
                   child: Align(
-                    alignment: Alignment.center,
+                    alignment:
+                        orientation == Orientation.portrait
+                            ? Alignment.center
+                            : Alignment.centerLeft,
                     child: IgnorePointer(
-                      child: Chessboard.fixed(
-                        size: MediaQuery.sizeOf(context).width,
-                        fen: kInitialFEN,
-                        orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: landscapeBoardPadding),
+                        child: Chessboard.fixed(
+                          size:
+                              orientation == Orientation.portrait
+                                  ? constraints.maxWidth
+                                  : constraints.maxHeight - landscapeBoardPadding * 2,
+                          fen: kInitialFEN,
+                          orientation: Side.white,
+                          settings: widget.boardPrefs.toBoardSettings(),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
                   top: MediaQuery.paddingOf(context).top + 26.0,
-                  left: 0,
+                  left: orientation == Orientation.portrait ? 0 : null,
                   right: 0,
                   child: Center(
                     child: PlatformCard(
+                      margin: const EdgeInsets.all(16.0),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: AdaptiveInkWell(
                         onTap: () {
@@ -422,6 +456,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                         child: Text(context.l10n.cancel),
                         onPressed: () => Navigator.pop(context, null),
                       ),
+                      const SizedBox(width: 16.0),
                       AdaptiveTextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
