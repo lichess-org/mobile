@@ -411,14 +411,14 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
 enum BoardBackgroundTheme {
   /// The background theme is based on the chess board
   board(20, 30),
-  blue(30, 36, FlexScheme.blue, 'Blue'),
-  indigo(30, 36, FlexScheme.indigo, 'indigo'),
-  green(30, 36, FlexScheme.jungle, 'Green'),
-  brown(30, 36, FlexScheme.purpleBrown, 'Brown'),
-  gold(30, 36, FlexScheme.gold, 'Gold'),
-  red(36, 36, FlexScheme.redWine, 'Red'),
-  purple(30, 36, FlexScheme.purpleM3, 'Purple'),
-  sepia(28, 36, FlexScheme.sepia, 'Sepia'),
+  blue(30, 34, FlexScheme.blue, 'Blue'),
+  indigo(30, 34, FlexScheme.indigo, 'indigo'),
+  green(30, 34, FlexScheme.jungle, 'Green'),
+  brown(30, 34, FlexScheme.purpleBrown, 'Brown'),
+  gold(30, 34, FlexScheme.gold, 'Gold'),
+  red(34, 34, FlexScheme.redWine, 'Red'),
+  purple(30, 34, FlexScheme.purpleM3, 'Purple'),
+  sepia(28, 34, FlexScheme.sepia, 'Sepia'),
 
   dimRed(16, 20, FlexScheme.redWine, 'Dim Red'),
   dimPurple(16, 20, FlexScheme.purpleM3, 'Dim Purple'),

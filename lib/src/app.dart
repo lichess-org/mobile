@@ -130,7 +130,7 @@ class _AppState extends ConsumerState<Application> {
     final themeLight = FlexThemeData.light(
       colors: flexScheme.light,
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-      blendLevel: 10,
+      blendLevel: isIOS ? 10 : 8,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
@@ -146,8 +146,8 @@ class _AppState extends ConsumerState<Application> {
         generalPrefs.systemColors
             ? null
             : FloatingActionButtonThemeData(
-              backgroundColor: themeLight.colorScheme.secondaryFixedDim,
-              foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
+              backgroundColor: themeLight.colorScheme.primaryFixedDim,
+              foregroundColor: themeLight.colorScheme.onPrimaryFixed,
             );
 
     const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
@@ -227,7 +227,7 @@ class _AppState extends ConsumerState<Application> {
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
             backgroundColor: highBlendThemeLight.colorScheme.surface,
-            indicatorColor: highBlendThemeLight.colorScheme.secondaryContainer,
+            indicatorColor: darken(highBlendThemeLight.colorScheme.secondaryContainer, 0.05),
             elevation: 3,
           ),
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
