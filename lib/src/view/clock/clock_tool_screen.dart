@@ -77,19 +77,21 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final activeColor = colorScheme.primaryFixedDim;
+    final activeTextColor = colorScheme.onPrimaryFixed;
+    final pausedColor = activeColor.withValues(alpha: 0.5);
     final backgroundColor =
         clockState.isFlagged(playerType)
             ? colorScheme.error
             : !clockState.paused && clockState.isPlayersTurn(playerType)
-            ? colorScheme.primaryFixed
+            ? activeColor
             : clockState.activeSide == playerType
-            ? colorScheme.primaryFixedDim
+            ? pausedColor
             : colorScheme.surface;
 
     final clockStyle = ClockStyle(
-      textColor:
-          clockState.activeSide == playerType ? colorScheme.onPrimaryFixed : colorScheme.onSurface,
-      activeTextColor: colorScheme.onPrimaryFixed,
+      textColor: clockState.activeSide == playerType ? activeTextColor : colorScheme.onSurface,
+      activeTextColor: activeTextColor,
       emergencyTextColor: Colors.white,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,
