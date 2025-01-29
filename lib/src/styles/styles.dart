@@ -53,9 +53,7 @@ abstract class Styles {
 
   /// Retrieve the background color for the screens where we display a list of items.
   static Color listingsScreenBackgroundColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light
-          ? ColorScheme.of(context).surfaceContainerLowest
-          : ColorScheme.of(context).surfaceContainerLow;
+      ColorScheme.of(context).surfaceContainerLowest;
 
   static Color cardColor(BuildContext context) {
     final brightness = Theme.of(context).brightness;

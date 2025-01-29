@@ -54,64 +54,58 @@ class _Body extends ConsumerWidget {
               return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
             }
             return SafeArea(
-              child: ColoredBox(
-                color:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoColors.systemBackground.resolveFrom(context)
-                        : Colors.transparent,
-                child: ListView.separated(
-                  itemCount: following.length,
-                  separatorBuilder:
-                      (context, index) =>
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                              : const SizedBox.shrink(),
-                  itemBuilder: (context, index) {
-                    final user = following[index];
-                    return Slidable(
-                      dragStartBehavior: DragStartBehavior.start,
-                      endActionPane: ActionPane(
-                        motion: const StretchMotion(),
-                        extentRatio: 0.3,
-                        children: [
-                          SlidableAction(
-                            onPressed: (BuildContext context) async {
-                              final oldState = following;
+              child: ListView.separated(
+                itemCount: following.length,
+                separatorBuilder:
+                    (context, index) =>
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                            : const SizedBox.shrink(),
+                itemBuilder: (context, index) {
+                  final user = following[index];
+                  return Slidable(
+                    dragStartBehavior: DragStartBehavior.start,
+                    endActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      extentRatio: 0.3,
+                      children: [
+                        SlidableAction(
+                          onPressed: (BuildContext context) async {
+                            final oldState = following;
+                            setState(() {
+                              following = following.removeWhere((v) => v.id == user.id);
+                            });
+                            try {
+                              await ref.withClient(
+                                (client) => RelationRepository(client).unfollow(user.id),
+                              );
+                            } catch (_) {
                               setState(() {
-                                following = following.removeWhere((v) => v.id == user.id);
+                                following = oldState;
                               });
-                              try {
-                                await ref.withClient(
-                                  (client) => RelationRepository(client).unfollow(user.id),
-                                );
-                              } catch (_) {
-                                setState(() {
-                                  following = oldState;
-                                });
-                              }
-                            },
-                            backgroundColor: context.lichessColors.error,
-                            foregroundColor: Colors.white,
-                            icon: Icons.person_remove,
-                            // TODO translate
-                            label: 'Unfollow',
-                          ),
-                        ],
-                      ),
-                      child: UserListTile.fromUser(
-                        user,
-                        _isOnline(user, data.$2),
-                        onTap:
-                            () => {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) => UserScreen(user: user.lightUser),
-                              ),
-                            },
-                      ),
-                    );
-                  },
-                ),
+                            }
+                          },
+                          backgroundColor: context.lichessColors.error,
+                          foregroundColor: Colors.white,
+                          icon: Icons.person_remove,
+                          // TODO translate
+                          label: 'Unfollow',
+                        ),
+                      ],
+                    ),
+                    child: UserListTile.fromUser(
+                      user,
+                      _isOnline(user, data.$2),
+                      onTap:
+                          () => {
+                            pushPlatformRoute(
+                              context,
+                              builder: (context) => UserScreen(user: user.lightUser),
+                            ),
+                          },
+                    ),
+                  );
+                },
               ),
             );
           },
