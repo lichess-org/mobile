@@ -136,11 +136,13 @@ class _AppState extends ConsumerState<Application> {
     );
     final themeDark = FlexThemeData.dark(
       colors: flexScheme.dark,
-      surfaceMode: FlexSurfaceMode.level,
-      blendLevel: 40,
+      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
+      blendLevel: 25,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
+
+    final darkScaffoldBackgroundColor = lighten(themeDark.scaffoldBackgroundColor, 0.05);
 
     final floatingActionButtonTheme =
         generalPrefs.systemColors
@@ -180,7 +182,7 @@ class _AppState extends ConsumerState<Application> {
       primaryColor: themeDark.colorScheme.primaryFixed,
       primaryContrastingColor: themeDark.colorScheme.onPrimaryFixed,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
+      scaffoldBackgroundColor: darkScaffoldBackgroundColor,
       barBackgroundColor: themeDark.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
@@ -233,6 +235,7 @@ class _AppState extends ConsumerState<Application> {
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
         darkTheme: themeDark.copyWith(
+          scaffoldBackgroundColor: darkScaffoldBackgroundColor,
           cupertinoOverrideTheme: darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
@@ -242,9 +245,10 @@ class _AppState extends ConsumerState<Application> {
             leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
           ),
           floatingActionButtonTheme: floatingActionButtonTheme,
-          navigationBarTheme: NavigationBarTheme.of(
-            context,
-          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+          navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+            height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+            backgroundColor: themeDark.colorScheme.surface,
+          ),
           extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
         ),
         themeMode: switch (generalPrefs.themeMode) {
