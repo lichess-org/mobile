@@ -30,7 +30,7 @@ class GameHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
-    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user, isOnline: isOnline));
+    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
     final title =
         filtersInUse.count == 0
             ? nbGamesAsync.when(
@@ -172,7 +172,6 @@ class _BodyState extends ConsumerState<_Body> {
 
                 return ExtendedGameListTile(
                   item: list[index],
-                  userId: widget.user?.id,
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
                       Theme.of(context).platform == TargetPlatform.iOS
