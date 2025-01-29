@@ -15,7 +15,6 @@ class BottomBarButton extends StatelessWidget {
     this.showLabel = false,
     this.showTooltip = true,
     this.blink = false,
-    this.invertBackground = false,
     this.tooltip,
     super.key,
   });
@@ -29,7 +28,6 @@ class BottomBarButton extends StatelessWidget {
   final bool showLabel;
   final bool showTooltip;
   final bool blink;
-  final bool invertBackground;
 
   /// In case we want to override the tooltip message. If null, the [label] will
   /// be used.
@@ -60,14 +58,7 @@ class BottomBarButton extends StatelessWidget {
             ),
             isLabelVisible: badgeLabel != null,
             label: (badgeLabel != null) ? Text(badgeLabel!) : null,
-            child:
-                blink
-                    ? _BlinkIcon(
-                      icon: icon,
-                      color:
-                          highlighted ? primary : Theme.of(context).iconTheme.color ?? Colors.black,
-                    )
-                    : Icon(icon, color: highlighted ? primary : null),
+            child: Icon(icon, color: highlighted ? primary : null),
           ),
           if (showLabel)
             Padding(
@@ -97,8 +88,8 @@ class BottomBarButton extends StatelessWidget {
           borderRadius: BorderRadius.zero,
           onTap: onTap,
           child:
-              invertBackground
-                  ? _InvertBackground(color: primary.withValues(alpha: 0.2), child: child)
+              blink
+                  ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
                   : child,
         ),
       ),
@@ -106,55 +97,8 @@ class BottomBarButton extends StatelessWidget {
   }
 }
 
-class _BlinkIcon extends StatefulWidget {
-  const _BlinkIcon({required this.icon, required this.color});
-
-  final IconData icon;
-  final Color color;
-
-  @override
-  _BlinkIconState createState() => _BlinkIconState();
-}
-
-class _BlinkIconState extends State<_BlinkIcon> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Color?> _colorAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-
-    _colorAnimation = ColorTween(begin: widget.color, end: null).animate(_controller)
-      ..addStatusListener((status) {
-        if (_controller.status == AnimationStatus.completed) {
-          _controller.reverse();
-        } else if (_controller.status == AnimationStatus.dismissed) {
-          _controller.forward();
-        }
-      });
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _colorAnimation,
-      builder: (_, __) => Icon(widget.icon, color: _colorAnimation.value ?? Colors.transparent),
-    );
-  }
-}
-
-class _InvertBackground extends StatefulWidget {
-  const _InvertBackground({required this.child, required this.color});
+class _AnimatedInvertBackground extends StatefulWidget {
+  const _AnimatedInvertBackground({required this.child, required this.color});
 
   final Widget child;
   final Color color;
@@ -163,7 +107,8 @@ class _InvertBackground extends StatefulWidget {
   _InvertBackgroundState createState() => _InvertBackgroundState();
 }
 
-class _InvertBackgroundState extends State<_InvertBackground> with SingleTickerProviderStateMixin {
+class _InvertBackgroundState extends State<_AnimatedInvertBackground>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
 
