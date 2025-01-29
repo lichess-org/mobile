@@ -1,6 +1,8 @@
 import 'dart:ui' show Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
+    show BoardTheme, boardPreferencesProvider;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,7 +49,10 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   }
 
   Future<void> toggleSystemColors() {
-    return save(state.copyWith(systemColors: !state.systemColors));
+    return Future.wait([
+      save(state.copyWith(systemColors: !state.systemColors)),
+      ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system),
+    ]).then((_) => {});
   }
 }
 

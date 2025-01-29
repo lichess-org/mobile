@@ -195,15 +195,6 @@ class _Body extends ConsumerWidget {
               );
             },
           ),
-          if (getCorePalette() != null)
-            SwitchSettingTile(
-              leading: const Icon(Icons.colorize_outlined),
-              title: Text(context.l10n.mobileSystemColors),
-              value: generalPrefs.systemColors,
-              onChanged: (value) {
-                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
-              },
-            ),
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium_outlined),
             settingsLabel: Text(context.l10n.background),
@@ -281,6 +272,15 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
+          if (getCorePalette() != null)
+            SwitchSettingTile(
+              leading: const Icon(Icons.colorize_outlined),
+              title: Text(context.l10n.mobileSystemColors),
+              value: generalPrefs.systemColors,
+              onChanged: (value) {
+                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+              },
+            ),
         ],
       ),
       ListSection(
