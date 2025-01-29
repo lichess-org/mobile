@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -214,8 +216,19 @@ class _AppState extends ConsumerState<Application> {
                     );
                   }
                   : null,
-          home: const BottomNavScaffold(),
           navigatorObservers: [rootNavPageRouteObserver],
+          onGenerateRoute:
+              (settings) =>
+                  settings.name != null
+                      ? resolveAppLinkUri(context, Uri.parse(settings.name!))
+                      : null,
+          onGenerateInitialRoutes: (initialRoute) {
+            final homeRoute = createPlatformRoute(context, screen: const BottomNavScaffold());
+            return <Route<dynamic>?>[
+              homeRoute,
+              resolveAppLinkUri(context, Uri.parse(initialRoute)),
+            ].nonNulls.toList(growable: false);
+          },
         );
       },
     );
