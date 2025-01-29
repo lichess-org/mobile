@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -118,8 +117,6 @@ class _ContextMenu extends ConsumerWidget {
     final customColors = Theme.of(context).extension<CustomColors>();
 
     final isLoggedIn = ref.watch(isLoggedInProvider);
-
-    final bookmarkValue = ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
 
     return BottomSheetScrollableContainer(
       children: [
@@ -247,9 +244,9 @@ class _ContextMenu extends ConsumerWidget {
         if (isLoggedIn && onPressedBookmark != null)
           BottomSheetContextMenuAction(
             onPressedWithContext: onPressedBookmark,
-            icon: bookmarkValue ? Icons.star : Icons.star_outline_rounded,
+            icon: game.bookmarked! ? Icons.star : Icons.star_outline_rounded,
             closeOnPressed: true,
-            child: Text(bookmarkValue ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
+            child: Text(game.bookmarked! ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
           ),
         // Builder is used to retrieve the context immediately surrounding the
         // BottomSheetContextMenuAction

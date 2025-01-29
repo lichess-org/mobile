@@ -43,9 +43,13 @@ instance to work on this project.
 
 If you work with a local lila, you will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws) (websocket server).
 
+### lila-gitpod
+
+The fastest and most straight-forward way to run you own lila is [lila-gitpod](https://github.com/lichess-org/lila-gitpod).
+
 ### lila-docker
 
-The fastest and most straight-forward way to get started is using [lila-docker](https://github.com/lichess-org/lila-docker).
+If you have Docker installed on your system, you will probably prefer to use [lila-docker](https://github.com/lichess-org/lila-docker).
 
 ### Local lila server (manual installation)
 
@@ -156,7 +160,7 @@ Use the `flutter run` command to run the app on an emulator or a real device. If
 
 ```bash
 flutter run \
-  --dart-define=LICHESS_HOST=lichess.dev \
+  --dart-define=LICHESS_HOST=lichess.org \
   --dart-define=LICHESS_WS_HOST=socket.lichess.org
 ```
 
@@ -164,9 +168,27 @@ flutter run \
 > Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper method
 
 > [!NOTE]
-> You can also use the production server but note that you will not be able to log in.
+> If you use the production server, note that you will not be able to log in.
 
 ### Android
+
+#### When using lila-gitpod
+
+To access the lila instance from your device, you will need to make the port 8080 public. You can do so by running this command in your Gitpod workspace:
+
+```bash
+./lila-docker public
+```
+
+Then you can run the application with:
+
+```bash
+flutter run \
+  --dart-define=LICHESS_HOST=[lila_gitpod_host] \
+  --dart-define=LICHESS_WS_HOST=[lila_gitpod_host]
+```
+
+To find the host of your lila Gitpod instance, use the command `gp url 8080`. Just be careful to not include the full url in the hosts variables, you need to remove the https:// from the url. 
 
 #### When using lila-docker
 

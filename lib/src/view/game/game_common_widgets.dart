@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -26,25 +26,39 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class BookmarkButton extends ConsumerWidget {
+class BookmarkButton extends ConsumerStatefulWidget {
   const BookmarkButton({required this.id, required this.bookmarked});
 
   final GameId id;
   final bool bookmarked;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bookmarkCurrentState = ref.watch(gameBookmarkProvider(id)) ?? bookmarked;
+  ConsumerState<BookmarkButton> createState() => _BookmarkButtonState();
+}
 
+class _BookmarkButtonState extends ConsumerState<BookmarkButton> {
+  late bool bookmarked;
+
+  @override
+  void initState() {
+    super.initState();
+    bookmarked = widget.bookmarked;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AppBarIconButton(
       onPressed: () async {
-        final newBookmarkValue = !bookmarkCurrentState;
-
         try {
           await ref.withClient(
-            (client) => GameRepository(client).bookmark(id, bookmark: newBookmarkValue),
+            (client) => GameRepository(client).bookmark(widget.id, bookmark: !widget.bookmarked),
           );
-          ref.read(gameBookmarkProvider(id).notifier).state = newBookmarkValue;
+
+          ref.invalidate(userGameHistoryProvider);
+          setState(() {
+            bookmarked = !bookmarked;
+          });
+          // TODO: invalidate providers
         } on Exception catch (_) {
           if (context.mounted) {
             showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);
@@ -52,7 +66,7 @@ class BookmarkButton extends ConsumerWidget {
         }
       },
       semanticsLabel: context.l10n.bookmarkThisGame,
-      icon: Icon(bookmarkCurrentState ? Icons.star : Icons.star_outline_rounded),
+      icon: Icon(widget.bookmarked ? Icons.star : Icons.star_outline_rounded),
     );
   }
 }

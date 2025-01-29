@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/game/game_bookmark_provider.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -34,7 +33,7 @@ class GameHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
-    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user, isOnline: isOnline));
+    final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
     final title =
         filtersInUse.count == 0
             ? nbGamesAsync.when(
@@ -139,9 +138,12 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
+    final gameListProvider = userGameHistoryProvider(
+      widget.user?.id,
+      isOnline: widget.isOnline,
+      filter: gameFilterState,
     );
+    final gameListState = ref.watch(gameListProvider);
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return gameListState.when(
@@ -176,17 +178,14 @@ class _BodyState extends ConsumerState<_Body> {
                 }
 
                 final game = list[index].game;
-                final bookmarkValue = ref.watch(gameBookmarkProvider(game.id)) ?? game.bookmarked!;
 
                 Future<void> onPressedBookmark(BuildContext context) async {
-                  final newBookmarkValue = !bookmarkValue;
-
                   try {
                     await ref.withClient(
                       (client) =>
-                          GameRepository(client).bookmark(game.id, bookmark: newBookmarkValue),
+                          GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
                     );
-                    ref.read(gameBookmarkProvider(game.id).notifier).state = newBookmarkValue;
+                    ref.read(gameListProvider.notifier).toggleBookmark(index);
                   } on Exception catch (_) {
                     if (context.mounted) {
                       showPlatformSnackbar(
@@ -216,8 +215,8 @@ class _BodyState extends ConsumerState<_Body> {
                           SlidableAction(
                             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
                             onPressed: onPressedBookmark,
-                            icon: bookmarkValue ? Icons.star : Icons.star_outline_rounded,
-                            label: bookmarkValue ? 'Unbookmark' : 'Bookmark',
+                            icon: game.bookmarked! ? Icons.star : Icons.star_outline_rounded,
+                            label: game.bookmarked! ? 'Unbookmark' : 'Bookmark',
                           ),
                         ],
                       ),
