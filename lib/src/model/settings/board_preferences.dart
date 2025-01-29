@@ -359,7 +359,6 @@ enum CastlingMethod {
   kingTwoSquares,
   either;
 
-  // TODO: l10n
   String castlingMethodl10n(BuildContext context, CastlingMethod castlingMethod) =>
       switch (castlingMethod) {
         CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
