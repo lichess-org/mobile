@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -14,7 +15,7 @@ part 'board_preferences.g.dart';
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
-@riverpod
+@Riverpod(keepAlive: true)
 class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
@@ -101,6 +102,17 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> adjustColors({double? brightness, double? hue}) {
     return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
+
+  Future<void> setBackground({
+    BoardBackgroundTheme? backgroundTheme,
+    BoardBackgroundImage? backgroundImage,
+  }) {
+    assert(
+      !(backgroundTheme != null && backgroundImage != null),
+      'Only one of backgroundTheme or backgroundImage should be set',
+    );
+    return save(state.copyWith(backgroundTheme: backgroundTheme, backgroundImage: backgroundImage));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -137,6 +149,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
+    BoardBackgroundTheme? backgroundTheme,
+    @BoardBackgroundImageConverter() BoardBackgroundImage? backgroundImage,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -293,6 +307,46 @@ enum BoardTheme {
     }
   }
 
+  FlexSchemeData get flexScheme {
+    final lightScheme = SeedColorScheme.fromSeeds(
+      primaryKey: colors.darkSquare,
+      secondaryKey: colors.lightSquare,
+      brightness: Brightness.light,
+    );
+    final darkScheme = SeedColorScheme.fromSeeds(
+      primaryKey: colors.darkSquare,
+      secondaryKey: colors.lightSquare,
+      brightness: Brightness.dark,
+    );
+    return FlexSchemeData(
+      name: 'Chessboard',
+      description: 'Chessboard based theme: $label',
+      light: FlexSchemeColor(
+        primary: lightScheme.primary,
+        primaryContainer: lightScheme.primaryContainer,
+        secondary: lightScheme.secondary,
+        secondaryContainer: lightScheme.secondaryContainer,
+        tertiary: lightScheme.tertiary,
+        tertiaryContainer: lightScheme.tertiaryContainer,
+        error: lightScheme.error,
+        errorContainer: lightScheme.errorContainer,
+      ),
+      dark: FlexSchemeColor(
+        primary: darkScheme.primary,
+        primaryContainer: darkScheme.primaryContainer,
+        primaryLightRef: lightScheme.primary,
+        secondary: darkScheme.secondary,
+        secondaryContainer: darkScheme.secondaryContainer,
+        secondaryLightRef: lightScheme.secondary,
+        tertiary: darkScheme.tertiary,
+        tertiaryContainer: darkScheme.tertiaryContainer,
+        tertiaryLightRef: lightScheme.tertiary,
+        error: darkScheme.error,
+        errorContainer: darkScheme.errorContainer,
+      ),
+    );
+  }
+
   Widget get thumbnail =>
       this == BoardTheme.system
           ? SizedBox(
@@ -353,3 +407,147 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
   DragTargetKind.square => 'Square',
   DragTargetKind.none => 'None',
 };
+
+enum BoardBackgroundTheme {
+  /// The background theme is based on the chess board
+  board(20, 30),
+  blue(30, 34, FlexScheme.blue, 'Blue'),
+  indigo(30, 34, FlexScheme.indigo, 'indigo'),
+  green(30, 34, FlexScheme.jungle, 'Green'),
+  brown(30, 34, FlexScheme.purpleBrown, 'Brown'),
+  gold(30, 34, FlexScheme.gold, 'Gold'),
+  red(34, 34, FlexScheme.redWine, 'Red'),
+  purple(30, 34, FlexScheme.purpleM3, 'Purple'),
+  sepia(28, 34, FlexScheme.sepia, 'Sepia'),
+
+  dimRed(16, 20, FlexScheme.redWine, 'Dim Red'),
+  dimPurple(16, 20, FlexScheme.purpleM3, 'Dim Purple'),
+  dimIndigo(16, 20, FlexScheme.indigo, 'Dim indigo'),
+  dimGold(16, 20, FlexScheme.gold, 'Dim Gold'),
+  dimBlue(16, 20, FlexScheme.blue, 'Dim Blue'),
+  dimGreen(16, 20, FlexScheme.greenM3, 'Dim Green');
+
+  final int lightBlend;
+  final int darkBlend;
+  final FlexScheme? scheme;
+  final String? _label;
+
+  const BoardBackgroundTheme(this.lightBlend, this.darkBlend, [this.scheme, this._label]);
+
+  String label(AppLocalizations l10n) => this == BoardBackgroundTheme.board ? l10n.board : _label!;
+
+  FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
+      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : scheme!.data;
+}
+
+@freezed
+class BoardBackgroundImage with _$BoardBackgroundImage {
+  const BoardBackgroundImage._();
+
+  const factory BoardBackgroundImage({
+    required String path,
+    required Matrix4 transform,
+    required bool isBlurred,
+    required ColorScheme darkColors,
+    required double meanLuminance,
+  }) = _BoardBackgroundImage;
+
+  static Color getFilterColor(ColorScheme scheme, double meanLuminance) =>
+      scheme.surface.withValues(
+        alpha: switch (meanLuminance) {
+          < 0.2 => 0,
+          < 0.4 => 0.25,
+          < 0.6 => 0.5,
+          _ => 0.8,
+        },
+      );
+
+  static ThemeData getTheme(ColorScheme scheme) => FlexThemeData.dark(
+    colors: FlexSchemeColor(
+      primary: scheme.primary,
+      primaryContainer: scheme.primaryContainer,
+      secondary: scheme.secondary,
+      secondaryContainer: scheme.secondaryContainer,
+      tertiary: scheme.tertiary,
+      tertiaryContainer: scheme.tertiaryContainer,
+      error: scheme.error,
+      errorContainer: scheme.errorContainer,
+    ),
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    appBarOpacity: 0,
+  );
+
+  ThemeData get theme => getTheme(darkColors);
+
+  Color get filterColor => getFilterColor(darkColors, meanLuminance);
+}
+
+class BoardBackgroundImageConverter
+    implements JsonConverter<BoardBackgroundImage?, Map<String, dynamic>?> {
+  const BoardBackgroundImageConverter();
+
+  @override
+  BoardBackgroundImage? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+
+    final darkColors = ColorScheme(
+      brightness: Brightness.dark,
+      primary: Color(json['darkPrimary'] as int),
+      onPrimary: Color(json['darkOnPrimary'] as int),
+      primaryContainer: Color(json['darkPrimaryContainer'] as int),
+      secondary: Color(json['darkSecondary'] as int),
+      onSecondary: Color(json['darkOnSecondary'] as int),
+      secondaryContainer: Color(json['darkSecondaryContainer'] as int),
+      tertiary: Color(json['darkTertiary'] as int),
+      tertiaryContainer: Color(json['darkTertiaryContainer'] as int),
+      error: Color(json['darkError'] as int),
+      onError: Color(json['darkOnError'] as int),
+      errorContainer: Color(json['darkErrorContainer'] as int),
+      surface: Color(json['darkSurface'] as int),
+      onSurface: Color(json['darkOnSurface'] as int),
+    );
+
+    final transform = json['transform'] as List<dynamic>;
+
+    return BoardBackgroundImage(
+      path: json['path'] as String,
+      transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
+      isBlurred: json['isBlurred'] as bool,
+      darkColors: darkColors,
+      meanLuminance: json['meanLuminance'] as double,
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(BoardBackgroundImage? object) {
+    if (object == null) {
+      return null;
+    }
+
+    final Map<String, int> darkColors = {
+      'darkPrimary': object.darkColors.primary.toARGB32(),
+      'darkOnPrimary': object.darkColors.onPrimary.toARGB32(),
+      'darkPrimaryContainer': object.darkColors.primaryContainer.toARGB32(),
+      'darkSecondary': object.darkColors.secondary.toARGB32(),
+      'darkOnSecondary': object.darkColors.onSecondary.toARGB32(),
+      'darkSecondaryContainer': object.darkColors.secondaryContainer.toARGB32(),
+      'darkTertiary': object.darkColors.tertiary.toARGB32(),
+      'darkTertiaryContainer': object.darkColors.tertiaryContainer.toARGB32(),
+      'darkError': object.darkColors.error.toARGB32(),
+      'darkOnError': object.darkColors.onError.toARGB32(),
+      'darkErrorContainer': object.darkColors.errorContainer.toARGB32(),
+      'darkSurface': object.darkColors.surface.toARGB32(),
+      'darkOnSurface': object.darkColors.onSurface.toARGB32(),
+    };
+
+    return {
+      'path': object.path,
+      'transform': object.transform.storage,
+      'isBlurred': object.isBlurred,
+      ...darkColors,
+      'meanLuminance': object.meanLuminance,
+    };
+  }
+}

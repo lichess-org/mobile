@@ -110,6 +110,13 @@ class _CreateGamePlatformButton extends StatelessWidget {
           title: Text(label, style: Styles.mainListTileTitle),
           onTap: onTap,
         )
-        : ElevatedButton.icon(onPressed: onTap, icon: Icon(icon), label: Text(label));
+        : OutlinedButton.icon(
+          onPressed: onTap,
+          icon: Icon(icon),
+          label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+          style: const ButtonStyle(
+            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 8.0)),
+          ),
+        );
   }
 }

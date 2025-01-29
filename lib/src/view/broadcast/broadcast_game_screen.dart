@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -85,7 +84,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               _ => const SizedBox.shrink(),
             };
 
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
         title: title,
         actions: [
@@ -401,10 +400,7 @@ class _PlayerWidget extends ConsumerWidget {
             );
           },
           child: Container(
-            color:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Styles.cupertinoCardColor.resolveFrom(context)
-                    : Theme.of(context).colorScheme.surfaceContainer,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [

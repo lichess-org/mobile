@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -32,18 +33,32 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+class AnalysisScreen extends StatelessWidget {
+  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+
+  final AnalysisOptions options;
+  final bool enableDrawingShapes;
+
+  @override
+  Widget build(BuildContext context) {
+    return BoardBackgroundThemeWidget(
+      child: _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes),
+    );
+  }
+}
+
+class _AnalysisScreen extends ConsumerStatefulWidget {
+  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 
   final bool enableDrawingShapes;
 
   @override
-  ConsumerState<AnalysisScreen> createState() => _AnalysisScreenState();
+  ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -233,7 +248,7 @@ class _BottomBar extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

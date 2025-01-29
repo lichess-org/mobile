@@ -142,16 +142,17 @@ class _ChoiceChip extends StatefulWidget {
 class _ChoiceChipState extends State<_ChoiceChip> {
   @override
   Widget build(BuildContext context) {
-    final cardColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context).withValues(alpha: 0.7)
-            : Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
+    final theme = Theme.of(context);
+    final bgColor =
+        theme.brightness == Brightness.light
+            ? theme.colorScheme.surfaceContainerLowest
+            : theme.colorScheme.surfaceContainerHighest;
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(
-          color: cardColor,
+          color: bgColor.withValues(alpha: 0.7),
           borderRadius: const BorderRadius.all(Radius.circular(6.0)),
         ),
         child: AdaptiveInkWell(

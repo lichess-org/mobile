@@ -251,7 +251,11 @@ class _BroadcastWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: numberOfItems, header: true),
+              child: ListSection.loading(
+                itemsNumber: numberOfItems,
+                header: true,
+                hasLeading: true,
+              ),
             ),
           ),
     );
@@ -365,7 +369,7 @@ class _WatchTvWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 4, header: true),
+              child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
             ),
           ),
     );
@@ -415,7 +419,11 @@ class _StreamerWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: numberOfItems, header: true),
+              child: ListSection.loading(
+                itemsNumber: numberOfItems,
+                header: true,
+                hasLeading: true,
+              ),
             ),
           ),
     );

@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'game_setup_preferences.freezed.dart';
 part 'game_setup_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class GameSetupPreferences extends _$GameSetupPreferences
     with SessionPreferencesStorage<GameSetupPrefs> {
   // ignore: avoid_public_notifier_properties

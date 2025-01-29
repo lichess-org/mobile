@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'study_preferences.freezed.dart';
 part 'study_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyPrefs> {
   // ignore: avoid_public_notifier_properties
   @override

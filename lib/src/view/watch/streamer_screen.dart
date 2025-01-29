@@ -22,6 +22,7 @@ class StreamerScreen extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
       body: ListView.builder(
         itemCount: streamers.length,
@@ -38,6 +39,7 @@ class StreamerScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.mobileLiveStreamers)),
       child: CustomScrollView(
         slivers: [

@@ -36,6 +36,7 @@ class OnlineBotsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: Text(context.l10n.onlineBots)),
       body: _Body(),
     );
