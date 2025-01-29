@@ -248,7 +248,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           style:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? const TextStyle(fontSize: 18)
-                  : Theme.of(context).textTheme.bodyLarge,
+                  : TextTheme.of(context).bodyLarge,
           textAlign: TextAlign.center,
         ),
       ),
@@ -431,7 +431,7 @@ class _HelloWidget extends ConsumerWidget {
     final style =
         Theme.of(context).platform == TargetPlatform.iOS
             ? const TextStyle(fontSize: 20)
-            : Theme.of(context).textTheme.bodyLarge;
+            : TextTheme.of(context).bodyLarge;
 
     final iconSize = Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
 
@@ -694,7 +694,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                           Theme.of(context).platform == TargetPlatform.iOS
                               ? const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
                               : TextStyle(
-                                fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
+                                fontSize: TextTheme.of(context).labelMedium?.fontSize,
                                 fontWeight: FontWeight.w500,
                               ),
                     ),

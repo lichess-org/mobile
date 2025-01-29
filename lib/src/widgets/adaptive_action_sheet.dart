@@ -64,14 +64,14 @@ Future<T?> showConfirmDialog<T>(
           title: title,
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
               child: Text(context.l10n.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
               child: Text(context.l10n.mobileOkButton),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -138,7 +138,7 @@ Future<T?> showMaterialActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
-  final actionTextStyle = Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18);
+  final actionTextStyle = TextTheme.of(context).titleMedium ?? const TextStyle(fontSize: 18);
 
   final screenWidth = MediaQuery.of(context).size.width;
   return showDialog<T>(

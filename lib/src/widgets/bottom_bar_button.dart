@@ -42,7 +42,7 @@ class BottomBarButton extends StatelessWidget {
     final labelFontSize =
         Theme.of(context).platform == TargetPlatform.iOS
             ? 11.0
-            : Theme.of(context).textTheme.bodySmall?.fontSize;
+            : TextTheme.of(context).bodySmall?.fontSize;
 
     final child = Opacity(
       opacity: enabled ? 1.0 : 0.4,
