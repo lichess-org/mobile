@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -80,6 +81,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final emptyRecent = ref
             .watch(myRecentGamesProvider)
             .maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
+
+        final recentGames = ref.watch(myRecentGamesProvider);
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
 
         // Show the welcome screen if there are no recent games and no stored games
@@ -88,8 +92,20 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             emptyRecent
                 ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
                 : isTablet
-                ? _tabletWidgets(session: session, status: status, ongoingGames: ongoingGames)
-                : _handsetWidgets(session: session, status: status, ongoingGames: ongoingGames);
+                ? _tabletWidgets(
+                  session: session,
+                  status: status,
+                  ongoingGames: ongoingGames,
+                  recentGames: recentGames,
+                  nbOfGames: nbOfGames,
+                )
+                : _handsetWidgets(
+                  session: session,
+                  status: status,
+                  ongoingGames: ongoingGames,
+                  recentGames: recentGames,
+                  nbOfGames: nbOfGames,
+                );
 
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoPageScaffold(
@@ -194,6 +210,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required int nbOfGames,
   }) {
     return [
       const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
@@ -212,7 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
       else
         const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-      const RecentGamesWidget(),
+      RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       if (Theme.of(context).platform == TargetPlatform.iOS)
         const SizedBox(height: 70.0)
       else
@@ -286,6 +304,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required int nbOfGames,
   }) {
     return [
       const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
@@ -310,11 +330,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ],
             ),
           ),
-          const Flexible(
+          Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [SizedBox(height: 8.0), RecentGamesWidget()],
+              children: [
+                const SizedBox(height: 8.0),
+                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+              ],
             ),
           ),
         ],

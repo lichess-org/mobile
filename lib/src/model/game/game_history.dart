@@ -37,13 +37,11 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
-    return ref.withClientCacheFor(
+    return ref.withClient(
       (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
-      const Duration(hours: 1),
     );
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
-    ref.cacheFor(const Duration(hours: 1));
     return storage
         .page(userId: session?.user.id, max: kNumberOfRecentGames)
         .then(
@@ -60,15 +58,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId),
-    // cache is important because the associated widget is in a [ListView] and
-    // the provider may be instanciated multiple times in a short period of time
-    // (e.g. when scrolling)
-    // TODO: consider debouncing the request instead of caching it, or make the
-    // request in the parent widget and pass the result to the child
-    const Duration(minutes: 1),
-  );
+  return ref.withClient((client) => GameRepository(client).getUserGames(userId));
 }
 
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
@@ -77,11 +67,12 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserI
 /// If the user is not logged in, or there is no connectivity, the number of games
 /// stored locally are fetched instead.
 @riverpod
-Future<int> userNumberOfGames(Ref ref, LightUser? user, {required bool isOnline}) async {
+Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
   final session = ref.watch(authSessionProvider);
+  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   return user != null
       ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
-      : session != null && isOnline
+      : session != null && online
       ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }
