@@ -71,6 +71,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       size: widget.boardSize,
       boardPrefs: boardPrefs,
       fen: analysisState.position.fen,
+      lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
       gameData: GameData(
         playerSide:
@@ -89,8 +90,14 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                 .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
-      lastMove: analysisState.lastMove as NormalMove?,
+
       shapes: userShapes.union(bestMoveShapes),
+      annotations:
+          showAnnotationsOnBoard && sanMove != null && annotation != null
+              ? altCastles.containsKey(sanMove.move.uci)
+                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
+                  : IMap({sanMove.move.to: annotation})
+              : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
@@ -101,14 +108,6 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
-      boardOverlay: null,
-      error: null,
-      annotations:
-          showAnnotationsOnBoard && sanMove != null && annotation != null
-              ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                  : IMap({sanMove.move.to: annotation})
-              : null,
     );
   }
 

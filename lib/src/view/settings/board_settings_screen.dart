@@ -87,7 +87,7 @@ class _Body extends ConsumerWidget {
                     context,
                     choices: CastlingMethod.values,
                     selectedItem: boardPrefs.castlingMethod,
-                    labelBuilder: (t) => Text(t.label),
+                    labelBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
                     onSelectedItemChanged: (CastlingMethod? value) {
                       ref
                           .read(boardPreferencesProvider.notifier)
@@ -321,7 +321,7 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
               notchedTile: true,
               choices: CastlingMethod.values,
               selectedItem: castlingMethod,
-              titleBuilder: (t) => Text(t.label),
+              titleBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
               onSelectedItemChanged: onChanged,
             ),
           ],
@@ -428,12 +428,4 @@ String pieceShiftMethodl10n(BuildContext context, PieceShiftMethod pieceShiftMet
       PieceShiftMethod.either => 'Either tap or drag',
       PieceShiftMethod.drag => context.l10n.preferencesDragPiece,
       PieceShiftMethod.tapTwoSquares => 'Tap two squares',
-    };
-
-String castlingMethodl10n(BuildContext context, CastlingMethod castlingMethod) =>
-    switch (castlingMethod) {
-      // TODO add this to mobile translations
-      CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
-      CastlingMethod.kingTwoSquares => context.l10n.preferencesCastleByMovingTwoSquares,
-      CastlingMethod.either => 'Either',
     };

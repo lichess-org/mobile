@@ -6,6 +6,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
@@ -359,11 +360,12 @@ enum CastlingMethod {
   either;
 
   // TODO: l10n
-  String get label => switch (this) {
-    CastlingMethod.kingOverRook => 'Move king over rook',
-    CastlingMethod.kingTwoSquares => 'Move king two squares',
-    CastlingMethod.either => 'Either',
-  };
+  String castlingMethodl10n(BuildContext context, CastlingMethod castlingMethod) =>
+      switch (castlingMethod) {
+        CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
+        CastlingMethod.kingTwoSquares => context.l10n.preferencesCastleByMovingTwoSquares,
+        CastlingMethod.either => context.l10n.preferencesBothClicksAndDrag,
+      };
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {

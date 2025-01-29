@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -501,7 +502,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     final sanMove = currentNode.sanMove;
     final annotation = makeAnnotation(studyState.currentNode.nags);
 
-    return Chessboard(
+    return BoardWidget(
       size: widget.boardSize,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
@@ -523,7 +524,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
                   ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
               : null,
-      game:
+      gameData:
           position != null
               ? GameData(
                 playerSide: studyState.playerSide,
@@ -539,6 +540,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
                 },
               )
               : null,
+      boardPrefs: boardPrefs,
     );
   }
 

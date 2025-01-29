@@ -1,16 +1,9 @@
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/move_list.dart';
 
 class BoardWidget extends StatelessWidget {
   BoardWidget({
@@ -19,13 +12,12 @@ class BoardWidget extends StatelessWidget {
     required this.fen,
     required this.orientation,
     required this.gameData,
-    required this.lastMove,
-    required this.shapes,
+    this.lastMove,
+    this.shapes,
     required this.settings,
-    required this.boardOverlay,
-    required this.error,
-
-    required this.annotations,
+    this.boardOverlay,
+    this.error,
+    this.annotations,
     this.boardKey,
   }) : setup = Setup.parseFen(fen);
 
@@ -35,7 +27,7 @@ class BoardWidget extends StatelessWidget {
   final Side orientation;
   final GameData? gameData;
   final Move? lastMove;
-  final ISet<Shape> shapes;
+  final ISet<Shape>? shapes;
   final ChessboardSettings settings;
   final String? error;
   final Widget? boardOverlay;
