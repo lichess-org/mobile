@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
@@ -144,12 +146,14 @@ class _Body extends ConsumerWidget {
                 );
               },
               loading:
-                  () => const BoardTable(
-                    topTable: kEmptyWidget,
-                    bottomTable: kEmptyWidget,
-                    orientation: Side.white,
-                    fen: kEmptyFEN,
-                    showMoveListPlaceholder: true,
+                  () => const Shimmer(
+                    child: BoardTable(
+                      topTable: LoadingPlayerWidget(),
+                      bottomTable: LoadingPlayerWidget(),
+                      orientation: Side.white,
+                      fen: kEmptyFEN,
+                      showMoveListPlaceholder: true,
+                    ),
                   ),
               error: (err, stackTrace) {
                 debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
@@ -178,7 +182,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
           label: context.l10n.flipBoard,

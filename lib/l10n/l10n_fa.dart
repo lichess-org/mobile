@@ -520,7 +520,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'شروع کنید بعد $param';
   }
 
   @override
@@ -865,7 +865,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesInGameOnly => 'تنها در بازی';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'به غیر از داخل بازی';
 
   @override
   String get preferencesChessClock => 'ساعت شطرنج';
@@ -1465,6 +1465,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'به جای انجام حرکت موردانتظار، نخست حرکت دیگری را روید که تهدیدی فوری‌ست و حریف باید به آن پاسخ دهد. همچنین به آن «قطار میانی - Zwischenzug» یا «در میانه» می‌گویند.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'مات جعبه مرگ';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'آخربازی اسب';
 
   @override
@@ -1701,7 +1707,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playWithTheMachine => 'بازی با رایانه';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت کردن حریف این لینک را برای او بفرستید';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت کسی به بازی، این وب‌نشانی را دهید';
 
   @override
   String get gameOver => 'پایان بازی';
@@ -1710,7 +1716,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get waitingForOpponent => 'انتطار برای حریف';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'یا اجازه دهید حریف‌تان این کد QR را بِروبینَد';
+  String get orLetYourOpponentScanQrCode => 'یا اجازه دهید حریف‌تان این کد QR را اسکن کنند';
 
   @override
   String get waiting => 'در حال انتظار';
@@ -1787,7 +1793,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get threeChecks => 'سه‌کیش';
 
   @override
-  String get raceFinished => 'مسابقه تمام شد';
+  String get raceFinished => 'پایان تاخت';
 
   @override
   String get variantEnding => 'پایان وَرتا';
@@ -1936,7 +1942,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get losing => 'حرکت بازنده';
 
   @override
-  String get drawn => 'حرکت تساوی‌دهنده';
+  String get drawn => 'مساوی';
 
   @override
   String get unknown => 'ناشناخته';
@@ -2214,7 +2220,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get passwordReset => 'بازنشانی گذرواژه';
 
   @override
-  String get forgotPassword => 'گذرواژه را فراموش کرده‌اید؟';
+  String get forgotPassword => 'گذرواژه را فراموش کرده‌اید?';
 
   @override
   String get error_weakPassword => 'این گذرواژه بسیار رایج و آسان‌حدس است.';
@@ -2880,10 +2886,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get ifNoneLeaveEmpty => 'اگر ندارید، خالی گذارید';
 
   @override
-  String get profile => 'رُخ‌نما';
+  String get profile => 'نمایه';
 
   @override
-  String get editProfile => 'ویرایش رُخ‌نما';
+  String get editProfile => 'ویرایش نمایه';
 
   @override
   String get realName => 'نام راستین';
@@ -4296,7 +4302,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String gameInProgress(String param) {
-    return 'شما یک بازی در حال انجام با $param دارید.';
+    return 'شما یک بازی جاری با $param دارید.';
   }
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اشتباه بزرگ',
+      one: '$count اشتباه بزرگ',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اشتباه',
+      one: '$count اشتباه',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نادقیق',
+      one: '$count نادقیق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -4709,8 +4748,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count بازی در حال انجام است',
-      one: '$count بازی در حال انجام است',
+      other: '$count بازی جاریست',
+      one: '$count بازی جاریست',
     );
     return '$_temp0';
   }
@@ -4889,16 +4928,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormWaitingForMorePlayers => 'در انتظارِ پیوستن بازیکنان بیشتر...';
 
   @override
-  String get stormRaceComplete => 'مسابقه تمام شد!';
+  String get stormRaceComplete => 'تاخت تمام شد!';
 
   @override
   String get stormSpectating => 'در حال تماشا';
 
   @override
-  String get stormJoinTheRace => 'به مسابقه بپیوندید!';
+  String get stormJoinTheRace => 'به تاخت بپیوندید!';
 
   @override
-  String get stormStartTheRace => 'شروع مسابقه';
+  String get stormStartTheRace => 'آغازِ تاخت';
 
   @override
   String stormYourRankX(String param) {
@@ -4906,10 +4945,10 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get stormWaitForRematch => 'برای بازی مجدد منتظر بمانید';
+  String get stormWaitForRematch => 'در انتظار بازرویارویی';
 
   @override
-  String get stormNextRace => 'مسابقه بعدی';
+  String get stormNextRace => 'تاختِ بعدی';
 
   @override
   String get stormJoinRematch => 'پیوستن به بازی مجدد';
@@ -4918,22 +4957,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormWaitingToStart => 'در انتظار آغاز';
 
   @override
-  String get stormCreateNewGame => 'ایجاد مسابقه جدید';
+  String get stormCreateNewGame => 'ایجاد تاختِ جدید';
 
   @override
-  String get stormJoinPublicRace => 'به یک مسابقه عمومی بپیوندید';
+  String get stormJoinPublicRace => 'به یک تاختِ همگانی بپیوندید';
 
   @override
-  String get stormRaceYourFriends => 'با دوستان خود مسابقه دهید';
+  String get stormRaceYourFriends => 'تاخت با دوستان‌تان';
 
   @override
   String get stormSkip => 'رد کردن';
 
   @override
-  String get stormSkipHelp => 'در هر مسابقه می‌توانید یک حرکت را رد کنید:';
+  String get stormSkipHelp => 'در هر تاخت می‌توانید یک حرکت را رد کنید:';
 
   @override
-  String get stormSkipExplanation => 'این حرکت را رَد کنید تا توالی حرکات درست خود را حفظ کنید! در هر مسابقه فقط یک بار قابل استفاده است.';
+  String get stormSkipExplanation => 'این حرکت را برای حفظ توالی‌تان رَد کنید! در هر تاخت، فقط یک بار شدنی است.';
 
   @override
   String get stormFailedPuzzles => 'معماهای ناموفق';
@@ -5110,7 +5149,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyShareChanges => 'تغییرها را در کارساز ذخیره کنید و با تماشاگران به اشتراک گذارید';
 
   @override
-  String get studyPlaying => 'در حال انجام';
+  String get studyPlaying => 'جاری';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'نوار ارزیابی';

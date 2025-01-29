@@ -215,7 +215,7 @@ class _BottomBar extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         if (!puzzleState.streak!.finished)
           BottomBarButton(

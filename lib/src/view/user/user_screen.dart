@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -10,6 +11,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -85,6 +87,8 @@ class _UserProfileListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
+    final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
     final session = ref.watch(authSessionProvider);
 
     if (user.disabled == true) {
@@ -115,9 +119,15 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
                   onTap: () {
+                    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
                     pushPlatformRoute(
                       context,
-                      builder: (context) => CreateChallengeScreen(user.lightUser),
+                      title: context.l10n.challengeChallengesX(user.lightUser.name),
+                      builder:
+                          (context) =>
+                              isOddBot
+                                  ? ChallengeOddBotsScreen(user.lightUser)
+                                  : CreateChallengeScreen(user.lightUser),
                     );
                   },
                 ),
@@ -170,7 +180,7 @@ class _UserProfileListView extends ConsumerWidget {
             ],
           ),
         UserActivityWidget(user: user),
-        RecentGamesWidget(user: user.lightUser),
+        RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: user.lightUser),
       ],
     );
   }

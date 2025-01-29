@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -359,10 +358,9 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId, this.padding});
+  const ExtendedGameListTile({required this.item, this.padding});
 
   final LightArchivedGameWithPov item;
-  final UserId? userId;
 
   final EdgeInsetsGeometry? padding;
 

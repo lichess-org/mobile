@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -43,12 +44,14 @@ class ProfileScreen extends ConsumerWidget {
           if (user == null) {
             return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
           }
+          final recentGames = ref.watch(myRecentGamesProvider);
+          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return ListView(
             children: [
               UserProfileWidget(user: user),
               const AccountPerfCards(),
               const UserActivityWidget(),
-              const RecentGamesWidget(),
+              RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
             ],
           );
         },

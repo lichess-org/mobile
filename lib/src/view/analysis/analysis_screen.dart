@@ -232,7 +232,8 @@ class _BottomBar extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentCupertinoBar: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -276,21 +277,23 @@ class _BottomBar extends ConsumerWidget {
       ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.boardEditor),
-          onPressed: (context) {
-            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-            final boardFen = analysisState.position.fen;
-            pushPlatformRoute(
-              context,
-              title: context.l10n.boardEditor,
-              builder: (_) => BoardEditorScreen(initialFen: boardFen),
-            );
-          },
-        ),
+        // board editor can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.boardEditor),
+            onPressed: (context) {
+              final boardFen = analysisState.position.fen;
+              pushPlatformRoute(
+                context,
+                title: context.l10n.boardEditor,
+                builder: (_) => BoardEditorScreen(initialFen: boardFen),
+              );
+            },
+          ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
           onPressed: (_) {

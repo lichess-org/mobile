@@ -25,11 +25,11 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'broadcast_game_controller.freezed.dart';
-part 'broadcast_game_controller.g.dart';
+part 'broadcast_analysis_controller.freezed.dart';
+part 'broadcast_analysis_controller.g.dart';
 
 @riverpod
-class BroadcastGameController extends _$BroadcastGameController implements PgnTreeNotifier {
+class BroadcastAnalysisController extends _$BroadcastAnalysisController implements PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -48,10 +48,10 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
   Object? _key = Object();
 
   @override
-  Future<BroadcastGameState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
+  Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
     _socketClient = ref
         .watch(socketPoolProvider)
-        .open(BroadcastGameController.broadcastSocketUri(roundId));
+        .open(BroadcastAnalysisController.broadcastSocketUri(roundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
@@ -104,7 +104,7 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
-    final broadcastState = BroadcastGameState(
+    final broadcastState = BroadcastAnalysisState(
       id: gameId,
       currentPath: currentPath,
       broadcastPath: currentPath,
@@ -560,10 +560,10 @@ class BroadcastGameController extends _$BroadcastGameController implements PgnTr
 }
 
 @freezed
-class BroadcastGameState with _$BroadcastGameState {
-  const BroadcastGameState._();
+class BroadcastAnalysisState with _$BroadcastAnalysisState {
+  const BroadcastAnalysisState._();
 
-  const factory BroadcastGameState({
+  const factory BroadcastAnalysisState({
     /// Broadcast game ID
     required StringId id,
 

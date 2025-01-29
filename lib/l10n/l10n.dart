@@ -19,7 +19,6 @@ import 'l10n_da.dart';
 import 'l10n_de.dart';
 import 'l10n_el.dart';
 import 'l10n_en.dart';
-import 'l10n_eo.dart';
 import 'l10n_es.dart';
 import 'l10n_et.dart';
 import 'l10n_eu.dart';
@@ -159,7 +158,6 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('el'),
     Locale('en', 'US'),
-    Locale('eo'),
     Locale('es'),
     Locale('et'),
     Locale('eu'),
@@ -2603,6 +2601,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".'**
   String get puzzleThemeIntermezzoDescription;
+
+  /// No description provided for @puzzleThemeKillBoxMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill box mate'**
+  String get puzzleThemeKillBoxMate;
+
+  /// No description provided for @puzzleThemeKillBoxMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".'**
+  String get puzzleThemeKillBoxMateDescription;
 
   /// No description provided for @puzzleThemeKnightEndgame.
   ///
@@ -8004,17 +8014,35 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{{count} blunder} other{{count} blunders}}'**
   String nbBlunders(int count);
 
+  /// No description provided for @numberBlunders.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Blunder} other{{count} Blunders}}'**
+  String numberBlunders(int count);
+
   /// No description provided for @nbMistakes.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} mistake} other{{count} mistakes}}'**
   String nbMistakes(int count);
 
+  /// No description provided for @numberMistakes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Mistake} other{{count} Mistakes}}'**
+  String numberMistakes(int count);
+
   /// No description provided for @nbInaccuracies.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}'**
   String nbInaccuracies(int count);
+
+  /// No description provided for @numberInaccuracies.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} Inaccuracy} other{{count} Inaccuracies}}'**
+  String numberInaccuracies(int count);
 
   /// No description provided for @nbPlayers.
   ///
@@ -8807,6 +8835,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Playing'**
   String get studyPlaying;
+
+  /// No description provided for @studyShowResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get studyShowResults;
 
   /// No description provided for @studyShowEvalBar.
   ///
@@ -9616,7 +9650,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -9662,7 +9696,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'da': return AppLocalizationsDa();
     case 'de': return AppLocalizationsDe();
     case 'el': return AppLocalizationsEl();
-    case 'eo': return AppLocalizationsEo();
     case 'es': return AppLocalizationsEs();
     case 'et': return AppLocalizationsEt();
     case 'eu': return AppLocalizationsEu();

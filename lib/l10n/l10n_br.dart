@@ -1517,6 +1517,12 @@ class AppLocalizationsBr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Knight endgame';
 
   @override
@@ -4436,6 +4442,20 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count A vourdoù',
+      many: '$count Bourd',
+      few: '$count Bourd',
+      two: '$count Vourd',
+      one: '$count Bourd',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4450,6 +4470,20 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count A fAzioù',
+      many: '$count Fazi',
+      few: '$count Fazi',
+      two: '$count Fazi',
+      one: '$count Fazi',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4459,6 +4493,20 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count diresisted',
       two: '$count ziresisted',
       one: '$count diresisted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Diseristed',
+      many: '$count Diseristed',
+      few: '$count Diresisted',
+      two: '$count Ziresisted',
+      one: '$count Diresisted',
     );
     return '$_temp0';
   }
@@ -5289,6 +5337,9 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get studyPlaying => 'O c\'hoari';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

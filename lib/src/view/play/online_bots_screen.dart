@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -22,16 +23,9 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO(#796): remove when Leela featured bots special challenges are ready
-// https://github.com/lichess-org/mobile/issues/796
-const _disabledBots = {'leelaknightodds', 'leelaqueenodds', 'leelaqueenforknight', 'leelarookodds'};
-
 final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async {
   return ref.withClientCacheFor(
-    (client) => UserRepository(client).getOnlineBots().then(
-      (bots) =>
-          bots.whereNot((bot) => _disabledBots.contains(bot.id.value.toLowerCase())).toIList(),
-    ),
+    (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
     const Duration(hours: 5),
   );
 });
@@ -129,10 +123,15 @@ class _Body extends ConsumerWidget {
                     );
                     return;
                   }
+                  final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
                   pushPlatformRoute(
                     context,
                     title: context.l10n.challengeChallengesX(bot.lightUser.name),
-                    builder: (context) => CreateChallengeScreen(bot.lightUser),
+                    builder:
+                        (context) =>
+                            isOddBot
+                                ? ChallengeOddBotsScreen(bot.lightUser)
+                                : CreateChallengeScreen(bot.lightUser),
                   );
                 },
                 onLongPress: () {

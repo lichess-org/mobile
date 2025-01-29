@@ -82,20 +82,18 @@ class BoardCarouselItem extends ConsumerWidget {
                     },
                     child: SizedBox(
                       height: boardSize,
-                      child: Chessboard.fixed(
+                      child: StaticChessboard(
                         size: boardSize,
                         fen: fen,
                         orientation: orientation,
                         lastMove: lastMove,
-                        settings: ChessboardSettings(
-                          enableCoordinates: false,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                          ),
-                          pieceAssets: boardPrefs.pieceSet.assets,
-                          colorScheme: boardPrefs.boardTheme.colors,
+                        enableCoordinates: false,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
                         ),
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
                       ),
                     ),
                   ),

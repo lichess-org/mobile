@@ -50,6 +50,7 @@ enum PuzzleThemeKey {
   hookMate(PuzzleIcons.hookMate),
   interference(PuzzleIcons.interference),
   intermezzo(PuzzleIcons.intermezzo),
+  killBoxMate(PuzzleIcons.killBoxMate),
   kingsideAttack(PuzzleIcons.kingsideAttack),
   knightEndgame(PuzzleIcons.knightEndgame),
   long(PuzzleIcons.long),
@@ -237,6 +238,11 @@ enum PuzzleThemeKey {
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeIntermezzo,
           description: l10n.puzzleThemeIntermezzoDescription,
+        );
+      case PuzzleThemeKey.killBoxMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeKillBoxMate,
+          description: l10n.puzzleThemeKillBoxMateDescription,
         );
       case PuzzleThemeKey.kingsideAttack:
         return PuzzleThemeL10n(
@@ -475,6 +481,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
         PuzzleThemeKey.doubleBishopMate,
         PuzzleThemeKey.dovetailMate,
         PuzzleThemeKey.hookMate,
+        PuzzleThemeKey.killBoxMate,
         PuzzleThemeKey.smotheredMate,
       ],
     ),

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
@@ -71,7 +72,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -147,7 +148,7 @@ class ChallengeLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -176,13 +177,61 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardTable(
-      orientation: orientation ?? Side.white,
-      fen: fen ?? kEmptyFen,
-      lastMove: lastMove as NormalMove?,
-      topTable: const SizedBox.shrink(),
-      bottomTable: const SizedBox.shrink(),
-      showMoveListPlaceholder: true,
+    return Shimmer(
+      child: BoardTable(
+        orientation: orientation ?? Side.white,
+        fen: fen ?? kEmptyFen,
+        lastMove: lastMove as NormalMove?,
+        topTable: const LoadingPlayerWidget(),
+        bottomTable: const LoadingPlayerWidget(),
+        showMoveListPlaceholder: true,
+      ),
+    );
+  }
+}
+
+/// A widget that shows a loading indicator for a player.
+///
+/// Must be wrapped in a [Shimmer] widget.
+class LoadingPlayerWidget extends StatelessWidget {
+  const LoadingPlayerWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerLoading(
+      isLoading: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 6,
+            child: SizedBox(
+              height: 24.0,
+              width: double.infinity,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ),
+          const Spacer(),
+          Flexible(
+            flex: 2,
+            child: SizedBox(
+              height: 38.0,
+              width: double.infinity,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -209,7 +258,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -290,7 +339,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),

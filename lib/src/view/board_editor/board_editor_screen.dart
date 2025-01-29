@@ -280,7 +280,7 @@ class _BottomBar extends ConsumerWidget {
     final editorState = ref.watch(boardEditorControllerProvider(initialFen));
     final pieceCount = editorState.pieces.length;
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
           label: context.l10n.menu,

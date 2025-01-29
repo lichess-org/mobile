@@ -737,7 +737,7 @@ class _EloChartState extends State<_EloChart> {
 
     Widget leftTitlesWidget(double value, TitleMeta meta) {
       return SideTitleWidget(
-        axisSide: meta.axisSide,
+        meta: meta,
         child: Text(
           value.toInt().toString(),
           style: const TextStyle(color: Colors.grey, fontSize: 10),
@@ -749,7 +749,7 @@ class _EloChartState extends State<_EloChart> {
       if (value == _minX || value == _maxX) return const SizedBox.shrink();
 
       return SideTitleWidget(
-        axisSide: meta.axisSide,
+        meta: meta,
         child: Text(
           formatDateFromTimestamp(value),
           style: const TextStyle(color: Colors.grey, fontSize: 10),

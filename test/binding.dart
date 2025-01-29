@@ -235,6 +235,7 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     timeSensitive: AppleNotificationSetting.disabled,
     criticalAlert: AppleNotificationSetting.disabled,
     sound: AppleNotificationSetting.disabled,
+    providesAppNotificationSettings: AppleNotificationSetting.disabled,
   );
 
   @override
@@ -246,6 +247,7 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     bool criticalAlert = false,
     bool provisional = false,
     bool sound = true,
+    bool providesAppNotificationSettings = false,
   }) async {
     _requestPermissionCalls.add((
       alert: alert,
@@ -271,6 +273,10 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
       criticalAlert:
           criticalAlert ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
       sound: sound ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      providesAppNotificationSettings:
+          providesAppNotificationSettings
+              ? AppleNotificationSetting.enabled
+              : AppleNotificationSetting.disabled,
     );
   }
 

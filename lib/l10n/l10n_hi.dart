@@ -12,33 +12,33 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileAllGames => 'सारे गेम्स';
 
   @override
-  String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
+  String get mobileAreYouSure => 'पक्का?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
+  String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
 
   @override
-  String get mobileClearButton => 'सब हटाएँ';
+  String get mobileClearButton => 'सब हटाएं';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'सहेजी गयी चाल हटाएं';
+  String get mobileCorrespondenceClearSavedMove => 'सेव की गई चाल हटाएं';
 
   @override
-  String get mobileCustomGameJoinAGame => 'खेल में शामिल हों';
+  String get mobileCustomGameJoinAGame => 'गेम जॉइन करें';
 
   @override
   String get mobileFeedbackButton => 'फीडबैक';
 
   @override
   String mobileGreeting(String param) {
-    return 'नमस्कार, $param';
+    return 'हैलो, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'नमस्कार';
+  String get mobileGreetingWithoutName => 'हैलो';
 
   @override
-  String get mobileHideVariation => 'वेरिएशन छुपाए';
+  String get mobileHideVariation => 'वेरिएशन छुपाएं';
 
   @override
   String get mobileHomeTab => 'होम';
@@ -47,99 +47,99 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
 
   @override
-  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको login करना होगा';
+  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको लॉगिन करना होगा।';
 
   @override
-  String get mobileNoSearchResults => 'कोई परिणाम नहीं';
+  String get mobileNoSearchResults => 'कोई रिजल्ट नहीं मिला';
 
   @override
-  String get mobileNotFollowingAnyUser => 'आप किसी यूसर को फ़ाॅलो नहीं करते';
+  String get mobileNotFollowingAnyUser => 'आप किसी यूजर को फॉलो नहीं कर रहे।';
 
   @override
-  String get mobileOkButton => 'ओके';
+  String get mobileOkButton => 'ठीक है';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'खिलाड़ी जिनके नाम हैं \"$param\"';
+    return '\"$param\" नाम वाले खिलाड़ी';
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'चले गये मोहरे को बड़ा करें';
+  String get mobilePrefMagnifyDraggedPiece => 'घसीटते वक्त पीस बड़ा दिखाएं';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'क्या आप इस रन को खत्म करना चाहते है?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'दिखाने के लिए कुछ नहीं है, प्लीज फिल्टर बदलें';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'दिखाने के लिए कुछ नहीं है। पजल स्टॉर्म के कुछ रन खेलें।';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => '3 मिनट में ज्यादा से ज्यादा पजल सॉल्व करें।';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'आप अपनी ये स्ट्रीक खो देंगे और आपका स्कोर सेव कर दिया जाएगा।';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'अपने मनपसंद ओपनिंग्स से पजल सॉल्व करें, या एक थीम चुनें।';
 
   @override
-  String get mobilePuzzlesTab => 'पज़ल';
+  String get mobilePuzzlesTab => 'पजल';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'हाल के सर्च';
 
   @override
-  String get mobileSettingsHapticFeedback => 'कंपन फीडबैक';
+  String get mobileSettingsHapticFeedback => 'हैप्टिक फीडबैक';
 
   @override
   String get mobileSettingsImmersiveMode => 'इमर्सिव मोड';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'खेलते वक्त सिस्टम यूआई छुपा दें। अगर आप स्क्रीन के किनारे के सिस्टम नेविगेशन जेस्चर्स से तंग होते है तो इसका इस्तेमाल करें। गेम और पजल स्टॉर्म के स्क्रीन्स पे अप्लाए होगा।';
 
   @override
   String get mobileSettingsTab => 'सेटिंग';
 
   @override
-  String get mobileShareGamePGN => 'PGN शेयर करें';
+  String get mobileShareGamePGN => 'पीजीएन शेयर करें';
 
   @override
-  String get mobileShareGameURL => 'गेम URL शेयर करें';
+  String get mobileShareGameURL => 'गेम यूआरएल शेयर करें';
 
   @override
-  String get mobileSharePositionAsFEN => 'पोजीशन FEN के रूप में शेयर करें';
+  String get mobileSharePositionAsFEN => 'पोजीशन एफईएन के तरह शेयर करें';
 
   @override
-  String get mobileSharePuzzle => 'पज़ल शरीर करें';
+  String get mobileSharePuzzle => 'ये पजल शेयर करें';
 
   @override
   String get mobileShowComments => 'कमेंट्स देखें';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'रिजल्ट दिखाएं';
 
   @override
-  String get mobileShowVariations => 'श्राे वेरिएशन देखें';
+  String get mobileShowVariations => 'वेरिएशन देखें';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'कुछ गड़बड़ हो गई।';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'सिस्टम कलर्स';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'थीम';
 
   @override
   String get mobileToolsTab => 'टूल्स';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'ऑप्पोनेंट का इंतजार कर रहे है...';
 
   @override
-  String get mobileWatchTab => 'देखें';
+  String get mobileWatchTab => 'टीवी';
 
   @override
   String get activityActivity => 'कार्यकलाप';
@@ -1463,6 +1463,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'अपेक्षित चाल चलने के बजाय, पहले एक और कदम उठाएँ, जिससे तत्काल खतरे की आशंका पैदा हो जाए। इसे \"ज़्विसचेंज़ुग\" या \"इन बीच\" के रूप में भी जाना जाता है।';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'नाइट एंडगेम';
 
   @override
@@ -1895,7 +1901,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get deleteFromHere => 'यहां से हटाओ';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'विविधताओं को मिटाये';
 
   @override
   String get expandVariations => 'Expand variations';
@@ -4373,6 +4379,17 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count गंभीर गल्तियां',
+      one: '$count गंभीर गलती',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4384,7 +4401,29 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count गलतियाँ',
+      one: '$count ग़लती',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अशुद्धियाँ',
+      one: '$count अशुद्धि',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5109,6 +5148,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyPlaying => 'वर्तमान खेल';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';
