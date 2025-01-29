@@ -378,11 +378,7 @@ class _BroadcastCardContent extends StatelessWidget {
       }
     }
 
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
-    final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
+    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
@@ -730,11 +726,7 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
-    final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
+    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
     final screenWidth = MediaQuery.sizeOf(context).width;
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
