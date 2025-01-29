@@ -1,7 +1,7 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -13,33 +13,25 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-/// A widget that show a list of recent games for a given player or the current user.
+/// A widget that show a list of recent games.
 ///
-/// If [user] is not provided, the current logged in user's recent games are displayed.
-/// If the current user is not logged in, or there is no connectivity, the stored recent games are displayed instead.
+/// The [user] should be provided only if the games are for a specific user. If the
+/// games are for the current logged in user, the [user] should be null.
 class RecentGamesWidget extends ConsumerWidget {
-  const RecentGamesWidget({this.user, super.key});
+  const RecentGamesWidget({
+    required this.recentGames,
+    required this.user,
+    required this.nbOfGames,
+    super.key,
+  });
 
   final LightUser? user;
+  final AsyncValue<IList<LightArchivedGameWithPov>> recentGames;
+  final int nbOfGames;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
-    final userId = user?.id ?? session?.user.id;
-
-    final recentGames =
-        user != null
-            ? ref.watch(userRecentGamesProvider(userId: user!.id))
-            : ref.watch(myRecentGamesProvider);
-
-    final nbOfGames =
-        ref
-            .watch(
-              userNumberOfGamesProvider(user, isOnline: connectivity.valueOrNull?.isOnline == true),
-            )
-            .valueOrNull ??
-        0;
 
     return recentGames.when(
       data: (data) {
@@ -67,7 +59,7 @@ class RecentGamesWidget extends ConsumerWidget {
                   : null,
           children:
               data.map((item) {
-                return ExtendedGameListTile(item: item, userId: userId);
+                return ExtendedGameListTile(item: item);
               }).toList(),
         );
       },

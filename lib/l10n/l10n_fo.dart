@@ -1463,6 +1463,12 @@ class AppLocalizationsFo extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Ístaðin fyri at leika tann væntaða leikin, skalt tú leika ein annan leik, ið er ein hóttandi vandi, ið mótleikarin má varða seg ímóti her og nú. Leikurin er eisini kendur sum \"Zwischenzug\" ella \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Riddaraendatalv';
 
   @override
@@ -4373,6 +4379,17 @@ class AppLocalizationsFo extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Bukkar',
+      one: '$count Bukkur',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4384,12 +4401,34 @@ class AppLocalizationsFo extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Mistøk',
+      one: '$count Mistak',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count óneyvleikar',
       one: '$count óneyvleiki',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Óneyvleikar',
+      one: '$count Óneyvleiki',
     );
     return '$_temp0';
   }
@@ -5109,6 +5148,9 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Í gongd';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

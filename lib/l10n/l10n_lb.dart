@@ -1465,6 +1465,12 @@ class AppLocalizationsLb extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Amplaz den erwaardenen Zuch ze spillen, spill als éischt en Zuch deen eng direkt Bedroung poséiert, op deen de Géigner äntweren muss.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Sprénger Endspill';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsLb extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Gaffen',
+      one: '$count Gaffe',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsLb extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Feeler',
+      one: '$count Feeler',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ongenauegkeeten',
+      one: '$count Ongenauegkeet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5111,6 +5150,9 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Lafend Partie';
+
+  @override
+  String get studyShowResults => 'Resultater';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

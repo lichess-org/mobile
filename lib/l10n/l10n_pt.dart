@@ -1465,6 +1465,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Em vez de jogares o movimento esperado, primeiro interpõe outro movimento colocando uma ameaça imediata à qual o oponente deve responder. Também conhecido como \"Zwischenzug\" ou jogada intermédia.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Uma torre está ao lado do rei inimigo apoiada por uma dama que também bloqueia as casas de fuga do rei. A torre e a dama apanham o rei inimigo numa “caixa de morte” de 3 por 3.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de cavalo';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erros graves',
+      one: '$count Erro grave',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erros',
+      one: '$count Erro',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprecisões',
       one: '$count imprecisão',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprecisões',
+      one: '$count Imprecisão',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyPlaying => 'A ser jogado';
+
+  @override
+  String get studyShowResults => 'Resultados';
 
   @override
   String get studyShowEvalBar => 'Barras de avaliação';
@@ -7137,6 +7179,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Em vez de jogar o movimento esperado, primeiro realiza outro movimento criando uma ameaça imediata a que o oponente deve responder. Também conhecido como \"Zwischenzug\" ou \"In between\".';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Mate de torre e dama';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Uma torre fica perto do rei inimigo e é defendida por uma dama que também bloqueia as casas de fuga. A torre e a dama capturam o rei inimigo em uma \"caixa mortal\" de 3 por 3.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Finais de Cavalo';
@@ -10049,6 +10097,17 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Capivaradas',
+      one: '$count Capivarada',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -10060,12 +10119,34 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erros',
+      one: '$count Erro',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprecisões',
       one: '$count imprecisão',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprecisões',
+      one: '$count Imprecisão',
     );
     return '$_temp0';
   }
@@ -10785,6 +10866,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyPlaying => 'Jogando';
+
+  @override
+  String get studyShowResults => 'Resultados';
 
   @override
   String get studyShowEvalBar => 'Barras de avaliação';

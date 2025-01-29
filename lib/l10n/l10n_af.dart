@@ -73,19 +73,19 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Niks om te wys nie; verander asb. die filters';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Niks om te vertoon nie. Speel \'n paar keer Raaisels Storm.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Los soveel kopkrappers moontlik op in 3 minute.';
+  String get mobilePuzzleStormSubtitle => 'Los soveel raaisels moontlik op in 3 minute.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Jy gaan you huidige reeks verloor en jou telling sal gestoor word.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Doen kopkrappers van jou gunstelingopenings, of kies \'n tema.';
+  String get mobilePuzzleThemesSubtitle => 'Doen raaisels van jou gunstelingopenings, of kies \'n tema.';
 
   @override
-  String get mobilePuzzlesTab => 'Kopkrappers';
+  String get mobilePuzzlesTab => 'Raaisels';
 
   @override
   String get mobileRecentSearches => 'Onlangse soektogte';
@@ -97,7 +97,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Volskermmodus';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Versteek sisteem gebruikers intervlak tydens spel. Gebruik dié as die navigasie sleutels op die rande van die skerm jou steur. Word op spel end Raaisel Storm skerms toegepas.';
 
   @override
   String get mobileSettingsTab => 'Instellings';
@@ -112,7 +112,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileSharePositionAsFEN => 'Deel posisie as FEN';
 
   @override
-  String get mobileSharePuzzle => 'Deel hierdie kopkrapper';
+  String get mobileSharePuzzle => 'Deel hierdie raaisel';
 
   @override
   String get mobileShowComments => 'Wys kommentaar';
@@ -182,7 +182,7 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Het $count taktiese kopkrappers opgelos',
+      other: '$count oefen raaisels opgelos',
       one: 'Het $count taktiese kopkrapper opgelos',
     );
     return '$_temp0';
@@ -1015,10 +1015,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzlePuzzles => 'Raaisels';
 
   @override
-  String get puzzlePuzzleThemes => 'Raaisel temas';
+  String get puzzlePuzzleThemes => 'Raaisel Temas';
 
   @override
-  String get puzzleRecommended => 'Aanbeveeldede';
+  String get puzzleRecommended => 'Aanbeveelde';
 
   @override
   String get puzzlePhases => 'Fases';
@@ -1162,10 +1162,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleNextPuzzle => 'Volgende raaisel';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Spring onmiddellik na die volgende kopkrapper';
+  String get puzzleJumpToNextPuzzleImmediately => 'Spring onmiddellik na die volgende raaisel';
 
   @override
-  String get puzzlePuzzleDashboard => 'Kopkrapper paneelbord';
+  String get puzzlePuzzleDashboard => 'Raaisel Paneelbord';
 
   @override
   String get puzzleImprovementAreas => 'Areas van verbetering';
@@ -1174,7 +1174,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleStrengths => 'Sterkpunte';
 
   @override
-  String get puzzleHistory => 'Kopkrapper geskiedenis';
+  String get puzzleHistory => 'Raaisel geskiedenis';
 
   @override
   String get puzzleSolved => 'opgelos';
@@ -1465,6 +1465,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'In plaas daarvan om die verwagte skuif te speel, moet u eers \'n ander stap inbring wat \'n onmiddellike bedreiging inhou wat die opponent moet beantwoord. Ook bekend as \"Zwischenzug\" of \"Tussenin\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ridder eindspel';
 
   @override
@@ -1480,13 +1486,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeMaster => 'Meester spelle';
 
   @override
-  String get puzzleThemeMasterDescription => 'Kopkrappers uit spelle van getitelde spelers.';
+  String get puzzleThemeMasterDescription => 'Raaisels uit spelle van getitelde spelers.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Meester vs Meester spelle';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'Kopkrappers uit spelle tussen twee getitelde spelers.';
+  String get puzzleThemeMasterVsMasterDescription => 'Raaisels uit spelle tussen twee getitelde spelers.';
 
   @override
   String get puzzleThemeMate => 'Mat';
@@ -1618,7 +1624,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeSuperGM => 'Super GM spelle';
 
   @override
-  String get puzzleThemeSuperGMDescription => 'Kopkrappers uit spelle tussen die beste spelers in die wêreld.';
+  String get puzzleThemeSuperGMDescription => 'Raaisels uit spelle tussen die beste spelers in die wêreld.';
 
   @override
   String get puzzleThemeTrappedPiece => 'Vasgevang stuk';
@@ -1660,7 +1666,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemePlayerGames => 'Speler se spelle';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Beloer kopkrappers wat ontstaan van jou spelle, of van ander se spelle af.';
+  String get puzzleThemePlayerGamesDescription => 'Beloer raaisels wat ontstaan van jou spelle, of van ander se spelle af.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2319,7 +2325,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get gamesPlayed => 'Spelle gespeel';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Regso';
 
   @override
   String get cancel => 'Kanseleer';
@@ -2946,7 +2952,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzles => 'Kopkrappers';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Aanlyn robotte';
 
   @override
   String get name => 'Naam';
@@ -2970,7 +2976,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get website => 'Webtuiste';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobiele';
 
   @override
   String get help => 'Help:';
@@ -3027,7 +3033,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get other => 'Ander';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Kopieer die skakel na die relevante spel(le) en verduidelik wat fout is met die speler se gedrag. Moenie net sê \"hulle kroek\" nie, verduidelik hoe jy die gevolgtrekking gekom bereik het. Jou antwoord sal vinniger geantwoord word as dit in Engels geskryf is.';
 
   @override
   String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
@@ -4040,7 +4046,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get correspondenceDesc => 'Korrespondensie spelle: een of meer dae per skuif';
 
   @override
-  String get puzzleDesc => 'Skaak kopkrapper instrukteur';
+  String get puzzleDesc => 'Skaak raaisel instrukteur';
 
   @override
   String get important => 'Tshivenda';
@@ -4375,6 +4381,17 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Flaters',
+      one: '$count Flaters',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Foute',
+      one: '$count Fout',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count onakuraathede',
       one: '$count onakuraatheid',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Onakkuraathede',
+      one: '$count Onakkuraatheid',
     );
     return '$_temp0';
   }
@@ -4489,7 +4528,7 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count kopkrappers',
+      other: '$count raaisels',
       one: '$count kopkrapper',
     );
     return '$_temp0';
@@ -5111,6 +5150,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Besig om te speel';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

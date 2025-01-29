@@ -1441,6 +1441,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
+
+  @override
   String get puzzleThemeKnightEndgame => '나이트 엔딩';
 
   @override
@@ -1671,22 +1677,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsThisAccountIsClosed => '계정이 폐쇄되었습니다.';
 
   @override
-  String get playWithAFriend => '친구와 게임하기';
+  String get playWithAFriend => '친구와 체스 두기';
 
   @override
-  String get playWithTheMachine => '체스 엔진과 붙기';
+  String get playWithTheMachine => '컴퓨터와 체스 두기';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '이 URL로 친구를 초대하세요';
 
   @override
-  String get gameOver => '게임 오버';
+  String get gameOver => '대국 종료';
 
   @override
   String get waitingForOpponent => '상대를 기다리는 중';
 
   @override
-  String get orLetYourOpponentScanQrCode => '또는 상대방에게 이 QR 코드를 스캔하게 하세요';
+  String get orLetYourOpponentScanQrCode => '상대방에게 이 QR 코드를 스캔하라고 하셔도 됩니다.';
 
   @override
   String get waiting => '기다리는 중';
@@ -1712,7 +1718,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chat => '채팅';
 
   @override
-  String get resign => '기권';
+  String get resign => '기권하기';
 
   @override
   String get checkmate => '체크메이트';
@@ -1736,7 +1742,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get randomColor => '무작위';
 
   @override
-  String get createAGame => '새 게임 만들기';
+  String get createAGame => '새로운 대국 만들기';
 
   @override
   String get whiteIsVictorious => '백 승리';
@@ -1757,7 +1763,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cheatDetected => '부정행위 감지됨';
 
   @override
-  String get kingInTheCenter => '킹이 중앙에 도달함';
+  String get kingInTheCenter => '킹이 중앙에 도달';
 
   @override
   String get threeChecks => '세 번의 체크';
@@ -1766,10 +1772,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get raceFinished => '킹이 보드 끝에 도달함';
 
   @override
-  String get variantEnding => '변형 게임 엔딩';
+  String get variantEnding => '변형 체스 규칙으로 종료';
 
   @override
-  String get newOpponent => '새 상대';
+  String get newOpponent => '새로운 상대';
 
   @override
   String get yourOpponentWantsToPlayANewGameWithYou => '상대가 재대결을 원합니다';
@@ -1949,7 +1955,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get maxDepthReached => '최대 깊이 도달!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => '설정에서 더 많은 게임을 포함하세요.';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => '설정에서 더 많은 대국을 포함하세요.';
 
   @override
   String get openings => '오프닝';
@@ -2065,7 +2071,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get fiftyMovesWithoutProgress => '진전 없이 50수 소모';
 
   @override
-  String get currentGames => '진행 중인 게임들';
+  String get currentGames => '진행 중인 대국들';
 
   @override
   String get viewInFullSize => '크게 보기';
@@ -2086,10 +2092,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get signUp => '회원 가입';
 
   @override
-  String get computersAreNotAllowedToPlay => '컴퓨터나 컴퓨터 지원을 받는 플레이어들은 게임 참가가 금지되어 있습니다. 게임 중 체스 엔진이나, 데이터베이스나, 주변 플레이어들로부터 도움을 받지 마십시오. 이와 더불어 다중 계정 소유는 권장하지 않으며 지나치게 많은 계정들을 사용할 시 계정들이 차단될 수 있습니다.';
+  String get computersAreNotAllowedToPlay => '컴퓨터나 컴퓨터를 사용하는 플레이어들은 대국이 금지되어 있습니다. 대국 중 체스 엔진이나, 데이터베이스나, 다른 사람들로부터 도움을 받지 마십시오. 이와 더불어 다중 계정 소유는 최대한 사용을 지양하여 주시고 지나치게 많은 계정들을 사용할 시 계정들이 차단될 수 있습니다.';
 
   @override
-  String get games => '게임';
+  String get games => '대국';
 
   @override
   String get forum => '포럼';
@@ -2292,7 +2298,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get gamesPlayed => '게임';
+  String get gamesPlayed => '대국 횟수';
 
   @override
   String get ok => '확인';
@@ -2346,10 +2352,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get finished => '종료됨';
 
   @override
-  String get abortGame => '게임 중단';
+  String get abortGame => '대국 취소';
 
   @override
-  String get gameAborted => '게임 중단됨';
+  String get gameAborted => '대국 취소됨';
 
   @override
   String get standard => '스탠다드';
@@ -2436,7 +2442,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get freeOnlineChess => '무료 온라인 체스';
 
   @override
-  String get exportGames => '게임 내보내기';
+  String get exportGames => '대국 저장하기';
 
   @override
   String get ratingRange => '레이팅 범위';
@@ -2469,7 +2475,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get yourOpponentProposesATakeback => '상대가 무르기를 요청합니다';
 
   @override
-  String get bookmarkThisGame => '이 게임을 즐겨찾기에 추가하기';
+  String get bookmarkThisGame => '이 대국을 즐겨찾기에 추가하기';
 
   @override
   String get tournament => '토너먼트';
@@ -2533,10 +2539,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get backToGame => '게임으로 돌아가기';
+  String get backToGame => '대국으로 돌아가기';
 
   @override
-  String get siteDescription => '회원가입, 광고, 플러그인 없이 즐길 수 있는 깔끔한 구성의 무료 온라인 체스 게임입니다. 컴퓨터, 친구 또는 무작위로 고른 상대와 함께 체스를 즐겨보세요.';
+  String get siteDescription => '회원 가입, 광고, 플러그인 없이 즐길 수 있는 깔끔한 구성의 무료 온라인 체스 게임입니다. 컴퓨터, 친구 또는 무작위로 고른 상대와 함께 체스를 즐겨보세요.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -2602,16 +2608,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get toStudy => '연구';
 
   @override
-  String get importGame => '게임 불러오기';
+  String get importGame => '대국 불러오기';
 
   @override
-  String get importGameExplanation => '게임의 PGN 을 붙여넣으면, 브라우저에서의 리플레이, 컴퓨터 해석, 게임챗, 공유가능 URL을 얻습니다.';
+  String get importGameExplanation => '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
 
   @override
   String get importGameCaveat => '변형은 지워집니다. 변형을 유지하려면 연구를 통해 PGN을 가져오세요.';
 
   @override
-  String get importGameDataPrivacyWarning => '이 PGN은 모두가 볼 수 있게 됩니다. 비공개로 게임을 불러오려면, 연구 기능을 이용하세요.';
+  String get importGameDataPrivacyWarning => '이 PGN은 모두가 볼 수 있게 됩니다. 비공개로 대국을 불러오려면, 연구 기능을 이용하세요.';
 
   @override
   String get thisIsAChessCaptcha => '자동 기입을 방지하기 위한 체스 퀴즈입니다.';
@@ -2907,13 +2913,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get activePlayers => '활동적인 플레이어';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => '조심하세요, 레이팅 게임이며 시간 제한이 없습니다!';
+  String get bewareTheGameIsRatedButHasNoClock => '주의하세요, 공식 대국이지만 시간 제한이 없습니다!';
 
   @override
   String get success => '성공!';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving => '수를 둔 다음에 자동으로 다음 게임에 이동';
+  String get automaticallyProceedToNextGameAfterMoving => '수를 둔 다음에 자동으로 다음 대국으로 이동';
 
   @override
   String get autoSwitch => '자동 전환';
@@ -3003,7 +3009,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get other => '기타';
 
   @override
-  String get reportCheatBoostHelp => '게임 URL 주소를 붙여넣으시고 해당 사용자가 무엇을 잘못했는지 설명해 주세요. 그냥 \"그들이 부정행위를 했어요\" 라고만 말하지 말고, 어떻게 당신이 이 결론에 도달하게 됐는지 알려주세요.';
+  String get reportCheatBoostHelp => '대국 URL 주소를 붙여넣으시고 해당 사용자가 무엇을 잘못했는지 설명해 주세요. 그냥 \"그들이 부정행위를 했어요\" 라고만 말하지 말고, 어떻게 당신이 이 결론에 도달하게 됐는지 알려주세요.';
 
   @override
   String get reportUsernameHelp => '왜 이 사용자의 이름이 불쾌한지 설명해주세요. 그저 \"불쾌해요/부적절해요\"라고만 말하지 마세요, 대신 왜 이런 결론에 도달했는지 말씀해 주세요. 단어가 난해하거나, 영어가 아니거나, 은어이거나, 문화적/역사적 배경이 있는 경우 특히 중요합니다.';
@@ -3012,7 +3018,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reportProcessedFasterInEnglish => '귀하의 신고가 영어로 적혀있을 경우 빠르게 처리될 것입니다.';
 
   @override
-  String get error_provideOneCheatedGameLink => '부정행위가 존재하는 게임의 링크를 적어도 하나는 적어주세요.';
+  String get error_provideOneCheatedGameLink => '부정행위가 존재하는 대국의 링크를 제공해주세요.';
 
   @override
   String by(String param) {
@@ -3115,7 +3121,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get allSquaresOfTheBoard => '보드의 모든 칸';
 
   @override
-  String get onSlowGames => '느린 게임에서만';
+  String get onSlowGames => '느린 대국에서만';
 
   @override
   String get always => '항상';
@@ -3159,7 +3165,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get allInformationIsPublicAndOptional => '모든 정보는 공개되며 선택 사항입니다.';
 
   @override
-  String get biographyDescription => '자신을 알려주세요. 왜 체스를 좋아하는지, 좋아하는 오프닝, 게임, 선수 등등...';
+  String get biographyDescription => '자신을 알려주세요. 왜 체스를 좋아하는지, 좋아하는 오프닝, 대국, 선수 등등...';
 
   @override
   String get listBlockedPlayers => '이 플레이어를 차단';
@@ -3365,7 +3371,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get create => '생성';
 
   @override
-  String get whenCreateSimul => '동시대국을 생성하면 한 번에 여러 명의 플레이어와 게임하게 됩니다.';
+  String get whenCreateSimul => '다면기를 생성하면 한 번에 여러 명의 플레이어와 게임하게 됩니다.';
 
   @override
   String get simulVariantsHint => '복수의 게임방식을 선택할 경우, 상대방 측에서 게임 방식을 선택하게 됩니다.';
@@ -4348,6 +4354,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 블런더',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4358,7 +4374,27 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 실수',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 부정확한 수',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -4392,7 +4428,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2게임간의 $count 레이팅',
+      other: '$count 점수 (대국 $param2 회)',
     );
     return '$_temp0';
   }
@@ -4472,7 +4508,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count번의 레이팅 게임',
+      other: '공식 대국 $count 회',
     );
     return '$_temp0';
   }
@@ -4512,7 +4548,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '플레이 중인 게임 $count개',
+      other: '현재 두고 있는 대국 $count개',
     );
     return '$_temp0';
   }
@@ -4582,7 +4618,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2 랭크 게임을 $count회 더 플레이해야합니다.',
+      other: '$param2 공식 대국을 $count회 더 두어야 합니다.',
     );
     return '$_temp0';
   }
@@ -4592,7 +4628,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '랭크 게임을 $count회 더 플레이하셔야 합니다.',
+      other: '공식 대국을 $count회 더 두어야 합니다.',
     );
     return '$_temp0';
   }
@@ -4602,7 +4638,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '불러온 게임 $count개',
+      other: '불러온 대국 $count개',
     );
     return '$_temp0';
   }
@@ -4652,7 +4688,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count개의 게임 플레이 중',
+      other: '$count개의 대국 진행 중',
     );
     return '$_temp0';
   }
@@ -5045,7 +5081,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyPlaying => '대국 중';
 
   @override
-  String get studyShowEvalBar => '평가 막대';
+  String get studyShowResults => '결과';
+
+  @override
+  String get studyShowEvalBar => '엔진 평가치';
 
   @override
   String get studyFirst => '처음';

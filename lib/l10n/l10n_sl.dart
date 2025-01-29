@@ -1513,6 +1513,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Namesto pričakovane poteze, vrinemo drugo potezo ki predstavlja takojšnjo grožnjo na katero mora nasprotnik odgovorit. Z drugim imenom tudi kot \"Zwischenzug\" ali medpoteza.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Končnica skakačev';
 
   @override
@@ -4429,6 +4435,19 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Napak',
+      few: '$count Napake',
+      two: '$count Napaki',
+      one: '$count Napaka',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,6 +4461,19 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Napakic',
+      few: '$count Napakice',
+      two: '$count Napakici',
+      one: '$count Napakica',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4450,6 +4482,19 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count nenatančnosti',
       two: '$count nenatančnosti',
       one: '$count nenatančnost',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Nenatančnosti',
+      few: '$count Nenatančnosti',
+      two: '$count Nenatančnosti',
+      one: '$count Nenatančnost',
     );
     return '$_temp0';
   }
@@ -5247,6 +5292,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyPlaying => 'V teku';
+
+  @override
+  String get studyShowResults => 'Rezultati';
 
   @override
   String get studyShowEvalBar => 'Ocenjevalne vrstice';

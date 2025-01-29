@@ -836,6 +836,8 @@
   "puzzleThemeInterferenceDescription": "Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.",
   "puzzleThemeIntermezzo": "Intermezzo",
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
+  "puzzleThemeKillBoxMate": "Kill box mate",
+  "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
   "puzzleThemeKnightEndgame": "Knight endgame",
   "puzzleThemeKnightEndgameDescription": "An endgame with only knights and pawns.",
   "puzzleThemeLong": "Long puzzle",
@@ -2504,6 +2506,14 @@
       }
     }
   },
+  "numberBlunders": "{count, plural, =1{{count} Blunder} other{{count} Blunders}}",
+  "@numberBlunders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nbMistakes": "{count, plural, =1{{count} mistake} other{{count} mistakes}}",
   "@nbMistakes": {
     "placeholders": {
@@ -2512,8 +2522,24 @@
       }
     }
   },
+  "numberMistakes": "{count, plural, =1{{count} Mistake} other{{count} Mistakes}}",
+  "@numberMistakes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nbInaccuracies": "{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}",
   "@nbInaccuracies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "numberInaccuracies": "{count, plural, =1{{count} Inaccuracy} other{{count} Inaccuracies}}",
+  "@numberInaccuracies": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -2968,6 +2994,7 @@
   "studyAllSyncMembersRemainOnTheSamePosition": "All SYNC members remain on the same position",
   "studyShareChanges": "Share changes with spectators and save them on the server",
   "studyPlaying": "Playing",
+  "studyShowResults": "Results",
   "studyShowEvalBar": "Evaluation bars",
   "studyFirst": "First",
   "studyPrevious": "Previous",
