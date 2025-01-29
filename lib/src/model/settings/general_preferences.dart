@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
   // ignore: avoid_public_notifier_properties
   @override

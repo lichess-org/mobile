@@ -6,7 +6,7 @@ part 'game_preferences.freezed.dart';
 part 'game_preferences.g.dart';
 
 /// Local game preferences, defined client-side only.
-@riverpod
+@Riverpod(keepAlive: true)
 class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePrefs> {
   // ignore: avoid_public_notifier_properties
   @override

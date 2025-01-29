@@ -10,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'opening_explorer_preferences.freezed.dart';
 part 'opening_explorer_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
   // ignore: avoid_public_notifier_properties

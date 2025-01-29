@@ -15,7 +15,7 @@ part 'board_preferences.g.dart';
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
-@riverpod
+@Riverpod(keepAlive: true)
 class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
