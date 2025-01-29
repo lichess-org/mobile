@@ -15,6 +15,7 @@ class BottomBarButton extends StatelessWidget {
     this.showLabel = false,
     this.showTooltip = true,
     this.blink = false,
+    this.invertBackground = false,
     this.tooltip,
     super.key,
   });
@@ -28,6 +29,7 @@ class BottomBarButton extends StatelessWidget {
   final bool showLabel;
   final bool showTooltip;
   final bool blink;
+  final bool invertBackground;
 
   /// In case we want to override the tooltip message. If null, the [label] will
   /// be used.
@@ -44,6 +46,43 @@ class BottomBarButton extends StatelessWidget {
             ? 11.0
             : Theme.of(context).textTheme.bodySmall?.fontSize;
 
+    final child = Opacity(
+      opacity: enabled ? 1.0 : 0.4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Badge(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
+            ),
+            isLabelVisible: badgeLabel != null,
+            label: (badgeLabel != null) ? Text(badgeLabel!) : null,
+            child:
+                blink
+                    ? _BlinkIcon(
+                      icon: icon,
+                      color:
+                          highlighted ? primary : Theme.of(context).iconTheme.color ?? Colors.black,
+                    )
+                    : Icon(icon, color: highlighted ? primary : null),
+          ),
+          if (showLabel)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                label,
+                style: TextStyle(fontSize: labelFontSize, color: highlighted ? primary : null),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+        ],
+      ),
+    );
+
     return Semantics(
       container: true,
       enabled: enabled,
@@ -57,46 +96,10 @@ class BottomBarButton extends StatelessWidget {
         child: AdaptiveInkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
-          child: Opacity(
-            opacity: enabled ? 1.0 : 0.4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (blink)
-                  _BlinkIcon(
-                    badgeLabel: badgeLabel,
-                    icon: icon,
-                    color:
-                        highlighted ? primary : Theme.of(context).iconTheme.color ?? Colors.black,
-                  )
-                else
-                  Badge(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    textStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    isLabelVisible: badgeLabel != null,
-                    label: (badgeLabel != null) ? Text(badgeLabel!) : null,
-                    child: Icon(icon, color: highlighted ? primary : null),
-                  ),
-                if (showLabel)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: labelFontSize,
-                        color: highlighted ? primary : null,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          child:
+              invertBackground
+                  ? _InvertBackground(color: primary.withValues(alpha: 0.2), child: child)
+                  : child,
         ),
       ),
     );
@@ -104,9 +107,8 @@ class BottomBarButton extends StatelessWidget {
 }
 
 class _BlinkIcon extends StatefulWidget {
-  const _BlinkIcon({this.badgeLabel, required this.icon, required this.color});
+  const _BlinkIcon({required this.icon, required this.color});
 
-  final String? badgeLabel;
   final IconData icon;
   final Color color;
 
@@ -146,18 +148,54 @@ class _BlinkIconState extends State<_BlinkIcon> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _colorAnimation,
-      builder: (context, child) {
-        return Badge(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          textStyle: TextStyle(
-            color: Theme.of(context).colorScheme.onSecondary,
-            fontWeight: FontWeight.bold,
-          ),
-          isLabelVisible: widget.badgeLabel != null,
-          label: widget.badgeLabel != null ? Text(widget.badgeLabel!) : null,
-          child: Icon(widget.icon, color: _colorAnimation.value ?? Colors.transparent),
-        );
-      },
+      builder: (_, __) => Icon(widget.icon, color: _colorAnimation.value ?? Colors.transparent),
+    );
+  }
+}
+
+class _InvertBackground extends StatefulWidget {
+  const _InvertBackground({required this.child, required this.color});
+
+  final Widget child;
+  final Color color;
+
+  @override
+  _InvertBackgroundState createState() => _InvertBackgroundState();
+}
+
+class _InvertBackgroundState extends State<_InvertBackground> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+
+    _colorAnimation = ColorTween(begin: Colors.transparent, end: widget.color).animate(_controller)
+      ..addStatusListener((status) {
+        if (_controller.status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (_controller.status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _colorAnimation,
+      builder: (_, __) => Container(color: _colorAnimation.value, child: widget.child),
     );
   }
 }
