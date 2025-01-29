@@ -178,7 +178,7 @@ class _BodyState extends ConsumerState<_Body> {
           slivers: [
             for (final section in sections)
               SliverMainAxisGroup(
-                key: ValueKey(section),
+                key: ValueKey(section.$1),
                 slivers: [
                   if (Theme.of(context).platform == TargetPlatform.iOS)
                     CupertinoSliverNavigationBar(
