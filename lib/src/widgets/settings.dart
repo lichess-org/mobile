@@ -271,10 +271,7 @@ class ChoicePicker<T> extends StatelessWidget {
             child: CupertinoListSection.insetGrouped(
               backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
               decoration: BoxDecoration(
-                color:
-                    theme.brightness == Brightness.light
-                        ? theme.colorScheme.surfaceContainerLowest
-                        : theme.colorScheme.surfaceContainer,
+                color: Styles.cardColor(context),
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),

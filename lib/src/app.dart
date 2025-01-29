@@ -130,7 +130,7 @@ class _AppState extends ConsumerState<Application> {
     final themeLight = FlexThemeData.light(
       colors: flexScheme.light,
       surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-      blendLevel: isIOS ? 10 : 8,
+      blendLevel: 10,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );

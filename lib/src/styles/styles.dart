@@ -51,6 +51,20 @@ abstract class Styles {
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
 
+  /// Retrieve the background color for the screens where we display a list of items.
+  static Color listingsScreenBackgroundColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? ColorScheme.of(context).surfaceContainerLowest
+          : ColorScheme.of(context).surfaceContainerLow;
+
+  static Color cardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    return brightness == Brightness.light
+        ? colorScheme.surfaceContainerLowest
+        : colorScheme.surfaceContainerLow;
+  }
+
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
@@ -160,12 +174,6 @@ abstract class Styles {
     ),
   );
 }
-
-/// Retrieve the background color for the screens where we display a list of items.
-Color? listingsScreenBackgroundColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-        ? ColorScheme.of(context).surfaceContainerLowest
-        : ColorScheme.of(context).surfaceContainerLow;
 
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>

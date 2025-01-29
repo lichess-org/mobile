@@ -69,7 +69,7 @@ class GameHistoryScreen extends ConsumerWidget {
     );
 
     return PlatformScaffold(
-      backgroundColor: listingsScreenBackgroundColor(context),
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: title, actions: [filterBtn]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
