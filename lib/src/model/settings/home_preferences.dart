@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_preferences.freezed.dart';
 part 'home_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePrefs> {
   // ignore: avoid_public_notifier_properties
   @override

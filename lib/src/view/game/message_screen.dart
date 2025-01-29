@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
@@ -49,7 +48,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
@@ -112,26 +111,12 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.primaryContainer
-              : CupertinoColors.systemGrey4.resolveFrom(context)
-          : you
-          ? Theme.of(context).colorScheme.primaryContainer
-          : brightness == Brightness.light
-          ? lighten(LichessColors.grey)
-          : darken(LichessColors.grey, 0.5);
+      you
+          ? Theme.of(context).colorScheme.secondary
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.onPrimaryContainer
-              : CupertinoColors.label.resolveFrom(context)
-          : you
-          ? Theme.of(context).colorScheme.onPrimaryContainer
-          : brightness == Brightness.light
-          ? Colors.black
-          : Colors.white;
+      you ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

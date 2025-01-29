@@ -16,6 +16,8 @@ class StatCard extends StatelessWidget {
     this.opacity,
     this.statFontSize,
     this.valueFontSize,
+    this.backgroundColor,
+    this.elevation = 0,
   });
 
   final String stat;
@@ -25,6 +27,8 @@ class StatCard extends StatelessWidget {
   final double? opacity;
   final double? statFontSize;
   final double? valueFontSize;
+  final Color? backgroundColor;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,8 @@ class StatCard extends StatelessWidget {
     return Padding(
       padding: padding ?? EdgeInsets.zero,
       child: PlatformCard(
+        elevation: elevation,
+        color: backgroundColor,
         margin: const EdgeInsets.symmetric(vertical: 6.0),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

@@ -7,16 +7,17 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -40,24 +41,28 @@ class OpeningExplorerScreen extends ConsumerWidget {
       _ => const CenterLoadingIndicator(),
     };
 
-    return PlatformWidget(
-      androidBuilder:
-          (_) => Scaffold(
-            body: body,
-            appBar: AppBar(
-              title: Text(context.l10n.openingExplorer),
-              bottom: _MoveList(options: options),
+    return BoardBackgroundThemeWidget(
+      child: PlatformWidget(
+        androidBuilder:
+            (_) => Scaffold(
+              body: body,
+              appBar: AppBar(
+                title: Text(context.l10n.openingExplorer),
+                bottom: _MoveList(options: options),
+              ),
             ),
-          ),
-      iosBuilder:
-          (_) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: Text(context.l10n.openingExplorer),
-              automaticBackgroundVisibility: false,
-              border: null,
+        iosBuilder:
+            (_) => CupertinoMaterialWrapper(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: Text(context.l10n.openingExplorer),
+                  automaticBackgroundVisibility: false,
+                  border: null,
+                ),
+                child: body,
+              ),
             ),
-            child: body,
-          ),
+      ),
     );
   }
 }
@@ -217,7 +222,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
           inlineDecoration:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? BoxDecoration(
-                    color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                    color: CupertinoTheme.of(context).barBackgroundColor,
                     border: const Border(bottom: BorderSide(color: Color(0x4D000000), width: 0.0)),
                   )
                   : null,
@@ -253,7 +258,7 @@ class _BottomBar extends ConsumerWidget {
     };
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: dbLabel,

@@ -180,12 +180,12 @@ class _SessionItem extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               isCurrent
-                  ? Colors.grey
+                  ? Colors.grey.harmonizeWith(colorScheme.primary)
                   : attempt != null
                   ? attempt!.win
                       ? good.harmonizeWith(colorScheme.primary)
                       : error.harmonizeWith(colorScheme.primary)
-                  : next,
+                  : next.harmonizeWith(colorScheme.primary),
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child:

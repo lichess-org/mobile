@@ -50,31 +50,23 @@ abstract class Styles {
       defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
-  static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xE6F9F9F9),
-    darkColor: Color.fromARGB(210, 36, 36, 38),
-  );
-  static const cupertinoTabletAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFF9F9F9),
-    darkColor: Color.fromARGB(255, 36, 36, 36),
-  );
-  static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 23, 23, 23),
-  );
+
+  /// Retrieve the background color for the screens where we display a list of items.
+  static Color listingsScreenBackgroundColor(BuildContext context) =>
+      ColorScheme.of(context).surfaceContainerLowest;
+
+  static Color cardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    return brightness == Brightness.light
+        ? colorScheme.surfaceContainerLowest
+        : colorScheme.surfaceContainerLow;
+  }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
-  static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFF000000),
-    darkColor: _cupertinoDarkLabelColor,
-  );
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
-  );
-  static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFFFFFFF),
-    darkColor: Color.fromARGB(255, 44, 44, 46),
   );
   static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
     debugLabel: 'separator',
@@ -179,11 +171,6 @@ abstract class Styles {
       decoration: TextDecoration.none,
     ),
   );
-
-  // from:
-  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
-  static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
-      CupertinoDynamicColor.withBrightness(color: Color(0x4D000000), darkColor: Color(0x29000000));
 }
 
 /// Retrieve the default text color and apply an opacity to it.

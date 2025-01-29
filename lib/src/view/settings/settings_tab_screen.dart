@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart' show getCorePalette;
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -19,8 +20,8 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/theme_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -111,7 +112,6 @@ class _Body extends ConsumerWidget {
       ListSection(
         header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
         hasLeading: true,
-        showDivider: true,
         children: [
           if (userSession != null) ...[
             PlatformListTile(
@@ -179,7 +179,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           SettingsListTile(
             icon: const Icon(Icons.music_note_outlined),
@@ -227,7 +226,11 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(context, title: 'Theme', builder: (context) => const ThemeScreen());
+              pushPlatformRoute(
+                context,
+                title: context.l10n.mobileTheme,
+                builder: (context) => const BoardThemeScreen(),
+              );
             },
           ),
           PlatformListTile(
@@ -267,11 +270,19 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
+          if (getCorePalette() != null)
+            SwitchSettingTile(
+              leading: const Icon(Icons.colorize_outlined),
+              title: Text(context.l10n.mobileSystemColors),
+              value: generalPrefs.systemColors,
+              onChanged: (value) {
+                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+              },
+            ),
         ],
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.info_outlined),
@@ -309,7 +320,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.code_outlined),
@@ -339,7 +349,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.storage_outlined),

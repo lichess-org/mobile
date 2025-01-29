@@ -972,12 +972,7 @@ class InlineMove extends ConsumerWidget {
   BoxDecoration? _boxDecoration(BuildContext context, bool isCurrentMove, bool isLiveMove) {
     return (isCurrentMove || isLiveMove)
         ? BoxDecoration(
-          color:
-              isCurrentMove
-                  ? Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoColors.systemGrey3.resolveFrom(context)
-                      : Theme.of(context).focusColor
-                  : null,
+          color: isCurrentMove ? Theme.of(context).focusColor : null,
           shape: BoxShape.rectangle,
           borderRadius: borderRadius,
           border: isLiveMove ? Border.all(width: 2, color: Colors.orange) : null,

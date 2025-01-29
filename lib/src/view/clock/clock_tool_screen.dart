@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
@@ -78,21 +77,21 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final activeColor = colorScheme.primaryFixedDim;
+    final activeTextColor = colorScheme.onPrimaryFixed;
+    final pausedColor = activeColor.withValues(alpha: 0.5);
     final backgroundColor =
         clockState.isFlagged(playerType)
-            ? context.lichessColors.error
+            ? colorScheme.error
             : !clockState.paused && clockState.isPlayersTurn(playerType)
-            ? colorScheme.primary
+            ? activeColor
             : clockState.activeSide == playerType
-            ? colorScheme.secondaryContainer
-            : colorScheme.surfaceContainer;
+            ? pausedColor
+            : colorScheme.surface;
 
     final clockStyle = ClockStyle(
-      textColor:
-          clockState.activeSide == playerType
-              ? colorScheme.onSecondaryContainer
-              : colorScheme.onSurface,
-      activeTextColor: colorScheme.onPrimary,
+      textColor: clockState.activeSide == playerType ? activeTextColor : colorScheme.onSurface,
+      activeTextColor: activeTextColor,
       emergencyTextColor: Colors.white,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,
