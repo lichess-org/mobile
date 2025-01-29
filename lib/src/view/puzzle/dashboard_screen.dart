@@ -76,6 +76,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                   context.l10n.performance,
                   value: dashboard.global.performance.toString(),
                   backgroundColor: cardColor,
+                  elevation: 0,
                 ),
                 StatCard(
                   context.l10n
@@ -85,18 +86,17 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       .capitalize(),
                   value: dashboard.global.nb.toString().localizeNumbers(),
                   backgroundColor: cardColor,
+                  elevation: 0,
                 ),
                 StatCard(
                   context.l10n.puzzleSolved.capitalize(),
                   value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
                   backgroundColor: cardColor,
+                  elevation: 0,
                 ),
               ]),
             ),
-            if (chartData.length >= 3)
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? PuzzleChart(chartData)
-                  : Card(margin: Styles.horizontalBodyPadding, child: PuzzleChart(chartData)),
+            if (chartData.length >= 3) PuzzleChart(chartData),
           ],
         );
       },

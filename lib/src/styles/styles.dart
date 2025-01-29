@@ -161,6 +161,12 @@ abstract class Styles {
   );
 }
 
+/// Retrieve the background color for the screens where we display a list of items.
+Color? listingsScreenBackgroundColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+        ? ColorScheme.of(context).surfaceContainerLowest
+        : ColorScheme.of(context).surfaceContainerLow;
+
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>
     DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);

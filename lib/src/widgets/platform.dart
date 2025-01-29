@@ -97,11 +97,9 @@ class PlatformCard extends StatelessWidget {
                 : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
         color:
             color ??
-            (platform == TargetPlatform.iOS
-                ? brightness == Brightness.light
-                    ? colorScheme.surfaceContainerLowest
-                    : colorScheme.surfaceContainer
-                : null),
+            (brightness == Brightness.light
+                ? colorScheme.surfaceContainerLowest
+                : colorScheme.surfaceContainer),
         shadowColor: shadowColor,
         semanticContainer: semanticContainer,
         elevation: elevation ?? (platform == TargetPlatform.iOS ? 0 : null),

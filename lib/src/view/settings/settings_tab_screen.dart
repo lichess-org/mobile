@@ -112,7 +112,6 @@ class _Body extends ConsumerWidget {
       ListSection(
         header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
         hasLeading: true,
-        showDivider: true,
         children: [
           if (userSession != null) ...[
             PlatformListTile(
@@ -180,7 +179,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           SettingsListTile(
             icon: const Icon(Icons.music_note_outlined),
@@ -285,7 +283,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.info_outlined),
@@ -323,7 +320,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.code_outlined),

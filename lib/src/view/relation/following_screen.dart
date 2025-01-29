@@ -31,6 +31,7 @@ class FollowingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      backgroundColor: listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: Text(context.l10n.friends)),
       body: const _Body(),
     );
@@ -62,7 +63,9 @@ class _Body extends ConsumerWidget {
                   itemCount: following.length,
                   separatorBuilder:
                       (context, index) =>
-                          const PlatformDivider(height: 1, cupertinoHasLeading: true),
+                          Theme.of(context).platform == TargetPlatform.iOS
+                              ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                              : const SizedBox.shrink(),
                   itemBuilder: (context, index) {
                     final user = following[index];
                     return Slidable(

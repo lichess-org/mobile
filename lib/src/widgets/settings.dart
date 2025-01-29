@@ -221,7 +221,6 @@ class ChoicePicker<T> extends StatelessWidget {
     this.tileContentPadding,
     this.margin,
     this.notchedTile = true,
-    this.showDividerBetweenTiles = false,
   });
 
   final List<T> choices;
@@ -230,9 +229,6 @@ class ChoicePicker<T> extends StatelessWidget {
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;
   final void Function(T choice)? onSelectedItemChanged;
-
-  /// Only on android.
-  final bool showDividerBetweenTiles;
 
   /// Android tiles content padding.
   final EdgeInsetsGeometry? tileContentPadding;
@@ -247,25 +243,20 @@ class ChoicePicker<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        final tiles = choices.map((value) {
-          return ListTile(
-            selected: selectedItem == value,
-            trailing: selectedItem == value ? const Icon(Icons.check) : null,
-            contentPadding: tileContentPadding,
-            title: titleBuilder(value),
-            subtitle: subtitleBuilder?.call(value),
-            leading: leadingBuilder?.call(value),
-            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
-          );
-        });
         return Opacity(
           opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-          child: Column(
+          child: ListSection(
             children: [
-              if (showDividerBetweenTiles)
-                ...ListTile.divideTiles(context: context, tiles: tiles)
-              else
-                ...tiles,
+              for (final value in choices)
+                ListTile(
+                  selected: selectedItem == value,
+                  trailing: selectedItem == value ? const Icon(Icons.check) : null,
+                  contentPadding: tileContentPadding,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  leading: leadingBuilder?.call(value),
+                  onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
+                ),
             ],
           ),
         );

@@ -63,7 +63,7 @@ class UserActivityEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final leadingIconSize = theme.platform == TargetPlatform.iOS ? 26.0 : 36.0;
+    const leadingIconSize = 26.0;
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
     final redColor = theme.extension<CustomColors>()?.error;

@@ -84,12 +84,6 @@ class BoardThemeWrapper extends StatelessWidget {
       data: theme.copyWith(
         cupertinoOverrideTheme: cupertinoTheme,
         listTileTheme: ListTileTheme.of(context).copyWith(
-          tileColor: theme.colorScheme.surfaceContainerLow.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
-          ),
-          selectedTileColor: theme.colorScheme.surfaceContainer.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
-          ),
           titleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
           subtitleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
           leadingAndTrailingTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,

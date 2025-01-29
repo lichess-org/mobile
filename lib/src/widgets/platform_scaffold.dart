@@ -117,6 +117,7 @@ class PlatformScaffold extends StatelessWidget {
     this.appBar,
     required this.body,
     this.resizeToAvoidBottomInset = true,
+    this.backgroundColor,
   });
 
   /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
@@ -130,9 +131,12 @@ class PlatformScaffold extends StatelessWidget {
   /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
   final bool resizeToAvoidBottomInset;
 
+  final Color? backgroundColor;
+
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      backgroundColor: backgroundColor,
       appBar:
           appBar != null
               ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
@@ -146,6 +150,7 @@ class PlatformScaffold extends StatelessWidget {
       child: CupertinoPageScaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
+        backgroundColor: backgroundColor,
         child: body,
       ),
     );

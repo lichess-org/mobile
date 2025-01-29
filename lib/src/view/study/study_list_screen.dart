@@ -35,6 +35,7 @@ class StudyListScreen extends ConsumerWidget {
     final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
 
     return PlatformScaffold(
+      backgroundColor: listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(
         title: title,
         actions: [

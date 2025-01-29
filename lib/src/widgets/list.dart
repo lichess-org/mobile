@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show PlatformCard;
 
 /// A platform agnostic list section.
 ///
@@ -79,8 +80,9 @@ class ListSection extends StatelessWidget {
     switch (theme.platform) {
       case TargetPlatform.android:
         return _isLoading
-            ? Padding(
-              padding: margin ?? Styles.sectionBottomPadding,
+            ? PlatformCard(
+              clipBehavior: Clip.hardEdge,
+              margin: margin ?? Styles.bodySectionPadding,
               child: Column(
                 children: [
                   if (header != null)
@@ -110,8 +112,9 @@ class ListSection extends StatelessWidget {
                 ],
               ),
             )
-            : Padding(
-              padding: margin ?? Styles.sectionBottomPadding,
+            : PlatformCard(
+              clipBehavior: Clip.hardEdge,
+              margin: margin ?? Styles.bodySectionPadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

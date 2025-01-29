@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -68,6 +69,7 @@ class GameHistoryScreen extends ConsumerWidget {
     );
 
     return PlatformScaffold(
+      backgroundColor: listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: title, actions: [filterBtn]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
