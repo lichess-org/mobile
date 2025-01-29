@@ -333,7 +333,7 @@ class PlatformListTile extends StatelessWidget {
         return ListTile(
           leading: leading,
           title: title,
-          iconColor: colorScheme.outline,
+          iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
           subtitle:
               subtitle != null
                   ? DefaultTextStyle.merge(
@@ -353,7 +353,7 @@ class PlatformListTile extends StatelessWidget {
       case TargetPlatform.iOS:
         final activatedColor = colorScheme.surfaceContainerHighest;
         return IconTheme(
-          data: CupertinoIconThemeData(color: colorScheme.outline),
+          data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
