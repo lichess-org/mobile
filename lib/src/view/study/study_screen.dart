@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -39,8 +40,19 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends ConsumerWidget {
-  const StudyScreen({required this.id});
+class StudyScreen extends StatelessWidget {
+  const StudyScreen({required this.id, super.key});
+
+  final StudyId id;
+
+  @override
+  Widget build(BuildContext context) {
+    return BoardBackgroundThemeWidget(child: _StudyScreenLoader(id: id));
+  }
+}
+
+class _StudyScreenLoader extends ConsumerWidget {
+  const _StudyScreenLoader({required this.id});
 
   final StudyId id;
 
@@ -52,7 +64,7 @@ class StudyScreen extends ConsumerWidget {
         return _StudyScreen(id: id, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
-        return PlatformBoardThemeScaffold(
+        return PlatformScaffold(
           appBar: const PlatformAppBar(title: Text('')),
           body: DefaultTabController(
             length: 1,
@@ -72,7 +84,7 @@ class StudyScreen extends ConsumerWidget {
           ),
         );
       case _:
-        return PlatformBoardThemeScaffold(
+        return PlatformScaffold(
           appBar: PlatformAppBar(
             title: Shimmer(
               child: ShimmerLoading(
@@ -163,7 +175,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return PlatformBoardThemeScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: AutoSizeText(
           widget.studyState.currentChapterTitle,
