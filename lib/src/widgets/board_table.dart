@@ -405,7 +405,7 @@ class _ErrorWidget extends StatelessWidget {
               color:
                   Theme.of(context).platform == TargetPlatform.iOS
                       ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                      : Theme.of(context).colorScheme.surface,
+                      : ColorScheme.of(context).surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),

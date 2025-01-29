@@ -201,8 +201,8 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                           ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
                           : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
                       : index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                      ? ColorScheme.of(context).surfaceContainerLow
+                      : ColorScheme.of(context).surfaceContainerHigh,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

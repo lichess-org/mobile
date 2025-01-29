@@ -76,7 +76,7 @@ class ClockTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     final activeColor = colorScheme.primaryFixedDim;
     final activeTextColor = colorScheme.onPrimaryFixed;
     final pausedColor = activeColor.withValues(alpha: 0.5);

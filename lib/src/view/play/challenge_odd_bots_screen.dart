@@ -244,7 +244,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                               border: Border.all(
                                 color:
                                     fen == botFen.fen
-                                        ? Theme.of(context).colorScheme.primary
+                                        ? ColorScheme.of(context).primary
                                         : Colors.transparent,
                                 width: borderWidth,
                               ),

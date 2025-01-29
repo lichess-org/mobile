@@ -87,7 +87,7 @@ class _ToolsButton extends StatelessWidget {
           color:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoTheme.of(context).primaryColor
-                  : Theme.of(context).colorScheme.primary,
+                  : ColorScheme.of(context).primary,
         ),
         title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
         trailing:

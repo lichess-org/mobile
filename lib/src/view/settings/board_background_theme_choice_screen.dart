@@ -124,7 +124,7 @@ class _Body extends ConsumerWidget {
         ),
         ListSection(
           header: const SettingsSectionTitle('Color presets'),
-          cupertinoBackgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+          cupertinoBackgroundColor: ColorScheme.of(context).surfaceContainerLow,
           children: [
             GridView.builder(
               primary: false,

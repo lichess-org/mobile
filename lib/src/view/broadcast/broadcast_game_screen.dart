@@ -400,7 +400,7 @@ class _PlayerWidget extends ConsumerWidget {
             );
           },
           child: Container(
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: ColorScheme.of(context).surfaceContainer,
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [
@@ -434,8 +434,8 @@ class _PlayerWidget extends ConsumerWidget {
                     color:
                         (side == sideToMove)
                             ? isCursorOnLiveMove
-                                ? Theme.of(context).colorScheme.tertiaryContainer
-                                : Theme.of(context).colorScheme.secondaryContainer
+                                ? ColorScheme.of(context).tertiaryContainer
+                                : ColorScheme.of(context).secondaryContainer
                             : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -489,8 +489,8 @@ class _Clock extends StatelessWidget {
         color:
             isSideToMove
                 ? isLive
-                    ? Theme.of(context).colorScheme.onTertiaryContainer
-                    : Theme.of(context).colorScheme.onSecondaryContainer
+                    ? ColorScheme.of(context).onTertiaryContainer
+                    : ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
