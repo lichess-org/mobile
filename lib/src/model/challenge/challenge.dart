@@ -22,6 +22,8 @@ abstract mixin class BaseChallenge {
   bool get rated;
   SideChoice get sideChoice;
   String? get initialFen;
+  int? get aiLevel;
+
 
   TimeIncrement? get timeIncrement =>
       clock != null ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds) : null;
@@ -53,6 +55,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     ChallengeUser? destUser,
     ChallengeDeclineReason? declineReason,
     String? initialFen,
+    int? aiLevel,
     ChallengeDirection? direction,
   }) = _Challenge;
 
@@ -123,6 +126,7 @@ class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseCha
     required bool rated,
     required SideChoice sideChoice,
     String? initialFen,
+    int? aiLevel,
   }) = _ChallengeRequest;
 
   @override
@@ -142,6 +146,7 @@ class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseCha
       'variant': variant.name,
       if (variant == Variant.fromPosition) 'fen': initialFen,
       if (sideChoice != SideChoice.random) 'color': sideChoice.name,
+      if (destUser.id == const UserId('ai')) 'level': aiLevel.toString(),
     };
   }
 }
