@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-const kBroadcastCarouselItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
+const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -391,7 +391,7 @@ class _BroadcastCardContent extends StatelessWidget {
     final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
 
     return Padding(
-      padding: kBroadcastCarouselItemContentPadding,
+      padding: kBroadcastCardItemContentPadding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
