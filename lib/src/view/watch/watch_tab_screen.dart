@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -172,23 +171,11 @@ class _BodyState extends ConsumerState<_Body> {
     final featuredChannels = ref.watch(featuredChannelsProvider);
     final streamers = ref.watch(liveStreamersProvider);
 
-    final content =
-        widget.orientation == Orientation.portrait
-            ? [
-              if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
-              _WatchTvWidget(featuredChannels),
-              _StreamerWidget(streamers),
-            ]
-            : [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_worker != null) Expanded(child: _BroadcastWidget(broadcastList, _worker!)),
-                  Expanded(child: _WatchTvWidget(featuredChannels)),
-                ],
-              ),
-              _StreamerWidget(streamers),
-            ];
+    final content = [
+      if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      _WatchTvWidget(featuredChannels),
+      _StreamerWidget(streamers),
+    ];
 
     return Theme.of(context).platform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
@@ -212,9 +199,6 @@ class _BroadcastWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isTablet = isTabletOrLarger(context);
-    final aspectRatio = isTablet ? 1.7 : 1.55;
-
     return Padding(
       padding: Styles.sectionBottomPadding,
       child: Column(
@@ -248,11 +232,7 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           switch (broadcastList) {
-            AsyncData(:final value) => BroadcastCarousel(
-              broadcasts: value,
-              worker: worker,
-              aspectRatio: aspectRatio,
-            ),
+            AsyncData(:final value) => BroadcastCarousel(broadcasts: value, worker: worker),
             AsyncError() => const Padding(
               padding: Styles.bodySectionPadding,
               child: Text('Could not load broadcasts'),
@@ -260,7 +240,7 @@ class _BroadcastWidget extends ConsumerWidget {
             _ => Shimmer(
               child: ShimmerLoading(
                 isLoading: true,
-                child: BroadcastCarousel.loading(worker: worker, aspectRatio: aspectRatio),
+                child: BroadcastCarousel.loading(worker: worker),
               ),
             ),
           },
