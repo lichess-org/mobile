@@ -1480,6 +1480,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Уместо играња очекиваног потеза, прво убаци потез који је непосредна претња на коју противник мора да одговори. Такође знано као \"Zwischenzug\" или \"међупотез\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Скакачка завршница';
 
   @override
@@ -4392,6 +4398,18 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Грубе грешке',
+      few: '$count Грубе грешке',
+      one: '$count Превид',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4403,12 +4421,36 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Грешке',
+      few: '$count Грешке',
+      one: '$count Грешка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count inaccuracies',
       one: '$count inaccuracy',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Непрецизности',
+      few: '$count Непрецизности',
+      one: '$count Непрецизност',
     );
     return '$_temp0';
   }
@@ -5165,6 +5207,9 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get studyPlaying => 'У току';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

@@ -127,6 +127,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: MaterialDifferenceFormat.materialDifference,
     )
     required MaterialDifferenceFormat materialDifferenceFormat,
+    @JsonKey(defaultValue: ClockPosition.right, unknownEnumValue: ClockPosition.right)
     required ClockPosition clockPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,

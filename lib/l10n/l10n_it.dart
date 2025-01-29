@@ -1465,6 +1465,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Esecuzione, prima della mossa più naturale, di un\'altra mossa che pone una minaccia più immediata, alla quale l\'avversario deve necessariamente reagire. Conosciuto anche come \"Zwischenzug\" o \"Mossa intermedia\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Finale di cavallo';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Errori gravi',
+      one: '$count Errore grave',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Errori',
+      one: '$count Errore',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprecisioni',
       one: '$count imprecisione',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprecisioni',
+      one: '$count Imprecisione',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyPlaying => 'In corso';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Barre di valutazione';

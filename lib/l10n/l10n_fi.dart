@@ -865,7 +865,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesInGameOnly => 'Vain pelin aikana';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Paitsi pelin aikana';
 
   @override
   String get preferencesChessClock => 'Shakkikello';
@@ -1463,6 +1463,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Tee odotetun siirron sijaan ensin toinen siirto, jonka synnyttämään välittömään uhkaan vastustajasi täytyy vastata. Tunnetaan myös nimellä \"Zwischenzug\".';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Tapponeliömatti';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Torni on vastustajan kuninkaan vieressä, ja sitä suojelee daami, joka myös vie kuninkaalta pakoruudut. Vastustajan kuningas jää kiinni tornin ja daamin muodostamaan 3x3-ruudun \"tapponeliöön\".';
 
   @override
   String get puzzleThemeKnightEndgame => 'Ratsuloppupeli';
@@ -4375,6 +4381,17 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Vakavaa virhettä',
+      one: '$count Vakava virhe',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Virhettä',
+      one: '$count Virhe',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count epätarkkuutta',
       one: '$count epätarkkuus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Epätarkkuutta',
+      one: '$count Epätarkkuus',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Meneillään';
+
+  @override
+  String get studyShowResults => 'Tulokset';
 
   @override
   String get studyShowEvalBar => 'Arviopalkit';

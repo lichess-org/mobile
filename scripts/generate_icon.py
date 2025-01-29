@@ -75,7 +75,8 @@ class PuzzleIcons {{
   static const _kFontFam = 'LichessPuzzleIcons';
   static const String? _kFontPkg = null;
 
-{"".join(dart_code_list)}
+  // dart format off
+  {"".join(dart_code_list)}
 }}
 """
 

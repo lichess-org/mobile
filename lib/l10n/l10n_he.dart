@@ -1513,6 +1513,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'טקטיקה בה במקום לבצע את המהלך הצפוי, מבצעים מהלך ביניים המציב איום הדורש תגובה מיידית מהיריב. נקראת גם \"מסע ביניים\" או מגרמנית \"זווישנזוג\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'מט ״קופסת החנק״';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'הצריח ממוקם ליד המלך של היריב והוא נתמך על ידי מלכה, שמצדה חוסמת את נתיב הבריחה של המלך. הצריח והמלכה לוכדים את המלך ב״קופסת חנק״ בגודל 3X3.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'סיום פרשים';
 
   @override
@@ -4429,6 +4435,19 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count טעויות גסות',
+      many: '$count טעויות גסות',
+      two: '$count טעויות גסות',
+      one: '$count טעות גסה',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,12 +4461,38 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שגיאות',
+      many: '$count טעויות',
+      two: '$count שגיאות',
+      one: '$count שגיאה',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count אי־דיוקים',
       many: '$count אי־דיוקים',
+      two: '$count אי־דיוקים',
+      one: '$count אי־דיוק',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count אי־דיוקים',
+      many: '$count אי-דיוקים',
       two: '$count אי־דיוקים',
       one: '$count אי־דיוק',
     );
@@ -5247,6 +5292,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyPlaying => 'מתקיים כעת';
+
+  @override
+  String get studyShowResults => 'תוצאות';
 
   @override
   String get studyShowEvalBar => 'מדי הערכה';
