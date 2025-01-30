@@ -81,25 +81,25 @@ class BoardThemeWrapper extends StatelessWidget {
     return Theme(
       data: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(
-          surface: theme.colorScheme.surface.withValues(alpha: transparentScaffold ? 0.5 : 1),
+          surface: theme.colorScheme.surface.withValues(alpha: transparentScaffold ? 0.7 : 1),
           surfaceContainerLowest: theme.colorScheme.surfaceContainerLowest.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
+            alpha: transparentScaffold ? 0.7 : 1,
           ),
           surfaceContainerLow: theme.colorScheme.surfaceContainerLow.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
+            alpha: transparentScaffold ? 0.7 : 1,
           ),
           surfaceContainer: theme.colorScheme.surfaceContainer.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
+            alpha: transparentScaffold ? 0.7 : 1,
           ),
           surfaceContainerHigh: theme.colorScheme.surfaceContainerHigh.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
+            alpha: transparentScaffold ? 0.7 : 1,
           ),
           surfaceContainerHighest: theme.colorScheme.surfaceContainerHighest.withValues(
-            alpha: transparentScaffold ? 0.5 : 1,
+            alpha: transparentScaffold ? 0.7 : 1,
           ),
-          surfaceDim: theme.colorScheme.surfaceDim.withValues(alpha: transparentScaffold ? 0.7 : 1),
+          surfaceDim: theme.colorScheme.surfaceDim.withValues(alpha: transparentScaffold ? 0.8 : 1),
           surfaceBright: theme.colorScheme.surfaceBright.withValues(
-            alpha: transparentScaffold ? 0.3 : 1,
+            alpha: transparentScaffold ? 0.5 : 1,
           ),
         ),
         cupertinoOverrideTheme: cupertinoTheme,
@@ -262,7 +262,9 @@ CupertinoThemeData _makeCupertinoTheme(
     scaffoldBackgroundColor: theme.scaffoldBackgroundColor.withValues(
       alpha: transparentScaffold ? 0 : 1,
     ),
-    barBackgroundColor: theme.appBarTheme.backgroundColor?.withValues(alpha: 0),
+    barBackgroundColor: theme.appBarTheme.backgroundColor?.withValues(
+      alpha: transparentScaffold ? 0.5 : 0.9,
+    ),
     applyThemeToAll: true,
   );
 }
