@@ -16,10 +16,15 @@ This project uses Flutter.
 > Installing on Linux using `snapd` might cause some [problems](https://github.com/lichess-org/mobile/issues/123) building stockfish.
 > Installing flutter manually is a known workaround.
 
-2. Switch to the beta channel by running `flutter channel beta` and `flutter upgrade`
+2. Switch to the main channel by running `flutter channel main` and `flutter upgrade`
 
 > [!NOTE]
-> We'll use Flutter's `beta` channel while the app itself is in Beta.
+> We're using Flutter's `main` channel while the app itself is in Beta.
+> This is to ensure that we're getting the latest bug fixes and features from
+> Flutter as early as possible.
+> We'll update the flutter version lower bound in the `pubspec.yaml` file from
+> time to time to ensure that the app is compatible with the latest stable. So
+> make sure to run `flutter upgrade` regularly.
 
 3. Ensure Flutter is correctly configured by running `flutter doctor`
 
@@ -117,7 +122,7 @@ simulator.
   If you use systemd-resolved, the recommended mode of handling `/etc/resolv.conf` is to symlink `/etc/resolv.conf` to `/run/systemd/resolve/stub-resolv.conf`.
 
 - If you experience high lags or freezes, check the memory settings and be sure to enable hardware acceleration (`-gpu host`).
-  
+
   Also disabling the snapshot storage may help:
 
   ```bash
@@ -188,7 +193,7 @@ flutter run \
   --dart-define=LICHESS_WS_HOST=[lila_gitpod_host]
 ```
 
-To find the host of your lila Gitpod instance, use the command `gp url 8080`. Just be careful to not include the full url in the hosts variables, you need to remove the https:// from the url. 
+To find the host of your lila Gitpod instance, use the command `gp url 8080`. Just be careful to not include the full url in the hosts variables, you need to remove the https:// from the url.
 
 #### When using lila-docker
 
