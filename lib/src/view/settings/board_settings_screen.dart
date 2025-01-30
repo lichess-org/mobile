@@ -75,6 +75,34 @@ class _Body extends ConsumerWidget {
                 }
               },
             ),
+            SettingsListTile(
+              settingsLabel: Text(
+                context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
+              ),
+              settingsValue: boardPrefs.castlingMethod.name,
+              showCupertinoTrailingValue: false,
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  showChoicePicker(
+                    context,
+                    choices: CastlingMethod.values,
+                    selectedItem: boardPrefs.castlingMethod,
+                    labelBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
+                    onSelectedItemChanged: (CastlingMethod? value) {
+                      ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setCastlingMethod(value ?? CastlingMethod.either);
+                    },
+                  );
+                } else {
+                  pushPlatformRoute(
+                    context,
+                    title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
+                    builder: (context) => const CastlingMethodSettingsScreen(),
+                  );
+                }
+              },
+            ),
             SwitchSettingTile(
               title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
               value: boardPrefs.magnifyDraggedPiece,
@@ -262,6 +290,38 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
               choices: PieceShiftMethod.values,
               selectedItem: pieceShiftMethod,
               titleBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+              onSelectedItemChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CastlingMethodSettingsScreen extends ConsumerWidget {
+  const CastlingMethodSettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final castlingMethod = ref.watch(
+      boardPreferencesProvider.select((state) => state.castlingMethod),
+    );
+
+    void onChanged(CastlingMethod? value) {
+      ref.read(boardPreferencesProvider.notifier).setCastlingMethod(value ?? CastlingMethod.either);
+    }
+
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: SafeArea(
+        child: ListView(
+          children: [
+            ChoicePicker(
+              notchedTile: true,
+              choices: CastlingMethod.values,
+              selectedItem: castlingMethod,
+              titleBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
               onSelectedItemChanged: onChanged,
             ),
           ],
