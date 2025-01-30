@@ -48,9 +48,9 @@ class BackgroundThemeWidget extends ConsumerWidget {
   }
 }
 
-/// Applies the configured board theme to the child widget.
-class BoardThemeWrapper extends StatelessWidget {
-  const BoardThemeWrapper({
+/// Applies the configured background theme to the child widget.
+class BackgroundThemeWrapper extends StatelessWidget {
+  const BackgroundThemeWrapper({
     required this.child,
     required this.theme,
     required this.brightness,
@@ -159,7 +159,7 @@ class _BoardBackgroundTheme extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     final theme = brightness == Brightness.light ? lightTheme : darkTheme;
 
-    return BoardThemeWrapper(theme: theme, brightness: brightness, child: child);
+    return BackgroundThemeWrapper(theme: theme, brightness: brightness, child: child);
   }
 }
 
@@ -190,7 +190,7 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
 
   @override
   Widget build(BuildContext context) {
-    return BoardThemeWrapper(
+    return BackgroundThemeWrapper(
       theme: widget.backgroundImage.theme,
       brightness: Brightness.dark,
       transparentScaffold: true,

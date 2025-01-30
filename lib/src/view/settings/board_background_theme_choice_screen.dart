@@ -359,7 +359,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       widget.meanLuminance,
     );
 
-    return BoardThemeWrapper(
+    return BackgroundThemeWrapper(
       theme: BoardBackgroundImage.getTheme(widget.darkColorScheme),
       brightness: Brightness.dark,
       transparentScaffold: true,
