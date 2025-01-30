@@ -203,7 +203,7 @@ class _AppState extends ConsumerState<Application> {
     final highBlendThemeLight = FlexThemeData.light(
       colors: flexScheme.light,
       surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
-      blendLevel: 16,
+      blendLevel: 20,
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
