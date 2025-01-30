@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -295,14 +296,24 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            Icon(LichessIcons.storm, size: 50.0, color: ColorScheme.of(context).primary),
-            const SizedBox(width: 8),
-            Text(
-              stormState.numSolved.toString(),
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: ColorScheme.of(context).primary,
+            PlatformCard(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(LichessIcons.storm, size: 50.0, color: ColorScheme.of(context).primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      stormState.numSolved.toString().padRight(2),
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: ColorScheme.of(context).primary,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const Spacer(),
@@ -589,18 +600,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         widget.stats.newHigh != null
             ? [
               const SizedBox(height: 16),
-              ListTile(
-                leading: Icon(LichessIcons.storm, size: 46, color: context.lichessColors.brag),
-                title: Text(
-                  newHighTitle(context, widget.stats.newHigh!),
-                  style: Styles.sectionTitle.copyWith(color: context.lichessColors.brag),
-                ),
-                subtitle: Text(
-                  context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
-                  style: TextStyle(color: context.lichessColors.brag),
+              PlatformCard(
+                margin: Styles.bodySectionPadding,
+                child: ListTile(
+                  leading: Icon(
+                    LichessIcons.storm,
+                    size: 46,
+                    color: ColorScheme.of(context).primary,
+                  ),
+                  title: Text(
+                    newHighTitle(context, widget.stats.newHigh!),
+                    style: Styles.sectionTitle,
+                  ),
+                  subtitle: Text(
+                    context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
             ]
             : null;
 

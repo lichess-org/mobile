@@ -82,6 +82,28 @@ class BoardThemeWrapper extends StatelessWidget {
 
     return Theme(
       data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          surface: theme.colorScheme.surface.withValues(alpha: transparentScaffold ? 0.5 : 1),
+          surfaceContainerLowest: theme.colorScheme.surfaceContainerLowest.withValues(
+            alpha: transparentScaffold ? 0.5 : 1,
+          ),
+          surfaceContainerLow: theme.colorScheme.surfaceContainerLow.withValues(
+            alpha: transparentScaffold ? 0.5 : 1,
+          ),
+          surfaceContainer: theme.colorScheme.surfaceContainer.withValues(
+            alpha: transparentScaffold ? 0.5 : 1,
+          ),
+          surfaceContainerHigh: theme.colorScheme.surfaceContainerHigh.withValues(
+            alpha: transparentScaffold ? 0.5 : 1,
+          ),
+          surfaceContainerHighest: theme.colorScheme.surfaceContainerHighest.withValues(
+            alpha: transparentScaffold ? 0.5 : 1,
+          ),
+          surfaceDim: theme.colorScheme.surfaceDim.withValues(alpha: transparentScaffold ? 0.7 : 1),
+          surfaceBright: theme.colorScheme.surfaceBright.withValues(
+            alpha: transparentScaffold ? 0.3 : 1,
+          ),
+        ),
         cupertinoOverrideTheme: cupertinoTheme,
         listTileTheme: ListTileTheme.of(context).copyWith(
           titleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
@@ -201,7 +223,7 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
                   child: ClipRect(
                     child: BackdropFilter(
                       enabled: widget.backgroundImage.isBlurred,
-                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                      filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
                       child: const SizedBox.expand(),
                     ),
                   ),
