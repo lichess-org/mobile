@@ -34,6 +34,7 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.bullet,
   TvChannel.blitz,
   TvChannel.rapid,
+  TvChannel.classical,
 });
 
 final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
