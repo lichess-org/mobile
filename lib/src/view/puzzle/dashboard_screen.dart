@@ -66,36 +66,30 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
-            Padding(
-              padding:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? EdgeInsets.zero
-                      : Styles.horizontalBodyPadding,
-              child: StatCardRow([
-                StatCard(
-                  context.l10n.performance,
-                  value: dashboard.global.performance.toString(),
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-                StatCard(
-                  context.l10n
-                      .puzzleNbPlayed(dashboard.global.nb)
-                      .replaceAll(RegExp(r'\d+'), '')
-                      .trim()
-                      .capitalize(),
-                  value: dashboard.global.nb.toString().localizeNumbers(),
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-                StatCard(
-                  context.l10n.puzzleSolved.capitalize(),
-                  value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-              ]),
-            ),
+            StatCardRow([
+              StatCard(
+                context.l10n.performance,
+                value: dashboard.global.performance.toString(),
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(dashboard.global.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n.puzzleSolved.capitalize(),
+                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+            ]),
             if (chartData.length >= 3) PuzzleChart(chartData),
           ],
         );
