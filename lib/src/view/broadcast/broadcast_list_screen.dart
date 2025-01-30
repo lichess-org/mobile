@@ -281,7 +281,7 @@ const BroadcastList _emptyBroadcasts = (
   nextPage: null,
 );
 
-const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0);
+const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 const kHandsetCarouselFlexWeights = [6, 2];
 const kTabletCarouselFlexWeights = [4, 4, 1];
 const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
@@ -350,10 +350,13 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: elementHeight),
+            constraints: BoxConstraints(
+              maxHeight: elementHeight + kBroadcastCarouselItemPadding.vertical,
+            ),
             child: CarouselView.weighted(
               controller: _controller,
               shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+              elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
               flexWeights: flexWeights,
               itemSnapping: true,
               padding: kBroadcastCarouselItemPadding,
@@ -768,34 +771,32 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
       duration: const Duration(milliseconds: 500),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(color: backgroundColor),
-      child: ClipRect(
-        child: OverflowBox(
-          maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-          minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image(
-                image: imageProvider,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
-                  return AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: frame == null ? 0 : 1,
-                    child: child,
-                  );
-                },
-                errorBuilder:
-                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-              ),
-              Expanded(
-                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
-              ),
-            ],
-          ),
+      child: OverflowBox(
+        maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+        minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image(
+              image: imageProvider,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: frame == null ? 0 : 1,
+                  child: child,
+                );
+              },
+              errorBuilder:
+                  (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+            ),
+            Expanded(
+              child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+            ),
+          ],
         ),
       ),
     );
