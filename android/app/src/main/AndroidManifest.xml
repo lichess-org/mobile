@@ -20,6 +20,10 @@
         android:fullBackupContent="@xml/backup_rules">
 
     <meta-data
+      android:name="io.flutter.embedding.android.EnableImpeller"
+      android:value="false" />
+
+    <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
       android:resource="@drawable/ic_stat_lichess_notification" />
     <meta-data
