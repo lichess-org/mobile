@@ -115,6 +115,32 @@ final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<Pa
 
 final _cupertinoTabController = CupertinoTabController();
 
+/// A [ChangeNotifier] that can be used to notify when the Home tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final homeTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Puzzles tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final puzzlesTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Tools tab is tapped, and all the built interactions
+/// (pop stack, scroll to top) are done.
+final toolsTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final watchTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Settings tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final settingsTabInteraction = _BottomTabInteraction();
+
+class _BottomTabInteraction extends ChangeNotifier {
+  void notifyItemTapped() {
+    notifyListeners();
+  }
+}
+
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
 /// This widget is intended to be used as the root of the app, and it provides
@@ -191,16 +217,27 @@ class BottomNavScaffold extends ConsumerWidget {
 
     if (tappedTab == curTab) {
       final navState = ref.read(currentNavigatorKeyProvider).currentState;
+      final scrollController = ref.read(currentRootScrollControllerProvider);
       if (navState?.canPop() == true) {
         navState?.popUntil((route) => route.isFirst);
+      } else if (scrollController.hasClients && scrollController.offset > 0) {
+        scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       } else {
-        final scrollController = ref.read(currentRootScrollControllerProvider);
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
+        switch (tappedTab) {
+          case BottomTab.home:
+            homeTabInteraction.notifyItemTapped();
+          case BottomTab.puzzles:
+            puzzlesTabInteraction.notifyItemTapped();
+          case BottomTab.tools:
+            toolsTabInteraction.notifyItemTapped();
+          case BottomTab.watch:
+            watchTabInteraction.notifyItemTapped();
+          case BottomTab.settings:
+            settingsTabInteraction.notifyItemTapped();
         }
       }
     } else {

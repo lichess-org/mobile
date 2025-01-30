@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
@@ -285,7 +286,7 @@ const kHandsetCarouselFlexWeights = [6, 2];
 const kTabletCarouselFlexWeights = [4, 4, 1];
 const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
 
-class BroadcastCarousel extends StatelessWidget {
+class BroadcastCarousel extends StatefulWidget {
   const BroadcastCarousel({required this.broadcasts, required this.worker, super.key})
     : _isLoading = false;
 
@@ -309,6 +310,35 @@ class BroadcastCarousel extends StatelessWidget {
   }
 
   @override
+  State<BroadcastCarousel> createState() => _BroadcastCarouselState();
+}
+
+class _BroadcastCarouselState extends State<BroadcastCarousel> {
+  final _controller = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    watchTabInteraction.addListener(_onTabInteraction);
+  }
+
+  @override
+  void dispose() {
+    watchTabInteraction.removeListener(_onTabInteraction);
+    super.dispose();
+  }
+
+  void _onTabInteraction() {
+    if (_controller.hasClients) {
+      _controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -322,12 +352,13 @@ class BroadcastCarousel extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: elementHeight),
             child: CarouselView.weighted(
+              controller: _controller,
               shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
               flexWeights: flexWeights,
               itemSnapping: true,
               padding: kBroadcastCarouselItemPadding,
               onTap: (index) {
-                final broadcast = broadcasts.active[index];
+                final broadcast = widget.broadcasts.active[index];
                 pushPlatformRoute(
                   context,
                   title: broadcast.title,
@@ -336,13 +367,13 @@ class BroadcastCarousel extends StatelessWidget {
                 );
               },
               children: [
-                if (_isLoading)
+                if (widget._isLoading)
                   for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
-                    BroadcastCarouselItem.loading(worker: worker, flexWeights: flexWeights),
-                for (final broadcast in broadcasts.active)
+                    BroadcastCarouselItem.loading(worker: widget.worker, flexWeights: flexWeights),
+                for (final broadcast in widget.broadcasts.active)
                   BroadcastCarouselItem(
                     broadcast: broadcast,
-                    worker: worker,
+                    worker: widget.worker,
                     flexWeights: flexWeights,
                   ),
               ],
