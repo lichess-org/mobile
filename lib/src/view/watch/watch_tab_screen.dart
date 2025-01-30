@@ -38,25 +38,26 @@ const _featuredChannelsSet = ISetConst({
 });
 
 final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
-  return ref.withClientCacheFor((client) async {
+  return ref.withClient((client) async {
     final channels = await TvRepository(client).channels();
-    return channels.entries
-        .where((channel) => _featuredChannelsSet.contains(channel.key))
+    return _featuredChannelsSet
+        .map((channel) => MapEntry(channel, channels[channel]))
+        .where((entry) => entry.value != null)
         .map(
           (entry) => TvGameSnapshot(
             channel: entry.key,
-            id: entry.value.id,
-            orientation: entry.value.side ?? Side.white,
+            id: entry.value!.id,
+            orientation: entry.value!.side ?? Side.white,
             player: FeaturedPlayer(
-              name: entry.value.user.name,
-              title: entry.value.user.title,
-              side: entry.value.side ?? Side.white,
-              rating: entry.value.rating,
+              name: entry.value!.user.name,
+              title: entry.value!.user.title,
+              side: entry.value!.side ?? Side.white,
+              rating: entry.value!.rating,
             ),
           ),
         )
         .toIList();
-  }, const Duration(minutes: 5));
+  });
 });
 
 class WatchTabScreen extends ConsumerStatefulWidget {
