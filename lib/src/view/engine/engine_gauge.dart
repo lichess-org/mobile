@@ -35,13 +35,13 @@ class EngineGauge extends ConsumerWidget {
 
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? lighten(Theme.of(context).colorScheme.surface, .07)
-          : lighten(Theme.of(context).colorScheme.onSurface, .17);
+          ? lighten(ColorScheme.of(context).surface, .07)
+          : lighten(ColorScheme.of(context).onSurface, .17);
 
   static Color valueColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? darken(Theme.of(context).colorScheme.onSurface, .1)
-          : darken(Theme.of(context).colorScheme.surface, .01);
+          ? darken(ColorScheme.of(context).onSurface, .1)
+          : darken(ColorScheme.of(context).surface, .01);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

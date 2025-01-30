@@ -87,7 +87,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final brightness = Theme.of(context).brightness;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);

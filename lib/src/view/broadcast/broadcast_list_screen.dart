@@ -610,7 +610,7 @@ class _BroadcastCardState extends State<BroadcastCard> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor = Theme.of(context).colorScheme.surfaceContainer;
+    final defaultBackgroundColor = ColorScheme.of(context).surfaceContainer;
     final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
 
     return GestureDetector(

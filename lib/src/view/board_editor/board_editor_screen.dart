@@ -221,7 +221,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                 color:
                     ref.read(boardEditorControllerProvider(widget.initialFen)).activePieceOnEdit ==
                             piece
-                        ? Theme.of(context).colorScheme.primary
+                        ? ColorScheme.of(context).primary
                         : Colors.transparent,
                 child: GestureDetector(
                   child: Draggable(

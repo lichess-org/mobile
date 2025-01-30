@@ -326,7 +326,7 @@ class PlatformListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return ListTile(
