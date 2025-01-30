@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/view/settings/board_background_theme_choice_s
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -26,7 +26,7 @@ class BoardThemeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BoardBackgroundThemeWidget(
+    return BackgroundThemeWidget(
       child: PlatformWidget(
         androidBuilder: (context) => const Scaffold(body: _Body()),
         iosBuilder:

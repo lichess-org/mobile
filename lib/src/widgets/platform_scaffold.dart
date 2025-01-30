@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -183,7 +183,7 @@ class PlatformBoardThemeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardBackgroundThemeWidget(
+    return BackgroundThemeWidget(
       child: PlatformScaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: appBar,

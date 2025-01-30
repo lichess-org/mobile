@@ -8,13 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
-/// Applies the configured board theme to the child widget.
+/// Applies the configured theme to the child widget.
 ///
 /// Tries first to apply the theme provided ar argument, and then from the stored settings.
-///
-/// Typically used in screens that need to display a chess board.
-class BoardBackgroundThemeWidget extends ConsumerWidget {
-  const BoardBackgroundThemeWidget({required this.child, this.backgroundTheme, super.key});
+class BackgroundThemeWidget extends ConsumerWidget {
+  const BackgroundThemeWidget({required this.child, this.backgroundTheme, super.key});
 
   /// The child widget to apply the theme to.
   final Widget child;

@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/board_background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -259,7 +259,7 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
                 controller: _controller,
                 itemBuilder: (context, index) {
                   final backgroundTheme = colorChoices[index];
-                  return BoardBackgroundThemeWidget(
+                  return BackgroundThemeWidget(
                     backgroundTheme: backgroundTheme,
                     child: const Scaffold(body: SizedBox.expand()),
                   );
