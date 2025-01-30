@@ -32,6 +32,7 @@ abstract class Styles {
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
+  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
 
   // padding
   static const cupertinoAppBarTrailingWidgetPadding = EdgeInsetsDirectional.only(end: 8.0);
