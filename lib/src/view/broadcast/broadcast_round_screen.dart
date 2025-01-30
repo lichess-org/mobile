@@ -77,7 +77,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _iosBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
+    AsyncValue<BroadcastRoundState> asyncRound,
   ) {
     final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
       groupValue: selectedTab,
@@ -151,7 +151,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _androidBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
+    AsyncValue<BroadcastRoundState> asyncRound,
   ) {
     return Scaffold(
       appBar: AppBar(
@@ -211,13 +211,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundWithGames>.loading();
+    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
 
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
         // and to know if the round has games to show
-        final round = ref.watch(
+        final roundState = ref.watch(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
         );
 
@@ -238,8 +238,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         );
 
         return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, round),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, round),
+          androidBuilder: (context) => _androidBuilder(context, asyncTour, roundState),
+          iosBuilder: (context) => _iosBuilder(context, asyncTour, roundState),
         );
 
       case _:
