@@ -215,7 +215,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: CupertinoColors.separator.resolveFrom(context)),
+            border: Border.all(color: ColorScheme.of(context).outline),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           placeholder: placeholder,
