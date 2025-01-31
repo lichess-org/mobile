@@ -70,6 +70,7 @@ class PlatformAppBar extends StatelessWidget {
     this.leading,
     this.actions = const [],
     this.androidTitleSpacing,
+    this.bottom,
   });
 
   /// Widget to place at the start of the navigation bar
@@ -94,6 +95,9 @@ class PlatformAppBar extends StatelessWidget {
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
   final double? androidTitleSpacing;
 
+  /// A widget to place at the bottom of the navigation bar.
+  final PreferredSizeWidget? bottom;
+
   AppBar _androidBuilder(BuildContext context) {
     return AppBar(
       titleSpacing: androidTitleSpacing,
@@ -101,6 +105,7 @@ class PlatformAppBar extends StatelessWidget {
       title: title,
       centerTitle: centerTitle,
       actions: actions,
+      bottom: bottom,
     );
   }
 
@@ -109,6 +114,7 @@ class PlatformAppBar extends StatelessWidget {
       padding: actions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
       middle: title,
       trailing: Row(mainAxisSize: MainAxisSize.min, children: actions),
+      bottom: bottom,
     );
   }
 
