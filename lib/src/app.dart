@@ -134,15 +134,24 @@ class _AppState extends ConsumerState<Application> {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
+
+    // Defined in 2 steps to allow for a different scaffold background color.
+    final darkFlexScheme = FlexColorScheme.dark(
+      colors: flexScheme.dark,
+      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
+      blendLevel: 20,
+    );
     final themeDark = FlexThemeData.dark(
       colors: flexScheme.dark,
       surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
-      blendLevel: 25,
+      blendLevel: 20,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      scaffoldBackground:
+          darkFlexScheme.scaffoldBackground != null
+              ? lighten(darkFlexScheme.scaffoldBackground!, 0.05)
+              : null,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
-
-    final darkScaffoldBackgroundColor = lighten(themeDark.scaffoldBackgroundColor, 0.05);
 
     final floatingActionButtonTheme =
         generalPrefs.systemColors
@@ -182,7 +191,7 @@ class _AppState extends ConsumerState<Application> {
       primaryColor: themeDark.colorScheme.primaryFixed,
       primaryContrastingColor: themeDark.colorScheme.onPrimaryFixed,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: darkScaffoldBackgroundColor,
+      scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
       barBackgroundColor: themeDark.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
@@ -235,7 +244,6 @@ class _AppState extends ConsumerState<Application> {
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
         darkTheme: themeDark.copyWith(
-          scaffoldBackgroundColor: darkScaffoldBackgroundColor,
           cupertinoOverrideTheme: darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,

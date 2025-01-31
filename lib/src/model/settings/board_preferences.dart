@@ -474,7 +474,7 @@ class BoardBackgroundImage with _$BoardBackgroundImage {
       errorContainer: scheme.errorContainer,
     ),
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-    appBarOpacity: 0,
+    appBarOpacity: 0.5,
   );
 
   ThemeData get theme => getTheme(darkColors);
