@@ -399,7 +399,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                     ),
                     child: BackdropFilter(
                       enabled: blur,
-                      filter: ui.ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                      filter: ui.ImageFilter.blur(
+                        sigmaX: kBackgroundImageBlurFactor,
+                        sigmaY: kBackgroundImageBlurFactor,
+                      ),
                       child: const SizedBox.expand(),
                     ),
                   ),

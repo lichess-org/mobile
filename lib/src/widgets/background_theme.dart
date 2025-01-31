@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
+const kBackgroundImageBlurFactor = 8.0;
+
 /// Applies the configured theme to the child widget.
 ///
 /// Tries first to apply the theme provided ar argument, and then from the stored settings.
@@ -235,7 +237,10 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
                   child: ClipRect(
                     child: BackdropFilter(
                       enabled: widget.backgroundImage.isBlurred,
-                      filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                      filter: ImageFilter.blur(
+                        sigmaX: kBackgroundImageBlurFactor,
+                        sigmaY: kBackgroundImageBlurFactor,
+                      ),
                       child: const SizedBox.expand(),
                     ),
                   ),
