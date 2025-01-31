@@ -42,7 +42,7 @@ class BoardEditorMenu extends ConsumerWidget {
                     title: context.l10n.preferencesHowDoYouMovePieces,
                     rootNavigator: true,
                     builder:
-                        (_) => SearchPositionScreen(
+                        (context) => SearchPositionScreen(
                           onPositionSelected:
                               (position) => {
                                 notifier.loadFen(position.fen),
