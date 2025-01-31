@@ -197,6 +197,12 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
   }
 
   @override
+  void didUpdateWidget(_BoardBackgroundImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.value = widget.backgroundImage.transform;
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _controller.dispose();
