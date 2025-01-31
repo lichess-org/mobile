@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -22,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/quantize/quantizer.dart';
 import 'package:material_color_utilities/quantize/quantizer_celebi.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
   const BoardBackgroundThemeChoiceScreen({super.key});
@@ -47,6 +47,8 @@ const itemsByRow = 3;
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appDocumentsDirectory =
+        ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final brightness = Theme.of(context).brightness;
 
@@ -55,73 +57,76 @@ class _Body extends ConsumerWidget {
 
     return ListView(
       children: [
-        ListSection(
-          children: [
-            PlatformListTile(
-              leading: const Icon(Icons.image_outlined),
-              title: const Text('Pick an image'),
-              trailing:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-              onTap: () async {
-                final ImagePicker picker = ImagePicker();
-                final XFile? image = await picker.pickImage(
-                  source: ImageSource.gallery,
-                  maxWidth: viewport.width * devicePixelRatio * 2,
-                  maxHeight: viewport.height * devicePixelRatio * 2,
-                  imageQuality: 80,
-                );
-
-                if (image != null) {
-                  final imageProvider = FileImage(File(image.path));
-                  final darkScheme = await ColorScheme.fromImageProvider(
-                    provider: imageProvider,
-                    brightness: Brightness.dark,
+        if (appDocumentsDirectory != null)
+          ListSection(
+            children: [
+              PlatformListTile(
+                leading: const Icon(Icons.image_outlined),
+                title: const Text('Pick an image'),
+                trailing:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? const CupertinoListTileChevron()
+                        : null,
+                onTap: () async {
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? image = await picker.pickImage(
+                    source: ImageSource.gallery,
+                    maxWidth: viewport.width * devicePixelRatio * 2,
+                    maxHeight: viewport.height * devicePixelRatio * 2,
+                    imageQuality: 80,
                   );
-                  final quantizerResult = await _extractColorsFromImageProvider(imageProvider);
-                  final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-                    (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
-                  );
-                  final meanLuminance =
-                      colorToCount.entries.fold<double>(
-                        0,
-                        (double previousValue, MapEntry<int, int> entry) =>
-                            previousValue + Color(entry.key).computeLuminance() * entry.value,
-                      ) /
-                      colorToCount.values.fold<int>(
-                        0,
-                        (int previousValue, int element) => previousValue + element,
-                      );
 
-                  if (context.mounted) {
-                    Navigator.of(context, rootNavigator: true)
-                        .push(
-                          MaterialPageRoute<BoardBackgroundImage?>(
-                            builder:
-                                (_) => ConfirmImageBackgroundScreen(
-                                  boardPrefs: boardPrefs,
-                                  image: image,
-                                  darkColorScheme: darkScheme,
-                                  meanLuminance: meanLuminance,
-                                ),
-                            fullscreenDialog: true,
-                          ),
-                        )
-                        .then((value) {
-                          if (context.mounted && value != null) {
-                            ref
-                                .read(boardPreferencesProvider.notifier)
-                                .setBackground(backgroundImage: value);
-                            Navigator.pop(context);
-                          }
-                        });
+                  if (image != null) {
+                    final imageProvider = FileImage(File(image.path));
+                    final darkScheme = await ColorScheme.fromImageProvider(
+                      provider: imageProvider,
+                      brightness: Brightness.dark,
+                    );
+                    final quantizerResult = await _extractColorsFromImageProvider(imageProvider);
+                    final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
+                      (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
+                    );
+                    final meanLuminance =
+                        colorToCount.entries.fold<double>(
+                          0,
+                          (double previousValue, MapEntry<int, int> entry) =>
+                              previousValue + Color(entry.key).computeLuminance() * entry.value,
+                        ) /
+                        colorToCount.values.fold<int>(
+                          0,
+                          (int previousValue, int element) => previousValue + element,
+                        );
+
+                    if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(
+                            MaterialPageRoute<BoardBackgroundImage?>(
+                              builder:
+                                  (_) => ConfirmImageBackgroundScreen(
+                                    boardPrefs: boardPrefs,
+                                    image: image,
+                                    darkColorScheme: darkScheme,
+                                    meanLuminance: meanLuminance,
+                                    viewport: viewport,
+                                    appDocumentsDirectory: appDocumentsDirectory,
+                                  ),
+                              fullscreenDialog: true,
+                            ),
+                          )
+                          .then((value) {
+                            if (context.mounted && value != null) {
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .setBackground(backgroundImage: value);
+                              Navigator.pop(context);
+                            }
+                          });
+                    }
                   }
-                }
-              },
-            ),
-          ],
-        ),
+                },
+              ),
+            ],
+          ),
         ListSection(
           header: const SettingsSectionTitle('Color presets'),
           cupertinoBackgroundColor: ColorScheme.of(context).surfaceContainerLow,
@@ -319,6 +324,8 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
     required this.boardPrefs,
     required this.darkColorScheme,
     required this.meanLuminance,
+    required this.viewport,
+    required this.appDocumentsDirectory,
     super.key,
   });
 
@@ -326,6 +333,8 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   final BoardPrefs boardPrefs;
   final ColorScheme darkColorScheme;
   final double meanLuminance;
+  final Size viewport;
+  final Directory appDocumentsDirectory;
 
   @override
   State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
@@ -464,16 +473,16 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       AdaptiveTextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
-                          final directory = await getApplicationDocumentsDirectory();
                           final ext = extension(widget.image.path);
-                          final targetPath = '${directory.path}/custom-board-background$ext';
+                          final relativePath = 'custom-board-background$ext';
+                          final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
                           await FileImage(File(targetPath)).evict();
                           await File(widget.image.path).copy(targetPath);
                           if (context.mounted) {
                             return Navigator.pop<BoardBackgroundImage>(
                               context,
                               BoardBackgroundImage(
-                                path: targetPath,
+                                path: relativePath,
                                 transform: _transformationMatrix,
                                 isBlurred: blur,
                                 darkColors: widget.darkColorScheme,

@@ -445,6 +445,7 @@ class BoardBackgroundImage with _$BoardBackgroundImage {
   const BoardBackgroundImage._();
 
   const factory BoardBackgroundImage({
+    /// The path to the image asset relative to the document directory returned by [getApplicationDocumentsDirectory]
     required String path,
     required Matrix4 transform,
     required bool isBlurred,

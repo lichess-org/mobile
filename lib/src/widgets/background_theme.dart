@@ -1,10 +1,11 @@
-import 'dart:io' show File;
+import 'dart:io' show Directory, File;
 import 'dart:ui' show ImageFilter;
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
@@ -23,6 +24,8 @@ class BackgroundThemeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final appDocumentsDirectory =
+        ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
 
     if (backgroundTheme == null &&
         boardPrefs.backgroundTheme == null &&
@@ -36,8 +39,12 @@ class BackgroundThemeWidget extends ConsumerWidget {
         boardTheme: boardPrefs.boardTheme,
         child: child,
       );
-    } else if (boardPrefs.backgroundImage != null) {
-      return _BoardBackgroundImage(backgroundImage: boardPrefs.backgroundImage!, child: child);
+    } else if (boardPrefs.backgroundImage != null && appDocumentsDirectory != null) {
+      return _BoardBackgroundImage(
+        backgroundImage: boardPrefs.backgroundImage!,
+        appDocumentsDirectory: appDocumentsDirectory,
+        child: child,
+      );
     } else {
       return _BoardBackgroundTheme(
         backgroundTheme: boardPrefs.backgroundTheme!,
@@ -164,9 +171,14 @@ class _BoardBackgroundTheme extends StatelessWidget {
 }
 
 class _BoardBackgroundImage extends StatefulWidget {
-  const _BoardBackgroundImage({required this.backgroundImage, required this.child});
+  const _BoardBackgroundImage({
+    required this.backgroundImage,
+    required this.appDocumentsDirectory,
+    required this.child,
+  });
 
   final BoardBackgroundImage backgroundImage;
+  final Directory appDocumentsDirectory;
   final Widget child;
 
   @override
@@ -210,7 +222,9 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
                   height: constraints.maxHeight,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: FileImage(File(widget.backgroundImage.path)),
+                      image: FileImage(
+                        File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
+                      ),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                         widget.backgroundImage.filterColor,
