@@ -1540,8 +1540,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0b4d8f20f72beb43c853230dd18063bee242487d"
-      resolved-ref: "0b4d8f20f72beb43c853230dd18063bee242487d"
+      ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
+      resolved-ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
       url: "https://github.com/lichess-org/dart-stockfish.git"
     source: git
     version: "1.6.2"
