@@ -183,6 +183,7 @@ class _OpeningsTabState extends State<_OpeningsTab> {
     _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
       final List<Position> result = [];
       for (final opening in jsonDecode(s) as List) {
+        // ignore: avoid_dynamic_calls
         for (final position in opening['positions'] as List) {
           result.add(Position.fromJson(position as Map<String, dynamic>));
         }
