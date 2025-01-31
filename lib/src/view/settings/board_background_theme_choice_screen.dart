@@ -107,7 +107,6 @@ class _Body extends ConsumerWidget {
                                     image: image,
                                     darkColorScheme: darkScheme,
                                     meanLuminance: meanLuminance,
-                                    viewport: viewport,
                                     appDocumentsDirectory: appDocumentsDirectory,
                                   ),
                               fullscreenDialog: true,
@@ -324,7 +323,6 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
     required this.boardPrefs,
     required this.darkColorScheme,
     required this.meanLuminance,
-    required this.viewport,
     required this.appDocumentsDirectory,
     super.key,
   });
@@ -333,7 +331,6 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   final BoardPrefs boardPrefs;
   final ColorScheme darkColorScheme;
   final double meanLuminance;
-  final Size viewport;
   final Directory appDocumentsDirectory;
 
   @override
@@ -349,7 +346,6 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
   @override
   void initState() {
     super.initState();
-
     _controller.addListener(() {
       _transformationMatrix = _controller.value;
     });
@@ -367,7 +363,6 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       widget.darkColorScheme,
       widget.meanLuminance,
     );
-
     return BackgroundThemeWrapper(
       theme: BoardBackgroundImage.getTheme(widget.darkColorScheme),
       brightness: Brightness.dark,
