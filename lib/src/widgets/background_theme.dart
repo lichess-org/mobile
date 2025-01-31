@@ -226,7 +226,7 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
                 panEnabled: false,
                 scaleEnabled: false,
                 child: Container(
-                  width: constraints.minWidth,
+                  width: constraints.maxWidth,
                   height: constraints.maxHeight,
                   decoration: BoxDecoration(
                     image: DecorationImage(
