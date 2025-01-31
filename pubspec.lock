@@ -739,12 +739,11 @@ packages:
   flutter_slidable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
-      resolved-ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
-      url: "https://github.com/veloce/flutter_slidable.git"
-    source: git
-    version: "3.1.1"
+      name: flutter_slidable
+      sha256: ab7dbb16f783307c9d7762ede2593ce32c220ba2ba0fd540a3db8e9a3acba71a
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
