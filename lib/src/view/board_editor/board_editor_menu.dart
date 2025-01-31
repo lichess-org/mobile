@@ -166,7 +166,7 @@ class SearchPositionScreen extends StatelessWidget {
 }
 
 class _OpeningsTab extends StatefulWidget {
-  const _OpeningsTab({required this.onPositionSelected, super.key});
+  const _OpeningsTab({required this.onPositionSelected});
 
   final void Function(Position position) onPositionSelected;
 
@@ -182,8 +182,8 @@ class _OpeningsTabState extends State<_OpeningsTab> {
   void initState() {
     _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
       final List<Position> result = [];
-      for (var opening in jsonDecode(s) as List) {
-        for (var position in opening['positions'] as List) {
+      for (final opening in jsonDecode(s) as List) {
+        for (final position in opening['positions'] as List) {
           result.add(Position.fromJson(position as Map<String, dynamic>));
         }
       }
@@ -216,7 +216,7 @@ class _OpeningsTabState extends State<_OpeningsTab> {
 }
 
 class _EndGamesTab extends StatefulWidget {
-  const _EndGamesTab({required this.onPositionSelected, super.key});
+  const _EndGamesTab({required this.onPositionSelected});
 
   final void Function(Position position) onPositionSelected;
 
@@ -232,7 +232,7 @@ class _EndGamesTabState extends State<_EndGamesTab> {
   void initState() {
     _endGames = DefaultAssetBundle.of(context).loadString('assets/endgames.json').then((s) {
       final List<Position> result = [];
-      for (var position in jsonDecode(s) as List) {
+      for (final position in jsonDecode(s) as List) {
         result.add(Position.fromJson(position as Map<String, dynamic>));
       }
       return result;
