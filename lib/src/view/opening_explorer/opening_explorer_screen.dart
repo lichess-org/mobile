@@ -41,7 +41,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
       _ => const CenterLoadingIndicator(),
     };
 
-    return BackgroundThemeWidget(
+    return FullScreenBackgroundTheme(
       child: PlatformWidget(
         androidBuilder:
             (_) => Scaffold(

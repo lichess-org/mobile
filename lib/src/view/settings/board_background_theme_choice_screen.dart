@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' show max;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -69,14 +70,16 @@ class _Body extends ConsumerWidget {
                         : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
+                  final maxDimension = max(viewport.width, viewport.height) * devicePixelRatio;
                   final XFile? image = await picker.pickImage(
                     source: ImageSource.gallery,
-                    maxWidth: viewport.width * devicePixelRatio * 2,
-                    maxHeight: viewport.height * devicePixelRatio * 2,
+                    maxWidth: maxDimension,
+                    maxHeight: maxDimension,
                     imageQuality: 80,
                   );
 
                   if (image != null) {
+                    final decodedImage = await decodeImageFromList(await image.readAsBytes());
                     final imageProvider = FileImage(File(image.path));
                     final darkScheme = await ColorScheme.fromImageProvider(
                       provider: imageProvider,
@@ -107,6 +110,11 @@ class _Body extends ConsumerWidget {
                                     image: image,
                                     darkColorScheme: darkScheme,
                                     meanLuminance: meanLuminance,
+                                    viewport: viewport,
+                                    imageSize: Size(
+                                      decodedImage.width.toDouble(),
+                                      decodedImage.height.toDouble(),
+                                    ),
                                     appDocumentsDirectory: appDocumentsDirectory,
                                   ),
                               fullscreenDialog: true,
@@ -256,14 +264,14 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
               constraints.maxWidth > constraints.maxHeight
                   ? Orientation.landscape
                   : Orientation.portrait;
-          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
+          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
           return Stack(
             children: [
               PageView.builder(
                 controller: _controller,
                 itemBuilder: (context, index) {
                   final backgroundTheme = colorChoices[index];
-                  return BackgroundThemeWidget(
+                  return FullScreenBackgroundTheme(
                     backgroundTheme: backgroundTheme,
                     child: const Scaffold(body: SizedBox.expand()),
                   );
@@ -275,9 +283,7 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
                   alignment:
                       orientation == Orientation.portrait ? Alignment.center : Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
-                    ),
+                    padding: EdgeInsets.only(left: orientation == Orientation.portrait ? 0 : 16.0),
                     child: Chessboard.fixed(
                       size:
                           orientation == Orientation.portrait
@@ -323,6 +329,8 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
     required this.boardPrefs,
     required this.darkColorScheme,
     required this.meanLuminance,
+    required this.imageSize,
+    required this.viewport,
     required this.appDocumentsDirectory,
     super.key,
   });
@@ -331,7 +339,30 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   final BoardPrefs boardPrefs;
   final ColorScheme darkColorScheme;
   final double meanLuminance;
+  final Size imageSize;
+  final Size viewport;
   final Directory appDocumentsDirectory;
+
+  Orientation get viewportOrientation =>
+      viewport.width > viewport.height ? Orientation.landscape : Orientation.portrait;
+
+  Orientation get imageOrientation =>
+      imageSize.width > imageSize.height ? Orientation.landscape : Orientation.portrait;
+
+  BoxFit get boxFit =>
+      imageOrientation == viewportOrientation
+          ? BoxFit.cover
+          : imageOrientation == Orientation.portrait
+          ? BoxFit.fitWidth
+          : BoxFit.fitHeight;
+
+  Size get imageFitSize => FullScreenBackgroundImageTheme.imageFitSize(boxFit, imageSize, viewport);
+
+  Matrix4 get centerWidthMatrix =>
+      Matrix4.translationValues((viewport.width - imageFitSize.width) / 2, 0, 0);
+
+  Matrix4 get centerHeightMatrix =>
+      Matrix4.translationValues(0, (viewport.height - imageFitSize.height) / 2, 0);
 
   @override
   State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
@@ -339,13 +370,21 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
 
 class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScreen> {
   bool blur = false;
+  bool showBoard = true;
 
-  final _controller = TransformationController();
+  late final TransformationController _controller;
   Matrix4 _transformationMatrix = Matrix4.identity();
 
   @override
   void initState() {
     super.initState();
+    final initialMatrix =
+        widget.imageOrientation == widget.viewportOrientation
+            ? Matrix4.identity()
+            : widget.imageOrientation == Orientation.landscape
+            ? widget.centerWidthMatrix
+            : widget.centerHeightMatrix;
+    _controller = TransformationController(initialMatrix);
     _controller.addListener(() {
       _transformationMatrix = _controller.value;
     });
@@ -363,111 +402,127 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       widget.darkColorScheme,
       widget.meanLuminance,
     );
+
+    final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+
     return BackgroundThemeWrapper(
       theme: BoardBackgroundImage.getTheme(widget.darkColorScheme),
       brightness: Brightness.dark,
       transparentScaffold: true,
       child: Scaffold(
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final orientation =
-                constraints.maxWidth > constraints.maxHeight
-                    ? Orientation.landscape
-                    : Orientation.portrait;
-            final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
-            return Stack(
-              children: [
-                InteractiveViewer(
-                  transformationController: _controller,
-                  constrained: false,
-                  minScale: 1,
-                  maxScale: 2,
-                  child: Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: Image.file(File(widget.image.path)).image,
-                        colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
-                        fit: BoxFit.cover,
+        body: Stack(
+          children: [
+            InteractiveViewer(
+              transformationController: _controller,
+              constrained: false,
+              minScale: 1,
+              maxScale: 2,
+              child: Container(
+                width: switch (widget.boxFit) {
+                  BoxFit.fitHeight => widget.imageFitSize.width,
+                  _ => widget.viewport.width,
+                },
+                height: switch (widget.boxFit) {
+                  BoxFit.fitWidth => widget.imageFitSize.height,
+                  _ => widget.viewport.height,
+                },
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: Image.file(File(widget.image.path)).image,
+                    colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
+                    fit: widget.boxFit,
+                  ),
+                ),
+                child: BackdropFilter(
+                  enabled: blur,
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: kBackgroundImageBlurFactor,
+                    sigmaY: kBackgroundImageBlurFactor,
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            ),
+            if (showBoard)
+              Positioned.fill(
+                child: Align(
+                  alignment:
+                      widget.viewportOrientation == Orientation.portrait
+                          ? Alignment.center
+                          : Alignment.centerLeft,
+                  child: IgnorePointer(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
-                    ),
-                    child: BackdropFilter(
-                      enabled: blur,
-                      filter: ui.ImageFilter.blur(
-                        sigmaX: kBackgroundImageBlurFactor,
-                        sigmaY: kBackgroundImageBlurFactor,
+                      child: Chessboard.fixed(
+                        size:
+                            widget.viewportOrientation == Orientation.portrait
+                                ? widget.viewport.width
+                                : widget.viewport.height - landscapeBoardPadding * 2,
+                        fen: kInitialFEN,
+                        orientation: Side.white,
+                        settings: widget.boardPrefs.toBoardSettings(),
                       ),
-                      child: const SizedBox.expand(),
                     ),
                   ),
                 ),
-                Positioned.fill(
-                  child: Align(
-                    alignment:
-                        orientation == Orientation.portrait
-                            ? Alignment.center
-                            : Alignment.centerLeft,
-                    child: IgnorePointer(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
-                        ),
-                        child: Chessboard.fixed(
-                          size:
-                              orientation == Orientation.portrait
-                                  ? constraints.maxWidth
-                                  : constraints.maxHeight - landscapeBoardPadding * 2,
-                          fen: kInitialFEN,
-                          orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(),
-                        ),
+              ),
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 26.0,
+              left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
+              right: 0,
+              child: Center(
+                child: PlatformCard(
+                  margin: const EdgeInsets.all(16.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: AdaptiveInkWell(
+                    onTap: () {
+                      setState(() {
+                        blur = !blur;
+                      });
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
+                          const SizedBox(width: 6.0),
+                          const Text('Blur the image', textAlign: TextAlign.center),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Positioned(
-                  top: MediaQuery.paddingOf(context).top + 26.0,
-                  left: orientation == Orientation.portrait ? 0 : null,
-                  right: 0,
-                  child: Center(
-                    child: PlatformCard(
-                      margin: const EdgeInsets.all(16.0),
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: AdaptiveInkWell(
-                        onTap: () {
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.paddingOf(context).bottom,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AdaptiveTextButton(
+                    child: Text(showBoard ? 'Hide board' : 'Show board'),
+                    onPressed:
+                        () => {
                           setState(() {
-                            blur = !blur;
-                          });
+                            showBoard = !showBoard;
+                          }),
                         },
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
-                              const SizedBox(width: 6.0),
-                              const Text('Blur the image', textAlign: TextAlign.center),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: MediaQuery.paddingOf(context).bottom,
-                  left: 0,
-                  right: 0,
-                  child: Row(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       AdaptiveTextButton(
                         child: Text(context.l10n.cancel),
                         onPressed: () => Navigator.pop(context, null),
                       ),
-                      const SizedBox(width: 16.0),
+                      const SizedBox(width: 10.0),
                       AdaptiveTextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
@@ -485,6 +540,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                                 isBlurred: blur,
                                 darkColors: widget.darkColorScheme,
                                 meanLuminance: widget.meanLuminance,
+                                width: widget.imageSize.width,
+                                height: widget.imageSize.height,
+                                viewportWidth: widget.viewport.width,
+                                viewportHeight: widget.viewport.height,
                               ),
                             );
                           }
@@ -492,10 +551,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

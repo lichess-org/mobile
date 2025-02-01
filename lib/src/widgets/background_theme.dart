@@ -14,8 +14,14 @@ const kBackgroundImageBlurFactor = 8.0;
 /// Applies the configured theme to the child widget.
 ///
 /// Tries first to apply the theme provided ar argument, and then from the stored settings.
-class BackgroundThemeWidget extends ConsumerWidget {
-  const BackgroundThemeWidget({required this.child, this.backgroundTheme, super.key});
+///
+/// The background can be a color or an image. If an image is provided, it will be used instead of
+/// the color, and the color will be ignored.
+///
+/// Since the background image is always full screen, this widget should be used to wrap only [Scaffold]
+/// or [CupertinoPageScaffold] widgets.
+class FullScreenBackgroundTheme extends ConsumerWidget {
+  const FullScreenBackgroundTheme({required this.child, this.backgroundTheme, super.key});
 
   /// The child widget to apply the theme to.
   final Widget child;
@@ -42,8 +48,9 @@ class BackgroundThemeWidget extends ConsumerWidget {
         child: child,
       );
     } else if (boardPrefs.backgroundImage != null && appDocumentsDirectory != null) {
-      return _BoardBackgroundImage(
+      return FullScreenBackgroundImageTheme(
         backgroundImage: boardPrefs.backgroundImage!,
+        viewport: MediaQuery.sizeOf(context),
         appDocumentsDirectory: appDocumentsDirectory,
         child: child,
       );
@@ -172,34 +179,58 @@ class _BoardBackgroundTheme extends StatelessWidget {
   }
 }
 
-class _BoardBackgroundImage extends StatefulWidget {
-  const _BoardBackgroundImage({
+/// Applies a background image to the child widget.
+///
+/// The image is always sized to cover the full screen, and the image is blurred if requested.
+/// This is intended to be used with [Scaffold] or [CupertinoPageScaffold] as the child.
+class FullScreenBackgroundImageTheme extends StatefulWidget {
+  const FullScreenBackgroundImageTheme({
     required this.backgroundImage,
+    required this.viewport,
     required this.appDocumentsDirectory,
     required this.child,
   });
 
   final BoardBackgroundImage backgroundImage;
+  final Size viewport;
   final Directory appDocumentsDirectory;
   final Widget child;
 
+  static Size imageFitSize(BoxFit boxFit, Size imageSize, Size viewportSize) => switch (boxFit) {
+    BoxFit.fitWidth => Size(
+      viewportSize.width,
+      imageSize.height * viewportSize.width / imageSize.width,
+    ),
+    BoxFit.fitHeight => Size(
+      imageSize.width * viewportSize.height / imageSize.height,
+      viewportSize.height,
+    ),
+    _ => Size(imageSize.width, imageSize.height),
+  };
+
   @override
-  State<_BoardBackgroundImage> createState() => _BoardBackgroundImageState();
+  State<FullScreenBackgroundImageTheme> createState() => _FullScreenBackgroundImageState();
 }
 
-class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
-  late TransformationController _controller;
+class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageTheme> {
+  final TransformationController _controller = TransformationController();
+
+  Size get pickedImageViewport =>
+      Size(widget.backgroundImage.viewportWidth, widget.backgroundImage.viewportHeight);
 
   @override
   void initState() {
-    _controller = TransformationController(widget.backgroundImage.transform);
+    _updateMatrix(widget.viewport);
     super.initState();
   }
 
   @override
-  void didUpdateWidget(_BoardBackgroundImage oldWidget) {
+  void didUpdateWidget(FullScreenBackgroundImageTheme oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.value = widget.backgroundImage.transform;
+    if (widget.backgroundImage.transform != oldWidget.backgroundImage.transform ||
+        widget.viewport != oldWidget.viewport) {
+      _updateMatrix(widget.viewport);
+    }
   }
 
   @override
@@ -208,54 +239,83 @@ class _BoardBackgroundImageState extends State<_BoardBackgroundImage> {
     _controller.dispose();
   }
 
+  void _updateMatrix(Size viewport) {
+    final matrix =
+        viewport == pickedImageViewport ? widget.backgroundImage.transform : Matrix4.identity();
+    _controller.value = matrix;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final viewportOrientation =
+        widget.viewport.width > widget.viewport.height
+            ? Orientation.landscape
+            : Orientation.portrait;
+    final imageOrientation =
+        widget.backgroundImage.width > widget.backgroundImage.height
+            ? Orientation.landscape
+            : Orientation.portrait;
+    final boxFit =
+        imageOrientation == viewportOrientation
+            ? BoxFit.cover
+            : imageOrientation == Orientation.portrait
+            ? BoxFit.fitWidth
+            : BoxFit.fitHeight;
+
+    final imageFitSize = FullScreenBackgroundImageTheme.imageFitSize(
+      boxFit,
+      Size(widget.backgroundImage.width, widget.backgroundImage.height),
+      widget.viewport,
+    );
+
     return BackgroundThemeWrapper(
       theme: widget.backgroundImage.theme,
       brightness: Brightness.dark,
       transparentScaffold: true,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Stack(
-            children: [
-              InteractiveViewer(
-                transformationController: _controller,
-                constrained: false,
-                minScale: 1,
-                maxScale: 2,
-                panEnabled: false,
-                scaleEnabled: false,
-                child: Container(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: FileImage(
-                        File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
-                      ),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        widget.backgroundImage.filterColor,
-                        BlendMode.srcOver,
-                      ),
-                    ),
+      child: Stack(
+        children: [
+          InteractiveViewer(
+            transformationController: _controller,
+            constrained: false,
+            minScale: 1,
+            maxScale: 2,
+            panEnabled: false,
+            scaleEnabled: false,
+            child: Container(
+              width: switch (boxFit) {
+                BoxFit.fitHeight => imageFitSize.width,
+                _ => widget.viewport.width,
+              },
+              height: switch (boxFit) {
+                BoxFit.fitWidth => imageFitSize.height,
+                _ => widget.viewport.height,
+              },
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: FileImage(
+                    File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
                   ),
-                  child: ClipRect(
-                    child: BackdropFilter(
-                      enabled: widget.backgroundImage.isBlurred,
-                      filter: ImageFilter.blur(
-                        sigmaX: kBackgroundImageBlurFactor,
-                        sigmaY: kBackgroundImageBlurFactor,
-                      ),
-                      child: const SizedBox.expand(),
-                    ),
+                  fit: boxFit,
+                  colorFilter: ColorFilter.mode(
+                    widget.backgroundImage.filterColor,
+                    BlendMode.srcOver,
                   ),
                 ),
               ),
-              Positioned.fill(child: widget.child),
-            ],
-          );
-        },
+              child: ClipRect(
+                child: BackdropFilter(
+                  enabled: widget.backgroundImage.isBlurred,
+                  filter: ImageFilter.blur(
+                    sigmaX: kBackgroundImageBlurFactor,
+                    sigmaY: kBackgroundImageBlurFactor,
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(child: widget.child),
+        ],
       ),
     );
   }

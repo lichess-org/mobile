@@ -183,7 +183,7 @@ class PlatformBoardThemeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundThemeWidget(
+    return FullScreenBackgroundTheme(
       child: PlatformScaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: appBar,

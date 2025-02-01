@@ -26,7 +26,7 @@ class BoardThemeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BackgroundThemeWidget(
+    return FullScreenBackgroundTheme(
       child: PlatformWidget(
         androidBuilder: (context) => const Scaffold(body: _Body()),
         iosBuilder:

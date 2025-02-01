@@ -47,7 +47,7 @@ class StudyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundThemeWidget(child: _StudyScreenLoader(id: id));
+    return FullScreenBackgroundTheme(child: _StudyScreenLoader(id: id));
   }
 }
 

@@ -451,6 +451,10 @@ class BoardBackgroundImage with _$BoardBackgroundImage {
     required bool isBlurred,
     required ColorScheme darkColors,
     required double meanLuminance,
+    required double width,
+    required double height,
+    required double viewportWidth,
+    required double viewportHeight,
   }) = _BoardBackgroundImage;
 
   static Color getFilterColor(ColorScheme scheme, double meanLuminance) =>
@@ -518,6 +522,10 @@ class BoardBackgroundImageConverter
       isBlurred: json['isBlurred'] as bool,
       darkColors: darkColors,
       meanLuminance: json['meanLuminance'] as double,
+      width: json['width'] as double,
+      height: json['height'] as double,
+      viewportWidth: json['viewportWidth'] as double,
+      viewportHeight: json['viewportHeight'] as double,
     );
   }
 
@@ -549,6 +557,10 @@ class BoardBackgroundImageConverter
       'isBlurred': object.isBlurred,
       ...darkColors,
       'meanLuminance': object.meanLuminance,
+      'width': object.width,
+      'height': object.height,
+      'viewportWidth': object.viewportWidth,
+      'viewportHeight': object.viewportHeight,
     };
   }
 }
