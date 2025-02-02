@@ -178,7 +178,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: AutoSizeText(
-          widget.studyState.currentChapterTitle,
+          'Chapter ${widget.studyState.study.chapters.indexOf(widget.studyState.currentChapterMeta) + 1}: ${widget.studyState.currentChapterTitle}',
           maxLines: 2,
           minFontSize: 14,
           overflow: TextOverflow.ellipsis,
