@@ -45,12 +45,7 @@ class ArchivedGameScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (gameData != null) {
-      return _Body(
-        gameData: gameData,
-        orientation: orientation,
-        isLoggedIn: ref.watch(isLoggedInProvider),
-        initialCursor: initialCursor,
-      );
+      return _Body(gameData: gameData, orientation: orientation, initialCursor: initialCursor);
     } else {
       return _LoadGame(gameId: gameId!, orientation: orientation, initialCursor: initialCursor);
     }
@@ -67,24 +62,12 @@ class _LoadGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
-    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return game.when(
       data: (game) {
-        return _Body(
-          gameData: game.data,
-          orientation: orientation,
-          isLoggedIn: isLoggedIn,
-          initialCursor: initialCursor,
-        );
+        return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
       },
-      loading:
-          () => _Body(
-            gameData: null,
-            orientation: orientation,
-            isLoggedIn: isLoggedIn,
-            initialCursor: initialCursor,
-          ),
+      loading: () => _Body(gameData: null, orientation: orientation, initialCursor: initialCursor),
       error: (error, stackTrace) {
         debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         switch (error) {
@@ -92,7 +75,6 @@ class _LoadGame extends ConsumerWidget {
             return _Body(
               gameData: null,
               orientation: orientation,
-              isLoggedIn: isLoggedIn,
               initialCursor: initialCursor,
               error: 'Game not found.',
             );
@@ -100,7 +82,6 @@ class _LoadGame extends ConsumerWidget {
             return _Body(
               gameData: null,
               orientation: orientation,
-              isLoggedIn: isLoggedIn,
               initialCursor: initialCursor,
               error: error,
             );
@@ -110,31 +91,27 @@ class _LoadGame extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({
-    required this.gameData,
-    required this.orientation,
-    required this.isLoggedIn,
-    this.initialCursor,
-    this.error,
-  });
+class _Body extends ConsumerWidget {
+  const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
 
   final LightArchivedGame? gameData;
   final Object? error;
-  final bool isLoggedIn;
   final Side orientation;
   final int? initialCursor;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+
     return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
         title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
         actions: [
           if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
           if (gameData != null && isLoggedIn)
-            BookmarkButton(id: gameData!.id, bookmarked: gameData!.bookmarked!),
-          const ToggleSoundButton(),
+            _GameMenu(id: gameData!.id, bookmarked: gameData!.bookmarked!)
+          else
+            const ToggleSoundButton(),
         ],
       ),
       body: SafeArea(
@@ -157,7 +134,7 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _GameTitle extends StatelessWidget {
+class _GameTitle extends ConsumerWidget {
   const _GameTitle({required this.gameData});
 
   final LightArchivedGame gameData;
@@ -165,7 +142,7 @@ class _GameTitle extends StatelessWidget {
   static final _dateFormat = DateFormat.yMMMd();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -178,6 +155,25 @@ class _GameTitle extends StatelessWidget {
           Text('Import • ${_dateFormat.format(gameData.createdAt)}')
         else
           Text('${gameData.clockDisplay} • ${_dateFormat.format(gameData.lastMoveAt)}'),
+      ],
+    );
+  }
+}
+
+class _GameMenu extends ConsumerWidget {
+  const _GameMenu({required this.id, required this.bookmarked});
+
+  final GameId id;
+  final bool bookmarked;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Game menu',
+      icon: const Icon(Icons.more_horiz),
+      actions: [
+        toggleSoundMenuAction(context, ref),
+        toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
       ],
     );
   }

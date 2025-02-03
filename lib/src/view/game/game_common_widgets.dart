@@ -26,49 +26,49 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class BookmarkButton extends ConsumerStatefulWidget {
-  const BookmarkButton({required this.id, required this.bookmarked});
+AppBarMenuAction toggleBookmarkMenuAction(
+  BuildContext context,
+  WidgetRef ref, {
+  required GameId id,
+  required bool bookmarked,
+}) {
+  return AppBarMenuAction(
+    icon: bookmarked ? Icons.star : Icons.star_outline_rounded,
+    label: 'Bookmark',
+    onPressed: () async {
+      try {
+        await ref.withClient(
+          (client) => GameRepository(client).bookmark(id, bookmark: !bookmarked),
+        );
 
-  final GameId id;
-  final bool bookmarked;
-
-  @override
-  ConsumerState<BookmarkButton> createState() => _BookmarkButtonState();
+        ref.invalidate(userGameHistoryProvider);
+        // TODO: invalidate providers
+      } on Exception catch (_) {
+        if (context.mounted) {
+          showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);
+        }
+      }
+    },
+  );
 }
 
-class _BookmarkButtonState extends ConsumerState<BookmarkButton> {
-  late bool bookmarked;
-
-  @override
-  void initState() {
-    super.initState();
-    bookmarked = widget.bookmarked;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      onPressed: () async {
-        try {
-          await ref.withClient(
-            (client) => GameRepository(client).bookmark(widget.id, bookmark: !widget.bookmarked),
-          );
-
-          ref.invalidate(userGameHistoryProvider);
-          setState(() {
-            bookmarked = !bookmarked;
-          });
-          // TODO: invalidate providers
-        } on Exception catch (_) {
-          if (context.mounted) {
-            showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);
-          }
-        }
-      },
-      semanticsLabel: context.l10n.bookmarkThisGame,
-      icon: Icon(widget.bookmarked ? Icons.star : Icons.star_outline_rounded),
-    );
-  }
+AppBarMenuAction _settingsMenuAction(
+  BuildContext context,
+  WidgetRef ref, {
+  required GameFullId id,
+}) {
+  return AppBarMenuAction(
+    icon: Icons.settings,
+    label: context.l10n.settingsSettings,
+    onPressed:
+        () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (_) => GameSettings(id: id),
+        ),
+  );
 }
 
 class _SettingButton extends ConsumerWidget {
@@ -136,12 +136,30 @@ class GameAppBar extends ConsumerWidget {
               : challenge != null
               ? _ChallengeGameTitle(challenge: challenge!)
               : const SizedBox.shrink(),
+      actions:
+          (id != null && bookmarked != null)
+              ? [_GameMenu(id: id!, bookmarked: bookmarked!)]
+              : [const ToggleSoundButton(), if (id != null) _SettingButton(id: id!)],
+    );
+  }
+}
+
+class _GameMenu extends ConsumerWidget {
+  const _GameMenu({required this.id, required this.bookmarked});
+
+  final GameFullId id;
+  final bool bookmarked;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    context.l10n.sound;
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Game menu',
+      icon: const Icon(Icons.more_horiz),
       actions: [
-        const ToggleSoundButton(),
-        if (id != null) ...[
-          if (bookmarked != null) BookmarkButton(id: id!.gameId, bookmarked: bookmarked ?? false),
-          _SettingButton(id: id!),
-        ],
+        _settingsMenuAction(context, ref, id: id),
+        toggleSoundMenuAction(context, ref),
+        toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
       ],
     );
   }
