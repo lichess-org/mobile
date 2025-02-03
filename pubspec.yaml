@@ -41,7 +41,7 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.3+1
+  flutter_markdown: ^0.7.6
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
   flutter_secure_storage: ^9.2.0
