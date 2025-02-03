@@ -173,7 +173,10 @@ class _Body extends ConsumerWidget {
 
                 return Tooltip(
                   message: 'Background based on chessboard colors.',
-                  triggerMode: t == BoardBackgroundTheme.board ? null : TooltipTriggerMode.manual,
+                  triggerMode:
+                      t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
+                          ? null
+                          : TooltipTriggerMode.manual,
                   child: GestureDetector(
                     onTap:
                         () => Navigator.of(context, rootNavigator: true)
@@ -201,7 +204,7 @@ class _Body extends ConsumerWidget {
                       child: ColoredBox(
                         color: theme.scaffoldBackgroundColor,
                         child:
-                            t == BoardBackgroundTheme.board
+                            t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
                                 ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
