@@ -160,13 +160,15 @@ class _Body extends ConsumerWidget {
                     )
                     : null,
           ),
-          if (isOnline)
-            _ToolsButton(
-              icon: LichessIcons.study,
-              title: context.l10n.studyMenu,
-              onTap:
-                  () => pushPlatformRoute(context, builder: (context) => const StudyListScreen()),
-            ),
+          _ToolsButton(
+            icon: LichessIcons.study,
+            title: context.l10n.studyMenu,
+            onTap:
+                isOnline
+                    ? () =>
+                        pushPlatformRoute(context, builder: (context) => const StudyListScreen())
+                    : null,
+          ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
