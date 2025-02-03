@@ -10,7 +10,7 @@ environment:
   flutter: "3.28.0-0.1.pre"
 
 dependencies:
-  app_settings: ^5.1.1
+  app_settings: ^5.2.0
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
