@@ -56,7 +56,7 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
   meta: ^1.8.0
-  package_info_plus: ^8.0.0
+  package_info_plus: ^8.1.4
   path: ^1.8.2
   path_provider: ^2.1.5
   popover: ^0.3.0
