@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -12,18 +13,21 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
+const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -40,16 +44,18 @@ class BroadcastListScreen extends StatelessWidget {
     return PlatformWidget(
       androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
       iosBuilder:
-          (_) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-              automaticBackgroundVisibility: false,
-              backgroundColor: Styles.cupertinoAppBarColor
-                  .resolveFrom(context)
-                  .withValues(alpha: 0.0),
-              border: null,
+          (_) => CupertinoMaterialWrapper(
+            child: CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: title,
+                automaticBackgroundVisibility: false,
+                backgroundColor: CupertinoTheme.of(
+                  context,
+                ).barBackgroundColor.withValues(alpha: 0.0),
+                border: null,
+              ),
+              child: const _Body(),
             ),
-            child: const _Body(),
           ),
     );
   }
@@ -130,7 +136,7 @@ class _BodyState extends ConsumerState<_Body> {
       crossAxisCount: itemsByRow,
       crossAxisSpacing: 12.0,
       mainAxisSpacing: 16.0,
-      childAspectRatio: 1.45,
+      childAspectRatio: 1.35,
     );
 
     final lowTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
@@ -269,6 +275,245 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
+const BroadcastList _emptyBroadcasts = (
+  active: IListConst<Broadcast>([]),
+  past: IListConst<Broadcast>([]),
+  nextPage: null,
+);
+
+const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
+const kHandsetCarouselFlexWeights = [6, 2];
+const kTabletCarouselFlexWeights = [4, 4, 1];
+const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
+
+class BroadcastCarousel extends StatefulWidget {
+  const BroadcastCarousel({required this.broadcasts, required this.worker, super.key})
+    : _isLoading = false;
+
+  const BroadcastCarousel.loading({required this.worker})
+    : _isLoading = true,
+      broadcasts = _emptyBroadcasts;
+
+  final BroadcastList broadcasts;
+  final ImageColorWorker worker;
+  final bool _isLoading;
+
+  static List<int> flexWeights(double screenWidth) {
+    switch (screenWidth) {
+      case > FormFactor.desktop:
+        return kDesktopCarouselFlexWeights;
+      case > FormFactor.tablet:
+        return kTabletCarouselFlexWeights;
+      case _:
+        return kHandsetCarouselFlexWeights;
+    }
+  }
+
+  @override
+  State<BroadcastCarousel> createState() => _BroadcastCarouselState();
+}
+
+class _BroadcastCarouselState extends State<BroadcastCarousel> {
+  final _controller = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    watchTabInteraction.addListener(_onTabInteraction);
+  }
+
+  @override
+  void dispose() {
+    watchTabInteraction.removeListener(_onTabInteraction);
+    super.dispose();
+  }
+
+  void _onTabInteraction() {
+    if (_controller.hasClients) {
+      _controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final flexWeights = BroadcastCarousel.flexWeights(constraints.maxWidth);
+        final widgetWidth = constraints.maxWidth;
+        final elementWidth = widgetWidth * flexWeights[0] / flexWeights.reduce((a, b) => a + b);
+        final pictureHeight = elementWidth / 2;
+        final elementHeight = pictureHeight + (pictureHeight * 0.5);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: elementHeight + kBroadcastCarouselItemPadding.vertical,
+            ),
+            child: CarouselView.weighted(
+              controller: _controller,
+              shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+              elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
+              flexWeights: flexWeights,
+              itemSnapping: true,
+              padding: kBroadcastCarouselItemPadding,
+              onTap: (index) {
+                final broadcast = widget.broadcasts.active[index];
+                pushPlatformRoute(
+                  context,
+                  title: broadcast.title,
+                  rootNavigator: true,
+                  builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
+                );
+              },
+              children: [
+                if (widget._isLoading)
+                  for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
+                    BroadcastCarouselItem.loading(worker: widget.worker, flexWeights: flexWeights),
+                for (final broadcast in widget.broadcasts.active)
+                  BroadcastCarouselItem(
+                    broadcast: broadcast,
+                    worker: widget.worker,
+                    flexWeights: flexWeights,
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
+final Map<ImageProvider, _CardColors?> _colorsCache = {};
+
+final _dateFormat = DateFormat.MMMd().add_jm();
+
+class _BroadcastCardContent extends StatelessWidget {
+  const _BroadcastCardContent({required this.broadcast, required _CardColors? cardColors})
+    : _cardColors = cardColors;
+
+  final Broadcast broadcast;
+  final _CardColors? _cardColors;
+
+  @override
+  Widget build(BuildContext context) {
+    String? eventDate;
+    if (broadcast.round.startsAt != null) {
+      final diff = broadcast.round.startsAt!.difference(DateTime.now());
+      if (!diff.isNegative && diff.inDays >= 1) {
+        eventDate = _dateFormat.format(broadcast.round.startsAt!);
+      } else {
+        eventDate = relativeDate(context.l10n, broadcast.round.startsAt!);
+      }
+    }
+
+    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
+    final titleColor = _cardColors?.onPrimaryContainer;
+    final subTitleColor =
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+    final bgHsl = HSLColor.fromColor(backgroundColor);
+    final liveHsl = HSLColor.fromColor(LichessColors.red);
+    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
+
+    return Padding(
+      padding: kBroadcastCardItemContentPadding,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment:
+                    broadcast.isLive ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  if (!broadcast.isFinished) ...[
+                    Flexible(
+                      flex: broadcast.isLive ? 1 : 0,
+                      child: Text(
+                        broadcast.round.name,
+                        style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                        overflow: TextOverflow.clip,
+                        softWrap: false,
+                        maxLines: 1,
+                      ),
+                    ),
+                    const SizedBox(width: 5.0),
+                  ],
+                  if (broadcast.isLive) ...[
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          size: 16,
+                          color: liveColor,
+                          shadows: const [
+                            Shadow(color: Colors.black54, offset: Offset(0, 1), blurRadius: 2),
+                          ],
+                        ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          'LIVE',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: liveColor,
+                            shadows: const [
+                              Shadow(color: Colors.black54, offset: Offset(0, 1), blurRadius: 2),
+                            ],
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ] else if (eventDate != null)
+                    Flexible(
+                      child: Text(
+                        eventDate,
+                        style: TextStyle(fontSize: 12, color: subTitleColor),
+                        overflow: TextOverflow.clip,
+                        softWrap: false,
+                        maxLines: 1,
+                      ),
+                    ),
+                ],
+              ),
+              Text(
+                broadcast.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: titleColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  height: 1.0,
+                ),
+              ),
+            ],
+          ),
+          if (broadcast.tour.information.players != null)
+            Text(
+              broadcast.tour.information.players!,
+              style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class BroadcastCard extends StatefulWidget {
   const BroadcastCard({
     required this.broadcast,
@@ -313,15 +558,10 @@ class BroadcastCard extends StatefulWidget {
       );
 
   @override
-  State<BroadcastCard> createState() => _BroadcastCartState();
+  State<BroadcastCard> createState() => _BroadcastCardState();
 }
 
-typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
-
-final _dateFormat = DateFormat.MMMd().add_jm();
-
-class _BroadcastCartState extends State<BroadcastCard> {
+class _BroadcastCardState extends State<BroadcastCard> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
@@ -373,27 +613,8 @@ class _BroadcastCartState extends State<BroadcastCard> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
+    final defaultBackgroundColor = ColorScheme.of(context).surfaceContainer;
     final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
-    final titleColor = _cardColors?.onPrimaryContainer;
-    final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
-    final bgHsl = HSLColor.fromColor(backgroundColor);
-    final liveHsl = HSLColor.fromColor(LichessColors.red);
-    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
-
-    String? eventDate;
-    if (widget.broadcast.round.startsAt != null) {
-      final diff = widget.broadcast.round.startsAt!.difference(DateTime.now());
-      if (!diff.isNegative && diff.inDays >= 1) {
-        eventDate = _dateFormat.format(widget.broadcast.round.startsAt!);
-      } else {
-        eventDate = relativeDate(context.l10n, widget.broadcast.round.startsAt!);
-      }
-    }
 
     return GestureDetector(
       onTap: () {
@@ -419,147 +640,163 @@ class _BroadcastCartState extends State<BroadcastCard> {
             boxShadow:
                 Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
           ),
-          child: Stack(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ShaderMask(
-                blendMode: BlendMode.dstOut,
-                shaderCallback: (bounds) {
-                  return LinearGradient(
-                    begin: const Alignment(0.0, 0.5),
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      backgroundColor.withValues(alpha: 0.0),
-                      backgroundColor.withValues(alpha: 1.0),
-                    ],
-                    stops: const [0.5, 1.10],
-                    tileMode: TileMode.clamp,
-                  ).createShader(bounds);
+              Image(
+                image: imageProvider,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: frame == null ? 0 : 1,
+                    child: child,
+                  );
                 },
-                child: AspectRatio(
-                  aspectRatio: 2.0,
-                  child: Image(
-                    image: imageProvider,
-                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                      if (wasSynchronouslyLoaded) {
-                        return child;
-                      }
-                      return AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: frame == null ? 0 : 1,
-                        child: child,
-                      );
-                    },
-                    errorBuilder:
-                        (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-                  ),
-                ),
+                errorBuilder:
+                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
               ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 8.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding,
-                      child: Row(
-                        mainAxisAlignment:
-                            widget.broadcast.isLive
-                                ? MainAxisAlignment.spaceBetween
-                                : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          if (!widget.broadcast.isFinished) ...[
-                            Flexible(
-                              flex: widget.broadcast.isLive ? 1 : 0,
-                              child: Text(
-                                widget.broadcast.round.name,
-                                style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            const SizedBox(width: 5.0),
-                          ],
-                          if (widget.broadcast.isLive) ...[
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  size: 16,
-                                  color: liveColor,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black54,
-                                      offset: Offset(0, 1),
-                                      blurRadius: 2,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 4.0),
-                                Text(
-                                  'LIVE',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: liveColor,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black54,
-                                        offset: Offset(0, 1),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ] else if (eventDate != null)
-                            Flexible(
-                              child: Text(
-                                eventDate,
-                                style: TextStyle(fontSize: 12, color: subTitleColor),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding.add(
-                        const EdgeInsets.symmetric(vertical: 3.0),
-                      ),
-                      child: Text(
-                        widget.broadcast.title,
-                        maxLines: widget.aspectRatio == 1.0 ? 3 : 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: titleColor,
-                          fontWeight: FontWeight.bold,
-                          height: 1.0,
-                        ),
-                      ),
-                    ),
-                    if (widget.broadcast.tour.information.players != null)
-                      Padding(
-                        padding: kBroadcastGridItemContentPadding,
-                        child: Text(
-                          widget.broadcast.tour.information.players!,
-                          style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                  ],
-                ),
+              Expanded(
+                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class BroadcastCarouselItem extends StatefulWidget {
+  const BroadcastCarouselItem({
+    required this.broadcast,
+    required this.flexWeights,
+    required this.worker,
+    super.key,
+  });
+
+  final Broadcast broadcast;
+  final ImageColorWorker worker;
+  final List<int> flexWeights;
+
+  const BroadcastCarouselItem.loading({required this.worker, required this.flexWeights})
+    : broadcast = const Broadcast(
+        tour: BroadcastTournamentData(
+          id: BroadcastTournamentId(''),
+          name: '',
+          slug: '',
+          imageUrl: null,
+          description: '',
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            website: null,
+            location: null,
+            dates: null,
+            standings: null,
+          ),
+        ),
+        round: BroadcastRound(
+          id: BroadcastRoundId(''),
+          name: '',
+          slug: '',
+          status: RoundStatus.finished,
+          startsAt: null,
+          finishedAt: null,
+          startsAfterPrevious: false,
+        ),
+        group: null,
+        roundToLinkId: BroadcastRoundId(''),
+      );
+
+  @override
+  State<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
+}
+
+class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
+  _CardColors? _cardColors;
+
+  String? get imageUrl => widget.broadcast.tour.imageUrl;
+
+  ImageProvider get imageProvider =>
+      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final cachedColors = _colorsCache[imageProvider];
+    if (_colorsCache.containsKey(imageProvider)) {
+      _cardColors = cachedColors;
+    } else if (imageUrl != null) {
+      _getImageColors(NetworkImage(imageUrl!));
+    }
+  }
+
+  Future<void> _getImageColors(NetworkImage provider) async {
+    if (!mounted) return;
+
+    if (Scrollable.recommendDeferredLoadingForContext(context)) {
+      SchedulerBinding.instance.scheduleFrameCallback((_) {
+        scheduleMicrotask(() => _getImageColors(provider));
+      });
+    } else if (widget.worker.closed == false) {
+      await precacheImage(provider, context);
+      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final imageBytes = await scaledImage.toByteData();
+      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      if (response != null) {
+        if (mounted) {
+          setState(() {
+            _cardColors = response;
+          });
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final double width = screenWidth - 16.0;
+    final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
+    final flexWeights = widget.flexWeights;
+    final totalFlex = flexWeights.reduce((a, b) => a + b);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(color: backgroundColor),
+      child: OverflowBox(
+        maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+        minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image(
+              image: imageProvider,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: frame == null ? 0 : 1,
+                  child: child,
+                );
+              },
+              errorBuilder:
+                  (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+            ),
+            Expanded(
+              child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+            ),
+          ],
         ),
       ),
     );

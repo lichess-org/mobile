@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 const double kEvalGaugeSize = 24.0;
 const double kEvalGaugeFontSize = 11.0;
-const Color _kEvalGaugeBackgroundColor = Color(0xFF444444);
-const Color _kEvalGaugeValueColorDarkBg = Color(0xEEEEEEEE);
-const Color _kEvalGaugeValueColorLightBg = Color(0xFFFFFFFF);
 
 enum EngineGaugeDisplayMode { vertical, horizontal }
 
@@ -37,21 +33,15 @@ class EngineGauge extends ConsumerWidget {
 
   final EngineGaugeParams params;
 
-  static Color backgroundColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? _kEvalGaugeBackgroundColor
-          : brightness == Brightness.dark
-          ? lighten(Theme.of(context).colorScheme.surface, .07)
-          : lighten(Theme.of(context).colorScheme.onSurface, .17);
+  static Color backgroundColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? lighten(ColorScheme.of(context).surface, .07)
+          : lighten(ColorScheme.of(context).onSurface, .17);
 
-  static Color valueColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? brightness == Brightness.dark
-              ? _kEvalGaugeValueColorDarkBg
-              : _kEvalGaugeValueColorLightBg
-          : brightness == Brightness.dark
-          ? darken(Theme.of(context).colorScheme.onSurface, .03)
-          : darken(Theme.of(context).colorScheme.surface, .01);
+  static Color valueColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? darken(ColorScheme.of(context).onSurface, .1)
+          : darken(ColorScheme.of(context).surface, .01);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,7 +70,7 @@ class EngineGauge extends ConsumerWidget {
   }
 }
 
-class _EvalGauge extends ConsumerStatefulWidget {
+class _EvalGauge extends StatefulWidget {
   const _EvalGauge({
     required this.position,
     required this.displayMode,
@@ -98,10 +88,10 @@ class _EvalGauge extends ConsumerStatefulWidget {
       (((whiteWinningChances + 1) * 0.5).abs() * 100).roundToDouble() / 100;
 
   @override
-  ConsumerState<_EvalGauge> createState() => _EvalGaugeState();
+  State<_EvalGauge> createState() => _EvalGaugeState();
 }
 
-class _EvalGaugeState extends ConsumerState<_EvalGauge> {
+class _EvalGaugeState extends State<_EvalGauge> {
   double fromValue = 0.5;
 
   @override
@@ -112,7 +102,6 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = ref.watch(currentBrightnessProvider);
     final TextDirection textDirection = Directionality.of(context);
 
     final evalDisplay =
@@ -156,13 +145,13 @@ class _EvalGaugeState extends ConsumerState<_EvalGauge> {
                     widget.displayMode == EngineGaugeDisplayMode.vertical
                         ? _EvalGaugeVerticalPainter(
                           orientation: widget.orientation,
-                          backgroundColor: EngineGauge.backgroundColor(context, brightness),
-                          valueColor: EngineGauge.valueColor(context, brightness),
+                          backgroundColor: EngineGauge.backgroundColor(context),
+                          valueColor: EngineGauge.valueColor(context),
                           value: value,
                         )
                         : _EvalGaugeHorizontalPainter(
-                          backgroundColor: EngineGauge.backgroundColor(context, brightness),
-                          valueColor: EngineGauge.valueColor(context, brightness),
+                          backgroundColor: EngineGauge.backgroundColor(context),
+                          valueColor: EngineGauge.valueColor(context),
                           value: value,
                           textDirection: textDirection,
                         ),

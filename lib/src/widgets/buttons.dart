@@ -194,16 +194,7 @@ class AppBarNotificationIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarIconButton(
-      icon: Badge.count(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        textStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onTertiary,
-          fontWeight: FontWeight.bold,
-        ),
-        count: count,
-        isLabelVisible: count > 0,
-        child: icon,
-      ),
+      icon: Badge.count(count: count, isLabelVisible: count > 0, child: icon),
       onPressed: onPressed,
       semanticsLabel: semanticsLabel,
     );

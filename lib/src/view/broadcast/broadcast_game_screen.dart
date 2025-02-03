@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -85,7 +84,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               _ => const SizedBox.shrink(),
             };
 
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
         title: title,
         actions: [
@@ -218,14 +217,17 @@ class _BroadcastGameTreeView extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return SingleChildScrollView(
-      child: DebouncedPgnTreeView(
-        root: state.root,
-        currentPath: state.currentPath,
-        broadcastLivePath: state.broadcastLivePath,
-        pgnRootComments: state.pgnRootComments,
-        shouldShowAnnotations: analysisPrefs.showAnnotations,
-        notifier: ref.read(ctrlProvider.notifier),
+    return ColoredBox(
+      color: ColorScheme.of(context).surface,
+      child: SingleChildScrollView(
+        child: DebouncedPgnTreeView(
+          root: state.root,
+          currentPath: state.currentPath,
+          broadcastLivePath: state.broadcastLivePath,
+          pgnRootComments: state.pgnRootComments,
+          shouldShowAnnotations: analysisPrefs.showAnnotations,
+          notifier: ref.read(ctrlProvider.notifier),
+        ),
       ),
     );
   }
@@ -401,10 +403,7 @@ class _PlayerWidget extends ConsumerWidget {
             );
           },
           child: Container(
-            color:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Styles.cupertinoCardColor.resolveFrom(context)
-                    : Theme.of(context).colorScheme.surfaceContainer,
+            color: ColorScheme.of(context).surfaceContainer,
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [
@@ -438,8 +437,8 @@ class _PlayerWidget extends ConsumerWidget {
                     color:
                         (side == sideToMove)
                             ? isCursorOnLiveMove
-                                ? Theme.of(context).colorScheme.tertiaryContainer
-                                : Theme.of(context).colorScheme.secondaryContainer
+                                ? ColorScheme.of(context).tertiaryContainer
+                                : ColorScheme.of(context).secondaryContainer
                             : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -493,8 +492,8 @@ class _Clock extends StatelessWidget {
         color:
             isSideToMove
                 ? isLive
-                    ? Theme.of(context).colorScheme.onTertiaryContainer
-                    : Theme.of(context).colorScheme.onSecondaryContainer
+                    ? ColorScheme.of(context).onTertiaryContainer
+                    : ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),

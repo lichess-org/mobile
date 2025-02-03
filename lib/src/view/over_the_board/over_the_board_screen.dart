@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -265,10 +264,6 @@ class _Player extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle =
-        brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
-
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
@@ -287,7 +282,6 @@ class _Player extends ConsumerWidget {
                   timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
                   key: clockKey,
                   active: clock.activeClock == side,
-                  clockStyle: clockStyle,
                   // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
                   emergencyThreshold: Duration(
                     seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),

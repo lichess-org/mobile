@@ -1,6 +1,8 @@
 import 'dart:ui' show Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
+    show BoardTheme, boardPreferencesProvider;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
@@ -46,8 +48,11 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     return save(state.copyWith(masterVolume: volume));
   }
 
-  Future<void> setAppThemeSeed(AppThemeSeed seed) {
-    return save(state.copyWith(appThemeSeed: seed));
+  Future<void> toggleSystemColors() {
+    return Future.wait([
+      save(state.copyWith(systemColors: !state.systemColors)),
+      ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system),
+    ]).then((_) => {});
   }
 }
 
@@ -60,9 +65,11 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
-    @Deprecated('Use appThemeSeed instead') bool? systemColors,
+    /// Whether to use system colors on android 10+.
+    @JsonKey(defaultValue: false) required bool systemColors,
 
     /// App theme seed
+    @Deprecated('Use systemColors instead')
     @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
     required AppThemeSeed appThemeSeed,
 
@@ -75,6 +82,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
+    systemColors: false,
     appThemeSeed: AppThemeSeed.board,
   );
 

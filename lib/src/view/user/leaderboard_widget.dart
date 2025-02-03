@@ -51,7 +51,7 @@ class LeaderboardWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 5, header: true),
+              child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
             ),
           ),
     );

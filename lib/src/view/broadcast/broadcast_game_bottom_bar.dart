@@ -33,7 +33,7 @@ class BroadcastGameBottomBar extends ConsumerWidget {
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

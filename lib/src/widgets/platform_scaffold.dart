@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
@@ -115,6 +117,7 @@ class PlatformScaffold extends StatelessWidget {
     this.appBar,
     required this.body,
     this.resizeToAvoidBottomInset = true,
+    this.backgroundColor,
   });
 
   /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
@@ -128,9 +131,12 @@ class PlatformScaffold extends StatelessWidget {
   /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
   final bool resizeToAvoidBottomInset;
 
+  final Color? backgroundColor;
+
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      backgroundColor: backgroundColor,
       appBar:
           appBar != null
               ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
@@ -140,15 +146,49 @@ class PlatformScaffold extends StatelessWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
-      child: body,
+    return CupertinoMaterialWrapper(
+      child: CupertinoPageScaffold(
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
+        backgroundColor: backgroundColor,
+        child: body,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
+  }
+}
+
+class PlatformBoardThemeScaffold extends StatelessWidget {
+  const PlatformBoardThemeScaffold({
+    super.key,
+    this.appBar,
+    required this.body,
+    this.resizeToAvoidBottomInset = true,
+  });
+
+  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
+  ///
+  /// Usually an instance of [PlatformAppBar].
+  final Widget? appBar;
+
+  /// The main content of the screen, displayed below the navigation bar.
+  final Widget body;
+
+  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
+  final bool resizeToAvoidBottomInset;
+
+  @override
+  Widget build(BuildContext context) {
+    return FullScreenBackgroundTheme(
+      child: PlatformScaffold(
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        appBar: appBar,
+        body: body,
+      ),
+    );
   }
 }

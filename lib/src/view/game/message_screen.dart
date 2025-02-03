@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -7,7 +6,6 @@ import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
@@ -49,7 +47,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
@@ -112,26 +110,12 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.primaryContainer
-              : CupertinoColors.systemGrey4.resolveFrom(context)
-          : you
-          ? Theme.of(context).colorScheme.primaryContainer
-          : brightness == Brightness.light
-          ? lighten(LichessColors.grey)
-          : darken(LichessColors.grey, 0.5);
+      you
+          ? ColorScheme.of(context).secondary
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      Theme.of(context).platform == TargetPlatform.iOS
-          ? you
-              ? Theme.of(context).colorScheme.onPrimaryContainer
-              : CupertinoColors.label.resolveFrom(context)
-          : you
-          ? Theme.of(context).colorScheme.onPrimaryContainer
-          : brightness == Brightness.light
-          ? Colors.black
-          : Colors.white;
+      you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -230,7 +214,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: CupertinoColors.separator.resolveFrom(context)),
+            border: Border.all(color: ColorScheme.of(context).outline),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           placeholder: placeholder,

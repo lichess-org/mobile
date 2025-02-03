@@ -339,10 +339,10 @@ class MaterialDifferenceDisplay extends StatelessWidget {
           children: [
             for (final role in Role.values)
               for (int i = 0; i < piecesToRender[role]!; i++)
-                Icon(_iconByRole[role], size: 13, color: Colors.grey),
+                Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
             const SizedBox(width: 3),
             Text(
-              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
               materialDiff.score > 0 ? '+${materialDiff.score}' : '',
             ),
           ],

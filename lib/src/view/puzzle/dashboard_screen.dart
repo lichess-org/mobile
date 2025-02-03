@@ -44,6 +44,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
+    final cardColor = Theme.of(context).platform == TargetPlatform.iOS ? Colors.transparent : null;
 
     return puzzleDashboard.when(
       data: (dashboard) {
@@ -65,35 +66,31 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
-            Padding(
-              padding:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? EdgeInsets.zero
-                      : Styles.horizontalBodyPadding,
-              child: StatCardRow([
-                StatCard(context.l10n.performance, value: dashboard.global.performance.toString()),
-                StatCard(
-                  context.l10n
-                      .puzzleNbPlayed(dashboard.global.nb)
-                      .replaceAll(RegExp(r'\d+'), '')
-                      .trim()
-                      .capitalize(),
-                  value: dashboard.global.nb.toString().localizeNumbers(),
-                ),
-                StatCard(
-                  context.l10n.puzzleSolved.capitalize(),
-                  value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                ),
-              ]),
-            ),
-            if (chartData.length >= 3)
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: AspectRatio(
-                  aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
-                  child: PuzzleChart(chartData),
-                ),
+            StatCardRow([
+              StatCard(
+                context.l10n.performance,
+                value: dashboard.global.performance.toString(),
+                backgroundColor: cardColor,
+                elevation: 0,
               ),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(dashboard.global.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n.puzzleSolved.capitalize(),
+                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+            ]),
+            if (chartData.length >= 3) PuzzleChart(chartData),
           ],
         );
       },
@@ -163,29 +160,37 @@ class PuzzleChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radarColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
-    final chartColor = Theme.of(context).colorScheme.tertiary;
-    return RadarChart(
-      RadarChartData(
-        radarBorderData: BorderSide(width: 0.5, color: radarColor),
-        gridBorderData: BorderSide(width: 0.5, color: radarColor),
-        tickBorderData: BorderSide(width: 0.5, color: radarColor),
-        radarShape: RadarShape.polygon,
-        dataSets: [
-          RadarDataSet(
-            fillColor: chartColor.withValues(alpha: 0.2),
-            borderColor: chartColor,
-            dataEntries:
-                puzzleData.map((theme) => RadarEntry(value: theme.performance.toDouble())).toList(),
+    final radarColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
+    final chartColor = ColorScheme.of(context).secondary;
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: AspectRatio(
+        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
+        child: RadarChart(
+          RadarChartData(
+            radarBorderData: BorderSide(width: 0.5, color: radarColor),
+            gridBorderData: BorderSide(width: 0.5, color: radarColor),
+            tickBorderData: BorderSide(width: 0.5, color: radarColor),
+            radarShape: RadarShape.polygon,
+            dataSets: [
+              RadarDataSet(
+                fillColor: chartColor.withValues(alpha: 0.2),
+                borderColor: chartColor,
+                dataEntries:
+                    puzzleData
+                        .map((theme) => RadarEntry(value: theme.performance.toDouble()))
+                        .toList(),
+              ),
+            ],
+            getTitle:
+                (index, angle) =>
+                    RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
+            titleTextStyle: const TextStyle(fontSize: 10),
+            titlePositionPercentageOffset: 0.09,
+            tickCount: 3,
+            ticksTextStyle: const TextStyle(fontSize: 8),
           ),
-        ],
-        getTitle:
-            (index, angle) =>
-                RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
-        titleTextStyle: const TextStyle(fontSize: 10),
-        titlePositionPercentageOffset: 0.09,
-        tickCount: 3,
-        ticksTextStyle: const TextStyle(fontSize: 8),
+        ),
       ),
     );
   }

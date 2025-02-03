@@ -75,7 +75,7 @@ class _Body extends ConsumerWidget {
                     color:
                         Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoTheme.of(context).primaryColor
-                            : Theme.of(context).colorScheme.primary,
+                            : ColorScheme.of(context).primary,
                     size: 30,
                   ),
                   UserFullNameWidget.player(

@@ -38,7 +38,7 @@ class OpeningNameHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
         onTap:
             opening.name == context.l10n.startPosition
@@ -47,17 +47,14 @@ class OpeningNameHeader extends StatelessWidget {
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
-              Icon(
-                Icons.open_in_browser_outlined,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
+              Icon(Icons.open_in_browser_outlined, color: ColorScheme.of(context).onSurface),
               const SizedBox(width: 6.0),
             ],
             Expanded(
               child: Text(
                 opening.name,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: ColorScheme.of(context).onSurface,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 1,
@@ -119,7 +116,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       columnWidths: columnWidths,
       children: [
         TableRow(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+          decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
           children: [
             Padding(
               padding: _kTableRowPadding,
@@ -155,8 +152,8 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             decoration: BoxDecoration(
               color:
                   index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                      ? ColorScheme.of(context).surfaceContainerLow
+                      : ColorScheme.of(context).surfaceContainerHigh,
             ),
             children: [
               TableRowInkWell(
@@ -189,8 +186,8 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             decoration: BoxDecoration(
               color:
                   moves.length.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                      ? ColorScheme.of(context).surfaceContainerLow
+                      : ColorScheme.of(context).surfaceContainerHigh,
             ),
             children: [
               Container(
@@ -211,7 +208,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           )
         else
           TableRow(
-            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerLow),
+            decoration: BoxDecoration(color: ColorScheme.of(context).surfaceContainerLow),
             children: [
               Padding(
                 padding: _kTableRowPadding,
@@ -324,7 +321,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: child,
     );
   }

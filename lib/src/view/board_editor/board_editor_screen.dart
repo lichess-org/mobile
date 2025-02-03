@@ -27,7 +27,7 @@ class BoardEditorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.boardEditor)),
       body: _Body(initialFen),
     );
@@ -221,7 +221,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                 color:
                     ref.read(boardEditorControllerProvider(widget.initialFen)).activePieceOnEdit ==
                             piece
-                        ? Theme.of(context).colorScheme.primary
+                        ? ColorScheme.of(context).primary
                         : Colors.transparent,
                 child: GestureDetector(
                   child: Draggable(

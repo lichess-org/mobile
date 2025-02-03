@@ -53,9 +53,8 @@ class Clock extends StatelessWidget {
     final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
     final brightness = Theme.of(context).brightness;
-    final activeClockStyle =
-        clockStyle ??
-        (brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle);
+    final colorScheme = ColorScheme.of(context);
+    final effectiveClockStyle = clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -68,9 +67,9 @@ class Clock extends StatelessWidget {
             color:
                 active
                     ? isEmergency
-                        ? activeClockStyle.emergencyBackgroundColor
-                        : activeClockStyle.activeBackgroundColor
-                    : activeClockStyle.backgroundColor,
+                        ? effectiveClockStyle.emergencyBackgroundColor
+                        : effectiveClockStyle.activeBackgroundColor
+                    : effectiveClockStyle.backgroundColor,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -86,9 +85,9 @@ class Clock extends StatelessWidget {
                     color:
                         active
                             ? isEmergency
-                                ? activeClockStyle.emergencyTextColor
-                                : activeClockStyle.activeTextColor
-                            : activeClockStyle.textColor,
+                                ? effectiveClockStyle.emergencyTextColor
+                                : effectiveClockStyle.activeTextColor
+                            : effectiveClockStyle.textColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
                     height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
@@ -133,22 +132,17 @@ class ClockStyle {
   final Color activeBackgroundColor;
   final Color emergencyBackgroundColor;
 
-  static const darkThemeStyle = ClockStyle(
-    textColor: Colors.grey,
-    activeTextColor: Colors.black,
-    emergencyTextColor: Colors.white,
-    backgroundColor: Colors.black,
-    activeBackgroundColor: Color(0xFFDDDDDD),
-    emergencyBackgroundColor: Color(0xFF673431),
-  );
-
-  static const lightThemeStyle = ClockStyle(
-    textColor: Colors.grey,
-    activeTextColor: Colors.black,
-    emergencyTextColor: Colors.black,
-    backgroundColor: Colors.white,
-    activeBackgroundColor: Color(0xFFD0E0BD),
-    emergencyBackgroundColor: Color(0xFFF2CCCC),
+  factory ClockStyle.defaultStyle(Brightness brightness, ColorScheme colorScheme) => ClockStyle(
+    backgroundColor: colorScheme.surface,
+    textColor: colorScheme.outline,
+    activeBackgroundColor:
+        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.primaryFixedDim,
+    activeTextColor:
+        brightness == Brightness.dark
+            ? colorScheme.onInverseSurface
+            : colorScheme.onPrimaryFixedVariant,
+    emergencyBackgroundColor: colorScheme.errorContainer,
+    emergencyTextColor: colorScheme.onErrorContainer,
   );
 }
 

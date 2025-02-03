@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -91,56 +92,58 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         }
       },
     );
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: switch (asyncRound) {
-              AsyncData(value: final _) => switch (selectedTab) {
-                _CupertinoView.overview => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastOverviewTab(
-                    broadcast: widget.broadcast,
-                    tournamentId: _selectedTournamentId,
-                  ),
-                ),
-                _CupertinoView.boards => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastBoardsTab(
-                      tournamentId: _selectedTournamentId,
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
-                      tournamentSlug: widget.broadcast.tour.slug,
-                    ),
-                    _ => const SliverFillRemaining(child: SizedBox.shrink()),
-                  },
-                ),
-                _CupertinoView.players => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                ),
-              },
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
+    return CupertinoMaterialWrapper(
+      child: CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: AutoSizeText(
+            widget.broadcast.title,
+            minFontSize: 14.0,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
-          switch (asyncTournament) {
-            AsyncData(:final value) => _BottomBar(
-              tournament: value,
-              roundId: _selectedRoundId ?? value.defaultRoundId,
-              setTournamentId: setTournamentId,
-              setRoundId: setRoundId,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: switch (asyncRound) {
+                AsyncData(value: final _) => switch (selectedTab) {
+                  _CupertinoView.overview => _TabView(
+                    cupertinoTabSwitcher: tabSwitcher,
+                    sliver: BroadcastOverviewTab(
+                      broadcast: widget.broadcast,
+                      tournamentId: _selectedTournamentId,
+                    ),
+                  ),
+                  _CupertinoView.boards => _TabView(
+                    cupertinoTabSwitcher: tabSwitcher,
+                    sliver: switch (asyncTournament) {
+                      AsyncData(:final value) => BroadcastBoardsTab(
+                        tournamentId: _selectedTournamentId,
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                        tournamentSlug: widget.broadcast.tour.slug,
+                      ),
+                      _ => const SliverFillRemaining(child: SizedBox.shrink()),
+                    },
+                  ),
+                  _CupertinoView.players => _TabView(
+                    cupertinoTabSwitcher: tabSwitcher,
+                    sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                  ),
+                },
+                _ => const Center(child: CircularProgressIndicator.adaptive()),
+              },
             ),
-            _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
-          },
-        ],
+            switch (asyncTournament) {
+              AsyncData(:final value) => _BottomBar(
+                tournament: value,
+                roundId: _selectedRoundId ?? value.defaultRoundId,
+                setTournamentId: setTournamentId,
+                setRoundId: setRoundId,
+              ),
+              _ => const PlatformBottomBar.empty(transparentBackground: false),
+            },
+          ],
+        ),
       ),
     );
   }
@@ -199,7 +202,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
+        _ => const PlatformBottomBar.empty(transparentBackground: false),
       },
     );
   }
@@ -285,7 +288,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         if (tournament.group != null)
           AdaptiveTextButton(

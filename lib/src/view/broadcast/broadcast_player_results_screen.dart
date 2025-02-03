@@ -206,8 +206,8 @@ class _Body extends ConsumerWidget {
                             ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
                             : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
                         : index.isEven
-                        ? Theme.of(context).colorScheme.surfaceContainerLow
-                        : Theme.of(context).colorScheme.surfaceContainerHigh,
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
                 child: Padding(
                   padding: _kTableRowPadding,
                   child: Row(
@@ -250,7 +250,7 @@ class _Body extends ConsumerWidget {
                                               playerResult.color == Side.black)
                                       ? Border.all(
                                         width: 2.0,
-                                        color: Theme.of(context).colorScheme.outline,
+                                        color: ColorScheme.of(context).outline,
                                       )
                                       : null,
                               shape: BoxShape.circle,

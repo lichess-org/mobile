@@ -78,29 +78,23 @@ class _ToolsButton extends StatelessWidget {
             ? const EdgeInsets.symmetric(vertical: 8.0)
             : EdgeInsets.zero;
 
-    return Padding(
-      padding:
-          Theme.of(context).platform == TargetPlatform.android
-              ? const EdgeInsets.only(bottom: 16.0)
-              : EdgeInsets.zero,
-      child: Opacity(
-        opacity: onTap == null ? 0.5 : 1.0,
-        child: PlatformListTile(
-          leading: Icon(
-            icon,
-            size: Styles.mainListTileIconSize,
-            color:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-          ),
-          title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
-          trailing:
+    return Opacity(
+      opacity: onTap == null ? 0.5 : 1.0,
+      child: PlatformListTile(
+        leading: Icon(
+          icon,
+          size: Styles.mainListTileIconSize,
+          color:
               Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-          onTap: onTap,
+                  ? CupertinoTheme.of(context).primaryColor
+                  : ColorScheme.of(context).primary,
         ),
+        title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
+        trailing:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+        onTap: onTap,
       ),
     );
   }
