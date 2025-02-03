@@ -40,6 +40,14 @@ class TimeIncrement {
     }
   }
 
+  String get paddedDisplay {
+    if (isInfinite) {
+      return '∞';
+    } else {
+      return '${clockLabelInMinutes(time).padLeft(2)}+${increment.toString().padRight(2)}';
+    }
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

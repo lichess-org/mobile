@@ -195,7 +195,7 @@ class _SectionChoices extends StatelessWidget {
                 Expanded(
                   child: _ChoiceChip(
                     key: ValueKey(choice),
-                    label: Text(choice.display, style: Styles.bold),
+                    label: Text(choice.paddedDisplay, style: Styles.bold),
                     selected: selected == choice,
                     onSelected: (bool selected) {
                       if (selected) onSelected(choice);
@@ -238,25 +238,14 @@ class _ChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorScheme.of(context).surfaceContainerHighest,
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        border:
-            selected
-                ? Border.fromBorderSide(
-                  BorderSide(color: ColorScheme.of(context).secondary, width: 2.0),
-                )
-                : const Border.fromBorderSide(BorderSide(color: Colors.transparent, width: 2.0)),
+    return ChoiceChip(
+      label: DefaultTextStyle.merge(
+        style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+        child: label,
       ),
-      child: AdaptiveInkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        onTap: () => onSelected(true),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Center(child: DefaultTextStyle.merge(style: Styles.timeControl, child: label)),
-        ),
-      ),
+      selected: selected,
+      onSelected: onSelected,
+      showCheckmark: false,
     );
   }
 }
