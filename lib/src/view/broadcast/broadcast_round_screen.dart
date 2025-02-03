@@ -20,20 +20,21 @@ import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
+enum BroadcastRoundTab { overview, boards, players }
+
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
+  final BroadcastRoundTab? initialTab;
 
-  const BroadcastRoundScreen({required this.broadcast});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
 
   @override
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _CupertinoView { overview, boards, players }
-
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _CupertinoView selectedTab = _CupertinoView.overview;
+  BroadcastRoundTab selectedTab = BroadcastRoundTab.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
@@ -43,7 +44,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    selectedTab = widget.initialTab ?? BroadcastRoundTab.overview;
+    _tabController = TabController(
+      initialIndex: widget.initialTab?.index ?? 0,
+      length: 3,
+      vsync: this,
+    );
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -54,7 +60,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setCupertinoTab(_CupertinoView mode) {
+  void setCupertinoTab(BroadcastRoundTab mode) {
     setState(() {
       selectedTab = mode;
     });
@@ -79,14 +85,14 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundWithGames> asyncRound,
   ) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
+    final tabSwitcher = CupertinoSlidingSegmentedControl<BroadcastRoundTab>(
       groupValue: selectedTab,
       children: {
-        _CupertinoView.overview: Text(context.l10n.broadcastOverview),
-        _CupertinoView.boards: Text(context.l10n.broadcastBoards),
-        _CupertinoView.players: Text(context.l10n.players),
+        BroadcastRoundTab.overview: Text(context.l10n.broadcastOverview),
+        BroadcastRoundTab.boards: Text(context.l10n.broadcastBoards),
+        BroadcastRoundTab.players: Text(context.l10n.players),
       },
-      onValueChanged: (_CupertinoView? view) {
+      onValueChanged: (BroadcastRoundTab? view) {
         if (view != null) {
           setCupertinoTab(view);
         }
@@ -107,14 +113,14 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Expanded(
               child: switch (asyncRound) {
                 AsyncData(value: final _) => switch (selectedTab) {
-                  _CupertinoView.overview => _TabView(
+                  BroadcastRoundTab.overview => _TabView(
                     cupertinoTabSwitcher: tabSwitcher,
                     sliver: BroadcastOverviewTab(
                       broadcast: widget.broadcast,
                       tournamentId: _selectedTournamentId,
                     ),
                   ),
-                  _CupertinoView.boards => _TabView(
+                  BroadcastRoundTab.boards => _TabView(
                     cupertinoTabSwitcher: tabSwitcher,
                     sliver: switch (asyncTournament) {
                       AsyncData(:final value) => BroadcastBoardsTab(
@@ -125,7 +131,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       _ => const SliverFillRemaining(child: SizedBox.shrink()),
                     },
                   ),
-                  _CupertinoView.players => _TabView(
+                  BroadcastRoundTab.players => _TabView(
                     cupertinoTabSwitcher: tabSwitcher,
                     sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
                   ),
@@ -224,13 +230,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         ref.listen(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
           (_, round) {
-            if (round.hasValue && !roundLoaded) {
+            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.index = 1;
 
                 if (Theme.of(context).platform == TargetPlatform.iOS) {
-                  setCupertinoTab(_CupertinoView.boards);
+                  setCupertinoTab(BroadcastRoundTab.boards);
                 }
               }
             }
