@@ -459,10 +459,13 @@ class _EditableWidget extends ConsumerWidget {
                 children: [
                   if (index != null)
                     IconButton(
-                      icon: Icon(Icons.arrow_upward, color: textShade(context, 0.5)),
-                      onPressed: () {
-                        ref.read(homePreferencesProvider.notifier).moveUp(widget);
-                      },
+                      icon: Icon(Icons.arrow_upward, color: ColorScheme.of(context).outline),
+                      onPressed:
+                          isEnabled
+                              ? () {
+                                ref.read(homePreferencesProvider.notifier).moveUp(widget);
+                              }
+                              : null,
                     ),
                   Checkbox.adaptive(
                     value: isEnabled,
@@ -475,10 +478,13 @@ class _EditableWidget extends ConsumerWidget {
                   ),
                   if (index != null)
                     IconButton(
-                      icon: Icon(Icons.arrow_downward, color: textShade(context, 0.5)),
-                      onPressed: () {
-                        ref.read(homePreferencesProvider.notifier).moveDown(widget);
-                      },
+                      icon: Icon(Icons.arrow_downward, color: ColorScheme.of(context).outline),
+                      onPressed:
+                          isEnabled
+                              ? () {
+                                ref.read(homePreferencesProvider.notifier).moveDown(widget);
+                              }
+                              : null,
                     ),
                 ],
               ),
