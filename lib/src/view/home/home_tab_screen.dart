@@ -264,7 +264,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         shouldShow: true,
         child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       ),
-    ].sortedBy((_EditableWidget widget) => homePrefs.enabledWidgets.indexOf(widget.widget));
+    ].sortedBy((_EditableWidget widget) {
+      final i = homePrefs.enabledWidgets.indexOf(widget.widget);
+      return i != -1 ? i : EnabledWidget.values.length;
+    });
     return [
       ...list,
       if (Theme.of(context).platform == TargetPlatform.iOS)
