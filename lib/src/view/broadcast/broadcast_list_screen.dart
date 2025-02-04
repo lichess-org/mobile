@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -535,6 +536,22 @@ class _BroadcastCardContent extends StatelessWidget {
                             (context) => BroadcastRoundScreen(
                               broadcast: broadcast,
                               initialTab: BroadcastRoundTab.overview,
+                            ),
+                      );
+                    },
+                  ),
+                  AppBarMenuAction(
+                    icon: LichessIcons.chess_board,
+                    label: context.l10n.broadcastBoards,
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: broadcast.title,
+                        rootNavigator: true,
+                        builder:
+                            (context) => BroadcastRoundScreen(
+                              broadcast: broadcast,
+                              initialTab: BroadcastRoundTab.boards,
                             ),
                       );
                     },
