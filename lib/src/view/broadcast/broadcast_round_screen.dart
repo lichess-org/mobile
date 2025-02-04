@@ -17,25 +17,25 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
+enum BroadcastRoundTab { overview, boards, players }
+
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
+  final BroadcastRoundTab? initialTab;
 
-  const BroadcastRoundScreen({required this.broadcast});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
 
   @override
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _CupertinoView { overview, boards, players }
-
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _CupertinoView selectedTab = _CupertinoView.overview;
+  BroadcastRoundTab selectedTab = BroadcastRoundTab.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
@@ -45,7 +45,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    selectedTab = widget.initialTab ?? BroadcastRoundTab.overview;
+    _tabController = TabController(
+      initialIndex: widget.initialTab?.index ?? 0,
+      length: 3,
+      vsync: this,
+    );
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -56,7 +61,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setCupertinoTab(_CupertinoView mode) {
+  void setCupertinoTab(BroadcastRoundTab mode) {
     setState(() {
       selectedTab = mode;
     });
@@ -81,72 +86,71 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
+    final tabSwitcher = CupertinoSlidingSegmentedControl<BroadcastRoundTab>(
       groupValue: selectedTab,
       children: {
-        _CupertinoView.overview: Text(context.l10n.broadcastOverview),
-        _CupertinoView.boards: Text(context.l10n.broadcastBoards),
-        _CupertinoView.players: Text(context.l10n.players),
+        BroadcastRoundTab.overview: Text(context.l10n.broadcastOverview),
+        BroadcastRoundTab.boards: Text(context.l10n.broadcastBoards),
+        BroadcastRoundTab.players: Text(context.l10n.players),
       },
-      onValueChanged: (_CupertinoView? view) {
+      onValueChanged: (BroadcastRoundTab? view) {
         if (view != null) {
           setCupertinoTab(view);
         }
       },
     );
-    return CupertinoMaterialWrapper(
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: AutoSizeText(
-            widget.broadcast.title,
-            minFontSize: 14.0,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          trailing: _BroadcastSettingsButton(),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: AutoSizeText(
+          widget.broadcast.title,
+          minFontSize: 14.0,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
-        child: Column(
-          children: [
-            Expanded(
-              child: switch (asyncRound) {
-                AsyncData(value: final _) => switch (selectedTab) {
-                  _CupertinoView.overview => _TabView(
-                    cupertinoTabSwitcher: tabSwitcher,
-                    sliver: BroadcastOverviewTab(
-                      broadcast: widget.broadcast,
+
+        trailing: _BroadcastSettingsButton(),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: switch (asyncRound) {
+              AsyncData(value: final _) => switch (selectedTab) {
+                BroadcastRoundTab.overview => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: BroadcastOverviewTab(
+                    broadcast: widget.broadcast,
+                    tournamentId: _selectedTournamentId,
+                  ),
+                ),
+                BroadcastRoundTab.boards => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: switch (asyncTournament) {
+                    AsyncData(:final value) => BroadcastBoardsTab(
                       tournamentId: _selectedTournamentId,
+                      roundId: _selectedRoundId ?? value.defaultRoundId,
+                      tournamentSlug: widget.broadcast.tour.slug,
                     ),
-                  ),
-                  _CupertinoView.boards => _TabView(
-                    cupertinoTabSwitcher: tabSwitcher,
-                    sliver: switch (asyncTournament) {
-                      AsyncData(:final value) => BroadcastBoardsTab(
-                        tournamentId: _selectedTournamentId,
-                        roundId: _selectedRoundId ?? value.defaultRoundId,
-                        tournamentSlug: widget.broadcast.tour.slug,
-                      ),
-                      _ => const SliverFillRemaining(child: SizedBox.shrink()),
-                    },
-                  ),
-                  _CupertinoView.players => _TabView(
-                    cupertinoTabSwitcher: tabSwitcher,
-                    sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                  ),
-                },
-                _ => const Center(child: CircularProgressIndicator.adaptive()),
+                    _ => const SliverFillRemaining(child: SizedBox.shrink()),
+                  },
+                ),
+                BroadcastRoundTab.players => _TabView(
+                  cupertinoTabSwitcher: tabSwitcher,
+                  sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                ),
               },
-            ),
-            switch (asyncTournament) {
-              AsyncData(:final value) => _BottomBar(
-                tournament: value,
-                roundId: _selectedRoundId ?? value.defaultRoundId,
-                setTournamentId: setTournamentId,
-                setRoundId: setRoundId,
-              ),
-              _ => const PlatformBottomBar.empty(transparentBackground: false),
+              _ => const Center(child: CircularProgressIndicator.adaptive()),
             },
-          ],
-        ),
+          ),
+          switch (asyncTournament) {
+            AsyncData(:final value) => _BottomBar(
+              tournament: value,
+              roundId: _selectedRoundId ?? value.defaultRoundId,
+              setTournamentId: setTournamentId,
+              setRoundId: setRoundId,
+            ),
+            _ => const PlatformBottomBar.empty(transparentBackground: false),
+          },
+        ],
       ),
     );
   }
@@ -228,13 +232,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         ref.listen(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
           (_, round) {
-            if (round.hasValue && !roundLoaded) {
+            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.index = 1;
 
                 if (Theme.of(context).platform == TargetPlatform.iOS) {
-                  setCupertinoTab(_CupertinoView.boards);
+                  setCupertinoTab(BroadcastRoundTab.boards);
                 }
               }
             }

@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -41,7 +40,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
       _ => const CenterLoadingIndicator(),
     };
 
-    return BackgroundThemeWidget(
+    return FullScreenBackgroundTheme(
       child: PlatformWidget(
         androidBuilder:
             (_) => Scaffold(
@@ -52,15 +51,13 @@ class OpeningExplorerScreen extends ConsumerWidget {
               ),
             ),
         iosBuilder:
-            (_) => CupertinoMaterialWrapper(
-              child: CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(
-                  middle: Text(context.l10n.openingExplorer),
-                  automaticBackgroundVisibility: false,
-                  border: null,
-                ),
-                child: body,
+            (_) => CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: Text(context.l10n.openingExplorer),
+                automaticBackgroundVisibility: false,
+                border: null,
               ),
+              child: body,
             ),
       ),
     );

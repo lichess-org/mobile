@@ -47,7 +47,7 @@ class StudyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundThemeWidget(child: _StudyScreenLoader(id: id));
+    return FullScreenBackgroundTheme(child: _StudyScreenLoader(id: id));
   }
 }
 
@@ -202,9 +202,19 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformAppBarMenuButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
+    return PlatformContextMenuAnchor(
+      builder:
+          (context, controller, _) => AppBarIconButton(
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            semanticsLabel: 'Study menu',
+            icon: const Icon(Icons.more_horiz),
+          ),
       actions: [
         AppBarMenuAction(
           icon: Icons.settings,

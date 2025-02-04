@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
@@ -177,21 +176,19 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case TargetPlatform.iOS:
         final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-        return CupertinoMaterialWrapper(
-          child: CupertinoTabScaffold(
-            tabBuilder: _iOSTabBuilder,
-            controller: _cupertinoTabController,
-            tabBar: CupertinoTabBar(
-              currentIndex: currentTab.index,
-              items: [
-                for (final tab in BottomTab.values)
-                  BottomNavigationBarItem(
-                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                    label: tab.label(context.l10n),
-                  ),
-              ],
-              onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
-            ),
+        return CupertinoTabScaffold(
+          tabBuilder: _iOSTabBuilder,
+          controller: _cupertinoTabController,
+          tabBar: CupertinoTabBar(
+            currentIndex: currentTab.index,
+            items: [
+              for (final tab in BottomTab.values)
+                BottomNavigationBarItem(
+                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                  label: tab.label(context.l10n),
+                ),
+            ],
+            onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
           ),
         );
       default:
