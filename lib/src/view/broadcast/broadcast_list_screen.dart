@@ -31,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
+const kDefaultCardOpacity = 0.9;
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -725,42 +726,38 @@ class _BroadcastCardState extends State<BroadcastCard> {
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
-      child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.95,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: kCardBorderRadius,
-            color: backgroundColor,
-            boxShadow:
-                Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image(
-                image: imageProvider,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
-                  return AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: frame == null ? 0 : 1,
-                    child: child,
-                  );
-                },
-                errorBuilder:
-                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-              ),
-              Expanded(
-                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
-              ),
-            ],
-          ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: kCardBorderRadius,
+          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
+          boxShadow:
+              Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image(
+              image: imageProvider,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: frame == null ? 0 : 1,
+                  child: child,
+                );
+              },
+              errorBuilder:
+                  (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+            ),
+            Expanded(
+              child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+            ),
+          ],
         ),
       ),
     );
@@ -885,43 +882,38 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
-      child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.95,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(color: backgroundColor),
-          child: OverflowBox(
-            maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-            minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image(
-                  image: imageProvider,
-                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                    if (wasSynchronouslyLoaded) {
-                      return child;
-                    }
-                    return AnimatedOpacity(
-                      duration: const Duration(milliseconds: 500),
-                      opacity: frame == null ? 0 : 1,
-                      child: child,
-                    );
-                  },
-                  errorBuilder:
-                      (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-                ),
-                Expanded(
-                  child: _BroadcastCardContent(
-                    broadcast: widget.broadcast,
-                    cardColors: _cardColors,
-                  ),
-                ),
-              ],
-            ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
+        ),
+        child: OverflowBox(
+          maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+          minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image(
+                image: imageProvider,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: frame == null ? 0 : 1,
+                    child: child,
+                  );
+                },
+                errorBuilder:
+                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+              ),
+              Expanded(
+                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+              ),
+            ],
           ),
         ),
       ),
