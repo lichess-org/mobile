@@ -1,9 +1,11 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
@@ -109,23 +111,23 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
               decoration: BoxDecoration(boxShadow: boardShadows),
               child: Row(
                 children: [
-                  Expanded(child: board),
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(4.0),
-                      bottomRight: Radius.circular(4.0),
-                    ),
-                    clipBehavior: Clip.hardEdge,
+                  board,
+                  Expanded(
                     child:
                         (widget.whiteWinningChances != null)
                             ? _BoardThumbnailEvalGauge(
                               height: widget.size,
                               whiteWinnigChances: widget.whiteWinningChances!,
                             )
-                            : SizedBox(
+                            : Container(
                               height: widget.size,
-                              width: widget.size * boardThumbnailEvalGaugeAspectRatio,
-                              child: ColoredBox(color: Colors.grey.withValues(alpha: 0.6)),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(4),
+                                  bottomRight: Radius.circular(4),
+                                ),
+                                color: Colors.grey.withValues(alpha: 0.6),
+                              ),
                             ),
                   ),
                 ],
@@ -179,23 +181,23 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
       children: [
         Column(
           children: [
-            SizedBox(
+            Container(
               height: height - whiteBarHeight,
-              width: height * boardThumbnailEvalGaugeAspectRatio,
-              child: ColoredBox(color: Colors.black.withValues(alpha: 0.6)),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(topRight: Radius.circular(4)),
+                color: EngineGauge.backgroundColor(context),
+              ),
             ),
-            SizedBox(
+            Container(
               height: whiteBarHeight,
-              width: height * boardThumbnailEvalGaugeAspectRatio,
-              child: ColoredBox(color: Colors.white.withValues(alpha: 0.6)),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(4)),
+                color: EngineGauge.valueColor(context),
+              ),
             ),
           ],
         ),
-        SizedBox(
-          height: height / 100,
-          width: height * boardThumbnailEvalGaugeAspectRatio,
-          child: const ColoredBox(color: Colors.red),
-        ),
+        Container(height: height / 100, color: Colors.red.darken()),
       ],
     );
   }
