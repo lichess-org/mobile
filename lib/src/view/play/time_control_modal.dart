@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -240,21 +239,34 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ColorScheme.of(context).surfaceContainerHighest,
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        border:
+        color:
             selected
-                ? Border.fromBorderSide(
-                  BorderSide(color: ColorScheme.of(context).secondary, width: 2.0),
-                )
-                : const Border.fromBorderSide(BorderSide(color: Colors.transparent, width: 2.0)),
+                ? ColorScheme.of(context).secondaryContainer
+                : ColorScheme.of(context).surfaceContainerLowest,
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        border: Border.fromBorderSide(
+          BorderSide(
+            color:
+                selected
+                    ? ColorScheme.of(context).secondaryContainer
+                    : Theme.of(context).dividerColor,
+            width: 1.0,
+          ),
+        ),
       ),
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => onSelected(true),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Center(child: DefaultTextStyle.merge(style: Styles.timeControl, child: label)),
+          child: Center(
+            child: DefaultTextStyle.merge(
+              style: Styles.timeControl.copyWith(
+                color: selected ? ColorScheme.of(context).onSecondaryContainer : null,
+              ),
+              child: label,
+            ),
+          ),
         ),
       ),
     );
