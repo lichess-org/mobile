@@ -165,13 +165,18 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _handleAddChapterEvent(SocketEvent event) {
     ref.invalidateSelf();
+
+    _sendEvalMultiGet();
   }
 
   void _handleChaptersEvent(SocketEvent event) {
     final games = pick(event.data).asListOrThrow(gameFromPick);
+
     state = AsyncData(
       state.requireValue.copyWith(round: state.requireValue.round, games: IMap.fromEntries(games)),
     );
+
+    _sendEvalMultiGet();
   }
 
   void _handleClockEvent(SocketEvent event) {
