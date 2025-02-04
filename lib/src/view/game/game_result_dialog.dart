@@ -30,24 +30,10 @@ class GameResultDialog extends ConsumerStatefulWidget {
   final void Function(PlayableGame game) onNewOpponentCallback;
 
   @override
-  ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
+  ConsumerState<GameResultDialog> createState() => _GameResultDialogState();
 }
 
-Widget _adaptiveDialog(BuildContext context, Widget content) {
-  final screenWidth = MediaQuery.of(context).size.width;
-  final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
-  return Dialog(
-    child: SizedBox(
-      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoPopupSurface(child: paddedContent)
-              : paddedContent,
-    ),
-  );
-}
-
-class _GameEndDialogState extends ConsumerState<GameResultDialog> {
+class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
 
@@ -331,4 +317,16 @@ class GameResult extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget _adaptiveDialog(BuildContext context, Widget content) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
+  final sizedContent = SizedBox(
+    width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+    child: paddedContent,
+  );
+  return Theme.of(context).platform == TargetPlatform.iOS
+      ? CupertinoAlertDialog(content: sizedContent)
+      : Dialog(child: sizedContent);
 }
