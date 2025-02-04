@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' show max;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -22,7 +24,6 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/quantize/quantizer.dart';
 import 'package:material_color_utilities/quantize/quantizer_celebi.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
   const BoardBackgroundThemeChoiceScreen({super.key});
@@ -47,6 +48,8 @@ const itemsByRow = 3;
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appDocumentsDirectory =
+        ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final brightness = Theme.of(context).brightness;
 
@@ -55,73 +58,82 @@ class _Body extends ConsumerWidget {
 
     return ListView(
       children: [
-        ListSection(
-          children: [
-            PlatformListTile(
-              leading: const Icon(Icons.image_outlined),
-              title: const Text('Pick an image'),
-              trailing:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-              onTap: () async {
-                final ImagePicker picker = ImagePicker();
-                final XFile? image = await picker.pickImage(
-                  source: ImageSource.gallery,
-                  maxWidth: viewport.width * devicePixelRatio * 2,
-                  maxHeight: viewport.height * devicePixelRatio * 2,
-                  imageQuality: 80,
-                );
-
-                if (image != null) {
-                  final imageProvider = FileImage(File(image.path));
-                  final darkScheme = await ColorScheme.fromImageProvider(
-                    provider: imageProvider,
-                    brightness: Brightness.dark,
+        if (appDocumentsDirectory != null)
+          ListSection(
+            children: [
+              PlatformListTile(
+                leading: const Icon(Icons.image_outlined),
+                title: const Text('Pick an image'),
+                trailing:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? const CupertinoListTileChevron()
+                        : null,
+                onTap: () async {
+                  final ImagePicker picker = ImagePicker();
+                  final maxDimension = max(viewport.width, viewport.height) * devicePixelRatio;
+                  final XFile? image = await picker.pickImage(
+                    source: ImageSource.gallery,
+                    maxWidth: maxDimension,
+                    maxHeight: maxDimension,
+                    imageQuality: 80,
                   );
-                  final quantizerResult = await _extractColorsFromImageProvider(imageProvider);
-                  final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-                    (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
-                  );
-                  final meanLuminance =
-                      colorToCount.entries.fold<double>(
-                        0,
-                        (double previousValue, MapEntry<int, int> entry) =>
-                            previousValue + Color(entry.key).computeLuminance() * entry.value,
-                      ) /
-                      colorToCount.values.fold<int>(
-                        0,
-                        (int previousValue, int element) => previousValue + element,
-                      );
 
-                  if (context.mounted) {
-                    Navigator.of(context, rootNavigator: true)
-                        .push(
-                          MaterialPageRoute<BoardBackgroundImage?>(
-                            builder:
-                                (_) => ConfirmImageBackgroundScreen(
-                                  boardPrefs: boardPrefs,
-                                  image: image,
-                                  darkColorScheme: darkScheme,
-                                  meanLuminance: meanLuminance,
-                                ),
-                            fullscreenDialog: true,
-                          ),
-                        )
-                        .then((value) {
-                          if (context.mounted && value != null) {
-                            ref
-                                .read(boardPreferencesProvider.notifier)
-                                .setBackground(backgroundImage: value);
-                            Navigator.pop(context);
-                          }
-                        });
+                  if (image != null) {
+                    final decodedImage = await decodeImageFromList(await image.readAsBytes());
+                    final imageProvider = FileImage(File(image.path));
+                    final darkScheme = await ColorScheme.fromImageProvider(
+                      provider: imageProvider,
+                      brightness: Brightness.dark,
+                    );
+                    final quantizerResult = await _extractColorsFromImageProvider(imageProvider);
+                    final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
+                      (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
+                    );
+                    final meanLuminance =
+                        colorToCount.entries.fold<double>(
+                          0,
+                          (double previousValue, MapEntry<int, int> entry) =>
+                              previousValue + Color(entry.key).computeLuminance() * entry.value,
+                        ) /
+                        colorToCount.values.fold<int>(
+                          0,
+                          (int previousValue, int element) => previousValue + element,
+                        );
+
+                    if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(
+                            MaterialPageRoute<BoardBackgroundImage?>(
+                              builder:
+                                  (_) => ConfirmImageBackgroundScreen(
+                                    boardPrefs: boardPrefs,
+                                    image: image,
+                                    darkColorScheme: darkScheme,
+                                    meanLuminance: meanLuminance,
+                                    viewport: viewport,
+                                    imageSize: Size(
+                                      decodedImage.width.toDouble(),
+                                      decodedImage.height.toDouble(),
+                                    ),
+                                    appDocumentsDirectory: appDocumentsDirectory,
+                                  ),
+                              fullscreenDialog: true,
+                            ),
+                          )
+                          .then((value) {
+                            if (context.mounted && value != null) {
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .setBackground(backgroundImage: value);
+                              Navigator.pop(context);
+                            }
+                          });
+                    }
                   }
-                }
-              },
-            ),
-          ],
-        ),
+                },
+              ),
+            ],
+          ),
         ListSection(
           header: const SettingsSectionTitle('Color presets'),
           cupertinoBackgroundColor: ColorScheme.of(context).surfaceContainerLow,
@@ -161,7 +173,10 @@ class _Body extends ConsumerWidget {
 
                 return Tooltip(
                   message: 'Background based on chessboard colors.',
-                  triggerMode: t == BoardBackgroundTheme.board ? null : TooltipTriggerMode.manual,
+                  triggerMode:
+                      t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
+                          ? null
+                          : TooltipTriggerMode.manual,
                   child: GestureDetector(
                     onTap:
                         () => Navigator.of(context, rootNavigator: true)
@@ -189,7 +204,7 @@ class _Body extends ConsumerWidget {
                       child: ColoredBox(
                         color: theme.scaffoldBackgroundColor,
                         child:
-                            t == BoardBackgroundTheme.board
+                            t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
                                 ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -252,14 +267,14 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
               constraints.maxWidth > constraints.maxHeight
                   ? Orientation.landscape
                   : Orientation.portrait;
-          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
+          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
           return Stack(
             children: [
               PageView.builder(
                 controller: _controller,
                 itemBuilder: (context, index) {
                   final backgroundTheme = colorChoices[index];
-                  return BackgroundThemeWidget(
+                  return FullScreenBackgroundTheme(
                     backgroundTheme: backgroundTheme,
                     child: const Scaffold(body: SizedBox.expand()),
                   );
@@ -267,21 +282,25 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
                 itemCount: colorChoices.length,
               ),
               Positioned.fill(
-                child: Align(
-                  alignment:
-                      orientation == Orientation.portrait ? Alignment.center : Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
-                    ),
-                    child: Chessboard.fixed(
-                      size:
-                          orientation == Orientation.portrait
-                              ? constraints.maxWidth
-                              : constraints.maxHeight - landscapeBoardPadding * 2,
-                      fen: kInitialFEN,
-                      orientation: Side.white,
-                      settings: widget.boardPrefs.toBoardSettings(),
+                child: IgnorePointer(
+                  child: Align(
+                    alignment:
+                        orientation == Orientation.portrait
+                            ? Alignment.center
+                            : Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: orientation == Orientation.portrait ? 0 : 16.0,
+                      ),
+                      child: Chessboard.fixed(
+                        size:
+                            orientation == Orientation.portrait
+                                ? constraints.maxWidth
+                                : constraints.maxHeight - landscapeBoardPadding * 2,
+                        fen: kInitialFEN,
+                        orientation: Side.white,
+                        settings: widget.boardPrefs.toBoardSettings(),
+                      ),
                     ),
                   ),
                 ),
@@ -319,6 +338,9 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
     required this.boardPrefs,
     required this.darkColorScheme,
     required this.meanLuminance,
+    required this.imageSize,
+    required this.viewport,
+    required this.appDocumentsDirectory,
     super.key,
   });
 
@@ -326,6 +348,30 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   final BoardPrefs boardPrefs;
   final ColorScheme darkColorScheme;
   final double meanLuminance;
+  final Size imageSize;
+  final Size viewport;
+  final Directory appDocumentsDirectory;
+
+  Orientation get viewportOrientation =>
+      viewport.width > viewport.height ? Orientation.landscape : Orientation.portrait;
+
+  Orientation get imageOrientation =>
+      imageSize.width > imageSize.height ? Orientation.landscape : Orientation.portrait;
+
+  BoxFit get boxFit =>
+      imageOrientation == viewportOrientation
+          ? BoxFit.cover
+          : imageOrientation == Orientation.portrait
+          ? BoxFit.fitWidth
+          : BoxFit.fitHeight;
+
+  Size get imageFitSize => FullScreenBackgroundImageTheme.imageFitSize(boxFit, imageSize, viewport);
+
+  Matrix4 get centerWidthMatrix =>
+      Matrix4.translationValues((viewport.width - imageFitSize.width) / 2, 0, 0);
+
+  Matrix4 get centerHeightMatrix =>
+      Matrix4.translationValues(0, (viewport.height - imageFitSize.height) / 2, 0);
 
   @override
   State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
@@ -333,14 +379,21 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
 
 class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScreen> {
   bool blur = false;
+  bool showBoard = true;
 
-  final _controller = TransformationController();
+  late final TransformationController _controller;
   Matrix4 _transformationMatrix = Matrix4.identity();
 
   @override
   void initState() {
     super.initState();
-
+    final initialMatrix =
+        widget.imageOrientation == widget.viewportOrientation
+            ? Matrix4.identity()
+            : widget.imageOrientation == Orientation.landscape
+            ? widget.centerWidthMatrix
+            : widget.centerHeightMatrix;
+    _controller = TransformationController(initialMatrix);
     _controller.addListener(() {
       _transformationMatrix = _controller.value;
     });
@@ -359,125 +412,149 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       widget.meanLuminance,
     );
 
-    return BoardThemeWrapper(
+    final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+
+    return BackgroundThemeWrapper(
       theme: BoardBackgroundImage.getTheme(widget.darkColorScheme),
       brightness: Brightness.dark,
       transparentScaffold: true,
       child: Scaffold(
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final orientation =
-                constraints.maxWidth > constraints.maxHeight
-                    ? Orientation.landscape
-                    : Orientation.portrait;
-            final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 16.0;
-            return Stack(
-              children: [
-                InteractiveViewer(
-                  transformationController: _controller,
-                  constrained: false,
-                  minScale: 1,
-                  maxScale: 2,
-                  child: Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: Image.file(File(widget.image.path)).image,
-                        colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
-                        fit: BoxFit.cover,
+        body: Stack(
+          children: [
+            InteractiveViewer(
+              transformationController: _controller,
+              constrained: false,
+              minScale: 1,
+              maxScale: 2,
+              child: Container(
+                width: switch (widget.boxFit) {
+                  BoxFit.fitHeight => widget.imageFitSize.width,
+                  _ => widget.viewport.width,
+                },
+                height: switch (widget.boxFit) {
+                  BoxFit.fitWidth => widget.imageFitSize.height,
+                  _ => widget.viewport.height,
+                },
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: Image.file(File(widget.image.path)).image,
+                    colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
+                    fit: widget.boxFit,
+                  ),
+                ),
+                child: BackdropFilter(
+                  enabled: blur,
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: kBackgroundImageBlurFactor,
+                    sigmaY: kBackgroundImageBlurFactor,
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment:
+                    widget.viewportOrientation == Orientation.portrait
+                        ? Alignment.center
+                        : Alignment.centerLeft,
+                child: IgnorePointer(
+                  child: Opacity(
+                    opacity: showBoard ? 1 : 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
-                    ),
-                    child: BackdropFilter(
-                      enabled: blur,
-                      filter: ui.ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
-                      child: const SizedBox.expand(),
+                      child: Chessboard.fixed(
+                        size:
+                            widget.viewportOrientation == Orientation.portrait
+                                ? widget.viewport.width
+                                : widget.viewport.height - landscapeBoardPadding * 2,
+                        fen: kInitialFEN,
+                        orientation: Side.white,
+                        settings: widget.boardPrefs.toBoardSettings(),
+                      ),
                     ),
                   ),
                 ),
-                Positioned.fill(
-                  child: Align(
-                    alignment:
-                        orientation == Orientation.portrait
-                            ? Alignment.center
-                            : Alignment.centerLeft,
-                    child: IgnorePointer(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: orientation == Orientation.portrait ? 0 : landscapeBoardPadding,
-                        ),
-                        child: Chessboard.fixed(
-                          size:
-                              orientation == Orientation.portrait
-                                  ? constraints.maxWidth
-                                  : constraints.maxHeight - landscapeBoardPadding * 2,
-                          fen: kInitialFEN,
-                          orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(),
-                        ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 26.0,
+              left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
+              right: 0,
+              child: Center(
+                child: PlatformCard(
+                  margin: const EdgeInsets.all(16.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: AdaptiveInkWell(
+                    onTap: () {
+                      setState(() {
+                        blur = !blur;
+                      });
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
+                          const SizedBox(width: 6.0),
+                          const Text('Blur the image', textAlign: TextAlign.center),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Positioned(
-                  top: MediaQuery.paddingOf(context).top + 26.0,
-                  left: orientation == Orientation.portrait ? 0 : null,
-                  right: 0,
-                  child: Center(
-                    child: PlatformCard(
-                      margin: const EdgeInsets.all(16.0),
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: AdaptiveInkWell(
-                        onTap: () {
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.paddingOf(context).bottom,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AdaptiveTextButton(
+                    child: Text(showBoard ? 'Hide board' : 'Show board'),
+                    onPressed:
+                        () => {
                           setState(() {
-                            blur = !blur;
-                          });
+                            showBoard = !showBoard;
+                          }),
                         },
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
-                              const SizedBox(width: 6.0),
-                              const Text('Blur the image', textAlign: TextAlign.center),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: MediaQuery.paddingOf(context).bottom,
-                  left: 0,
-                  right: 0,
-                  child: Row(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       AdaptiveTextButton(
                         child: Text(context.l10n.cancel),
                         onPressed: () => Navigator.pop(context, null),
                       ),
-                      const SizedBox(width: 16.0),
+                      const SizedBox(width: 10.0),
                       AdaptiveTextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
-                          final directory = await getApplicationDocumentsDirectory();
                           final ext = extension(widget.image.path);
-                          final targetPath = '${directory.path}/custom-board-background$ext';
+                          final relativePath = 'custom-board-background$ext';
+                          final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
                           await FileImage(File(targetPath)).evict();
                           await File(widget.image.path).copy(targetPath);
                           if (context.mounted) {
                             return Navigator.pop<BoardBackgroundImage>(
                               context,
                               BoardBackgroundImage(
-                                path: targetPath,
+                                path: relativePath,
                                 transform: _transformationMatrix,
                                 isBlurred: blur,
                                 darkColors: widget.darkColorScheme,
                                 meanLuminance: widget.meanLuminance,
+                                width: widget.imageSize.width,
+                                height: widget.imageSize.height,
+                                viewportWidth: widget.viewport.width,
+                                viewportHeight: widget.viewport.height,
                               ),
                             );
                           }
@@ -485,10 +562,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

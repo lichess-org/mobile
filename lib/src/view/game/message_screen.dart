@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -113,7 +112,7 @@ class _MessageBubble extends ConsumerWidget {
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
       you
           ? ColorScheme.of(context).secondary
-          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.2);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
@@ -215,7 +214,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: CupertinoColors.separator.resolveFrom(context)),
+            border: Border.all(color: ColorScheme.of(context).outline),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           placeholder: placeholder,

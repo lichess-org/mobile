@@ -50,10 +50,10 @@ packages:
     dependency: "direct main"
     description:
       name: app_settings
-      sha256: "09bc7fe0313a507087bec1a3baf555f0576e816a760cbb31813a88890a09d9e5"
+      sha256: "476df1d85cec143c3d27dd1c7451629a59c0c5ccf70a0adcbfa92a0a2d928705"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "5.2.0"
   archive:
     dependency: transitive
     description:
@@ -660,10 +660,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: e37f4c69a07b07bb92622ef6b131a53c9aae48f64b176340af9e8e5238718487
+      sha256: "46cdcdcd216f15ac04c80e24e814a89ea7143654442c53ba67fec349b4d44565"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.5"
+    version: "0.7.6"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -739,12 +739,11 @@ packages:
   flutter_slidable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
-      resolved-ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
-      url: "https://github.com/veloce/flutter_slidable.git"
-    source: git
-    version: "3.1.1"
+      name: flutter_slidable
+      sha256: ab7dbb16f783307c9d7762ede2593ce32c220ba2ba0fd540a3db8e9a3acba71a
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -1127,18 +1126,18 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: b15fad91c4d3d1f2b48c053dd41cb82da007c27407dc9ab5f9aa59881d0e39d4
+      sha256: c447a3c3e7be4addf129b8f9ab6a4bd5d166b78918223e223b61fddf4d07e254
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.4"
+    version: "8.2.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
       name: package_info_plus_platform_interface
-      sha256: a5ef9986efc7bf772f2696183a3992615baa76c1ffb1189318dd8803778fb05b
+      sha256: "205ec83335c2ab9107bbba3f8997f9356d72ca3c715d2f038fc773d0366b4c76"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.0"
   path:
     dependency: "direct main"
     description:
@@ -1540,8 +1539,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0b4d8f20f72beb43c853230dd18063bee242487d"
-      resolved-ref: "0b4d8f20f72beb43c853230dd18063bee242487d"
+      ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
+      resolved-ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
       url: "https://github.com/lichess-org/dart-stockfish.git"
     source: git
     version: "1.6.2"
@@ -1810,5 +1809,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.8.0-24.0.dev <4.0.0"
-  flutter: ">=3.29.0-1.0.pre.164"
+  dart: ">=3.7.0-209.1.beta <4.0.0"
+  flutter: ">=3.28.0-0.1.pre"

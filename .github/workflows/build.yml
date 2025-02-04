@@ -22,7 +22,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: main
+          channel: beta
       - run: flutter doctor -v
 
       - name: Checkout mobile code

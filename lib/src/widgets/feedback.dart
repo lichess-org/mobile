@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 
 class LagIndicator extends StatelessWidget {
@@ -235,15 +234,13 @@ class CupertinoSnackBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoMaterialWrapper(
-      child: CupertinoPopupSurface(
-        isSurfacePainted: true,
-        child: ColoredBox(
-          color: backgroundColor ?? CupertinoColors.systemGrey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Text(message, style: textStyle, textAlign: TextAlign.center),
-          ),
+    return CupertinoPopupSurface(
+      isSurfacePainted: true,
+      child: ColoredBox(
+        color: backgroundColor ?? CupertinoColors.systemGrey,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Text(message, style: textStyle, textAlign: TextAlign.center),
         ),
       ),
     );

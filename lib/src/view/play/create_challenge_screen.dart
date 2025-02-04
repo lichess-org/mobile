@@ -331,7 +331,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     harmonizeCupertinoTitleStyle: true,
                     title: Text(context.l10n.rated),
                     trailing: Switch.adaptive(
-                      applyCupertinoTheme: true,
                       value: preferences.rated,
                       onChanged: (bool value) {
                         ref.read(challengePreferencesProvider.notifier).setRated(value);

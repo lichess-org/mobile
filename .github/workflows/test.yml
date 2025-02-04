@@ -21,7 +21,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: main
+          channel: beta
       - run: flutter doctor -v
 
       - name: Install requirements for sqflite_common_ffi package

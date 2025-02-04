@@ -134,15 +134,24 @@ class _AppState extends ConsumerState<Application> {
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
+
+    // Defined in 2 steps to allow for a different scaffold background color.
+    final darkFlexScheme = FlexColorScheme.dark(
+      colors: flexScheme.dark,
+      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
+      blendLevel: 20,
+    );
     final themeDark = FlexThemeData.dark(
       colors: flexScheme.dark,
       surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
-      blendLevel: 25,
+      blendLevel: 20,
       cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+      scaffoldBackground:
+          darkFlexScheme.scaffoldBackground != null
+              ? lighten(darkFlexScheme.scaffoldBackground!, 0.05)
+              : null,
       appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
     );
-
-    final darkScaffoldBackgroundColor = lighten(themeDark.scaffoldBackgroundColor, 0.05);
 
     final floatingActionButtonTheme =
         generalPrefs.systemColors
@@ -182,7 +191,7 @@ class _AppState extends ConsumerState<Application> {
       primaryColor: themeDark.colorScheme.primaryFixed,
       primaryContrastingColor: themeDark.colorScheme.onPrimaryFixed,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: darkScaffoldBackgroundColor,
+      scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
       barBackgroundColor: themeDark.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
@@ -206,6 +215,13 @@ class _AppState extends ConsumerState<Application> {
       blendLevel: 20,
     );
 
+    const iosMenuTheme = MenuThemeData(
+      style: MenuStyle(
+        elevation: WidgetStatePropertyAll(0),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: kCardBorderRadius)),
+      ),
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -225,6 +241,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
           ),
+          menuTheme: isIOS ? iosMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
@@ -235,7 +252,6 @@ class _AppState extends ConsumerState<Application> {
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
         ),
         darkTheme: themeDark.copyWith(
-          scaffoldBackgroundColor: darkScaffoldBackgroundColor,
           cupertinoOverrideTheme: darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
@@ -244,6 +260,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
           ),
+          menuTheme: isIOS ? iosMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
@@ -256,6 +273,16 @@ class _AppState extends ConsumerState<Application> {
           BackgroundThemeMode.dark => ThemeMode.dark,
           BackgroundThemeMode.system => ThemeMode.system,
         },
+        builder:
+            isIOS
+                ? (context, child) => IconTheme.merge(
+                  data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                  child: DefaultTextStyle.merge(
+                    style: CupertinoTheme.of(context).textTheme.textStyle,
+                    child: Material(color: Colors.transparent, child: child),
+                  ),
+                )
+                : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],
       ),

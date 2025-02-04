@@ -41,7 +41,7 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundThemeWidget(
+    return FullScreenBackgroundTheme(
       child: _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes),
     );
   }
