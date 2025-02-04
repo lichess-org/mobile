@@ -282,19 +282,25 @@ class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> 
                 itemCount: colorChoices.length,
               ),
               Positioned.fill(
-                child: Align(
-                  alignment:
-                      orientation == Orientation.portrait ? Alignment.center : Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: orientation == Orientation.portrait ? 0 : 16.0),
-                    child: Chessboard.fixed(
-                      size:
-                          orientation == Orientation.portrait
-                              ? constraints.maxWidth
-                              : constraints.maxHeight - landscapeBoardPadding * 2,
-                      fen: kInitialFEN,
-                      orientation: Side.white,
-                      settings: widget.boardPrefs.toBoardSettings(),
+                child: IgnorePointer(
+                  child: Align(
+                    alignment:
+                        orientation == Orientation.portrait
+                            ? Alignment.center
+                            : Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: orientation == Orientation.portrait ? 0 : 16.0,
+                      ),
+                      child: Chessboard.fixed(
+                        size:
+                            orientation == Orientation.portrait
+                                ? constraints.maxWidth
+                                : constraints.maxHeight - landscapeBoardPadding * 2,
+                        fen: kInitialFEN,
+                        orientation: Side.white,
+                        settings: widget.boardPrefs.toBoardSettings(),
+                      ),
                     ),
                   ),
                 ),
@@ -446,14 +452,15 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 ),
               ),
             ),
-            if (showBoard)
-              Positioned.fill(
-                child: Align(
-                  alignment:
-                      widget.viewportOrientation == Orientation.portrait
-                          ? Alignment.center
-                          : Alignment.centerLeft,
-                  child: IgnorePointer(
+            Positioned.fill(
+              child: Align(
+                alignment:
+                    widget.viewportOrientation == Orientation.portrait
+                        ? Alignment.center
+                        : Alignment.centerLeft,
+                child: IgnorePointer(
+                  child: Opacity(
+                    opacity: showBoard ? 1 : 0,
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
@@ -471,6 +478,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                   ),
                 ),
               ),
+            ),
             Positioned(
               top: MediaQuery.paddingOf(context).top + 26.0,
               left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
