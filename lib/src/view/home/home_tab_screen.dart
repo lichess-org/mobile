@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -218,26 +219,46 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
     required int nbOfGames,
   }) {
-    return [
-      const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
-      if (status.isOnline)
-        _EditableWidget(
-          widget: EnabledWidget.perfCards,
-          shouldShow: session != null,
-          child: AccountPerfCards(
-            padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-          ),
+    final homePrefs = ref.watch(homePreferencesProvider);
+    final list = [
+      _EditableWidget(
+        widget: EnabledWidget.hello,
+        shouldShow: true,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.hello),
+        child: const _HelloWidget(),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.perfCards,
+        shouldShow: session != null,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.perfCards),
+        child: AccountPerfCards(
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
         ),
+      ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
         shouldShow: status.isOnline,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.quickPairing),
         child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
-      if (status.isOnline)
-        _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-      else
-        const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-      RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+      _EditableWidget(
+        widget: EnabledWidget.ongoingGames,
+        shouldShow: true,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.ongoingGames),
+        child:
+            status.isOnline
+                ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+                : const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.recentGames,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.recentGames),
+        shouldShow: true,
+        child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+      ),
+    ].sortedBy((_EditableWidget widget) => homePrefs.enabledWidgets.indexOf(widget.widget));
+    return [
+      ...list,
       if (Theme.of(context).platform == TargetPlatform.iOS)
         const SizedBox(height: 70.0)
       else
@@ -393,11 +414,17 @@ class _SignInWidget extends ConsumerWidget {
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
+  const _EditableWidget({
+    required this.child,
+    required this.widget,
+    required this.shouldShow,
+    this.index,
+  });
 
   final Widget child;
   final EnabledWidget widget;
   final bool shouldShow;
+  final int? index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -415,11 +442,33 @@ class _EditableWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Checkbox.adaptive(
-                value: isEnabled,
-                onChanged: (_) {
-                  ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
-                },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (index != null)
+                    IconButton(
+                      icon: Icon(Icons.arrow_upward, color: textShade(context, 0.5)),
+                      onPressed: () {
+                        ref.read(homePreferencesProvider.notifier).moveUp(widget);
+                      },
+                    ),
+                  Checkbox.adaptive(
+                    value: isEnabled,
+                    onChanged:
+                        widget == EnabledWidget.ongoingGames
+                            ? null
+                            : (_) {
+                              ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
+                            },
+                  ),
+                  if (index != null)
+                    IconButton(
+                      icon: Icon(Icons.arrow_downward, color: textShade(context, 0.5)),
+                      onPressed: () {
+                        ref.read(homePreferencesProvider.notifier).moveDown(widget);
+                      },
+                    ),
+                ],
               ),
             ),
             Expanded(child: IgnorePointer(ignoring: isEditing, child: child)),
