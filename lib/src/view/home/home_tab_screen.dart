@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -86,6 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       data: (status) {
         final session = ref.watch(authSessionProvider);
         final ongoingGames = ref.watch(ongoingGamesProvider);
+        final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final emptyRecent = ref
             .watch(myRecentGamesProvider)
             .maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
@@ -104,6 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   session: session,
                   status: status,
                   ongoingGames: ongoingGames,
+                  offlineCorresGames: offlineCorresGames,
                   recentGames: recentGames,
                   nbOfGames: nbOfGames,
                 )
@@ -111,6 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   session: session,
                   status: status,
                   ongoingGames: ongoingGames,
+                  offlineCorresGames: offlineCorresGames,
                   recentGames: recentGames,
                   nbOfGames: nbOfGames,
                 );
@@ -216,10 +220,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
     required int nbOfGames,
   }) {
     final homePrefs = ref.watch(homePreferencesProvider);
+    final hasOngoingGames =
+        ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false) ||
+        offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false);
     final list = [
       _EditableWidget(
         widget: EnabledWidget.hello,
@@ -229,7 +237,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       _EditableWidget(
         widget: EnabledWidget.perfCards,
-        shouldShow: session != null,
+        shouldShow: session != null && status.isOnline,
         index: homePrefs.enabledWidgets.indexOf(EnabledWidget.perfCards),
         child: AccountPerfCards(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
@@ -243,12 +251,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       _EditableWidget(
         widget: EnabledWidget.ongoingGames,
-        shouldShow: true,
+        shouldShow: hasOngoingGames,
         index: homePrefs.enabledWidgets.indexOf(EnabledWidget.ongoingGames),
         child:
             status.isOnline
                 ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-                : const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
+                : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
       ),
       _EditableWidget(
         widget: EnabledWidget.recentGames,
@@ -332,6 +340,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
     required int nbOfGames,
   }) {
@@ -354,7 +363,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 if (status.isOnline)
                   _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                 else
-                  const _OfflineCorrespondencePreview(maxGamesToShow: 5),
+                  _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
               ],
             ),
           ),
@@ -590,13 +599,14 @@ class _OngoingGamesCarousel extends ConsumerWidget {
 }
 
 class _OfflineCorrespondenceCarousel extends ConsumerWidget {
-  const _OfflineCorrespondenceCarousel({required this.maxGamesToShow});
+  const _OfflineCorrespondenceCarousel(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         if (data.isEmpty) {
@@ -920,13 +930,14 @@ class _OngoingGamesPreview extends ConsumerWidget {
 }
 
 class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview({required this.maxGamesToShow});
+  const _OfflineCorrespondencePreview(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         return PreviewGameList(

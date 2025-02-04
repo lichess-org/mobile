@@ -86,7 +86,21 @@ class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePref
   }
 }
 
-enum EnabledWidget { ongoingGames, hello, perfCards, quickPairing, recentGames }
+enum EnabledWidget {
+  ongoingGames,
+  hello,
+  perfCards,
+  quickPairing,
+  recentGames;
+
+  String get label => switch (this) {
+    EnabledWidget.ongoingGames => 'Ongoing Games',
+    EnabledWidget.hello => 'Hello',
+    EnabledWidget.perfCards => 'Performance Cards',
+    EnabledWidget.quickPairing => 'Quick Pairing',
+    EnabledWidget.recentGames => 'Recent Games',
+  };
+}
 
 @Freezed(fromJson: true, toJson: true)
 class HomePrefs with _$HomePrefs implements Serializable {
