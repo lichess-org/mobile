@@ -273,6 +273,13 @@ class _AppState extends ConsumerState<Application> {
           BackgroundThemeMode.dark => ThemeMode.dark,
           BackgroundThemeMode.system => ThemeMode.system,
         },
+        builder:
+            isIOS
+                ? (context, child) => IconTheme.merge(
+                  data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                  child: Material(color: Colors.transparent, child: child),
+                )
+                : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],
       ),

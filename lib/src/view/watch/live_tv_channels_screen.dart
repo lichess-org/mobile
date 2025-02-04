@@ -69,15 +69,7 @@ class _Body extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(game.channel.label, style: Styles.boardPreviewTitle),
-                  Icon(
-                    game.channel.icon,
-
-                    color:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? CupertinoTheme.of(context).primaryColor
-                            : ColorScheme.of(context).primary,
-                    size: 30,
-                  ),
+                  Icon(game.channel.icon, color: ColorScheme.of(context).primary, size: 30),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,
                     aiLevel: game.player.asPlayer.aiLevel,

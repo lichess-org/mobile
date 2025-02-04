@@ -96,13 +96,7 @@ class _Title extends StatelessWidget {
                       (context) => Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            p.icon,
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).primaryColor
-                                    : null,
-                          ),
+                          Icon(p.icon),
                           const SizedBox(width: 6),
                           Text(
                             context.l10n.perfStatPerfStats(p.title),

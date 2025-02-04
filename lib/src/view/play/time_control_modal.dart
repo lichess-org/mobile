@@ -258,15 +258,12 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconTheme(
-      data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
-      child: Row(
-        children: [
-          Icon(icon, size: 20.0),
-          const SizedBox(width: 10),
-          Text(title, style: _titleStyle),
-        ],
-      ),
+    return Row(
+      children: [
+        Icon(icon, size: 20.0),
+        const SizedBox(width: 10),
+        Text(title, style: _titleStyle),
+      ],
     );
   }
 }
