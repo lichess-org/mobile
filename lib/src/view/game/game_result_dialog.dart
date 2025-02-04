@@ -34,19 +34,9 @@ class GameResultDialog extends ConsumerStatefulWidget {
 }
 
 Widget _adaptiveDialog(BuildContext context, Widget content) {
-  // TODO return CupertinoAlertDialog on iOS when the pixelated text bug is fixed
-  const dialogColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xCCF2F2F2),
-    darkColor: Color(0xBF1E1E1E),
-  );
-
   final screenWidth = MediaQuery.of(context).size.width;
   final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
   return Dialog(
-    backgroundColor:
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoDynamicColor.resolve(dialogColor, context)
-            : null,
     child: SizedBox(
       width: min(screenWidth, kMaterialPopupMenuMaxWidth),
       child:

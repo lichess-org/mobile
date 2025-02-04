@@ -277,7 +277,10 @@ class _AppState extends ConsumerState<Application> {
             isIOS
                 ? (context, child) => IconTheme.merge(
                   data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
-                  child: Material(color: Colors.transparent, child: child),
+                  child: DefaultTextStyle.merge(
+                    style: CupertinoTheme.of(context).textTheme.textStyle,
+                    child: Material(color: Colors.transparent, child: child),
+                  ),
                 )
                 : null,
         home: const BottomNavScaffold(),
