@@ -1,7 +1,10 @@
+import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -11,6 +14,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -32,14 +36,17 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
+
+const kGameCarouselFlexWeights = [6, 2];
+const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -217,7 +224,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         _EditableWidget(
           widget: EnabledWidget.perfCards,
           shouldShow: session != null,
-          child: const AccountPerfCards(padding: Styles.horizontalBodyPadding),
+          child: AccountPerfCards(
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+          ),
         ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
@@ -507,23 +516,21 @@ class _OngoingGamesCarousel extends ConsumerWidget {
         }
         return _GamesCarousel<OngoingGame>(
           list: data,
-          builder:
-              (game) => _GamePreviewCarouselItem(
-                game: game,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder:
-                        (context) => GameScreen(
-                          initialGameId: game.fullId,
-                          loadingFen: game.fen,
-                          loadingOrientation: game.orientation,
-                          loadingLastMove: game.lastMove,
-                        ),
-                  );
-                },
-              ),
+          onTap: (index) {
+            final game = data[index];
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder:
+                  (_) => GameScreen(
+                    initialGameId: game.fullId,
+                    loadingFen: game.fen,
+                    loadingOrientation: game.orientation,
+                    loadingLastMove: game.lastMove,
+                  ),
+            );
+          },
+          builder: (game) => _GamePreviewCarouselItem(game: game),
           moreScreenBuilder: (_) => const OngoingGamesScreen(),
           maxGamesToShow: maxGamesToShow,
         );
@@ -548,6 +555,14 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         }
         return _GamesCarousel(
           list: data,
+          onTap: (index) {
+            final el = data[index];
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (el.$1, el.$2)),
+            );
+          },
           builder:
               (el) => _GamePreviewCarouselItem(
                 game: OngoingGame(
@@ -565,13 +580,6 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
                   lastMove: el.$2.lastMove,
                   secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
                 ),
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (el.$1, el.$2)),
-                  );
-                },
               ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
           maxGamesToShow: maxGamesToShow,
@@ -586,11 +594,13 @@ class _GamesCarousel<T> extends StatefulWidget {
   const _GamesCarousel({
     required this.list,
     required this.builder,
+    required this.onTap,
     required this.moreScreenBuilder,
     required this.maxGamesToShow,
   });
   final IList<T> list;
   final Widget Function(T data) builder;
+  final void Function(int index)? onTap;
   final Widget Function(BuildContext) moreScreenBuilder;
   final int maxGamesToShow;
 
@@ -599,71 +609,100 @@ class _GamesCarousel<T> extends StatefulWidget {
 }
 
 class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
-  final _pageController = PageController(viewportFraction: 0.65);
+  final _controller = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    homeTabInteraction.addListener(_onTabInteraction);
+  }
+
+  @override
+  void dispose() {
+    homeTabInteraction.removeListener(_onTabInteraction);
+    super.dispose();
+  }
+
+  void _onTabInteraction() {
+    if (_controller.hasClients) {
+      _controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  context.l10n.nbGamesInPlay(widget.list.length),
-                  style: Styles.sectionTitle,
-                  overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: Styles.verticalBodyPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    context.l10n.nbGamesInPlay(widget.list.length),
+                    style: Styles.sectionTitle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              if (widget.list.length > 2) ...[
-                const SizedBox(width: 6.0),
-                NoPaddingTextButton(
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.nbGamesInPlay(widget.list.length),
-                      builder: widget.moreScreenBuilder,
-                    );
-                  },
-                  child: Text(context.l10n.more),
-                ),
+                if (widget.list.length > 2) ...[
+                  const SizedBox(width: 6.0),
+                  NoPaddingTextButton(
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.nbGamesInPlay(widget.list.length),
+                        builder: widget.moreScreenBuilder,
+                      );
+                    },
+                    child: Text(context.l10n.more),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
-        ),
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: BoardsPageView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            controller: _pageController,
-            pageSnapping: widget.list.length > 2,
-            allowImplicitScrolling: true,
-            itemCount: widget.list.length,
-            itemBuilder: (context, index) {
-              return widget.builder(widget.list[index]);
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: AspectRatio(
+              aspectRatio: 1.2,
+              child: CarouselView.weighted(
+                controller: _controller,
+                padding: kGameCarouselPadding,
+                shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+                elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
+                flexWeights: kGameCarouselFlexWeights,
+                itemSnapping: true,
+                onTap: (index) {
+                  widget.onTap?.call(index);
+                },
+                children: [for (final game in widget.list) widget.builder(game)],
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _GamePreviewCarouselItem extends StatelessWidget {
-  const _GamePreviewCarouselItem({required this.game, this.onTap});
+  const _GamePreviewCarouselItem({required this.game});
 
   final OngoingGame game;
-  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
       opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
-      child: BoardCarouselItem(
+      child: _BoardCarouselItem(
         fen: game.fen,
         orientation: game.orientation,
         lastMove: game.lastMove,
@@ -711,7 +750,99 @@ class _GamePreviewCarouselItem extends StatelessWidget {
             ),
           ),
         ),
-        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class _BoardCarouselItem extends ConsumerWidget {
+  const _BoardCarouselItem({
+    required this.orientation,
+    required this.fen,
+    required this.description,
+    this.lastMove,
+  });
+
+  /// Side by which the board is oriented.
+  final Side orientation;
+
+  /// FEN string describing the position of the board.
+  final String fen;
+
+  /// Last move played, used to highlight corresponding squares.
+  final Move? lastMove;
+
+  final Widget description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final brightness = ColorScheme.of(context).brightness;
+
+    final backgroundColor = lighten(
+      boardPrefs.boardTheme.colors.darkSquare,
+      brightness == Brightness.light ? 0.25 : 0.0,
+    );
+
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
+    final double width = screenWidth - 16.0;
+    final boardSize =
+        width * kGameCarouselFlexWeights[0] / totalFlex - kGameCarouselPadding.horizontal;
+
+    return BrightnessHueFilter(
+      hue: boardPrefs.hue,
+      brightness: boardPrefs.brightness,
+      child: PlatformCard(
+        clipBehavior: Clip.hardEdge,
+        color: backgroundColor,
+        child: OverflowBox(
+          maxWidth: boardSize,
+          minWidth: boardSize,
+          child: Stack(
+            children: [
+              ShaderMask(
+                blendMode: BlendMode.dstOut,
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor.withValues(alpha: 0.25),
+                      backgroundColor.withValues(alpha: 1.0),
+                    ],
+                    stops: const [0.3, 1.00],
+                    tileMode: TileMode.clamp,
+                  ).createShader(bounds);
+                },
+                child: SizedBox(
+                  height: boardSize,
+                  child: StaticChessboard(
+                    size: boardSize,
+                    fen: fen,
+                    orientation: orientation,
+                    lastMove: lastMove,
+                    enableCoordinates: false,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                    pieceAssets: boardPrefs.pieceSet.assets,
+                    colorScheme: boardPrefs.boardTheme.colors,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                bottom: 8,
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(color: Colors.white),
+                  child: description,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
