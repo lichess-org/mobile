@@ -6,21 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({required this.onTapMove, required this.localEval, required this.isGameOver});
+  const EngineLines({required this.onTapMove, required this.eval, required this.isGameOver});
   final void Function(NormalMove move) onTapMove;
-  final LocalEval? localEval;
+  final ClientEval? eval;
   final bool isGameOver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
-    final engineEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = engineEval ?? localEval;
 
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
@@ -28,9 +25,9 @@ class EngineLines extends ConsumerWidget {
         isGameOver
             ? emptyLines
             : (eval != null
-                ? eval.pvs
+                ? eval!.pvs
                     .take(numEvalLines)
-                    .map((pv) => Engineline(onTapMove, eval.position, pv))
+                    .map((pv) => Engineline(onTapMove, eval!.position, pv))
                     .toList()
                 : emptyLines);
 

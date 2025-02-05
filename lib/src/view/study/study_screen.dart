@@ -408,6 +408,7 @@ class _Body extends ConsumerWidget {
                     ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: engineGaugeParams,
+                      eval: null,
                     )
                     : Container(
                       clipBehavior: Clip.hardEdge,
@@ -415,6 +416,7 @@ class _Body extends ConsumerWidget {
                       child: EngineGauge(
                         displayMode: EngineGaugeDisplayMode.vertical,
                         params: engineGaugeParams,
+                        eval: null,
                       ),
                     );
               }
@@ -422,7 +424,7 @@ class _Body extends ConsumerWidget {
       engineLines:
           isComputerAnalysisAllowed && isLocalEvaluationEnabled && numEvalLines > 0
               ? EngineLines(
-                localEval: currentNode.eval,
+                eval: currentNode.eval,
                 isGameOver: currentNode.position?.isGameOver ?? false,
                 onTapMove: ref.read(studyControllerProvider(id).notifier).onUserMove,
               )

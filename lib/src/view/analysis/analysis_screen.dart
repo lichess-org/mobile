@@ -91,7 +91,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     final appBarActions = [
       if (prefs.enableComputerAnalysis)
-        EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
+        EngineDepth(eval: asyncState.valueOrNull?.currentNode.currentClientEval(ref)),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
@@ -182,6 +182,8 @@ class _Body extends ConsumerWidget {
     final currentNode = analysisState.currentNode;
     final pov = analysisState.pov;
 
+    final eval = currentNode.currentEval(ref);
+
     return AnalysisLayout(
       tabController: controller,
       pov: pov,
@@ -199,6 +201,7 @@ class _Body extends ConsumerWidget {
                     ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: analysisState.engineGaugeParams,
+                      eval: eval,
                     )
                     : Container(
                       clipBehavior: Clip.hardEdge,
@@ -206,6 +209,7 @@ class _Body extends ConsumerWidget {
                       child: EngineGauge(
                         displayMode: EngineGaugeDisplayMode.vertical,
                         params: analysisState.engineGaugeParams,
+                        eval: eval,
                       ),
                     );
               }
@@ -214,7 +218,7 @@ class _Body extends ConsumerWidget {
           isEngineAvailable && numEvalLines > 0
               ? EngineLines(
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                localEval: currentNode.eval,
+                eval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
               )
               : null,

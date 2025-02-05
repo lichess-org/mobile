@@ -26,6 +26,9 @@ abstract class Node {
   /// The local evaluation of the position.
   LocalEval? eval;
 
+  /// The cloud evaluation of the position
+  CloudEval? cloudEval;
+
   /// The opening associated with this node.
   Opening? opening;
 

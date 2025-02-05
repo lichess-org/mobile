@@ -12,59 +12,76 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
 class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.defaultEval});
+  const EngineDepth({this.eval});
 
-  final LocalEval? defaultEval;
+  final ClientEval? eval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final depth =
-        ref.watch(engineEvaluationProvider.select((value) => value.eval?.depth)) ??
-        defaultEval?.depth;
+    final depth = eval?.depth;
 
     return depth != null
         ? AppBarTextButton(
-          onPressed: () {
-            showPopover(
-              context: context,
-              bodyBuilder: (context) {
-                return _StockfishInfo(defaultEval);
-              },
-              direction: PopoverDirection.top,
-              width: 240,
-              backgroundColor:
-                  Theme.of(context).platform == TargetPlatform.android
-                      ? DialogTheme.of(context).backgroundColor ??
-                          ColorScheme.of(context).surfaceContainerHigh
-                      : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
-              transitionDuration: Duration.zero,
-              popoverTransitionBuilder: (_, child) => child,
-            );
+          onPressed: switch (eval) {
+            final LocalEval? localEval => () {
+              showPopover(
+                context: context,
+                bodyBuilder: (context) {
+                  return _StockfishInfo(localEval);
+                },
+                direction: PopoverDirection.top,
+                width: 240,
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? DialogTheme.of(context).backgroundColor ??
+                            ColorScheme.of(context).surfaceContainerHigh
+                        : CupertinoDynamicColor.resolve(
+                          CupertinoColors.tertiarySystemBackground,
+                          context,
+                        ),
+                transitionDuration: Duration.zero,
+                popoverTransitionBuilder: (_, child) => child,
+              );
+            },
+            CloudEval() => () {},
           },
-          child: RepaintBoundary(
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: ColorScheme.of(context).secondary,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  '${math.min(99, depth)}',
-                  style: TextStyle(
-                    color: ColorScheme.of(context).onSecondary,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+          child: switch (eval) {
+            LocalEval() || null => RepaintBoundary(
+              child: Container(
+                width: 20.0,
+                height: 20.0,
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  color: ColorScheme.of(context).secondary,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    '${math.min(99, depth)}',
+                    style: TextStyle(
+                      color: ColorScheme.of(context).onSecondary,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+            CloudEval(:final depth) => Stack(
+              alignment: const AlignmentDirectional(-0.05, 0.15),
+              children: [
+                Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary),
+                Text(
+                  '${math.min(99, depth)}',
+                  style: TextStyle(
+                    color: ColorScheme.of(context).onSecondary,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          },
         )
         : const SizedBox.shrink();
   }
@@ -86,15 +103,10 @@ class _StockfishInfo extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlatformListTile(
-          leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-          title: Text(engineName),
-          subtitle: Text(context.l10n.depthX('$depth$knps')),
-        ),
-      ],
+    return PlatformListTile(
+      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+      title: Text(engineName),
+      subtitle: Text(context.l10n.depthX('$depth$knps')),
     );
   }
 }

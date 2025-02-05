@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -799,7 +800,6 @@ class AnalysisState with _$AnalysisState {
     orientation: pov,
     isLocalEngineAvailable: isEngineAvailable,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
   );
 }
 
@@ -813,7 +813,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     required bool isRoot,
     SanMove? sanMove,
     Opening? opening,
-    LocalEval? eval,
+    ClientEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
@@ -843,6 +843,22 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
         eval: node.eval,
       );
     }
+  }
+
+  Eval? currentEval(WidgetRef ref) {
+    return switch (eval) {
+      CloudEval() => eval,
+      LocalEval() => ref.watch(engineEvaluationProvider).eval ?? eval,
+      null => ref.watch(engineEvaluationProvider).eval ?? serverEval,
+    };
+  }
+
+  ClientEval? currentClientEval(WidgetRef ref) {
+    final eval = currentEval(ref);
+    return switch (eval) {
+      ExternalEval() || null => null,
+      ClientEval() => eval,
+    };
   }
 
   /// The evaluation from the PGN comments.
