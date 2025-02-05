@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാം കളികൾ</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാ കളികൾ</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">താങ്ങൾക്ക് ഉറപ്പാണോ?</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">തിരിച്ചെടുക്കൽ നിർദേശം കളയുക</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">മയ്ക്കുക</string>
