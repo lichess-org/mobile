@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -21,17 +20,16 @@ typedef EngineGaugeParams =
 
       /// Position to evaluate.
       Position position,
-
-      /// Saved evaluation to display when the current evaluation is not available.
-      Eval? savedEval,
     });
 
 class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.displayMode, required this.params});
+  const EngineGauge({required this.displayMode, required this.params, required this.eval});
 
   final EngineGaugeDisplayMode displayMode;
 
   final EngineGaugeParams params;
+
+  final Eval? eval;
 
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
@@ -45,28 +43,12 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval =
-        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : null;
-
-    return localEval != null
-        ? _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-          eval: localEval,
-        )
-        : params.savedEval != null
-        ? _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-          eval: params.savedEval,
-        )
-        : _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-        );
+    return _EvalGauge(
+      displayMode: displayMode,
+      position: params.position,
+      orientation: params.orientation,
+      eval: eval,
+    );
   }
 }
 

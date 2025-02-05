@@ -276,7 +276,6 @@ class _Body extends ConsumerWidget {
                         orientation: puzzleState.pov,
                         isLocalEngineAvailable: true,
                         position: puzzleState.position,
-                        savedEval: puzzleState.node.eval,
                       )
                       : null,
               showEngineGaugePlaceholder: true,
