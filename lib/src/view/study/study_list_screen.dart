@@ -40,7 +40,7 @@ class StudyListScreen extends ConsumerWidget {
         title: title,
         actions: [
           AppBarIconButton(
-            icon: const Icon(Icons.tune),
+            icon: const Icon(Icons.filter_list),
             // TODO: translate
             semanticsLabel: 'Filter studies',
             onPressed:

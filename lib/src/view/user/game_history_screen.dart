@@ -2,14 +2,13 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -42,7 +41,7 @@ class GameHistoryScreen extends ConsumerWidget {
               loading: () => const ButtonLoadingIndicator(),
               error: (e, s) => Text(context.l10n.mobileAllGames),
             )
-            : Text(filtersInUse.selectionLabel(context));
+            : Text(filtersInUse.selectionLabel(context.l10n));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
@@ -52,7 +51,7 @@ class GameHistoryScreen extends ConsumerWidget {
         ),
         count: filtersInUse.count,
         isLabelVisible: filtersInUse.count > 0,
-        child: const Icon(Icons.tune),
+        child: const Icon(Icons.filter_list),
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed:
@@ -183,10 +182,9 @@ class _BodyState extends ConsumerState<_Body> {
 
                 Future<void> onPressedBookmark(BuildContext context) async {
                   try {
-                    await ref.withClient(
-                      (client) =>
-                          GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
-                    );
+                    await ref
+                        .read(accountServiceProvider)
+                        .setGameBookmark(game.id, bookmark: !game.bookmarked!);
                     ref.read(gameListProvider.notifier).toggleBookmark(game.id);
                   } on Exception catch (_) {
                     if (context.mounted) {
@@ -218,8 +216,11 @@ class _BodyState extends ConsumerState<_Body> {
                           SlidableAction(
                             backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
                             onPressed: onPressedBookmark,
-                            icon: game.bookmarked! ? Icons.star : Icons.star_outline_rounded,
-                            label: game.bookmarked! ? 'Unbookmark' : 'Bookmark',
+                            icon:
+                                game.isBookmarked
+                                    ? Icons.bookmark_remove_outlined
+                                    : Icons.bookmark_add_outlined,
+                            label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
                           ),
                         ],
                       ),

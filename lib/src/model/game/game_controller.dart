@@ -291,9 +291,9 @@ class GameController extends _$GameController {
   Future<void> toggleBookmark() async {
     if (state.hasValue) {
       final toggledBookmark = !(state.requireValue.game.bookmarked ?? false);
-      await ref.withClient(
-        (client) => GameRepository(client).bookmark(gameFullId.gameId, bookmark: toggledBookmark),
-      );
+      await ref
+          .read(accountServiceProvider)
+          .setGameBookmark(gameFullId.gameId, bookmark: toggledBookmark);
       state = AsyncValue.data(
         state.requireValue.copyWith(
           game: state.requireValue.game.copyWith(bookmarked: toggledBookmark),

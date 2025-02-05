@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -162,9 +162,7 @@ class _BodyState extends ConsumerState<_Body> {
     final toggledBookmark = !_bookmarked;
     final gameData = widget.gameData;
     if (gameData == null) return;
-    await ref.withClient(
-      (client) => GameRepository(client).bookmark(gameData.id, bookmark: toggledBookmark),
-    );
+    await ref.read(accountServiceProvider).setGameBookmark(gameData.id, bookmark: toggledBookmark);
     if (mounted) {
       setState(() {
         _bookmarked = toggledBookmark;

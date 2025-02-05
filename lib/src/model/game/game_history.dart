@@ -214,7 +214,7 @@ class UserGameHistory extends _$UserGameHistory {
     state = AsyncData(
       state.requireValue.copyWith(
         gameList: gameList.replace(index, (
-          game: game.copyWith(bookmarked: !game.bookmarked!),
+          game: game.copyWith(bookmarked: !game.isBookmarked),
           pov: pov,
         )),
       ),

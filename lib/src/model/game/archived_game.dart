@@ -112,6 +112,8 @@ class LightArchivedGame with _$LightArchivedGame {
   factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
       _$LightArchivedGameFromJson(json);
 
+  bool get isBookmarked => bookmarked == true;
+
   String get clockDisplay {
     return TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
   }

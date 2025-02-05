@@ -47,8 +47,10 @@ class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuIte
       future: _pendingBookmarkAction,
       builder: (context, snapshot) {
         return MenuItemButton(
-          leadingIcon: Icon(widget.bookmarked ? Icons.star : Icons.star_outline_rounded),
-          semanticsLabel: 'Bookmark',
+          leadingIcon: Icon(
+            widget.bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
+          ),
+          semanticsLabel: widget.bookmarked ? 'Unbookmark' : 'Bookmark',
           closeOnActivate: false,
           onPressed:
               snapshot.connectionState == ConnectionState.waiting
