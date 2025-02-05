@@ -25,9 +25,13 @@ sealed class Eval {
 
 /// The eval from the client side, either from the cloud or the local engine.
 sealed class ClientEval extends Eval {
+  int get depth;
+
   Position get position;
 
   IList<PvData> get pvs;
+
+  IList<MoveWithWinningChances> get bestMoves;
 }
 
 /// The eval coming from other Lichess clients, served from the network.
@@ -47,6 +51,16 @@ class CloudEval with _$CloudEval implements ClientEval {
   int? get cp => pvs[0].cp;
 
   int? get mate => pvs[0].mate;
+
+  @override
+  IList<MoveWithWinningChances> get bestMoves {
+    return pvs
+        .where((e) => e.moves.isNotEmpty)
+        .map((e) => e._firstMoveWithWinningChances(position.turn))
+        .nonNulls
+        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
+        .toIList();
+  }
 }
 
 /// The eval from the local engine.
@@ -73,6 +87,7 @@ class LocalEval with _$LocalEval implements ClientEval {
     return Move.parse(uci);
   }
 
+  @override
   IList<MoveWithWinningChances> get bestMoves {
     return pvs
         .where((e) => e.moves.isNotEmpty)

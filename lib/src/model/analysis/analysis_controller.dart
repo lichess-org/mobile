@@ -813,7 +813,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     required bool isRoot,
     SanMove? sanMove,
     Opening? opening,
-    LocalEval? eval,
+    ClientEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
