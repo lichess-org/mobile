@@ -334,11 +334,20 @@ class _ContextMenu extends ConsumerWidget {
           child: Text(context.l10n.mobileShareGameURL),
         ),
         if (isLoggedIn && onPressedBookmark != null)
-          BottomSheetContextMenuAction(
-            onPressedWithContext: onPressedBookmark,
-            icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-            closeOnPressed: true,
-            child: Text(game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
+          Builder(
+            builder: (context) {
+              return BottomSheetContextMenuAction(
+                onPressed: () => onPressedBookmark?.call(context),
+                icon:
+                    game.isBookmarked
+                        ? Icons.bookmark_remove_outlined
+                        : Icons.bookmark_add_outlined,
+                closeOnPressed: true,
+                child: Text(
+                  game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame,
+                ),
+              );
+            },
           ),
         // Builder is used to retrieve the context immediately surrounding the
         // BottomSheetContextMenuAction

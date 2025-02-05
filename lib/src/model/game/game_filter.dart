@@ -23,15 +23,12 @@ class GameFilter extends _$GameFilter {
 class GameFilterState with _$GameFilterState {
   const GameFilterState._();
 
-  const factory GameFilterState({
-    @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
-    Side? side,
-    bool? rated,
-  }) = _GameFilterState;
+  const factory GameFilterState({@Default(ISet<Perf>.empty()) ISet<Perf> perfs, Side? side}) =
+      _GameFilterState;
 
   /// Returns a translated label of the selected filters.
   String selectionLabel(AppLocalizations l10n) {
-    final fields = [side, perfs, rated];
+    final fields = [side, perfs];
     final labels =
         fields
             .map(
@@ -50,7 +47,7 @@ class GameFilterState with _$GameFilterState {
   }
 
   int get count {
-    final fields = [perfs, side, rated];
+    final fields = [perfs, side];
     return fields.where((field) => field is Iterable ? field.isNotEmpty : field != null).length;
   }
 }
