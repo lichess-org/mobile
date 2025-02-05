@@ -187,7 +187,7 @@ class _BodyState extends ConsumerState<_Body> {
                       (client) =>
                           GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
                     );
-                    ref.read(gameListProvider.notifier).toggleBookmark(index);
+                    ref.read(gameListProvider.notifier).toggleBookmark(game.id);
                   } on Exception catch (_) {
                     if (context.mounted) {
                       showPlatformSnackbar(
@@ -199,7 +199,7 @@ class _BodyState extends ConsumerState<_Body> {
                   }
                 }
 
-                final gameTile = ExtendedGameListTile(
+                final gameTile = GameListTile(
                   item: list[index],
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
@@ -207,6 +207,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
                   onPressedBookmark: onPressedBookmark,
+                  gameListContext: (widget.user?.id, gameFilterState),
                 );
 
                 return isLoggedIn

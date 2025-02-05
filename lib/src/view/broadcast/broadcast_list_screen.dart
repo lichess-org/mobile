@@ -510,7 +510,7 @@ class _BroadcastCardContent extends StatelessWidget {
                 ),
                 const Spacer(),
               ],
-              PlatformContextMenuAnchor(
+              MenuAnchor(
                 builder:
                     (context, controller, _) => AppBarIconButton(
                       onPressed: () {
@@ -523,10 +523,11 @@ class _BroadcastCardContent extends StatelessWidget {
                       semanticsLabel: context.l10n.menu,
                       icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                     ),
-                actions: [
-                  AppBarMenuAction(
-                    icon: Icons.info,
-                    label: context.l10n.broadcastOverview,
+                menuChildren: [
+                  MenuItemButton(
+                    leadingIcon: const Icon(Icons.info),
+                    semanticsLabel: context.l10n.broadcastOverview,
+                    child: Text(context.l10n.broadcastOverview),
                     onPressed: () {
                       pushPlatformRoute(
                         context,
@@ -540,9 +541,10 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  AppBarMenuAction(
-                    icon: LichessIcons.chess_board,
-                    label: context.l10n.broadcastBoards,
+                  MenuItemButton(
+                    leadingIcon: const Icon(LichessIcons.chess_board),
+                    semanticsLabel: context.l10n.broadcastBoards,
+                    child: Text(context.l10n.broadcastBoards),
                     onPressed: () {
                       pushPlatformRoute(
                         context,
@@ -556,9 +558,10 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  AppBarMenuAction(
-                    icon: Icons.people,
-                    label: context.l10n.players,
+                  MenuItemButton(
+                    leadingIcon: const Icon(Icons.people),
+                    semanticsLabel: context.l10n.players,
+                    child: Text(context.l10n.players),
                     onPressed: () {
                       pushPlatformRoute(
                         context,
@@ -572,12 +575,14 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  AppBarMenuAction(
-                    icon:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? CupertinoIcons.share
-                            : Icons.share,
-                    label: context.l10n.studyShareAndExport,
+                  MenuItemButton(
+                    leadingIcon: Icon(
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? CupertinoIcons.share
+                          : Icons.share,
+                    ),
+                    semanticsLabel: context.l10n.studyShareAndExport,
+                    child: Text(context.l10n.studyShareAndExport),
                     onPressed: () {
                       showAdaptiveActionSheet<void>(
                         context: context,

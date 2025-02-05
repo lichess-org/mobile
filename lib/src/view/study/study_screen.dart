@@ -202,7 +202,7 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformContextMenuAnchor(
+    return MenuAnchor(
       builder:
           (context, controller, _) => AppBarIconButton(
             onPressed: () {
@@ -215,25 +215,29 @@ class _StudyMenu extends ConsumerWidget {
             semanticsLabel: 'Study menu',
             icon: const Icon(Icons.more_horiz),
           ),
-      actions: [
-        AppBarMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.settings),
+          semanticsLabel: context.l10n.settingsSettings,
+          child: Text(context.l10n.settingsSettings),
           onPressed: () {
             pushPlatformRoute(context, screen: StudySettings(id));
           },
         ),
-        AppBarMenuAction(
-          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+        MenuItemButton(
+          leadingIcon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
+          semanticsLabel: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+          child: Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
           onPressed: () {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },
         ),
-        AppBarMenuAction(
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
-          label: context.l10n.studyShareAndExport,
+        MenuItemButton(
+          leadingIcon: Icon(
+            Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+          ),
+          semanticsLabel: context.l10n.studyShareAndExport,
+          child: Text(context.l10n.studyShareAndExport),
           onPressed: () {
             showAdaptiveActionSheet<void>(
               context: context,

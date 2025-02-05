@@ -124,6 +124,7 @@ class BackgroundThemeWrapper extends StatelessWidget {
           subtitleTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
           leadingAndTrailingTextStyle: isIOS ? cupertinoTheme.textTheme.textStyle : null,
         ),
+        menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
         scaffoldBackgroundColor: theme.scaffoldBackgroundColor.withValues(
           alpha: transparentScaffold ? 0 : 1,
         ),

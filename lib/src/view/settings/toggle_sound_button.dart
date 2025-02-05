@@ -23,16 +23,23 @@ class ToggleSoundButton extends ConsumerWidget {
   }
 }
 
-AppBarMenuAction toggleSoundMenuAction(BuildContext context, WidgetRef ref) {
-  final isSoundEnabled = ref.watch(
-    generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
-  );
+/// A menu item button that toggles the sound on and off.
+class ToggleSoundMenuItemButton extends ConsumerWidget {
+  const ToggleSoundMenuItemButton({super.key});
 
-  return AppBarMenuAction(
-    icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
-    label: context.l10n.sound,
-    onPressed: () {
-      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-    },
-  );
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
+    );
+
+    return MenuItemButton(
+      leadingIcon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+      semanticsLabel: context.l10n.sound,
+      child: Text(context.l10n.sound),
+      onPressed: () {
+        ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+      },
+    );
+  }
 }

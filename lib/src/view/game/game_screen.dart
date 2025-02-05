@@ -1,10 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -17,7 +21,11 @@ import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/game/ping_rating.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -36,7 +44,7 @@ class GameScreen extends ConsumerStatefulWidget {
     this.loadingLastMove,
     this.loadingOrientation,
     this.lastMoveAt,
-    this.bookmarked,
+    this.gameListContext,
     super.key,
   }) : assert(
          initialGameId != null || seek != null || challenge != null,
@@ -57,7 +65,8 @@ class GameScreen extends ConsumerStatefulWidget {
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
-  final bool? bookmarked;
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
 
   _GameSource get source {
     if (initialGameId != null) {
@@ -155,10 +164,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     : const LoadGameError('Could not create the game.');
             return PlatformBoardThemeScaffold(
               resizeToAvoidBottomInset: false,
-              appBar: GameAppBar(
+              appBar: _GameAppBar(
                 id: gameId,
                 lastMoveAt: widget.lastMoveAt,
-                bookmarked: widget.bookmarked,
+                gameListContext: widget.gameListContext,
               ),
               body: body,
             );
@@ -179,7 +188,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
             return PlatformBoardThemeScaffold(
               resizeToAvoidBottomInset: false,
-              appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
+              appBar: _GameAppBar(
+                seek: widget.seek,
+                challenge: widget.challenge,
+                lastMoveAt: widget.lastMoveAt,
+                gameListContext: widget.gameListContext,
+              ),
               body: PopScope(canPop: false, child: loadingBoard),
             );
           },
@@ -199,10 +213,198 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
             final body = PopScope(child: message);
 
             return PlatformBoardThemeScaffold(
-              appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
+              appBar: _GameAppBar(
+                seek: widget.seek,
+                lastMoveAt: widget.lastMoveAt,
+                gameListContext: widget.gameListContext,
+              ),
               body: body,
             );
           },
         );
+  }
+}
+
+class _GameAppBar extends ConsumerWidget {
+  const _GameAppBar({
+    this.id,
+    this.seek,
+    this.challenge,
+    this.lastMoveAt,
+    required this.gameListContext,
+  });
+
+  final GameSeek? seek;
+  final ChallengeRequest? challenge;
+  final GameFullId? id;
+
+  /// The date of the last move played in the game. If null, the game is in progress.
+  final DateTime? lastMoveAt;
+
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
+  static const pingRating = Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+    child: SocketPingRating(size: 24.0),
+  );
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shouldPreventGoingBackAsync =
+        id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
+    final isBookmarkedAsync =
+        id != null ? ref.watch(isGameBookmarkedProvider(id!)) : const AsyncValue.data(false);
+
+    return PlatformAppBar(
+      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+        data: (prevent) => prevent ? pingRating : null,
+        orElse: () => pingRating,
+      ),
+      title:
+          id != null
+              ? _StandaloneGameTitle(id: id!, lastMoveAt: lastMoveAt)
+              : seek != null
+              ? _LobbyGameTitle(seek: seek!)
+              : challenge != null
+              ? _ChallengeGameTitle(challenge: challenge!)
+              : const SizedBox.shrink(),
+      actions: [
+        MenuAnchor(
+          builder:
+              (context, controller, _) => AppBarIconButton(
+                icon: const Icon(Icons.more_horiz),
+                semanticsLabel: context.l10n.menu,
+                onPressed: () {
+                  if (controller.isOpen) {
+                    controller.close();
+                  } else {
+                    controller.open();
+                  }
+                },
+              ),
+          menuChildren: [
+            if (id != null) GameSettingsMenuItemButton(id: id!),
+            const ToggleSoundMenuItemButton(),
+            if (id != null)
+              GameBookmarkMenuItemButton(
+                id: id!.gameId,
+                bookmarked: isBookmarkedAsync.valueOrNull ?? false,
+                onToggleBookmark:
+                    () => ref.read(gameControllerProvider(id!).notifier).toggleBookmark(),
+                gameListContext: gameListContext,
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _LobbyGameTitle extends ConsumerWidget {
+  const _LobbyGameTitle({required this.seek});
+
+  final GameSeek seek;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        const SizedBox(width: 4.0),
+        Text('${seek.timeIncrement?.display}$mode'),
+      ],
+    );
+  }
+}
+
+class _ChallengeGameTitle extends ConsumerWidget {
+  const _ChallengeGameTitle({required this.challenge});
+
+  final ChallengeRequest challenge;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        const SizedBox(width: 4.0),
+        if (challenge.timeIncrement != null)
+          Text('${challenge.timeIncrement?.display}$mode')
+        else if (challenge.days != null)
+          Text('${context.l10n.nbDays(challenge.days!)}$mode'),
+      ],
+    );
+  }
+}
+
+class _StandaloneGameTitle extends ConsumerWidget {
+  const _StandaloneGameTitle({required this.id, this.lastMoveAt});
+
+  final GameFullId id;
+
+  final DateTime? lastMoveAt;
+
+  static final _gameTitledateFormat = DateFormat.yMMMd();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final metaAsync = ref.watch(gameMetaProvider(id));
+    return metaAsync.when(
+      data: (meta) {
+        final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
+
+        final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
+            const SizedBox(width: 4.0),
+            if (meta.clock != null)
+              Flexible(
+                child: AutoSizeText(
+                  '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                ),
+              )
+            else if (meta.daysPerTurn != null)
+              Flexible(
+                child: AutoSizeText(
+                  '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                ),
+              )
+            else
+              Flexible(
+                child: AutoSizeText('${meta.perf.title}$info', maxLines: 1, minFontSize: 14.0),
+              ),
+          ],
+        );
+      },
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      error: (error, _) => const SizedBox.shrink(),
+    );
   }
 }

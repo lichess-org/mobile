@@ -60,10 +60,7 @@ class RecentGamesWidget extends ConsumerWidget {
                     child: Text(context.l10n.more),
                   )
                   : null,
-          children:
-              list.map((item) {
-                return ExtendedGameListTile(item: item);
-              }).toList(),
+          children: [for (final item in list) GameListTile(item: item)],
         );
       },
       error: (error, stackTrace) {

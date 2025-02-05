@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -33,6 +35,7 @@ class ArchivedGameScreen extends ConsumerWidget {
     this.gameData,
     required this.orientation,
     this.initialCursor,
+    this.gameListContext,
     super.key,
   }) : assert(gameId != null || gameData != null);
 
@@ -42,22 +45,43 @@ class ArchivedGameScreen extends ConsumerWidget {
   final Side orientation;
   final int? initialCursor;
 
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (gameData != null) {
-      return _Body(gameData: gameData, orientation: orientation, initialCursor: initialCursor);
+      return _Body(
+        gameData: gameData,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      );
     } else {
-      return _LoadGame(gameId: gameId!, orientation: orientation, initialCursor: initialCursor);
+      return _LoadGame(
+        gameId: gameId!,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      );
     }
   }
 }
 
 class _LoadGame extends ConsumerWidget {
-  const _LoadGame({required this.gameId, required this.orientation, required this.initialCursor});
+  const _LoadGame({
+    required this.gameId,
+    required this.orientation,
+    required this.initialCursor,
+    required this.gameListContext,
+  });
 
   final GameId gameId;
   final Side orientation;
   final int? initialCursor;
+
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -65,9 +89,20 @@ class _LoadGame extends ConsumerWidget {
 
     return game.when(
       data: (game) {
-        return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
+        return _Body(
+          gameData: game.data,
+          orientation: orientation,
+          initialCursor: initialCursor,
+          gameListContext: gameListContext,
+        );
       },
-      loading: () => _Body(gameData: null, orientation: orientation, initialCursor: initialCursor),
+      loading:
+          () => _Body(
+            gameData: null,
+            orientation: orientation,
+            initialCursor: initialCursor,
+            gameListContext: gameListContext,
+          ),
       error: (error, stackTrace) {
         debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         switch (error) {
@@ -76,6 +111,7 @@ class _LoadGame extends ConsumerWidget {
               gameData: null,
               orientation: orientation,
               initialCursor: initialCursor,
+              gameListContext: gameListContext,
               error: 'Game not found.',
             );
           default:
@@ -83,6 +119,7 @@ class _LoadGame extends ConsumerWidget {
               gameData: null,
               orientation: orientation,
               initialCursor: initialCursor,
+              gameListContext: gameListContext,
               error: error,
             );
         }
@@ -91,25 +128,87 @@ class _LoadGame extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
+class _Body extends ConsumerStatefulWidget {
+  const _Body({
+    required this.gameData,
+    required this.orientation,
+    this.initialCursor,
+    this.error,
+    required this.gameListContext,
+  });
 
   final LightArchivedGame? gameData;
   final Object? error;
   final Side orientation;
   final int? initialCursor;
 
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  late bool _bookmarked;
+
+  @override
+  void initState() {
+    _bookmarked = widget.gameData?.bookmarked ?? false;
+    super.initState();
+  }
+
+  Future<void> _toggleBookmark() async {
+    final toggledBookmark = !_bookmarked;
+    final gameData = widget.gameData;
+    if (gameData == null) return;
+    await ref.withClient(
+      (client) => GameRepository(client).bookmark(gameData.id, bookmark: toggledBookmark),
+    );
+    if (mounted) {
+      setState(() {
+        _bookmarked = toggledBookmark;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
-        title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
+        title:
+            widget.gameData != null
+                ? _GameTitle(gameData: widget.gameData!)
+                : const SizedBox.shrink(),
         actions: [
-          if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
-          if (gameData != null && isLoggedIn)
-            _GameMenu(id: gameData!.id, bookmarked: gameData!.bookmarked!)
+          if (widget.gameData == null && widget.error == null)
+            const PlatformAppBarLoadingIndicator(),
+          if (widget.gameData != null && isLoggedIn)
+            MenuAnchor(
+              builder:
+                  (context, controller, _) => AppBarIconButton(
+                    icon: const Icon(Icons.more_horiz),
+                    semanticsLabel: context.l10n.menu,
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                  ),
+              menuChildren: [
+                const ToggleSoundMenuItemButton(),
+                GameBookmarkMenuItemButton(
+                  id: widget.gameData!.id,
+                  bookmarked: _bookmarked,
+                  onToggleBookmark: _toggleBookmark,
+                  gameListContext: widget.gameListContext,
+                ),
+              ],
+            )
           else
             const ToggleSoundButton(),
         ],
@@ -120,13 +219,13 @@ class _Body extends ConsumerWidget {
           children: [
             Expanded(
               child: _BoardBody(
-                archivedGameData: gameData,
-                orientation: orientation,
-                initialCursor: initialCursor,
-                error: error,
+                archivedGameData: widget.gameData,
+                orientation: widget.orientation,
+                initialCursor: widget.initialCursor,
+                error: widget.error,
               ),
             ),
-            _BottomBar(archivedGameData: gameData, orientation: orientation),
+            _BottomBar(archivedGameData: widget.gameData, orientation: widget.orientation),
           ],
         ),
       ),
@@ -155,25 +254,6 @@ class _GameTitle extends ConsumerWidget {
           Text('Import • ${_dateFormat.format(gameData.createdAt)}')
         else
           Text('${gameData.clockDisplay} • ${_dateFormat.format(gameData.lastMoveAt)}'),
-      ],
-    );
-  }
-}
-
-class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.id, required this.bookmarked});
-
-  final GameId id;
-  final bool bookmarked;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformAppBarMenuButton(
-      semanticsLabel: 'Game menu',
-      icon: const Icon(Icons.more_horiz),
-      actions: [
-        toggleSoundMenuAction(context, ref),
-        toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -200,12 +201,15 @@ class UserGameHistory extends _$UserGameHistory {
     );
   }
 
-  void toggleBookmark(int index) {
+  void toggleBookmark(GameId id) {
     if (!state.hasValue) return;
 
     final gameList = state.requireValue.gameList;
-    final game = gameList[index].game;
-    final pov = gameList[index].pov;
+    final entry = gameList.firstWhereOrNull((e) => e.game.id == id);
+    if (entry == null) return;
+
+    final (game: game, pov: pov) = entry;
+    final index = gameList.indexOf(entry);
 
     state = AsyncData(
       state.requireValue.copyWith(
