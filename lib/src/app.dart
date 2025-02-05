@@ -215,13 +215,6 @@ class _AppState extends ConsumerState<Application> {
       blendLevel: 20,
     );
 
-    const iosMenuTheme = MenuThemeData(
-      style: MenuStyle(
-        elevation: WidgetStatePropertyAll(0),
-        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: kCardBorderRadius)),
-      ),
-    );
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -241,7 +234,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
           ),
-          menuTheme: isIOS ? iosMenuTheme : null,
+          menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
@@ -260,7 +253,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
           ),
-          menuTheme: isIOS ? iosMenuTheme : null,
+          menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,

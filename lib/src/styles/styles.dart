@@ -2,6 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -73,6 +74,13 @@ abstract class Styles {
     debugLabel: 'separator',
     color: Color.fromARGB(73, 60, 60, 67),
     darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
+
+  static const cupertinoAnchorMenuTheme = MenuThemeData(
+    style: MenuStyle(
+      elevation: WidgetStatePropertyAll(0),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: kCardBorderRadius)),
+    ),
   );
 
   /// A Material Design text theme with light glyphs based on San Francisco.

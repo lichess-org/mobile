@@ -66,11 +66,13 @@ class BottomSheetContextMenuAction extends StatelessWidget {
     required this.child,
     this.icon,
     this.onPressed,
+    this.onPressedWithContext,
     this.closeOnPressed = true,
   });
 
   final IconData? icon;
   final VoidCallback? onPressed;
+  final Future<void> Function(BuildContext context)? onPressedWithContext;
   final Widget child;
   final bool closeOnPressed;
 
@@ -84,6 +86,7 @@ class BottomSheetContextMenuAction extends StatelessWidget {
           Navigator.of(context, rootNavigator: true).pop();
         }
         onPressed?.call();
+        onPressedWithContext?.call(context);
       },
     );
   }
