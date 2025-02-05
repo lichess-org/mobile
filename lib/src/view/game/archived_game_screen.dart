@@ -62,7 +62,6 @@ class _LoadGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
-
     return game.when(
       data: (game) {
         return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
@@ -134,7 +133,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _GameTitle extends ConsumerWidget {
+class _GameTitle extends StatelessWidget {
   const _GameTitle({required this.gameData});
 
   final LightArchivedGame gameData;
@@ -142,7 +141,7 @@ class _GameTitle extends ConsumerWidget {
   static final _dateFormat = DateFormat.yMMMd();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
