@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -24,14 +26,89 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
+AppBarMenuAction toggleBookmarkMenuAction(
+  BuildContext context,
+  WidgetRef ref, {
+  required GameId id,
+  required bool bookmarked,
+}) {
+  return AppBarMenuAction(
+    icon: bookmarked ? Icons.star : Icons.star_outline_rounded,
+    label: 'Bookmark',
+    onPressed: () async {
+      try {
+        await ref.withClient(
+          (client) => GameRepository(client).bookmark(id, bookmark: !bookmarked),
+        );
+
+        ref.invalidate(userGameHistoryProvider);
+        // TODO: invalidate providers
+      } on Exception catch (_) {
+        if (context.mounted) {
+          showPlatformSnackbar(context, 'Bookmark action failed', type: SnackBarType.error);
+        }
+      }
+    },
+  );
+}
+
+AppBarMenuAction _settingsMenuAction(
+  BuildContext context,
+  WidgetRef ref, {
+  required GameFullId id,
+}) {
+  return AppBarMenuAction(
+    icon: Icons.settings,
+    label: context.l10n.settingsSettings,
+    onPressed:
+        () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (_) => GameSettings(id: id),
+        ),
+  );
+}
+
+class _SettingButton extends ConsumerWidget {
+  const _SettingButton({required this.id});
+
+  final GameFullId id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBarIconButton(
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (_) => GameSettings(id: id),
+          ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
+  }
+}
+
 final _gameTitledateFormat = DateFormat.yMMMd();
 
 class GameAppBar extends ConsumerWidget {
-  const GameAppBar({this.id, this.seek, this.challenge, this.lastMoveAt, super.key});
+  const GameAppBar({
+    this.id,
+    this.seek,
+    this.challenge,
+    this.lastMoveAt,
+    this.bookmarked,
+    super.key,
+  });
 
   final GameSeek? seek;
   final ChallengeRequest? challenge;
   final GameFullId? id;
+  final bool? bookmarked;
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
@@ -59,22 +136,30 @@ class GameAppBar extends ConsumerWidget {
               : challenge != null
               ? _ChallengeGameTitle(challenge: challenge!)
               : const SizedBox.shrink(),
+      actions:
+          (id != null && bookmarked != null)
+              ? [_GameMenu(id: id!, bookmarked: bookmarked!)]
+              : [const ToggleSoundButton(), if (id != null) _SettingButton(id: id!)],
+    );
+  }
+}
+
+class _GameMenu extends ConsumerWidget {
+  const _GameMenu({required this.id, required this.bookmarked});
+
+  final GameFullId id;
+  final bool bookmarked;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    context.l10n.sound;
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Game menu',
+      icon: const Icon(Icons.more_horiz),
       actions: [
-        const ToggleSoundButton(),
-        if (id != null)
-          AppBarIconButton(
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-                  builder: (_) => GameSettings(id: id!),
-                ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
+        _settingsMenuAction(context, ref, id: id),
+        toggleSoundMenuAction(context, ref),
+        toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
       ],
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -61,6 +62,7 @@ class _LoadGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
+
     return game.when(
       data: (game) {
         return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
@@ -89,7 +91,7 @@ class _LoadGame extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
 
   final LightArchivedGame? gameData;
@@ -98,13 +100,18 @@ class _Body extends StatelessWidget {
   final int? initialCursor;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+
     return PlatformBoardThemeScaffold(
       appBar: PlatformAppBar(
         title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
         actions: [
           if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
-          const ToggleSoundButton(),
+          if (gameData != null && isLoggedIn)
+            _GameMenu(id: gameData!.id, bookmarked: gameData!.bookmarked!)
+          else
+            const ToggleSoundButton(),
         ],
       ),
       body: SafeArea(
@@ -127,7 +134,7 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _GameTitle extends StatelessWidget {
+class _GameTitle extends ConsumerWidget {
   const _GameTitle({required this.gameData});
 
   final LightArchivedGame gameData;
@@ -135,7 +142,7 @@ class _GameTitle extends StatelessWidget {
   static final _dateFormat = DateFormat.yMMMd();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -148,6 +155,25 @@ class _GameTitle extends StatelessWidget {
           Text('Import • ${_dateFormat.format(gameData.createdAt)}')
         else
           Text('${gameData.clockDisplay} • ${_dateFormat.format(gameData.lastMoveAt)}'),
+      ],
+    );
+  }
+}
+
+class _GameMenu extends ConsumerWidget {
+  const _GameMenu({required this.id, required this.bookmarked});
+
+  final GameId id;
+  final bool bookmarked;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PlatformAppBarMenuButton(
+      semanticsLabel: 'Game menu',
+      icon: const Icon(Icons.more_horiz),
+      actions: [
+        toggleSoundMenuAction(context, ref),
+        toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
       ],
     );
   }

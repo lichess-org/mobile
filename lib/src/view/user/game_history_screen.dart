@@ -1,12 +1,15 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -137,9 +140,13 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
+    final gameListProvider = userGameHistoryProvider(
+      widget.user?.id,
+      isOnline: widget.isOnline,
+      filter: gameFilterState,
     );
+    final gameListState = ref.watch(gameListProvider);
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return gameListState.when(
       data: (state) {
@@ -172,14 +179,52 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
-                return ExtendedGameListTile(
+                final game = list[index].game;
+
+                Future<void> onPressedBookmark(BuildContext context) async {
+                  try {
+                    await ref.withClient(
+                      (client) =>
+                          GameRepository(client).bookmark(game.id, bookmark: !game.bookmarked!),
+                    );
+                    ref.read(gameListProvider.notifier).toggleBookmark(index);
+                  } on Exception catch (_) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(
+                        context,
+                        'Bookmark action failed',
+                        type: SnackBarType.error,
+                      );
+                    }
+                  }
+                }
+
+                final gameTile = ExtendedGameListTile(
                   item: list[index],
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
+                  onPressedBookmark: onPressedBookmark,
                 );
+
+                return isLoggedIn
+                    ? Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                            onPressed: onPressedBookmark,
+                            icon: game.bookmarked! ? Icons.star : Icons.star_outline_rounded,
+                            label: game.bookmarked! ? 'Unbookmark' : 'Bookmark',
+                          ),
+                        ],
+                      ),
+                      child: gameTile,
+                    )
+                    : gameTile;
               },
             );
       },

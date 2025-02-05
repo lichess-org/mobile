@@ -58,7 +58,9 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  return ref.withClient((client) => GameRepository(client).getUserGames(userId));
+  return ref.withClient(
+    (client) => GameRepository(client).getUserGames(userId, withBookmarked: true),
+  );
 }
 
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
@@ -110,7 +112,10 @@ class UserGameHistory extends _$UserGameHistory {
     final id = userId ?? session?.user.id;
     final recentGames =
         id != null && online
-            ? ref.withClient((client) => GameRepository(client).getUserGames(id, filter: filter))
+            ? ref.withClient(
+              (client) =>
+                  GameRepository(client).getUserGames(id, filter: filter, withBookmarked: true),
+            )
             : storage
                 .page(userId: id, filter: filter)
                 .then(
@@ -149,6 +154,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : currentVal.online && currentVal.session != null
@@ -158,6 +164,7 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
             ),
           )
           : (await ref.watch(gameStorageProvider.future))
@@ -190,6 +197,23 @@ class UserGameHistory extends _$UserGameHistory {
       (error, stackTrace) {
         state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
       },
+    );
+  }
+
+  void toggleBookmark(int index) {
+    if (!state.hasValue) return;
+
+    final gameList = state.requireValue.gameList;
+    final game = gameList[index].game;
+    final pov = gameList[index].pov;
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        gameList: gameList.replace(index, (
+          game: game.copyWith(bookmarked: !game.bookmarked!),
+          pov: pov,
+        )),
+      ),
     );
   }
 }

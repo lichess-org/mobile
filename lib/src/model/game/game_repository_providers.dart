@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -14,7 +15,10 @@ part 'game_repository_providers.g.dart';
 Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
   ArchivedGame game;
   try {
-    game = await ref.withClient((client) => GameRepository(client).getGame(id));
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+    game = await ref.withClient(
+      (client) => GameRepository(client).getGame(id, withBookmarked: isLoggedIn),
+    );
   } catch (_) {
     final gameStorage = await ref.watch(gameStorageProvider.future);
     final storedGame = await gameStorage.fetch(gameId: id);
