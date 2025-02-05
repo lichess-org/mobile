@@ -38,7 +38,9 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref.withClient(
-      (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
+      (client) => GameRepository(
+        client,
+      ).getUserGames(session.user.id, max: kNumberOfRecentGames, withBookmarked: true),
     );
   } else {
     final storage = await ref.watch(gameStorageProvider.future);

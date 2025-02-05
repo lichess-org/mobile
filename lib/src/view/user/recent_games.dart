@@ -2,14 +2,17 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -62,7 +65,25 @@ class RecentGamesWidget extends ConsumerWidget {
                   : null,
           children:
               list.map((item) {
-                return ExtendedGameListTile(item: item);
+                Future<void> onPressedBookmark(BuildContext context) async {
+                  try {
+                    await ref.withClient(
+                      (client) => GameRepository(
+                        client,
+                      ).bookmark(item.game.id, bookmark: !item.game.bookmarked!),
+                    );
+                  } on Exception catch (_) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(
+                        context,
+                        'Bookmark action failed',
+                        type: SnackBarType.error,
+                      );
+                    }
+                  }
+                }
+
+                return ExtendedGameListTile(item: item, onPressedBookmark: onPressedBookmark);
               }).toList(),
         );
       },
