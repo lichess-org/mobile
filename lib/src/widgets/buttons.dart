@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:popover/popover.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
@@ -464,105 +463,15 @@ class PlatformIconButton extends StatelessWidget {
   }
 }
 
-const _kMenuWidth = 250.0;
-const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xFFA9A9AF),
-  darkColor: Color(0xFF57585A),
-);
+/// A platform agnostic context menu anchor.
+class PlatformContextMenuAnchor extends StatelessWidget {
+  const PlatformContextMenuAnchor({required this.actions, required this.builder, super.key});
 
-/// A platform agnostic menu button for the app bar.
-class PlatformAppBarMenuButton extends StatelessWidget {
-  const PlatformAppBarMenuButton({
-    required this.icon,
-    required this.semanticsLabel,
-    required this.actions,
-    super.key,
-  });
-
-  final Widget icon;
-  final String semanticsLabel;
   final List<AppBarMenuAction> actions;
+  final MenuAnchorChildBuilder builder;
 
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      final menuActions =
-          actions.map((action) {
-            return CupertinoContextMenuAction(
-              onPressed: () {
-                if (action.dismissOnPress) {
-                  Navigator.of(context).pop();
-                }
-                action.onPressed();
-              },
-              trailingIcon: action.icon,
-              child: Text(action.label),
-            );
-          }).toList();
-      return AppBarIconButton(
-        onPressed: () {
-          showPopover(
-            context: context,
-            bodyBuilder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: _kMenuWidth,
-                  child: IntrinsicHeight(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                      child: ColoredBox(
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoContextMenu.kBackgroundColor,
-                          context,
-                        ),
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: CupertinoScrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  menuActions.first,
-                                  for (final Widget action in menuActions.skip(1))
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: CupertinoDynamicColor.resolve(
-                                              _kBorderColor,
-                                              context,
-                                            ),
-                                            width: 0.4,
-                                          ),
-                                        ),
-                                      ),
-                                      position: DecorationPosition.foreground,
-                                      child: action,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            arrowWidth: 0.0,
-            arrowHeight: 0.0,
-            direction: PopoverDirection.top,
-            width: _kMenuWidth,
-            backgroundColor: Colors.transparent,
-          );
-        },
-        semanticsLabel: semanticsLabel,
-        icon: icon,
-      );
-    }
-
     return MenuAnchor(
       menuChildren:
           actions.map((action) {
@@ -574,19 +483,7 @@ class PlatformAppBarMenuButton extends StatelessWidget {
               child: Text(action.label),
             );
           }).toList(),
-      builder: (BuildContext context, MenuController controller, Widget? child) {
-        return AppBarIconButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          semanticsLabel: semanticsLabel,
-          icon: icon,
-        );
-      },
+      builder: builder,
     );
   }
 }

@@ -84,10 +84,7 @@ class _ToolsButton extends StatelessWidget {
         leading: Icon(
           icon,
           size: Styles.mainListTileIconSize,
-          color:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoTheme.of(context).primaryColor
-                  : ColorScheme.of(context).primary,
+          color: ColorScheme.of(context).primary,
         ),
         title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
         trailing:
@@ -160,13 +157,15 @@ class _Body extends ConsumerWidget {
                     )
                     : null,
           ),
-          if (isOnline)
-            _ToolsButton(
-              icon: LichessIcons.study,
-              title: context.l10n.studyMenu,
-              onTap:
-                  () => pushPlatformRoute(context, builder: (context) => const StudyListScreen()),
-            ),
+          _ToolsButton(
+            icon: LichessIcons.study,
+            title: context.l10n.studyMenu,
+            onTap:
+                isOnline
+                    ? () =>
+                        pushPlatformRoute(context, builder: (context) => const StudyListScreen())
+                    : null,
+          ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,

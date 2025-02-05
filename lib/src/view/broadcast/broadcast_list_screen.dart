@@ -14,20 +14,25 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
+const kDefaultCardOpacity = 0.9;
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastListScreen extends StatelessWidget {
@@ -44,18 +49,14 @@ class BroadcastListScreen extends StatelessWidget {
     return PlatformWidget(
       androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
       iosBuilder:
-          (_) => CupertinoMaterialWrapper(
-            child: CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: title,
-                automaticBackgroundVisibility: false,
-                backgroundColor: CupertinoTheme.of(
-                  context,
-                ).barBackgroundColor.withValues(alpha: 0.0),
-                border: null,
-              ),
-              child: const _Body(),
+          (_) => CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: title,
+              automaticBackgroundVisibility: false,
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
+              border: null,
             ),
+            child: const _Body(),
           ),
     );
   }
@@ -136,7 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
       crossAxisCount: itemsByRow,
       crossAxisSpacing: 12.0,
       mainAxisSpacing: 16.0,
-      childAspectRatio: 1.35,
+      childAspectRatio: 1.2,
     );
 
     final lowTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
@@ -145,10 +146,10 @@ class _BodyState extends ConsumerState<_Body> {
       mainAxisSpacing: 16.0,
       childAspectRatio:
           screenWidth >= 1200
-              ? 1.4
+              ? 1.2
               : screenWidth >= 700
-              ? 1.3
-              : 1.0,
+              ? 1.0
+              : 0.8,
     );
 
     final sections = [
@@ -346,7 +347,8 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
         final widgetWidth = constraints.maxWidth;
         final elementWidth = widgetWidth * flexWeights[0] / flexWeights.reduce((a, b) => a + b);
         final pictureHeight = elementWidth / 2;
-        final elementHeight = pictureHeight + (pictureHeight * 0.5);
+        final elementHeightFactor = flexWeights.length == 2 ? 0.75 : 0.6;
+        final elementHeight = pictureHeight + (pictureHeight * elementHeightFactor);
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(
@@ -360,15 +362,7 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
               flexWeights: flexWeights,
               itemSnapping: true,
               padding: kBroadcastCarouselItemPadding,
-              onTap: (index) {
-                final broadcast = widget.broadcasts.active[index];
-                pushPlatformRoute(
-                  context,
-                  title: broadcast.title,
-                  rootNavigator: true,
-                  builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
-                );
-              },
+              enableSplash: false,
               children: [
                 if (widget._isLoading)
                   for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -412,104 +406,225 @@ class _BroadcastCardContent extends StatelessWidget {
       }
     }
 
-    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
         _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
-    final bgHsl = HSLColor.fromColor(backgroundColor);
-    final liveHsl = HSLColor.fromColor(LichessColors.red);
-    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
 
-    return Padding(
-      padding: kBroadcastCardItemContentPadding,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      children: [
+        Padding(
+          padding: kBroadcastCardItemContentPadding,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment:
-                    broadcast.isLive ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!broadcast.isFinished) ...[
-                    Flexible(
-                      flex: broadcast.isLive ? 1 : 0,
-                      child: Text(
-                        broadcast.round.name,
-                        style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                        overflow: TextOverflow.clip,
-                        softWrap: false,
-                        maxLines: 1,
-                      ),
-                    ),
-                    const SizedBox(width: 5.0),
-                  ],
-                  if (broadcast.isLive) ...[
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          size: 16,
-                          color: liveColor,
-                          shadows: const [
-                            Shadow(color: Colors.black54, offset: Offset(0, 1), blurRadius: 2),
-                          ],
-                        ),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          'LIVE',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: liveColor,
-                            shadows: const [
-                              Shadow(color: Colors.black54, offset: Offset(0, 1), blurRadius: 2),
-                            ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      if (!broadcast.isFinished) ...[
+                        Flexible(
+                          flex: 0,
+                          child: Text(
+                            broadcast.round.name,
+                            style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                            overflow: TextOverflow.clip,
+                            softWrap: false,
+                            maxLines: 1,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
+                        const SizedBox(width: 5.0),
+                      ],
+                      if (eventDate != null)
+                        Flexible(
+                          child: Text(
+                            eventDate,
+                            style: TextStyle(fontSize: 12, color: subTitleColor),
+                            overflow: TextOverflow.clip,
+                            softWrap: false,
+                            maxLines: 1,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 6.0),
+                  Text.rich(
+                    maxLines: 3,
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: broadcast.title,
+                          style: TextStyle(
+                            color: titleColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                            height: 1.0,
+                          ),
+                        ),
+                        if (broadcast.tour.information.players != null)
+                          TextSpan(
+                            text: '\n${broadcast.tour.information.players}',
+                            style: TextStyle(
+                              color: subTitleColor,
+                              fontSize: 12,
+                              letterSpacing: -0.2,
+                            ),
+                          ),
                       ],
                     ),
-                  ] else if (eventDate != null)
-                    Flexible(
-                      child: Text(
-                        eventDate,
-                        style: TextStyle(fontSize: 12, color: subTitleColor),
-                        overflow: TextOverflow.clip,
-                        softWrap: false,
-                        maxLines: 1,
-                      ),
-                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
-              ),
-              Text(
-                broadcast.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: titleColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                  height: 1.0,
-                ),
               ),
             ],
           ),
-          if (broadcast.tour.information.players != null)
-            Text(
-              broadcast.tour.information.players!,
-              style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: kBroadcastCardItemContentPadding.horizontal / 2,
+          right: 0,
+          // bottom: kBroadcastCardItemContentPadding.vertical / 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (broadcast.isLive) ...[
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: const Text(
+                    'LIVE',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: LichessColors.red,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+              ],
+              PlatformContextMenuAnchor(
+                builder:
+                    (context, controller, _) => AppBarIconButton(
+                      onPressed: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      semanticsLabel: context.l10n.menu,
+                      icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
+                    ),
+                actions: [
+                  AppBarMenuAction(
+                    icon: Icons.info,
+                    label: context.l10n.broadcastOverview,
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: broadcast.title,
+                        rootNavigator: true,
+                        builder:
+                            (context) => BroadcastRoundScreen(
+                              broadcast: broadcast,
+                              initialTab: BroadcastRoundTab.overview,
+                            ),
+                      );
+                    },
+                  ),
+                  AppBarMenuAction(
+                    icon: LichessIcons.chess_board,
+                    label: context.l10n.broadcastBoards,
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: broadcast.title,
+                        rootNavigator: true,
+                        builder:
+                            (context) => BroadcastRoundScreen(
+                              broadcast: broadcast,
+                              initialTab: BroadcastRoundTab.boards,
+                            ),
+                      );
+                    },
+                  ),
+                  AppBarMenuAction(
+                    icon: Icons.people,
+                    label: context.l10n.players,
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        title: broadcast.title,
+                        rootNavigator: true,
+                        builder:
+                            (context) => BroadcastRoundScreen(
+                              broadcast: broadcast,
+                              initialTab: BroadcastRoundTab.players,
+                            ),
+                      );
+                    },
+                  ),
+                  AppBarMenuAction(
+                    icon:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? CupertinoIcons.share
+                            : Icons.share,
+                    label: context.l10n.studyShareAndExport,
+                    onPressed: () {
+                      showAdaptiveActionSheet<void>(
+                        context: context,
+                        actions: [
+                          BottomSheetAction(
+                            makeLabel: (context) => Text(broadcast.title),
+                            onPressed: (context) async {
+                              launchShareDialog(
+                                context,
+                                uri: lichessUri(
+                                  '/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}',
+                                ),
+                              );
+                            },
+                          ),
+                          BottomSheetAction(
+                            makeLabel: (context) => Text(broadcast.round.name),
+                            onPressed: (context) async {
+                              launchShareDialog(
+                                context,
+                                uri: lichessUri(
+                                  '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}',
+                                ),
+                              );
+                            },
+                          ),
+                          BottomSheetAction(
+                            makeLabel: (context) => Text('${broadcast.round.name} PGN'),
+                            onPressed: (context) async {
+                              launchShareDialog(
+                                context,
+                                uri: lichessUri(
+                                  '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}.pgn',
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -628,42 +743,38 @@ class _BroadcastCardState extends State<BroadcastCard> {
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
       onTapUp: (_) => _onTapCancel(),
-      child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.85,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: kCardBorderRadius,
-            color: backgroundColor,
-            boxShadow:
-                Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image(
-                image: imageProvider,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
-                  return AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: frame == null ? 0 : 1,
-                    child: child,
-                  );
-                },
-                errorBuilder:
-                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-              ),
-              Expanded(
-                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
-              ),
-            ],
-          ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: kCardBorderRadius,
+          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
+          boxShadow:
+              Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image(
+              image: imageProvider,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: frame == null ? 0 : 1,
+                  child: child,
+                );
+              },
+              errorBuilder:
+                  (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+            ),
+            Expanded(
+              child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+            ),
+          ],
         ),
       ),
     );
@@ -719,6 +830,7 @@ class BroadcastCarouselItem extends StatefulWidget {
 
 class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
   _CardColors? _cardColors;
+  bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
@@ -758,6 +870,14 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
     }
   }
 
+  void _onTapDown() {
+    setState(() => _tapDown = true);
+  }
+
+  void _onTapCancel() {
+    setState(() => _tapDown = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
@@ -767,36 +887,51 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
     final flexWeights = widget.flexWeights;
     final totalFlex = flexWeights.reduce((a, b) => a + b);
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(color: backgroundColor),
-      child: OverflowBox(
-        maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-        minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image(
-              image: imageProvider,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (wasSynchronouslyLoaded) {
-                  return child;
-                }
-                return AnimatedOpacity(
-                  duration: const Duration(milliseconds: 500),
-                  opacity: frame == null ? 0 : 1,
-                  child: child,
-                );
-              },
-              errorBuilder:
-                  (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
-            ),
-            Expanded(
-              child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          title: widget.broadcast.title,
+          rootNavigator: true,
+          builder: (context) => BroadcastRoundScreen(broadcast: widget.broadcast),
+        );
+      },
+      onTapDown: (_) => _onTapDown(),
+      onTapCancel: _onTapCancel,
+      onTapUp: (_) => _onTapCancel(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
+        ),
+        child: OverflowBox(
+          maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+          minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image(
+                image: imageProvider,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded) {
+                    return child;
+                  }
+                  return AnimatedOpacity(
+                    duration: const Duration(milliseconds: 500),
+                    opacity: frame == null ? 0 : 1,
+                    child: child,
+                  );
+                },
+                errorBuilder:
+                    (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+              ),
+              Expanded(
+                child: _BroadcastCardContent(broadcast: widget.broadcast, cardColors: _cardColors),
+              ),
+            ],
+          ),
         ),
       ),
     );

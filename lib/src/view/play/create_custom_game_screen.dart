@@ -603,7 +603,6 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   harmonizeCupertinoTitleStyle: true,
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
-                    applyCupertinoTheme: true,
                     value: preferences.customRated,
                     onChanged: (bool value) {
                       ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);

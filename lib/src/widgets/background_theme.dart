@@ -136,7 +136,19 @@ class BackgroundThemeWrapper extends StatelessWidget {
                 : null,
         extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
       ),
-      child: isIOS ? CupertinoTheme(data: cupertinoTheme, child: child) : child,
+      child:
+          isIOS
+              ? CupertinoTheme(
+                data: cupertinoTheme,
+                child: IconTheme(
+                  data: IconThemeData(color: cupertinoTheme.textTheme.textStyle.color),
+                  child: DefaultTextStyle.merge(
+                    style: cupertinoTheme.textTheme.textStyle,
+                    child: child,
+                  ),
+                ),
+              )
+              : child,
     );
   }
 }

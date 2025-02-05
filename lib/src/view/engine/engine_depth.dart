@@ -50,10 +50,7 @@ class EngineDepth extends ConsumerWidget {
               height: 20.0,
               padding: const EdgeInsets.all(2.0),
               decoration: BoxDecoration(
-                color:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? ColorScheme.of(context).secondary
-                        : CupertinoTheme.of(context).primaryColor,
+                color: ColorScheme.of(context).secondary,
                 borderRadius: BorderRadius.circular(4.0),
               ),
               child: FittedBox(
@@ -61,10 +58,7 @@ class EngineDepth extends ConsumerWidget {
                 child: Text(
                   '${math.min(99, depth)}',
                   style: TextStyle(
-                    color:
-                        Theme.of(context).platform == TargetPlatform.android
-                            ? ColorScheme.of(context).onSecondary
-                            : CupertinoTheme.of(context).primaryContrastingColor,
+                    color: ColorScheme.of(context).onSecondary,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),

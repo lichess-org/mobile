@@ -215,6 +215,13 @@ class _AppState extends ConsumerState<Application> {
       blendLevel: 20,
     );
 
+    const iosMenuTheme = MenuThemeData(
+      style: MenuStyle(
+        elevation: WidgetStatePropertyAll(0),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: kCardBorderRadius)),
+      ),
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
         context,
@@ -234,6 +241,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
           ),
+          menuTheme: isIOS ? iosMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
@@ -252,6 +260,7 @@ class _AppState extends ConsumerState<Application> {
             subtitleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
             leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
           ),
+          menuTheme: isIOS ? iosMenuTheme : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
@@ -264,6 +273,16 @@ class _AppState extends ConsumerState<Application> {
           BackgroundThemeMode.dark => ThemeMode.dark,
           BackgroundThemeMode.system => ThemeMode.system,
         },
+        builder:
+            isIOS
+                ? (context, child) => IconTheme.merge(
+                  data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                  child: DefaultTextStyle.merge(
+                    style: CupertinoTheme.of(context).textTheme.textStyle,
+                    child: Material(color: Colors.transparent, child: child),
+                  ),
+                )
+                : null,
         home: const BottomNavScaffold(),
         navigatorObservers: [rootNavPageRouteObserver],
       ),

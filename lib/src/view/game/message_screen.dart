@@ -112,7 +112,7 @@ class _MessageBubble extends ConsumerWidget {
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
       you
           ? ColorScheme.of(context).secondary
-          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.2);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;

@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -96,13 +95,7 @@ class _Title extends StatelessWidget {
                       (context) => Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            p.icon,
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).primaryColor
-                                    : null,
-                          ),
+                          Icon(p.icon),
                           const SizedBox(width: 6),
                           Text(
                             context.l10n.perfStatPerfStats(p.title),

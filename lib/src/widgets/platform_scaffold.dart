@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/background_theme.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
@@ -146,13 +145,11 @@ class PlatformScaffold extends StatelessWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoMaterialWrapper(
-      child: CupertinoPageScaffold(
-        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-        navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
-        backgroundColor: backgroundColor,
-        child: body,
-      ),
+    return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
+      backgroundColor: backgroundColor,
+      child: body,
     );
   }
 

@@ -168,9 +168,19 @@ class _GameMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformAppBarMenuButton(
-      semanticsLabel: 'Game menu',
-      icon: const Icon(Icons.more_horiz),
+    return PlatformContextMenuAnchor(
+      builder:
+          (context, controller, _) => AppBarIconButton(
+            icon: const Icon(Icons.more_horiz),
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            semanticsLabel: 'Game menu',
+          ),
       actions: [
         toggleSoundMenuAction(context, ref),
         toggleBookmarkMenuAction(context, ref, id: id.gameId, bookmarked: bookmarked),
