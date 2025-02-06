@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -196,11 +195,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
             },
             child: ColoredBox(
               color:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? index.isEven
-                          ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                          : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
-                      : index.isEven
+                  index.isEven
                       ? ColorScheme.of(context).surfaceContainerLow
                       : ColorScheme.of(context).surfaceContainerHigh,
               child: Row(

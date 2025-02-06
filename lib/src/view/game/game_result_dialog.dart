@@ -320,13 +320,17 @@ class GameResult extends StatelessWidget {
 }
 
 Widget _adaptiveDialog(BuildContext context, Widget content) {
+  final platform = Theme.of(context).platform;
   final screenWidth = MediaQuery.of(context).size.width;
-  final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
+  final paddedContent = Padding(
+    padding: platform == TargetPlatform.iOS ? EdgeInsets.zero : const EdgeInsets.all(16.0),
+    child: content,
+  );
   final sizedContent = SizedBox(
     width: min(screenWidth, kMaterialPopupMenuMaxWidth),
     child: paddedContent,
   );
-  return Theme.of(context).platform == TargetPlatform.iOS
-      ? CupertinoAlertDialog(content: sizedContent)
+  return platform == TargetPlatform.iOS
+      ? CupertinoAlertDialog(content: paddedContent)
       : Dialog(child: sizedContent);
 }

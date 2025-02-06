@@ -66,7 +66,10 @@ abstract class Styles {
   }
 
   static Color backgroundActivated(BuildContext context) {
-    return ColorScheme.of(context).surfaceContainerHighest;
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.light
+        ? ColorScheme.of(context).surfaceContainerLow
+        : ColorScheme.of(context).surfaceContainerHighest;
   }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);

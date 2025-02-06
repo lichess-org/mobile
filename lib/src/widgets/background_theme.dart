@@ -144,7 +144,7 @@ class BackgroundThemeWrapper extends StatelessWidget {
                 child: IconTheme(
                   data: IconThemeData(color: cupertinoTheme.textTheme.textStyle.color),
                   child: DefaultTextStyle.merge(
-                    style: cupertinoTheme.textTheme.textStyle,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     child: child,
                   ),
                 ),

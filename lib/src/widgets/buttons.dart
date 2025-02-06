@@ -267,13 +267,7 @@ class CupertinoIconButton extends StatelessWidget {
       child: CupertinoButton(
         padding: padding,
         onPressed: onPressed,
-        child: IconTheme.merge(
-          data: IconThemeData(
-            size: 24.0,
-            color: CupertinoTheme.of(context).textTheme.textStyle.color,
-          ),
-          child: icon,
-        ),
+        child: IconTheme.merge(data: const IconThemeData(size: 24.0), child: icon),
       ),
     );
   }
