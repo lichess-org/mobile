@@ -126,6 +126,7 @@ class _BodyState extends ConsumerState<_Body> {
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
+                  onPressedBookmark: onRemoveBookmark,
                 );
 
                 return Slidable(

@@ -101,7 +101,7 @@ class GameRepository {
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: (json) => LightArchivedGame.fromServerJson(json),
+          mapper: (json) => LightArchivedGame.fromServerJson(json, isBookmarked: true),
         )
         .then(
           (value) =>
