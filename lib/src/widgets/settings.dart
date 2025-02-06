@@ -262,8 +262,6 @@ class ChoicePicker<T> extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final tileConstructor = notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
-        final theme = Theme.of(context);
-        final colorScheme = theme.colorScheme;
         return Padding(
           padding: margin ?? Styles.bodySectionPadding,
           child: Opacity(
@@ -288,7 +286,7 @@ class ChoicePicker<T> extends StatelessWidget {
                       title: titleBuilder(value),
                       subtitle: subtitleBuilder?.call(value),
                       leading: leadingBuilder?.call(value),
-                      backgroundColorActivated: colorScheme.surfaceContainerHighest,
+                      backgroundColorActivated: Styles.backgroundActivated(context),
                       onTap:
                           onSelectedItemChanged != null
                               ? () => onSelectedItemChanged!(value)

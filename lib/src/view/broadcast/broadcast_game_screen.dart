@@ -218,7 +218,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
     return ColoredBox(
-      color: ColorScheme.of(context).surface,
+      color: ColorScheme.of(context).surfaceContainer,
       child: SingleChildScrollView(
         child: DebouncedPgnTreeView(
           root: state.root,

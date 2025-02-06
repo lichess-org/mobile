@@ -17,7 +17,8 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart' show getSystemScheme;
+import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart' show getDynamicColorSchemes;
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -122,43 +123,44 @@ class _AppState extends ConsumerState<Application> {
     final isTablet = isTabletOrLarger(context);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
-    final systemScheme = getSystemScheme();
-    final flexScheme =
-        generalPrefs.systemColors == true && systemScheme != null
-            ? systemScheme
-            : FlexColor.espresso;
-    final themeLight = FlexThemeData.light(
-      colors: flexScheme.light,
-      surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-      blendLevel: 10,
-      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-    );
+    final systemScheme = getDynamicColorSchemes();
+    final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
+
+    final themeLight =
+        hasSystemColors
+            ? ThemeData.from(colorScheme: systemScheme.light)
+            : FlexThemeData.light(
+              colors: AppTheme.lightColors,
+              surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+              blendLevel: 10,
+              swapLegacyOnMaterial3: !hasSystemColors,
+              useMaterial3ErrorColors: true,
+              cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+              appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
+            );
 
     // Defined in 2 steps to allow for a different scaffold background color.
     final darkFlexScheme = FlexColorScheme.dark(
-      colors: flexScheme.dark,
+      colors: AppTheme.darkColors,
       surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
-      blendLevel: 20,
+      blendLevel: 10,
     );
-    final themeDark = FlexThemeData.dark(
-      colors: flexScheme.dark,
-      surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
-      blendLevel: 20,
-      cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-      scaffoldBackground:
-          darkFlexScheme.scaffoldBackground != null
-              ? lighten(darkFlexScheme.scaffoldBackground!, 0.05)
-              : null,
-      appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-    );
-
-    final floatingActionButtonTheme =
-        generalPrefs.systemColors
-            ? null
-            : FloatingActionButtonThemeData(
-              backgroundColor: themeLight.colorScheme.primaryFixedDim,
-              foregroundColor: themeLight.colorScheme.onPrimaryFixed,
+    final themeDark =
+        hasSystemColors
+            ? ThemeData.from(colorScheme: systemScheme.dark)
+            : FlexThemeData.dark(
+              colors: AppTheme.darkColors,
+              // swapColors: !hasSystemColors,
+              swapLegacyOnMaterial3: !hasSystemColors,
+              useMaterial3ErrorColors: !hasSystemColors,
+              surfaceMode: FlexSurfaceMode.highSurfaceLowScaffold,
+              blendLevel: 15,
+              cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+              scaffoldBackground:
+                  darkFlexScheme.scaffoldBackground != null
+                      ? lighten(darkFlexScheme.scaffoldBackground!, 0.1)
+                      : null,
+              appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
             );
 
     const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
@@ -167,15 +169,15 @@ class _AppState extends ConsumerState<Application> {
     );
 
     final lightCupertino = CupertinoThemeData(
-      primaryColor: themeLight.colorScheme.primary,
-      primaryContrastingColor: themeLight.colorScheme.onPrimary,
+      primaryColor: themeLight.colorScheme.onPrimaryFixed,
+      primaryContrastingColor: themeLight.colorScheme.primaryFixed,
       brightness: Brightness.light,
       scaffoldBackgroundColor: themeLight.scaffoldBackgroundColor,
       barBackgroundColor: themeLight.appBarTheme.backgroundColor?.withValues(
         alpha: isTablet ? 1.0 : 0.9,
       ),
       textTheme: const CupertinoThemeData().textTheme.copyWith(
-        primaryColor: themeLight.colorScheme.primary,
+        primaryColor: themeLight.colorScheme.onSurface,
         textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
           color: themeLight.colorScheme.onSurface,
         ),
@@ -196,7 +198,7 @@ class _AppState extends ConsumerState<Application> {
         alpha: isTablet ? 1.0 : 0.9,
       ),
       textTheme: const CupertinoThemeData().textTheme.copyWith(
-        primaryColor: themeDark.colorScheme.primaryFixed,
+        primaryColor: themeDark.colorScheme.onSurface,
         textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
           color: themeDark.colorScheme.onSurface,
         ),
@@ -210,10 +212,18 @@ class _AppState extends ConsumerState<Application> {
 
     // The high blend theme is used only for the navigation bar in light mode.
     final highBlendThemeLight = FlexThemeData.light(
-      colors: flexScheme.light,
+      colors: AppTheme.lightColors,
       surfaceMode: FlexSurfaceMode.highBackgroundLowScaffold,
       blendLevel: 20,
     );
+
+    final floatingActionButtonTheme =
+        hasSystemColors
+            ? null
+            : FloatingActionButtonThemeData(
+              backgroundColor: themeLight.colorScheme.primaryFixedDim,
+              foregroundColor: themeLight.colorScheme.onPrimaryFixed,
+            );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: FlexColorScheme.themedSystemNavigationBar(
@@ -229,17 +239,22 @@ class _AppState extends ConsumerState<Application> {
           cupertinoOverrideTheme: lightCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.blackCupertino : null,
-          listTileTheme: ListTileTheme.of(context).copyWith(
-            titleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? lightCupertino.textTheme.textStyle : null,
-          ),
+          listTileTheme:
+              isIOS
+                  ? ListTileTheme.of(context).copyWith(
+                    titleTextStyle: lightCupertino.textTheme.textStyle,
+                    subtitleTextStyle: lightCupertino.textTheme.textStyle,
+                    leadingAndTrailingTextStyle: lightCupertino.textTheme.textStyle,
+                  )
+                  : null,
           menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
-          floatingActionButtonTheme: floatingActionButtonTheme,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-            backgroundColor: highBlendThemeLight.colorScheme.surface,
-            indicatorColor: darken(highBlendThemeLight.colorScheme.secondaryContainer, 0.05),
+            backgroundColor: hasSystemColors ? null : highBlendThemeLight.colorScheme.surface,
+            indicatorColor:
+                hasSystemColors
+                    ? null
+                    : darken(highBlendThemeLight.colorScheme.secondaryContainer, 0.05),
             elevation: 3,
           ),
           extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
@@ -248,16 +263,19 @@ class _AppState extends ConsumerState<Application> {
           cupertinoOverrideTheme: darkCupertino,
           splashFactory: isIOS ? NoSplash.splashFactory : null,
           textTheme: isIOS ? Typography.whiteCupertino : null,
-          listTileTheme: ListTileTheme.of(context).copyWith(
-            titleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
-            subtitleTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
-            leadingAndTrailingTextStyle: isIOS ? darkCupertino.textTheme.textStyle : null,
-          ),
-          menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
+          listTileTheme:
+              isIOS
+                  ? ListTileTheme.of(context).copyWith(
+                    titleTextStyle: darkCupertino.textTheme.textStyle,
+                    subtitleTextStyle: darkCupertino.textTheme.textStyle,
+                    leadingAndTrailingTextStyle: darkCupertino.textTheme.textStyle,
+                  )
+                  : null,
           floatingActionButtonTheme: floatingActionButtonTheme,
+          menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
           navigationBarTheme: NavigationBarTheme.of(context).copyWith(
             height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-            backgroundColor: themeDark.colorScheme.surface,
+            backgroundColor: hasSystemColors ? null : themeDark.colorScheme.surface,
           ),
           extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
         ),

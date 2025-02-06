@@ -25,7 +25,7 @@ class AnalysisTreeView extends ConsumerWidget {
     final enableComputerAnalysis = !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
 
     return ColoredBox(
-      color: ColorScheme.of(context).surface,
+      color: ColorScheme.of(context).surfaceContainer,
       child: SingleChildScrollView(
         padding: EdgeInsets.zero,
         child: DebouncedPgnTreeView(

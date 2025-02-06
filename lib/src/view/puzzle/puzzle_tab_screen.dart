@@ -205,7 +205,6 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
           ),
           Expanded(
             child: CupertinoPageScaffold(
-              backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
               navigationBar: CupertinoNavigationBar(
                 transitionBetweenRoutes: false,
                 middle: Text(context.l10n.puzzleHistory),
@@ -484,7 +483,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             isTablet ? _kNumberOfHistoryItemsOnTablet : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
-          cupertinoBackgroundColor: CupertinoPageScaffoldBackgroundColor.maybeOf(context),
           cupertinoClipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           headerTrailing:

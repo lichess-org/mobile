@@ -409,8 +409,6 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
 };
 
 enum BoardBackgroundTheme {
-  /// The background theme is based on the chess board
-  board(30, 34),
   blue(30, 34, FlexScheme.blue, 'Blue'),
   indigo(30, 34, FlexScheme.indigo, 'indigo'),
   green(30, 34, FlexScheme.jungle, 'Green'),
@@ -418,17 +416,13 @@ enum BoardBackgroundTheme {
   gold(30, 34, FlexScheme.gold, 'Gold'),
   red(34, 34, FlexScheme.redWine, 'Red'),
   purple(30, 34, FlexScheme.purpleM3, 'Purple'),
-  sepia(28, 34, FlexScheme.sepia, 'Sepia'),
+  teal(30, 34, FlexScheme.tealM3, 'Teal'),
+  lime(30, 34, FlexScheme.limeM3, 'Lime'),
+  mango(30, 34, FlexScheme.mango, 'Mango'),
+  sepia(30, 34, FlexScheme.sepia, 'Sepia'),
 
-  dimBoard(20, 24),
-  dimBlue(20, 24, FlexScheme.blue, 'Blue dim'),
-  dimIndigo(20, 24, FlexScheme.indigo, 'Indigo dim'),
-  dimGreen(20, 24, FlexScheme.jungle, 'Green dim'),
-  dimBrown(20, 24, FlexScheme.purpleBrown, 'Brown dim'),
-  dimGold(20, 24, FlexScheme.gold, 'Gold dim'),
-  dimRed(24, 24, FlexScheme.redWine, 'Red dim'),
-  dimPurple(20, 24, FlexScheme.purpleM3, 'Purple dim'),
-  dimSepia(18, 24, FlexScheme.sepia, 'Sepia dim');
+  /// The background theme is based on the chess board
+  board(30, 34);
 
   final int lightBlend;
   final int darkBlend;
@@ -437,15 +431,10 @@ enum BoardBackgroundTheme {
 
   const BoardBackgroundTheme(this.lightBlend, this.darkBlend, [this.scheme, this._label]);
 
-  String label(AppLocalizations l10n) =>
-      this == BoardBackgroundTheme.board || this == BoardBackgroundTheme.dimBoard
-          ? l10n.board
-          : _label!;
+  String label(AppLocalizations l10n) => this == BoardBackgroundTheme.board ? l10n.board : _label!;
 
   FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
-      this == BoardBackgroundTheme.board || this == BoardBackgroundTheme.dimBoard
-          ? boardTheme.flexScheme
-          : scheme!.data;
+      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : scheme!.data;
 }
 
 @freezed

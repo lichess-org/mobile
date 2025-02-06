@@ -11,7 +11,7 @@ CorePalette? _corePalette;
 
 FlexSchemeData? _systemScheme;
 
-(ColorScheme, ColorScheme)? _colorSchemes;
+({ColorScheme light, ColorScheme dark})? _colorSchemes;
 
 ChessboardColorScheme? _boardColorScheme;
 
@@ -96,7 +96,7 @@ FlexSchemeData? getSystemScheme() {
 }
 
 /// Get the system color schemes based on the core palette, if available (android 12+).
-(ColorScheme light, ColorScheme dark)? getDynamicColorSchemes() {
+({ColorScheme light, ColorScheme dark})? getDynamicColorSchemes() {
   return _colorSchemes;
 }
 
@@ -107,7 +107,7 @@ ChessboardColorScheme? getBoardColorScheme() {
 
 // --
 
-(ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
+({ColorScheme light, ColorScheme dark}) _generateDynamicColourSchemes(
   ColorScheme lightDynamic,
   ColorScheme darkDynamic,
 ) {
@@ -123,7 +123,7 @@ ChessboardColorScheme? getBoardColorScheme() {
   final lightScheme = _insertAdditionalColours(lightBase, lightAdditionalColours);
   final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
 
-  return (lightScheme.harmonized(), darkScheme.harmonized());
+  return (light: lightScheme.harmonized(), dark: darkScheme.harmonized());
 }
 
 List<Color> _extractAdditionalColours(ColorScheme scheme) => [

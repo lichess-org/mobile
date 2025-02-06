@@ -136,7 +136,7 @@ class _Body extends ConsumerWidget {
           ),
         ListSection(
           header: const SettingsSectionTitle('Color presets'),
-          cupertinoBackgroundColor: ColorScheme.of(context).surfaceContainerLow,
+          backgroundColor: ColorScheme.of(context).surfaceContainerLowest,
           children: [
             GridView.builder(
               primary: false,
@@ -168,15 +168,12 @@ class _Body extends ConsumerWidget {
 
                 final autoColor =
                     brightness == Brightness.light
-                        ? darken(theme.scaffoldBackgroundColor, 0.2)
-                        : lighten(theme.scaffoldBackgroundColor, 0.2);
+                        ? darken(theme.scaffoldBackgroundColor, 0.3)
+                        : lighten(theme.scaffoldBackgroundColor, 0.3);
 
                 return Tooltip(
                   message: 'Background based on chessboard colors.',
-                  triggerMode:
-                      t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
-                          ? null
-                          : TooltipTriggerMode.manual,
+                  triggerMode: t == BoardBackgroundTheme.board ? null : TooltipTriggerMode.manual,
                   child: GestureDetector(
                     onTap:
                         () => Navigator.of(context, rootNavigator: true)
@@ -204,17 +201,21 @@ class _Body extends ConsumerWidget {
                       child: ColoredBox(
                         color: theme.scaffoldBackgroundColor,
                         child:
-                            t == BoardBackgroundTheme.board || t == BoardBackgroundTheme.dimBoard
+                            t == BoardBackgroundTheme.board
                                 ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(LichessIcons.chess_board, color: autoColor),
                                     const SizedBox(height: 8),
                                     Center(
-                                      child: Text(
-                                        'auto',
-                                        style: theme.textTheme.labelSmall?.copyWith(
-                                          color: autoColor,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Chessboard colors',
+                                          style: theme.textTheme.labelSmall?.copyWith(
+                                            color: autoColor,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     ),

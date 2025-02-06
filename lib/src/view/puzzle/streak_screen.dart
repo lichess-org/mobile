@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -152,19 +153,28 @@ class _Body extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
-                        children: [
-                          Icon(LichessIcons.streak, size: 40.0, color: context.lichessColors.brag),
-                          const SizedBox(width: 8.0),
-                          Text(
-                            puzzleState.streak!.index.toString(),
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                              color: context.lichessColors.brag,
-                            ),
+                      PlatformCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                LichessIcons.streak,
+                                size: 50.0,
+                                color: ColorScheme.of(context).primary,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                puzzleState.streak!.index.toString(),
+                                style: TextStyle(
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorScheme.of(context).primary,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                       Text(context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString())),
                     ],
