@@ -11,8 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -149,7 +147,7 @@ class _Body extends ConsumerWidget {
               ),
               itemBuilder: (context, index) {
                 final t = colorChoices[index];
-                final fsd = t.getFlexScheme(boardPrefs.boardTheme);
+                final fsd = t.scheme.data;
 
                 final theme =
                     brightness == Brightness.light
@@ -164,65 +162,30 @@ class _Body extends ConsumerWidget {
                           blendLevel: t.darkBlend,
                         );
 
-                final autoColor =
-                    brightness == Brightness.light
-                        ? darken(theme.scaffoldBackgroundColor, 0.3)
-                        : lighten(theme.scaffoldBackgroundColor, 0.3);
-
-                return Tooltip(
-                  message: 'Background based on chessboard colors.',
-                  triggerMode: t == BoardBackgroundTheme.board ? null : TooltipTriggerMode.manual,
-                  child: GestureDetector(
-                    onTap:
-                        () => Navigator.of(context, rootNavigator: true)
-                            .push(
-                              MaterialPageRoute<double?>(
-                                builder:
-                                    (_) => ConfirmColorBackgroundScreen(
-                                      boardPrefs: boardPrefs,
-                                      initialIndex: index,
-                                    ),
-                                fullscreenDialog: true,
-                              ),
-                            )
-                            .then((value) {
-                              if (context.mounted) {
-                                if (value != null) {
-                                  ref
-                                      .read(boardPreferencesProvider.notifier)
-                                      .setBackground(backgroundTheme: colorChoices[value.toInt()]);
-                                  Navigator.pop(context);
-                                }
+                return GestureDetector(
+                  onTap:
+                      () => Navigator.of(context, rootNavigator: true)
+                          .push(
+                            MaterialPageRoute<double?>(
+                              builder:
+                                  (_) => ConfirmColorBackgroundScreen(
+                                    boardPrefs: boardPrefs,
+                                    initialIndex: index,
+                                  ),
+                              fullscreenDialog: true,
+                            ),
+                          )
+                          .then((value) {
+                            if (context.mounted) {
+                              if (value != null) {
+                                ref
+                                    .read(boardPreferencesProvider.notifier)
+                                    .setBackground(backgroundTheme: colorChoices[value.toInt()]);
+                                Navigator.pop(context);
                               }
-                            }),
-                    child: SizedBox.expand(
-                      child: ColoredBox(
-                        color: theme.scaffoldBackgroundColor,
-                        child:
-                            t == BoardBackgroundTheme.board
-                                ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(LichessIcons.chess_board, color: autoColor),
-                                    const SizedBox(height: 8),
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Chessboard colors',
-                                          style: theme.textTheme.labelSmall?.copyWith(
-                                            color: autoColor,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                                : null,
-                      ),
-                    ),
-                  ),
+                            }
+                          }),
+                  child: SizedBox.expand(child: ColoredBox(color: theme.scaffoldBackgroundColor)),
                 );
               },
               itemCount: colorChoices.length,

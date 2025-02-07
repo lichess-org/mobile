@@ -104,7 +104,7 @@ class ApplicationTheme extends _$ApplicationTheme {
   BoardBackgroundTheme backgroundTheme, {
   required bool isIOS,
 }) {
-  final flexScheme = backgroundTheme.getFlexScheme(boardTheme);
+  final flexScheme = backgroundTheme.scheme.data;
   final lightTheme = FlexThemeData.light(
     colors: flexScheme.light,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),

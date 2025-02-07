@@ -306,46 +306,6 @@ enum BoardTheme {
     }
   }
 
-  FlexSchemeData get flexScheme {
-    final lightScheme = SeedColorScheme.fromSeeds(
-      primaryKey: colors.darkSquare,
-      secondaryKey: colors.lightSquare,
-      brightness: Brightness.light,
-    );
-    final darkScheme = SeedColorScheme.fromSeeds(
-      primaryKey: colors.darkSquare,
-      secondaryKey: colors.lightSquare,
-      brightness: Brightness.dark,
-    );
-    return FlexSchemeData(
-      name: 'Chessboard',
-      description: 'Chessboard based theme: $label',
-      light: FlexSchemeColor(
-        primary: lightScheme.primary,
-        primaryContainer: lightScheme.primaryContainer,
-        secondary: lightScheme.secondary,
-        secondaryContainer: lightScheme.secondaryContainer,
-        tertiary: lightScheme.tertiary,
-        tertiaryContainer: lightScheme.tertiaryContainer,
-        error: lightScheme.error,
-        errorContainer: lightScheme.errorContainer,
-      ),
-      dark: FlexSchemeColor(
-        primary: darkScheme.primary,
-        primaryContainer: darkScheme.primaryContainer,
-        primaryLightRef: lightScheme.primary,
-        secondary: darkScheme.secondary,
-        secondaryContainer: darkScheme.secondaryContainer,
-        secondaryLightRef: lightScheme.secondary,
-        tertiary: darkScheme.tertiary,
-        tertiaryContainer: darkScheme.tertiaryContainer,
-        tertiaryLightRef: lightScheme.tertiary,
-        error: darkScheme.error,
-        errorContainer: darkScheme.errorContainer,
-      ),
-    );
-  }
-
   Widget get thumbnail =>
       this == BoardTheme.system
           ? SizedBox(
@@ -418,22 +378,16 @@ enum BoardBackgroundTheme {
   teal(30, 34, FlexScheme.tealM3, 'Teal'),
   lime(30, 34, FlexScheme.limeM3, 'Lime'),
   mango(30, 34, FlexScheme.mango, 'Mango'),
-  sepia(30, 34, FlexScheme.sepia, 'Sepia'),
-
-  /// The background theme is based on the chess board
-  board(30, 34);
+  sepia(30, 34, FlexScheme.sepia, 'Sepia');
 
   final int lightBlend;
   final int darkBlend;
-  final FlexScheme? scheme;
-  final String? _label;
+  final FlexScheme scheme;
+  final String _label;
 
-  const BoardBackgroundTheme(this.lightBlend, this.darkBlend, [this.scheme, this._label]);
+  const BoardBackgroundTheme(this.lightBlend, this.darkBlend, this.scheme, this._label);
 
-  String label(AppLocalizations l10n) => this == BoardBackgroundTheme.board ? l10n.board : _label!;
-
-  FlexSchemeData getFlexScheme(BoardTheme boardTheme) =>
-      this == BoardBackgroundTheme.board ? boardTheme.flexScheme : scheme!.data;
+  String label(AppLocalizations l10n) => _label;
 }
 
 @freezed
