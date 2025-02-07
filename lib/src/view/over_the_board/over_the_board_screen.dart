@@ -28,7 +28,7 @@ class OverTheBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(
         title: const Text('Over the board'), // TODO: l10n
         actions: [

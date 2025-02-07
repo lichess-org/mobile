@@ -17,7 +17,7 @@ class GameBookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
       body: const _Body(),

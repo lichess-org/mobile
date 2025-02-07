@@ -407,7 +407,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
       },
     );
 
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.preferencesPreferences),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],

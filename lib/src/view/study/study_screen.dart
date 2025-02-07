@@ -64,7 +64,7 @@ class _StudyScreenLoader extends ConsumerWidget {
         return _StudyScreen(id: id, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
-        return PlatformScaffold(
+        return PlatformThemedScaffold(
           appBar: const PlatformAppBar(title: Text('')),
           body: DefaultTabController(
             length: 1,
@@ -84,7 +84,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           ),
         );
       case _:
-        return PlatformScaffold(
+        return PlatformThemedScaffold(
           appBar: PlatformAppBar(
             title: Shimmer(
               child: ShimmerLoading(
@@ -175,7 +175,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(
         title: AutoSizeText(
           widget.studyState.currentChapterTitle,

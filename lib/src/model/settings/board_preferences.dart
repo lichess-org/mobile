@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -446,7 +445,7 @@ class BoardBackgroundImage with _$BoardBackgroundImage {
     required String path,
     required Matrix4 transform,
     required bool isBlurred,
-    required ColorScheme darkColors,
+    required Color seedColor,
     required double meanLuminance,
     required double width,
     required double height,
@@ -454,34 +453,22 @@ class BoardBackgroundImage with _$BoardBackgroundImage {
     required double viewportHeight,
   }) = _BoardBackgroundImage;
 
-  static Color getFilterColor(ColorScheme scheme, double meanLuminance) =>
-      scheme.surface.withValues(
-        alpha: switch (meanLuminance) {
-          < 0.2 => 0,
-          < 0.4 => 0.25,
-          < 0.6 => 0.5,
-          _ => 0.8,
-        },
-      );
-
-  static ThemeData getTheme(ColorScheme scheme) => FlexThemeData.dark(
-    colors: FlexSchemeColor(
-      primary: scheme.primary,
-      primaryContainer: scheme.primaryContainer,
-      secondary: scheme.secondary,
-      secondaryContainer: scheme.secondaryContainer,
-      tertiary: scheme.tertiary,
-      tertiaryContainer: scheme.tertiaryContainer,
-      error: scheme.error,
-      errorContainer: scheme.errorContainer,
-    ),
-    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-    appBarOpacity: 0.5,
+  static Color getFilterColor(Color surfaceColor, double meanLuminance) => surfaceColor.withValues(
+    alpha: switch (meanLuminance) {
+      < 0.2 => 0,
+      < 0.4 => 0.25,
+      < 0.6 => 0.5,
+      _ => 0.8,
+    },
   );
 
-  ThemeData get theme => getTheme(darkColors);
+  /// Generate a base [ThemeData] from the seed color.
+  static ThemeData getTheme(Color seedColor) => ThemeData.from(
+    colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
+  );
 
-  Color get filterColor => getFilterColor(darkColors, meanLuminance);
+  /// The base theme for the background image.
+  ThemeData get baseTheme => getTheme(seedColor);
 }
 
 class BoardBackgroundImageConverter
@@ -494,30 +481,13 @@ class BoardBackgroundImageConverter
       return null;
     }
 
-    final darkColors = ColorScheme(
-      brightness: Brightness.dark,
-      primary: Color(json['darkPrimary'] as int),
-      onPrimary: Color(json['darkOnPrimary'] as int),
-      primaryContainer: Color(json['darkPrimaryContainer'] as int),
-      secondary: Color(json['darkSecondary'] as int),
-      onSecondary: Color(json['darkOnSecondary'] as int),
-      secondaryContainer: Color(json['darkSecondaryContainer'] as int),
-      tertiary: Color(json['darkTertiary'] as int),
-      tertiaryContainer: Color(json['darkTertiaryContainer'] as int),
-      error: Color(json['darkError'] as int),
-      onError: Color(json['darkOnError'] as int),
-      errorContainer: Color(json['darkErrorContainer'] as int),
-      surface: Color(json['darkSurface'] as int),
-      onSurface: Color(json['darkOnSurface'] as int),
-    );
-
     final transform = json['transform'] as List<dynamic>;
 
     return BoardBackgroundImage(
       path: json['path'] as String,
       transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
       isBlurred: json['isBlurred'] as bool,
-      darkColors: darkColors,
+      seedColor: Color(json['seedColor'] as int),
       meanLuminance: json['meanLuminance'] as double,
       width: json['width'] as double,
       height: json['height'] as double,
@@ -532,27 +502,11 @@ class BoardBackgroundImageConverter
       return null;
     }
 
-    final Map<String, int> darkColors = {
-      'darkPrimary': object.darkColors.primary.toARGB32(),
-      'darkOnPrimary': object.darkColors.onPrimary.toARGB32(),
-      'darkPrimaryContainer': object.darkColors.primaryContainer.toARGB32(),
-      'darkSecondary': object.darkColors.secondary.toARGB32(),
-      'darkOnSecondary': object.darkColors.onSecondary.toARGB32(),
-      'darkSecondaryContainer': object.darkColors.secondaryContainer.toARGB32(),
-      'darkTertiary': object.darkColors.tertiary.toARGB32(),
-      'darkTertiaryContainer': object.darkColors.tertiaryContainer.toARGB32(),
-      'darkError': object.darkColors.error.toARGB32(),
-      'darkOnError': object.darkColors.onError.toARGB32(),
-      'darkErrorContainer': object.darkColors.errorContainer.toARGB32(),
-      'darkSurface': object.darkColors.surface.toARGB32(),
-      'darkOnSurface': object.darkColors.onSurface.toARGB32(),
-    };
-
     return {
       'path': object.path,
       'transform': object.transform.storage,
       'isBlurred': object.isBlurred,
-      ...darkColors,
+      'seedColor': object.seedColor.toARGB32(),
       'meanLuminance': object.meanLuminance,
       'width': object.width,
       'height': object.height,

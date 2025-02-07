@@ -37,7 +37,7 @@ class CreateChallengeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
       body: _ChallengeBody(user),
     );

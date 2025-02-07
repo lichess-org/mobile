@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:math' show max;
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
@@ -15,14 +13,15 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:material_color_utilities/quantize/quantizer.dart';
-import 'package:material_color_utilities/quantize/quantizer_celebi.dart';
+import 'package:material_color_utilities/score/score.dart';
 import 'package:path/path.dart';
 
 class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
@@ -81,14 +80,13 @@ class _Body extends ConsumerWidget {
                   if (image != null) {
                     final decodedImage = await decodeImageFromList(await image.readAsBytes());
                     final imageProvider = FileImage(File(image.path));
-                    final darkScheme = await ColorScheme.fromImageProvider(
-                      provider: imageProvider,
-                      brightness: Brightness.dark,
-                    );
-                    final quantizerResult = await _extractColorsFromImageProvider(imageProvider);
+                    final quantizerResult = await extractColorsFromImageProvider(imageProvider);
                     final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-                      (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
+                      (int key, int value) => MapEntry<int, int>(getArgbFromAbgr(key), value),
                     );
+                    // Score colors for color scheme suitability.
+                    final List<int> scoredResults = Score.score(colorToCount, desired: 1);
+                    final ui.Color baseColor = Color(scoredResults.first);
                     final meanLuminance =
                         colorToCount.entries.fold<double>(
                           0,
@@ -108,7 +106,7 @@ class _Body extends ConsumerWidget {
                                   (_) => ConfirmImageBackgroundScreen(
                                     boardPrefs: boardPrefs,
                                     image: image,
-                                    darkColorScheme: darkScheme,
+                                    baseColor: baseColor,
                                     meanLuminance: meanLuminance,
                                     viewport: viewport,
                                     imageSize: Size(
@@ -337,8 +335,8 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   const ConfirmImageBackgroundScreen({
     required this.image,
     required this.boardPrefs,
-    required this.darkColorScheme,
     required this.meanLuminance,
+    required this.baseColor,
     required this.imageSize,
     required this.viewport,
     required this.appDocumentsDirectory,
@@ -347,7 +345,7 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
 
   final XFile image;
   final BoardPrefs boardPrefs;
-  final ColorScheme darkColorScheme;
+  final Color baseColor;
   final double meanLuminance;
   final Size imageSize;
   final Size viewport;
@@ -408,17 +406,20 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
 
   @override
   Widget build(BuildContext context) {
+    final baseTheme = BoardBackgroundImage.getTheme(widget.baseColor);
     final filterColor = BoardBackgroundImage.getFilterColor(
-      widget.darkColorScheme,
+      baseTheme.colorScheme.surface,
       widget.meanLuminance,
     );
 
     final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
 
-    return BackgroundThemeWrapper(
-      theme: BoardBackgroundImage.getTheme(widget.darkColorScheme),
-      brightness: Brightness.dark,
-      transparentScaffold: true,
+    return Theme(
+      data:
+          makeBackgroundImageTheme(
+            baseTheme: baseTheme,
+            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
+          ).dark,
       child: Scaffold(
         body: Stack(
           children: [
@@ -550,7 +551,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                                 path: relativePath,
                                 transform: _transformationMatrix,
                                 isBlurred: blur,
-                                darkColors: widget.darkColorScheme,
+                                seedColor: widget.baseColor,
                                 meanLuminance: widget.meanLuminance,
                                 width: widget.imageSize.width,
                                 height: widget.imageSize.height,
@@ -571,86 +572,4 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
       ),
     );
   }
-}
-
-// --
-// code below taken from: https://github.com/flutter/flutter/blob/74669e4bf1352a5134ad68398a6bf7fac0a6473b/packages/flutter/lib/src/material/color_scheme.dart
-
-Future<QuantizerResult> _extractColorsFromImageProvider(ImageProvider imageProvider) async {
-  final ui.Image scaledImage = await _imageProviderToScaled(imageProvider);
-  final ByteData? imageBytes = await scaledImage.toByteData();
-
-  final QuantizerResult quantizerResult = await QuantizerCelebi().quantize(
-    imageBytes!.buffer.asUint32List(),
-    128,
-    returnInputPixelToClusterPixel: true,
-  );
-  return quantizerResult;
-}
-
-// Scale image size down to reduce computation time of color extraction.
-Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
-  const double maxDimension = 112.0;
-  final ImageStream stream = imageProvider.resolve(
-    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
-  );
-  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
-  late ImageStreamListener listener;
-  late ui.Image scaledImage;
-  Timer? loadFailureTimeout;
-
-  listener = ImageStreamListener(
-    (ImageInfo info, bool sync) async {
-      loadFailureTimeout?.cancel();
-      stream.removeListener(listener);
-      final ui.Image image = info.image;
-      final int width = image.width;
-      final int height = image.height;
-      double paintWidth = width.toDouble();
-      double paintHeight = height.toDouble();
-      assert(width > 0 && height > 0);
-
-      final bool rescale = width > maxDimension || height > maxDimension;
-      if (rescale) {
-        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
-      }
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder);
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
-        image: image,
-        filterQuality: FilterQuality.none,
-      );
-
-      final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
-    },
-    onError: (Object exception, StackTrace? stackTrace) {
-      stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
-    },
-  );
-
-  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
-    stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
-  });
-
-  stream.addListener(listener);
-  await imageCompleter.future;
-  return scaledImage;
-}
-
-// Converts AABBGGRR color int to AARRGGBB format.
-int _getArgbFromAbgr(int abgr) {
-  const int exceptRMask = 0xFF00FFFF;
-  const int onlyRMask = ~exceptRMask;
-  const int exceptBMask = 0xFFFFFF00;
-  const int onlyBMask = ~exceptBMask;
-  final int r = (abgr & onlyRMask) >> 16;
-  final int b = abgr & onlyBMask;
-  return (abgr & exceptRMask & exceptBMask) | (b << 16) | r;
 }

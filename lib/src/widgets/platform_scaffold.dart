@@ -7,7 +7,7 @@ const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0
 
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
 ///
-/// Intended to be passed to [PlatformScaffold].
+/// Intended to be passed to [PlatformThemedScaffold].
 class PlatformAppBar extends StatelessWidget {
   const PlatformAppBar({
     super.key,
@@ -106,12 +106,14 @@ class _CupertinoNavBarWrapper extends StatelessWidget implements ObstructingPref
 
 /// A screen with a navigation bar and a body that adapts to the platform.
 ///
+/// It is also aware of the configured [FullScreenBackgroundTheme].
+///
 /// On Android, this is a [Scaffold] with an [AppBar],
 /// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
 ///
 /// See [PlatformAppBar] for an app bar that adapts to the platform and needs to be passed to this widget.
-class PlatformScaffold extends StatelessWidget {
-  const PlatformScaffold({
+class PlatformThemedScaffold extends StatelessWidget {
+  const PlatformThemedScaffold({
     super.key,
     this.appBar,
     required this.body,
@@ -155,37 +157,8 @@ class PlatformScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-}
-
-class PlatformBoardThemeScaffold extends StatelessWidget {
-  const PlatformBoardThemeScaffold({
-    super.key,
-    this.appBar,
-    required this.body,
-    this.resizeToAvoidBottomInset = true,
-  });
-
-  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
-  ///
-  /// Usually an instance of [PlatformAppBar].
-  final Widget? appBar;
-
-  /// The main content of the screen, displayed below the navigation bar.
-  final Widget body;
-
-  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
-  final bool resizeToAvoidBottomInset;
-
-  @override
-  Widget build(BuildContext context) {
     return FullScreenBackgroundTheme(
-      child: PlatformScaffold(
-        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-        appBar: appBar,
-        body: body,
-      ),
+      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
     );
   }
 }

@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -38,7 +37,7 @@ class StreakScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WakelockWidget(
-      child: PlatformBoardThemeScaffold(
+      child: PlatformThemedScaffold(
         appBar: PlatformAppBar(actions: [ToggleSoundButton()], title: Text('Puzzle Streak')),
         body: _Load(),
       ),

@@ -19,7 +19,7 @@ class StormDashboardModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       body: _Body(user: user),
       appBar: PlatformAppBar(
         title: Row(

@@ -23,7 +23,7 @@ class AnalysisShareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.studyShareAndExport)),
       body: _EditPgnTagsForm(options),
     );

@@ -33,7 +33,7 @@ class StudySettings extends ConsumerWidget {
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [

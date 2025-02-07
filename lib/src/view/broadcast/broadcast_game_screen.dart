@@ -84,7 +84,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               _ => const SizedBox.shrink(),
             };
 
-    return PlatformBoardThemeScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(
         title: title,
         actions: [

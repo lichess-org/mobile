@@ -28,7 +28,7 @@ class AnalysisSettings extends ConsumerWidget {
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return PlatformScaffold(
+        return PlatformThemedScaffold(
           appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
           body: ListView(
             children: [

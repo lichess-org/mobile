@@ -142,17 +142,13 @@ class _ChoiceChip extends StatefulWidget {
 class _ChoiceChipState extends State<_ChoiceChip> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final bgColor =
-        theme.brightness == Brightness.light
-            ? theme.colorScheme.surfaceContainerLowest
-            : theme.colorScheme.surfaceContainerHighest;
+    final bgColor = Styles.cardColor(context);
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(
-          color: bgColor.withValues(alpha: 0.7),
+          color: bgColor.withValues(alpha: 0.8),
           borderRadius: const BorderRadius.all(Radius.circular(6.0)),
         ),
         child: AdaptiveInkWell(

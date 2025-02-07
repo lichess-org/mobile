@@ -29,7 +29,7 @@ class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: Text(context.l10n.friends)),
       body: const _Body(),

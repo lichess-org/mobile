@@ -46,7 +46,7 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformBoardThemeScaffold(
+      child: PlatformThemedScaffold(
         appBar: PlatformAppBar(
           actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
@@ -569,7 +569,7 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformBoardThemeScaffold(
+    return PlatformThemedScaffold(
       body: _RunStatsPopup(stats),
       appBar: PlatformAppBar(
         leading: IconButton(

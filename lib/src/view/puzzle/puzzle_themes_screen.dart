@@ -36,7 +36,7 @@ class PuzzleThemesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
+    return PlatformThemedScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
       body: const _Body(),
     );
