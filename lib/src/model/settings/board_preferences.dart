@@ -100,17 +100,6 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
   Future<void> adjustColors({double? brightness, double? hue}) {
     return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
   }
-
-  Future<void> setBackground({
-    BoardBackgroundTheme? backgroundTheme,
-    BoardBackgroundImage? backgroundImage,
-  }) {
-    assert(
-      !(backgroundTheme != null && backgroundImage != null),
-      'Only one of backgroundTheme or backgroundImage should be set',
-    );
-    return save(state.copyWith(backgroundTheme: backgroundTheme, backgroundImage: backgroundImage));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -147,8 +136,6 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
-    BoardBackgroundTheme? backgroundTheme,
-    @BoardBackgroundImageConverter() BoardBackgroundImage? backgroundImage,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -365,106 +352,3 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
   DragTargetKind.square => 'Square',
   DragTargetKind.none => 'None',
 };
-
-enum BoardBackgroundTheme {
-  blue(Color.fromARGB(255, 58, 81, 100), 'Blue'),
-  indigo(Color.fromARGB(255, 49, 54, 82), 'indigo'),
-  green(Color.fromARGB(255, 32, 64, 42), 'Green'),
-  brown(Color.fromARGB(255, 67, 52, 54), 'Brown'),
-  gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
-  red(Color.fromARGB(255, 92, 42, 50), 'Red'),
-  purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),
-  teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
-  lime(Color.fromARGB(255, 77, 84, 40), 'Lime'),
-  sepia(Color.fromARGB(255, 97, 93, 87), 'Sepia');
-
-  final Color color;
-  final String _label;
-
-  const BoardBackgroundTheme(this.color, this._label);
-
-  String label(AppLocalizations l10n) => _label;
-
-  /// The base theme for the background color.
-  ThemeData get baseTheme => BoardBackgroundImage.getTheme(color);
-}
-
-@freezed
-class BoardBackgroundImage with _$BoardBackgroundImage {
-  const BoardBackgroundImage._();
-
-  const factory BoardBackgroundImage({
-    /// The path to the image asset relative to the document directory returned by [getApplicationDocumentsDirectory]
-    required String path,
-    required Matrix4 transform,
-    required bool isBlurred,
-    required Color seedColor,
-    required double meanLuminance,
-    required double width,
-    required double height,
-    required double viewportWidth,
-    required double viewportHeight,
-  }) = _BoardBackgroundImage;
-
-  static Color getFilterColor(Color surfaceColor, double meanLuminance) => surfaceColor.withValues(
-    alpha: switch (meanLuminance) {
-      < 0.2 => 0,
-      < 0.4 => 0.25,
-      < 0.6 => 0.5,
-      _ => 0.8,
-    },
-  );
-
-  /// Generate a base [ThemeData] from the seed color.
-  static ThemeData getTheme(Color seedColor) => ThemeData.from(
-    colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
-  );
-
-  /// The base theme for the background image.
-  ThemeData get baseTheme => getTheme(seedColor);
-}
-
-class BoardBackgroundImageConverter
-    implements JsonConverter<BoardBackgroundImage?, Map<String, dynamic>?> {
-  const BoardBackgroundImageConverter();
-
-  @override
-  BoardBackgroundImage? fromJson(Map<String, dynamic>? json) {
-    if (json == null) {
-      return null;
-    }
-
-    final transform = json['transform'] as List<dynamic>;
-
-    return BoardBackgroundImage(
-      path: json['path'] as String,
-      transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
-      isBlurred: json['isBlurred'] as bool,
-      seedColor: Color(json['seedColor'] as int),
-      meanLuminance: json['meanLuminance'] as double,
-      width: json['width'] as double,
-      height: json['height'] as double,
-      viewportWidth: json['viewportWidth'] as double,
-      viewportHeight: json['viewportHeight'] as double,
-    );
-  }
-
-  @override
-  Map<String, dynamic>? toJson(BoardBackgroundImage? object) {
-    if (object == null) {
-      return null;
-    }
-
-    return {
-      'path': object.path,
-      'transform': object.transform.storage,
-      'isBlurred': object.isBlurred,
-      'seedColor': object.seedColor.toARGB32(),
-      'meanLuminance': object.meanLuminance,
-      'width': object.width,
-      'height': object.height,
-      'viewportWidth': object.viewportWidth,
-      'viewportHeight': object.viewportHeight,
-    };
-  }
-}

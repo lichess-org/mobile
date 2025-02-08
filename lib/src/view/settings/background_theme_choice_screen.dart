@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,8 +22,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
 import 'package:path/path.dart';
 
-class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
-  const BoardBackgroundThemeChoiceScreen({super.key});
+class BackgroundThemeChoiceScreen extends StatelessWidget {
+  const BackgroundThemeChoiceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
   }
 }
 
-const colorChoices = BoardBackgroundTheme.values;
+const colorChoices = BackgroundTheme.values;
 const itemsByRow = 3;
 
 class _Body extends ConsumerWidget {
@@ -99,7 +100,7 @@ class _Body extends ConsumerWidget {
                     if (context.mounted) {
                       Navigator.of(context, rootNavigator: true)
                           .push(
-                            MaterialPageRoute<BoardBackgroundImage?>(
+                            MaterialPageRoute<BackgroundImage?>(
                               builder:
                                   (_) => ConfirmImageBackgroundScreen(
                                     boardPrefs: boardPrefs,
@@ -119,7 +120,7 @@ class _Body extends ConsumerWidget {
                           .then((value) {
                             if (context.mounted && value != null) {
                               ref
-                                  .read(boardPreferencesProvider.notifier)
+                                  .read(generalPreferencesProvider.notifier)
                                   .setBackground(backgroundImage: value);
                               Navigator.pop(context);
                             }
@@ -165,7 +166,7 @@ class _Body extends ConsumerWidget {
                             if (context.mounted) {
                               if (value == true) {
                                 ref
-                                    .read(boardPreferencesProvider.notifier)
+                                    .read(generalPreferencesProvider.notifier)
                                     .setBackground(backgroundTheme: t);
                                 Navigator.pop(context);
                               }
@@ -194,7 +195,7 @@ class ConfirmColorBackgroundScreen extends StatelessWidget {
     return Theme(
       data:
           makeBackgroundImageTheme(
-            baseTheme: BoardBackgroundImage.getTheme(color),
+            baseTheme: BackgroundImage.getTheme(color),
             isIOS: Theme.of(context).platform == TargetPlatform.iOS,
           ).dark,
       child: Scaffold(
@@ -326,8 +327,8 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
 
   @override
   Widget build(BuildContext context) {
-    final baseTheme = BoardBackgroundImage.getTheme(widget.baseColor);
-    final filterColor = BoardBackgroundImage.getFilterColor(
+    final baseTheme = BackgroundImage.getTheme(widget.baseColor);
+    final filterColor = BackgroundImage.getFilterColor(
       baseTheme.colorScheme.surface,
       widget.meanLuminance,
     );
@@ -465,9 +466,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                           await FileImage(File(targetPath)).evict();
                           await File(widget.image.path).copy(targetPath);
                           if (context.mounted) {
-                            return Navigator.pop<BoardBackgroundImage>(
+                            return Navigator.pop<BackgroundImage>(
                               context,
-                              BoardBackgroundImage(
+                              BackgroundImage(
                                 path: relativePath,
                                 transform: _transformationMatrix,
                                 isBlurred: blur,

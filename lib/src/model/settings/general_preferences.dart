@@ -1,6 +1,6 @@
-import 'dart:ui' show Locale;
-
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
     show BoardTheme, boardPreferencesProvider;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -54,6 +54,14 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
       ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system),
     ]).then((_) => {});
   }
+
+  Future<void> setBackground({BackgroundTheme? backgroundTheme, BackgroundImage? backgroundImage}) {
+    assert(
+      !(backgroundTheme != null && backgroundImage != null),
+      'Only one of backgroundTheme or backgroundImage should be set',
+    );
+    return save(state.copyWith(backgroundTheme: backgroundTheme, backgroundImage: backgroundImage));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -75,6 +83,9 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
 
     /// Locale to use in the app, use system locale if null
     @LocaleConverter() Locale? locale,
+
+    BackgroundTheme? backgroundTheme,
+    @BackgroundImageConverter() BackgroundImage? backgroundImage,
   }) = _GeneralPrefs;
 
   static const defaults = GeneralPrefs(
@@ -123,4 +134,106 @@ enum SoundTheme {
   final String label;
 
   const SoundTheme(this.label);
+}
+
+enum BackgroundTheme {
+  blue(Color.fromARGB(255, 58, 81, 100), 'Blue'),
+  indigo(Color.fromARGB(255, 49, 54, 82), 'indigo'),
+  green(Color.fromARGB(255, 32, 64, 42), 'Green'),
+  brown(Color.fromARGB(255, 67, 52, 54), 'Brown'),
+  gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
+  red(Color.fromARGB(255, 92, 42, 50), 'Red'),
+  purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),
+  teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
+  lime(Color.fromARGB(255, 77, 84, 40), 'Lime'),
+  sepia(Color.fromARGB(255, 97, 93, 87), 'Sepia');
+
+  final Color color;
+  final String _label;
+
+  const BackgroundTheme(this.color, this._label);
+
+  String label(AppLocalizations l10n) => _label;
+
+  /// The base theme for the background color.
+  ThemeData get baseTheme => BackgroundImage.getTheme(color);
+}
+
+@freezed
+class BackgroundImage with _$BackgroundImage {
+  const BackgroundImage._();
+
+  const factory BackgroundImage({
+    /// The path to the image asset relative to the document directory returned by [getApplicationDocumentsDirectory]
+    required String path,
+    required Matrix4 transform,
+    required bool isBlurred,
+    required Color seedColor,
+    required double meanLuminance,
+    required double width,
+    required double height,
+    required double viewportWidth,
+    required double viewportHeight,
+  }) = _BackgroundImage;
+
+  static Color getFilterColor(Color surfaceColor, double meanLuminance) => surfaceColor.withValues(
+    alpha: switch (meanLuminance) {
+      < 0.2 => 0,
+      < 0.4 => 0.25,
+      < 0.6 => 0.5,
+      _ => 0.8,
+    },
+  );
+
+  /// Generate a base [ThemeData] from the seed color.
+  static ThemeData getTheme(Color seedColor) => ThemeData.from(
+    colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
+  );
+
+  /// The base theme for the background image.
+  ThemeData get baseTheme => getTheme(seedColor);
+}
+
+class BackgroundImageConverter implements JsonConverter<BackgroundImage?, Map<String, dynamic>?> {
+  const BackgroundImageConverter();
+
+  @override
+  BackgroundImage? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+
+    final transform = json['transform'] as List<dynamic>;
+
+    return BackgroundImage(
+      path: json['path'] as String,
+      transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
+      isBlurred: json['isBlurred'] as bool,
+      seedColor: Color(json['seedColor'] as int),
+      meanLuminance: json['meanLuminance'] as double,
+      width: json['width'] as double,
+      height: json['height'] as double,
+      viewportWidth: json['viewportWidth'] as double,
+      viewportHeight: json['viewportHeight'] as double,
+    );
+  }
+
+  @override
+  Map<String, dynamic>? toJson(BackgroundImage? object) {
+    if (object == null) {
+      return null;
+    }
+
+    return {
+      'path': object.path,
+      'transform': object.transform.storage,
+      'isBlurred': object.isBlurred,
+      'seedColor': object.seedColor.toARGB32(),
+      'meanLuminance': object.meanLuminance,
+      'width': object.width,
+      'height': object.height,
+      'viewportWidth': object.viewportWidth,
+      'viewportHeight': object.viewportHeight,
+    };
+  }
 }

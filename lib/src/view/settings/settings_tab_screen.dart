@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -229,7 +229,7 @@ class _Body extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 title: context.l10n.mobileTheme,
-                builder: (context) => const BoardThemeScreen(),
+                builder: (context) => const ThemeSettingsScreen(),
               );
             },
           ),

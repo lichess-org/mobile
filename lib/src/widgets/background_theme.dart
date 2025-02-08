@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/theme.dart';
 
 const kBackgroundImageBlurFactor = 8.0;
@@ -25,20 +25,20 @@ class FullScreenBackgroundTheme extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final appDocumentsDirectory =
         ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
 
-    if (boardPrefs.backgroundImage != null && appDocumentsDirectory != null) {
+    if (generalPrefs.backgroundImage != null && appDocumentsDirectory != null) {
       return FullScreenBackgroundImageTheme(
-        backgroundImage: boardPrefs.backgroundImage!,
+        backgroundImage: generalPrefs.backgroundImage!,
         viewport: MediaQuery.sizeOf(context),
         appDocumentsDirectory: appDocumentsDirectory,
         child: child,
       );
-    } else if (boardPrefs.backgroundTheme != null) {
+    } else if (generalPrefs.backgroundTheme != null) {
       return _FullScreenBackgroundColorTheme(
-        backgroundTheme: boardPrefs.backgroundTheme!,
+        backgroundTheme: generalPrefs.backgroundTheme!,
         child: child,
       );
     } else {
@@ -59,7 +59,7 @@ class FullScreenBackgroundImageTheme extends StatefulWidget {
     required this.child,
   });
 
-  final BoardBackgroundImage backgroundImage;
+  final BackgroundImage backgroundImage;
   final Size viewport;
   final Directory appDocumentsDirectory;
   final Widget child;
@@ -136,8 +136,8 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
       widget.viewport,
     );
 
-    final baseTheme = BoardBackgroundImage.getTheme(widget.backgroundImage.seedColor);
-    final filterColor = BoardBackgroundImage.getFilterColor(
+    final baseTheme = BackgroundImage.getTheme(widget.backgroundImage.seedColor);
+    final filterColor = BackgroundImage.getFilterColor(
       baseTheme.colorScheme.surface,
       widget.backgroundImage.meanLuminance,
     );
@@ -198,7 +198,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
 class _FullScreenBackgroundColorTheme extends StatelessWidget {
   const _FullScreenBackgroundColorTheme({required this.backgroundTheme, required this.child});
 
-  final BoardBackgroundTheme backgroundTheme;
+  final BackgroundTheme backgroundTheme;
   final Widget child;
 
   @override

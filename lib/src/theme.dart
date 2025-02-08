@@ -17,16 +17,16 @@ class ApplicationTheme extends _$ApplicationTheme {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final isIOS = defaultTargetPlatform == TargetPlatform.iOS;
 
-    if (boardPrefs.backgroundTheme == null && boardPrefs.backgroundImage == null) {
+    if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
       return _makeDefaultTheme(generalPrefs, boardPrefs, isIOS);
-    } else if (boardPrefs.backgroundImage != null) {
+    } else if (generalPrefs.backgroundImage != null) {
       return makeBackgroundImageTheme(
-        baseTheme: boardPrefs.backgroundImage!.baseTheme,
+        baseTheme: generalPrefs.backgroundImage!.baseTheme,
         isIOS: isIOS,
       );
     } else {
       return makeBackgroundImageTheme(
-        baseTheme: boardPrefs.backgroundTheme!.baseTheme,
+        baseTheme: generalPrefs.backgroundTheme!.baseTheme,
         isIOS: isIOS,
       );
     }
