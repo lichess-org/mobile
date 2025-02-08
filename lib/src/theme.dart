@@ -20,12 +20,12 @@ class ApplicationTheme extends _$ApplicationTheme {
     if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
       return _makeDefaultTheme(generalPrefs, boardPrefs, isIOS);
     } else if (generalPrefs.backgroundImage != null) {
-      return makeBackgroundImageTheme(
+      return _makeBackgroundImageTheme(
         baseTheme: generalPrefs.backgroundImage!.baseTheme,
         isIOS: isIOS,
       );
     } else {
-      return makeBackgroundImageTheme(
+      return _makeBackgroundImageTheme(
         baseTheme: generalPrefs.backgroundTheme!.baseTheme,
         isIOS: isIOS,
       );
@@ -94,52 +94,66 @@ class ApplicationTheme extends _$ApplicationTheme {
       ),
     );
   }
-}
 
-({ThemeData light, ThemeData dark}) makeBackgroundImageTheme({
-  required ThemeData baseTheme,
-  required bool isIOS,
-}) {
-  final cupertinoTheme = _makeCupertinoBackgroundTheme(
-    baseTheme,
-    brightness: Brightness.dark,
-    transparentScaffold: true,
-  );
+  ({ThemeData light, ThemeData dark}) _makeBackgroundImageTheme({
+    required ThemeData baseTheme,
+    required bool isIOS,
+  }) {
+    final primary = baseTheme.colorScheme.primary;
+    final onPrimary = baseTheme.colorScheme.onPrimary;
+    final cupertinoTheme = CupertinoThemeData(
+      primaryColor: primary,
+      primaryContrastingColor: onPrimary,
+      brightness: Brightness.dark,
+      textTheme: cupertinoTextTheme(baseTheme.colorScheme),
+      scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
+      barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.5),
+      applyThemeToAll: true,
+    );
 
-  const baseSurfaceAlpha = 0.7;
+    const baseSurfaceAlpha = 0.7;
 
-  final theme = baseTheme.copyWith(
-    colorScheme: baseTheme.colorScheme.copyWith(
-      surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
-      surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
-        alpha: baseSurfaceAlpha,
+    final theme = baseTheme.copyWith(
+      colorScheme: baseTheme.colorScheme.copyWith(
+        surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
+        surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
+          alpha: baseSurfaceAlpha,
+        ),
+        surfaceContainerLow: baseTheme.colorScheme.surfaceContainerLow.withValues(
+          alpha: baseSurfaceAlpha,
+        ),
+        surfaceContainer: baseTheme.colorScheme.surfaceContainer.withValues(
+          alpha: baseSurfaceAlpha,
+        ),
+        surfaceContainerHigh: baseTheme.colorScheme.surfaceContainerHigh.withValues(
+          alpha: baseSurfaceAlpha,
+        ),
+        surfaceContainerHighest: baseTheme.colorScheme.surfaceContainerHighest.withValues(
+          alpha: baseSurfaceAlpha,
+        ),
+        surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
+        surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
       ),
-      surfaceContainerLow: baseTheme.colorScheme.surfaceContainerLow.withValues(
-        alpha: baseSurfaceAlpha,
+      cupertinoOverrideTheme: cupertinoTheme,
+      listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
       ),
-      surfaceContainer: baseTheme.colorScheme.surfaceContainer.withValues(alpha: baseSurfaceAlpha),
-      surfaceContainerHigh: baseTheme.colorScheme.surfaceContainerHigh.withValues(
-        alpha: baseSurfaceAlpha,
+      dialogTheme: DialogTheme(
+        backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
       ),
-      surfaceContainerHighest: baseTheme.colorScheme.surfaceContainerHighest.withValues(
-        alpha: baseSurfaceAlpha,
+      menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
+      scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
+      appBarTheme: baseTheme.appBarTheme.copyWith(
+        backgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
       ),
-      surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
-      surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
-    ),
-    cupertinoOverrideTheme: cupertinoTheme,
-    listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
-    menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
-    scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    appBarTheme: baseTheme.appBarTheme.copyWith(
-      backgroundColor: baseTheme.colorScheme.surfaceContainerLowest.withValues(alpha: 0.5),
-    ),
-    splashFactory: isIOS ? NoSplash.splashFactory : null,
-    textTheme: isIOS ? Typography.whiteCupertino : null,
-    extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
-  );
+      splashFactory: isIOS ? NoSplash.splashFactory : null,
+      textTheme: isIOS ? Typography.whiteCupertino : null,
+      extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
+    );
 
-  return (light: theme, dark: theme);
+    return (light: theme, dark: theme);
+  }
 }
 
 /// Makes a Cupertino text theme based on the given [colors].
@@ -160,25 +174,3 @@ ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => 
   subtitleTextStyle: cupertinoTheme.textTheme.textStyle,
   leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle,
 );
-
-CupertinoThemeData _makeCupertinoBackgroundTheme(
-  ThemeData theme, {
-  required Brightness brightness,
-  bool transparentScaffold = false,
-}) {
-  final primary = theme.colorScheme.primary;
-  final onPrimary = theme.colorScheme.onPrimary;
-  return CupertinoThemeData(
-    primaryColor: primary,
-    primaryContrastingColor: onPrimary,
-    brightness: brightness,
-    textTheme: cupertinoTextTheme(theme.colorScheme),
-    scaffoldBackgroundColor: theme.scaffoldBackgroundColor.withValues(
-      alpha: transparentScaffold ? 0 : 1,
-    ),
-    barBackgroundColor: theme.colorScheme.surface.withValues(
-      alpha: transparentScaffold ? 0.5 : 0.9,
-    ),
-    applyThemeToAll: true,
-  );
-}
