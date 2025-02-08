@@ -62,7 +62,7 @@ class ApplicationTheme extends _$ApplicationTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: darken(themeLight.scaffoldBackgroundColor, 0.05),
       barBackgroundColor: themeLight.colorScheme.surface.withValues(alpha: 0.9),
-      textTheme: _cupertinoTextTheme(themeLight.colorScheme),
+      textTheme: cupertinoTextTheme(themeLight.colorScheme),
     );
 
     final darkCupertino = CupertinoThemeData(
@@ -72,7 +72,7 @@ class ApplicationTheme extends _$ApplicationTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
       barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
-      textTheme: _cupertinoTextTheme(themeDark.colorScheme),
+      textTheme: cupertinoTextTheme(themeDark.colorScheme),
     );
 
     return (
@@ -142,7 +142,8 @@ class ApplicationTheme extends _$ApplicationTheme {
   return (light: theme, dark: theme);
 }
 
-CupertinoTextThemeData _cupertinoTextTheme(ColorScheme colors) =>
+/// Makes a Cupertino text theme based on the given [colors].
+CupertinoTextThemeData cupertinoTextTheme(ColorScheme colors) =>
     const CupertinoThemeData().textTheme.copyWith(
       primaryColor: colors.primary,
       textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(color: colors.onSurface),
@@ -171,7 +172,7 @@ CupertinoThemeData _makeCupertinoBackgroundTheme(
     primaryColor: primary,
     primaryContrastingColor: onPrimary,
     brightness: brightness,
-    textTheme: _cupertinoTextTheme(theme.colorScheme),
+    textTheme: cupertinoTextTheme(theme.colorScheme),
     scaffoldBackgroundColor: theme.scaffoldBackgroundColor.withValues(
       alpha: transparentScaffold ? 0 : 1,
     ),

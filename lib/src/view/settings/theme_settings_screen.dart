@@ -194,7 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pushPlatformRoute(
                         context,
                         title: context.l10n.background,
-                        builder: (context) => const BackgroundThemeChoiceScreen(),
+                        builder: (context) => const BackgroundChoiceScreen(),
                       );
                     },
                   ),

@@ -23,8 +23,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
 import 'package:path/path.dart';
 
-class BackgroundThemeChoiceScreen extends StatelessWidget {
-  const BackgroundThemeChoiceScreen({super.key});
+class BackgroundChoiceScreen extends StatelessWidget {
+  const BackgroundChoiceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -198,12 +198,8 @@ class ConfirmColorBackgroundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data:
-          makeBackgroundImageTheme(
-            baseTheme: BackgroundImage.getTheme(color),
-            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
-          ).dark,
+    return _BackgroundTheme(
+      baseTheme: BackgroundImage.getTheme(color),
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -341,12 +337,8 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
 
     final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
 
-    return Theme(
-      data:
-          makeBackgroundImageTheme(
-            baseTheme: baseTheme,
-            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
-          ).dark,
+    return _BackgroundTheme(
+      baseTheme: baseTheme,
       child: Scaffold(
         body: Stack(
           children: [
@@ -495,6 +487,40 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Applies the background theme, based on [baseTheme], to the child widget.
+///
+/// This is used to try new background themes without changing the whole app theme.
+class _BackgroundTheme extends StatelessWidget {
+  const _BackgroundTheme({required this.baseTheme, required this.child});
+
+  final ThemeData baseTheme;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final cupertinoTheme = CupertinoThemeData(
+      applyThemeToAll: true,
+      primaryColor: baseTheme.colorScheme.primary,
+      primaryContrastingColor: baseTheme.colorScheme.onPrimary,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
+      barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+      textTheme: cupertinoTextTheme(baseTheme.colorScheme),
+    );
+
+    return Theme(
+      data: baseTheme,
+      child: CupertinoTheme(
+        data: cupertinoTheme,
+        child: IconTheme(
+          data: IconThemeData(color: cupertinoTheme.textTheme.textStyle.color),
+          child: DefaultTextStyle.merge(style: cupertinoTheme.textTheme.textStyle, child: child),
         ),
       ),
     );
