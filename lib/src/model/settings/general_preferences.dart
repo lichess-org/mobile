@@ -144,7 +144,7 @@ enum BackgroundTheme {
   gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
   red(Color.fromARGB(255, 92, 42, 50), 'Red'),
   purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),
-  teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
+  // teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
   lime(Color.fromARGB(255, 77, 84, 40), 'Lime'),
   sepia(Color.fromARGB(255, 97, 93, 87), 'Sepia');
 
