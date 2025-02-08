@@ -30,7 +30,7 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -47,7 +47,7 @@ class StudyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(child: _StudyScreenLoader(id: id));
+    return FullScreenBackground(child: _StudyScreenLoader(id: id));
   }
 }
 

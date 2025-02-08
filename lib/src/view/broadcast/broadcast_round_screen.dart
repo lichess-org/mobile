@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -98,7 +98,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         }
       },
     );
-    return FullScreenBackgroundTheme(
+    return FullScreenBackground(
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: AutoSizeText(
@@ -159,7 +159,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundWithGames> asyncRound,
   ) {
-    return FullScreenBackgroundTheme(
+    return FullScreenBackground(
       child: Scaffold(
         appBar: AppBar(
           title: AutoSizeText(

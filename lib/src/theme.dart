@@ -100,77 +100,46 @@ class ApplicationTheme extends _$ApplicationTheme {
   required ThemeData baseTheme,
   required bool isIOS,
 }) {
-  final theme = _makeBackgroundTheme(
-    theme: baseTheme,
-    brightness: Brightness.dark,
-    isIOS: isIOS,
-    transparentScaffold: true,
-  );
-  return (light: theme, dark: theme);
-}
-
-ThemeData _makeBackgroundTheme({
-  required ThemeData theme,
-  required bool isIOS,
-  Brightness brightness = Brightness.dark,
-  bool transparentScaffold = true,
-}) {
   final cupertinoTheme = _makeCupertinoBackgroundTheme(
-    theme,
-    brightness: brightness,
-    transparentScaffold: transparentScaffold,
+    baseTheme,
+    brightness: Brightness.dark,
+    transparentScaffold: true,
   );
 
   const baseSurfaceAlpha = 0.7;
 
-  return theme.copyWith(
-    colorScheme: theme.colorScheme.copyWith(
-      surface: theme.colorScheme.surface.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
+  final theme = baseTheme.copyWith(
+    colorScheme: baseTheme.colorScheme.copyWith(
+      surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
+      surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
+        alpha: baseSurfaceAlpha,
       ),
-      surfaceContainerLowest: theme.colorScheme.surfaceContainerLowest.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
+      surfaceContainerLow: baseTheme.colorScheme.surfaceContainerLow.withValues(
+        alpha: baseSurfaceAlpha,
       ),
-      surfaceContainerLow: theme.colorScheme.surfaceContainerLow.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
+      surfaceContainer: baseTheme.colorScheme.surfaceContainer.withValues(alpha: baseSurfaceAlpha),
+      surfaceContainerHigh: baseTheme.colorScheme.surfaceContainerHigh.withValues(
+        alpha: baseSurfaceAlpha,
       ),
-      surfaceContainer: theme.colorScheme.surfaceContainer.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
+      surfaceContainerHighest: baseTheme.colorScheme.surfaceContainerHighest.withValues(
+        alpha: baseSurfaceAlpha,
       ),
-      surfaceContainerHigh: theme.colorScheme.surfaceContainerHigh.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
-      ),
-      surfaceContainerHighest: theme.colorScheme.surfaceContainerHighest.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha : 1,
-      ),
-      surfaceDim: theme.colorScheme.surfaceDim.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha + 1 : 1,
-      ),
-      surfaceBright: theme.colorScheme.surfaceBright.withValues(
-        alpha: transparentScaffold ? baseSurfaceAlpha - 2 : 1,
-      ),
+      surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
+      surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
     cupertinoOverrideTheme: cupertinoTheme,
     listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
     menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
-    scaffoldBackgroundColor: theme.scaffoldBackgroundColor.withValues(
-      alpha: transparentScaffold ? 0 : 1,
+    scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
+    appBarTheme: baseTheme.appBarTheme.copyWith(
+      backgroundColor: baseTheme.colorScheme.surfaceContainerLowest.withValues(alpha: 0.5),
     ),
-    appBarTheme:
-        transparentScaffold
-            ? theme.appBarTheme.copyWith(
-              backgroundColor: theme.colorScheme.surfaceContainerLowest.withValues(alpha: 0.5),
-            )
-            : null,
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    textTheme:
-        isIOS
-            ? brightness == Brightness.light
-                ? Typography.blackCupertino
-                : Typography.whiteCupertino
-            : null,
-    extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
+    textTheme: isIOS ? Typography.whiteCupertino : null,
+    extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
+
+  return (light: theme, dark: theme);
 }
 
 CupertinoTextThemeData _cupertinoTextTheme(ColorScheme colors) =>

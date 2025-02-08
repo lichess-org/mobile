@@ -27,7 +27,7 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -42,7 +42,7 @@ class CreateCustomGameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(
+    return FullScreenBackground(
       child: PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos),
     );
   }

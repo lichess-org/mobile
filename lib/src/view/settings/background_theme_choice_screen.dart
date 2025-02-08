@@ -11,10 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -27,7 +28,7 @@ class BackgroundThemeChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(
+    return FullScreenBackground(
       child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
     );
   }
@@ -56,7 +57,7 @@ class _Body extends ConsumerWidget {
 
     return ListView(
       children: [
-        if (appDocumentsDirectory != null)
+        if (appDocumentsDirectory != null) ...[
           ListSection(
             children: [
               PlatformListTile(
@@ -131,6 +132,11 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
+          const Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: Text('Custom background works only in dark mode. A dark image is recommended.'),
+          ),
+        ],
         ListSection(
           header: const SettingsSectionTitle('Presets'),
           backgroundColor: ColorScheme.of(context).surfaceContainerLowest,
@@ -285,7 +291,7 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
           ? BoxFit.fitWidth
           : BoxFit.fitHeight;
 
-  Size get imageFitSize => FullScreenBackgroundImageTheme.imageFitSize(boxFit, imageSize, viewport);
+  Size get imageFitSize => FullScreenBackgroundImage.imageFitSize(boxFit, imageSize, viewport);
 
   Matrix4 get centerWidthMatrix =>
       Matrix4.translationValues((viewport.width - imageFitSize.width) / 2, 0, 0);

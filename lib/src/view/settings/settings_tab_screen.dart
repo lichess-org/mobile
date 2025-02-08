@@ -86,6 +86,9 @@ class _Body extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
+    final isForcedDarkMode =
+        generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null;
+
     final Widget? donateButton =
         userSession == null || userSession.user.isPatron != true
             ? PlatformListTile(
@@ -193,30 +196,40 @@ class _Body extends ConsumerWidget {
               );
             },
           ),
-          SettingsListTile(
-            icon: const Icon(Icons.brightness_medium_outlined),
-            settingsLabel: Text(context.l10n.background),
-            settingsValue: AppBackgroundModeScreen.themeTitle(context, generalPrefs.themeMode),
-            onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker(
-                  context,
-                  choices: BackgroundThemeMode.values,
-                  selectedItem: generalPrefs.themeMode,
-                  labelBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged:
-                      (BackgroundThemeMode? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                );
-              } else {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.background,
-                  builder: (context) => const AppBackgroundModeScreen(),
-                );
-              }
-            },
+          Opacity(
+            opacity: isForcedDarkMode ? 0.5 : 1.0,
+            child: SettingsListTile(
+              icon: const Icon(Icons.brightness_medium_outlined),
+              settingsLabel: Text(context.l10n.background),
+              settingsValue: AppBackgroundModeScreen.themeTitle(
+                context,
+                isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
+              ),
+              onTap:
+                  isForcedDarkMode
+                      ? null
+                      : () {
+                        if (Theme.of(context).platform == TargetPlatform.android) {
+                          showChoicePicker(
+                            context,
+                            choices: BackgroundThemeMode.values,
+                            selectedItem: generalPrefs.themeMode,
+                            labelBuilder:
+                                (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
+                            onSelectedItemChanged:
+                                (BackgroundThemeMode? value) => ref
+                                    .read(generalPreferencesProvider.notifier)
+                                    .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                          );
+                        } else {
+                          pushPlatformRoute(
+                            context,
+                            title: context.l10n.background,
+                            builder: (context) => const AppBackgroundModeScreen(),
+                          );
+                        }
+                      },
+            ),
           ),
           PlatformListTile(
             leading: const Icon(Icons.palette_outlined),

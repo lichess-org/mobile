@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -78,7 +78,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    return FullScreenBackgroundTheme(
+    return FullScreenBackground(
       child: PlatformWidget(
         androidBuilder:
             (context) => Scaffold(

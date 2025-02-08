@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/theme.dart';
 
 const kBackgroundImageBlurFactor = 8.0;
 
@@ -17,8 +16,8 @@ const kBackgroundImageBlurFactor = 8.0;
 ///
 /// Since the background image is always full screen, this widget should be used to wrap only [Scaffold]
 /// or [CupertinoPageScaffold] widgets.
-class FullScreenBackgroundTheme extends ConsumerWidget {
-  const FullScreenBackgroundTheme({required this.child, super.key});
+class FullScreenBackground extends ConsumerWidget {
+  const FullScreenBackground({required this.child, super.key});
 
   /// The child widget to apply the theme to.
   final Widget child;
@@ -30,7 +29,7 @@ class FullScreenBackgroundTheme extends ConsumerWidget {
         ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
 
     if (generalPrefs.backgroundImage != null && appDocumentsDirectory != null) {
-      return FullScreenBackgroundImageTheme(
+      return FullScreenBackgroundImage(
         backgroundImage: generalPrefs.backgroundImage!,
         viewport: MediaQuery.sizeOf(context),
         appDocumentsDirectory: appDocumentsDirectory,
@@ -51,8 +50,8 @@ class FullScreenBackgroundTheme extends ConsumerWidget {
 ///
 /// The image is always sized to cover the full screen, and the image is blurred if requested.
 /// This is intended to be used with [Scaffold] or [CupertinoPageScaffold] as the child.
-class FullScreenBackgroundImageTheme extends StatefulWidget {
-  const FullScreenBackgroundImageTheme({
+class FullScreenBackgroundImage extends StatefulWidget {
+  const FullScreenBackgroundImage({
     required this.backgroundImage,
     required this.viewport,
     required this.appDocumentsDirectory,
@@ -77,10 +76,10 @@ class FullScreenBackgroundImageTheme extends StatefulWidget {
   };
 
   @override
-  State<FullScreenBackgroundImageTheme> createState() => _FullScreenBackgroundImageState();
+  State<FullScreenBackgroundImage> createState() => _FullScreenBackgroundImageState();
 }
 
-class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageTheme> {
+class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
   final TransformationController _controller = TransformationController();
 
   Size get pickedImageViewport =>
@@ -93,7 +92,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
   }
 
   @override
-  void didUpdateWidget(FullScreenBackgroundImageTheme oldWidget) {
+  void didUpdateWidget(FullScreenBackgroundImage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.backgroundImage.transform != oldWidget.backgroundImage.transform ||
         widget.viewport != oldWidget.viewport) {
@@ -130,7 +129,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
             ? BoxFit.fitWidth
             : BoxFit.fitHeight;
 
-    final imageFitSize = FullScreenBackgroundImageTheme.imageFitSize(
+    final imageFitSize = FullScreenBackgroundImage.imageFitSize(
       boxFit,
       Size(widget.backgroundImage.width, widget.backgroundImage.height),
       widget.viewport,
@@ -142,55 +141,48 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
       widget.backgroundImage.meanLuminance,
     );
 
-    return Theme(
-      data:
-          makeBackgroundImageTheme(
-            baseTheme: baseTheme,
-            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
-          ).dark,
-      child: Stack(
-        children: [
-          InteractiveViewer(
-            transformationController: _controller,
-            constrained: false,
-            minScale: 1,
-            maxScale: 2,
-            panEnabled: false,
-            scaleEnabled: false,
-            child: Container(
-              width: switch (boxFit) {
-                BoxFit.fitHeight => imageFitSize.width,
-                _ => widget.viewport.width,
-              },
-              height: switch (boxFit) {
-                BoxFit.fitWidth => imageFitSize.height,
-                _ => widget.viewport.height,
-              },
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                image: DecorationImage(
-                  image: FileImage(
-                    File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
-                  ),
-                  fit: boxFit,
-                  colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
+    return Stack(
+      children: [
+        InteractiveViewer(
+          transformationController: _controller,
+          constrained: false,
+          minScale: 1,
+          maxScale: 2,
+          panEnabled: false,
+          scaleEnabled: false,
+          child: Container(
+            width: switch (boxFit) {
+              BoxFit.fitHeight => imageFitSize.width,
+              _ => widget.viewport.width,
+            },
+            height: switch (boxFit) {
+              BoxFit.fitWidth => imageFitSize.height,
+              _ => widget.viewport.height,
+            },
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              image: DecorationImage(
+                image: FileImage(
+                  File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
                 ),
+                fit: boxFit,
+                colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
               ),
-              child: ClipRect(
-                child: BackdropFilter(
-                  enabled: widget.backgroundImage.isBlurred,
-                  filter: ImageFilter.blur(
-                    sigmaX: kBackgroundImageBlurFactor,
-                    sigmaY: kBackgroundImageBlurFactor,
-                  ),
-                  child: const SizedBox.expand(),
+            ),
+            child: ClipRect(
+              child: BackdropFilter(
+                enabled: widget.backgroundImage.isBlurred,
+                filter: ImageFilter.blur(
+                  sigmaX: kBackgroundImageBlurFactor,
+                  sigmaY: kBackgroundImageBlurFactor,
                 ),
+                child: const SizedBox.expand(),
               ),
             ),
           ),
-          Positioned.fill(child: widget.child),
-        ],
-      ),
+        ),
+        Positioned.fill(child: widget.child),
+      ],
     );
   }
 }
@@ -203,18 +195,11 @@ class _FullScreenBackgroundColorTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data:
-          makeBackgroundImageTheme(
-            baseTheme: backgroundTheme.baseTheme,
-            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
-          ).dark,
-      child: Stack(
-        children: [
-          ColoredBox(color: backgroundTheme.color, child: const SizedBox.expand()),
-          Positioned.fill(child: child),
-        ],
-      ),
+    return Stack(
+      children: [
+        ColoredBox(color: backgroundTheme.color, child: const SizedBox.expand()),
+        Positioned.fill(child: child),
+      ],
     );
   }
 }

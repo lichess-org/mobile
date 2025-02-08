@@ -22,7 +22,8 @@ class SettingsListTile extends StatelessWidget {
   final Text settingsLabel;
 
   final String settingsValue;
-  final void Function() onTap;
+
+  final void Function()? onTap;
 
   /// The optional explanation of the settings.
   final String? explanation;

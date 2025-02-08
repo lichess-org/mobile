@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -437,8 +437,8 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
           return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
 
-        return FullScreenBackgroundTheme(
-          child: FullScreenBackgroundTheme(
+        return FullScreenBackground(
+          child: FullScreenBackground(
             child: CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
@@ -501,7 +501,7 @@ class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSetti
         return FutureBuilder(
           future: _pendingSetPieceNotation,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:
@@ -562,7 +562,7 @@ class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsS
         return FutureBuilder(
           future: _pendingSetShowRatings,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:
@@ -620,7 +620,7 @@ class _TakebackSettingsScreenState extends ConsumerState<TakebackSettingsScreen>
           return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
 
-        return FullScreenBackgroundTheme(
+        return FullScreenBackground(
           child: CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
@@ -682,7 +682,7 @@ class _AutoQueenSettingsScreenState extends ConsumerState<AutoQueenSettingsScree
         return FutureBuilder(
           future: _pendingSetAutoQueen,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:
@@ -743,7 +743,7 @@ class _AutoThreefoldSettingsScreenState extends ConsumerState<AutoThreefoldSetti
         return FutureBuilder(
           future: _pendingSetAutoThreefold,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:
@@ -804,7 +804,7 @@ class _MoretimeSettingsScreenState extends ConsumerState<MoretimeSettingsScreen>
         return FutureBuilder(
           future: _pendingSetMoretime,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:
@@ -864,7 +864,7 @@ class _ChallengeSettingsScreenState extends ConsumerState<_ChallengeSettingsScre
         return FutureBuilder(
           future: _pendingSetChallenge,
           builder: (context, snapshot) {
-            return FullScreenBackgroundTheme(
+            return FullScreenBackground(
               child: CupertinoPageScaffold(
                 navigationBar: CupertinoNavigationBar(
                   trailing:

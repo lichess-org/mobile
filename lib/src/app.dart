@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -151,7 +151,7 @@ class _AppState extends ConsumerState<Application> {
                 child: Material(color: Colors.transparent, child: child),
               )
               : null,
-      home: const FullScreenBackgroundTheme(child: BottomNavScaffold()),
+      home: const FullScreenBackground(child: BottomNavScaffold()),
       navigatorObservers: [rootNavPageRouteObserver],
     );
   }
