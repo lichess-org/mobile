@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -156,7 +155,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
       ],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -173,7 +172,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
       children: [GameResult(game: game), const SizedBox(height: 16.0), PlayerSummary(game: game)],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -219,7 +218,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
       ],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -319,18 +318,19 @@ class GameResult extends StatelessWidget {
   }
 }
 
-Widget _adaptiveDialog(BuildContext context, Widget content) {
-  final platform = Theme.of(context).platform;
-  final screenWidth = MediaQuery.of(context).size.width;
-  final paddedContent = Padding(
-    padding: platform == TargetPlatform.iOS ? EdgeInsets.zero : const EdgeInsets.all(16.0),
-    child: content,
-  );
-  final sizedContent = SizedBox(
-    width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-    child: paddedContent,
-  );
-  return platform == TargetPlatform.iOS
-      ? CupertinoAlertDialog(content: paddedContent)
-      : Dialog(child: sizedContent);
+class _ResultDialog extends StatelessWidget {
+  const _ResultDialog({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
+    final sizedContent = SizedBox(
+      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+      child: paddedContent,
+    );
+    return Dialog(child: sizedContent);
+  }
 }
