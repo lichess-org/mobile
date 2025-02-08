@@ -1,7 +1,5 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -125,42 +123,36 @@ class _AppState extends ConsumerState<Application> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: FlexColorScheme.themedSystemNavigationBar(
-        context,
-        systemNavBarStyle: FlexSystemNavBarStyle.transparent,
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: kSupportedLocales,
+      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      locale: generalPrefs.locale,
+      theme: themeLight.copyWith(
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
       ),
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: kSupportedLocales,
-        onGenerateTitle: (BuildContext context) => 'lichess.org',
-        locale: generalPrefs.locale,
-        theme: themeLight.copyWith(
-          navigationBarTheme: NavigationBarTheme.of(
-            context,
-          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-        ),
-        darkTheme: themeDark.copyWith(
-          navigationBarTheme: NavigationBarTheme.of(
-            context,
-          ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-          extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
-        ),
-        themeMode: switch (generalPrefs.themeMode) {
-          BackgroundThemeMode.light => ThemeMode.light,
-          BackgroundThemeMode.dark => ThemeMode.dark,
-          BackgroundThemeMode.system => ThemeMode.system,
-        },
-        builder:
-            isIOS
-                ? (context, child) => IconTheme.merge(
-                  data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
-                  child: Material(color: Colors.transparent, child: child),
-                )
-                : null,
-        home: const FullScreenBackgroundTheme(child: BottomNavScaffold()),
-        navigatorObservers: [rootNavPageRouteObserver],
+      darkTheme: themeDark.copyWith(
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
       ),
+      themeMode: switch (generalPrefs.themeMode) {
+        BackgroundThemeMode.light => ThemeMode.light,
+        BackgroundThemeMode.dark => ThemeMode.dark,
+        BackgroundThemeMode.system => ThemeMode.system,
+      },
+      builder:
+          isIOS
+              ? (context, child) => IconTheme.merge(
+                data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                child: Material(color: Colors.transparent, child: child),
+              )
+              : null,
+      home: const FullScreenBackgroundTheme(child: BottomNavScaffold()),
+      navigatorObservers: [rootNavPageRouteObserver],
     );
   }
 }

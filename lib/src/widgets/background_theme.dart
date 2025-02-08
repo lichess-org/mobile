@@ -12,21 +12,16 @@ const kBackgroundImageBlurFactor = 8.0;
 
 /// Applies the configured theme to the child widget.
 ///
-/// Tries first to apply the theme provided ar argument, and then from the stored settings.
-///
 /// The background can be a color or an image. If an image is provided, it will be used instead of
 /// the color, and the color will be ignored.
 ///
 /// Since the background image is always full screen, this widget should be used to wrap only [Scaffold]
 /// or [CupertinoPageScaffold] widgets.
 class FullScreenBackgroundTheme extends ConsumerWidget {
-  const FullScreenBackgroundTheme({required this.child, this.backgroundTheme, super.key});
+  const FullScreenBackgroundTheme({required this.child, super.key});
 
   /// The child widget to apply the theme to.
   final Widget child;
-
-  /// The background theme to apply to the child. If null, the theme from the stored settings will be used.
-  final BoardBackgroundTheme? backgroundTheme;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,49 +29,21 @@ class FullScreenBackgroundTheme extends ConsumerWidget {
     final appDocumentsDirectory =
         ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
 
-    if (backgroundTheme == null && boardPrefs.backgroundImage == null) {
-      return child;
-    }
-
-    if (backgroundTheme != null) {
-      return _ColoredBackgroundTheme(
-        backgroundTheme: backgroundTheme!,
-        boardTheme: boardPrefs.boardTheme,
-        child: child,
-      );
-    } else if (boardPrefs.backgroundImage != null && appDocumentsDirectory != null) {
+    if (boardPrefs.backgroundImage != null && appDocumentsDirectory != null) {
       return FullScreenBackgroundImageTheme(
         backgroundImage: boardPrefs.backgroundImage!,
         viewport: MediaQuery.sizeOf(context),
         appDocumentsDirectory: appDocumentsDirectory,
         child: child,
       );
+    } else if (boardPrefs.backgroundTheme != null) {
+      return _FullScreenBackgroundColorTheme(
+        backgroundTheme: boardPrefs.backgroundTheme!,
+        child: child,
+      );
     } else {
       return child;
     }
-  }
-}
-
-class _ColoredBackgroundTheme extends StatelessWidget {
-  const _ColoredBackgroundTheme({
-    required this.backgroundTheme,
-    required this.boardTheme,
-    required this.child,
-  });
-
-  final Widget child;
-  final BoardTheme boardTheme;
-  final BoardBackgroundTheme backgroundTheme;
-
-  @override
-  Widget build(BuildContext context) {
-    final (:light, :dark) = makeColoredBackgroundTheme(
-      boardTheme,
-      backgroundTheme,
-      isIOS: Theme.of(context).platform == TargetPlatform.iOS,
-    );
-    final theme = Theme.of(context).brightness == Brightness.light ? light : dark;
-    return Theme(data: theme, child: child);
   }
 }
 
@@ -200,6 +167,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
                 _ => widget.viewport.height,
               },
               decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
                 image: DecorationImage(
                   image: FileImage(
                     File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
@@ -221,6 +189,30 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImageThe
             ),
           ),
           Positioned.fill(child: widget.child),
+        ],
+      ),
+    );
+  }
+}
+
+class _FullScreenBackgroundColorTheme extends StatelessWidget {
+  const _FullScreenBackgroundColorTheme({required this.backgroundTheme, required this.child});
+
+  final BoardBackgroundTheme backgroundTheme;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data:
+          makeBackgroundImageTheme(
+            baseTheme: backgroundTheme.baseTheme,
+            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
+          ).dark,
+      child: Stack(
+        children: [
+          ColoredBox(color: backgroundTheme.color, child: const SizedBox.expand()),
+          Positioned.fill(child: child),
         ],
       ),
     );

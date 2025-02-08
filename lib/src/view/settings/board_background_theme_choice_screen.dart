@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +47,6 @@ class _Body extends ConsumerWidget {
     final appDocumentsDirectory =
         ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final brightness = Theme.of(context).brightness;
 
     final viewport = MediaQuery.sizeOf(context);
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
@@ -131,7 +129,7 @@ class _Body extends ConsumerWidget {
             ],
           ),
         ListSection(
-          header: const SettingsSectionTitle('Color presets'),
+          header: const SettingsSectionTitle('Presets'),
           backgroundColor: ColorScheme.of(context).surfaceContainerLowest,
           children: [
             GridView.builder(
@@ -147,45 +145,31 @@ class _Body extends ConsumerWidget {
               ),
               itemBuilder: (context, index) {
                 final t = colorChoices[index];
-                final fsd = t.scheme.data;
-
-                final theme =
-                    brightness == Brightness.light
-                        ? FlexThemeData.light(
-                          colors: fsd.light,
-                          surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-                          blendLevel: t.lightBlend,
-                        )
-                        : FlexThemeData.dark(
-                          colors: fsd.dark,
-                          surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-                          blendLevel: t.darkBlend,
-                        );
 
                 return GestureDetector(
                   onTap:
                       () => Navigator.of(context, rootNavigator: true)
                           .push(
-                            MaterialPageRoute<double?>(
+                            MaterialPageRoute<bool?>(
                               builder:
                                   (_) => ConfirmColorBackgroundScreen(
                                     boardPrefs: boardPrefs,
-                                    initialIndex: index,
+                                    color: t.color,
                                   ),
                               fullscreenDialog: true,
                             ),
                           )
                           .then((value) {
                             if (context.mounted) {
-                              if (value != null) {
+                              if (value == true) {
                                 ref
                                     .read(boardPreferencesProvider.notifier)
-                                    .setBackground(backgroundTheme: colorChoices[value.toInt()]);
+                                    .setBackground(backgroundTheme: t);
                                 Navigator.pop(context);
                               }
                             }
                           }),
-                  child: SizedBox.expand(child: ColoredBox(color: theme.scaffoldBackgroundColor)),
+                  child: SizedBox.expand(child: ColoredBox(color: t.color)),
                 );
               },
               itemCount: colorChoices.length,
@@ -197,99 +181,70 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class ConfirmColorBackgroundScreen extends StatefulWidget {
-  const ConfirmColorBackgroundScreen({
-    required this.initialIndex,
-    required this.boardPrefs,
-    super.key,
-  });
+class ConfirmColorBackgroundScreen extends StatelessWidget {
+  const ConfirmColorBackgroundScreen({required this.color, required this.boardPrefs, super.key});
 
-  final int initialIndex;
+  final Color color;
   final BoardPrefs boardPrefs;
 
   @override
-  State<ConfirmColorBackgroundScreen> createState() => _ConfirmBackgroundScreenState();
-}
-
-class _ConfirmBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
-  late PageController _controller;
-
-  @override
-  void initState() {
-    _controller = PageController(initialPage: widget.initialIndex);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final orientation =
-              constraints.maxWidth > constraints.maxHeight
-                  ? Orientation.landscape
-                  : Orientation.portrait;
-          final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
-          return Stack(
-            children: [
-              PageView.builder(
-                controller: _controller,
-                itemBuilder: (context, index) {
-                  final backgroundTheme = colorChoices[index];
-                  return FullScreenBackgroundTheme(
-                    backgroundTheme: backgroundTheme,
-                    child: const Scaffold(body: SizedBox.expand()),
-                  );
-                },
-                itemCount: colorChoices.length,
-              ),
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: Align(
-                    alignment:
-                        orientation == Orientation.portrait
-                            ? Alignment.center
-                            : Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: orientation == Orientation.portrait ? 0 : 16.0,
-                      ),
-                      child: Chessboard.fixed(
-                        size:
-                            orientation == Orientation.portrait
-                                ? constraints.maxWidth
-                                : constraints.maxHeight - landscapeBoardPadding * 2,
-                        fen: kInitialFEN,
-                        orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(),
+    return Theme(
+      data:
+          makeBackgroundImageTheme(
+            baseTheme: BoardBackgroundImage.getTheme(color),
+            isIOS: Theme.of(context).platform == TargetPlatform.iOS,
+          ).dark,
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final orientation =
+                constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
+            final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+            return Stack(
+              children: [
+                ColoredBox(color: color, child: const SizedBox.expand()),
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: Align(
+                      alignment:
+                          orientation == Orientation.portrait
+                              ? Alignment.center
+                              : Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: orientation == Orientation.portrait ? 0 : 16.0,
+                        ),
+                        child: Chessboard.fixed(
+                          size:
+                              orientation == Orientation.portrait
+                                  ? constraints.maxWidth
+                                  : constraints.maxHeight - landscapeBoardPadding * 2,
+                          fen: kInitialFEN,
+                          orientation: Side.white,
+                          settings: boardPrefs.toBoardSettings(),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: MediaQuery.paddingOf(context).bottom + 16.0,
-                left: orientation == Orientation.portrait ? 0 : null,
-                right: 0,
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
-                ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
+        persistentFooterButtons: [
+          AdaptiveTextButton(
+            child: Text(context.l10n.cancel),
+            onPressed: () => Navigator.pop(context, null),
+          ),
+          AdaptiveTextButton(
+            child: Text(context.l10n.accept),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
       ),
-      persistentFooterButtons: [
-        AdaptiveTextButton(
-          child: Text(context.l10n.cancel),
-          onPressed: () => Navigator.pop(context, null),
-        ),
-        AdaptiveTextButton(
-          child: Text(context.l10n.accept),
-          onPressed: () => Navigator.pop(context, _controller.page),
-        ),
-      ],
     );
   }
 }

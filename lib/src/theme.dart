@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class ApplicationTheme extends _$ApplicationTheme {
   @override
   ({ThemeData light, ThemeData dark}) build() {
@@ -26,9 +25,8 @@ class ApplicationTheme extends _$ApplicationTheme {
         isIOS: isIOS,
       );
     } else {
-      return makeColoredBackgroundTheme(
-        boardPrefs.boardTheme,
-        boardPrefs.backgroundTheme!,
+      return makeBackgroundImageTheme(
+        baseTheme: boardPrefs.backgroundTheme!.baseTheme,
         isIOS: isIOS,
       );
     }
@@ -63,7 +61,7 @@ class ApplicationTheme extends _$ApplicationTheme {
       primaryContrastingColor: themeLight.colorScheme.onPrimary,
       brightness: Brightness.light,
       scaffoldBackgroundColor: darken(themeLight.scaffoldBackgroundColor, 0.05),
-      barBackgroundColor: themeLight.colorScheme.surface.withValues(alpha: 0.8),
+      barBackgroundColor: themeLight.colorScheme.surface.withValues(alpha: 0.9),
       textTheme: _cupertinoTextTheme(themeLight.colorScheme),
     );
 
@@ -73,7 +71,7 @@ class ApplicationTheme extends _$ApplicationTheme {
       primaryContrastingColor: themeDark.colorScheme.onPrimary,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
-      barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.8),
+      barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
       textTheme: _cupertinoTextTheme(themeDark.colorScheme),
     );
 
@@ -98,35 +96,6 @@ class ApplicationTheme extends _$ApplicationTheme {
   }
 }
 
-/// Create a colored background theme based on the provided [BoardTheme] and [BoardBackgroundTheme].
-({ThemeData light, ThemeData dark}) makeColoredBackgroundTheme(
-  BoardTheme boardTheme,
-  BoardBackgroundTheme backgroundTheme, {
-  required bool isIOS,
-}) {
-  final flexScheme = backgroundTheme.scheme.data;
-  final lightTheme = FlexThemeData.light(
-    colors: flexScheme.light,
-    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-    surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-    appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-    blendLevel: backgroundTheme.lightBlend,
-  );
-  final darkTheme = FlexThemeData.dark(
-    colors: flexScheme.dark,
-    surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
-    blendLevel: backgroundTheme.darkBlend,
-    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
-    appBarStyle: isIOS ? null : FlexAppBarStyle.scaffoldBackground,
-  );
-
-  return (
-    light: _makeBackgroundTheme(theme: lightTheme, brightness: Brightness.light, isIOS: isIOS),
-    dark: _makeBackgroundTheme(theme: darkTheme, brightness: Brightness.dark, isIOS: isIOS),
-  );
-}
-
-/// Create a background theme based on the provided [ThemeData] base theme.
 ({ThemeData light, ThemeData dark}) makeBackgroundImageTheme({
   required ThemeData baseTheme,
   required bool isIOS,
@@ -140,29 +109,11 @@ class ApplicationTheme extends _$ApplicationTheme {
   return (light: theme, dark: theme);
 }
 
-CupertinoTextThemeData _cupertinoTextTheme(ColorScheme colors) =>
-    const CupertinoThemeData().textTheme.copyWith(
-      primaryColor: colors.primary,
-      textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(color: colors.onSurface),
-      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
-        color: colors.onSurface,
-      ),
-      navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
-        color: colors.onSurface,
-      ),
-    );
-
-ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => ListTileThemeData(
-  titleTextStyle: cupertinoTheme.textTheme.textStyle,
-  subtitleTextStyle: cupertinoTheme.textTheme.textStyle,
-  leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle,
-);
-
 ThemeData _makeBackgroundTheme({
   required ThemeData theme,
-  required Brightness brightness,
   required bool isIOS,
-  bool transparentScaffold = false,
+  Brightness brightness = Brightness.dark,
+  bool transparentScaffold = true,
 }) {
   final cupertinoTheme = _makeCupertinoBackgroundTheme(
     theme,
@@ -208,7 +159,7 @@ ThemeData _makeBackgroundTheme({
     appBarTheme:
         transparentScaffold
             ? theme.appBarTheme.copyWith(
-              backgroundColor: theme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
+              backgroundColor: theme.colorScheme.surfaceContainerLowest.withValues(alpha: 0.5),
             )
             : null,
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -221,6 +172,24 @@ ThemeData _makeBackgroundTheme({
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
   );
 }
+
+CupertinoTextThemeData _cupertinoTextTheme(ColorScheme colors) =>
+    const CupertinoThemeData().textTheme.copyWith(
+      primaryColor: colors.primary,
+      textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(color: colors.onSurface),
+      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
+        color: colors.onSurface,
+      ),
+      navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
+        color: colors.onSurface,
+      ),
+    );
+
+ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => ListTileThemeData(
+  titleTextStyle: cupertinoTheme.textTheme.textStyle,
+  subtitleTextStyle: cupertinoTheme.textTheme.textStyle,
+  leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle,
+);
 
 CupertinoThemeData _makeCupertinoBackgroundTheme(
   ThemeData theme, {
@@ -238,7 +207,7 @@ CupertinoThemeData _makeCupertinoBackgroundTheme(
       alpha: transparentScaffold ? 0 : 1,
     ),
     barBackgroundColor: theme.colorScheme.surface.withValues(
-      alpha: transparentScaffold ? 0.5 : 0.8,
+      alpha: transparentScaffold ? 0.5 : 0.9,
     ),
     applyThemeToAll: true,
   );

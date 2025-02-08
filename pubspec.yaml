@@ -31,7 +31,6 @@ dependencies:
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
   fl_chart: ^0.70.0
-  flex_color_scheme: ^8.1.0
   flutter:
     sdk: flutter
   flutter_appauth: ^8.0.0+1

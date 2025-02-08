@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -368,26 +367,26 @@ String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
 };
 
 enum BoardBackgroundTheme {
-  blue(30, 34, FlexScheme.blue, 'Blue'),
-  indigo(30, 34, FlexScheme.indigo, 'indigo'),
-  green(30, 34, FlexScheme.jungle, 'Green'),
-  brown(30, 34, FlexScheme.purpleBrown, 'Brown'),
-  gold(30, 34, FlexScheme.gold, 'Gold'),
-  red(34, 34, FlexScheme.redWine, 'Red'),
-  purple(30, 34, FlexScheme.purpleM3, 'Purple'),
-  teal(30, 34, FlexScheme.tealM3, 'Teal'),
-  lime(30, 34, FlexScheme.limeM3, 'Lime'),
-  mango(30, 34, FlexScheme.mango, 'Mango'),
-  sepia(30, 34, FlexScheme.sepia, 'Sepia');
+  blue(Color.fromARGB(255, 58, 81, 100), 'Blue'),
+  indigo(Color.fromARGB(255, 49, 54, 82), 'indigo'),
+  green(Color.fromARGB(255, 32, 64, 42), 'Green'),
+  brown(Color.fromARGB(255, 67, 52, 54), 'Brown'),
+  gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
+  red(Color.fromARGB(255, 92, 42, 50), 'Red'),
+  purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),
+  teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
+  lime(Color.fromARGB(255, 77, 84, 40), 'Lime'),
+  sepia(Color.fromARGB(255, 97, 93, 87), 'Sepia');
 
-  final int lightBlend;
-  final int darkBlend;
-  final FlexScheme scheme;
+  final Color color;
   final String _label;
 
-  const BoardBackgroundTheme(this.lightBlend, this.darkBlend, this.scheme, this._label);
+  const BoardBackgroundTheme(this.color, this._label);
 
   String label(AppLocalizations l10n) => _label;
+
+  /// The base theme for the background color.
+  ThemeData get baseTheme => BoardBackgroundImage.getTheme(color);
 }
 
 @freezed
