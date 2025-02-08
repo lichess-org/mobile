@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -77,27 +78,29 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    return PlatformWidget(
-      androidBuilder:
-          (context) => Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 80, // Custom height to fit the search bar
-              title: searchBar,
-            ),
-            body: body,
-          ),
-      iosBuilder:
-          (context) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              automaticallyImplyLeading: false,
-              middle: SizedBox(height: 36.0, child: searchBar),
-              trailing: NoPaddingTextButton(
-                child: Text(context.l10n.close),
-                onPressed: () => Navigator.pop(context),
+    return FullScreenBackgroundTheme(
+      child: PlatformWidget(
+        androidBuilder:
+            (context) => Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 80, // Custom height to fit the search bar
+                title: searchBar,
               ),
+              body: body,
             ),
-            child: body,
-          ),
+        iosBuilder:
+            (context) => CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                automaticallyImplyLeading: false,
+                middle: SizedBox(height: 36.0, child: searchBar),
+                trailing: NoPaddingTextButton(
+                  child: Text(context.l10n.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              child: body,
+            ),
+      ),
     );
   }
 }

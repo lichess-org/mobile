@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -46,18 +47,22 @@ class BroadcastListScreen extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
     );
-    return PlatformWidget(
-      androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
-      iosBuilder:
-          (_) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-              automaticBackgroundVisibility: false,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-              border: null,
+    return FullScreenBackgroundTheme(
+      child: PlatformWidget(
+        androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
+        iosBuilder:
+            (_) => CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: title,
+                automaticBackgroundVisibility: false,
+                backgroundColor: CupertinoTheme.of(
+                  context,
+                ).barBackgroundColor.withValues(alpha: 0.0),
+                border: null,
+              ),
+              child: const _Body(),
             ),
-            child: const _Body(),
-          ),
+      ),
     );
   }
 }

@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
@@ -19,18 +19,10 @@ class BoardSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.preferencesGameBehavior)),
+    return PlatformThemedScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.preferencesGameBehavior)),
       body: const _Body(),
     );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return const CupertinoPageScaffold(navigationBar: CupertinoNavigationBar(), child: _Body());
   }
 }
 

@@ -5,6 +5,65 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
 
+/// A screen with a navigation bar and a body that adapts to the platform.
+///
+/// It is also aware of the configured [FullScreenBackgroundTheme].
+///
+/// On Android, this is a [Scaffold] with an [AppBar],
+/// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
+///
+/// See [PlatformAppBar] for an app bar that adapts to the platform and needs to be passed to this widget.
+class PlatformThemedScaffold extends StatelessWidget {
+  const PlatformThemedScaffold({
+    super.key,
+    this.appBar,
+    required this.body,
+    this.resizeToAvoidBottomInset = true,
+    this.backgroundColor,
+  });
+
+  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
+  ///
+  /// Usually an instance of [PlatformAppBar].
+  final Widget? appBar;
+
+  /// The main content of the screen, displayed below the navigation bar.
+  final Widget body;
+
+  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
+  final bool resizeToAvoidBottomInset;
+
+  final Color? backgroundColor;
+
+  Widget _androidBuilder(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      backgroundColor: backgroundColor,
+      appBar:
+          appBar != null
+              ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
+              : null,
+      body: body,
+    );
+  }
+
+  Widget _iosBuilder(BuildContext context) {
+    return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
+      backgroundColor: backgroundColor,
+      child: body,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FullScreenBackgroundTheme(
+      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
+    );
+  }
+}
+
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
 ///
 /// Intended to be passed to [PlatformThemedScaffold].
@@ -101,64 +160,5 @@ class _CupertinoNavBarWrapper extends StatelessWidget implements ObstructingPref
   bool shouldFullyObstruct(BuildContext context) {
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     return backgroundColor.a == 0xFF;
-  }
-}
-
-/// A screen with a navigation bar and a body that adapts to the platform.
-///
-/// It is also aware of the configured [FullScreenBackgroundTheme].
-///
-/// On Android, this is a [Scaffold] with an [AppBar],
-/// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
-///
-/// See [PlatformAppBar] for an app bar that adapts to the platform and needs to be passed to this widget.
-class PlatformThemedScaffold extends StatelessWidget {
-  const PlatformThemedScaffold({
-    super.key,
-    this.appBar,
-    required this.body,
-    this.resizeToAvoidBottomInset = true,
-    this.backgroundColor,
-  });
-
-  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
-  ///
-  /// Usually an instance of [PlatformAppBar].
-  final Widget? appBar;
-
-  /// The main content of the screen, displayed below the navigation bar.
-  final Widget body;
-
-  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
-  final bool resizeToAvoidBottomInset;
-
-  final Color? backgroundColor;
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      backgroundColor: backgroundColor,
-      appBar:
-          appBar != null
-              ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
-              : null,
-      body: body,
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
-      backgroundColor: backgroundColor,
-      child: body,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(
-      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
-    );
   }
 }

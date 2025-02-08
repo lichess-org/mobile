@@ -5,26 +5,23 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BoardChoiceScreen extends StatelessWidget {
   const BoardChoiceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.board)), body: _Body());
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
+    return PlatformThemedScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.board)),
+      body: const _Body(),
+    );
   }
 }
 
 class _Body extends ConsumerWidget {
+  const _Body();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));

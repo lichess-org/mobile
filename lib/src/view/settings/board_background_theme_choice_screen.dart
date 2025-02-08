@@ -26,7 +26,9 @@ class BoardBackgroundThemeChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
+    return FullScreenBackgroundTheme(
+      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
+    );
   }
 
   Widget _androidBuilder(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class OngoingGamesScreen extends ConsumerWidget {
@@ -17,19 +17,11 @@ class OngoingGamesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
-  Widget _buildIos(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
-  }
-
-  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
-    return Scaffold(
+    return PlatformThemedScaffold(
       appBar: ongoingGames.maybeWhen(
-        data: (data) => AppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
-        orElse: () => AppBar(title: const SizedBox.shrink()),
+        data: (data) => PlatformAppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
+        orElse: () => const PlatformAppBar(title: SizedBox.shrink()),
       ),
       body: _Body(),
     );

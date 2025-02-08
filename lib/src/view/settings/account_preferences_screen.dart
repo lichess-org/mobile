@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -436,35 +437,39 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
           return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
 
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
-          ),
-          child: ListView(
-            children: [
-              ChoicePicker(
-                choices: Zen.values,
-                selectedItem: data.zenMode,
-                titleBuilder: (t) => Text(t.label(context)),
-                onSelectedItemChanged:
-                    isLoading
-                        ? null
-                        : (Zen? v) async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          try {
-                            await ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setZen(v ?? data.zenMode);
-                          } finally {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        },
+        return FullScreenBackgroundTheme(
+          child: FullScreenBackgroundTheme(
+            child: CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
               ),
-            ],
+              child: ListView(
+                children: [
+                  ChoicePicker(
+                    choices: Zen.values,
+                    selectedItem: data.zenMode,
+                    titleBuilder: (t) => Text(t.label(context)),
+                    onSelectedItemChanged:
+                        isLoading
+                            ? null
+                            : (Zen? v) async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              try {
+                                await ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setZen(v ?? data.zenMode);
+                              } finally {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            },
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -496,32 +501,34 @@ class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSetti
         return FutureBuilder(
           future: _pendingSetPieceNotation,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: PieceNotation.values,
-                    selectedItem: data.pieceNotation,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (PieceNotation? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setPieceNotation(v ?? data.pieceNotation);
-                              setState(() {
-                                _pendingSetPieceNotation = future;
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: PieceNotation.values,
+                      selectedItem: data.pieceNotation,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (PieceNotation? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setPieceNotation(v ?? data.pieceNotation);
+                                setState(() {
+                                  _pendingSetPieceNotation = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -555,32 +562,34 @@ class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsS
         return FutureBuilder(
           future: _pendingSetShowRatings,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: ShowRatings.values,
-                    selectedItem: data.showRatings,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (ShowRatings? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setShowRatings(v ?? data.showRatings);
-                              setState(() {
-                                _pendingSetShowRatings = future;
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: ShowRatings.values,
+                      selectedItem: data.showRatings,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (ShowRatings? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setShowRatings(v ?? data.showRatings);
+                                setState(() {
+                                  _pendingSetShowRatings = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -611,35 +620,37 @@ class _TakebackSettingsScreenState extends ConsumerState<TakebackSettingsScreen>
           return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
 
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
-          ),
-          child: ListView(
-            children: [
-              ChoicePicker(
-                choices: Takeback.values,
-                selectedItem: data.takeback,
-                titleBuilder: (t) => Text(t.label(context)),
-                onSelectedItemChanged:
-                    isLoading
-                        ? null
-                        : (Takeback? v) async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          try {
-                            await ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setTakeback(v ?? data.takeback);
-                          } finally {
+        return FullScreenBackgroundTheme(
+          child: CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
+            ),
+            child: ListView(
+              children: [
+                ChoicePicker(
+                  choices: Takeback.values,
+                  selectedItem: data.takeback,
+                  titleBuilder: (t) => Text(t.label(context)),
+                  onSelectedItemChanged:
+                      isLoading
+                          ? null
+                          : (Takeback? v) async {
                             setState(() {
-                              isLoading = false;
+                              isLoading = true;
                             });
-                          }
-                        },
-              ),
-            ],
+                            try {
+                              await ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setTakeback(v ?? data.takeback);
+                            } finally {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          },
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -671,32 +682,34 @@ class _AutoQueenSettingsScreenState extends ConsumerState<AutoQueenSettingsScree
         return FutureBuilder(
           future: _pendingSetAutoQueen,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: AutoQueen.values,
-                    selectedItem: data.autoQueen,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (AutoQueen? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setAutoQueen(v ?? data.autoQueen);
-                              setState(() {
-                                _pendingSetAutoQueen = future;
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: AutoQueen.values,
+                      selectedItem: data.autoQueen,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (AutoQueen? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setAutoQueen(v ?? data.autoQueen);
+                                setState(() {
+                                  _pendingSetAutoQueen = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -730,32 +743,34 @@ class _AutoThreefoldSettingsScreenState extends ConsumerState<AutoThreefoldSetti
         return FutureBuilder(
           future: _pendingSetAutoThreefold,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: AutoThreefold.values,
-                    selectedItem: data.autoThreefold,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (AutoThreefold? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setAutoThreefold(v ?? data.autoThreefold);
-                              setState(() {
-                                _pendingSetAutoThreefold = future;
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: AutoThreefold.values,
+                      selectedItem: data.autoThreefold,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (AutoThreefold? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setAutoThreefold(v ?? data.autoThreefold);
+                                setState(() {
+                                  _pendingSetAutoThreefold = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -789,31 +804,33 @@ class _MoretimeSettingsScreenState extends ConsumerState<MoretimeSettingsScreen>
         return FutureBuilder(
           future: _pendingSetMoretime,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: Moretime.values,
-                    selectedItem: data.moretime,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (Moretime? v) {
-                              setState(() {
-                                _pendingSetMoretime = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setMoretime(v ?? data.moretime);
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: Moretime.values,
+                      selectedItem: data.moretime,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (Moretime? v) {
+                                setState(() {
+                                  _pendingSetMoretime = ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setMoretime(v ?? data.moretime);
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -847,32 +864,34 @@ class _ChallengeSettingsScreenState extends ConsumerState<_ChallengeSettingsScre
         return FutureBuilder(
           future: _pendingSetChallenge,
           builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: Challenge.values,
-                    selectedItem: data.challenge,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (Challenge? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setChallenge(v ?? data.challenge);
-                              setState(() {
-                                _pendingSetChallenge = future;
-                              });
-                            },
-                  ),
-                ],
+            return FullScreenBackgroundTheme(
+              child: CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  trailing:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const CircularProgressIndicator.adaptive()
+                          : null,
+                ),
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: Challenge.values,
+                      selectedItem: data.challenge,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : (Challenge? v) {
+                                final future = ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setChallenge(v ?? data.challenge);
+                                setState(() {
+                                  _pendingSetChallenge = future;
+                                });
+                              },
+                    ),
+                  ],
+                ),
               ),
             );
           },
