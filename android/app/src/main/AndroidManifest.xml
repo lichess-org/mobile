@@ -65,8 +65,8 @@
                 <data android:pathPattern="/training/....." />
                 <data android:pathPattern="/study/........" />
 
-                <data android:pathPattern="/storm" />
-                <data android:pathPattern="/streak" />
+                <data android:path="/storm" />
+                <data android:path="/streak" />
 
                 <!-- Either game or challenge -->
                 <data android:pathPattern="/........" />
