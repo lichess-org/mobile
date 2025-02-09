@@ -70,7 +70,7 @@ class ApplicationTheme extends _$ApplicationTheme {
       primaryColor: themeDark.colorScheme.primary,
       primaryContrastingColor: themeDark.colorScheme.onPrimary,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: themeDark.scaffoldBackgroundColor,
+      scaffoldBackgroundColor: lighten(themeDark.scaffoldBackgroundColor, 0.04),
       barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
       textTheme: cupertinoTextTheme(themeDark.colorScheme),
     );

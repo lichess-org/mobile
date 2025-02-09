@@ -85,9 +85,6 @@ class _Body extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
-    final isForcedDarkMode =
-        generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null;
-
     final Widget? donateButton =
         userSession == null || userSession.user.isPatron != true
             ? PlatformListTile(
@@ -184,16 +181,16 @@ class _Body extends ConsumerWidget {
             },
           ),
           Opacity(
-            opacity: isForcedDarkMode ? 0.5 : 1.0,
+            opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
             child: SettingsListTile(
               icon: const Icon(Icons.brightness_medium_outlined),
               settingsLabel: Text(context.l10n.background),
               settingsValue: AppBackgroundModeScreen.themeTitle(
                 context,
-                isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
+                generalPrefs.isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
               ),
               onTap:
-                  isForcedDarkMode
+                  generalPrefs.isForcedDarkMode
                       ? null
                       : () {
                         if (Theme.of(context).platform == TargetPlatform.android) {

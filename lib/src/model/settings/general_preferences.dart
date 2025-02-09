@@ -66,6 +66,8 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
 
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
+  const GeneralPrefs._();
+
   const factory GeneralPrefs({
     @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
@@ -100,6 +102,8 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
     return _$GeneralPrefsFromJson(json);
   }
+
+  bool get isForcedDarkMode => backgroundTheme != null || backgroundImage != null;
 }
 
 enum AppThemeSeed {
@@ -138,9 +142,9 @@ enum SoundTheme {
 
 enum BackgroundTheme {
   blue(Color.fromARGB(255, 58, 81, 100), 'Blue'),
-  indigo(Color.fromARGB(255, 49, 54, 82), 'indigo'),
+  indigo(Color.fromARGB(255, 49, 54, 82), 'Indigo'),
   green(Color.fromARGB(255, 32, 64, 42), 'Green'),
-  brown(Color.fromARGB(255, 67, 52, 54), 'Brown'),
+  brown(Color.fromARGB(255, 67, 52, 54), 'Brown purple'),
   gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
   red(Color.fromARGB(255, 92, 42, 50), 'Red'),
   purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),

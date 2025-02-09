@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -21,7 +20,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
     final boardTheme = ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
-    final brightness = ref.watch(currentBrightnessProvider);
+    final brightness = Theme.of(context).brightness;
 
     final piece = state.pov == Side.white ? PieceKind.whiteKing : PieceKind.blackKing;
     final asset = pieceSet.assets[piece]!;

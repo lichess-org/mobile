@@ -140,11 +140,14 @@ class _AppState extends ConsumerState<Application> {
         ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
         extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
       ),
-      themeMode: switch (generalPrefs.themeMode) {
-        BackgroundThemeMode.light => ThemeMode.light,
-        BackgroundThemeMode.dark => ThemeMode.dark,
-        BackgroundThemeMode.system => ThemeMode.system,
-      },
+      themeMode:
+          generalPrefs.isForcedDarkMode
+              ? ThemeMode.dark
+              : switch (generalPrefs.themeMode) {
+                BackgroundThemeMode.light => ThemeMode.light,
+                BackgroundThemeMode.dark => ThemeMode.dark,
+                BackgroundThemeMode.system => ThemeMode.system,
+              },
       builder:
           isIOS
               ? (context, child) => IconTheme.merge(
