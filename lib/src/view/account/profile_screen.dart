@@ -21,6 +21,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const ProfileScreen(), title: context.l10n.profile);
+  }
+
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -44,7 +48,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           AppBarIconButton(
             icon: const Icon(Icons.edit),
             semanticsLabel: context.l10n.editProfile,
-            onPressed: () => pushPlatformRoute(context, builder: (_) => const EditProfileScreen()),
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
           ),
         ],
       ),
@@ -74,11 +78,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {
-                          pushPlatformRoute(
-                            context,
-                            title: context.l10n.nbBookmarks(user.count!.bookmark),
-                            builder:
-                                (context) => GameBookmarksScreen(nbBookmarks: user.count!.bookmark),
+                          Navigator.of(context).push(
+                            GameBookmarksScreen.buildRoute(
+                              context,
+                              nbBookmarks: user.count!.bookmark,
+                            ),
                           );
                         },
                       ),

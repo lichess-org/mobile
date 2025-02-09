@@ -18,7 +18,7 @@ class ListSection extends StatelessWidget {
     this.showDividerBetweenTiles = false,
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
-    this.cupertinoBackgroundColor,
+    this.backgroundColor,
     this.cupertinoBorderRadius,
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
@@ -35,7 +35,7 @@ class ListSection extends StatelessWidget {
        showDividerBetweenTiles = false,
        dense = false,
        cupertinoAdditionalDividerMargin = null,
-       cupertinoBackgroundColor = null,
+       backgroundColor = null,
        cupertinoBorderRadius = null,
        cupertinoClipBehavior = Clip.hardEdge,
        _isLoading = true;
@@ -66,7 +66,7 @@ class ListSection extends StatelessWidget {
   /// See [CupertinoListSection.additionalDividerMargin].
   final double? cupertinoAdditionalDividerMargin;
 
-  final Color? cupertinoBackgroundColor;
+  final Color? backgroundColor;
 
   final BorderRadiusGeometry? cupertinoBorderRadius;
 
@@ -83,6 +83,7 @@ class ListSection extends StatelessWidget {
             ? PlatformCard(
               clipBehavior: Clip.hardEdge,
               margin: margin ?? Styles.bodySectionPadding,
+              color: backgroundColor,
               child: Column(
                 children: [
                   if (header != null)
@@ -115,6 +116,7 @@ class ListSection extends StatelessWidget {
             : PlatformCard(
               clipBehavior: Clip.hardEdge,
               margin: margin ?? Styles.bodySectionPadding,
+              color: backgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -205,7 +207,7 @@ class ListSection extends StatelessWidget {
                     clipBehavior: cupertinoClipBehavior,
                     backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
                     decoration: BoxDecoration(
-                      color: cupertinoBackgroundColor ?? Styles.cardColor(context),
+                      color: backgroundColor ?? Styles.cardColor(context),
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -287,7 +289,7 @@ class PlatformListTile extends StatelessWidget {
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
-    this.cupertinoBackgroundColor,
+    this.backgroundColor,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
     super.key,
@@ -300,7 +302,7 @@ class PlatformListTile extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  final Color? cupertinoBackgroundColor;
+  final Color? backgroundColor;
 
   /// only on iOS
   final Widget? additionalInfo;
@@ -350,13 +352,13 @@ class PlatformListTile extends StatelessWidget {
           contentPadding: padding,
         );
       case TargetPlatform.iOS:
-        final activatedColor = colorScheme.surfaceContainerHighest;
+        final activatedColor = Styles.backgroundActivated(context);
         return IconTheme(
           data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor: selected == true ? activatedColor : cupertinoBackgroundColor,
+              backgroundColor: selected == true ? activatedColor : backgroundColor,
               backgroundColorActivated: activatedColor,
               leading: leading,
               title:

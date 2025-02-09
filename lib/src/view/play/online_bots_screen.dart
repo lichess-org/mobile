@@ -33,6 +33,10 @@ final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async 
 class OnlineBotsScreen extends StatelessWidget {
   const OnlineBotsScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const OnlineBotsScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -125,14 +129,10 @@ class _Body extends ConsumerWidget {
                     return;
                   }
                   final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.challengeChallengesX(bot.lightUser.name),
-                    builder:
-                        (context) =>
-                            isOddBot
-                                ? ChallengeOddBotsScreen(bot.lightUser)
-                                : CreateChallengeScreen(bot.lightUser),
+                  Navigator.of(context).push(
+                    isOddBot
+                        ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
+                        : CreateChallengeScreen.buildRoute(context, bot.lightUser),
                   );
                 },
                 onLongPress: () {
@@ -178,12 +178,11 @@ class _ContextMenu extends ConsumerWidget {
                   onOpen: (link) async {
                     if (link.originText.startsWith('@')) {
                       final username = link.originText.substring(1);
-                      pushPlatformRoute(
-                        context,
-                        builder:
-                            (ctx) => UserScreen(
-                              user: LightUser(id: UserId.fromUserName(username), name: username),
-                            ),
+                      Navigator.of(context).push(
+                        UserScreen.buildRoute(
+                          context,
+                          LightUser(id: UserId.fromUserName(username), name: username),
+                        ),
                       );
                     } else {
                       launchUrl(Uri.parse(link.url));
@@ -204,7 +203,7 @@ class _ContextMenu extends ConsumerWidget {
         const PlatformDivider(),
         BottomSheetContextMenuAction(
           onPressed: () {
-            pushPlatformRoute(context, builder: (context) => UserScreen(user: bot.lightUser));
+            Navigator.of(context).push(UserScreen.buildRoute(context, bot.lightUser));
           },
           icon: Icons.person,
           child: Text(context.l10n.profile),

@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -28,6 +28,14 @@ class OpeningExplorerScreen extends ConsumerWidget {
 
   final AnalysisOptions options;
 
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.openingExplorer,
+      screen: OpeningExplorerScreen(options: options),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
@@ -40,26 +48,24 @@ class OpeningExplorerScreen extends ConsumerWidget {
       _ => const CenterLoadingIndicator(),
     };
 
-    return FullScreenBackgroundTheme(
-      child: PlatformWidget(
-        androidBuilder:
-            (_) => Scaffold(
-              body: body,
-              appBar: AppBar(
-                title: Text(context.l10n.openingExplorer),
-                bottom: _MoveList(options: options),
-              ),
+    return PlatformWidget(
+      androidBuilder:
+          (_) => Scaffold(
+            body: body,
+            appBar: AppBar(
+              title: Text(context.l10n.openingExplorer),
+              bottom: _MoveList(options: options),
             ),
-        iosBuilder:
-            (_) => CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: Text(context.l10n.openingExplorer),
-                automaticBackgroundVisibility: false,
-                border: null,
-              ),
-              child: body,
+          ),
+      iosBuilder:
+          (_) => CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(context.l10n.openingExplorer),
+              automaticBackgroundVisibility: false,
+              border: null,
             ),
-      ),
+            child: body,
+          ),
     );
   }
 }

@@ -39,6 +39,14 @@ enum _ViewMode { create, challenges }
 class CreateCustomGameScreen extends StatelessWidget {
   const CreateCustomGameScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const CreateCustomGameScreen(),
+      title: context.l10n.custom,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -276,13 +284,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            pushPlatformRoute(
+            Navigator.of(
               context,
               rootNavigator: true,
-              builder: (BuildContext context) {
-                return GameScreen(initialGameId: gameFullId);
-              },
-            );
+            ).push(GameScreen.buildRoute(context, initialGameId: gameFullId));
           }
           widget.setViewMode(_ViewMode.create);
 
@@ -631,14 +636,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           timeControl == TimeControl.realTime
                               ? isValidTimeControl
                                   ? () {
-                                    pushPlatformRoute(
-                                      context,
-                                      rootNavigator: true,
-                                      builder: (BuildContext context) {
-                                        return GameScreen(
-                                          seek: GameSeek.custom(preferences, account),
-                                        );
-                                      },
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      GameScreen.buildRoute(
+                                        context,
+                                        seek: GameSeek.custom(preferences, account),
+                                      ),
                                     );
                                   }
                                   : null

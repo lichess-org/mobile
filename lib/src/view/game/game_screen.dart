@@ -51,11 +51,8 @@ class GameScreen extends ConsumerStatefulWidget {
          'Either a seek, a challenge or an initial game id must be provided.',
        );
 
-  // tweak
   final GameSeek? seek;
-
   final GameFullId? initialGameId;
-
   final ChallengeRequest? challenge;
 
   final String? loadingFen;
@@ -76,6 +73,32 @@ class GameScreen extends ConsumerStatefulWidget {
     } else {
       return _GameSource.lobby;
     }
+  }
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    GameSeek? seek,
+    GameFullId? initialGameId,
+    ChallengeRequest? challenge,
+    String? loadingFen,
+    Move? loadingLastMove,
+    Side? loadingOrientation,
+    DateTime? lastMoveAt,
+    (UserId?, GameFilterState)? gameListContext,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: GameScreen(
+        seek: seek,
+        initialGameId: initialGameId,
+        challenge: challenge,
+        loadingFen: loadingFen,
+        loadingLastMove: loadingLastMove,
+        loadingOrientation: loadingOrientation,
+        lastMoveAt: lastMoveAt,
+        gameListContext: gameListContext,
+      ),
+    );
   }
 
   @override
@@ -142,13 +165,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                           ref.read(provider.notifier).newOpponent();
                         } else {
                           final savedSetup = ref.read(gameSetupPreferencesProvider);
-                          pushReplacementPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder:
-                                (_) => GameScreen(
-                                  seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                                ),
+                          Navigator.of(context, rootNavigator: true).pushReplacement(
+                            GameScreen.buildRoute(
+                              context,
+                              seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                            ),
                           );
                         }
                       },
@@ -162,7 +183,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                               : ChallengeDeclineReason.generic.label(context.l10n),
                     )
                     : const LoadGameError('Could not create the game.');
-            return PlatformBoardThemeScaffold(
+            return PlatformScaffold(
               resizeToAvoidBottomInset: false,
               appBar: _GameAppBar(
                 id: gameId,
@@ -186,7 +207,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     )
                     : const StandaloneGameLoadingBoard();
 
-            return PlatformBoardThemeScaffold(
+            return PlatformScaffold(
               resizeToAvoidBottomInset: false,
               appBar: _GameAppBar(
                 seek: widget.seek,
@@ -212,7 +233,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
             final body = PopScope(child: message);
 
-            return PlatformBoardThemeScaffold(
+            return PlatformScaffold(
               appBar: _GameAppBar(
                 seek: widget.seek,
                 lastMoveAt: widget.lastMoveAt,

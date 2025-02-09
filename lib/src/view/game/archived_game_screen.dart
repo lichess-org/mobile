@@ -48,6 +48,26 @@ class ArchivedGameScreen extends ConsumerWidget {
   /// The context of the game list that opened this screen, if available.
   final (UserId?, GameFilterState)? gameListContext;
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    GameId? gameId,
+    LightArchivedGame? gameData,
+    Side orientation = Side.white,
+    int? initialCursor,
+    (UserId?, GameFilterState)? gameListContext,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: ArchivedGameScreen(
+        gameId: gameId,
+        gameData: gameData,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (gameData != null) {
@@ -174,7 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
-    return PlatformBoardThemeScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title:
             widget.gameData != null
@@ -408,16 +428,15 @@ class _BottomBar extends ConsumerWidget {
               gameCursor.hasValue
                   ? () {
                     final cursor = gameCursor.requireValue.$2;
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(
-                              orientation: orientation,
-                              gameId: gameData.id,
-                              initialMoveCursor: cursor,
-                            ),
-                          ),
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: orientation,
+                          gameId: gameData.id,
+                          initialMoveCursor: cursor,
+                        ),
+                      ),
                     );
                   }
                   : null,

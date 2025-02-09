@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/user/search_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -20,6 +21,14 @@ class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({this.onUserTap});
 
   final void Function(LightUser)? onUserTap;
+
+  static Route<dynamic> buildRoute(BuildContext context, {void Function(LightUser)? onUserTap}) {
+    return buildScreenRoute(
+      context,
+      screen: SearchScreen(onUserTap: onUserTap),
+      fullscreenDialog: true,
+    );
+  }
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();

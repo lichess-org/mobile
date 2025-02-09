@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
@@ -159,11 +158,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     right: 8.0,
                     child: FloatingActionButton.extended(
                       onPressed: () {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.play,
-                          builder: (_) => const PlayScreen(),
-                        );
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
                       },
                       icon: const Icon(Icons.add),
                       label: Text(context.l10n.play),
@@ -203,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     ? null
                     : FloatingActionButton.extended(
                       onPressed: () {
-                        pushPlatformRoute(context, builder: (_) => const PlayScreen());
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
                       },
                       icon: const Icon(Icons.add),
                       label: Text(context.l10n.play),
@@ -525,7 +520,7 @@ class _HelloWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: () {
           ref.invalidate(accountActivityProvider);
-          pushPlatformRoute(context, builder: (context) => const ProfileScreen());
+          Navigator.of(context).push(ProfileScreen.buildRoute(context));
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -585,20 +580,18 @@ class _OngoingGamesCarousel extends ConsumerWidget {
           list: data,
           onTap: (index) {
             final game = data[index];
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder:
-                  (_) => GameScreen(
-                    initialGameId: game.fullId,
-                    loadingFen: game.fen,
-                    loadingOrientation: game.orientation,
-                    loadingLastMove: game.lastMove,
-                  ),
+            Navigator.of(context, rootNavigator: true).push(
+              GameScreen.buildRoute(
+                context,
+                initialGameId: game.fullId,
+                loadingFen: game.fen,
+                loadingOrientation: game.orientation,
+                loadingLastMove: game.lastMove,
+              ),
             );
           },
           builder: (game) => _GamePreviewCarouselItem(game: game),
-          moreScreenBuilder: (_) => const OngoingGamesScreen(),
+          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
       },
@@ -625,10 +618,8 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
           list: data,
           onTap: (index) {
             final el = data[index];
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (el.$1, el.$2)),
+            Navigator.of(context, rootNavigator: true).push(
+              OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (el.$1, el.$2)),
             );
           },
           builder:
@@ -649,7 +640,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
                   secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
                 ),
               ),
-          moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
+          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
       },
@@ -663,13 +654,13 @@ class _GamesCarousel<T> extends StatefulWidget {
     required this.list,
     required this.builder,
     required this.onTap,
-    required this.moreScreenBuilder,
+    required this.moreScreenRouteBuilder,
     required this.maxGamesToShow,
   });
   final IList<T> list;
   final Widget Function(T data) builder;
   final void Function(int index)? onTap;
-  final Widget Function(BuildContext) moreScreenBuilder;
+  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
   final int maxGamesToShow;
 
   @override
@@ -725,11 +716,12 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
                   const SizedBox(width: 6.0),
                   NoPaddingTextButton(
                     onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.nbGamesInPlay(widget.list.length),
-                        builder: widget.moreScreenBuilder,
-                      );
+                      // pushPlatformRoute(
+                      //   context,
+                      //   title: context.l10n.nbGamesInPlay(widget.list.length),
+                      //   builder: widget.moreScreenRouteBuilder,
+                      // );
+                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
                     },
                     child: Text(context.l10n.more),
                   ),
@@ -930,7 +922,7 @@ class _OngoingGamesPreview extends ConsumerWidget {
           list: data,
           maxGamesToShow: maxGamesToShow,
           builder: (el) => OngoingGamePreview(game: el),
-          moreScreenBuilder: (_) => const OngoingGamesScreen(),
+          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
         );
       },
       orElse: () => const SizedBox.shrink(),
@@ -953,7 +945,7 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
           list: data,
           maxGamesToShow: maxGamesToShow,
           builder: (el) => OfflineCorrespondenceGamePreview(game: el.$2, lastModified: el.$1),
-          moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
+          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
         );
       },
       orElse: () => const SizedBox.shrink(),
@@ -965,12 +957,12 @@ class PreviewGameList<T> extends StatelessWidget {
   const PreviewGameList({
     required this.list,
     required this.builder,
-    required this.moreScreenBuilder,
+    required this.moreScreenRouteBuilder,
     required this.maxGamesToShow,
   });
   final IList<T> list;
   final Widget Function(T data) builder;
-  final Widget Function(BuildContext) moreScreenBuilder;
+  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
   final int maxGamesToShow;
 
   @override
@@ -999,11 +991,7 @@ class PreviewGameList<T> extends StatelessWidget {
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.nbGamesInPlay(list.length),
-                      builder: moreScreenBuilder,
-                    );
+                    Navigator.of(context).push(moreScreenRouteBuilder(context));
                   },
                   child: Text(context.l10n.more),
                 ),
@@ -1033,11 +1021,7 @@ class _PlayerScreenButton extends ConsumerWidget {
                 !connectivity.isOnline
                     ? null
                     : () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.players,
-                        builder: (_) => const PlayerScreen(),
-                      );
+                      Navigator.of(context).push(PlayerScreen.buildRoute(context));
                     },
           ),
       orElse:
@@ -1075,11 +1059,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
                     ? null
                     : () {
                       ref.invalidate(challengesProvider);
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesNotifyChallenge,
-                        builder: (_) => const ChallengeRequestsScreen(),
-                      );
+                      Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
                     },
             count: count ?? 0,
           ),

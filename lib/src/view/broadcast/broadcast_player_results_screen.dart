@@ -25,10 +25,28 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
 
   const BroadcastPlayerResultsScreen(
     this.tournamentId,
-    this.playerId,
+    this.playerId, {
+    required this.playerName,
     this.playerTitle,
-    this.playerName,
-  );
+  });
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastTournamentId tournamentId,
+    String playerId, {
+    String? playerTitle,
+    required String playerName,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastPlayerResultsScreen(
+        tournamentId,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,14 +207,13 @@ class _Body extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder:
-                      (context) => BroadcastGameScreen(
-                        tournamentId: tournamentId,
-                        roundId: playerResult.roundId,
-                        gameId: playerResult.gameId,
-                      ),
+                Navigator.of(context).push(
+                  BroadcastGameScreen.buildRoute(
+                    context,
+                    tournamentId: tournamentId,
+                    roundId: playerResult.roundId,
+                    gameId: playerResult.gameId,
+                  ),
                 );
               },
               child: ColoredBox(

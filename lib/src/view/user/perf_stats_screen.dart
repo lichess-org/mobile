@@ -47,6 +47,14 @@ class PerfStatsScreen extends StatelessWidget {
   final User user;
   final Perf perf;
 
+  static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.perfStatPerfStats(perf.title),
+      screen: PerfStatsScreen(user: user, perf: perf),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -104,12 +112,9 @@ class _Title extends StatelessWidget {
                         ],
                       ),
                   onPressed: (ctx) {
-                    pushReplacementPlatformRoute(
+                    Navigator.of(
                       context,
-                      builder: (ctx) {
-                        return PerfStatsScreen(user: user, perf: p);
-                      },
-                    );
+                    ).pushReplacement(PerfStatsScreen.buildRoute(context, user: user, perf: p));
                   },
                 );
               })
@@ -254,14 +259,13 @@ class _Body extends ConsumerWidget {
                 message: context.l10n.perfStatViewTheGames,
                 child: AdaptiveInkWell(
                   onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (context) => GameHistoryScreen(
-                            user: user.lightUser,
-                            isOnline: true,
-                            gameFilter: GameFilterState(perfs: ISet({perf})),
-                          ),
+                    Navigator.of(context).push(
+                      GameHistoryScreen.buildRoute(
+                        context,
+                        user: user.lightUser,
+                        isOnline: true,
+                        gameFilter: GameFilterState(perfs: ISet({perf})),
+                      ),
                     );
                   },
                   child: Padding(
@@ -621,14 +625,12 @@ class _GameListWidget extends ConsumerWidget {
               );
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder:
-                      (context) => ArchivedGameScreen(
-                        gameData: gameData,
-                        orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
-                      ),
+                Navigator.of(context, rootNavigator: true).push(
+                  ArchivedGameScreen.buildRoute(
+                    context,
+                    gameData: gameData,
+                    orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
+                  ),
                 );
               } else if (context.mounted && gameData != null) {
                 showPlatformSnackbar(context, 'This variant is not supported yet');

@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -29,6 +30,18 @@ class GameHistoryScreen extends ConsumerWidget {
   final LightUser? user;
   final bool isOnline;
   final GameFilterState gameFilter;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    LightUser? user,
+    bool isOnline = false,
+    GameFilterState gameFilter = const GameFilterState(),
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: GameHistoryScreen(user: user, isOnline: isOnline, gameFilter: gameFilter),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -11,26 +11,27 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
   const BoardSettingsScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.preferencesGameBehavior)),
-      body: const _Body(),
+  static Route<dynamic> buildRoute(BuildContext context, {bool fullscreenDialog = false}) {
+    return buildScreenRoute(
+      context,
+      fullscreenDialog: fullscreenDialog,
+      screen: const BoardSettingsScreen(),
+      title: context.l10n.preferencesGameBehavior,
     );
   }
 
-  Widget _iosBuilder(BuildContext context) {
-    return const CupertinoPageScaffold(navigationBar: CupertinoNavigationBar(), child: _Body());
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.preferencesGameBehavior)),
+      body: const _Body(),
+    );
   }
 }
 
@@ -67,11 +68,7 @@ class _Body extends ConsumerWidget {
                     },
                   );
                 } else {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.preferencesHowDoYouMovePieces,
-                    builder: (context) => const PieceShiftMethodSettingsScreen(),
-                  );
+                  Navigator.of(context).push(PieceShiftMethodSettingsScreen.buildRoute(context));
                 }
               },
             ),
@@ -103,11 +100,7 @@ class _Body extends ConsumerWidget {
                     },
                   );
                 } else {
-                  pushPlatformRoute(
-                    context,
-                    title: 'Dragged piece target',
-                    builder: (context) => const DragTargetKindSettingsScreen(),
-                  );
+                  Navigator.of(context).push(DragTargetKindSettingsScreen.buildRoute(context));
                 }
               },
             ),
@@ -169,11 +162,7 @@ class _Body extends ConsumerWidget {
                             .setClockPosition(value ?? ClockPosition.right),
                   );
                 } else {
-                  pushPlatformRoute(
-                    context,
-                    title: 'Clock position',
-                    builder: (context) => const BoardClockPositionScreen(),
-                  );
+                  Navigator.of(context).push(BoardClockPositionScreen.buildRoute(context));
                 }
               },
             ),
@@ -209,11 +198,7 @@ class _Body extends ConsumerWidget {
                             ),
                   );
                 } else {
-                  pushPlatformRoute(
-                    context,
-                    title: 'Material',
-                    builder: (context) => const MaterialDifferenceFormatScreen(),
-                  );
+                  Navigator.of(context).push(MaterialDifferenceFormatScreen.buildRoute(context));
                 }
               },
             ),
@@ -239,6 +224,14 @@ class _Body extends ConsumerWidget {
 
 class PieceShiftMethodSettingsScreen extends ConsumerWidget {
   const PieceShiftMethodSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const PieceShiftMethodSettingsScreen(),
+      title: context.l10n.preferencesHowDoYouMovePieces,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -274,6 +267,14 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
 class BoardClockPositionScreen extends ConsumerWidget {
   const BoardClockPositionScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const BoardClockPositionScreen(),
+      title: 'Clock position',
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final clockPosition = ref.watch(
@@ -302,6 +303,14 @@ class BoardClockPositionScreen extends ConsumerWidget {
 class MaterialDifferenceFormatScreen extends ConsumerWidget {
   const MaterialDifferenceFormatScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const MaterialDifferenceFormatScreen(),
+      title: 'Material',
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final materialDifferenceFormat = ref.watch(
@@ -328,6 +337,14 @@ class MaterialDifferenceFormatScreen extends ConsumerWidget {
 
 class DragTargetKindSettingsScreen extends ConsumerWidget {
   const DragTargetKindSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const DragTargetKindSettingsScreen(),
+      title: 'Dragged piece target',
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

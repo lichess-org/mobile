@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -84,11 +83,11 @@ class _SectionChoices extends ConsumerWidget {
                     onTap:
                         isOnline
                             ? () {
-                              pushPlatformRoute(
-                                context,
-                                rootNavigator: true,
-                                builder:
-                                    (_) => GameScreen(seek: GameSeek.fastPairing(choice, session)),
+                              Navigator.of(context, rootNavigator: true).push(
+                                GameScreen.buildRoute(
+                                  context,
+                                  seek: GameSeek.fastPairing(choice, session),
+                                ),
                               );
                             }
                             : null,
@@ -113,10 +112,7 @@ class _SectionChoices extends ConsumerWidget {
                 onTap:
                     isOnline
                         ? () {
-                          pushPlatformRoute(
-                            context,
-                            builder: (_) => const CreateCustomGameScreen(),
-                          );
+                          Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
                         }
                         : null,
               ),
@@ -142,17 +138,13 @@ class _ChoiceChip extends StatefulWidget {
 class _ChoiceChipState extends State<_ChoiceChip> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final bgColor =
-        theme.brightness == Brightness.light
-            ? theme.colorScheme.surfaceContainerLowest
-            : theme.colorScheme.surfaceContainerHighest;
+    final bgColor = Styles.cardColor(context);
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(
-          color: bgColor.withValues(alpha: 0.7),
+          color: bgColor.withValues(alpha: 0.8),
           borderRadius: const BorderRadius.all(Radius.circular(6.0)),
         ),
         child: AdaptiveInkWell(

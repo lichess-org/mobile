@@ -15,7 +15,7 @@ class StudyGamebook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ColorScheme.of(context).surface,
+      color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

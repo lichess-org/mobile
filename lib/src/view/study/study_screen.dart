@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -45,9 +44,13 @@ class StudyScreen extends StatelessWidget {
 
   final StudyId id;
 
+  static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
+    return buildScreenRoute(context, screen: StudyScreen(id: id));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(child: _StudyScreenLoader(id: id));
+    return _StudyScreenLoader(id: id);
   }
 }
 
@@ -221,7 +224,7 @@ class _StudyMenu extends ConsumerWidget {
           semanticsLabel: context.l10n.settingsSettings,
           child: Text(context.l10n.settingsSettings),
           onPressed: () {
-            pushPlatformRoute(context, screen: StudySettings(id));
+            Navigator.of(context).push(StudySettings.buildRoute(context, id));
           },
         ),
         MenuItemButton(

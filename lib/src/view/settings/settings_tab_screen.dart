@@ -15,13 +15,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart' show getCorePalette;
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -123,11 +122,7 @@ class _Body extends ConsumerWidget {
                       : null,
               onTap: () {
                 ref.invalidate(accountActivityProvider);
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.profile,
-                  builder: (context) => const ProfileScreen(),
-                );
+                Navigator.of(context).push(ProfileScreen.buildRoute(context));
               },
             ),
             PlatformListTile(
@@ -138,11 +133,7 @@ class _Body extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.preferencesPreferences,
-                  builder: (context) => const AccountPreferencesScreen(),
-                );
+                Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
               },
             ),
             if (authController.isLoading)
@@ -186,37 +177,39 @@ class _Body extends ConsumerWidget {
             settingsValue:
                 '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.sound,
-                builder: (context) => const SoundSettingsScreen(),
-              );
+              Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
             },
           ),
-          SettingsListTile(
-            icon: const Icon(Icons.brightness_medium_outlined),
-            settingsLabel: Text(context.l10n.background),
-            settingsValue: AppBackgroundModeScreen.themeTitle(context, generalPrefs.themeMode),
-            onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker(
-                  context,
-                  choices: BackgroundThemeMode.values,
-                  selectedItem: generalPrefs.themeMode,
-                  labelBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged:
-                      (BackgroundThemeMode? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                );
-              } else {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.background,
-                  builder: (context) => const AppBackgroundModeScreen(),
-                );
-              }
-            },
+          Opacity(
+            opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
+            child: SettingsListTile(
+              icon: const Icon(Icons.brightness_medium_outlined),
+              settingsLabel: Text(context.l10n.background),
+              settingsValue: AppBackgroundModeScreen.themeTitle(
+                context,
+                generalPrefs.isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
+              ),
+              onTap:
+                  generalPrefs.isForcedDarkMode
+                      ? null
+                      : () {
+                        if (Theme.of(context).platform == TargetPlatform.android) {
+                          showChoicePicker(
+                            context,
+                            choices: BackgroundThemeMode.values,
+                            selectedItem: generalPrefs.themeMode,
+                            labelBuilder:
+                                (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
+                            onSelectedItemChanged:
+                                (BackgroundThemeMode? value) => ref
+                                    .read(generalPreferencesProvider.notifier)
+                                    .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                          );
+                        } else {
+                          Navigator.of(context).push(AppBackgroundModeScreen.buildRoute(context));
+                        }
+                      },
+            ),
           ),
           PlatformListTile(
             leading: const Icon(Icons.palette_outlined),
@@ -226,11 +219,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.mobileTheme,
-                builder: (context) => const BoardThemeScreen(),
-              );
+              Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
             },
           ),
           PlatformListTile(
@@ -241,11 +230,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardSettingsScreen(),
-              );
+              Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
             },
           ),
           SettingsListTile(

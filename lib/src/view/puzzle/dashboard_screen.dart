@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -21,6 +22,14 @@ final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.puzzlePuzzleDashboard,
+      screen: const PuzzleDashboardScreen(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

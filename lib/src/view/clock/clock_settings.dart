@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
 const _iconSize = 38.0;
+const _kIconPadding = EdgeInsets.all(10.0);
 
 class ClockSettings extends ConsumerWidget {
   const ClockSettings({required this.orientation, super.key});
@@ -23,70 +24,83 @@ class ClockSettings extends ConsumerWidget {
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    return Padding(
-      padding:
-          orientation == Orientation.portrait
-              ? const EdgeInsets.symmetric(vertical: 10.0)
-              : const EdgeInsets.symmetric(horizontal: 10.0),
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: (orientation == Orientation.portrait ? Row.new : Column.new)(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const _PlayResumeButton(_iconSize),
-          IconButton(
-            tooltip: context.l10n.reset,
-            iconSize: _iconSize,
-            onPressed:
-                buttonsEnabled
-                    ? () {
-                      ref.read(clockToolControllerProvider.notifier).reset();
-                    }
-                    : null,
-            icon: const Icon(Icons.refresh),
+          const Expanded(child: _PlayResumeButton(_iconSize)),
+          Expanded(
+            child: IconButton(
+              padding: _kIconPadding,
+              tooltip: context.l10n.reset,
+              iconSize: _iconSize,
+              onPressed:
+                  buttonsEnabled
+                      ? () {
+                        ref.read(clockToolControllerProvider.notifier).reset();
+                      }
+                      : null,
+              icon: const Icon(Icons.refresh),
+            ),
           ),
-          IconButton(
-            tooltip: context.l10n.settingsSettings,
-            iconSize: _iconSize,
-            onPressed:
-                buttonsEnabled
-                    ? () {
-                      final double screenHeight = MediaQuery.sizeOf(context).height;
-                      showAdaptiveBottomSheet<void>(
-                        context: context,
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
-                        builder: (BuildContext context) {
-                          final options = ref.watch(
-                            clockToolControllerProvider.select((value) => value.options),
-                          );
-                          return TimeControlModal(
-                            excludeUltraBullet: true,
-                            value: TimeIncrement(
-                              options.whiteTime.inSeconds,
-                              options.whiteIncrement.inSeconds,
-                            ),
-                            onSelected: (choice) {
-                              ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
-                            },
-                          );
-                        },
-                      );
-                    }
-                    : null,
-            icon: const Icon(Icons.settings),
+          Expanded(
+            child: IconButton(
+              padding: _kIconPadding,
+              tooltip: context.l10n.settingsSettings,
+              iconSize: _iconSize,
+              onPressed:
+                  buttonsEnabled
+                      ? () {
+                        final double screenHeight = MediaQuery.sizeOf(context).height;
+                        showAdaptiveBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          showDragHandle: true,
+                          constraints: BoxConstraints(
+                            maxHeight: screenHeight - (screenHeight / 10),
+                          ),
+                          builder: (BuildContext context) {
+                            final options = ref.watch(
+                              clockToolControllerProvider.select((value) => value.options),
+                            );
+                            return TimeControlModal(
+                              excludeUltraBullet: true,
+                              value: TimeIncrement(
+                                options.whiteTime.inSeconds,
+                                options.whiteIncrement.inSeconds,
+                              ),
+                              onSelected: (choice) {
+                                ref
+                                    .read(clockToolControllerProvider.notifier)
+                                    .updateOptions(choice);
+                              },
+                            );
+                          },
+                        );
+                      }
+                      : null,
+              icon: const Icon(Icons.settings),
+            ),
           ),
-          IconButton(
-            iconSize: _iconSize,
-            // TODO: translate
-            tooltip: 'Toggle sound',
-            onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-            icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+          Expanded(
+            child: IconButton(
+              padding: _kIconPadding,
+              iconSize: _iconSize,
+              // TODO: translate
+              tooltip: 'Toggle sound',
+              onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+              icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+            ),
           ),
-          IconButton(
-            tooltip: context.l10n.close,
-            iconSize: _iconSize,
-            onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
-            icon: const Icon(Icons.home),
+          Expanded(
+            child: IconButton(
+              padding: _kIconPadding,
+              tooltip: context.l10n.close,
+              iconSize: _iconSize,
+              onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
+              icon: const Icon(Icons.home),
+            ),
           ),
         ],
       ),
@@ -104,29 +118,36 @@ class _PlayResumeButton extends ConsumerWidget {
     final controller = ref.read(clockToolControllerProvider.notifier);
     final state = ref.watch(clockToolControllerProvider);
 
-    if (!state.started) {
-      return IconButton(
-        tooltip: context.l10n.play,
-        iconSize: iconSize,
-        onPressed: () => controller.start(),
-        icon: const Icon(Icons.play_arrow),
-      );
-    }
-
-    if (state.paused) {
-      return IconButton(
-        tooltip: context.l10n.resume,
-        iconSize: iconSize,
-        onPressed: () => controller.resume(),
-        icon: const Icon(Icons.play_arrow),
-      );
-    }
-
-    return IconButton(
-      tooltip: context.l10n.pause,
-      iconSize: iconSize,
-      onPressed: () => controller.pause(),
-      icon: const Icon(Icons.pause),
+    return ColoredBox(
+      color:
+          !state.started
+              ? Theme.of(context).colorScheme.surfaceContainerHighest
+              : Colors.transparent,
+      child:
+          !state.started
+              ? IconButton(
+                padding: _kIconPadding,
+                color: Theme.of(context).colorScheme.primary,
+                tooltip: context.l10n.play,
+                iconSize: iconSize,
+                onPressed: () => controller.start(),
+                icon: const Icon(Icons.play_arrow),
+              )
+              : state.paused
+              ? IconButton(
+                padding: _kIconPadding,
+                tooltip: context.l10n.resume,
+                iconSize: iconSize,
+                onPressed: () => controller.resume(),
+                icon: const Icon(Icons.play_arrow),
+              )
+              : IconButton(
+                padding: _kIconPadding,
+                tooltip: context.l10n.pause,
+                iconSize: iconSize,
+                onPressed: () => controller.pause(),
+                icon: const Icon(Icons.pause),
+              ),
     );
   }
 }

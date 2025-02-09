@@ -7,40 +7,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_background_theme_choice_screen.dart';
+import 'package:lichess_mobile/src/view/settings/background_theme_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BoardThemeScreen extends ConsumerWidget {
-  const BoardThemeScreen({super.key});
+class ThemeSettingsScreen extends ConsumerWidget {
+  const ThemeSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ThemeSettingsScreen(),
+      title: context.l10n.mobileTheme,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FullScreenBackgroundTheme(
-      child: PlatformWidget(
-        androidBuilder: (context) => const Scaffold(body: _Body()),
-        iosBuilder:
-            (context) => CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                automaticBackgroundVisibility: false,
-                backgroundColor: CupertinoTheme.of(
-                  context,
-                ).barBackgroundColor.withValues(alpha: 0.0),
-                border: null,
-              ),
-              child: const _Body(),
+    return PlatformWidget(
+      androidBuilder: (context) => const Scaffold(body: _Body()),
+      iosBuilder:
+          (context) => CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              automaticBackgroundVisibility: false,
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
+              border: null,
             ),
-      ),
+            child: const _Body(),
+          ),
     );
   }
 }
@@ -104,6 +108,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final bool hasAjustedColors =
@@ -175,34 +180,26 @@ class _BodyState extends ConsumerState<_Body> {
                     settingsLabel: Text(context.l10n.board),
                     settingsValue: boardPrefs.boardTheme.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.board,
-                        builder: (context) => const BoardChoiceScreen(),
-                      );
+                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
                     },
                   ),
                   SettingsListTile(
                     icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
                     settingsValue:
-                        boardPrefs.backgroundTheme?.label(context.l10n) ??
-                        (boardPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                        generalPrefs.backgroundTheme?.label(context.l10n) ??
+                        (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.background,
-                        builder: (context) => const BoardBackgroundThemeChoiceScreen(),
-                      );
+                      Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
                     },
                   ),
-                  if (boardPrefs.backgroundTheme != null || boardPrefs.backgroundImage != null)
+                  if (generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null)
                     PlatformListTile(
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
                         ref
-                            .read(boardPreferencesProvider.notifier)
+                            .read(generalPreferencesProvider.notifier)
                             .setBackground(backgroundTheme: null, backgroundImage: null);
                       },
                     ),
@@ -211,11 +208,7 @@ class _BodyState extends ConsumerState<_Body> {
                     settingsLabel: Text(context.l10n.pieceSet),
                     settingsValue: boardPrefs.pieceSet.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.pieceSet,
-                        builder: (context) => const PieceSetScreen(),
-                      );
+                      Navigator.of(context).push(PieceSetScreen.buildRoute(context));
                     },
                   ),
                   SettingsListTile(

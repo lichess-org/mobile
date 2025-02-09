@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -14,6 +15,14 @@ class StreamerScreen extends StatelessWidget {
   const StreamerScreen({required this.streamers});
 
   final IList<Streamer> streamers;
+
+  static Route<dynamic> buildRoute(BuildContext context, IList<Streamer> streamers) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.mobileLiveStreamers,
+      screen: StreamerScreen(streamers: streamers),
+    );
+  }
 
   @override
   Widget build(BuildContext build) {
