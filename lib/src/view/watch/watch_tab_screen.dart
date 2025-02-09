@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -222,11 +221,7 @@ class _BroadcastWidget extends ConsumerWidget {
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.broadcastBroadcasts,
-                      builder: (context) => const BroadcastListScreen(),
-                    );
+                    Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
                   },
                   child: Text(context.l10n.more),
                 ),
@@ -269,10 +264,9 @@ class _WatchTvWidget extends ConsumerWidget {
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed:
-                () => pushPlatformRoute(
+                () => Navigator.of(
                   context,
-                  builder: (context) => const LiveTvChannelsScreen(),
-                ).then((_) => _refreshData(ref)),
+                ).push(LiveTvChannelsScreen.buildRoute(context)).then((_) => _refreshData(ref)),
             child: Text(context.l10n.more),
           ),
           children: data
@@ -286,11 +280,16 @@ class _WatchTvWidget extends ConsumerWidget {
                     rating: snapshot.player.rating,
                   ),
                   onTap:
-                      () => pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => TvScreen(channel: snapshot.channel),
-                      ).then((_) => _refreshData(ref)),
+                      () => Navigator.of(context, rootNavigator: true)
+                          .push(
+                            TvScreen.buildRoute(
+                              context,
+                              snapshot.channel,
+                              gameId: snapshot.id,
+                              orientation: snapshot.player.side,
+                            ),
+                          )
+                          .then((_) => _refreshData(ref)),
                 );
               })
               .toList(growable: false),
@@ -332,11 +331,7 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed:
-                () => pushPlatformRoute(
-                  context,
-                  builder: (context) => StreamerScreen(streamers: data),
-                ),
+            onPressed: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
             child: Text(context.l10n.more),
           ),
           children: [

@@ -18,6 +18,14 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ChallengeRequestsScreen(),
+      title: context.l10n.preferencesNotifyChallenge,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformThemedScaffold(
@@ -59,13 +67,10 @@ class _Body extends ConsumerWidget {
                   .show(challenge.id)
                   .then((challenge) => challenge.gameFullId);
               if (!context.mounted) return;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
                 rootNavigator: true,
-                builder: (BuildContext context) {
-                  return GameScreen(initialGameId: fullId);
-                },
-              );
+              ).push(GameScreen.buildRoute(context, initialGameId: fullId));
             }
 
             Future<void> declineChallenge(ChallengeDeclineReason? reason) async {

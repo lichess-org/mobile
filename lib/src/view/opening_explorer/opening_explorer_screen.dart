@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
@@ -27,6 +28,14 @@ class OpeningExplorerScreen extends ConsumerWidget {
   const OpeningExplorerScreen({required this.options});
 
   final AnalysisOptions options;
+
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.openingExplorer,
+      screen: OpeningExplorerScreen(options: options),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

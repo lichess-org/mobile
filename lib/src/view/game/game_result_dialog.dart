@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -145,10 +144,9 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
           SecondaryButton(
             semanticsLabel: context.l10n.analysis,
             onPressed: () {
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-              );
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
             child: Text(context.l10n.analysis, textAlign: TextAlign.center),
           ),
@@ -198,19 +196,18 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
         SecondaryButton(
           semanticsLabel: context.l10n.analysis,
           onPressed: () {
-            pushPlatformRoute(
-              context,
-              builder:
-                  (_) => AnalysisScreen(
-                    options: AnalysisOptions(
-                      orientation: Side.white,
-                      standalone: (
-                        pgn: game.makePgn(),
-                        isComputerAnalysisAllowed: true,
-                        variant: game.meta.variant,
-                      ),
-                    ),
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions(
+                  orientation: Side.white,
+                  standalone: (
+                    pgn: game.makePgn(),
+                    isComputerAnalysisAllowed: true,
+                    variant: game.meta.variant,
                   ),
+                ),
+              ),
             );
           },
           child: Text(context.l10n.analysis, textAlign: TextAlign.center),

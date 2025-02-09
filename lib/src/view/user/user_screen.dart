@@ -28,6 +28,10 @@ class UserScreen extends ConsumerStatefulWidget {
 
   final LightUser user;
 
+  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
+    return buildScreenRoute(context, title: user.name, screen: UserScreen(user: user));
+  }
+
   @override
   ConsumerState<UserScreen> createState() => _UserScreenState();
 }
@@ -120,14 +124,10 @@ class _UserProfileListView extends ConsumerWidget {
                   leading: const Icon(LichessIcons.crossed_swords),
                   onTap: () {
                     final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.challengeChallengesX(user.lightUser.name),
-                      builder:
-                          (context) =>
-                              isOddBot
-                                  ? ChallengeOddBotsScreen(user.lightUser)
-                                  : CreateChallengeScreen(user.lightUser),
+                    Navigator.of(context).push(
+                      isOddBot
+                          ? ChallengeOddBotsScreen.buildRoute(context, user.lightUser)
+                          : CreateChallengeScreen.buildRoute(context, user.lightUser),
                     );
                   },
                 ),

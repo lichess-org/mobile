@@ -45,6 +45,10 @@ class StudyScreen extends StatelessWidget {
 
   final StudyId id;
 
+  static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
+    return buildScreenRoute(context, screen: StudyScreen(id: id));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FullScreenBackground(child: _StudyScreenLoader(id: id));
@@ -221,7 +225,7 @@ class _StudyMenu extends ConsumerWidget {
           semanticsLabel: context.l10n.settingsSettings,
           child: Text(context.l10n.settingsSettings),
           onPressed: () {
-            pushPlatformRoute(context, screen: StudySettings(id));
+            Navigator.of(context).push(StudySettings.buildRoute(context, id));
           },
         ),
         MenuItemButton(

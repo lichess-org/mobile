@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -18,6 +19,18 @@ class BroadcastGameSettings extends ConsumerWidget {
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required BroadcastRoundId roundId,
+    required BroadcastGameId gameId,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastGameSettings(roundId, gameId),
+      title: context.l10n.settingsSettings,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

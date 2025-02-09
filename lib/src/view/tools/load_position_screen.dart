@@ -16,6 +16,10 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class LoadPositionScreen extends StatelessWidget {
   const LoadPositionScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const LoadPositionScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformThemedScaffold(
@@ -81,11 +85,10 @@ class _BodyState extends State<_Body> {
                   semanticsLabel: context.l10n.analysis,
                   onPressed:
                       parsedInput != null
-                          ? () => pushPlatformRoute(
+                          ? () => Navigator.of(
                             context,
                             rootNavigator: true,
-                            builder: (context) => AnalysisScreen(options: parsedInput!.options),
-                          )
+                          ).push(AnalysisScreen.buildRoute(context, parsedInput!.options))
                           : null,
                   child: Text(context.l10n.analysis),
                 ),
@@ -94,10 +97,8 @@ class _BodyState extends State<_Body> {
                   semanticsLabel: context.l10n.boardEditor,
                   onPressed:
                       parsedInput != null
-                          ? () => pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (context) => BoardEditorScreen(initialFen: parsedInput!.fen),
+                          ? () => Navigator.of(context, rootNavigator: true).push(
+                            BoardEditorScreen.buildRoute(context, initialFen: parsedInput!.fen),
                           )
                           : null,
                   child: Text(context.l10n.boardEditor),

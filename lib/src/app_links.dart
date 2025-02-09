@@ -19,13 +19,13 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
 
   switch (appLinkUri.pathSegments[0]) {
     case 'streak':
-      return createPlatformRoute(context, screen: const StreakScreen());
+      return buildScreenRoute(context, screen: const StreakScreen());
     case 'storm':
-      return createPlatformRoute(context, screen: const StormScreen());
+      return buildScreenRoute(context, screen: const StormScreen());
     case 'study':
-      return createPlatformRoute(context, screen: StudyScreen(id: StudyId(id)));
+      return buildScreenRoute(context, screen: StudyScreen(id: StudyId(id)));
     case 'training':
-      return createPlatformRoute(
+      return buildScreenRoute(
         context,
         screen: PuzzleScreen(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id)),
       );
@@ -34,7 +34,7 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
         final gameId = GameId(appLinkUri.pathSegments[0]);
         final orientation = appLinkUri.pathSegments.getOrNull(2);
         if (gameId.isValid) {
-          return createPlatformRoute(
+          return buildScreenRoute(
             context,
             screen: ArchivedGameScreen(
               gameId: gameId,

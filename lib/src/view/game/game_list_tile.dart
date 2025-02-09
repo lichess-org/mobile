@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
@@ -70,25 +69,23 @@ class GameListTile extends StatelessWidget {
       onTap:
           game.variant.isReadSupported
               ? () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder:
-                      (context) =>
-                          game.fullId != null
-                              ? GameScreen(
-                                initialGameId: game.fullId,
-                                loadingFen: game.lastFen,
-                                loadingLastMove: game.lastMove,
-                                loadingOrientation: youAre,
-                                lastMoveAt: game.lastMoveAt,
-                                gameListContext: gameListContext,
-                              )
-                              : ArchivedGameScreen(
-                                gameData: game,
-                                orientation: youAre,
-                                gameListContext: gameListContext,
-                              ),
+                Navigator.of(context, rootNavigator: true).push(
+                  game.fullId != null
+                      ? GameScreen.buildRoute(
+                        context,
+                        initialGameId: game.fullId,
+                        loadingFen: game.lastFen,
+                        loadingLastMove: game.lastMove,
+                        loadingOrientation: youAre,
+                        lastMoveAt: game.lastMoveAt,
+                        gameListContext: gameListContext,
+                      )
+                      : ArchivedGameScreen.buildRoute(
+                        context,
+                        gameData: game,
+                        orientation: youAre,
+                        gameListContext: gameListContext,
+                      ),
                 );
               }
               : () {
@@ -308,12 +305,11 @@ class _ContextMenu extends ConsumerWidget {
           onPressed:
               game.variant.isReadSupported
                   ? () {
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(orientation: orientation, gameId: game.id),
-                          ),
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(orientation: orientation, gameId: game.id),
+                      ),
                     );
                   }
                   : () {

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -14,6 +15,14 @@ class GameBookmarksScreen extends ConsumerWidget {
   const GameBookmarksScreen({required this.nbBookmarks, super.key});
 
   final int nbBookmarks;
+
+  static Route<dynamic> buildRoute(BuildContext context, {required int nbBookmarks}) {
+    return buildScreenRoute(
+      context,
+      screen: GameBookmarksScreen(nbBookmarks: nbBookmarks),
+      title: context.l10n.nbBookmarks(nbBookmarks),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

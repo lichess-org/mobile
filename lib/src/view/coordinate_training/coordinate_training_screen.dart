@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_display.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -26,6 +27,10 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class CoordinateTrainingScreen extends StatelessWidget {
   const CoordinateTrainingScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const CoordinateTrainingScreen());
+  }
 
   @override
   Widget build(BuildContext context) {

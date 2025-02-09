@@ -34,6 +34,10 @@ import 'package:result_extensions/result_extensions.dart';
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Puzzle Streak', screen: const StreakScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return const WakelockWidget(
@@ -260,20 +264,19 @@ class _BottomBar extends ConsumerWidget {
         if (puzzleState.streak!.finished)
           BottomBarButton(
             onTap: () {
-              pushPlatformRoute(
-                context,
-                builder:
-                    (context) => AnalysisScreen(
-                      options: AnalysisOptions(
-                        orientation: puzzleState.pov,
-                        standalone: (
-                          pgn: ref.read(ctrlProvider.notifier).makePgn(),
-                          isComputerAnalysisAllowed: true,
-                          variant: Variant.standard,
-                        ),
-                        initialMoveCursor: 0,
-                      ),
+              Navigator.of(context, rootNavigator: true).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  AnalysisOptions(
+                    orientation: puzzleState.pov,
+                    standalone: (
+                      pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                      isComputerAnalysisAllowed: true,
+                      variant: Variant.standard,
                     ),
+                    initialMoveCursor: 0,
+                  ),
+                ),
               );
             },
             label: context.l10n.analysis,

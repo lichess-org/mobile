@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -117,19 +116,16 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 recognizer:
                     TapGestureRecognizer()
                       ..onTap =
-                          () => pushPlatformRoute(
-                            context,
-                            fullscreenDialog: true,
-                            builder:
-                                (_) => SearchScreen(
-                                  onUserTap:
-                                      (user) => {
-                                        ref
-                                            .read(openingExplorerPreferencesProvider.notifier)
-                                            .setPlayerDbUsernameOrId(user.name),
-                                        Navigator.of(context).pop(),
-                                      },
-                                ),
+                          () => Navigator.of(context).push(
+                            SearchScreen.buildRoute(
+                              context,
+                              onUserTap: (user) {
+                                ref
+                                    .read(openingExplorerPreferencesProvider.notifier)
+                                    .setPlayerDbUsernameOrId(user.name);
+                                Navigator.of(context).pop();
+                              },
+                            ),
                           ),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,

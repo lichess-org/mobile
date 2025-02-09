@@ -14,6 +14,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Lichess TV', screen: const LiveTvChannelsScreen());
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
@@ -51,12 +55,13 @@ class _Body extends ConsumerWidget {
             final game = list[index];
             return SmallBoardPreview(
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder:
-                      (_) =>
-                          TvScreen(channel: game.channel, initialGame: (game.id, game.orientation)),
+                Navigator.of(context, rootNavigator: true).push(
+                  TvScreen.buildRoute(
+                    context,
+                    game.channel,
+                    gameId: game.id,
+                    orientation: game.orientation,
+                  ),
                 );
               },
               orientation: game.orientation,

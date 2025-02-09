@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -48,11 +47,10 @@ class CorrespondenceService {
       rootNavState.popUntil((route) => route.isFirst);
     }
 
-    pushPlatformRoute(
+    Navigator.of(
       context,
       rootNavigator: true,
-      builder: (_) => GameScreen(initialGameId: fullId),
-    );
+    ).push(GameScreen.buildRoute(context, initialGameId: fullId));
   }
 
   /// Syncs offline correspondence games with the server.

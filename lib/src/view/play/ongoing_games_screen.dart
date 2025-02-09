@@ -15,6 +15,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class OngoingGamesScreen extends ConsumerWidget {
   const OngoingGamesScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const OngoingGamesScreen());
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -80,21 +84,21 @@ class OngoingGamePreview extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder:
-              (context) => GameScreen(
+        Navigator.of(context, rootNavigator: true)
+            .push(
+              GameScreen.buildRoute(
+                context,
                 initialGameId: game.fullId,
                 loadingFen: game.fen,
                 loadingOrientation: game.orientation,
                 loadingLastMove: game.lastMove,
               ),
-        ).then((_) {
-          if (context.mounted) {
-            ref.invalidate(ongoingGamesProvider);
-          }
-        });
+            )
+            .then((_) {
+              if (context.mounted) {
+                ref.invalidate(ongoingGamesProvider);
+              }
+            });
       },
     );
   }

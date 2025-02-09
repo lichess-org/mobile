@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -25,6 +26,14 @@ import 'package:path/path.dart';
 
 class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const BackgroundChoiceScreen(),
+      title: context.l10n.background,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

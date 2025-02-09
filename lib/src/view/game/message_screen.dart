@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -18,6 +19,15 @@ class MessageScreen extends ConsumerStatefulWidget {
   final LightUser? me;
 
   const MessageScreen({required this.id, required this.title, this.me});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required GameFullId id,
+    required Widget title,
+    LightUser? me,
+  }) {
+    return buildScreenRoute(context, screen: MessageScreen(id: id, title: title, me: me));
+  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();

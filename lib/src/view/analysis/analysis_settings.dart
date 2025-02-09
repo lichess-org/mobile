@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -16,6 +17,14 @@ class AnalysisSettings extends ConsumerWidget {
   const AnalysisSettings(this.options);
 
   final AnalysisOptions options;
+
+  static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
+    return buildScreenRoute(
+      context,
+      screen: AnalysisSettings(options),
+      title: context.l10n.settingsSettings,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

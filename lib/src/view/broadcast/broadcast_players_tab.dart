@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
@@ -182,15 +181,14 @@ class _PlayersListState extends ConsumerState<PlayersList> {
 
           return GestureDetector(
             onTap: () {
-              pushPlatformRoute(
-                context,
-                builder:
-                    (context) => BroadcastPlayerResultsScreen(
-                      widget.tournamentId,
-                      player.fideId != null ? player.fideId.toString() : player.name,
-                      player.title,
-                      player.name,
-                    ),
+              Navigator.of(context).push(
+                BroadcastPlayerResultsScreen.buildRoute(
+                  context,
+                  widget.tournamentId,
+                  player.fideId != null ? player.fideId.toString() : player.name,
+                  playerTitle: player.title,
+                  playerName: player.name,
+                ),
               );
             },
             child: ColoredBox(

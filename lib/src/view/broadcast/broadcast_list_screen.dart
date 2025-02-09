@@ -39,6 +39,14 @@ const kDefaultCardOpacity = 0.9;
 class BroadcastListScreen extends StatelessWidget {
   const BroadcastListScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.broadcastBroadcasts,
+      screen: const BroadcastListScreen(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = AutoSizeText(
@@ -534,15 +542,12 @@ class _BroadcastCardContent extends StatelessWidget {
                     semanticsLabel: context.l10n.broadcastOverview,
                     child: Text(context.l10n.broadcastOverview),
                     onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: broadcast.title,
-                        rootNavigator: true,
-                        builder:
-                            (context) => BroadcastRoundScreen(
-                              broadcast: broadcast,
-                              initialTab: BroadcastRoundTab.overview,
-                            ),
+                      Navigator.of(context, rootNavigator: true).push(
+                        BroadcastRoundScreen.buildRoute(
+                          context,
+                          broadcast,
+                          initialTab: BroadcastRoundTab.overview,
+                        ),
                       );
                     },
                   ),
@@ -551,15 +556,12 @@ class _BroadcastCardContent extends StatelessWidget {
                     semanticsLabel: context.l10n.broadcastBoards,
                     child: Text(context.l10n.broadcastBoards),
                     onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: broadcast.title,
-                        rootNavigator: true,
-                        builder:
-                            (context) => BroadcastRoundScreen(
-                              broadcast: broadcast,
-                              initialTab: BroadcastRoundTab.boards,
-                            ),
+                      Navigator.of(context, rootNavigator: true).push(
+                        BroadcastRoundScreen.buildRoute(
+                          context,
+                          broadcast,
+                          initialTab: BroadcastRoundTab.boards,
+                        ),
                       );
                     },
                   ),
@@ -568,15 +570,12 @@ class _BroadcastCardContent extends StatelessWidget {
                     semanticsLabel: context.l10n.players,
                     child: Text(context.l10n.players),
                     onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        title: broadcast.title,
-                        rootNavigator: true,
-                        builder:
-                            (context) => BroadcastRoundScreen(
-                              broadcast: broadcast,
-                              initialTab: BroadcastRoundTab.players,
-                            ),
+                      Navigator.of(context, rootNavigator: true).push(
+                        BroadcastRoundScreen.buildRoute(
+                          context,
+                          broadcast,
+                          initialTab: BroadcastRoundTab.players,
+                        ),
                       );
                     },
                   ),
@@ -743,12 +742,10 @@ class _BroadcastCardState extends State<BroadcastCard> {
 
     return GestureDetector(
       onTap: () {
-        pushPlatformRoute(
+        Navigator.of(
           context,
-          title: widget.broadcast.title,
           rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: widget.broadcast),
-        );
+        ).push(BroadcastRoundScreen.buildRoute(context, widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
@@ -899,12 +896,10 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
 
     return GestureDetector(
       onTap: () {
-        pushPlatformRoute(
+        Navigator.of(
           context,
-          title: widget.broadcast.title,
           rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: widget.broadcast),
-        );
+        ).push(BroadcastRoundScreen.buildRoute(context, widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,

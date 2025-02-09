@@ -233,11 +233,10 @@ void main() {
                   semanticsLabel: 'Start Streak',
                   child: const Text('Start Streak'),
                   onPressed:
-                      () => pushPlatformRoute(
+                      () => Navigator.of(
                         context,
                         rootNavigator: true,
-                        builder: (context) => const StreakScreen(),
-                      ),
+                      ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
                 ),
               ),
         ),

@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -16,6 +17,10 @@ class StormDashboardModal extends StatelessWidget {
   const StormDashboardModal({super.key, required this.user});
 
   final LightUser user;
+
+  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
+    return buildScreenRoute(context, screen: StormDashboardModal(user: user));
+  }
 
   @override
   Widget build(BuildContext context) {

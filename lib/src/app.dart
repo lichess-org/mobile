@@ -156,7 +156,7 @@ class _AppState extends ConsumerState<Application> {
           (settings) =>
               settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
       onGenerateInitialRoutes: (initialRoute) {
-        final homeRoute = createPlatformRoute(context, screen: const BottomNavScaffold());
+        final homeRoute = buildScreenRoute<void>(context, screen: const BottomNavScaffold());
         return <Route<dynamic>?>[
           homeRoute,
           resolveAppLinkUri(context, Uri.parse(initialRoute)),

@@ -27,6 +27,11 @@ final _getFollowingAndOnlinesProvider = FutureProvider.autoDispose<(IList<User>,
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: context.l10n.friends, screen: const FollowingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformThemedScaffold(
@@ -97,10 +102,9 @@ class _Body extends ConsumerWidget {
                       _isOnline(user, data.$2),
                       onTap:
                           () => {
-                            pushPlatformRoute(
+                            Navigator.of(
                               context,
-                              builder: (context) => UserScreen(user: user.lightUser),
-                            ),
+                            ).push(UserScreen.buildRoute(context, user.lightUser)),
                           },
                     ),
                   );

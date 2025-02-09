@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart' show getCorePalette;
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
@@ -126,11 +125,7 @@ class _Body extends ConsumerWidget {
                       : null,
               onTap: () {
                 ref.invalidate(accountActivityProvider);
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.profile,
-                  builder: (context) => const ProfileScreen(),
-                );
+                Navigator.of(context).push(ProfileScreen.buildRoute(context));
               },
             ),
             PlatformListTile(
@@ -141,11 +136,7 @@ class _Body extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.preferencesPreferences,
-                  builder: (context) => const AccountPreferencesScreen(),
-                );
+                Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
               },
             ),
             if (authController.isLoading)
@@ -189,11 +180,7 @@ class _Body extends ConsumerWidget {
             settingsValue:
                 '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.sound,
-                builder: (context) => const SoundSettingsScreen(),
-              );
+              Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
             },
           ),
           Opacity(
@@ -222,11 +209,7 @@ class _Body extends ConsumerWidget {
                                     .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
                           );
                         } else {
-                          pushPlatformRoute(
-                            context,
-                            title: context.l10n.background,
-                            builder: (context) => const AppBackgroundModeScreen(),
-                          );
+                          Navigator.of(context).push(AppBackgroundModeScreen.buildRoute(context));
                         }
                       },
             ),
@@ -239,11 +222,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.mobileTheme,
-                builder: (context) => const ThemeSettingsScreen(),
-              );
+              Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
             },
           ),
           PlatformListTile(
@@ -254,11 +233,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardSettingsScreen(),
-              );
+              Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
             },
           ),
           SettingsListTile(

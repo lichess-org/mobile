@@ -25,6 +25,14 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ThemeSettingsScreen(),
+      title: context.l10n.mobileTheme,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FullScreenBackground(
@@ -177,11 +185,7 @@ class _BodyState extends ConsumerState<_Body> {
                     settingsLabel: Text(context.l10n.board),
                     settingsValue: boardPrefs.boardTheme.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.board,
-                        builder: (context) => const BoardChoiceScreen(),
-                      );
+                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
                     },
                   ),
                   SettingsListTile(
@@ -191,11 +195,7 @@ class _BodyState extends ConsumerState<_Body> {
                         generalPrefs.backgroundTheme?.label(context.l10n) ??
                         (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.background,
-                        builder: (context) => const BackgroundChoiceScreen(),
-                      );
+                      Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
                     },
                   ),
                   if (generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null)
@@ -213,11 +213,7 @@ class _BodyState extends ConsumerState<_Body> {
                     settingsLabel: Text(context.l10n.pieceSet),
                     settingsValue: boardPrefs.pieceSet.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.pieceSet,
-                        builder: (context) => const PieceSetScreen(),
-                      );
+                      Navigator.of(context).push(PieceSetScreen.buildRoute(context));
                     },
                   ),
                   SettingsListTile(

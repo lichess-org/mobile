@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 
 /// A page route that always builds the same screen widget.
 ///
@@ -11,7 +12,8 @@ abstract class ScreenRoute<T extends Object?> extends PageRoute<T> {
 
 /// A [MaterialPageRoute] that always builds the same screen widget.
 ///
-/// This is useful to test new screens being pushed to the Navigator.
+/// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
+/// is always filled with the configured app's background color or image.
 class MaterialScreenRoute<T extends Object?> extends MaterialPageRoute<T>
     implements ScreenRoute<T> {
   MaterialScreenRoute({
@@ -20,7 +22,7 @@ class MaterialScreenRoute<T extends Object?> extends MaterialPageRoute<T>
     super.maintainState,
     super.fullscreenDialog,
     super.allowSnapshotting,
-  }) : super(builder: (_) => screen);
+  }) : super(builder: (_) => FullScreenBackground(child: screen));
 
   @override
   final Widget screen;
@@ -28,7 +30,8 @@ class MaterialScreenRoute<T extends Object?> extends MaterialPageRoute<T>
 
 /// A [CupertinoPageRoute] that always builds the same screen widget.
 ///
-/// This is useful to test new screens being pushed to the Navigator.
+/// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
+/// is always filled with the configured app's background color or image.
 class CupertinoScreenRoute<T extends Object?> extends CupertinoPageRoute<T>
     implements ScreenRoute<T> {
   CupertinoScreenRoute({
@@ -37,81 +40,25 @@ class CupertinoScreenRoute<T extends Object?> extends CupertinoPageRoute<T>
     super.maintainState,
     super.fullscreenDialog,
     super.title,
-  }) : super(builder: (_) => screen);
+  }) : super(builder: (_) => FullScreenBackground(child: screen));
 
   @override
   final Widget screen;
 }
 
-/// Push a new route using Navigator.
+/// Builds a new route for the [screen] based on the platform.
 ///
-/// {@macro lichess.navigation.builder_or_screen}
-Future<void> pushPlatformRoute(
+/// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
+/// is always filled with the configured app's background color or image.
+///
+/// It will return a [MaterialScreenRoute] on Android and a [CupertinoScreenRoute] on iOS.
+Route<T> buildScreenRoute<T>(
   BuildContext context, {
-  Widget? screen,
-  WidgetBuilder? builder,
-  bool rootNavigator = false,
+  required Widget screen,
   bool fullscreenDialog = false,
   String? title,
 }) {
-  assert(screen != null || builder != null, 'Either screen or builder must be provided.');
-
-  return Navigator.of(context, rootNavigator: rootNavigator).push<void>(
-    createPlatformRoute(
-      context,
-      builder: builder,
-      screen: screen,
-      fullscreenDialog: fullscreenDialog,
-      title: title,
-    ),
-  );
-}
-
-/// Push a new route using Navigator and replace the current route.
-///
-/// {@macro lichess.navigation.builder_or_screen}
-Future<void> pushReplacementPlatformRoute(
-  BuildContext context, {
-  WidgetBuilder? builder,
-  Widget? screen,
-  bool rootNavigator = false,
-  bool fullscreenDialog = false,
-  String? title,
-}) {
-  return Navigator.of(context, rootNavigator: rootNavigator).pushReplacement<void, void>(
-    createPlatformRoute(
-      context,
-      builder: builder,
-      screen: screen,
-      fullscreenDialog: fullscreenDialog,
-      title: title,
-    ),
-  );
-}
-
-/// Create a route from either [builder] or [screen].
-///
-/// {@template lichess.navigation.builder_or_screen}
-/// If [builder] is provided, it will return a [MaterialPageRoute] on Android and
-/// a [CupertinoPageRoute] on iOS.
-///
-/// If [screen] is provided, it will return a [MaterialScreenRoute] on Android and
-/// a [CupertinoScreenRoute] on iOS.
-/// {@endtemplate}
-Route<dynamic> createPlatformRoute(
-  BuildContext context, {
-  Widget? screen,
-  WidgetBuilder? builder,
-  bool fullscreenDialog = false,
-  String? title,
-}) {
-  assert(screen != null || builder != null, 'Either screen or builder must be provided.');
-
   return Theme.of(context).platform == TargetPlatform.iOS
-      ? builder != null
-          ? CupertinoPageRoute(builder: builder, title: title, fullscreenDialog: fullscreenDialog)
-          : CupertinoScreenRoute(screen: screen!, title: title, fullscreenDialog: fullscreenDialog)
-      : builder != null
-      ? MaterialPageRoute(builder: builder, fullscreenDialog: fullscreenDialog)
-      : MaterialScreenRoute(screen: screen!, fullscreenDialog: fullscreenDialog);
+      ? CupertinoScreenRoute<T>(screen: screen, title: title, fullscreenDialog: fullscreenDialog)
+      : MaterialScreenRoute<T>(screen: screen, fullscreenDialog: fullscreenDialog);
 }

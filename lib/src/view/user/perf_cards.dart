@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
@@ -141,18 +140,10 @@ class PerfCards extends StatelessWidget {
   }
 
   void _handlePerfCardTap(BuildContext context, Perf perf) {
-    pushPlatformRoute(
-      context,
-      builder: (context) {
-        switch (perf) {
-          case Perf.puzzle:
-            return const PuzzleDashboardScreen();
-          case Perf.storm:
-            return StormDashboardModal(user: user.lightUser);
-          default:
-            return PerfStatsScreen(user: user, perf: perf);
-        }
-      },
-    );
+    Navigator.of(context).push(switch (perf) {
+      Perf.puzzle => PuzzleDashboardScreen.buildRoute(context),
+      Perf.storm => StormDashboardModal.buildRoute(context, user.lightUser),
+      _ => PerfStatsScreen.buildRoute(context, user: user, perf: perf),
+    });
   }
 }

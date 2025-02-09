@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
@@ -112,27 +111,24 @@ class _Body extends ConsumerWidget {
           _ToolsButton(
             icon: Icons.upload_file,
             title: context.l10n.loadPosition,
-            onTap:
-                () => pushPlatformRoute(context, builder: (context) => const LoadPositionScreen()),
+            onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
           ),
           _ToolsButton(
             icon: Icons.biotech,
             title: context.l10n.analysis,
             onTap:
-                () => pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder:
-                      (context) => const AnalysisScreen(
-                        options: AnalysisOptions(
-                          orientation: Side.white,
-                          standalone: (
-                            pgn: '',
-                            isComputerAnalysisAllowed: true,
-                            variant: Variant.standard,
-                          ),
-                        ),
+                () => Navigator.of(context, rootNavigator: true).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    const AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: '',
+                        isComputerAnalysisAllowed: true,
+                        variant: Variant.standard,
                       ),
+                    ),
+                  ),
                 ),
           ),
           _ToolsButton(
@@ -140,20 +136,18 @@ class _Body extends ConsumerWidget {
             title: context.l10n.openingExplorer,
             onTap:
                 isOnline
-                    ? () => pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder:
-                          (context) => const OpeningExplorerScreen(
-                            options: AnalysisOptions(
-                              orientation: Side.white,
-                              standalone: (
-                                pgn: '',
-                                isComputerAnalysisAllowed: false,
-                                variant: Variant.standard,
-                              ),
-                            ),
+                    ? () => Navigator.of(context, rootNavigator: true).push(
+                      OpeningExplorerScreen.buildRoute(
+                        context,
+                        const AnalysisOptions(
+                          orientation: Side.white,
+                          standalone: (
+                            pgn: '',
+                            isComputerAnalysisAllowed: false,
+                            variant: Variant.standard,
                           ),
+                        ),
+                      ),
                     )
                     : null,
           ),
@@ -162,39 +156,35 @@ class _Body extends ConsumerWidget {
             title: context.l10n.studyMenu,
             onTap:
                 isOnline
-                    ? () =>
-                        pushPlatformRoute(context, builder: (context) => const StudyListScreen())
+                    ? () => Navigator.of(context).push(StudyListScreen.buildRoute(context))
                     : null,
           ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
             onTap:
-                () => pushPlatformRoute(
+                () => Navigator.of(
                   context,
-                  builder: (context) => const BoardEditorScreen(),
                   rootNavigator: true,
-                ),
+                ).push(BoardEditorScreen.buildRoute(context)),
           ),
           _ToolsButton(
             icon: Icons.where_to_vote_outlined,
             title: 'Coordinate Training', // TODO l10n
             onTap:
-                () => pushPlatformRoute(
+                () => Navigator.of(
                   context,
                   rootNavigator: true,
-                  builder: (context) => const CoordinateTrainingScreen(),
-                ),
+                ).push(CoordinateTrainingScreen.buildRoute(context)),
           ),
           _ToolsButton(
             icon: Icons.alarm,
             title: context.l10n.clock,
             onTap:
-                () => pushPlatformRoute(
+                () => Navigator.of(
                   context,
-                  builder: (context) => const ClockToolScreen(),
                   rootNavigator: true,
-                ),
+                ).push(ClockToolScreen.buildRoute(context)),
           ),
         ],
       ),

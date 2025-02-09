@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
@@ -25,6 +26,10 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({super.key});
+
+  static Route<void> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Over the board', screen: const OverTheBoardScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
