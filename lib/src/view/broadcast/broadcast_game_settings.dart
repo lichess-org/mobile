@@ -41,7 +41,7 @@ class BroadcastGameSettings extends ConsumerWidget {
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [

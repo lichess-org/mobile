@@ -194,7 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title:
             widget.gameData != null

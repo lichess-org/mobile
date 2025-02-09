@@ -37,9 +37,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackground(
-      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 
   Widget _androidBuilder(BuildContext context) {

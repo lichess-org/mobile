@@ -57,7 +57,7 @@ class PerfStatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(androidTitleSpacing: 0, title: _Title(user: user, perf: perf)),
       body: _Body(user: user, perf: perf),
     );

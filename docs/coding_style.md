@@ -60,7 +60,7 @@ PlatformWidget(
 ```
 
 > [!TIP]
-> The codebase already has some common platform-aware widgets that you can use, for example `PlatformThemedScaffold`,
+> The codebase already has some common platform-aware widgets that you can use, for example `PlatformScaffold`,
 > `PlatformAppBar`, `PlatformListTile`, ...
 
 ## Writing UI code

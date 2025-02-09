@@ -34,7 +34,7 @@ class CoordinateTrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: const Text('Coordinate Training'), // TODO l10n once script works
         actions: [

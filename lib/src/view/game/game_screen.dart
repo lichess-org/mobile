@@ -183,7 +183,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                               : ChallengeDeclineReason.generic.label(context.l10n),
                     )
                     : const LoadGameError('Could not create the game.');
-            return PlatformThemedScaffold(
+            return PlatformScaffold(
               resizeToAvoidBottomInset: false,
               appBar: _GameAppBar(
                 id: gameId,
@@ -207,7 +207,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     )
                     : const StandaloneGameLoadingBoard();
 
-            return PlatformThemedScaffold(
+            return PlatformScaffold(
               resizeToAvoidBottomInset: false,
               appBar: _GameAppBar(
                 seek: widget.seek,
@@ -233,7 +233,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
             final body = PopScope(child: message);
 
-            return PlatformThemedScaffold(
+            return PlatformScaffold(
               appBar: _GameAppBar(
                 seek: widget.seek,
                 lastMoveAt: widget.lastMoveAt,

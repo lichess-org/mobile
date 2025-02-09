@@ -41,7 +41,7 @@ class StreakScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WakelockWidget(
-      child: PlatformThemedScaffold(
+      child: PlatformScaffold(
         appBar: PlatformAppBar(actions: [ToggleSoundButton()], title: Text('Puzzle Streak')),
         body: _Load(),
       ),

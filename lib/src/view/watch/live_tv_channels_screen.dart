@@ -29,7 +29,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
           ref.read(liveTvChannelsProvider.notifier).stopWatching();
         }
       },
-      child: const PlatformThemedScaffold(
+      child: const PlatformScaffold(
         appBar: PlatformAppBar(title: Text('Lichess TV')),
         body: _Body(),
       ),

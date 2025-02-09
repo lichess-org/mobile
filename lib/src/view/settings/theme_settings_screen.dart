@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/view/settings/background_theme_choice_screen.
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -35,21 +34,17 @@ class ThemeSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FullScreenBackground(
-      child: PlatformWidget(
-        androidBuilder: (context) => const Scaffold(body: _Body()),
-        iosBuilder:
-            (context) => CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                automaticBackgroundVisibility: false,
-                backgroundColor: CupertinoTheme.of(
-                  context,
-                ).barBackgroundColor.withValues(alpha: 0.0),
-                border: null,
-              ),
-              child: const _Body(),
+    return PlatformWidget(
+      androidBuilder: (context) => const Scaffold(body: _Body()),
+      iosBuilder:
+          (context) => CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              automaticBackgroundVisibility: false,
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
+              border: null,
             ),
-      ),
+            child: const _Body(),
+          ),
     );
   }
 }

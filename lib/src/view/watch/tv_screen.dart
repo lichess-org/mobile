@@ -61,7 +61,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           ref.read(_tvGameCtrl.notifier).stopWatching();
         }
       },
-      child: PlatformThemedScaffold(
+      child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text('${widget.channel.label} TV'),
           actions: const [ToggleSoundButton()],

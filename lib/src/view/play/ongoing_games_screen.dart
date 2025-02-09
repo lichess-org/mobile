@@ -22,7 +22,7 @@ class OngoingGamesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: ongoingGames.maybeWhen(
         data: (data) => PlatformAppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
         orElse: () => const PlatformAppBar(title: SizedBox.shrink()),

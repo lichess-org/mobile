@@ -35,7 +35,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
           data:

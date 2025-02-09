@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -51,7 +50,7 @@ class StudyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackground(child: _StudyScreenLoader(id: id));
+    return _StudyScreenLoader(id: id);
   }
 }
 
@@ -68,7 +67,7 @@ class _StudyScreenLoader extends ConsumerWidget {
         return _StudyScreen(id: id, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
-        return PlatformThemedScaffold(
+        return PlatformScaffold(
           appBar: const PlatformAppBar(title: Text('')),
           body: DefaultTabController(
             length: 1,
@@ -88,7 +87,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           ),
         );
       case _:
-        return PlatformThemedScaffold(
+        return PlatformScaffold(
           appBar: PlatformAppBar(
             title: Shimmer(
               child: ShimmerLoading(
@@ -179,7 +178,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: AutoSizeText(
           widget.studyState.currentChapterTitle,

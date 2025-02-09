@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -27,9 +26,7 @@ class StreamerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext build) {
-    return FullScreenBackground(
-      child: PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos),
-    );
+    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildAndroid(BuildContext context) {

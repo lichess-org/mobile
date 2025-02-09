@@ -92,7 +92,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformThemedScaffold(
+      child: PlatformScaffold(
         appBar: PlatformAppBar(
           actions: const [ToggleSoundButton(), _PuzzleSettingsButton()],
           title: _Title(angle: widget.angle),

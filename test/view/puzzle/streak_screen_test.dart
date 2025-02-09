@@ -227,7 +227,7 @@ void main() {
         tester,
         home: Builder(
           builder:
-              (context) => PlatformThemedScaffold(
+              (context) => PlatformScaffold(
                 appBar: const PlatformAppBar(title: Text('Test Streak Screen')),
                 body: FatButton(
                   semanticsLabel: 'Start Streak',

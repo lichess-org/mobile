@@ -22,7 +22,7 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-    return PlatformThemedScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: offlineGames.maybeWhen(
           data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),

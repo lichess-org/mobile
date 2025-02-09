@@ -1,20 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
 
 /// A screen with a navigation bar and a body that adapts to the platform.
 ///
-/// It is also aware of the configured [FullScreenBackground].
-///
 /// On Android, this is a [Scaffold] with an [AppBar],
 /// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
 ///
 /// See [PlatformAppBar] for an app bar that adapts to the platform and needs to be passed to this widget.
-class PlatformThemedScaffold extends StatelessWidget {
-  const PlatformThemedScaffold({
+class PlatformScaffold extends StatelessWidget {
+  const PlatformScaffold({
     super.key,
     this.appBar,
     required this.body,
@@ -58,15 +55,13 @@ class PlatformThemedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackground(
-      child: PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder),
-    );
+    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 }
 
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
 ///
-/// Intended to be passed to [PlatformThemedScaffold].
+/// Intended to be passed to [PlatformScaffold].
 class PlatformAppBar extends StatelessWidget {
   const PlatformAppBar({
     super.key,
