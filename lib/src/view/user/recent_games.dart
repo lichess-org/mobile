@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -22,12 +21,14 @@ class RecentGamesWidget extends ConsumerWidget {
     required this.recentGames,
     required this.user,
     required this.nbOfGames,
+    this.maxGamesToShow = 10,
     super.key,
   });
 
   final LightUser? user;
   final AsyncValue<IList<LightArchivedGameWithPov>> recentGames;
   final int nbOfGames;
+  final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,29 +39,26 @@ class RecentGamesWidget extends ConsumerWidget {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
+        final list = data.take(maxGamesToShow);
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
           headerTrailing:
-              nbOfGames > data.length
+              nbOfGames > list.length
                   ? NoPaddingTextButton(
                     onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        builder:
-                            (context) => GameHistoryScreen(
-                              user: user,
-                              isOnline: connectivity.valueOrNull?.isOnline == true,
-                            ),
+                      Navigator.of(context).push(
+                        GameHistoryScreen.buildRoute(
+                          context,
+                          user: user,
+                          isOnline: connectivity.valueOrNull?.isOnline == true,
+                        ),
                       );
                     },
                     child: Text(context.l10n.more),
                   )
                   : null,
-          children:
-              data.map((item) {
-                return ExtendedGameListTile(item: item);
-              }).toList(),
+          children: [for (final item in list) GameListTile(item: item)],
         );
       },
       error: (error, stackTrace) {
@@ -74,7 +72,7 @@ class RecentGamesWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true),
+              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
             ),
           ),
     );

@@ -32,18 +32,34 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+class AnalysisScreen extends StatelessWidget {
+  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+
+  final AnalysisOptions options;
+  final bool enableDrawingShapes;
+
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
+  }
+}
+
+class _AnalysisScreen extends ConsumerStatefulWidget {
+  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 
   final bool enableDrawingShapes;
 
   @override
-  ConsumerState<AnalysisScreen> createState() => _AnalysisScreenState();
+  ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -79,11 +95,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
-          pushPlatformRoute(
+          Navigator.of(
             context,
-            title: context.l10n.settingsSettings,
-            builder: (_) => AnalysisSettings(widget.options),
-          );
+          ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
         },
         semanticsLabel: context.l10n.settingsSettings,
         icon: const Icon(Icons.settings),
@@ -233,7 +247,7 @@ class _BottomBar extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -287,21 +301,15 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: (context) {
               final boardFen = analysisState.position.fen;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                title: context.l10n.boardEditor,
-                builder: (_) => BoardEditorScreen(initialFen: boardFen),
-              );
+              ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
           onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(options: options),
-            );
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
           },
         ),
         BottomSheetAction(

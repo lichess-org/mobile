@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_display.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -27,20 +28,28 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class CoordinateTrainingScreen extends StatelessWidget {
   const CoordinateTrainingScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const CoordinateTrainingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: const Text('Coordinate Training'), // TODO l10n once script works
         actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.settings),
-            semanticsLabel: context.l10n.settingsSettings,
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
+          Builder(
+            builder: (context) {
+              return AppBarIconButton(
+                icon: const Icon(Icons.settings),
+                semanticsLabel: context.l10n.settingsSettings,
+                onPressed:
+                    () => showAdaptiveBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                    ),
+              );
+            },
           ),
         ],
       ),

@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/online_bots_screen.dart';
@@ -26,29 +25,28 @@ class CreateGameOptions extends ConsumerWidget {
         _Section(
           children: [
             _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      ref.invalidate(accountProvider);
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.custom,
-                        builder: (_) => const CreateCustomGameScreen(),
-                      );
-                    }
-                  : null,
+              onTap:
+                  isOnline
+                      ? () {
+                        ref.invalidate(accountProvider);
+                        Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
+                      }
+                      : null,
               icon: Icons.tune,
               label: context.l10n.custom,
             ),
             _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.onlineBots,
-                        builder: (_) => const OnlineBotsScreen(),
-                      );
-                    }
-                  : null,
+              onTap:
+                  isOnline
+                      ? () {
+                        // pushPlatformRoute(
+                        //   context,
+                        //   title: context.l10n.onlineBots,
+                        //   builder: (_) => const OnlineBotsScreen(),
+                        // );
+                        Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
+                      }
+                      : null,
               icon: Icons.computer,
               label: context.l10n.onlineBots,
             ),
@@ -58,12 +56,10 @@ class CreateGameOptions extends ConsumerWidget {
           children: [
             _CreateGamePlatformButton(
               onTap: () {
-                pushPlatformRoute(
+                Navigator.of(
                   context,
-                  title: 'Over the Board',
                   rootNavigator: true,
-                  builder: (_) => const OverTheBoardScreen(),
-                );
+                ).push(OverTheBoardScreen.buildRoute(context));
               },
               icon: LichessIcons.chess_board,
               label: 'Over the board',
@@ -116,18 +112,18 @@ class _CreateGamePlatformButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
         ? PlatformListTile(
-            leading: Icon(
-              icon,
-              size: 28,
-            ),
-            trailing: const CupertinoListTileChevron(),
-            title: Text(label, style: Styles.mainListTileTitle),
-            onTap: onTap,
-          )
-        : ElevatedButton.icon(
-            onPressed: onTap,
-            icon: Icon(icon),
-            label: Text(label),
-          );
+          leading: Icon(icon, size: 28),
+          trailing: const CupertinoListTileChevron(),
+          title: Text(label, style: Styles.mainListTileTitle),
+          onTap: onTap,
+        )
+        : FilledButton.tonalIcon(
+          onPressed: onTap,
+          icon: Icon(icon),
+          label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+          style: const ButtonStyle(
+            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 8.0)),
+          ),
+        );
   }
 }

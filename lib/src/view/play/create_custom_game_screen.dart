@@ -39,6 +39,14 @@ enum _ViewMode { create, challenges }
 class CreateCustomGameScreen extends StatelessWidget {
   const CreateCustomGameScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const CreateCustomGameScreen(),
+      title: context.l10n.custom,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -48,7 +56,7 @@ class CreateCustomGameScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticBackgroundVisibility: false,
-        backgroundColor: Styles.cupertinoAppBarColor.resolveFrom(context).withValues(alpha: 0.0),
+        backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
         border: null,
       ),
       child: const _CupertinoBody(),
@@ -210,14 +218,14 @@ class _TabView extends StatelessWidget {
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
         Styles.verticalBodyPadding;
-    final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
+    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
     return CustomScrollView(
       slivers: [
         if (cupertinoTabSwitcher != null)
           PinnedHeaderSliver(
             child: ClipRect(
               child: BackdropFilter(
-                enabled: backgroundColor.alpha != 0xFF,
+                enabled: backgroundColor.a != 1,
                 filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
@@ -276,13 +284,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            pushPlatformRoute(
+            Navigator.of(
               context,
               rootNavigator: true,
-              builder: (BuildContext context) {
-                return GameScreen(initialGameId: gameFullId);
-              },
-            );
+            ).push(GameScreen.buildRoute(context, initialGameId: gameFullId));
           }
           widget.setViewMode(_ViewMode.create);
 
@@ -312,7 +317,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
         return SliverList.separated(
           itemCount: supportedChallenges.length,
           separatorBuilder:
-              (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+              (context, index) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final challenge = supportedChallenges[index];
             final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
@@ -600,7 +608,6 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   harmonizeCupertinoTitleStyle: true,
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
-                    applyCupertinoTheme: true,
                     value: preferences.customRated,
                     onChanged: (bool value) {
                       ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
@@ -629,14 +636,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           timeControl == TimeControl.realTime
                               ? isValidTimeControl
                                   ? () {
-                                    pushPlatformRoute(
-                                      context,
-                                      rootNavigator: true,
-                                      builder: (BuildContext context) {
-                                        return GameScreen(
-                                          seek: GameSeek.custom(preferences, account),
-                                        );
-                                      },
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      GameScreen.buildRoute(
+                                        context,
+                                        seek: GameSeek.custom(preferences, account),
+                                      ),
                                     );
                                   }
                                   : null

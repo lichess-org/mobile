@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
@@ -20,6 +21,14 @@ class AnalysisShareScreen extends StatelessWidget {
   const AnalysisShareScreen({required this.options});
 
   final AnalysisOptions options;
+
+  static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
+    return buildScreenRoute(
+      context,
+      screen: AnalysisShareScreen(options: options),
+      title: context.l10n.studyShareAndExport,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

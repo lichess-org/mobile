@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -22,14 +24,15 @@ const innacuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
 
-Color? nagColor(int nag) {
+Color? _nagColor(BuildContext context, int nag) {
+  final colorScheme = ColorScheme.of(context);
   return switch (nag) {
-    1 => Colors.lightGreen,
-    2 => mistakeColor,
-    3 => Colors.teal,
-    4 => blunderColor,
-    5 => LichessColors.purple,
-    6 => LichessColors.cyan,
+    1 => Colors.lightGreen.harmonizeWith(colorScheme.primary),
+    2 => context.lichessColors.brag,
+    3 => Colors.teal.harmonizeWith(colorScheme.primary),
+    4 => context.lichessColors.error,
+    5 => context.lichessColors.purple,
+    6 => context.lichessColors.cyan,
     int() => null,
   };
 }
@@ -932,10 +935,10 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 Color? _textColor(BuildContext context, double opacity, {int? nag}) {
   final defaultColor =
       Theme.of(context).platform == TargetPlatform.android
-          ? Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: opacity)
+          ? TextTheme.of(context).bodyLarge?.color?.withValues(alpha: opacity)
           : CupertinoTheme.of(context).textTheme.textStyle.color?.withValues(alpha: opacity);
 
-  return nag != null && nag > 0 ? nagColor(nag) : defaultColor;
+  return nag != null && nag > 0 ? _nagColor(context, nag) : defaultColor;
 }
 
 /// A widget that displays a single move in the tree view.
@@ -972,12 +975,7 @@ class InlineMove extends ConsumerWidget {
   BoxDecoration? _boxDecoration(BuildContext context, bool isCurrentMove, bool isLiveMove) {
     return (isCurrentMove || isLiveMove)
         ? BoxDecoration(
-          color:
-              isCurrentMove
-                  ? Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoColors.systemGrey3.resolveFrom(context)
-                      : Theme.of(context).focusColor
-                  : null,
+          color: isCurrentMove ? Theme.of(context).focusColor : null,
           shape: BoxShape.rectangle,
           borderRadius: borderRadius,
           border: isLiveMove ? Border.all(width: 2, color: Colors.orange) : null,
@@ -1084,7 +1082,7 @@ class _MoveContextMenu extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: Theme.of(context).textTheme.titleLarge),
+              Text(title, style: TextTheme.of(context).titleLarge),
               if (branch.clock != null)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

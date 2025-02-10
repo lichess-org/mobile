@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
@@ -516,10 +515,9 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.gameAnalysis,
                 icon: Icons.biotech,
                 onTap: () {
-                  pushPlatformRoute(
+                  Navigator.of(
                     context,
-                    builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-                  );
+                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
                 },
               )
             else if (gameState.game.meta.speed == Speed.bullet ||
@@ -569,15 +567,13 @@ class _GameBottomBar extends ConsumerWidget {
               onTap:
                   isChatEnabled
                       ? () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (BuildContext context) {
-                            return MessageScreen(
-                              title: UserFullNameWidget(user: gameState.game.opponent?.user),
-                              me: gameState.game.me?.user,
-                              id: id,
-                            );
-                          },
+                        Navigator.of(context).push(
+                          MessageScreen.buildRoute(
+                            context,
+                            title: UserFullNameWidget(user: gameState.game.opponent?.user),
+                            me: gameState.game.me?.user,
+                            id: id,
+                          ),
                         );
                       }
                       : null,
@@ -603,6 +599,9 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
                 showTooltip: false,
+                blink:
+                    gameState.stepCursor != gameState.game.steps.length - 1 &&
+                    gameState.game.sideToMove == gameState.game.youAre,
               ),
             ),
           ];
@@ -636,10 +635,9 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: (context) {
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-              );
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
           ),
         if (gameState.game.abortable)

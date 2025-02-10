@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart'
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
@@ -21,12 +22,18 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
-
 class OpeningExplorerScreen extends ConsumerWidget {
   const OpeningExplorerScreen({required this.options});
 
   final AnalysisOptions options;
+
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.openingExplorer,
+      screen: OpeningExplorerScreen(options: options),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,7 +120,7 @@ class _Body extends ConsumerWidget {
                         child: AnalysisBoard(
                           options,
                           boardSize,
-                          borderRadius: isTablet ? _kTabletBoardRadius : null,
+                          borderRadius: isTablet ? Styles.boardBorderRadius : null,
                           shouldReplaceChildOnUserMove: true,
                         ),
                       ),
@@ -125,7 +132,6 @@ class _Body extends ConsumerWidget {
                             Expanded(
                               child: PlatformCard(
                                 clipBehavior: Clip.hardEdge,
-                                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,
                                 child: OpeningExplorerView(
@@ -217,7 +223,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
           inlineDecoration:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? BoxDecoration(
-                    color: Styles.cupertinoAppBarColor.resolveFrom(context),
+                    color: CupertinoTheme.of(context).barBackgroundColor,
                     border: const Border(bottom: BorderSide(color: Color(0x4D000000), width: 0.0)),
                   )
                   : null,
@@ -253,7 +259,7 @@ class _BottomBar extends ConsumerWidget {
     };
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: dbLabel,

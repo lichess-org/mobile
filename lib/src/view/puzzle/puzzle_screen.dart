@@ -53,6 +53,14 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   final PuzzleAngle angle;
   final PuzzleId? puzzleId;
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required PuzzleAngle angle,
+    PuzzleId? puzzleId,
+  }) {
+    return buildScreenRoute(context, screen: PuzzleScreen(angle: angle, puzzleId: puzzleId));
+  }
+
   @override
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
 }
@@ -437,20 +445,19 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.analysis),
           onPressed: (context) {
-            pushPlatformRoute(
-              context,
-              builder:
-                  (context) => AnalysisScreen(
-                    options: AnalysisOptions(
-                      orientation: puzzleState.pov,
-                      standalone: (
-                        pgn: ref.read(ctrlProvider.notifier).makePgn(),
-                        isComputerAnalysisAllowed: true,
-                        variant: Variant.standard,
-                      ),
-                      initialMoveCursor: 0,
-                    ),
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions(
+                  orientation: puzzleState.pov,
+                  standalone: (
+                    pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                    isComputerAnalysisAllowed: true,
+                    variant: Variant.standard,
                   ),
+                  initialMoveCursor: 0,
+                ),
+              ),
             );
           },
         ),
@@ -462,14 +469,13 @@ class _BottomBar extends ConsumerWidget {
               archivedGameProvider(id: puzzleState.puzzle.game.id).future,
             );
             if (context.mounted) {
-              pushPlatformRoute(
-                context,
-                builder:
-                    (context) => ArchivedGameScreen(
-                      gameData: game.data,
-                      orientation: puzzleState.pov,
-                      initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
-                    ),
+              Navigator.of(context).push(
+                ArchivedGameScreen.buildRoute(
+                  context,
+                  gameData: game.data,
+                  orientation: puzzleState.pov,
+                  initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
+                ),
               );
             }
           },

@@ -23,6 +23,14 @@ class ChallengeOddBotsScreen extends StatelessWidget {
 
   final LightUser bot;
 
+  static Route<dynamic> buildRoute(BuildContext context, LightUser bot) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.challengeChallengesX(bot.name),
+      screen: ChallengeOddBotsScreen(bot),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -244,7 +252,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                               border: Border.all(
                                 color:
                                     fen == botFen.fen
-                                        ? Theme.of(context).colorScheme.primary
+                                        ? ColorScheme.of(context).primary
                                         : Colors.transparent,
                                 width: borderWidth,
                               ),
@@ -270,25 +278,22 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               onPressed:
                   fen != null
                       ? () {
-                        pushPlatformRoute(
-                          context,
-                          rootNavigator: true,
-                          builder: (BuildContext context) {
-                            return GameScreen(
-                              challenge: ChallengeRequest(
-                                destUser: widget.bot,
-                                variant: Variant.fromPosition,
-                                timeControl: ChallengeTimeControlType.clock,
-                                clock: (
-                                  time: Duration(seconds: seconds),
-                                  increment: Duration(seconds: incrementSeconds),
-                                ),
-                                rated: false,
-                                sideChoice: sideChoice,
-                                initialFen: fen,
+                        Navigator.of(context, rootNavigator: true).push(
+                          GameScreen.buildRoute(
+                            context,
+                            challenge: ChallengeRequest(
+                              destUser: widget.bot,
+                              variant: Variant.fromPosition,
+                              timeControl: ChallengeTimeControlType.clock,
+                              clock: (
+                                time: Duration(seconds: seconds),
+                                increment: Duration(seconds: incrementSeconds),
                               ),
-                            );
-                          },
+                              rated: false,
+                              sideChoice: sideChoice,
+                              initialFen: fen,
+                            ),
+                          ),
                         );
                       }
                       : null,

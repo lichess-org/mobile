@@ -51,6 +51,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
+    bool? bookmarked,
     ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
@@ -211,6 +212,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
     prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
+    bookmarked: pick('bookmarked').asBoolOrNull(),
     expiration: pick('expiration').letOrNull((it) {
       final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
       return (
