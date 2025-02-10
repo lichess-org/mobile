@@ -417,7 +417,7 @@ class _Body extends ConsumerWidget {
       engineLines:
           isComputerAnalysisAllowed && isLocalEvaluationEnabled && numEvalLines > 0
               ? EngineLines(
-                clientEval: currentNode.eval,
+                localEval: currentNode.eval,
                 isGameOver: currentNode.position?.isGameOver ?? false,
                 onTapMove: ref.read(studyControllerProvider(id).notifier).onUserMove,
               )

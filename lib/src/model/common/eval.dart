@@ -68,12 +68,12 @@ double _toWhiteWinningChances(int? cp, int? mate) {
   }
 }
 
-/// The eval from the client's own engine, typically stockfish.
+/// The eval from the Stockfish local engine
 @freezed
-class ClientEval with _$ClientEval implements Eval {
-  const ClientEval._();
+class LocalEval with _$LocalEval implements Eval {
+  const LocalEval._();
 
-  const factory ClientEval({
+  const factory LocalEval({
     required Position position,
     required int depth,
     required int nodes,
@@ -82,7 +82,7 @@ class ClientEval with _$ClientEval implements Eval {
     required Duration searchTime,
     int? cp,
     int? mate,
-  }) = _ClientEval;
+  }) = _LocalEval;
 
   double get knps => nodes / millis;
 

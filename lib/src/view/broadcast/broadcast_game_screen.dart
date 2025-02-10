@@ -205,7 +205,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && numEvalLines > 0
                   ? EngineLines(
-                    clientEval: currentNode.eval,
+                    localEval: currentNode.eval,
                     isGameOver: currentNode.position.isGameOver,
                     onTapMove:
                         ref
