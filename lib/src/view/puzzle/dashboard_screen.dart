@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -21,6 +22,14 @@ final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.puzzlePuzzleDashboard,
+      screen: const PuzzleDashboardScreen(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,36 +75,30 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
-            Padding(
-              padding:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? EdgeInsets.zero
-                      : Styles.horizontalBodyPadding,
-              child: StatCardRow([
-                StatCard(
-                  context.l10n.performance,
-                  value: dashboard.global.performance.toString(),
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-                StatCard(
-                  context.l10n
-                      .puzzleNbPlayed(dashboard.global.nb)
-                      .replaceAll(RegExp(r'\d+'), '')
-                      .trim()
-                      .capitalize(),
-                  value: dashboard.global.nb.toString().localizeNumbers(),
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-                StatCard(
-                  context.l10n.puzzleSolved.capitalize(),
-                  value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                  backgroundColor: cardColor,
-                  elevation: 0,
-                ),
-              ]),
-            ),
+            StatCardRow([
+              StatCard(
+                context.l10n.performance,
+                value: dashboard.global.performance.toString(),
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(dashboard.global.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n.puzzleSolved.capitalize(),
+                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                backgroundColor: cardColor,
+                elevation: 0,
+              ),
+            ]),
             if (chartData.length >= 3) PuzzleChart(chartData),
           ],
         );
@@ -166,8 +169,8 @@ class PuzzleChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radarColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
-    final chartColor = Theme.of(context).colorScheme.secondary;
+    final radarColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
+    final chartColor = ColorScheme.of(context).secondary;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(

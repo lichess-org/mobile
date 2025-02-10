@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -19,6 +18,15 @@ class MessageScreen extends ConsumerStatefulWidget {
   final LightUser? me;
 
   const MessageScreen({required this.id, required this.title, this.me});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required GameFullId id,
+    required Widget title,
+    LightUser? me,
+  }) {
+    return buildScreenRoute(context, screen: MessageScreen(id: id, title: title, me: me));
+  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
@@ -48,7 +56,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformBoardThemeScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
@@ -112,15 +120,15 @@ class _MessageBubble extends ConsumerWidget {
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
       you
-          ? Theme.of(context).colorScheme.secondary
-          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.4);
+          ? ColorScheme.of(context).secondary
+          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.2);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      you ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.onSurface;
+      you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final brightness = ref.watch(currentBrightnessProvider);
+    final brightness = Theme.of(context).brightness;
 
     return FractionallySizedBox(
       alignment: you ? Alignment.centerRight : Alignment.centerLeft,
@@ -215,7 +223,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: CupertinoColors.separator.resolveFrom(context)),
+            border: Border.all(color: ColorScheme.of(context).outline),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
           placeholder: placeholder,

@@ -83,8 +83,6 @@ class Engineline extends ConsumerWidget {
       ply += 1;
     });
 
-    final brightness = Theme.of(context).brightness;
-
     final evalString = pvData.evalString;
     return AdaptiveInkWell(
       onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
@@ -101,8 +99,8 @@ class Engineline extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color:
                       pvData.winningSide == Side.black
-                          ? EngineGauge.backgroundColor(context, brightness)
-                          : EngineGauge.valueColor(context, brightness),
+                          ? EngineGauge.backgroundColor(context)
+                          : EngineGauge.valueColor(context),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),

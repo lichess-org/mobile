@@ -47,7 +47,7 @@ Future<void> showChoicePicker<T>(
                       height: deviceHeight * 0.6,
                       child: ListView(shrinkWrap: true, children: choiceWidgets),
                     )
-                    : Column(mainAxisSize: MainAxisSize.min, children: choiceWidgets);
+                    : ListBody(children: choiceWidgets);
               },
             ),
             actions: [

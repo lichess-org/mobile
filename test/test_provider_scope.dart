@@ -222,6 +222,7 @@ Future<Widget> makeTestProviderScope(
           }),
           userSession: userSession,
           engineMaxMemoryInMb: 256,
+          appDocumentsDirectory: null,
         );
       }),
       ...overrides ?? [],

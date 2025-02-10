@@ -6,21 +6,34 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/edit_profile_screen.dart';
+import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const ProfileScreen(), title: context.l10n.profile);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -35,7 +48,7 @@ class ProfileScreen extends ConsumerWidget {
           AppBarIconButton(
             icon: const Icon(Icons.edit),
             semanticsLabel: context.l10n.editProfile,
-            onPressed: () => pushPlatformRoute(context, builder: (_) => const EditProfileScreen()),
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
           ),
         ],
       ),
@@ -46,13 +59,39 @@ class ProfileScreen extends ConsumerWidget {
           }
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
-          return ListView(
-            children: [
-              UserProfileWidget(user: user),
-              const AccountPerfCards(),
-              const UserActivityWidget(),
-              RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
-            ],
+          return RefreshIndicator.adaptive(
+            edgeOffset:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top + 16.0
+                    : 0,
+            key: _refreshIndicatorKey,
+            onRefresh: () async => ref.refresh(accountProvider),
+            child: ListView(
+              children: [
+                UserProfileWidget(user: user),
+                const AccountPerfCards(),
+                if (user.count != null && user.count!.bookmark > 0)
+                  ListSection(
+                    hasLeading: true,
+                    children: [
+                      PlatformListTile(
+                        title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
+                        leading: const Icon(Icons.bookmarks_outlined),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            GameBookmarksScreen.buildRoute(
+                              context,
+                              nbBookmarks: user.count!.bookmark,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                const UserActivityWidget(),
+                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+              ],
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),

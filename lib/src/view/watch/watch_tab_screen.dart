@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -34,28 +34,30 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.bullet,
   TvChannel.blitz,
   TvChannel.rapid,
+  TvChannel.classical,
 });
 
 final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
-  return ref.withClientCacheFor((client) async {
+  return ref.withClient((client) async {
     final channels = await TvRepository(client).channels();
-    return channels.entries
-        .where((channel) => _featuredChannelsSet.contains(channel.key))
+    return _featuredChannelsSet
+        .map((channel) => MapEntry(channel, channels[channel]))
+        .where((entry) => entry.value != null)
         .map(
           (entry) => TvGameSnapshot(
             channel: entry.key,
-            id: entry.value.id,
-            orientation: entry.value.side ?? Side.white,
+            id: entry.value!.id,
+            orientation: entry.value!.side ?? Side.white,
             player: FeaturedPlayer(
-              name: entry.value.user.name,
-              title: entry.value.user.title,
-              side: entry.value.side ?? Side.white,
-              rating: entry.value.rating,
+              name: entry.value!.user.name,
+              title: entry.value!.user.title,
+              side: entry.value!.side ?? Side.white,
+              rating: entry.value!.rating,
             ),
           ),
         )
         .toIList();
-  }, const Duration(minutes: 5));
+  });
 });
 
 class WatchTabScreen extends ConsumerStatefulWidget {
@@ -200,7 +202,7 @@ class _BroadcastWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: Styles.sectionBottomPadding,
+      padding: Styles.verticalBodyPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -220,11 +222,7 @@ class _BroadcastWidget extends ConsumerWidget {
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.broadcastBroadcasts,
-                      builder: (context) => const BroadcastListScreen(),
-                    );
+                    Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
                   },
                   child: Text(context.l10n.more),
                 ),
@@ -267,10 +265,9 @@ class _WatchTvWidget extends ConsumerWidget {
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed:
-                () => pushPlatformRoute(
+                () => Navigator.of(
                   context,
-                  builder: (context) => const LiveTvChannelsScreen(),
-                ).then((_) => _refreshData(ref)),
+                ).push(LiveTvChannelsScreen.buildRoute(context)).then((_) => _refreshData(ref)),
             child: Text(context.l10n.more),
           ),
           children: data
@@ -284,11 +281,16 @@ class _WatchTvWidget extends ConsumerWidget {
                     rating: snapshot.player.rating,
                   ),
                   onTap:
-                      () => pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => TvScreen(channel: snapshot.channel),
-                      ).then((_) => _refreshData(ref)),
+                      () => Navigator.of(context, rootNavigator: true)
+                          .push(
+                            TvScreen.buildRoute(
+                              context,
+                              snapshot.channel,
+                              gameId: snapshot.id,
+                              orientation: snapshot.player.side,
+                            ),
+                          )
+                          .then((_) => _refreshData(ref)),
                 );
               })
               .toList(growable: false),
@@ -330,11 +332,7 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed:
-                () => pushPlatformRoute(
-                  context,
-                  builder: (context) => StreamerScreen(streamers: data),
-                ),
+            onPressed: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
             child: Text(context.l10n.more),
           ),
           children: [

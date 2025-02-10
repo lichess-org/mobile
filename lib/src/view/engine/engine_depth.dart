@@ -35,7 +35,7 @@ class EngineDepth extends ConsumerWidget {
               backgroundColor:
                   Theme.of(context).platform == TargetPlatform.android
                       ? DialogTheme.of(context).backgroundColor ??
-                          Theme.of(context).colorScheme.surfaceContainerHigh
+                          ColorScheme.of(context).surfaceContainerHigh
                       : CupertinoDynamicColor.resolve(
                         CupertinoColors.tertiarySystemBackground,
                         context,
@@ -50,10 +50,7 @@ class EngineDepth extends ConsumerWidget {
               height: 20.0,
               padding: const EdgeInsets.all(2.0),
               decoration: BoxDecoration(
-                color:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? Theme.of(context).colorScheme.secondary
-                        : CupertinoTheme.of(context).primaryColor,
+                color: ColorScheme.of(context).secondary,
                 borderRadius: BorderRadius.circular(4.0),
               ),
               child: FittedBox(
@@ -61,10 +58,7 @@ class EngineDepth extends ConsumerWidget {
                 child: Text(
                   '${math.min(99, depth)}',
                   style: TextStyle(
-                    color:
-                        Theme.of(context).platform == TargetPlatform.android
-                            ? Theme.of(context).colorScheme.onSecondary
-                            : CupertinoTheme.of(context).primaryContrastingColor,
+                    color: ColorScheme.of(context).onSecondary,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),

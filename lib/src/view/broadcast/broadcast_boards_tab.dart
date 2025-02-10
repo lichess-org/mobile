@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
@@ -144,18 +143,16 @@ class BroadcastPreview extends StatelessWidget {
           return BoardThumbnail(
             animationDuration: const Duration(milliseconds: 150),
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: title,
-                builder:
-                    (context) => BroadcastGameScreen(
-                      tournamentId: tournamentId,
-                      roundId: roundId,
-                      gameId: game.id,
-                      tournamentSlug: tournamentSlug,
-                      roundSlug: roundSlug,
-                      title: title,
-                    ),
+              Navigator.of(context).push(
+                BroadcastGameScreen.buildRoute(
+                  context,
+                  tournamentId: tournamentId,
+                  roundId: roundId,
+                  gameId: game.id,
+                  tournamentSlug: tournamentSlug,
+                  roundSlug: roundSlug,
+                  title: title,
+                ),
               );
             },
             orientation: Side.white,

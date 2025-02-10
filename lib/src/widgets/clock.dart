@@ -53,7 +53,7 @@ class Clock extends StatelessWidget {
     final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
     final brightness = Theme.of(context).brightness;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     final effectiveClockStyle = clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme);
 
     return LayoutBuilder(
@@ -136,11 +136,9 @@ class ClockStyle {
     backgroundColor: colorScheme.surface,
     textColor: colorScheme.outline,
     activeBackgroundColor:
-        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.primaryFixedDim,
+        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.secondary,
     activeTextColor:
-        brightness == Brightness.dark
-            ? colorScheme.onInverseSurface
-            : colorScheme.onPrimaryFixedVariant,
+        brightness == Brightness.dark ? colorScheme.onInverseSurface : colorScheme.onSecondary,
     emergencyBackgroundColor: colorScheme.errorContainer,
     emergencyTextColor: colorScheme.onErrorContainer,
   );

@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -59,7 +58,9 @@ class GameSettings extends ConsumerWidget {
           title: const Text('Board settings'),
           trailing: const Icon(CupertinoIcons.chevron_right),
           onTap: () {
-            pushPlatformRoute(context, fullscreenDialog: true, screen: const BoardSettingsScreen());
+            Navigator.of(
+              context,
+            ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
           },
         ),
         SwitchSettingTile(

@@ -37,12 +37,12 @@ class BottomBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final primary = ColorScheme.of(context).primary;
 
     final labelFontSize =
         Theme.of(context).platform == TargetPlatform.iOS
             ? 11.0
-            : Theme.of(context).textTheme.bodySmall?.fontSize;
+            : TextTheme.of(context).bodySmall?.fontSize;
 
     final child = Opacity(
       opacity: enabled ? 1.0 : 0.4,
@@ -51,9 +51,9 @@ class BottomBarButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Badge(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            backgroundColor: ColorScheme.of(context).secondary,
             textStyle: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondary,
+              color: ColorScheme.of(context).onSecondary,
               fontWeight: FontWeight.bold,
             ),
             isLabelVisible: badgeLabel != null,

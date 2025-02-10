@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.14.0+001400 # See README.md for details about versioning
+version: 0.14.4+001404 # See README.md for details about versioning
 
 environment:
   sdk: '^3.7.0-209.1.beta'
@@ -31,7 +31,6 @@ dependencies:
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
   fl_chart: ^0.70.0
-  flex_color_scheme: ^8.1.0
   flutter:
     sdk: flutter
   flutter_appauth: ^8.0.0+1
@@ -45,10 +44,7 @@ dependencies:
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
   flutter_secure_storage: ^9.2.0
-  flutter_slidable:
-    git:
-      url: https://github.com/veloce/flutter_slidable.git
-      ref: 89b8384667d3b6c1c2967a8ff10846bcf0a170c7
+  flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
   http: ^1.1.0
@@ -74,7 +70,7 @@ dependencies:
   stockfish:
     git:
       url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 0b4d8f20f72beb43c853230dd18063bee242487d
+      ref: 47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0

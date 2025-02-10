@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -175,7 +176,7 @@ class AnalysisLayout extends StatelessWidget {
                         ? Orientation.landscape
                         : Orientation.portrait;
                 final isTablet = isTabletOrLarger(context);
-                const tabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
+                const tabletBoardRadius = Styles.boardBorderRadius;
 
                 if (orientation == Orientation.landscape) {
                   final headerAndFooterHeight =
@@ -255,7 +256,6 @@ class AnalysisLayout extends StatelessWidget {
                               Expanded(
                                 child: PlatformCard(
                                   clipBehavior: Clip.hardEdge,
-                                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                                   semanticContainer: false,
                                   child: TabBarView(controller: tabController, children: children),
                                 ),

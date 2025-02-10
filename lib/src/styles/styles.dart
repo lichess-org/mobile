@@ -32,6 +32,7 @@ abstract class Styles {
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
+  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
 
   // padding
   static const cupertinoAppBarTrailingWidgetPadding = EdgeInsetsDirectional.only(end: 8.0);
@@ -45,6 +46,20 @@ abstract class Styles {
   /// Horizontal and bottom padding for the body section.
   static const bodySectionBottomPadding = EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0);
 
+  // cards
+  static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
+
+  static Color cardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    return brightness == Brightness.light
+        ? colorScheme.surfaceContainerLowest
+        : colorScheme.surfaceContainerHigh;
+  }
+
+  // boards
+  static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
   // colors
   static Color? expansionTileColor(BuildContext context) =>
       defaultTargetPlatform == TargetPlatform.iOS
@@ -55,12 +70,11 @@ abstract class Styles {
   static Color listingsScreenBackgroundColor(BuildContext context) =>
       ColorScheme.of(context).surfaceContainerLowest;
 
-  static Color cardColor(BuildContext context) {
+  static Color backgroundActivated(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    final colorScheme = ColorScheme.of(context);
     return brightness == Brightness.light
-        ? colorScheme.surfaceContainerLowest
-        : colorScheme.surfaceContainerLow;
+        ? ColorScheme.of(context).surfaceContainerLow
+        : ColorScheme.of(context).surfaceContainerHighest;
   }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
@@ -72,6 +86,13 @@ abstract class Styles {
     debugLabel: 'separator',
     color: Color.fromARGB(73, 60, 60, 67),
     darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
+
+  static const cupertinoAnchorMenuTheme = MenuThemeData(
+    style: MenuStyle(
+      elevation: WidgetStatePropertyAll(0),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
+    ),
   );
 
   /// A Material Design text theme with light glyphs based on San Francisco.

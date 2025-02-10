@@ -47,6 +47,28 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.title,
   });
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required BroadcastTournamentId tournamentId,
+    required BroadcastRoundId roundId,
+    required BroadcastGameId gameId,
+    String? tournamentSlug,
+    String? roundSlug,
+    String? title,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastGameScreen(
+        tournamentId: tournamentId,
+        roundId: roundId,
+        gameId: gameId,
+        tournamentSlug: tournamentSlug,
+        roundSlug: roundSlug,
+        title: title,
+      ),
+    );
+  }
+
   @override
   ConsumerState<BroadcastGameScreen> createState() => _BroadcastGameScreenState();
 }
@@ -85,16 +107,19 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               _ => const SizedBox.shrink(),
             };
 
-    return PlatformBoardThemeScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
         title: title,
         actions: [
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           AppBarIconButton(
             onPressed: () {
-              pushPlatformRoute(
-                context,
-                screen: BroadcastGameSettings(widget.roundId, widget.gameId),
+              Navigator.of(context).push(
+                BroadcastGameSettingsScreen.buildRoute(
+                  context,
+                  roundId: widget.roundId,
+                  gameId: widget.gameId,
+                ),
               );
             },
             semanticsLabel: context.l10n.settingsSettings,
@@ -218,14 +243,17 @@ class _BroadcastGameTreeView extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return SingleChildScrollView(
-      child: DebouncedPgnTreeView(
-        root: state.root,
-        currentPath: state.currentPath,
-        broadcastLivePath: state.broadcastLivePath,
-        pgnRootComments: state.pgnRootComments,
-        shouldShowAnnotations: analysisPrefs.showAnnotations,
-        notifier: ref.read(ctrlProvider.notifier),
+    return ColoredBox(
+      color: ColorScheme.of(context).surfaceContainer,
+      child: SingleChildScrollView(
+        child: DebouncedPgnTreeView(
+          root: state.root,
+          currentPath: state.currentPath,
+          broadcastLivePath: state.broadcastLivePath,
+          pgnRootComments: state.pgnRootComments,
+          shouldShowAnnotations: analysisPrefs.showAnnotations,
+          notifier: ref.read(ctrlProvider.notifier),
+        ),
       ),
     );
   }
@@ -390,19 +418,18 @@ class _PlayerWidget extends ConsumerWidget {
 
         return GestureDetector(
           onTap: () {
-            pushPlatformRoute(
-              context,
-              builder:
-                  (context) => BroadcastPlayerResultsScreen(
-                    tournamentId,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    player.title,
-                    player.name,
-                  ),
+            Navigator.of(context).push(
+              BroadcastPlayerResultsScreen.buildRoute(
+                context,
+                tournamentId,
+                (player.fideId != null) ? player.fideId!.toString() : player.name,
+                playerTitle: player.title,
+                playerName: player.name,
+              ),
             );
           },
           child: Container(
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: ColorScheme.of(context).surfaceContainer,
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [
@@ -436,8 +463,8 @@ class _PlayerWidget extends ConsumerWidget {
                     color:
                         (side == sideToMove)
                             ? isCursorOnLiveMove
-                                ? Theme.of(context).colorScheme.tertiaryContainer
-                                : Theme.of(context).colorScheme.secondaryContainer
+                                ? ColorScheme.of(context).tertiaryContainer
+                                : ColorScheme.of(context).secondaryContainer
                             : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -491,8 +518,8 @@ class _Clock extends StatelessWidget {
         color:
             isSideToMove
                 ? isLive
-                    ? Theme.of(context).colorScheme.onTertiaryContainer
-                    : Theme.of(context).colorScheme.onSecondaryContainer
+                    ? ColorScheme.of(context).onTertiaryContainer
+                    : ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),

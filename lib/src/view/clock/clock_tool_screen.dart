@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -13,6 +14,10 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 
 class ClockToolScreen extends StatelessWidget {
   const ClockToolScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const ClockToolScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +81,7 @@ class ClockTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
     final activeColor = colorScheme.primaryFixedDim;
     final activeTextColor = colorScheme.onPrimaryFixed;
     final pausedColor = activeColor.withValues(alpha: 0.5);
