@@ -459,7 +459,8 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   @override
   Widget build(BuildContext context) {
     final rootComments = widget.rootComments?.map((c) => c.text).nonNulls ?? [];
-    return Padding(
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceContainerHigh,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -706,11 +707,6 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
 
     final initialFullmoves = nodes.first.position.fullmoves;
 
-    final background =
-        Theme.of(context).brightness == Brightness.light
-            ? ColorScheme.of(context).surfaceContainerHigh
-            : ColorScheme.of(context).surfaceContainerHigh;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -740,7 +736,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: background,
+                  color: ColorScheme.of(context).surfaceContainer,
                   shape: BoxShape.rectangle,
                   borderRadius: InlineMove.borderRadius,
                 ),
