@@ -65,7 +65,7 @@ class SmallBoardPreview extends ConsumerWidget {
                     height: boardSize,
                     decoration: const BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      borderRadius: Styles.boardBorderRadius,
                     ),
                   )
                 else
@@ -79,7 +79,7 @@ class SmallBoardPreview extends ConsumerWidget {
                     brightness: boardPrefs.brightness,
                     hue: boardPrefs.hue,
                     enableCoordinates: false,
-                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    borderRadius: Styles.boardBorderRadius,
                     boxShadow: boardShadows,
                     animationDuration: const Duration(milliseconds: 150),
                   ),
@@ -98,7 +98,7 @@ class SmallBoardPreview extends ConsumerWidget {
                               width: double.infinity,
                               decoration: const BoxDecoration(
                                 color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                borderRadius: Styles.boardBorderRadius,
                               ),
                             ),
                             const SizedBox(height: 4.0),
@@ -107,7 +107,7 @@ class SmallBoardPreview extends ConsumerWidget {
                               width: MediaQuery.sizeOf(context).width / 3,
                               decoration: const BoxDecoration(
                                 color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                borderRadius: Styles.boardBorderRadius,
                               ),
                             ),
                           ],
@@ -117,7 +117,7 @@ class SmallBoardPreview extends ConsumerWidget {
                           width: 44.0,
                           decoration: const BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            borderRadius: Styles.boardBorderRadius,
                           ),
                         ),
                         Container(
@@ -125,7 +125,7 @@ class SmallBoardPreview extends ConsumerWidget {
                           width: double.infinity,
                           decoration: const BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            borderRadius: Styles.boardBorderRadius,
                           ),
                         ),
                       ],

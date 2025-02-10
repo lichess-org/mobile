@@ -136,7 +136,7 @@ class _BoardEditor extends ConsumerWidget {
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? const BorderRadius.all(Radius.circular(4.0)) : BorderRadius.zero,
+        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
       pointerMode: editorState.editorPointerMode,
@@ -189,8 +189,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius:
-            widget.isTablet ? const BorderRadius.all(Radius.circular(4.0)) : BorderRadius.zero,
+        borderRadius: widget.isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
       ),
       child: ColoredBox(

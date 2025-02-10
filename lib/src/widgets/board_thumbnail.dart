@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
@@ -75,7 +76,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       orientation: widget.orientation,
       lastMove: widget.lastMove as NormalMove?,
       enableCoordinates: false,
-      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+      borderRadius: Styles.boardBorderRadius,
       boxShadow: boardShadows,
       pieceAssets: boardPrefs.pieceSet.assets,
       colorScheme: boardPrefs.boardTheme.colors,

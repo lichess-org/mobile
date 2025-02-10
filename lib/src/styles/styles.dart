@@ -49,6 +49,17 @@ abstract class Styles {
   // cards
   static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
 
+  static Color cardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    return brightness == Brightness.light
+        ? colorScheme.surfaceContainerLowest
+        : colorScheme.surfaceContainerHigh;
+  }
+
+  // boards
+  static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
   // colors
   static Color? expansionTileColor(BuildContext context) =>
       defaultTargetPlatform == TargetPlatform.iOS
@@ -58,14 +69,6 @@ abstract class Styles {
   /// Retrieve the background color for the screens where we display a list of items.
   static Color listingsScreenBackgroundColor(BuildContext context) =>
       ColorScheme.of(context).surfaceContainerLowest;
-
-  static Color cardColor(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final colorScheme = ColorScheme.of(context);
-    return brightness == Brightness.light
-        ? colorScheme.surfaceContainerLowest
-        : colorScheme.surfaceContainerHigh;
-  }
 
   static Color backgroundActivated(BuildContext context) {
     final brightness = Theme.of(context).brightness;

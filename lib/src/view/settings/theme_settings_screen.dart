@@ -369,7 +369,7 @@ class _BoardPreview extends StatelessWidget {
           settings: boardPrefs.toBoardSettings().copyWith(
             brightness: kBoardDefaultBrightnessFilter,
             hue: kBoardDefaultHueFilter,
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            borderRadius: Styles.boardBorderRadius,
             boxShadow: boardShadows,
           ),
         ),
