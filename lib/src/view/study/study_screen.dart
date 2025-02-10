@@ -533,6 +533,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
 
     return BoardWidget(
       size: widget.boardSize,
+      boardPrefs: boardPrefs,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
@@ -569,7 +570,6 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
                 },
               )
               : null,
-      boardPrefs: boardPrefs,
     );
   }
 

@@ -321,6 +321,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
     return BoardWidget(
       size: widget.boardSize,
+      boardPrefs: boardPrefs,
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
@@ -355,7 +356,6 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
-      boardPrefs: boardPrefs,
     );
   }
 
