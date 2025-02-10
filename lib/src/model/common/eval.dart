@@ -14,10 +14,40 @@ part 'eval.g.dart';
 
 sealed class Eval {
   String get evalString;
+
+  /// The winning chances for the given [Side].
+  ///
+  /// 1  = infinitely winning
+  /// -1 = infinitely losing
   double winningChances(Side side);
 }
 
-/// The eval from an external engine, typically lichess server side stockfish.
+sealed class ClientEval extends Eval {
+  Position get position;
+
+  IList<PvData> get pvs;
+}
+
+/// The cloud eval coming from Lichess server
+@freezed
+class CloudEval with _$CloudEval implements ClientEval {
+  CloudEval._();
+
+  factory CloudEval({required int depth, required Position position, required IList<PvData> pvs}) =
+      _CloudEval;
+
+  @override
+  String get evalString => _evalString(cp, mate);
+
+  @override
+  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+
+  int? get cp => pvs[0].cp;
+
+  int? get mate => pvs[0].mate;
+}
+
+/// The eval from an external engine, typically Lichess server side Stockfish.
 @Freezed(fromJson: true, toJson: true)
 class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
@@ -70,7 +100,7 @@ double _toWhiteWinningChances(int? cp, int? mate) {
 
 /// The eval from the Stockfish local engine
 @freezed
-class LocalEval with _$LocalEval implements Eval {
+class LocalEval with _$LocalEval implements ClientEval {
   const LocalEval._();
 
   const factory LocalEval({
@@ -104,10 +134,6 @@ class LocalEval with _$LocalEval implements Eval {
   @override
   String get evalString => _evalString(cp, mate);
 
-  /// The winning chances for the given [Side].
-  ///
-  /// 1  = infinitely winning
-  /// -1 = infinitely losing
   @override
   double winningChances(Side side) => _toPov(side, _whiteWinningChances);
 
