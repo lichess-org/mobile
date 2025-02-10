@@ -57,12 +57,7 @@ class _Body extends ConsumerWidget {
           _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
           _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
           _Leaderboard(data.antichess, LichessIcons.antichess, 'ANTICHESS'),
-          _Leaderboard(
-            data.racingKings,
-            LichessIcons.racing_kings,
-            'RACING KINGS',
-            showDivider: false,
-          ),
+          _Leaderboard(data.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
         ];
 
         return SafeArea(
@@ -143,11 +138,10 @@ class _Progress extends StatelessWidget {
 }
 
 class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.iconData, this.title, {this.showDivider = true});
+  const _Leaderboard(this.userList, this.iconData, this.title);
   final List<LeaderboardUser> userList;
   final IconData iconData;
   final String title;
-  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +149,6 @@ class _Leaderboard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: ListSection(
         hasLeading: false,
-        showDivider: showDivider,
         header: Row(
           children: [
             Icon(iconData, color: context.lichessColors.brag),

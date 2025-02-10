@@ -23,6 +23,8 @@ class PerfCards extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
+  static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
+
   @override
   Widget build(BuildContext context) {
     const puzzlePerfsSet = {Perf.puzzle, Perf.streak, Perf.storm};
@@ -79,8 +81,9 @@ class PerfCards extends StatelessWidget {
                 height: 100,
                 width: 100,
                 child: PlatformCard(
+                  borderRadius: _kCardBorderRadius,
                   child: AdaptiveInkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: _kCardBorderRadius,
                     onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),

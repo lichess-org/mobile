@@ -136,6 +136,8 @@ class _ChoiceChip extends StatefulWidget {
 }
 
 class _ChoiceChipState extends State<_ChoiceChip> {
+  static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
+
   @override
   Widget build(BuildContext context) {
     final bgColor = Styles.cardColor(context);
@@ -145,10 +147,10 @@ class _ChoiceChipState extends State<_ChoiceChip> {
       child: Container(
         decoration: BoxDecoration(
           color: bgColor.withValues(alpha: 0.8),
-          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+          borderRadius: _kBorderRadius,
         ),
         child: AdaptiveInkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          borderRadius: _kBorderRadius,
           onTap: widget.onTap,
           splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
           child: Padding(

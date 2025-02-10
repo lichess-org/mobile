@@ -48,7 +48,6 @@ class _Body extends ConsumerWidget {
       children: [
         ListSection(
           hasLeading: false,
-          showDivider: false,
           children: [
             SettingsListTile(
               settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),

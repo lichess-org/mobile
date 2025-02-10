@@ -14,7 +14,6 @@ class ListSection extends StatelessWidget {
     this.headerTrailing,
     this.margin,
     this.hasLeading = false,
-    this.showDivider = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
@@ -31,7 +30,6 @@ class ListSection extends StatelessWidget {
   }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
        headerTrailing = null,
        header = header ? const SizedBox.shrink() : null,
-       showDivider = false,
        showDividerBetweenTiles = false,
        dense = false,
        cupertinoAdditionalDividerMargin = null,
@@ -57,9 +55,6 @@ class ListSection extends StatelessWidget {
   /// Only on android.
   final bool showDividerBetweenTiles;
 
-  /// Show a [Divider] at the bottom of the section. Only on android.
-  final bool showDivider;
-
   /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
 
@@ -74,44 +69,52 @@ class ListSection extends StatelessWidget {
 
   final bool _isLoading;
 
+  static const double materialVerticalPadding = 8.0;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     switch (theme.platform) {
       case TargetPlatform.android:
         return _isLoading
-            ? PlatformCard(
-              clipBehavior: Clip.hardEdge,
-              margin: margin ?? Styles.bodySectionPadding,
-              color: backgroundColor,
-              child: Column(
-                children: [
-                  if (header != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                        ),
+            ? Column(
+              children: [
+                if (header != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 25,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
                     ),
-                  for (int i = 0; i < children.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                PlatformCard(
+                  clipBehavior: Clip.hardEdge,
+                  margin: margin ?? Styles.bodySectionPadding,
+                  color: backgroundColor,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: materialVerticalPadding),
+                      for (int i = 0; i < children.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-              ),
+                      const SizedBox(height: materialVerticalPadding),
+                    ],
+                  ),
+                ),
+              ],
             )
             : PlatformCard(
               clipBehavior: Clip.hardEdge,
@@ -120,6 +123,7 @@ class ListSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: materialVerticalPadding),
                   if (header != null)
                     ListTile(
                       dense: true,
@@ -130,11 +134,7 @@ class ListSection extends StatelessWidget {
                     ...ListTile.divideTiles(context: context, tiles: children)
                   else
                     ...children,
-                  if (showDivider)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Divider(thickness: 0),
-                    ),
+                  const SizedBox(height: materialVerticalPadding),
                 ],
               ),
             );
