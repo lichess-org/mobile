@@ -121,7 +121,7 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void start() {
-    _clock.start();
+    _clock.startSide(Side.white);
     state = state.copyWith(started: true);
   }
 
