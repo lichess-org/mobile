@@ -92,11 +92,6 @@ class _Body extends ConsumerWidget {
                   );
                 } else {
                   Navigator.of(context).push(CastlingMethodSettingsScreen.buildRoute(context));
-                  // pushPlatformRoute(
-                  //   context,
-                  //   title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
-                  //   builder: (context) => const CastlingMethodSettingsScreen(),
-                  // );
                 }
               },
             ),
