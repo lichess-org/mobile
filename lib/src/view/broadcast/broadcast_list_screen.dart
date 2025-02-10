@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -365,7 +364,7 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
             ),
             child: CarouselView.weighted(
               controller: _controller,
-              shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+              shape: const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
               elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
               flexWeights: flexWeights,
               itemSnapping: true,
@@ -749,7 +748,7 @@ class _BroadcastCardState extends State<BroadcastCard> {
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          borderRadius: kCardBorderRadius,
+          borderRadius: Styles.cardBorderRadius,
           color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
           boxShadow:
               Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],

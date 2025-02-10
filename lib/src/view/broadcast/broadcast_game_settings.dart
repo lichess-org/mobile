@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BroadcastGameSettings extends ConsumerWidget {
-  const BroadcastGameSettings(this.roundId, this.gameId);
+class BroadcastGameSettingsScreen extends ConsumerWidget {
+  const BroadcastGameSettingsScreen(this.roundId, this.gameId);
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
@@ -27,7 +27,7 @@ class BroadcastGameSettings extends ConsumerWidget {
   }) {
     return buildScreenRoute(
       context,
-      screen: BroadcastGameSettings(roundId, gameId),
+      screen: BroadcastGameSettingsScreen(roundId, gameId),
       title: context.l10n.settingsSettings,
     );
   }

@@ -13,15 +13,15 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class AnalysisSettings extends ConsumerWidget {
-  const AnalysisSettings(this.options);
+class AnalysisSettingsScreen extends ConsumerWidget {
+  const AnalysisSettingsScreen(this.options);
 
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
     return buildScreenRoute(
       context,
-      screen: AnalysisSettings(options),
+      screen: AnalysisSettingsScreen(options),
       title: context.l10n.settingsSettings,
     );
   }

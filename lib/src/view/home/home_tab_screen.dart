@@ -5,7 +5,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -736,7 +735,7 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
               child: CarouselView.weighted(
                 controller: _controller,
                 padding: kGameCarouselPadding,
-                shape: const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+                shape: const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
                 elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
                 flexWeights: kGameCarouselFlexWeights,
                 itemSnapping: true,

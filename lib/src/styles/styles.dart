@@ -2,7 +2,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -47,6 +46,9 @@ abstract class Styles {
   /// Horizontal and bottom padding for the body section.
   static const bodySectionBottomPadding = EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0);
 
+  // cards
+  static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
+
   // colors
   static Color? expansionTileColor(BuildContext context) =>
       defaultTargetPlatform == TargetPlatform.iOS
@@ -86,7 +88,7 @@ abstract class Styles {
   static const cupertinoAnchorMenuTheme = MenuThemeData(
     style: MenuStyle(
       elevation: WidgetStatePropertyAll(0),
-      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: kCardBorderRadius)),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
     ),
   );
 

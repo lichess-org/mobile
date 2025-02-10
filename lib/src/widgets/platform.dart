@@ -94,7 +94,7 @@ class PlatformCard extends StatelessWidget {
         shape:
             borderRadius != null
                 ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+                : const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
         color: color ?? Styles.cardColor(context),
         shadowColor: shadowColor,
         semanticContainer: semanticContainer,

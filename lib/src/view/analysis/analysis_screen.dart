@@ -95,7 +95,9 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
-          Navigator.of(context).push(AnalysisSettings.buildRoute(context, options: widget.options));
+          Navigator.of(
+            context,
+          ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
         },
         semanticsLabel: context.l10n.settingsSettings,
         icon: const Icon(Icons.settings),

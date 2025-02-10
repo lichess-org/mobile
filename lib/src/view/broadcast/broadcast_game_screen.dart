@@ -114,7 +114,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           AppBarIconButton(
             onPressed: () {
               Navigator.of(context).push(
-                BroadcastGameSettings.buildRoute(
+                BroadcastGameSettingsScreen.buildRoute(
                   context,
                   roundId: widget.roundId,
                   gameId: widget.gameId,
