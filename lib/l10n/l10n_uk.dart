@@ -462,7 +462,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Дата початку в місцевому часовому поясі турніру: $param';
   }
 
   @override
@@ -551,12 +551,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Дошки можна завантажити із джерела або через $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Почнеться після $param';
   }
 
   @override
@@ -584,7 +584,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Публічне джерело PGN у реальному часі для цього раунду. Ми також пропонуємо $param для швидшої й ефективнішої синхронізації.';
   }
 
   @override
@@ -903,7 +903,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesInGameOnly => 'Лише під час гри';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Окрім під час гри';
 
   @override
   String get preferencesChessClock => 'Шаховий годинник';
@@ -1511,6 +1511,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Замість очікуваного ходу, спочатку робиться інший хід з безпосередньою атакою, на яку суперник має відповісти. Також відомий як \"Zwischenzug\" або \"In between\".';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
   String get puzzleThemeKnightEndgame => 'Коньовий ендшпіль';
@@ -4429,6 +4435,19 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count грубих помилок',
+      many: '$count грубих помилок',
+      few: '$count грубі помилки',
+      one: '$count груба помилка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,7 +4461,33 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count помилок',
+      many: '$count помилок',
+      few: '$count помилки',
+      one: '$count помилка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count неточностей',
+      many: '$count неточностей',
+      few: '$count неточності',
+      one: '$count неточність',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5247,6 +5292,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Активні';
+
+  @override
+  String get studyShowResults => 'Результати';
 
   @override
   String get studyShowEvalBar => 'Шкала оцінки';

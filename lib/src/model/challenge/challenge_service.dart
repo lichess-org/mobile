@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -112,11 +111,10 @@ class ChallengeService {
           rootNavState.popUntil((route) => route.isFirst);
         }
 
-        pushPlatformRoute(
+        Navigator.of(
           context,
           rootNavigator: true,
-          builder: (BuildContext context) => GameScreen(initialGameId: fullId),
-        );
+        ).push(GameScreen.buildRoute(context, initialGameId: fullId));
 
       case 'decline':
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -144,10 +142,7 @@ class ChallengeService {
         if (navState.canPop()) {
           navState.popUntil((route) => route.isFirst);
         }
-        pushPlatformRoute(
-          context,
-          builder: (BuildContext context) => const ChallengeRequestsScreen(),
-        );
+        Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
     }
   }
 }

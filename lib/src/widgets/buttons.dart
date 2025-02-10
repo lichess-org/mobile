@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:popover/popover.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
@@ -194,16 +193,7 @@ class AppBarNotificationIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarIconButton(
-      icon: Badge.count(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        textStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onTertiary,
-          fontWeight: FontWeight.bold,
-        ),
-        count: count,
-        isLabelVisible: count > 0,
-        child: icon,
-      ),
+      icon: Badge.count(count: count, isLabelVisible: count > 0, child: icon),
       onPressed: onPressed,
       semanticsLabel: semanticsLabel,
     );
@@ -471,149 +461,4 @@ class PlatformIconButton extends StatelessWidget {
         return const SizedBox.shrink();
     }
   }
-}
-
-const _kMenuWidth = 250.0;
-const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xFFA9A9AF),
-  darkColor: Color(0xFF57585A),
-);
-
-/// A platform agnostic menu button for the app bar.
-class PlatformAppBarMenuButton extends StatelessWidget {
-  const PlatformAppBarMenuButton({
-    required this.icon,
-    required this.semanticsLabel,
-    required this.actions,
-    super.key,
-  });
-
-  final Widget icon;
-  final String semanticsLabel;
-  final List<AppBarMenuAction> actions;
-
-  @override
-  Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      final menuActions =
-          actions.map((action) {
-            return CupertinoContextMenuAction(
-              onPressed: () {
-                if (action.dismissOnPress) {
-                  Navigator.of(context).pop();
-                }
-                action.onPressed();
-              },
-              trailingIcon: action.icon,
-              child: Text(action.label),
-            );
-          }).toList();
-      return AppBarIconButton(
-        onPressed: () {
-          showPopover(
-            context: context,
-            bodyBuilder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: _kMenuWidth,
-                  child: IntrinsicHeight(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                      child: ColoredBox(
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoContextMenu.kBackgroundColor,
-                          context,
-                        ),
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: CupertinoScrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  menuActions.first,
-                                  for (final Widget action in menuActions.skip(1))
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: CupertinoDynamicColor.resolve(
-                                              _kBorderColor,
-                                              context,
-                                            ),
-                                            width: 0.4,
-                                          ),
-                                        ),
-                                      ),
-                                      position: DecorationPosition.foreground,
-                                      child: action,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            arrowWidth: 0.0,
-            arrowHeight: 0.0,
-            direction: PopoverDirection.top,
-            width: _kMenuWidth,
-            backgroundColor: Colors.transparent,
-          );
-        },
-        semanticsLabel: semanticsLabel,
-        icon: icon,
-      );
-    }
-
-    return MenuAnchor(
-      menuChildren:
-          actions.map((action) {
-            return MenuItemButton(
-              leadingIcon: Icon(action.icon),
-              semanticsLabel: action.label,
-              closeOnActivate: action.dismissOnPress,
-              onPressed: action.onPressed,
-              child: Text(action.label),
-            );
-          }).toList(),
-      builder: (BuildContext context, MenuController controller, Widget? child) {
-        return AppBarIconButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          semanticsLabel: semanticsLabel,
-          icon: icon,
-        );
-      },
-    );
-  }
-}
-
-class AppBarMenuAction {
-  const AppBarMenuAction({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    this.dismissOnPress = true,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onPressed;
-
-  /// Whether the modal should be dismissed when an action is pressed.
-  ///
-  /// Default to true.
-  final bool dismissOnPress;
 }

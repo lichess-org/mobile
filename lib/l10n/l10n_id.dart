@@ -1443,6 +1443,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Daripada memainkan gerakan yang disangka, mainkan terlebih dulu gerakan lain yang mengancam sehingga mewajibkan lawan untuk membalas. Juga disebut \"Zwischenzug\" atau \"Di antara\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Babak akhir kuda';
 
   @override
@@ -4350,6 +4356,16 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Blunder',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4360,11 +4376,31 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Kesalahan',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count ketidaktepatan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ketidaktepatan',
     );
     return '$_temp0';
   }
@@ -5045,6 +5081,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Memainkan';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

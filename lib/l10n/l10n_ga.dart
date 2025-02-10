@@ -1531,6 +1531,12 @@ class AppLocalizationsGa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Tarlaíonn Zwischenzug i lár malartú píosaí nó i líne beartaíochta in áit eile ar an gclár nuair a ghluaiseann imreoir píosa ar shlí nach bhfuil an t-imreoir eile ag súil leis chun suíomh níos fearr a fháil.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Cor deiridh ridire';
 
   @override
@@ -4450,6 +4456,20 @@ class AppLocalizationsGa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Botún',
+      many: '$count Botún',
+      few: '$count Mbotún',
+      two: '$count Bhotún',
+      one: '$count Botún',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4464,6 +4484,20 @@ class AppLocalizationsGa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Botún',
+      many: '$count Botún',
+      few: '$count Mbotún',
+      two: '$count Bhotún',
+      one: '$count Botún',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4473,6 +4507,20 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count míchruinneas',
       two: '$count mhíchruinneas',
       one: '$count míchruinneas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Míchruinneas',
+      many: '$count Míchruinneas',
+      few: '$count Míchruinneas',
+      two: '$count Mhíchruinneas',
+      one: '$count Míchruinneas',
     );
     return '$_temp0';
   }
@@ -5303,6 +5351,9 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Ag imirt';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

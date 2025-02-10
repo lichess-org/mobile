@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -84,11 +83,11 @@ class _SectionChoices extends ConsumerWidget {
                     onTap:
                         isOnline
                             ? () {
-                              pushPlatformRoute(
-                                context,
-                                rootNavigator: true,
-                                builder:
-                                    (_) => GameScreen(seek: GameSeek.fastPairing(choice, session)),
+                              Navigator.of(context, rootNavigator: true).push(
+                                GameScreen.buildRoute(
+                                  context,
+                                  seek: GameSeek.fastPairing(choice, session),
+                                ),
                               );
                             }
                             : null,
@@ -113,10 +112,7 @@ class _SectionChoices extends ConsumerWidget {
                 onTap:
                     isOnline
                         ? () {
-                          pushPlatformRoute(
-                            context,
-                            builder: (_) => const CreateCustomGameScreen(),
-                          );
+                          Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
                         }
                         : null,
               ),
@@ -140,22 +136,21 @@ class _ChoiceChip extends StatefulWidget {
 }
 
 class _ChoiceChipState extends State<_ChoiceChip> {
+  static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
+
   @override
   Widget build(BuildContext context) {
-    final cardColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context).withValues(alpha: 0.7)
-            : Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
+    final bgColor = Styles.cardColor(context);
 
     return Opacity(
       opacity: widget.onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+          color: bgColor.withValues(alpha: 0.8),
+          borderRadius: _kBorderRadius,
         ),
         child: AdaptiveInkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          borderRadius: _kBorderRadius,
           onTap: widget.onTap,
           splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
           child: Padding(

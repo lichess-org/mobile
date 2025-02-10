@@ -1465,6 +1465,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Վրիպում',
+      one: '$count Վրիպում',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Սխալ',
+      one: '$count Սխալ',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count անճշտություն',
       one: '$count անճշտություն',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Անճշտություն',
+      one: '$count Անճշտություն',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Ակտիվ';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

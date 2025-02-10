@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -37,7 +36,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).valueOrNull;
     if (state == null) {
-      return const BottomBar(children: []);
+      return const PlatformBottomBar(children: []);
     }
 
     final onGoForward =
@@ -45,7 +44,8 @@ class _AnalysisBottomBar extends ConsumerWidget {
     final onGoBack =
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentBackground: false,
       children: [
         _ChapterButton(state: state),
         _NextChapterButton(
@@ -90,7 +90,7 @@ class _GamebookBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
@@ -144,20 +144,18 @@ class _GamebookBottomBar extends ConsumerWidget {
             if (!state.isIntroductoryChapter)
               BottomBarButton(
                 onTap:
-                    () => pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(
-                              orientation: state.pov,
-                              standalone: (
-                                pgn: state.pgn,
-                                isComputerAnalysisAllowed: true,
-                                variant: state.variant,
-                              ),
-                            ),
+                    () => Navigator.of(context, rootNavigator: true).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: state.pov,
+                          standalone: (
+                            pgn: state.pgn,
+                            isComputerAnalysisAllowed: true,
+                            variant: state.variant,
                           ),
+                        ),
+                      ),
                     ),
                 icon: Icons.biotech,
                 label: context.l10n.analysis,

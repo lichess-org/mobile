@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -13,12 +15,9 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -28,12 +27,73 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
-/// A list tile that shows game info.
+/// A list tile for a game in a game list.
 class GameListTile extends StatelessWidget {
   const GameListTile({
+    required this.item,
+    this.padding,
+    this.onPressedBookmark,
+    this.gameListContext,
+  });
+
+  final LightArchivedGameWithPov item;
+  final EdgeInsetsGeometry? padding;
+  final Future<void> Function(BuildContext context)? onPressedBookmark;
+
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
+  @override
+  Widget build(BuildContext context) {
+    final (game: game, pov: youAre) = item;
+    final me = youAre == Side.white ? game.white : game.black;
+    final opponent = youAre == Side.white ? game.black : game.white;
+
+    Widget getResultIcon(LightArchivedGame game, Side mySide) {
+      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
+        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
+      } else {
+        return game.winner == null
+            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
+            : game.winner == mySide
+            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
+            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
+      }
+    }
+
+    return _GameListTile(
+      game: game,
+      mySide: youAre,
+      padding: padding,
+      onTap: () => openGameScreen(item.game, item.pov, context),
+      icon: game.perf.icon,
+      opponentTitle: UserFullNameWidget.player(
+        user: opponent.user,
+        aiLevel: opponent.aiLevel,
+        rating: opponent.rating,
+      ),
+      onPressedBookmark: onPressedBookmark,
+      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (me.analysis != null) ...[
+            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
+            const SizedBox(width: 5),
+          ],
+          getResultIcon(game, youAre),
+        ],
+      ),
+    );
+  }
+}
+
+class _GameListTile extends StatelessWidget {
+  const _GameListTile({
     required this.game,
     required this.mySide,
     required this.opponentTitle,
+    required this.onPressedBookmark,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -43,9 +103,10 @@ class GameListTile extends StatelessWidget {
 
   final LightArchivedGame game;
   final Side mySide;
+  final Widget opponentTitle;
+  final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   final IconData? icon;
-  final Widget opponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
@@ -62,7 +123,14 @@ class GameListTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => GameContextMenu(game: game, mySide: mySide, showGameSummary: true),
+          builder:
+              (context) => GameContextMenu(
+                game: game,
+                mySide: mySide,
+                showGameSummary: true,
+                opponentTitle: opponentTitle,
+                onPressedBookmark: onPressedBookmark,
+              ),
         );
       },
       leading: icon != null ? Icon(icon) : null,
@@ -81,10 +149,18 @@ class GameListTile extends StatelessWidget {
 }
 
 class GameContextMenu extends ConsumerWidget {
-  const GameContextMenu({required this.game, required this.mySide, required this.showGameSummary});
+  const GameContextMenu({
+    required this.game,
+    required this.mySide,
+    required this.opponentTitle,
+    required this.onPressedBookmark,
+    required this.showGameSummary,
+  });
 
   final LightArchivedGame game;
   final Side mySide;
+  final Widget opponentTitle;
+  final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   final bool showGameSummary;
 
@@ -93,6 +169,8 @@ class GameContextMenu extends ConsumerWidget {
     final orientation = mySide;
 
     final customColors = Theme.of(context).extension<CustomColors>();
+
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return BottomSheetScrollableContainer(
       children: [
@@ -193,12 +271,11 @@ class GameContextMenu extends ConsumerWidget {
           onPressed:
               game.variant.isReadSupported
                   ? () {
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(orientation: orientation, gameId: game.id),
-                          ),
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(orientation: orientation, gameId: game.id),
+                      ),
                     );
                   }
                   : () {
@@ -218,6 +295,22 @@ class GameContextMenu extends ConsumerWidget {
           closeOnPressed: false,
           child: Text(context.l10n.mobileShareGameURL),
         ),
+        if (isLoggedIn && onPressedBookmark != null)
+          Builder(
+            builder: (context) {
+              return BottomSheetContextMenuAction(
+                onPressed: () => onPressedBookmark?.call(context),
+                icon:
+                    game.isBookmarked
+                        ? Icons.bookmark_remove_outlined
+                        : Icons.bookmark_add_outlined,
+                closeOnPressed: true,
+                child: Text(
+                  game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame,
+                ),
+              );
+            },
+          ),
         // Builder is used to retrieve the context immediately surrounding the
         // BottomSheetContextMenuAction
         // This is necessary to get the correct context for the iPad share dialog
@@ -337,59 +430,6 @@ class GameContextMenu extends ConsumerWidget {
           },
         ),
       ],
-    );
-  }
-}
-
-/// A list tile that shows extended game info including a result icon and analysis icon.
-class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId, this.padding});
-
-  final LightArchivedGameWithPov item;
-  final UserId? userId;
-
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final (game: game, pov: youAre) = item;
-    final me = youAre == Side.white ? game.white : game.black;
-    final opponent = youAre == Side.white ? game.black : game.white;
-
-    Widget getResultIcon(LightArchivedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
-        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
-      } else {
-        return game.winner == null
-            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
-            : game.winner == mySide
-            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
-            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
-      }
-    }
-
-    return GameListTile(
-      game: game,
-      mySide: youAre,
-      padding: padding,
-      onTap: () => openGameScreen(item.game, item.pov, context),
-      icon: game.perf.icon,
-      opponentTitle: UserFullNameWidget.player(
-        user: opponent.user,
-        aiLevel: opponent.aiLevel,
-        rating: opponent.rating,
-      ),
-      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (me.analysis != null) ...[
-            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-            const SizedBox(width: 5),
-          ],
-          getResultIcon(game, youAre),
-        ],
-      ),
     );
   }
 }

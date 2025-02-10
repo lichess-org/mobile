@@ -16,6 +16,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:resizeableActivity="false"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules">
 
     <meta-data
@@ -52,6 +53,25 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" android:host="lichess.org" />
+
+                <data android:pathPattern="/training/....." />
+                <data android:pathPattern="/study/........" />
+
+                <data android:path="/storm" />
+                <data android:path="/streak" />
+
+                <!-- Either game or challenge -->
+                <data android:pathPattern="/........" />
+                <data android:pathPattern="/......../black" />
+                <data android:pathPattern="/......../white" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

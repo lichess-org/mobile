@@ -31,6 +31,16 @@ class OfflineCorrespondenceGameScreen extends StatefulWidget {
 
   final (DateTime, OfflineCorrespondenceGame) initialGame;
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required (DateTime, OfflineCorrespondenceGame) initialGame,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: OfflineCorrespondenceGameScreen(initialGame: initialGame),
+    );
+  }
+
   @override
   State<OfflineCorrespondenceGameScreen> createState() => _OfflineCorrespondenceGameScreenState();
 }
@@ -210,7 +220,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               label: context.l10n.flipBoard,
@@ -224,20 +234,19 @@ class _BodyState extends ConsumerState<_Body> {
             BottomBarButton(
               label: context.l10n.analysis,
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder:
-                      (_) => AnalysisScreen(
-                        options: AnalysisOptions(
-                          orientation: game.youAre!,
-                          standalone: (
-                            pgn: game.makePgn(),
-                            isComputerAnalysisAllowed: false,
-                            variant: game.variant,
-                          ),
-                          initialMoveCursor: stepCursor,
-                        ),
+                Navigator.of(context).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    AnalysisOptions(
+                      orientation: game.youAre!,
+                      standalone: (
+                        pgn: game.makePgn(),
+                        isComputerAnalysisAllowed: false,
+                        variant: game.variant,
                       ),
+                      initialMoveCursor: stepCursor,
+                    ),
+                  ),
                 );
               },
               icon: Icons.biotech,

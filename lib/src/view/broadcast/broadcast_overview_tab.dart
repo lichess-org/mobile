@@ -70,6 +70,12 @@ class BroadcastOverviewTab extends ConsumerWidget {
                       context.l10n.broadcastOfficialWebsite,
                       information.website,
                     ),
+                  if (information.standings != null)
+                    _BroadcastOverviewCard(
+                      Icons.link,
+                      context.l10n.broadcastStandings,
+                      information.standings,
+                    ),
                 ],
               ),
               if (description != null) ...[
@@ -123,14 +129,12 @@ class _BroadcastOverviewCard extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(iconData, color: website != null ? Theme.of(context).colorScheme.primary : null),
+              Icon(iconData, color: website != null ? ColorScheme.of(context).primary : null),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
                   text,
-                  style: TextStyle(
-                    color: website != null ? Theme.of(context).colorScheme.primary : null,
-                  ),
+                  style: TextStyle(color: website != null ? ColorScheme.of(context).primary : null),
                 ),
               ),
             ],

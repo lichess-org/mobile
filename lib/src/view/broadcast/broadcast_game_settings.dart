@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -13,15 +14,27 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BroadcastGameSettings extends ConsumerWidget {
-  const BroadcastGameSettings(this.roundId, this.gameId);
+class BroadcastGameSettingsScreen extends ConsumerWidget {
+  const BroadcastGameSettingsScreen(this.roundId, this.gameId);
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required BroadcastRoundId roundId,
+    required BroadcastGameId gameId,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastGameSettingsScreen(roundId, gameId),
+      title: context.l10n.settingsSettings,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broacdcastGameAnalysisController = broadcastGameControllerProvider(roundId, gameId);
+    final controller = broadcastAnalysisControllerProvider(roundId, gameId);
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final isSoundEnabled = ref.watch(
@@ -33,17 +46,11 @@ class BroadcastGameSettings extends ConsumerWidget {
       body: ListView(
         children: [
           StockfishSettingsWidget(
-            onToggleLocalEvaluation:
-                () => ref.read(broacdcastGameAnalysisController.notifier).toggleLocalEvaluation(),
+            onToggleLocalEvaluation: () => ref.read(controller.notifier).toggleLocalEvaluation(),
             onSetEngineSearchTime:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setEngineSearchTime(value),
-            onSetNumEvalLines:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setNumEvalLines(value),
-            onSetEngineCores:
-                (value) =>
-                    ref.read(broacdcastGameAnalysisController.notifier).setEngineCores(value),
+                (value) => ref.read(controller.notifier).setEngineSearchTime(value),
+            onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
+            onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
           ),
           ListSection(
             children: [

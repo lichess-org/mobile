@@ -1,3 +1,6 @@
+import 'package:chessground/chessground.dart';
+import 'package:collection/collection.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +12,10 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -17,7 +23,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
@@ -31,14 +36,17 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
+
+const kGameCarouselFlexWeights = [6, 2];
+const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -77,9 +85,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       data: (status) {
         final session = ref.watch(authSessionProvider);
         final ongoingGames = ref.watch(ongoingGamesProvider);
+        final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final emptyRecent = ref
             .watch(myRecentGamesProvider)
             .maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
+
+        final recentGames = ref.watch(myRecentGamesProvider);
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
 
         // Show the welcome screen if there are no recent games and no stored games
@@ -88,8 +100,22 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             emptyRecent
                 ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
                 : isTablet
-                ? _tabletWidgets(session: session, status: status, ongoingGames: ongoingGames)
-                : _handsetWidgets(session: session, status: status, ongoingGames: ongoingGames);
+                ? _tabletWidgets(
+                  session: session,
+                  status: status,
+                  ongoingGames: ongoingGames,
+                  offlineCorresGames: offlineCorresGames,
+                  recentGames: recentGames,
+                  nbOfGames: nbOfGames,
+                )
+                : _handsetWidgets(
+                  session: session,
+                  status: status,
+                  ongoingGames: ongoingGames,
+                  offlineCorresGames: offlineCorresGames,
+                  recentGames: recentGames,
+                  nbOfGames: nbOfGames,
+                );
 
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoPageScaffold(
@@ -130,14 +156,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     bottom: MediaQuery.paddingOf(context).bottom + 16.0,
                     right: 8.0,
                     child: FloatingActionButton.extended(
-                      backgroundColor: CupertinoTheme.of(context).primaryColor,
-                      foregroundColor: CupertinoTheme.of(context).primaryContrastingColor,
                       onPressed: () {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.play,
-                          builder: (_) => const PlayScreen(),
-                        );
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
                       },
                       icon: const Icon(Icons.add),
                       label: Text(context.l10n.play),
@@ -177,7 +197,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     ? null
                     : FloatingActionButton.extended(
                       onPressed: () {
-                        pushPlatformRoute(context, builder: (_) => const PlayScreen());
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
                       },
                       icon: const Icon(Icons.add),
                       label: Text(context.l10n.play),
@@ -194,25 +214,56 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
+    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required int nbOfGames,
   }) {
-    return [
-      const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
-      if (status.isOnline)
-        _EditableWidget(
-          widget: EnabledWidget.perfCards,
-          shouldShow: session != null,
-          child: const AccountPerfCards(padding: Styles.horizontalBodyPadding),
+    final homePrefs = ref.watch(homePreferencesProvider);
+    final hasOngoingGames =
+        ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false) ||
+        offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false);
+    final list = [
+      _EditableWidget(
+        widget: EnabledWidget.hello,
+        shouldShow: true,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.hello),
+        child: const _HelloWidget(),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.perfCards,
+        shouldShow: session != null && status.isOnline,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.perfCards),
+        child: AccountPerfCards(
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
         ),
+      ),
       _EditableWidget(
         widget: EnabledWidget.quickPairing,
         shouldShow: status.isOnline,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.quickPairing),
         child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
-      if (status.isOnline)
-        _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-      else
-        const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-      const RecentGamesWidget(),
+      _EditableWidget(
+        widget: EnabledWidget.ongoingGames,
+        shouldShow: hasOngoingGames,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.ongoingGames),
+        child:
+            status.isOnline
+                ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+                : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.recentGames,
+        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.recentGames),
+        shouldShow: true,
+        child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+      ),
+    ].sortedBy((_EditableWidget widget) {
+      final i = homePrefs.enabledWidgets.indexOf(widget.widget);
+      return i != -1 ? i : EnabledWidget.values.length;
+    });
+    return [
+      ...list,
       if (Theme.of(context).platform == TargetPlatform.iOS)
         const SizedBox(height: 70.0)
       else
@@ -232,7 +283,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           style:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? const TextStyle(fontSize: 18)
-                  : Theme.of(context).textTheme.bodyLarge,
+                  : TextTheme.of(context).bodyLarge,
           textAlign: TextAlign.center,
         ),
       ),
@@ -286,6 +337,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
+    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required int nbOfGames,
   }) {
     return [
       const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
@@ -306,15 +360,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 if (status.isOnline)
                   _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                 else
-                  const _OfflineCorrespondencePreview(maxGamesToShow: 5),
+                  _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
               ],
             ),
           ),
-          const Flexible(
+          Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [SizedBox(height: 8.0), RecentGamesWidget()],
+              children: [
+                const SizedBox(height: 8.0),
+                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+              ],
             ),
           ),
         ],
@@ -363,11 +420,17 @@ class _SignInWidget extends ConsumerWidget {
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
+  const _EditableWidget({
+    required this.child,
+    required this.widget,
+    required this.shouldShow,
+    this.index,
+  });
 
   final Widget child;
   final EnabledWidget widget;
   final bool shouldShow;
+  final int? index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -385,11 +448,39 @@ class _EditableWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Checkbox.adaptive(
-                value: isEnabled,
-                onChanged: (_) {
-                  ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
-                },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (index != null)
+                    IconButton(
+                      icon: Icon(Icons.arrow_upward, color: ColorScheme.of(context).outline),
+                      onPressed:
+                          isEnabled
+                              ? () {
+                                ref.read(homePreferencesProvider.notifier).moveUp(widget);
+                              }
+                              : null,
+                    ),
+                  Checkbox.adaptive(
+                    value: isEnabled,
+                    onChanged:
+                        widget == EnabledWidget.ongoingGames
+                            ? null
+                            : (_) {
+                              ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
+                            },
+                  ),
+                  if (index != null)
+                    IconButton(
+                      icon: Icon(Icons.arrow_downward, color: ColorScheme.of(context).outline),
+                      onPressed:
+                          isEnabled
+                              ? () {
+                                ref.read(homePreferencesProvider.notifier).moveDown(widget);
+                              }
+                              : null,
+                    ),
+                ],
               ),
             ),
             Expanded(child: IgnorePointer(ignoring: isEditing, child: child)),
@@ -410,7 +501,7 @@ class _HelloWidget extends ConsumerWidget {
     final style =
         Theme.of(context).platform == TargetPlatform.iOS
             ? const TextStyle(fontSize: 20)
-            : Theme.of(context).textTheme.bodyLarge;
+            : TextTheme.of(context).bodyLarge;
 
     final iconSize = Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
 
@@ -428,7 +519,7 @@ class _HelloWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: () {
           ref.invalidate(accountActivityProvider);
-          pushPlatformRoute(context, builder: (context) => const ProfileScreen());
+          Navigator.of(context).push(ProfileScreen.buildRoute(context));
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -486,24 +577,20 @@ class _OngoingGamesCarousel extends ConsumerWidget {
         }
         return _GamesCarousel<OngoingGame>(
           list: data,
-          builder:
-              (game) => _GamePreviewCarouselItem(
-                game: game,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder:
-                        (context) => GameScreen(
-                          initialGameId: game.fullId,
-                          loadingFen: game.fen,
-                          loadingOrientation: game.orientation,
-                          loadingLastMove: game.lastMove,
-                        ),
-                  );
-                },
+          onTap: (index) {
+            final game = data[index];
+            Navigator.of(context, rootNavigator: true).push(
+              GameScreen.buildRoute(
+                context,
+                initialGameId: game.fullId,
+                loadingFen: game.fen,
+                loadingOrientation: game.orientation,
+                loadingLastMove: game.lastMove,
               ),
-          moreScreenBuilder: (_) => const OngoingGamesScreen(),
+            );
+          },
+          builder: (game) => _GamePreviewCarouselItem(game: game),
+          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
       },
@@ -513,13 +600,14 @@ class _OngoingGamesCarousel extends ConsumerWidget {
 }
 
 class _OfflineCorrespondenceCarousel extends ConsumerWidget {
-  const _OfflineCorrespondenceCarousel({required this.maxGamesToShow});
+  const _OfflineCorrespondenceCarousel(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         if (data.isEmpty) {
@@ -527,6 +615,12 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         }
         return _GamesCarousel(
           list: data,
+          onTap: (index) {
+            final el = data[index];
+            Navigator.of(context, rootNavigator: true).push(
+              OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (el.$1, el.$2)),
+            );
+          },
           builder:
               (el) => _GamePreviewCarouselItem(
                 game: OngoingGame(
@@ -544,15 +638,8 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
                   lastMove: el.$2.lastMove,
                   secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
                 ),
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (_) => OfflineCorrespondenceGameScreen(initialGame: (el.$1, el.$2)),
-                  );
-                },
               ),
-          moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
+          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
       },
@@ -565,12 +652,14 @@ class _GamesCarousel<T> extends StatefulWidget {
   const _GamesCarousel({
     required this.list,
     required this.builder,
-    required this.moreScreenBuilder,
+    required this.onTap,
+    required this.moreScreenRouteBuilder,
     required this.maxGamesToShow,
   });
   final IList<T> list;
   final Widget Function(T data) builder;
-  final Widget Function(BuildContext) moreScreenBuilder;
+  final void Function(int index)? onTap;
+  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
   final int maxGamesToShow;
 
   @override
@@ -578,71 +667,101 @@ class _GamesCarousel<T> extends StatefulWidget {
 }
 
 class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
-  final _pageController = PageController(viewportFraction: 0.65);
+  final _controller = CarouselController();
+
+  @override
+  void initState() {
+    super.initState();
+    homeTabInteraction.addListener(_onTabInteraction);
+  }
+
+  @override
+  void dispose() {
+    homeTabInteraction.removeListener(_onTabInteraction);
+    super.dispose();
+  }
+
+  void _onTabInteraction() {
+    if (_controller.hasClients) {
+      _controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  context.l10n.nbGamesInPlay(widget.list.length),
-                  style: Styles.sectionTitle,
-                  overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: Styles.verticalBodyPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    context.l10n.nbGamesInPlay(widget.list.length),
+                    style: Styles.sectionTitle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-              if (widget.list.length > 2) ...[
-                const SizedBox(width: 6.0),
-                NoPaddingTextButton(
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.nbGamesInPlay(widget.list.length),
-                      builder: widget.moreScreenBuilder,
-                    );
-                  },
-                  child: Text(context.l10n.more),
-                ),
+                if (widget.list.length > 2) ...[
+                  const SizedBox(width: 6.0),
+                  NoPaddingTextButton(
+                    onPressed: () {
+                      // pushPlatformRoute(
+                      //   context,
+                      //   title: context.l10n.nbGamesInPlay(widget.list.length),
+                      //   builder: widget.moreScreenRouteBuilder,
+                      // );
+                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
+                    },
+                    child: Text(context.l10n.more),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
-        ),
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: BoardsPageView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            controller: _pageController,
-            pageSnapping: widget.list.length > 2,
-            allowImplicitScrolling: true,
-            itemCount: widget.list.length,
-            itemBuilder: (context, index) {
-              return widget.builder(widget.list[index]);
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: AspectRatio(
+              aspectRatio: 1.2,
+              child: CarouselView.weighted(
+                controller: _controller,
+                padding: kGameCarouselPadding,
+                shape: const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+                elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
+                flexWeights: kGameCarouselFlexWeights,
+                itemSnapping: true,
+                onTap: (index) {
+                  widget.onTap?.call(index);
+                },
+                children: [for (final game in widget.list) widget.builder(game)],
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _GamePreviewCarouselItem extends StatelessWidget {
-  const _GamePreviewCarouselItem({required this.game, this.onTap});
+  const _GamePreviewCarouselItem({required this.game});
 
   final OngoingGame game;
-  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
       opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
-      child: BoardCarouselItem(
+      child: _BoardCarouselItem(
         fen: game.fen,
         orientation: game.orientation,
         lastMove: game.lastMove,
@@ -673,7 +792,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                           Theme.of(context).platform == TargetPlatform.iOS
                               ? const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
                               : TextStyle(
-                                fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
+                                fontSize: TextTheme.of(context).labelMedium?.fontSize,
                                 fontWeight: FontWeight.w500,
                               ),
                     ),
@@ -690,7 +809,99 @@ class _GamePreviewCarouselItem extends StatelessWidget {
             ),
           ),
         ),
-        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class _BoardCarouselItem extends ConsumerWidget {
+  const _BoardCarouselItem({
+    required this.orientation,
+    required this.fen,
+    required this.description,
+    this.lastMove,
+  });
+
+  /// Side by which the board is oriented.
+  final Side orientation;
+
+  /// FEN string describing the position of the board.
+  final String fen;
+
+  /// Last move played, used to highlight corresponding squares.
+  final Move? lastMove;
+
+  final Widget description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final brightness = ColorScheme.of(context).brightness;
+
+    final backgroundColor = lighten(
+      boardPrefs.boardTheme.colors.darkSquare,
+      brightness == Brightness.light ? 0.25 : 0.0,
+    );
+
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
+    final double width = screenWidth - 16.0;
+    final boardSize =
+        width * kGameCarouselFlexWeights[0] / totalFlex - kGameCarouselPadding.horizontal;
+
+    return BrightnessHueFilter(
+      hue: boardPrefs.hue,
+      brightness: boardPrefs.brightness,
+      child: PlatformCard(
+        clipBehavior: Clip.hardEdge,
+        color: backgroundColor,
+        child: OverflowBox(
+          maxWidth: boardSize,
+          minWidth: boardSize,
+          child: Stack(
+            children: [
+              ShaderMask(
+                blendMode: BlendMode.dstOut,
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor.withValues(alpha: 0.25),
+                      backgroundColor.withValues(alpha: 1.0),
+                    ],
+                    stops: const [0.3, 1.00],
+                    tileMode: TileMode.clamp,
+                  ).createShader(bounds);
+                },
+                child: SizedBox(
+                  height: boardSize,
+                  child: StaticChessboard(
+                    size: boardSize,
+                    fen: fen,
+                    orientation: orientation,
+                    lastMove: lastMove,
+                    enableCoordinates: false,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                    pieceAssets: boardPrefs.pieceSet.assets,
+                    colorScheme: boardPrefs.boardTheme.colors,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                bottom: 8,
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(color: Colors.white),
+                  child: description,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -710,7 +921,7 @@ class _OngoingGamesPreview extends ConsumerWidget {
           list: data,
           maxGamesToShow: maxGamesToShow,
           builder: (el) => OngoingGamePreview(game: el),
-          moreScreenBuilder: (_) => const OngoingGamesScreen(),
+          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
         );
       },
       orElse: () => const SizedBox.shrink(),
@@ -719,20 +930,21 @@ class _OngoingGamesPreview extends ConsumerWidget {
 }
 
 class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview({required this.maxGamesToShow});
+  const _OfflineCorrespondencePreview(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
         return PreviewGameList(
           list: data,
           maxGamesToShow: maxGamesToShow,
           builder: (el) => OfflineCorrespondenceGamePreview(game: el.$2, lastModified: el.$1),
-          moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
+          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
         );
       },
       orElse: () => const SizedBox.shrink(),
@@ -744,12 +956,12 @@ class PreviewGameList<T> extends StatelessWidget {
   const PreviewGameList({
     required this.list,
     required this.builder,
-    required this.moreScreenBuilder,
+    required this.moreScreenRouteBuilder,
     required this.maxGamesToShow,
   });
   final IList<T> list;
   final Widget Function(T data) builder;
-  final Widget Function(BuildContext) moreScreenBuilder;
+  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
   final int maxGamesToShow;
 
   @override
@@ -778,11 +990,7 @@ class PreviewGameList<T> extends StatelessWidget {
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.nbGamesInPlay(list.length),
-                      builder: moreScreenBuilder,
-                    );
+                    Navigator.of(context).push(moreScreenRouteBuilder(context));
                   },
                   child: Text(context.l10n.more),
                 ),
@@ -812,11 +1020,7 @@ class _PlayerScreenButton extends ConsumerWidget {
                 !connectivity.isOnline
                     ? null
                     : () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.players,
-                        builder: (_) => const PlayerScreen(),
-                      );
+                      Navigator.of(context).push(PlayerScreen.buildRoute(context));
                     },
           ),
       orElse:
@@ -854,11 +1058,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
                     ? null
                     : () {
                       ref.invalidate(challengesProvider);
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesNotifyChallenge,
-                        builder: (_) => const ChallengeRequestsScreen(),
-                      );
+                      Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
                     },
             count: count ?? 0,
           ),

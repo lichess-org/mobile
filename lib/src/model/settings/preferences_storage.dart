@@ -35,7 +35,7 @@ enum PrefCategory {
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.
-mixin PreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
+mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
   T fromJson(Map<String, dynamic> json);
   T get defaults;
 
@@ -65,7 +65,7 @@ mixin PreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences per session.
-mixin SessionPreferencesStorage<T extends Serializable> on AutoDisposeNotifier<T> {
+mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
   T fromJson(Map<String, dynamic> json);
   T defaults({LightUser? user});
 

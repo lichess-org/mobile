@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -22,16 +23,9 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO(#796): remove when Leela featured bots special challenges are ready
-// https://github.com/lichess-org/mobile/issues/796
-const _disabledBots = {'leelaknightodds', 'leelaqueenodds', 'leelaqueenforknight', 'leelarookodds'};
-
 final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async {
   return ref.withClientCacheFor(
-    (client) => UserRepository(client).getOnlineBots().then(
-      (bots) =>
-          bots.whereNot((bot) => _disabledBots.contains(bot.id.value.toLowerCase())).toIList(),
-    ),
+    (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
     const Duration(hours: 5),
   );
 });
@@ -39,9 +33,14 @@ final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async 
 class OnlineBotsScreen extends StatelessWidget {
   const OnlineBotsScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const OnlineBotsScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: PlatformAppBar(title: Text(context.l10n.onlineBots)),
       body: _Body(),
     );
@@ -129,10 +128,11 @@ class _Body extends ConsumerWidget {
                     );
                     return;
                   }
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.challengeChallengesX(bot.lightUser.name),
-                    builder: (context) => CreateChallengeScreen(bot.lightUser),
+                  final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
+                  Navigator.of(context).push(
+                    isOddBot
+                        ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
+                        : CreateChallengeScreen.buildRoute(context, bot.lightUser),
                   );
                 },
                 onLongPress: () {
@@ -178,12 +178,11 @@ class _ContextMenu extends ConsumerWidget {
                   onOpen: (link) async {
                     if (link.originText.startsWith('@')) {
                       final username = link.originText.substring(1);
-                      pushPlatformRoute(
-                        context,
-                        builder:
-                            (ctx) => UserScreen(
-                              user: LightUser(id: UserId.fromUserName(username), name: username),
-                            ),
+                      Navigator.of(context).push(
+                        UserScreen.buildRoute(
+                          context,
+                          LightUser(id: UserId.fromUserName(username), name: username),
+                        ),
                       );
                     } else {
                       launchUrl(Uri.parse(link.url));
@@ -204,7 +203,7 @@ class _ContextMenu extends ConsumerWidget {
         const PlatformDivider(),
         BottomSheetContextMenuAction(
           onPressed: () {
-            pushPlatformRoute(context, builder: (context) => UserScreen(user: bot.lightUser));
+            Navigator.of(context).push(UserScreen.buildRoute(context, bot.lightUser));
           },
           icon: Icons.person,
           child: Text(context.l10n.profile),

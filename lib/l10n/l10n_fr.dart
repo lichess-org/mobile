@@ -1465,6 +1465,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Au lieu de jouer le coup attendu, jouez d\'abord un autre coup posant une menace immédiate à laquelle l\'adversaire doit répondre. Aussi connu sous le nom de \"Zwischenzug\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Mat par mise en boîte';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'La tour, protégée par la dame, met le roi adverse en échec et la dame bloque la seule case de fuite du roi (le roi est enfermé dans une boîte de 3 cases par 3 cases formée par la tour et la dame).';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Finale de Cavaliers';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erreurs graves',
+      one: '$count Erreur grave',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erreurs',
+      one: '$count Erreur',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprécisions',
       one: '$count imprécision',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprécisions',
+      one: '$count Imprécision',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get studyPlaying => 'En cours';
+
+  @override
+  String get studyShowResults => 'Résultats';
 
   @override
   String get studyShowEvalBar => 'Barre d’évaluation';

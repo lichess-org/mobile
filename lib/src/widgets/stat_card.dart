@@ -12,19 +12,23 @@ class StatCard extends StatelessWidget {
     this.stat, {
     this.child,
     this.value,
-    this.padding,
+    this.contentPadding,
     this.opacity,
     this.statFontSize,
     this.valueFontSize,
+    this.backgroundColor,
+    this.elevation = 0,
   });
 
   final String stat;
   final Widget? child;
   final String? value;
-  final EdgeInsets? padding;
+  final EdgeInsets? contentPadding;
   final double? opacity;
   final double? statFontSize;
   final double? valueFontSize;
+  final Color? backgroundColor;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +39,27 @@ class StatCard extends StatelessWidget {
 
     final defaultValueStyle = TextStyle(fontSize: valueFontSize ?? _defaultValueFontSize);
 
-    return Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: PlatformCard(
-        margin: const EdgeInsets.symmetric(vertical: 6.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FittedBox(
-                alignment: Alignment.center,
-                fit: BoxFit.scaleDown,
-                child: Text(stat, style: defaultStatStyle, textAlign: TextAlign.center),
-              ),
-              if (value != null)
-                Text(value!, style: defaultValueStyle, textAlign: TextAlign.center)
-              else if (child != null)
-                child!
-              else
-                Text('?', style: defaultValueStyle),
-            ],
-          ),
+    return PlatformCard(
+      elevation: elevation,
+      color: backgroundColor,
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Padding(
+        padding: contentPadding ?? EdgeInsets.zero,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FittedBox(
+              alignment: Alignment.center,
+              fit: BoxFit.scaleDown,
+              child: Text(stat, style: defaultStatStyle, textAlign: TextAlign.center),
+            ),
+            if (value != null)
+              Text(value!, style: defaultValueStyle, textAlign: TextAlign.center)
+            else if (child != null)
+              child!
+            else
+              Text('?', style: defaultValueStyle),
+          ],
         ),
       ),
     );

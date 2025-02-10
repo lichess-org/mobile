@@ -61,6 +61,7 @@ typedef BroadcastTournamentInformation =
       String? location,
       BroadcastTournamentDates? dates,
       Uri? website,
+      Uri? standings,
     });
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
@@ -95,6 +96,8 @@ class BroadcastGame with _$BroadcastGame {
     required Move? lastMove,
     required BroadcastResult status,
     required DateTime updatedClockAt,
+    int? cp,
+    int? mate,
   }) = _BroadcastGame;
 
   bool get isOngoing => status == BroadcastResult.ongoing;

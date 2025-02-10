@@ -1,101 +1,126 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
-import 'package:lichess_mobile/src/view/game/ping_rating.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-final _gameTitledateFormat = DateFormat.yMMMd();
 
 void openGameScreen(LightArchivedGame game, Side orientation, BuildContext context) {
   if (game.variant.isReadSupported) {
-    pushPlatformRoute(
-      context,
-      rootNavigator: true,
-      builder:
-          (context) =>
-              game.fullId != null
-                  ? GameScreen(initialGameId: game.fullId)
-                  : ArchivedGameScreen(gameData: game, orientation: orientation),
+    Navigator.of(context, rootNavigator: true).push(
+      game.fullId != null
+          ? GameScreen.buildRoute(context, initialGameId: game.fullId)
+          : ArchivedGameScreen.buildRoute(context, gameData: game, orientation: orientation),
     );
   } else {
     showPlatformSnackbar(context, 'This variant is not supported yet.', type: SnackBarType.info);
   }
 }
 
-class GameAppBar extends ConsumerWidget {
-  const GameAppBar({this.id, this.seek, this.challenge, this.lastMoveAt, super.key});
+class GameBookmarkMenuItemButton extends ConsumerStatefulWidget {
+  const GameBookmarkMenuItemButton({
+    required this.id,
+    required this.bookmarked,
+    required this.onToggleBookmark,
+    this.gameListContext,
+    super.key,
+  });
 
-  final GameSeek? seek;
-  final ChallengeRequest? challenge;
-  final GameFullId? id;
+  final GameId id;
+  final bool bookmarked;
+  final Future<void> Function() onToggleBookmark;
 
-  /// The date of the last move played in the game. If null, the game is in progress.
-  final DateTime? lastMoveAt;
-
-  static const pingRating = Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-    child: SocketPingRating(size: 24.0),
-  );
+  /// The context of the game list that opened this screen, if available.
+  ///
+  /// It is used to invalidate the user game history, if the game was loaded from a user's game history.
+  /// If the [UserId] is null, it means the game was not loaded from the current logged in user's game history.
+  final (UserId?, GameFilterState)? gameListContext;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final shouldPreventGoingBackAsync =
-        id != null ? ref.watch(shouldPreventGoingBackProvider(id!)) : const AsyncValue.data(true);
+  ConsumerState<GameBookmarkMenuItemButton> createState() => _GameBookmarkMenuItemButtonState();
+}
 
-    return PlatformAppBar(
-      leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-        data: (prevent) => prevent ? pingRating : null,
-        orElse: () => pingRating,
-      ),
-      title:
-          id != null
-              ? _StandaloneGameTitle(id: id!, lastMoveAt: lastMoveAt)
-              : seek != null
-              ? _LobbyGameTitle(seek: seek!)
-              : challenge != null
-              ? _ChallengeGameTitle(challenge: challenge!)
-              : const SizedBox.shrink(),
-      actions: [
-        const ToggleSoundButton(),
-        if (id != null)
-          AppBarIconButton(
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-                  builder: (_) => GameSettings(id: id!),
-                ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
+class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuItemButton> {
+  Future<void>? _pendingBookmarkAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _pendingBookmarkAction,
+      builder: (context, snapshot) {
+        return MenuItemButton(
+          leadingIcon: Icon(
+            widget.bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
           ),
-      ],
+          semanticsLabel: widget.bookmarked ? 'Unbookmark' : 'Bookmark',
+          closeOnActivate: false,
+          onPressed:
+              snapshot.connectionState == ConnectionState.waiting
+                  ? null
+                  : () async {
+                    try {
+                      await widget.onToggleBookmark();
+                      if (context.mounted) {
+                        if (widget.gameListContext != null) {
+                          final historyProvider = userGameHistoryProvider(
+                            widget.gameListContext!.$1,
+                            isOnline: true,
+                            filter: widget.gameListContext!.$2,
+                          );
+                          if (ref.exists(historyProvider)) {
+                            ref.read(historyProvider.notifier).toggleBookmark(widget.id);
+                          }
+                        }
+                      }
+                    } catch (_) {
+                      if (context.mounted) {
+                        showPlatformSnackbar(
+                          context,
+                          'Bookmark action failed',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+          child: Text(widget.bookmarked ? 'Unbookmark' : 'Bookmark'),
+        );
+      },
+    );
+  }
+}
+
+class GameSettingsMenuItemButton extends StatelessWidget {
+  const GameSettingsMenuItemButton({required this.id, super.key});
+
+  final GameFullId id;
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.settings),
+      semanticsLabel: context.l10n.settingsSettings,
+      child: Text(context.l10n.settingsSettings),
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (_) => GameSettings(id: id),
+          ),
     );
   }
 }
@@ -277,112 +302,6 @@ class GameShareBottomSheet extends ConsumerWidget {
           },
         ),
       ],
-    );
-  }
-}
-
-class _LobbyGameTitle extends ConsumerWidget {
-  const _LobbyGameTitle({required this.seek});
-
-  final GameSeek seek;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
-        const SizedBox(width: 4.0),
-        Text('${seek.timeIncrement?.display}$mode'),
-      ],
-    );
-  }
-}
-
-class _ChallengeGameTitle extends ConsumerWidget {
-  const _ChallengeGameTitle({required this.challenge});
-
-  final ChallengeRequest challenge;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
-        const SizedBox(width: 4.0),
-        if (challenge.timeIncrement != null)
-          Text('${challenge.timeIncrement?.display}$mode')
-        else if (challenge.days != null)
-          Text('${context.l10n.nbDays(challenge.days!)}$mode'),
-      ],
-    );
-  }
-}
-
-class _StandaloneGameTitle extends ConsumerWidget {
-  const _StandaloneGameTitle({required this.id, this.lastMoveAt});
-
-  final GameFullId id;
-
-  final DateTime? lastMoveAt;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final metaAsync = ref.watch(gameMetaProvider(id));
-    return metaAsync.when(
-      data: (meta) {
-        final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-
-        final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
-
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
-            const SizedBox(width: 4.0),
-            if (meta.clock != null)
-              Flexible(
-                child: AutoSizeText(
-                  '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                ),
-              )
-            else if (meta.daysPerTurn != null)
-              Flexible(
-                child: AutoSizeText(
-                  '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                ),
-              )
-            else
-              Flexible(
-                child: AutoSizeText('${meta.perf.title}$info', maxLines: 1, minFontSize: 14.0),
-              ),
-          ],
-        );
-      },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: SizedBox(
-                height: 24.0,
-                width: 200.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
-      error: (error, _) => const SizedBox.shrink(),
     );
   }
 }

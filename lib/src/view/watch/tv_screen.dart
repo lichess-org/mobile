@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -23,6 +24,21 @@ class TvScreen extends ConsumerStatefulWidget {
 
   final TvChannel channel;
   final (GameId id, Side orientation)? initialGame;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    TvChannel channel, {
+    GameId? gameId,
+    Side? orientation,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: TvScreen(
+        channel: channel,
+        initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,
+      ),
+    );
+  }
 
   @override
   ConsumerState<TvScreen> createState() => _TvScreenState();
@@ -182,7 +198,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
           label: context.l10n.flipBoard,

@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -13,11 +14,18 @@ class GameRepository {
 
   final LichessClient client;
 
-  Future<ArchivedGame> getGame(GameId id) {
+  Future<ArchivedGame> getGame(GameId id, {bool withBookmarked = false}) {
     return client.readJson(
-      Uri(path: '/game/export/$id', queryParameters: {'clocks': '1', 'accuracy': '1'}),
+      Uri(
+        path: '/game/export/$id',
+        queryParameters: {
+          'clocks': '1',
+          'accuracy': '1',
+          if (withBookmarked) 'withBookmarked': '1',
+        },
+      ),
       headers: {'Accept': 'application/json'},
-      mapper: ArchivedGame.fromServerJson,
+      mapper: (json) => ArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
     );
   }
 
@@ -34,6 +42,7 @@ class GameRepository {
     int max = 20,
     DateTime? until,
     GameFilterState filter = const GameFilterState(),
+    bool withBookmarked = false,
   }) {
     assert(!filter.perfs.contains(Perf.fromPosition));
     assert(!filter.perfs.contains(Perf.puzzle));
@@ -53,10 +62,11 @@ class GameRepository {
               if (filter.perfs.isNotEmpty)
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
+              if (withBookmarked) 'withBookmarked': 'true',
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: LightArchivedGame.fromServerJson,
+          mapper: (json) => LightArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
         )
         .then(
           (value) =>
@@ -66,6 +76,41 @@ class GameRepository {
                       game: e,
                       // we know here user is not null for at least one of the players
                       pov: e.white.user?.id == userId ? Side.white : Side.black,
+                    ),
+                  )
+                  .toIList(),
+        );
+  }
+
+  Future<IList<LightArchivedGameWithPov>> getBookmarkedGames(
+    AuthSessionState session, {
+    int max = 20,
+    DateTime? until,
+  }) {
+    return client
+        .readNdJsonList(
+          Uri(
+            path: '/api/games/export/bookmarks',
+            queryParameters: {
+              'max': max.toString(),
+              if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
+              'moves': 'false',
+              'lastFen': 'true',
+              'accuracy': 'true',
+              'opening': 'true',
+            },
+          ),
+          headers: {'Accept': 'application/x-ndjson'},
+          mapper: (json) => LightArchivedGame.fromServerJson(json, isBookmarked: true),
+        )
+        .then(
+          (value) =>
+              value
+                  .map(
+                    (e) => (
+                      game: e,
+                      // we know here user is not null for at least one of the players
+                      pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
                     ),
                   )
                   .toIList(),

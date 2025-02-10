@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -241,23 +240,33 @@ class _ChoiceChip extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context)
-                : Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        border:
             selected
-                ? Border.fromBorderSide(
-                  BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
-                )
-                : const Border.fromBorderSide(BorderSide(color: Colors.transparent, width: 2.0)),
+                ? ColorScheme.of(context).secondaryContainer
+                : ColorScheme.of(context).surfaceContainerLowest,
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        border: Border.fromBorderSide(
+          BorderSide(
+            color:
+                selected
+                    ? ColorScheme.of(context).secondaryContainer
+                    : Theme.of(context).dividerColor,
+            width: 1.0,
+          ),
+        ),
       ),
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => onSelected(true),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Center(child: DefaultTextStyle.merge(style: Styles.timeControl, child: label)),
+          child: Center(
+            child: DefaultTextStyle.merge(
+              style: Styles.timeControl.copyWith(
+                color: selected ? ColorScheme.of(context).onSecondaryContainer : null,
+              ),
+              child: label,
+            ),
+          ),
         ),
       ),
     );
@@ -272,15 +281,12 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconTheme(
-      data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
-      child: Row(
-        children: [
-          Icon(icon, size: 20.0),
-          const SizedBox(width: 10),
-          Text(title, style: _titleStyle),
-        ],
-      ),
+    return Row(
+      children: [
+        Icon(icon, size: 20.0),
+        const SizedBox(width: 10),
+        Text(title, style: _titleStyle),
+      ],
     );
   }
 }

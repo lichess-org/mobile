@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_display.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -27,20 +28,28 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class CoordinateTrainingScreen extends StatelessWidget {
   const CoordinateTrainingScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const CoordinateTrainingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: const Text('Coordinate Training'), // TODO l10n once script works
         actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.settings),
-            semanticsLabel: context.l10n.settingsSettings,
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
+          Builder(
+            builder: (context) {
+              return AppBarIconButton(
+                icon: const Icon(Icons.settings),
+                semanticsLabel: context.l10n.settingsSettings,
+                onPressed:
+                    () => showAdaptiveBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                    ),
+              );
+            },
           ),
         ],
       ),
@@ -178,7 +187,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
           if (!trainingState.trainingActive)
-            BottomBar(
+            PlatformBottomBar(
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,
@@ -431,9 +440,9 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
         Stack(
           alignment: Alignment.center,
           children: [
-            ChessboardEditor(
+            Chessboard.fixed(
               size: widget.boardSize,
-              pieces: readFen(trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN),
+              fen: trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN,
               squareHighlights: widget.squareHighlights,
               orientation: widget.orientation,
               settings: boardPrefs.toBoardSettings().copyWith(
@@ -444,8 +453,7 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
                         : BorderRadius.zero,
                 boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
               ),
-              pointerMode: EditorPointerMode.edit,
-              onEditedSquare: (square) {
+              onTouchedSquare: (square) {
                 if (trainingState.trainingActive && trainingPrefs.mode == TrainingMode.findSquare) {
                   widget.onGuess(square);
                 }

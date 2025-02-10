@@ -9,16 +9,16 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'সব গেম';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'আপনি কি নিশ্চিত?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার অফার বাতিল করুন';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'মুছে ফেলুন';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
@@ -41,7 +41,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileHideVariation => 'Hide variation';
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'হোম';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
@@ -100,13 +100,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'সেটিংস';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN শেয়ার করুন';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'খেলার লিংক শেয়ার করুন';
 
   @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
@@ -115,7 +115,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSharePuzzle => 'Share this puzzle';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'কমেন্টগুলো দেখুন';
 
   @override
   String get mobileShowResult => 'Show result';
@@ -136,10 +136,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileToolsTab => 'Tools';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'প্রতিপক্ষের জন্য অপেক্ষারত...';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'দেখুন';
 
   @override
   String get activityActivity => 'কার্যকলাপ';
@@ -1465,6 +1465,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'প্রত্যাশিত চাল না খেলে ভিন্ন চাল দেয়া, যা তৎক্ষণাৎ হুমকি(threat) তৈরি করবে এবং প্রতিপক্ষকে অবশ্যই তা প্রতিহত করতে হবে।';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Knight/ঘোড়ার সমাপনী খেলা';
 
   @override
@@ -1710,7 +1716,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get waitingForOpponent => 'প্রতিপক্ষের জন্য অপেক্ষারত';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'অথবা আপনার প্রতিপক্ষকে এই কিউআর কোডটি স্ক্যান করতে দিন';
 
   @override
   String get waiting => 'অপেক্ষা করুন';
@@ -2886,7 +2892,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get editProfile => 'পরিচিতি সম্পাদনা';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'আসল নাম';
 
   @override
   String get setFlair => 'আপনার ফ্লেয়ার সেট করুন';
@@ -4375,6 +4381,17 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি ব্লান্ডার',
+      one: '$count টি ব্লান্ডার',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি ভূল',
+      one: '$countটি ভূল',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি অনিপুণতা',
+      one: '$countটি অনিপুণতা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5111,6 +5150,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get studyPlaying => 'খেলছে';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Evaluation bars';

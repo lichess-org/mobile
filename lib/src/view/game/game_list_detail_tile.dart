@@ -21,9 +21,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
 class GameListDetailTile extends StatelessWidget {
-  const GameListDetailTile({required this.item});
+  const GameListDetailTile({required this.item, this.onPressedBookmark});
 
   final LightArchivedGameWithPov item;
+  final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   Side get mySide => item.pov;
 
@@ -31,6 +32,7 @@ class GameListDetailTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
+    final opponent = youAre == Side.white ? game.black : game.white;
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
@@ -44,7 +46,18 @@ class GameListDetailTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => GameContextMenu(game: game, mySide: mySide, showGameSummary: false),
+          builder:
+              (context) => GameContextMenu(
+                opponentTitle: UserFullNameWidget.player(
+                  user: opponent.user,
+                  aiLevel: opponent.aiLevel,
+                  rating: opponent.rating,
+                ),
+                game: game,
+                mySide: mySide,
+                showGameSummary: false,
+                onPressedBookmark: onPressedBookmark,
+              ),
         );
       },
       onTap: () => openGameScreen(item.game, item.pov, context),

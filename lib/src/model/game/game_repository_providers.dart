@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -9,16 +10,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_repository_providers.g.dart';
 
-/// Fetches a game from the local storage if available, otherwise fetches it from the server.
+/// Fetches a game from the server or from the local storage if not available online.
 @riverpod
 Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
-  final gameStorage = await ref.watch(gameStorageProvider.future);
-  final game = await gameStorage.fetch(gameId: id);
-  if (game != null) return game;
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getGame(id),
-    const Duration(seconds: 10),
-  );
+  ArchivedGame game;
+  try {
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+    game = await ref.withClient(
+      (client) => GameRepository(client).getGame(id, withBookmarked: isLoggedIn),
+    );
+  } catch (_) {
+    final gameStorage = await ref.watch(gameStorageProvider.future);
+    final storedGame = await gameStorage.fetch(gameId: id);
+    if (storedGame != null) {
+      game = storedGame;
+    } else {
+      throw Exception('Game $id not found in local storage.');
+    }
+  }
+  return game;
 }
 
 @riverpod

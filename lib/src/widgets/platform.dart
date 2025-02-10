@@ -85,36 +85,22 @@ class PlatformCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? Card(
-                margin: margin ?? EdgeInsets.zero,
-                elevation: elevation ?? 0,
-                color: color ?? Styles.cupertinoCardColor.resolveFrom(context),
-                shadowColor: shadowColor,
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                semanticContainer: semanticContainer,
-                clipBehavior: clipBehavior,
-                child: child,
-              )
-              : Card(
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                color: color,
-                shadowColor: shadowColor,
-                semanticContainer: semanticContainer,
-                elevation: elevation,
-                margin: margin,
-                clipBehavior: clipBehavior,
-                child: child,
-              ),
+      child: Card(
+        shape:
+            borderRadius != null
+                ? RoundedRectangleBorder(borderRadius: borderRadius!)
+                : const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+        color: color ?? Styles.cardColor(context),
+        shadowColor: shadowColor,
+        semanticContainer: semanticContainer,
+        elevation: elevation ?? (platform == TargetPlatform.iOS ? 0 : null),
+        margin: margin ?? EdgeInsets.zero,
+        clipBehavior: clipBehavior,
+        child: child,
+      ),
     );
   }
 }

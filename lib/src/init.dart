@@ -32,9 +32,11 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
-  // TODO remove this migration code after a few releases
-  if (installedVersion != null && Version.parse(installedVersion) <= Version(0, 13, 9)) {
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
+    // TODO remove this migration code after a few releases
     _migrateThemeSettings();
+
+    _resetHomePrefs();
   }
 
   if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
@@ -54,6 +56,19 @@ Future<void> setupFirstLaunch() async {
   }
 }
 
+Future<void> _resetHomePrefs() async {
+  final prefs = LichessBinding.instance.sharedPreferences;
+  try {
+    final stored = prefs.getString(PrefCategory.home.storageKey);
+    if (stored == null) {
+      return;
+    }
+    await prefs.setString(PrefCategory.home.storageKey, jsonEncode(null));
+  } catch (e) {
+    _logger.warning('Failed to migrate home preferences: $e');
+  }
+}
+
 Future<void> _migrateThemeSettings() async {
   if (getCorePalette() == null) {
     return;
@@ -68,9 +83,9 @@ Future<void> _migrateThemeSettings() async {
     }
     final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
     final migrated = generalPrefs.copyWith(
-      appThemeSeed:
+      systemColors:
           // ignore: deprecated_member_use_from_same_package
-          generalPrefs.systemColors == true ? AppThemeSeed.system : AppThemeSeed.board,
+          generalPrefs.appThemeSeed == AppThemeSeed.system,
     );
     await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
   } catch (e) {

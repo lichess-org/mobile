@@ -1557,6 +1557,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'بدلاً من لعب النقلة المتوقعة، يتم أولاً القيام بنقلة أخرى تشكل تهديدًا فوريًا مباشرًا يجب على الخصم الرد عليه. يُعرف أيضًا باسم \"زفيشنزوك\" أو \"أنترميزو \".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'نهاية المباراة تتضمن حصان';
 
   @override
@@ -4479,6 +4485,21 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غلطات',
+      many: '$count غلطة',
+      few: '$count غلطة',
+      two: '$count غلطة',
+      one: '$count غلطة',
+      zero: '$count غلطة',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4494,7 +4515,37 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count أخطاء',
+      many: '$count خطأ',
+      few: '$count خطأ',
+      two: '$count خطأ',
+      one: '$count خطأ',
+      zero: '$count خطأ',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غموض',
+      many: '$count غموض',
+      few: '$count غموض',
+      two: '$count غموض',
+      one: '$count غموض',
+      zero: '$count غموض',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5379,6 +5430,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyPlaying => 'يلعب الان';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'شرائط التقييم';

@@ -39,8 +39,23 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends ConsumerWidget {
-  const StudyScreen({required this.id});
+class StudyScreen extends StatelessWidget {
+  const StudyScreen({required this.id, super.key});
+
+  final StudyId id;
+
+  static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
+    return buildScreenRoute(context, screen: StudyScreen(id: id));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _StudyScreenLoader(id: id);
+  }
+}
+
+class _StudyScreenLoader extends ConsumerWidget {
+  const _StudyScreenLoader({required this.id});
 
   final StudyId id;
 
@@ -190,28 +205,42 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformAppBarMenuButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
-      actions: [
-        AppBarMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
+    return MenuAnchor(
+      builder:
+          (context, controller, _) => AppBarIconButton(
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            semanticsLabel: 'Study menu',
+            icon: const Icon(Icons.more_horiz),
+          ),
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.settings),
+          semanticsLabel: context.l10n.settingsSettings,
+          child: Text(context.l10n.settingsSettings),
           onPressed: () {
-            pushPlatformRoute(context, screen: StudySettings(id));
+            Navigator.of(context).push(StudySettings.buildRoute(context, id));
           },
         ),
-        AppBarMenuAction(
-          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+        MenuItemButton(
+          leadingIcon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
+          semanticsLabel: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+          child: Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
           onPressed: () {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },
         ),
-        AppBarMenuAction(
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
-          label: context.l10n.studyShareAndExport,
+        MenuItemButton(
+          leadingIcon: Icon(
+            Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+          ),
+          semanticsLabel: context.l10n.studyShareAndExport,
+          child: Text(context.l10n.studyShareAndExport),
           onPressed: () {
             showAdaptiveActionSheet<void>(
               context: context,

@@ -65,7 +65,7 @@ void main() {
         // wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
-        expect(find.byType(BroadcastCard), findsAtLeast(1));
+        expect(find.byType(BroadcastListTile), findsAtLeast(1));
       });
     });
 
@@ -89,7 +89,7 @@ void main() {
         // wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
-        await tester.scrollUntilVisible(find.text('Completed'), 200.0);
+        await tester.scrollUntilVisible(find.text('Completed'), 100.0);
       });
     });
   });

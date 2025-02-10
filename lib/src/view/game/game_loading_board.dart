@@ -52,7 +52,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                           Text(
                             seek.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${seek.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -60,7 +60,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         const SizedBox(height: 8.0),
                         Text(
                           '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                       ],
                       const SizedBox(height: 16.0),
@@ -72,7 +72,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -122,7 +122,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                       const SizedBox(height: 16.0),
                       UserFullNameWidget(
                         user: challenge.destUser,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: TextTheme.of(context).titleLarge,
                       ),
                       const SizedBox(height: 16.0),
                       Row(
@@ -137,7 +137,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                           Text(
                             challenge.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${challenge.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -148,7 +148,7 @@ class ChallengeLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -258,7 +258,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -306,7 +306,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                       children: [
                         Text(
                           context.l10n.challengeChallengeDeclined,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                         const SizedBox(height: 8.0),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
@@ -339,7 +339,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),

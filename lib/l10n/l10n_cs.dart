@@ -1513,6 +1513,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Namísto zahrání očekávaného tahu je nejdřív zahrán tah představující bezprostřední hrozbu (např. šach či napadení), na který musí soupeř odpovědět. Tomuto motivu se také říká Zwischenzug.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Jezdcové koncovky';
 
   @override
@@ -4429,6 +4435,19 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Hrubých chyb',
+      many: '$count Hrubých chyb',
+      few: '$count Hrubé chyby',
+      one: '$count Hrubá chyba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4442,6 +4461,19 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Chyb',
+      many: '$count Chyb',
+      few: '$count Chyby',
+      one: '$count Chyba',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4450,6 +4482,19 @@ class AppLocalizationsCs extends AppLocalizations {
       many: '$count nepřesností',
       few: '$count nepřesnosti',
       one: '$count nepřesnost',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Nepřesností',
+      many: '$count Nepřesností',
+      few: '$count Nepřesnosti',
+      one: '$count Nepřesnost',
     );
     return '$_temp0';
   }
@@ -5247,6 +5292,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Probíhající';
+
+  @override
+  String get studyShowResults => 'Results';
 
   @override
   String get studyShowEvalBar => 'Lišta hodnotící pozici';

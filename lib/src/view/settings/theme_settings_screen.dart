@@ -10,32 +10,37 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
+import 'package:lichess_mobile/src/view/settings/background_theme_choice_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class ThemeScreen extends StatelessWidget {
-  const ThemeScreen({super.key});
+class ThemeSettingsScreen extends ConsumerWidget {
+  const ThemeSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ThemeSettingsScreen(),
+      title: context.l10n.mobileTheme,
+    );
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return PlatformWidget(
       androidBuilder: (context) => const Scaffold(body: _Body()),
       iosBuilder:
           (context) => CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               automaticBackgroundVisibility: false,
-              backgroundColor: Styles.cupertinoAppBarColor
-                  .resolveFrom(context)
-                  .withValues(alpha: 0.0),
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
               border: null,
             ),
             child: const _Body(),
@@ -111,7 +116,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
-    final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
+    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
 
     return NotificationListener(
       onNotification: handleScrollNotification,
@@ -121,7 +126,7 @@ class _BodyState extends ConsumerState<_Body> {
             PinnedHeaderSliver(
               child: ClipRect(
                 child: BackdropFilter(
-                  enabled: backgroundColor.alpha != 0xFF,
+                  enabled: backgroundColor.a != 1,
                   filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -151,7 +156,7 @@ class _BodyState extends ConsumerState<_Body> {
           else
             SliverAppBar(
               pinned: true,
-              title: const Text('Theme'),
+              title: Text(context.l10n.mobileTheme),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(boardSize + 16.0),
                 child: Padding(
@@ -170,65 +175,40 @@ class _BodyState extends ConsumerState<_Body> {
               ListSection(
                 hasLeading: true,
                 children: [
-                  if (getCorePalette() != null)
-                    SettingsListTile(
-                      icon: const Icon(Icons.colorize_outlined),
-                      settingsLabel: const Text('Color scheme'),
-                      settingsValue: switch (generalPrefs.appThemeSeed) {
-                        AppThemeSeed.board => context.l10n.board,
-                        AppThemeSeed.system => context.l10n.mobileSystemColors,
-                      },
-                      onTap: () {
-                        showAdaptiveActionSheet<void>(
-                          context: context,
-                          actions:
-                              AppThemeSeed.values
-                                  .where(
-                                    (t) => t != AppThemeSeed.system || getCorePalette() != null,
-                                  )
-                                  .map(
-                                    (t) => BottomSheetAction(
-                                      makeLabel:
-                                          (context) => switch (t) {
-                                            AppThemeSeed.board => Text(context.l10n.board),
-                                            AppThemeSeed.system => Text(
-                                              context.l10n.mobileSystemColors,
-                                            ),
-                                          },
-                                      onPressed: (context) {
-                                        ref
-                                            .read(generalPreferencesProvider.notifier)
-                                            .setAppThemeSeed(t);
-                                      },
-                                      dismissOnPress: true,
-                                    ),
-                                  )
-                                  .toList(),
-                        );
-                      },
-                    ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.chess_board),
                     settingsLabel: Text(context.l10n.board),
                     settingsValue: boardPrefs.boardTheme.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.board,
-                        builder: (context) => const BoardThemeScreen(),
-                      );
+                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
                     },
                   ),
+                  SettingsListTile(
+                    icon: const Icon(Icons.wallpaper),
+                    settingsLabel: Text(context.l10n.background),
+                    settingsValue:
+                        generalPrefs.backgroundTheme?.label(context.l10n) ??
+                        (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                    onTap: () {
+                      Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
+                    },
+                  ),
+                  if (generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null)
+                    PlatformListTile(
+                      leading: const Icon(Icons.cancel),
+                      title: const Text('Reset background'),
+                      onTap: () {
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setBackground(backgroundTheme: null, backgroundImage: null);
+                      },
+                    ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.chess_pawn),
                     settingsLabel: Text(context.l10n.pieceSet),
                     settingsValue: boardPrefs.pieceSet.label,
                     onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.pieceSet,
-                        builder: (context) => const PieceSetScreen(),
-                      );
+                      Navigator.of(context).push(PieceSetScreen.buildRoute(context));
                     },
                   ),
                   SettingsListTile(
@@ -389,7 +369,7 @@ class _BoardPreview extends StatelessWidget {
           settings: boardPrefs.toBoardSettings().copyWith(
             brightness: kBoardDefaultBrightnessFilter,
             hue: kBoardDefaultHueFilter,
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            borderRadius: Styles.boardBorderRadius,
             boxShadow: boardShadows,
           ),
         ),

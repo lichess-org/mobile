@@ -24,6 +24,9 @@ jobs:
           channel: beta
       - run: flutter doctor -v
 
+      - name: Install requirements for sqflite_common_ffi package
+        run: sudo apt-get -y install libsqlite3-0 libsqlite3-dev
+
       - name: Install dependencies
         run: flutter pub get
 

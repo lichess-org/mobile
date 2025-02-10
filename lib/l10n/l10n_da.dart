@@ -865,7 +865,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesInGameOnly => 'Kun i spillet';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Undtagen i spillet';
 
   @override
   String get preferencesChessClock => 'Skakur';
@@ -1095,7 +1095,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzlePuzzleSuccess => 'Korrekt!';
 
   @override
-  String get puzzlePuzzleComplete => 'Taktikpgave løst!';
+  String get puzzlePuzzleComplete => 'Taktikopgave løst!';
 
   @override
   String get puzzleByOpenings => 'Efter åbninger';
@@ -1465,6 +1465,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'I stedet for at spille det forventede træk foretages først et andet træk, som udgør en umiddelbar trussel, som modstanderen må besvare. Også kendt som \"Zwischenzug\" eller \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box-mat';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden af fjendens konge og støttes af en dronning, som også blokerer kongens flugtfelter. Tårnet og dronningen fanger fjendens konge i en 3 x 3 \"kill box\".';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springerslutspil';
 
   @override
@@ -1701,7 +1707,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get playWithTheMachine => 'Spil mod computeren';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Invitér en til at spille ved at oplyse denne URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Invitér nogen til at spille ved at give dem denne URL';
 
   @override
   String get gameOver => 'Spillet er slut';
@@ -2163,7 +2169,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get correspondence => 'Korrespondance';
 
   @override
-  String get daysPerTurn => 'Dage per træk';
+  String get daysPerTurn => 'Dage pr. træk';
 
   @override
   String get oneDay => 'En dag';
@@ -3160,17 +3166,17 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 mod $param2 i $param3';
+    return '$param1 over $param2 i $param3';
   }
 
   @override
   String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 mod $param2 i $param3';
+    return '$param1 til $param2 i $param3';
   }
 
   @override
   String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 mod $param2 i $param3';
+    return '$param1 med $param2 i $param3';
   }
 
   @override
@@ -4037,7 +4043,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get classicalDesc => 'Klassiske spil: 25 minutter eller mere';
 
   @override
-  String get correspondenceDesc => 'Korrespondancepartier: en eller adskillige dage per træk';
+  String get correspondenceDesc => 'Korrespondancepartier: en eller adskillige dage pr. træk';
 
   @override
   String get puzzleDesc => 'Skaktaktik-træner';
@@ -4375,6 +4381,17 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count brølere',
+      one: '$count brøler',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,7 +4403,29 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fejl',
+      one: '$count fejl',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unøjagtigheder',
+      one: '$count unøjagtighed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5111,6 +5150,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyPlaying => 'Spiller';
+
+  @override
+  String get studyShowResults => 'Resultater';
 
   @override
   String get studyShowEvalBar => 'Evalueringssøjler';

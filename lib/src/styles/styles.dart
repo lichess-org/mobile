@@ -32,6 +32,7 @@ abstract class Styles {
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
+  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
 
   // padding
   static const cupertinoAppBarTrailingWidgetPadding = EdgeInsetsDirectional.only(end: 8.0);
@@ -45,41 +46,53 @@ abstract class Styles {
   /// Horizontal and bottom padding for the body section.
   static const bodySectionBottomPadding = EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0);
 
+  // cards
+  static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
+
+  static Color cardColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    return brightness == Brightness.light
+        ? colorScheme.surfaceContainerLowest
+        : colorScheme.surfaceContainerHigh;
+  }
+
+  // boards
+  static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
   // colors
   static Color? expansionTileColor(BuildContext context) =>
       defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
-  static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xE6F9F9F9),
-    darkColor: Color.fromARGB(210, 36, 36, 38),
-  );
-  static const cupertinoTabletAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFF9F9F9),
-    darkColor: Color.fromARGB(255, 36, 36, 36),
-  );
-  static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 23, 23, 23),
-  );
+
+  /// Retrieve the background color for the screens where we display a list of items.
+  static Color listingsScreenBackgroundColor(BuildContext context) =>
+      ColorScheme.of(context).surfaceContainerLowest;
+
+  static Color backgroundActivated(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.light
+        ? ColorScheme.of(context).surfaceContainerLow
+        : ColorScheme.of(context).surfaceContainerHighest;
+  }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
-  static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFF000000),
-    darkColor: _cupertinoDarkLabelColor,
-  );
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
-  );
-  static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFFFFFFF),
-    darkColor: Color.fromARGB(255, 44, 44, 46),
   );
   static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
     debugLabel: 'separator',
     color: Color.fromARGB(73, 60, 60, 67),
     darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
+
+  static const cupertinoAnchorMenuTheme = MenuThemeData(
+    style: MenuStyle(
+      elevation: WidgetStatePropertyAll(0),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
+    ),
   );
 
   /// A Material Design text theme with light glyphs based on San Francisco.
@@ -179,11 +192,6 @@ abstract class Styles {
       decoration: TextDecoration.none,
     ),
   );
-
-  // from:
-  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
-  static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
-      CupertinoDynamicColor.withBrightness(color: Color(0x4D000000), darkColor: Color(0x29000000));
 }
 
 /// Retrieve the default text color and apply an opacity to it.

@@ -1465,6 +1465,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'En troques de facer a xogada agardada, interpoñer un movemento que xera unha ameaza inmediata que forza unha resposta do opoñente. Tamén se di \"Zwischenzug\" ou \"Intermezzo\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Mate da caixa';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Unha torre canda o rei do adversario, defendida por unha dama que tamén bloquea as casas de escape do rei. A torre e a dama apreixan ao rei nun curruncho de 3 por 3.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de cabalos';
 
   @override
@@ -4375,6 +4381,17 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Metidas de zoca',
+      one: '$count Metida de zoca',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4386,12 +4403,34 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Erros',
+      one: '$count Erro',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imprecisións',
       one: '$count imprecisión',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Imprecisións',
+      one: '$count Imprecisión',
     );
     return '$_temp0';
   }
@@ -5111,6 +5150,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyPlaying => 'En xogo';
+
+  @override
+  String get studyShowResults => 'Resultados';
 
   @override
   String get studyShowEvalBar => 'Indicadores de avaliación';
