@@ -91,11 +91,12 @@ class _Body extends ConsumerWidget {
                     },
                   );
                 } else {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
-                    builder: (context) => const CastlingMethodSettingsScreen(),
-                  );
+                   Navigator.of(context).push(CastlingMethodSettingsScreen.buildRoute(context));
+                  // pushPlatformRoute(
+                  //   context,
+                  //   title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
+                  //   builder: (context) => const CastlingMethodSettingsScreen(),
+                  // );
                 }
               },
             ),
@@ -293,6 +294,14 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
 
 class CastlingMethodSettingsScreen extends ConsumerWidget {
   const CastlingMethodSettingsScreen({super.key});
+
+    static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const BoardClockPositionScreen(),
+      title: 'Clock position',
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
