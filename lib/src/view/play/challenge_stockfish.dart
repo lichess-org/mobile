@@ -31,6 +31,14 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class ComputerChallengeScreen extends StatelessWidget {
   const ComputerChallengeScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.playWithTheMachine,
+      screen: const ComputerChallengeScreen(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -401,10 +409,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
 
                                 if (!context.mounted) return;
 
-                                pushPlatformRoute(
-                                  context,
-                                  rootNavigator: true,
-                                  screen: GameScreen(initialGameId: GameFullId.fromJson(fullId)),
+                                Navigator.of(context, rootNavigator: true).push(
+                                  GameScreen.buildRoute(
+                                    context,
+                                    initialGameId: GameFullId.fromJson(fullId),
+                                  ),
                                 );
                               }
                               : null,

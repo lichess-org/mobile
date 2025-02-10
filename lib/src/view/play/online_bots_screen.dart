@@ -147,7 +147,7 @@ class _Body extends ConsumerWidget {
                       isOddBot
                           ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
                           : isLichessAI
-                          ? const ComputerChallengeScreen.buildRoute(context)
+                          ? ComputerChallengeScreen.buildRoute(context)
                           : CreateChallengeScreen.buildRoute(context, bot.lightUser),
                   );
                 },
