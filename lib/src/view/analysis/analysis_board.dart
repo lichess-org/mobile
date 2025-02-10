@@ -90,7 +90,6 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                 .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
-
       shapes: userShapes.union(bestMoveShapes),
       annotations:
           showAnnotationsOnBoard && sanMove != null && annotation != null
