@@ -463,10 +463,9 @@ class _EditableWidget extends ConsumerWidget {
                     ),
                   Checkbox.adaptive(
                     value: isEnabled,
-                    onChanged:
-                        (_) {
-                              ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
-                            },
+                    onChanged: (_) {
+                      ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
+                    },
                   ),
                   if (index != null)
                     IconButton(
