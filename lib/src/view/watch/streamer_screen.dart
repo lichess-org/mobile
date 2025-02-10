@@ -11,6 +11,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _kThumbnailSize = 75.0;
+
 class StreamerScreen extends StatelessWidget {
   const StreamerScreen({required this.streamers});
 
@@ -37,7 +39,7 @@ class StreamerScreen extends StatelessWidget {
         itemCount: streamers.length,
         itemBuilder:
             (context, index) => StreamerListTile(
-              thumbnailSize: 75.0,
+              thumbnailSize: _kThumbnailSize,
               streamer: streamers[index],
               isPreview: false,
               maxSubtitleLines: 4,
@@ -55,11 +57,12 @@ class StreamerScreen extends StatelessWidget {
           SliverSafeArea(
             sliver: SliverList.separated(
               separatorBuilder:
-                  (context, index) => const PlatformDivider(height: 1, indent: 75.0 + 16.0 + 10.0),
+                  (context, index) =>
+                      const PlatformDivider(height: 1, indent: _kThumbnailSize + 16.0 + 10.0),
               itemCount: streamers.length,
               itemBuilder:
                   (context, index) => StreamerListTile(
-                    thumbnailSize: 75.0,
+                    thumbnailSize: _kThumbnailSize,
                     streamer: streamers[index],
                     isPreview: false,
                     maxSubtitleLines: 4,
@@ -76,7 +79,7 @@ class StreamerListTile extends StatelessWidget {
   const StreamerListTile({
     required this.streamer,
     this.maxSubtitleLines = 1,
-    this.thumbnailSize = 50.0,
+    this.thumbnailSize = _kThumbnailSize,
     this.isPreview = true,
   });
 
