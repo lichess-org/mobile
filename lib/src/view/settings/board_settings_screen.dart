@@ -91,7 +91,7 @@ class _Body extends ConsumerWidget {
                     },
                   );
                 } else {
-                   Navigator.of(context).push(CastlingMethodSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(CastlingMethodSettingsScreen.buildRoute(context));
                   // pushPlatformRoute(
                   //   context,
                   //   title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
@@ -295,7 +295,7 @@ class PieceShiftMethodSettingsScreen extends ConsumerWidget {
 class CastlingMethodSettingsScreen extends ConsumerWidget {
   const CastlingMethodSettingsScreen({super.key});
 
-    static Route<dynamic> buildRoute(BuildContext context) {
+  static Route<dynamic> buildRoute(BuildContext context) {
     return buildScreenRoute(
       context,
       screen: const BoardClockPositionScreen(),
