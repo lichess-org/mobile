@@ -25,9 +25,6 @@ class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePref
   }
 
   Future<void> toggleWidget(EnabledWidget widget) {
-    if (widget == EnabledWidget.ongoingGames) {
-      return Future.value();
-    }
     final newState = state.copyWith(
       enabledWidgets:
           state.enabledWidgets.contains(widget)

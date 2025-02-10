@@ -464,9 +464,7 @@ class _EditableWidget extends ConsumerWidget {
                   Checkbox.adaptive(
                     value: isEnabled,
                     onChanged:
-                        widget == EnabledWidget.ongoingGames
-                            ? null
-                            : (_) {
+                        (_) {
                               ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
                             },
                   ),
