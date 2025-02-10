@@ -288,7 +288,6 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
   }
 }
 
-
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
