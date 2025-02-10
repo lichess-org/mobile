@@ -395,7 +395,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                   lichessUri('/api/challenge/ai'),
                                   body: toRequestBody,
                                   mapper: (Map<String, dynamic> json) {
-                                    print(json);
                                     return json['fullId'];
                                   },
                                 );
