@@ -167,8 +167,7 @@ class _BodyState extends ConsumerState<_Body> {
     final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
-      debugPrint('SEVERE: [BroadcastsListScreen] could not load broadcast tournaments');
-      return const Center(child: Text('Could not load broadcast tournaments'));
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     final sections = [
