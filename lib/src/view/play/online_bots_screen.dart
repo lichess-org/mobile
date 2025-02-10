@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
+import 'package:lichess_mobile/src/view/play/challenge_stockfish.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -50,7 +52,7 @@ class _Body extends ConsumerWidget {
     return onlineBots.when(
       data:
           (data) => ListView.separated(
-            itemCount: data.length,
+            itemCount: data.length + 1,
             separatorBuilder:
                 (context, index) =>
                     Theme.of(context).platform == TargetPlatform.iOS
@@ -64,9 +66,22 @@ class _Body extends ConsumerWidget {
                         )
                         : const SizedBox.shrink(),
             itemBuilder: (context, index) {
-              final bot = data[index];
+              late final User bot;
+              final isLichessAI = index == 0;
+
+              if (index == 0) {
+                bot = User(
+                  // TODO
+                  username: 'Stockfish',
+                  verified: true,
+                  id: const UserId(''),
+                  perfs: IMap(),
+                );
+              } else {
+                bot = data[index + 1];
+              }
               return PlatformListTile(
-                isThreeLine: true,
+                isThreeLine: !isLichessAI,
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS
                         ? Row(
@@ -92,7 +107,7 @@ class _Body extends ConsumerWidget {
                   children: [
                     Row(
                       children:
-                          [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
+                          isLichessAI ? [] : [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
                             final rating = bot.perfs[perf]?.rating;
                             final nbGames = bot.perfs[perf]?.games ?? 0;
                             return Padding(
@@ -110,7 +125,7 @@ class _Body extends ConsumerWidget {
                             );
                           }).toList(),
                     ),
-                    Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
+                    if (isLichessAI) Text(context.l10n.playWithTheMachine, maxLines: 2, overflow: TextOverflow.ellipsis) else Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
                   ],
                 ),
                 onTap: () {
@@ -131,19 +146,24 @@ class _Body extends ConsumerWidget {
                         (context) =>
                             isOddBot
                                 ? ChallengeOddBotsScreen(bot.lightUser)
+                                : isLichessAI
+                                ? const ComputerChallengeScreen()
                                 : CreateChallengeScreen(bot.lightUser),
                   );
                 },
-                onLongPress: () {
-                  showAdaptiveBottomSheet<void>(
-                    context: context,
-                    useRootNavigator: true,
-                    isDismissible: true,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    builder: (context) => _ContextMenu(bot: bot),
-                  );
-                },
+                onLongPress:
+                    index > 0
+                        ? () {
+                          showAdaptiveBottomSheet<void>(
+                            context: context,
+                            useRootNavigator: true,
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            showDragHandle: true,
+                            builder: (context) => _ContextMenu(bot: bot),
+                          );
+                        }
+                        : () {}, // TODO
               );
             },
           ),

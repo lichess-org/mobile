@@ -53,19 +53,6 @@ class CreateGameOptions extends ConsumerWidget {
               icon: Icons.computer,
               label: context.l10n.onlineBots,
             ),
-            _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.playWithTheMachine,
-                  builder: (_) => const ComputerChallengeScreen() // const PlayStockfishScreen(),
-                );
-              }
-                  : null,
-              icon: Icons.memory,
-              label: context.l10n.playWithTheMachine,
-            ),
           ],
         ),
         _Section(
