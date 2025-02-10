@@ -710,6 +710,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (!initialPath.isEmpty) const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -755,13 +756,15 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
             ),
           ],
         ),
-        if (params.shouldShowComments && lastBranch?.hasTextComment == true)
+        if (params.shouldShowComments && lastBranch?.hasTextComment == true) ...[
+          const Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
             child: Text.rich(
               TextSpan(children: _comments(lastBranch!.textComments, textStyle: textStyle)),
             ),
           ),
+        ],
       ],
     );
   }
