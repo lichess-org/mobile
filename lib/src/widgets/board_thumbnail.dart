@@ -92,10 +92,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       enableCoordinates: false,
       borderRadius:
           (widget.showEvaluationBar)
-              ? BorderRadius.only(
-                topLeft: Styles.boardBorderRadius.topLeft,
-                bottomLeft: Styles.boardBorderRadius.bottomLeft,
-              )
+              ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
               : Styles.boardBorderRadius,
       boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
       pieceAssets: boardPrefs.pieceSet.assets,
@@ -122,9 +119,9 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                             : Container(
                               height: widget.size,
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(4),
-                                  bottomRight: Radius.circular(4),
+                                borderRadius: Styles.boardBorderRadius.copyWith(
+                                  topLeft: Radius.zero,
+                                  bottomLeft: Radius.zero,
                                 ),
                                 color: Colors.grey.withValues(alpha: 0.6),
                               ),
@@ -179,23 +176,20 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Column(
-          children: [
-            Container(
-              height: height - whiteBarHeight,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topRight: Styles.boardBorderRadius.topRight),
+        ClipRRect(
+          borderRadius: Styles.boardBorderRadius.copyWith(
+            topLeft: Radius.zero,
+            bottomLeft: Radius.zero,
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: height - whiteBarHeight,
                 color: EngineGauge.backgroundColor(context),
               ),
-            ),
-            Container(
-              height: whiteBarHeight,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomRight: Styles.boardBorderRadius.topLeft),
-                color: EngineGauge.valueColor(context),
-              ),
-            ),
-          ],
+              Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
+            ],
+          ),
         ),
         Container(height: height / 100, color: darken(Colors.red)),
       ],
