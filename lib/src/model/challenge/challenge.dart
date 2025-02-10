@@ -24,7 +24,6 @@ abstract mixin class BaseChallenge {
   String? get initialFen;
   int? get aiLevel;
 
-
   TimeIncrement? get timeIncrement =>
       clock != null ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds) : null;
 
