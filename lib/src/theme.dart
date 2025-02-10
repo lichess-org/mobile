@@ -79,7 +79,6 @@ class ApplicationTheme extends _$ApplicationTheme {
       light: themeLight.copyWith(
         cupertinoOverrideTheme: lightCupertino,
         splashFactory: isIOS ? NoSplash.splashFactory : null,
-        textTheme: isIOS ? Typography.blackCupertino : null,
         listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
         menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
         extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
@@ -87,7 +86,6 @@ class ApplicationTheme extends _$ApplicationTheme {
       dark: themeDark.copyWith(
         cupertinoOverrideTheme: darkCupertino,
         splashFactory: isIOS ? NoSplash.splashFactory : null,
-        textTheme: isIOS ? Typography.whiteCupertino : null,
         listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
         menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
         extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
