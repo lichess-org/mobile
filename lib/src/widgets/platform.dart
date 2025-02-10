@@ -86,15 +86,13 @@ class PlatformCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platform = Theme.of(context).platform;
-    final brightness = Theme.of(context).brightness;
-    final cardFactory = brightness == Brightness.dark ? Card.filled : Card.new;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child: cardFactory(
+      child: Card(
         shape:
             borderRadius != null
                 ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
+                : const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
         color: color ?? Styles.cardColor(context),
         shadowColor: shadowColor,
         semanticContainer: semanticContainer,

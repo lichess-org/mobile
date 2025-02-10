@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/background_theme.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -39,11 +38,13 @@ class AnalysisScreen extends StatelessWidget {
   final AnalysisOptions options;
   final bool enableDrawingShapes;
 
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FullScreenBackgroundTheme(
-      child: _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes),
-    );
+    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
   }
 }
 
@@ -94,11 +95,9 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
-          pushPlatformRoute(
+          Navigator.of(
             context,
-            title: context.l10n.settingsSettings,
-            builder: (_) => AnalysisSettings(widget.options),
-          );
+          ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
         },
         semanticsLabel: context.l10n.settingsSettings,
         icon: const Icon(Icons.settings),
@@ -302,21 +301,15 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: (context) {
               final boardFen = analysisState.position.fen;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                title: context.l10n.boardEditor,
-                builder: (_) => BoardEditorScreen(initialFen: boardFen),
-              );
+              ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
           onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(options: options),
-            );
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
           },
         ),
         BottomSheetAction(

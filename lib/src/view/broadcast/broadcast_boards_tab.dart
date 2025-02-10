@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
@@ -238,18 +237,16 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
       child: BoardThumbnail(
         animationDuration: const Duration(milliseconds: 150),
         onTap: () {
-          pushPlatformRoute(
-            context,
-            title: widget.title,
-            builder:
-                (context) => BroadcastGameScreen(
-                  tournamentId: widget.tournamentId,
-                  roundId: widget.roundId,
-                  gameId: widget.game.id,
-                  tournamentSlug: widget.tournamentSlug,
-                  roundSlug: widget.roundSlug,
-                  title: widget.title,
-                ),
+          Navigator.of(context).push(
+            BroadcastGameScreen.buildRoute(
+              context,
+              tournamentId: widget.tournamentId,
+              roundId: widget.roundId,
+              gameId: widget.game.id,
+              tournamentSlug: widget.tournamentSlug,
+              roundSlug: widget.roundSlug,
+              title: widget.title,
+            ),
           );
         },
         orientation: Side.white,

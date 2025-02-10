@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
@@ -155,40 +156,45 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        return Scaffold(
-          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
-          bottomNavigationBar: Consumer(
-            builder: (context, ref, _) {
-              final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-              return NavigationBar(
-                selectedIndex: currentTab.index,
-                destinations: [
-                  for (final tab in BottomTab.values)
-                    NavigationDestination(
-                      icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                      label: tab.label(context.l10n),
-                    ),
-                ],
-                onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
-              );
-            },
+        return FullScreenBackground(
+          child: Scaffold(
+            body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
+            bottomNavigationBar: Consumer(
+              builder: (context, ref, _) {
+                final isOnline =
+                    ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+                return NavigationBar(
+                  selectedIndex: currentTab.index,
+                  destinations: [
+                    for (final tab in BottomTab.values)
+                      NavigationDestination(
+                        icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+                );
+              },
+            ),
           ),
         );
       case TargetPlatform.iOS:
         final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-        return CupertinoTabScaffold(
-          tabBuilder: _iOSTabBuilder,
-          controller: _cupertinoTabController,
-          tabBar: CupertinoTabBar(
-            currentIndex: currentTab.index,
-            items: [
-              for (final tab in BottomTab.values)
-                BottomNavigationBarItem(
-                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                  label: tab.label(context.l10n),
-                ),
-            ],
-            onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+        return FullScreenBackground(
+          child: CupertinoTabScaffold(
+            tabBuilder: _iOSTabBuilder,
+            controller: _cupertinoTabController,
+            tabBar: CupertinoTabBar(
+              currentIndex: currentTab.index,
+              items: [
+                for (final tab in BottomTab.values)
+                  BottomNavigationBarItem(
+                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                    label: tab.label(context.l10n),
+                  ),
+              ],
+              onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+            ),
           ),
         );
       default:

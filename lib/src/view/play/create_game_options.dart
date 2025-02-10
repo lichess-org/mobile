@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/online_bots_screen.dart';
@@ -29,11 +28,7 @@ class CreateGameOptions extends ConsumerWidget {
                   isOnline
                       ? () {
                         ref.invalidate(accountProvider);
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.custom,
-                          builder: (_) => const CreateCustomGameScreen(),
-                        );
+                        Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
                       }
                       : null,
               icon: Icons.tune,
@@ -43,11 +38,12 @@ class CreateGameOptions extends ConsumerWidget {
               onTap:
                   isOnline
                       ? () {
-                        pushPlatformRoute(
-                          context,
-                          title: context.l10n.onlineBots,
-                          builder: (_) => const OnlineBotsScreen(),
-                        );
+                        // pushPlatformRoute(
+                        //   context,
+                        //   title: context.l10n.onlineBots,
+                        //   builder: (_) => const OnlineBotsScreen(),
+                        // );
+                        Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
                       }
                       : null,
               icon: Icons.computer,
@@ -59,12 +55,10 @@ class CreateGameOptions extends ConsumerWidget {
           children: [
             _CreateGamePlatformButton(
               onTap: () {
-                pushPlatformRoute(
+                Navigator.of(
                   context,
-                  title: 'Over the Board',
                   rootNavigator: true,
-                  builder: (_) => const OverTheBoardScreen(),
-                );
+                ).push(OverTheBoardScreen.buildRoute(context));
               },
               icon: LichessIcons.chess_board,
               label: 'Over the board',
@@ -110,7 +104,7 @@ class _CreateGamePlatformButton extends StatelessWidget {
           title: Text(label, style: Styles.mainListTileTitle),
           onTap: onTap,
         )
-        : OutlinedButton.icon(
+        : FilledButton.tonalIcon(
           onPressed: onTap,
           icon: Icon(icon),
           label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),

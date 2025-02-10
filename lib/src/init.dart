@@ -32,10 +32,11 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
-  // TODO remove this migration code after a few releases
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 2)) {
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
+    // TODO remove this migration code after a few releases
     _migrateThemeSettings();
-    _migrateHomePrefs();
+
+    _resetHomePrefs();
   }
 
   if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
@@ -55,7 +56,7 @@ Future<void> setupFirstLaunch() async {
   }
 }
 
-Future<void> _migrateHomePrefs() async {
+Future<void> _resetHomePrefs() async {
   final prefs = LichessBinding.instance.sharedPreferences;
   try {
     final stored = prefs.getString(PrefCategory.home.storageKey);

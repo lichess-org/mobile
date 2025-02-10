@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -355,14 +354,13 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
       color: widget.color,
       child: AdaptiveInkWell(
         onTap: () {
-          pushPlatformRoute(
-            context,
-            builder:
-                (_) => ArchivedGameScreen(
-                  gameId: widget.game.id,
-                  orientation: Side.white,
-                  initialCursor: widget.ply,
-                ),
+          Navigator.of(context).push(
+            ArchivedGameScreen.buildRoute(
+              context,
+              gameId: widget.game.id,
+              orientation: Side.white,
+              initialCursor: widget.ply,
+            ),
           );
         },
         child: Row(

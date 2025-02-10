@@ -25,9 +25,17 @@ class BoardEditorScreen extends StatelessWidget {
 
   final String? initialFen;
 
+  static Route<dynamic> buildRoute(BuildContext context, {String? initialFen}) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.boardEditor,
+      screen: BoardEditorScreen(initialFen: initialFen),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PlatformBoardThemeScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.boardEditor)),
       body: _Body(initialFen),
     );
@@ -128,7 +136,7 @@ class _BoardEditor extends ConsumerWidget {
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? const BorderRadius.all(Radius.circular(4.0)) : BorderRadius.zero,
+        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
       pointerMode: editorState.editorPointerMode,
@@ -181,8 +189,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius:
-            widget.isTablet ? const BorderRadius.all(Radius.circular(4.0)) : BorderRadius.zero,
+        borderRadius: widget.isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
       ),
       child: ColoredBox(
@@ -308,20 +315,18 @@ class _BottomBar extends ConsumerWidget {
                       pieceCount > 0 &&
                       pieceCount <= 32
                   ? () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(
-                              orientation: editorState.orientation,
-                              standalone: (
-                                pgn: editorState.pgn!,
-                                isComputerAnalysisAllowed: true,
-                                variant: Variant.fromPosition,
-                              ),
-                            ),
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: editorState.orientation,
+                          standalone: (
+                            pgn: editorState.pgn!,
+                            isComputerAnalysisAllowed: true,
+                            variant: Variant.fromPosition,
                           ),
+                        ),
+                      ),
                     );
                   }
                   : null,

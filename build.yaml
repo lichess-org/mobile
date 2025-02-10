@@ -13,6 +13,7 @@ targets:
       riverpod_generator:
         generate_for:
           - lib/src/localizations.dart
+          - lib/src/theme.dart
           - lib/src/model/**/*.dart
           - lib/src/network/*.dart
           - lib/src/db/*.dart

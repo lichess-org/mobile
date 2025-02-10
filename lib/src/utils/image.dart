@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
+import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 typedef ImageColors = ({int primaryContainer, int onPrimaryContainer});
@@ -81,7 +83,7 @@ class ImageColorWorker {
         // final stopwatch0 = Stopwatch()..start();
         final quantizerResult = await QuantizerCelebi().quantize(image, 32);
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-          (int key, int value) => MapEntry<int, int>(_getArgbFromAbgr(key), value),
+          (int key, int value) => MapEntry<int, int>(getArgbFromAbgr(key), value),
         );
         final significantColors = Map<int, int>.from(colorToCount)
           ..removeWhere((key, value) => value < 10);
@@ -139,8 +141,22 @@ class ImageColorWorker {
   }
 }
 
+// code below taken from: https://github.com/flutter/flutter/blob/74669e4bf1352a5134ad68398a6bf7fac0a6473b/packages/flutter/lib/src/material/color_scheme.dart
+
+Future<QuantizerResult> extractColorsFromImageProvider(ImageProvider imageProvider) async {
+  final ui.Image scaledImage = await _imageProviderToScaled(imageProvider);
+  final ByteData? imageBytes = await scaledImage.toByteData();
+
+  final QuantizerResult quantizerResult = await QuantizerCelebi().quantize(
+    imageBytes!.buffer.asUint32List(),
+    128,
+    returnInputPixelToClusterPixel: true,
+  );
+  return quantizerResult;
+}
+
 // Converts AABBGGRR color int to AARRGGBB format.
-int _getArgbFromAbgr(int abgr) {
+int getArgbFromAbgr(int abgr) {
   const int exceptRMask = 0xFF00FFFF;
   const int onlyRMask = ~exceptRMask;
   const int exceptBMask = 0xFFFFFF00;
@@ -148,4 +164,60 @@ int _getArgbFromAbgr(int abgr) {
   final int r = (abgr & onlyRMask) >> 16;
   final int b = abgr & onlyBMask;
   return (abgr & exceptRMask & exceptBMask) | (b << 16) | r;
+}
+
+// Scale image size down to reduce computation time of color extraction.
+Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
+  const double maxDimension = 112.0;
+  final ImageStream stream = imageProvider.resolve(
+    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
+  );
+  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
+  late ImageStreamListener listener;
+  late ui.Image scaledImage;
+  Timer? loadFailureTimeout;
+
+  listener = ImageStreamListener(
+    (ImageInfo info, bool sync) async {
+      loadFailureTimeout?.cancel();
+      stream.removeListener(listener);
+      final ui.Image image = info.image;
+      final int width = image.width;
+      final int height = image.height;
+      double paintWidth = width.toDouble();
+      double paintHeight = height.toDouble();
+      assert(width > 0 && height > 0);
+
+      final bool rescale = width > maxDimension || height > maxDimension;
+      if (rescale) {
+        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
+        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
+      }
+      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(pictureRecorder);
+      paintImage(
+        canvas: canvas,
+        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
+        image: image,
+        filterQuality: FilterQuality.none,
+      );
+
+      final ui.Picture picture = pictureRecorder.endRecording();
+      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
+      imageCompleter.complete(info.image);
+    },
+    onError: (Object exception, StackTrace? stackTrace) {
+      stream.removeListener(listener);
+      throw Exception('Failed to render image: $exception');
+    },
+  );
+
+  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
+    stream.removeListener(listener);
+    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+  });
+
+  stream.addListener(listener);
+  await imageCompleter.future;
+  return scaledImage;
 }

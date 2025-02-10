@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.da
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
@@ -28,6 +29,18 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final BroadcastRoundTab? initialTab;
 
   const BroadcastRoundScreen({required this.broadcast, this.initialTab});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    Broadcast broadcast, {
+    BroadcastRoundTab? initialTab,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
+      title: broadcast.title,
+    );
+  }
 
   @override
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();

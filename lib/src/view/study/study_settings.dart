@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -18,6 +19,10 @@ class StudySettings extends ConsumerWidget {
   const StudySettings(this.id);
 
   final StudyId id;
+
+  static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
+    return buildScreenRoute(context, screen: StudySettings(id));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

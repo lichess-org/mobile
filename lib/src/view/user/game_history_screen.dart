@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -9,6 +11,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -28,6 +31,18 @@ class GameHistoryScreen extends ConsumerWidget {
   final bool isOnline;
   final GameFilterState gameFilter;
 
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    LightUser? user,
+    bool isOnline = false,
+    GameFilterState gameFilter = const GameFilterState(),
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: GameHistoryScreen(user: user, isOnline: isOnline, gameFilter: gameFilter),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
@@ -39,7 +54,7 @@ class GameHistoryScreen extends ConsumerWidget {
               loading: () => const ButtonLoadingIndicator(),
               error: (e, s) => Text(context.l10n.mobileAllGames),
             )
-            : Text(filtersInUse.selectionLabel(context));
+            : Text(filtersInUse.selectionLabel(context.l10n));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
@@ -49,7 +64,7 @@ class GameHistoryScreen extends ConsumerWidget {
         ),
         count: filtersInUse.count,
         isLabelVisible: filtersInUse.count > 0,
-        child: const Icon(Icons.tune),
+        child: const Icon(Icons.filter_list),
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed:
@@ -137,9 +152,13 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline, filter: gameFilterState),
+    final gameListProvider = userGameHistoryProvider(
+      widget.user?.id,
+      isOnline: widget.isOnline,
+      filter: gameFilterState,
     );
+    final gameListState = ref.watch(gameListProvider);
+    final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return gameListState.when(
       data: (state) {
@@ -172,14 +191,55 @@ class _BodyState extends ConsumerState<_Body> {
                   );
                 }
 
-                return ExtendedGameListTile(
+                final game = list[index].game;
+
+                Future<void> onPressedBookmark(BuildContext context) async {
+                  try {
+                    await ref
+                        .read(accountServiceProvider)
+                        .setGameBookmark(game.id, bookmark: !game.bookmarked!);
+                    ref.read(gameListProvider.notifier).toggleBookmark(game.id);
+                  } on Exception catch (_) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(
+                        context,
+                        'Bookmark action failed',
+                        type: SnackBarType.error,
+                      );
+                    }
+                  }
+                }
+
+                final gameTile = GameListTile(
                   item: list[index],
                   // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                   padding:
                       Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
                           : null,
+                  onPressedBookmark: onPressedBookmark,
+                  gameListContext: (widget.user?.id, gameFilterState),
                 );
+
+                return isLoggedIn
+                    ? Slidable(
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                            onPressed: onPressedBookmark,
+                            icon:
+                                game.isBookmarked
+                                    ? Icons.bookmark_remove_outlined
+                                    : Icons.bookmark_add_outlined,
+                            label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
+                          ),
+                        ],
+                      ),
+                      child: gameTile,
+                    )
+                    : gameTile;
               },
             );
       },

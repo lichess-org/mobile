@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -71,12 +70,11 @@ class UserProfileWidget extends ConsumerWidget {
                 onOpen: (link) async {
                   if (link.originText.startsWith('@')) {
                     final username = link.originText.substring(1);
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (ctx) => UserScreen(
-                            user: LightUser(id: UserId.fromUserName(username), name: username),
-                          ),
+                    Navigator.of(context).push(
+                      UserScreen.buildRoute(
+                        context,
+                        LightUser(id: UserId.fromUserName(username), name: username),
+                      ),
                     );
                   } else {
                     launchUrl(Uri.parse(link.url));
