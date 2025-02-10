@@ -104,9 +104,18 @@ class LightArchivedGame with _$LightArchivedGame {
 
   factory LightArchivedGame.fromServerJson(
     Map<String, dynamic> json, {
+
+    /// Whether to ask the server if the game is bookmarked
     bool withBookmarked = false,
+
+    /// Whether it is already known that the game is bookmarked
+    bool isBookmarked = false,
   }) {
-    return _lightArchivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
+    return _lightArchivedGameFromPick(
+      pick(json).required(),
+      withBookmarked: withBookmarked,
+      isBookmarked: isBookmarked,
+    );
   }
 
   factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
@@ -208,7 +217,11 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
   );
 }
 
-LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
+LightArchivedGame _lightArchivedGameFromPick(
+  RequiredPick pick, {
+  bool withBookmarked = false,
+  bool isBookmarked = false,
+}) {
   return LightArchivedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
@@ -229,7 +242,12 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick, {bool withBookma
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
-    bookmarked: withBookmarked ? pick('bookmarked').asBoolOrFalse() : null,
+    bookmarked:
+        isBookmarked
+            ? true
+            : withBookmarked
+            ? pick('bookmarked').asBoolOrFalse()
+            : null,
   );
 }
 
