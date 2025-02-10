@@ -1,12 +1,11 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
@@ -185,20 +184,20 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
             Container(
               height: height - whiteBarHeight,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(topRight: Radius.circular(4)),
+                borderRadius: BorderRadius.only(topRight: Styles.boardBorderRadius.topRight),
                 color: EngineGauge.backgroundColor(context),
               ),
             ),
             Container(
               height: whiteBarHeight,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(bottomRight: Radius.circular(4)),
+                borderRadius: BorderRadius.only(bottomRight: Styles.boardBorderRadius.topLeft),
                 color: EngineGauge.valueColor(context),
               ),
             ),
           ],
         ),
-        Container(height: height / 100, color: Colors.red.darken()),
+        Container(height: height / 100, color: darken(Colors.red)),
       ],
     );
   }
