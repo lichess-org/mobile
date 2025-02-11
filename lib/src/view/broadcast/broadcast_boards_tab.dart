@@ -29,11 +29,13 @@ class BroadcastBoardsTab extends ConsumerWidget {
     required this.tournamentId,
     required this.roundId,
     required this.tournamentSlug,
+    required this.showOnlyOngoingGames,
   });
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final String tournamentSlug;
+  final bool showOnlyOngoingGames;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +65,10 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 ),
               )
               : BroadcastPreview(
-                games: value.games.values.toIList(),
+                games:
+                    showOnlyOngoingGames
+                        ? value.games.values.where((game) => game.isOngoing).toIList()
+                        : value.games.values.toIList(),
                 tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,

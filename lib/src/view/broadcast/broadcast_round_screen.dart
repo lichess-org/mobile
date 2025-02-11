@@ -52,6 +52,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
+  bool showOnlyOngoingGames = false;
 
   bool roundLoaded = false;
 
@@ -94,6 +95,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
+  void togglePlaying() {
+    setState(() {
+      showOnlyOngoingGames = !showOnlyOngoingGames;
+    });
+  }
+
   Widget _iosBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
@@ -121,7 +128,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           maxLines: 1,
         ),
 
-        trailing: _BroadcastSettingsButton(),
+        trailing: _BroadcastSettingsButton(
+          showOnlyOngoingGames: showOnlyOngoingGames,
+          togglePlaying: togglePlaying,
+        ),
       ),
       child: Column(
         children: [
@@ -142,6 +152,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       tournamentId: _selectedTournamentId,
                       roundId: _selectedRoundId ?? value.defaultRoundId,
                       tournamentSlug: widget.broadcast.tour.slug,
+                      showOnlyOngoingGames: showOnlyOngoingGames,
                     ),
                     _ => const SliverFillRemaining(child: SizedBox.shrink()),
                   },
@@ -189,7 +200,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Tab(text: context.l10n.players),
           ],
         ),
-        actions: [_BroadcastSettingsButton()],
+        actions: [
+          _BroadcastSettingsButton(
+            showOnlyOngoingGames: showOnlyOngoingGames,
+            togglePlaying: togglePlaying,
+          ),
+        ],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
@@ -207,6 +223,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   tournamentId: _selectedTournamentId,
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentSlug: widget.broadcast.tour.slug,
+                  showOnlyOngoingGames: showOnlyOngoingGames,
                 ),
                 _ => const SliverFillRemaining(child: SizedBox.shrink()),
               },
@@ -507,6 +524,11 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsButton extends StatelessWidget {
+  final bool showOnlyOngoingGames;
+  final VoidCallback togglePlaying;
+
+  const _BroadcastSettingsButton({required this.showOnlyOngoingGames, required this.togglePlaying});
+
   @override
   Widget build(BuildContext context) => AppBarIconButton(
     icon: const Icon(Icons.settings),
@@ -516,17 +538,41 @@ class _BroadcastSettingsButton extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (_) => const _BroadcastSettingsBottomSheet(),
+          builder:
+              (_) => _BroadcastSettingsBottomSheet(
+                showOnlyOngoingGames: showOnlyOngoingGames,
+                togglePlaying: togglePlaying,
+              ),
         ),
     semanticsLabel: context.l10n.settingsSettings,
   );
 }
 
-class _BroadcastSettingsBottomSheet extends ConsumerWidget {
-  const _BroadcastSettingsBottomSheet();
+class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
+  final bool showOnlyOngoingGames;
+  final VoidCallback togglePlaying;
+
+  const _BroadcastSettingsBottomSheet({
+    required this.showOnlyOngoingGames,
+    required this.togglePlaying,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
+      _BroadcastSettingsBottomSheetState();
+}
+
+class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+  late bool showOnlyOngoingGames;
+
+  @override
+  void initState() {
+    super.initState();
+    showOnlyOngoingGames = widget.showOnlyOngoingGames;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
     return DraggableScrollableSheet(
@@ -541,6 +587,16 @@ class _BroadcastSettingsBottomSheet extends ConsumerWidget {
                 value: broadcastPreferences.showEvaluationBar,
                 onChanged: (value) {
                   ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+                },
+              ),
+              SwitchSettingTile(
+                title: Text(context.l10n.studyPlaying),
+                value: showOnlyOngoingGames,
+                onChanged: (value) {
+                  setState(() {
+                    showOnlyOngoingGames = !showOnlyOngoingGames;
+                  });
+                  widget.togglePlaying();
                 },
               ),
             ],
