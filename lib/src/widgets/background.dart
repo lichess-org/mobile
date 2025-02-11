@@ -160,7 +160,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
               _ => widget.viewport.height,
             },
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: widget.backgroundImage.seedColor,
               image: DecorationImage(
                 image: FileImage(
                   File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),

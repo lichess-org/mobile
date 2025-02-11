@@ -15,14 +15,10 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
 
   if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
     return _makeDefaultTheme(generalPrefs, boardPrefs, isIOS);
-  } else if (generalPrefs.backgroundImage != null) {
-    return _makeBackgroundImageTheme(
-      baseTheme: generalPrefs.backgroundImage!.baseTheme,
-      isIOS: isIOS,
-    );
   } else {
     return _makeBackgroundImageTheme(
-      baseTheme: generalPrefs.backgroundTheme!.baseTheme,
+      baseTheme: generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundTheme!.baseTheme,
+      seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundTheme!.color,
       isIOS: isIOS,
     );
   }
@@ -107,6 +103,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
 
 ({ThemeData light, ThemeData dark}) _makeBackgroundImageTheme({
   required ThemeData baseTheme,
+  required Color seedColor,
   required bool isIOS,
 }) {
   final primary = baseTheme.colorScheme.primary;
@@ -150,10 +147,8 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
     menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
-    scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    appBarTheme: baseTheme.appBarTheme.copyWith(
-      backgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    ),
+    scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
+    appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.2)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );

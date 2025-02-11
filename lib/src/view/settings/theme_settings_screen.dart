@@ -156,6 +156,9 @@ class _BodyState extends ConsumerState<_Body> {
             )
           else
             SliverAppBar(
+              backgroundColor: Theme.of(
+                context,
+              ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
               pinned: true,
               title: Text(context.l10n.mobileTheme),
               bottom: PreferredSize(
