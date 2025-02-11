@@ -35,8 +35,6 @@ Future<void> setupFirstLaunch() async {
   if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
     // TODO remove this migration code after a few releases
     _migrateThemeSettings();
-
-    _resetHomePrefs();
   }
 
   if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
@@ -53,19 +51,6 @@ Future<void> setupFirstLaunch() async {
     await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
 
     await prefs.setBool('first_run', false);
-  }
-}
-
-Future<void> _resetHomePrefs() async {
-  final prefs = LichessBinding.instance.sharedPreferences;
-  try {
-    final stored = prefs.getString(PrefCategory.home.storageKey);
-    if (stored == null) {
-      return;
-    }
-    await prefs.setString(PrefCategory.home.storageKey, jsonEncode(null));
-  } catch (e) {
-    _logger.warning('Failed to migrate home preferences: $e');
   }
 }
 
