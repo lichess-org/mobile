@@ -14,7 +14,7 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ठीक छ</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">खेलहारु \"%s\" संग</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">प्रशिक्षण</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">हालको खोज्हारु</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">हालका खोजहरू</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">कम्पन प्रतिक्रिया</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">ध्यान मोड</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">खेल्दा प्रणाली UI लुकाउनुहोस्। स्क्रिनको छेउमा प्रणाली इशाराहरू द्वारा परेशान भएमा प्रयोग गर्नुहोस्। खेल र पजल स्टर्म स्क्रिनहरूमा लागू हुन्छ।</string>
