@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,13 +36,12 @@ class FatButton extends StatelessWidget {
 }
 
 /// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatefulWidget {
+class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     required this.semanticsLabel,
     required this.child,
     required this.onPressed,
     this.textStyle,
-    this.glowing = false,
     super.key,
   });
 
@@ -51,49 +49,6 @@ class SecondaryButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final Widget child;
   final TextStyle? textStyle;
-  final bool glowing;
-
-  @override
-  State<SecondaryButton> createState() => _SecondaryButtonState();
-}
-
-class _SecondaryButtonState extends State<SecondaryButton> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    _animation = (defaultTargetPlatform == TargetPlatform.iOS
-          ? Tween<double>(begin: 0.5, end: 1.0)
-          : Tween<double>(begin: 0.0, end: 0.3))
-      .animate(_controller)..addListener(() {
-      setState(() {});
-    });
-
-    if (widget.glowing) {
-      _controller.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(SecondaryButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.glowing != oldWidget.glowing) {
-      if (widget.glowing) {
-        _controller.repeat(reverse: true);
-      } else {
-        _controller.stop();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,33 +56,12 @@ class _SecondaryButtonState extends State<SecondaryButton> with SingleTickerProv
       container: true,
       enabled: true,
       button: true,
-      label: widget.semanticsLabel,
+      label: semanticsLabel,
       excludeSemantics: true,
       child:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton(
-                color:
-                    widget.glowing
-                        ? CupertinoTheme.of(
-                          context,
-                        ).primaryColor.withValues(alpha: _animation.value)
-                        : null,
-                onPressed: widget.onPressed,
-                child: widget.child,
-              )
-              : FilledButton.tonal(
-                onPressed: widget.onPressed,
-                style: OutlinedButton.styleFrom(
-                  textStyle: widget.textStyle,
-                  backgroundColor:
-                      widget.glowing
-                          ? Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: _animation.value)
-                          : null,
-                ),
-                child: widget.child,
-              ),
+              ? CupertinoButton(onPressed: onPressed, child: child)
+              : FilledButton.tonal(onPressed: onPressed, child: child),
     );
   }
 }
