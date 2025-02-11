@@ -115,7 +115,7 @@ class _SecondaryButtonState extends State<SecondaryButton> with SingleTickerProv
                 onPressed: widget.onPressed,
                 child: widget.child,
               )
-              : OutlinedButton(
+              : FilledButton.tonal(
                 onPressed: widget.onPressed,
                 style: OutlinedButton.styleFrom(
                   textStyle: widget.textStyle,

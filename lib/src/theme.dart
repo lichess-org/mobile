@@ -148,7 +148,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
     menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
-    appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.2)),
+    appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
