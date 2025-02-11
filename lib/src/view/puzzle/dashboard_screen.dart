@@ -170,7 +170,7 @@ class PuzzleChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radarColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
-    final chartColor = ColorScheme.of(context).secondary;
+    final chartColor = Styles.chartColor(context);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(

@@ -756,7 +756,7 @@ class _EloChartState extends State<_EloChart> {
   @override
   Widget build(BuildContext context) {
     final borderColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
-    final chartColor = ColorScheme.of(context).secondary;
+    final chartColor = Styles.chartColor(context);
     final chartDateFormatter = switch (_selectedRange) {
       DateRange.oneWeek => DateFormat.MMMd(),
       DateRange.oneMonth => DateFormat.MMMd(),
@@ -919,7 +919,7 @@ class _RangeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chartColor = ColorScheme.of(context).secondary;
+    final chartColor = Styles.chartColor(context);
 
     return PlatformCard(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,

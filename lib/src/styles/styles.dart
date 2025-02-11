@@ -69,6 +69,10 @@ abstract class Styles {
         : ColorScheme.of(context).surfaceContainerHighest;
   }
 
+  static Color chartColor(BuildContext context) {
+    return ColorScheme.of(context).tertiary;
+  }
+
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
