@@ -15,13 +15,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class StudySettings extends ConsumerWidget {
-  const StudySettings(this.id);
+class StudySettingsScreen extends ConsumerWidget {
+  const StudySettingsScreen(this.id);
 
   final StudyId id;
 
   static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
-    return buildScreenRoute(context, screen: StudySettings(id));
+    return buildScreenRoute(context, screen: StudySettingsScreen(id));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -100,6 +101,18 @@ class PlatformCard extends StatelessWidget {
         clipBehavior: clipBehavior,
         child: child,
       ),
+    );
+  }
+}
+
+class PlatformShareIcon extends StatelessWidget {
+  const PlatformShareIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: (_) => const Icon(Icons.share),
+      iosBuilder: (_) => const Icon(CupertinoIcons.share),
     );
   }
 }

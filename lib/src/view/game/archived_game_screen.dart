@@ -21,11 +21,13 @@ import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 /// Screen for viewing an archived game.
@@ -204,28 +206,48 @@ class _BodyState extends ConsumerState<_Body> {
           if (widget.gameData == null && widget.error == null)
             const PlatformAppBarLoadingIndicator(),
           if (widget.gameData != null && isLoggedIn)
-            MenuAnchor(
-              builder:
-                  (context, controller, _) => AppBarIconButton(
-                    icon: const Icon(Icons.more_horiz),
-                    semanticsLabel: context.l10n.menu,
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                  ),
-              menuChildren: [
-                const ToggleSoundMenuItemButton(),
-                GameBookmarkMenuItemButton(
-                  id: widget.gameData!.id,
-                  bookmarked: _bookmarked,
-                  onToggleBookmark: _toggleBookmark,
-                  gameListContext: widget.gameListContext,
-                ),
-              ],
+            // builder is needed to keep the context in the MenuAnchor when [MenuItemButton.closeOnActivate] is true
+            Builder(
+              builder: (context) {
+                return MenuAnchor(
+                  builder:
+                      (context, controller, _) => AppBarIconButton(
+                        icon: const Icon(Icons.more_horiz),
+                        semanticsLabel: context.l10n.menu,
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                      ),
+                  menuChildren: [
+                    const ToggleSoundMenuItemButton(),
+                    GameBookmarkMenuItemButton(
+                      id: widget.gameData!.id,
+                      bookmarked: _bookmarked,
+                      onToggleBookmark: _toggleBookmark,
+                      gameListContext: widget.gameListContext,
+                    ),
+                    MenuItemButton(
+                      leadingIcon: const PlatformShareIcon(),
+                      semanticsLabel: context.l10n.studyShareAndExport,
+                      child: Text(context.l10n.studyShareAndExport),
+                      onPressed: () {
+                        showAdaptiveBottomSheet<void>(
+                          context: context,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          showDragHandle: true,
+                          builder:
+                              (_) => _GameShareBottomSheet(widget.gameData!, widget.orientation),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
             )
           else
             const ToggleSoundButton(),
@@ -248,6 +270,29 @@ class _BodyState extends ConsumerState<_Body> {
         ),
       ),
     );
+  }
+}
+
+class _GameShareBottomSheet extends ConsumerWidget {
+  const _GameShareBottomSheet(this.archivedGameData, this.orientation);
+
+  final LightArchivedGame archivedGameData;
+  final Side orientation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    switch (ref.watch(gameCursorProvider(archivedGameData.id))) {
+      case AsyncData(:final value):
+        final (game, cursor) = value;
+        return GameShareBottomSheet(
+          game: game,
+          orientation: orientation,
+          currentGamePosition: game.positionAt(cursor),
+          lastMove: game.moveAt(cursor),
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
   }
 }
 
@@ -383,8 +428,6 @@ class _BottomBar extends ConsumerWidget {
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     Future<void> showGameMenu() {
-      final game = gameCursor.valueOrNull?.$1;
-      final cursor = gameCursor.valueOrNull?.$2;
       return showAdaptiveActionSheet(
         context: context,
         actions: [
@@ -394,15 +437,6 @@ class _BottomBar extends ConsumerWidget {
               ref.read(isBoardTurnedProvider.notifier).toggle();
             },
           ),
-          if (game != null && cursor != null)
-            ...makeFinishedGameShareActions(
-              game,
-              context: context,
-              ref: ref,
-              currentGamePosition: game.positionAt(cursor),
-              orientation: orientation,
-              lastMove: game.moveAt(cursor),
-            ),
         ],
       );
     }

@@ -224,10 +224,11 @@ class _StudyMenu extends ConsumerWidget {
           semanticsLabel: context.l10n.settingsSettings,
           child: Text(context.l10n.settingsSettings),
           onPressed: () {
-            Navigator.of(context).push(StudySettings.buildRoute(context, id));
+            Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
         MenuItemButton(
+          closeOnActivate: false,
           leadingIcon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
           semanticsLabel: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
           child: Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
