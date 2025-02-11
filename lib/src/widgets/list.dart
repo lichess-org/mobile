@@ -207,7 +207,10 @@ class ListSection extends StatelessWidget {
                     clipBehavior: cupertinoClipBehavior,
                     backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
                     decoration: BoxDecoration(
-                      color: backgroundColor ?? Styles.cardColor(context),
+                      color:
+                          backgroundColor ??
+                          theme.cardTheme.color ??
+                          theme.colorScheme.surfaceContainerLow,
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
