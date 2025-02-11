@@ -141,16 +141,15 @@ enum SoundTheme {
 }
 
 enum BackgroundTheme {
-  blue(Color.fromARGB(255, 58, 81, 100), 'Blue'),
-  indigo(Color.fromARGB(255, 49, 54, 82), 'Indigo'),
-  green(Color.fromARGB(255, 32, 64, 42), 'Green'),
-  brown(Color.fromARGB(255, 67, 52, 54), 'Brown purple'),
-  gold(Color.fromARGB(255, 95, 68, 38), 'Gold'),
-  red(Color.fromARGB(255, 92, 42, 50), 'Red'),
-  purple(Color.fromARGB(255, 100, 69, 103), 'Purple'),
-  // teal(Color.fromARGB(255, 34, 88, 81), 'Teal'),
-  lime(Color.fromARGB(255, 77, 84, 40), 'Lime'),
-  sepia(Color.fromARGB(255, 97, 93, 87), 'Sepia');
+  blue(Color(0xFF4A5F70), 'Blue'),
+  indigo(Color(0xFF494D66), 'Indigo'),
+  green(Color(0xFF3A5643), 'Green'),
+  brown(Color(0xFF524446), 'Brown purple'),
+  gold(Color(0xFF725A3F), 'Gold'),
+  red(Color(0xFF693B42), 'Red'),
+  purple(Color(0xFF6D5070), 'Purple'),
+  lime(Color(0xFF585E35), 'Lime'),
+  sepia(Color(0xFF6A6761), 'Sepia');
 
   final Color color;
   final String _label;
