@@ -252,7 +252,7 @@ class _Body extends ConsumerWidget {
           isEngineAvailable && numEvalLines > 0
               ? EngineLines(
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                clientEval: currentNode.eval,
+                localEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
               )
               : null,
