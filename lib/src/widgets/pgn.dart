@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 const innacuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
-const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0);
+const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);
 const kIndexOpacity = 0.6;
 
 Color? _nagColor(BuildContext context, int nag) {
@@ -459,8 +459,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   @override
   Widget build(BuildContext context) {
     final rootComments = widget.rootComments?.map((c) => c.text).nonNulls ?? [];
-    return Container(
-      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -736,8 +735,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  color: ColorScheme.of(context).surfaceContainer,
+                decoration: const BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: InlineMove.borderRadius,
                 ),
