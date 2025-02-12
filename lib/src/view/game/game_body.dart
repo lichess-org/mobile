@@ -599,6 +599,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.chevron_forward,
                 showTooltip: false,
                 blink:
+                    gameState.game.playable &&
                     gameState.stepCursor != gameState.game.steps.length - 1 &&
                     gameState.game.sideToMove == gameState.game.youAre,
               ),
