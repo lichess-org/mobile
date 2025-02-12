@@ -202,53 +202,48 @@ class _BodyState extends ConsumerState<_Body> {
       appBarActions: [
         if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
         if (widget.gameData != null && isLoggedIn)
-          // builder is needed to keep the context in the MenuAnchor when [MenuItemButton.closeOnActivate] is true
-          Builder(
-            builder: (context) {
-              return MenuAnchor(
-                crossAxisUnconstrained: false,
-                style: MenuStyle(
-                  maximumSize: WidgetStatePropertyAll(
-                    Size(
-                      MediaQuery.sizeOf(context).width * 0.6,
-                      MediaQuery.sizeOf(context).height * 0.8,
-                    ),
-                  ),
+          MenuAnchor(
+            crossAxisUnconstrained: false,
+            style: MenuStyle(
+              maximumSize: WidgetStatePropertyAll(
+                Size(
+                  MediaQuery.sizeOf(context).width * 0.6,
+                  MediaQuery.sizeOf(context).height * 0.8,
                 ),
-                builder:
-                    (context, controller, _) => AppBarIconButton(
-                      icon: const Icon(Icons.more_horiz),
-                      semanticsLabel: context.l10n.menu,
-                      onPressed: () {
-                        if (controller.isOpen) {
-                          controller.close();
-                        } else {
-                          controller.open();
-                        }
-                      },
-                    ),
-                menuChildren: [
-                  const ToggleSoundMenuItemButton(),
-                  GameBookmarkMenuItemButton(
-                    id: widget.gameData!.id,
-                    bookmarked: _bookmarked,
-                    onToggleBookmark: _toggleBookmark,
-                    gameListContext: widget.gameListContext,
-                  ),
-                  ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
-                    AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
-                      context,
-                      ref,
-                      game: value.$1,
-                      orientation: value.$1.youAre ?? Side.white,
-                      currentGamePosition: value.$1.positionAt(value.$2),
-                      lastMove: value.$1.moveAt(value.$2),
-                    ),
-                    _ => [],
-                  }),
-                ],
-              );
-            },
+              ),
+            ),
+            builder:
+                (context, controller, _) => AppBarIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                ),
+            menuChildren: [
+              const ToggleSoundMenuItemButton(),
+              GameBookmarkMenuItemButton(
+                id: widget.gameData!.id,
+                bookmarked: _bookmarked,
+                onToggleBookmark: _toggleBookmark,
+                gameListContext: widget.gameListContext,
+              ),
+              ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
+                AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
+                  context,
+                  ref,
+                  game: value.$1,
+                  orientation: value.$1.youAre ?? Side.white,
+                  currentGamePosition: value.$1.positionAt(value.$2),
+                  lastMove: value.$1.moveAt(value.$2),
+                ),
+                _ => [],
+              }),
+            ],
           )
         else
           const ToggleSoundButton(),
