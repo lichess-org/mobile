@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -109,6 +110,15 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     return PlatformScaffold(
       appBarTitle: title,
       appBarActions: [
+        EngineDepth(
+          defaultEval:
+              ref
+                  .watch(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId))
+                  .value
+                  ?.currentNode
+                  .eval,
+        ),
+
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         AppBarIconButton(
           onPressed: () {
@@ -207,7 +217,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && numEvalLines > 0
                   ? EngineLines(
-                    localEval: currentNode.eval,
+                    clientEval: currentNode.eval,
                     isGameOver: currentNode.position.isGameOver,
                     onTapMove:
                         ref

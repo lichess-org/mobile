@@ -14,7 +14,7 @@ import 'package:popover/popover.dart';
 class EngineDepth extends ConsumerWidget {
   const EngineDepth({this.defaultEval});
 
-  final LocalEval? defaultEval;
+  final ClientEval? defaultEval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,47 +24,66 @@ class EngineDepth extends ConsumerWidget {
 
     return depth != null
         ? AppBarTextButton(
-          onPressed: () {
-            showPopover(
-              context: context,
-              bodyBuilder: (context) {
-                return _StockfishInfo(defaultEval);
-              },
-              direction: PopoverDirection.top,
-              width: 240,
-              backgroundColor:
-                  Theme.of(context).platform == TargetPlatform.android
-                      ? DialogTheme.of(context).backgroundColor ??
-                          ColorScheme.of(context).surfaceContainerHigh
-                      : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
-              transitionDuration: Duration.zero,
-              popoverTransitionBuilder: (_, child) => child,
-            );
+          onPressed: switch (defaultEval) {
+            final LocalEval? localEval => () {
+              showPopover(
+                context: context,
+                bodyBuilder: (context) {
+                  return _StockfishInfo(localEval);
+                },
+                direction: PopoverDirection.top,
+                width: 240,
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? DialogTheme.of(context).backgroundColor ??
+                            ColorScheme.of(context).surfaceContainerHigh
+                        : CupertinoDynamicColor.resolve(
+                          CupertinoColors.tertiarySystemBackground,
+                          context,
+                        ),
+                transitionDuration: Duration.zero,
+                popoverTransitionBuilder: (_, child) => child,
+              );
+            },
+            CloudEval() => () {},
           },
-          child: RepaintBoundary(
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color: ColorScheme.of(context).secondary,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  '${math.min(99, depth)}',
-                  style: TextStyle(
-                    color: ColorScheme.of(context).onSecondary,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+          child: switch (defaultEval) {
+            LocalEval() || null => RepaintBoundary(
+              child: Container(
+                width: 20.0,
+                height: 20.0,
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  color: ColorScheme.of(context).secondary,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    '${math.min(99, depth)}',
+                    style: TextStyle(
+                      color: ColorScheme.of(context).onSecondary,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
+            CloudEval(:final depth) => Stack(
+              alignment: const AlignmentDirectional(-0.05, 0.15),
+              children: [
+                Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary),
+                Text(
+                  '${math.min(99, depth)}',
+                  style: TextStyle(
+                    color: ColorScheme.of(context).onSecondary,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          },
         )
         : const SizedBox.shrink();
   }
