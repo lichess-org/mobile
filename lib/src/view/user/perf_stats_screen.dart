@@ -151,7 +151,7 @@ class _Body extends ConsumerWidget {
                   (element) => element.perf == perf,
                 );
 
-                if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.isEmpty) {
+                if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.length <= 1) {
                   return const SizedBox.shrink();
                 }
                 return PlatformCard(
