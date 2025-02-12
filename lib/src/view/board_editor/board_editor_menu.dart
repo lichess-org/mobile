@@ -37,18 +37,15 @@ class BoardEditorMenu extends ConsumerWidget {
                 child: Text(context.l10n.loadPosition),
                 onPressed: () {
                   final notifier = ref.read(editorController.notifier);
-                  pushReplacementPlatformRoute(
-                    context,
-                    title: context.l10n.preferencesHowDoYouMovePieces,
-                    rootNavigator: true,
-                    builder:
-                        (context) => SearchPositionScreen(
-                          onPositionSelected:
-                              (position) => {
-                                notifier.loadFen(position.fen),
-                                Navigator.of(context, rootNavigator: true).pop(),
-                              },
-                        ),
+                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                    SearchPositionScreen.buildRoute(
+                      context,
+                      onPositionSelected:
+                          (position) => {
+                            notifier.loadFen(position.fen),
+                            Navigator.of(context, rootNavigator: true).pop(),
+                          },
+                    ),
                   );
                 },
               ),
@@ -142,6 +139,17 @@ class SearchPositionScreen extends StatelessWidget {
   const SearchPositionScreen({required this.onPositionSelected, super.key});
 
   final void Function(Position position) onPositionSelected;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required void Function(Position position) onPositionSelected,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: SearchPositionScreen(onPositionSelected: onPositionSelected),
+      title: context.l10n.preferencesHowDoYouMovePieces,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
