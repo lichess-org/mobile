@@ -107,6 +107,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             };
 
     return PlatformScaffold(
+      enableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),

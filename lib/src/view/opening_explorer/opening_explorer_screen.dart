@@ -59,6 +59,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
       iosBuilder:
           (_) => CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
+              enableBackgroundFilterBlur: false,
               middle: Text(context.l10n.openingExplorer),
               automaticBackgroundVisibility: false,
               border: null,

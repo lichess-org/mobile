@@ -22,6 +22,7 @@ class PlatformScaffold extends StatelessWidget {
     required this.body,
     this.resizeToAvoidBottomInset = true,
     this.backgroundColor,
+    this.enableBackgroundFilterBlur = true,
   });
 
   /// Widget to place at the start of the navigation bar
@@ -55,6 +56,11 @@ class PlatformScaffold extends StatelessWidget {
   /// The background color of the screen. If null, the default background color of the theme is used.
   final Color? backgroundColor;
 
+  /// {@macro flutter.cupertino.CupertinoNavigationBar.enableBackgroundFilterBlur}
+  ///
+  /// Has no effect on Android.
+  final bool enableBackgroundFilterBlur;
+
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
@@ -78,6 +84,7 @@ class PlatformScaffold extends StatelessWidget {
         middle: appBarTitle,
         leading: appBarLeading,
         trailing: Row(mainAxisSize: MainAxisSize.min, children: appBarActions),
+        enableBackgroundFilterBlur: enableBackgroundFilterBlur,
       ),
       backgroundColor: backgroundColor,
       child: body,
