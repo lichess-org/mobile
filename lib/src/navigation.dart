@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
@@ -114,6 +115,32 @@ final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<Pa
 
 final _cupertinoTabController = CupertinoTabController();
 
+/// A [ChangeNotifier] that can be used to notify when the Home tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final homeTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Puzzles tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final puzzlesTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Tools tab is tapped, and all the built interactions
+/// (pop stack, scroll to top) are done.
+final toolsTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final watchTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Settings tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final settingsTabInteraction = _BottomTabInteraction();
+
+class _BottomTabInteraction extends ChangeNotifier {
+  void notifyItemTapped() {
+    notifyListeners();
+  }
+}
+
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
 /// This widget is intended to be used as the root of the app, and it provides
@@ -129,40 +156,45 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        return Scaffold(
-          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
-          bottomNavigationBar: Consumer(
-            builder: (context, ref, _) {
-              final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-              return NavigationBar(
-                selectedIndex: currentTab.index,
-                destinations: [
-                  for (final tab in BottomTab.values)
-                    NavigationDestination(
-                      icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                      label: tab.label(context.l10n),
-                    ),
-                ],
-                onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
-              );
-            },
+        return FullScreenBackground(
+          child: Scaffold(
+            body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
+            bottomNavigationBar: Consumer(
+              builder: (context, ref, _) {
+                final isOnline =
+                    ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+                return NavigationBar(
+                  selectedIndex: currentTab.index,
+                  destinations: [
+                    for (final tab in BottomTab.values)
+                      NavigationDestination(
+                        icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+                );
+              },
+            ),
           ),
         );
       case TargetPlatform.iOS:
         final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-        return CupertinoTabScaffold(
-          tabBuilder: _iOSTabBuilder,
-          controller: _cupertinoTabController,
-          tabBar: CupertinoTabBar(
-            currentIndex: currentTab.index,
-            items: [
-              for (final tab in BottomTab.values)
-                BottomNavigationBarItem(
-                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                  label: tab.label(context.l10n),
-                ),
-            ],
-            onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+        return FullScreenBackground(
+          child: CupertinoTabScaffold(
+            tabBuilder: _iOSTabBuilder,
+            controller: _cupertinoTabController,
+            tabBar: CupertinoTabBar(
+              currentIndex: currentTab.index,
+              items: [
+                for (final tab in BottomTab.values)
+                  BottomNavigationBarItem(
+                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                    label: tab.label(context.l10n),
+                  ),
+              ],
+              onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+            ),
           ),
         );
       default:
@@ -188,16 +220,27 @@ class BottomNavScaffold extends ConsumerWidget {
 
     if (tappedTab == curTab) {
       final navState = ref.read(currentNavigatorKeyProvider).currentState;
+      final scrollController = ref.read(currentRootScrollControllerProvider);
       if (navState?.canPop() == true) {
         navState?.popUntil((route) => route.isFirst);
+      } else if (scrollController.hasClients && scrollController.offset > 0) {
+        scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       } else {
-        final scrollController = ref.read(currentRootScrollControllerProvider);
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
+        switch (tappedTab) {
+          case BottomTab.home:
+            homeTabInteraction.notifyItemTapped();
+          case BottomTab.puzzles:
+            puzzlesTabInteraction.notifyItemTapped();
+          case BottomTab.tools:
+            toolsTabInteraction.notifyItemTapped();
+          case BottomTab.watch:
+            watchTabInteraction.notifyItemTapped();
+          case BottomTab.settings:
+            settingsTabInteraction.notifyItemTapped();
         }
       }
     } else {

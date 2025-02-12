@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -12,19 +12,24 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class AnalysisSettings extends ConsumerWidget {
-  const AnalysisSettings(this.options);
+class AnalysisSettingsScreen extends ConsumerWidget {
+  const AnalysisSettingsScreen(this.options);
 
   final AnalysisOptions options;
+
+  static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
+    return buildScreenRoute(
+      context,
+      screen: AnalysisSettingsScreen(options),
+      title: context.l10n.settingsSettings,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
     final prefs = ref.watch(analysisPreferencesProvider);
     final asyncState = ref.watch(ctrlProvider);
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
-    );
 
     switch (asyncState) {
       case AsyncData(:final value):
@@ -130,13 +135,6 @@ class AnalysisSettings extends ConsumerWidget {
                           isDismissible: true,
                           builder: (_) => const OpeningExplorerSettings(),
                         ),
-                  ),
-                  SwitchSettingTile(
-                    title: Text(context.l10n.sound),
-                    value: isSoundEnabled,
-                    onChanged: (value) {
-                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-                    },
                   ),
                 ],
               ),

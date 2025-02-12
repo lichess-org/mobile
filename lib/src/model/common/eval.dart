@@ -12,12 +12,88 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 part 'eval.freezed.dart';
 part 'eval.g.dart';
 
+/// Base class for evals.
 sealed class Eval {
   String get evalString;
+
+  /// The winning chances for the given [Side].
+  ///
+  /// 1  = infinitely winning
+  /// -1 = infinitely losing
   double winningChances(Side side);
 }
 
-/// The eval from an external engine, typically lichess server side stockfish.
+/// The eval from the client side, either from the cloud or the local engine.
+sealed class ClientEval extends Eval {
+  Position get position;
+
+  IList<PvData> get pvs;
+}
+
+/// The eval coming from other Lichess clients, served from the network.
+@freezed
+class CloudEval with _$CloudEval implements ClientEval {
+  CloudEval._();
+
+  factory CloudEval({required int depth, required Position position, required IList<PvData> pvs}) =
+      _CloudEval;
+
+  @override
+  String get evalString => _evalString(cp, mate);
+
+  @override
+  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+
+  int? get cp => pvs[0].cp;
+
+  int? get mate => pvs[0].mate;
+}
+
+/// The eval from the local engine.
+@freezed
+class LocalEval with _$LocalEval implements ClientEval {
+  const LocalEval._();
+
+  const factory LocalEval({
+    required Position position,
+    required int depth,
+    required int nodes,
+    required IList<PvData> pvs,
+    required int millis,
+    required Duration searchTime,
+    int? cp,
+    int? mate,
+  }) = _LocalEval;
+
+  double get knps => nodes / millis;
+
+  Move? get bestMove {
+    final uci = pvs.firstOrNull?.moves.firstOrNull;
+    if (uci == null) return null;
+    return Move.parse(uci);
+  }
+
+  IList<MoveWithWinningChances> get bestMoves {
+    return pvs
+        .where((e) => e.moves.isNotEmpty)
+        .map((e) => e._firstMoveWithWinningChances(position.turn))
+        .nonNulls
+        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
+        .toIList();
+  }
+
+  @override
+  String get evalString => _evalString(cp, mate);
+
+  @override
+  double winningChances(Side side) => _toPov(side, _whiteWinningChances);
+
+  double get _whiteWinningChances {
+    return _toWhiteWinningChances(cp, mate);
+  }
+}
+
+/// The eval from an external engine, typically Lichess server side Stockfish.
 @Freezed(fromJson: true, toJson: true)
 class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
@@ -65,54 +141,6 @@ double _toWhiteWinningChances(int? cp, int? mate) {
     return cpWinningChances(cp);
   } else {
     return 0;
-  }
-}
-
-/// The eval from the client's own engine, typically stockfish.
-@freezed
-class ClientEval with _$ClientEval implements Eval {
-  const ClientEval._();
-
-  const factory ClientEval({
-    required Position position,
-    required int depth,
-    required int nodes,
-    required IList<PvData> pvs,
-    required int millis,
-    required Duration searchTime,
-    int? cp,
-    int? mate,
-  }) = _ClientEval;
-
-  double get knps => nodes / millis;
-
-  Move? get bestMove {
-    final uci = pvs.firstOrNull?.moves.firstOrNull;
-    if (uci == null) return null;
-    return Move.parse(uci);
-  }
-
-  IList<MoveWithWinningChances> get bestMoves {
-    return pvs
-        .where((e) => e.moves.isNotEmpty)
-        .map((e) => e._firstMoveWithWinningChances(position.turn))
-        .nonNulls
-        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
-        .toIList();
-  }
-
-  @override
-  String get evalString => _evalString(cp, mate);
-
-  /// The winning chances for the given [Side].
-  ///
-  /// 1  = infinitely winning
-  /// -1 = infinitely losing
-  @override
-  double winningChances(Side side) => _toPov(side, _whiteWinningChances);
-
-  double get _whiteWinningChances {
-    return _toWhiteWinningChances(cp, mate);
   }
 }
 

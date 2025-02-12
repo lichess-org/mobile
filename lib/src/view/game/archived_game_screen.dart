@@ -3,10 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,11 +21,13 @@ import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 /// Screen for viewing an archived game.
@@ -32,6 +37,7 @@ class ArchivedGameScreen extends ConsumerWidget {
     this.gameData,
     required this.orientation,
     this.initialCursor,
+    this.gameListContext,
     super.key,
   }) : assert(gameId != null || gameData != null);
 
@@ -41,31 +47,84 @@ class ArchivedGameScreen extends ConsumerWidget {
   final Side orientation;
   final int? initialCursor;
 
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    GameId? gameId,
+    LightArchivedGame? gameData,
+    Side orientation = Side.white,
+    int? initialCursor,
+    (UserId?, GameFilterState)? gameListContext,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: ArchivedGameScreen(
+        gameId: gameId,
+        gameData: gameData,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (gameData != null) {
-      return _Body(gameData: gameData, orientation: orientation, initialCursor: initialCursor);
+      return _Body(
+        gameData: gameData,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      );
     } else {
-      return _LoadGame(gameId: gameId!, orientation: orientation, initialCursor: initialCursor);
+      return _LoadGame(
+        gameId: gameId!,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      );
     }
   }
 }
 
 class _LoadGame extends ConsumerWidget {
-  const _LoadGame({required this.gameId, required this.orientation, required this.initialCursor});
+  const _LoadGame({
+    required this.gameId,
+    required this.orientation,
+    required this.initialCursor,
+    required this.gameListContext,
+  });
 
   final GameId gameId;
   final Side orientation;
   final int? initialCursor;
 
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(archivedGameProvider(id: gameId));
+
     return game.when(
       data: (game) {
-        return _Body(gameData: game.data, orientation: orientation, initialCursor: initialCursor);
+        return _Body(
+          gameData: game.data,
+          orientation: orientation,
+          initialCursor: initialCursor,
+          gameListContext: gameListContext,
+        );
       },
-      loading: () => _Body(gameData: null, orientation: orientation, initialCursor: initialCursor),
+      loading:
+          () => _Body(
+            gameData: null,
+            orientation: orientation,
+            initialCursor: initialCursor,
+            gameListContext: gameListContext,
+          ),
       error: (error, stackTrace) {
         debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         switch (error) {
@@ -74,6 +133,7 @@ class _LoadGame extends ConsumerWidget {
               gameData: null,
               orientation: orientation,
               initialCursor: initialCursor,
+              gameListContext: gameListContext,
               error: 'Game not found.',
             );
           default:
@@ -81,6 +141,7 @@ class _LoadGame extends ConsumerWidget {
               gameData: null,
               orientation: orientation,
               initialCursor: initialCursor,
+              gameListContext: gameListContext,
               error: error,
             );
         }
@@ -89,22 +150,107 @@ class _LoadGame extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({required this.gameData, required this.orientation, this.initialCursor, this.error});
+class _Body extends ConsumerStatefulWidget {
+  const _Body({
+    required this.gameData,
+    required this.orientation,
+    this.initialCursor,
+    this.error,
+    required this.gameListContext,
+  });
 
   final LightArchivedGame? gameData;
   final Object? error;
   final Side orientation;
   final int? initialCursor;
 
+  /// The context of the game list that opened this screen, if available.
+  final (UserId?, GameFilterState)? gameListContext;
+
+  @override
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  late bool _bookmarked;
+
+  @override
+  void initState() {
+    _bookmarked = widget.gameData?.bookmarked ?? false;
+    super.initState();
+  }
+
+  Future<void> _toggleBookmark() async {
+    final toggledBookmark = !_bookmarked;
+    final gameData = widget.gameData;
+    if (gameData == null) return;
+    await ref.read(accountServiceProvider).setGameBookmark(gameData.id, bookmark: toggledBookmark);
+    if (mounted) {
+      setState(() {
+        _bookmarked = toggledBookmark;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: gameData != null ? _GameTitle(gameData: gameData!) : const SizedBox.shrink(),
+        title:
+            widget.gameData != null
+                ? _GameTitle(gameData: widget.gameData!)
+                : const SizedBox.shrink(),
         actions: [
-          if (gameData == null && error == null) const PlatformAppBarLoadingIndicator(),
-          const ToggleSoundButton(),
+          if (widget.gameData == null && widget.error == null)
+            const PlatformAppBarLoadingIndicator(),
+          if (widget.gameData != null && isLoggedIn)
+            // builder is needed to keep the context in the MenuAnchor when [MenuItemButton.closeOnActivate] is true
+            Builder(
+              builder: (context) {
+                return MenuAnchor(
+                  builder:
+                      (context, controller, _) => AppBarIconButton(
+                        icon: const Icon(Icons.more_horiz),
+                        semanticsLabel: context.l10n.menu,
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                      ),
+                  menuChildren: [
+                    const ToggleSoundMenuItemButton(),
+                    GameBookmarkMenuItemButton(
+                      id: widget.gameData!.id,
+                      bookmarked: _bookmarked,
+                      onToggleBookmark: _toggleBookmark,
+                      gameListContext: widget.gameListContext,
+                    ),
+                    MenuItemButton(
+                      leadingIcon: const PlatformShareIcon(),
+                      semanticsLabel: context.l10n.studyShareAndExport,
+                      child: Text(context.l10n.studyShareAndExport),
+                      onPressed: () {
+                        showAdaptiveBottomSheet<void>(
+                          context: context,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          showDragHandle: true,
+                          builder:
+                              (_) => _GameShareBottomSheet(widget.gameData!, widget.orientation),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            )
+          else
+            const ToggleSoundButton(),
         ],
       ),
       body: SafeArea(
@@ -113,13 +259,13 @@ class _Body extends StatelessWidget {
           children: [
             Expanded(
               child: _BoardBody(
-                archivedGameData: gameData,
-                orientation: orientation,
-                initialCursor: initialCursor,
-                error: error,
+                archivedGameData: widget.gameData,
+                orientation: widget.orientation,
+                initialCursor: widget.initialCursor,
+                error: widget.error,
               ),
             ),
-            _BottomBar(archivedGameData: gameData, orientation: orientation),
+            _BottomBar(archivedGameData: widget.gameData, orientation: widget.orientation),
           ],
         ),
       ),
@@ -127,7 +273,30 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _GameTitle extends StatelessWidget {
+class _GameShareBottomSheet extends ConsumerWidget {
+  const _GameShareBottomSheet(this.archivedGameData, this.orientation);
+
+  final LightArchivedGame archivedGameData;
+  final Side orientation;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    switch (ref.watch(gameCursorProvider(archivedGameData.id))) {
+      case AsyncData(:final value):
+        final (game, cursor) = value;
+        return GameShareBottomSheet(
+          game: game,
+          orientation: orientation,
+          currentGamePosition: game.positionAt(cursor),
+          lastMove: game.moveAt(cursor),
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
+  }
+}
+
+class _GameTitle extends ConsumerWidget {
   const _GameTitle({required this.gameData});
 
   final LightArchivedGame gameData;
@@ -135,7 +304,7 @@ class _GameTitle extends StatelessWidget {
   static final _dateFormat = DateFormat.yMMMd();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -259,8 +428,6 @@ class _BottomBar extends ConsumerWidget {
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     Future<void> showGameMenu() {
-      final game = gameCursor.valueOrNull?.$1;
-      final cursor = gameCursor.valueOrNull?.$2;
       return showAdaptiveActionSheet(
         context: context,
         actions: [
@@ -270,15 +437,6 @@ class _BottomBar extends ConsumerWidget {
               ref.read(isBoardTurnedProvider.notifier).toggle();
             },
           ),
-          if (game != null && cursor != null)
-            ...makeFinishedGameShareActions(
-              game,
-              context: context,
-              ref: ref,
-              currentGamePosition: game.positionAt(cursor),
-              orientation: orientation,
-              lastMove: game.moveAt(cursor),
-            ),
         ],
       );
     }
@@ -304,16 +462,15 @@ class _BottomBar extends ConsumerWidget {
               gameCursor.hasValue
                   ? () {
                     final cursor = gameCursor.requireValue.$2;
-                    pushPlatformRoute(
-                      context,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(
-                              orientation: orientation,
-                              gameId: gameData.id,
-                              initialMoveCursor: cursor,
-                            ),
-                          ),
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: orientation,
+                          gameId: gameData.id,
+                          initialMoveCursor: cursor,
+                        ),
+                      ),
                     );
                   }
                   : null,

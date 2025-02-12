@@ -663,7 +663,7 @@ class StudyCurrentNode with _$StudyCurrentNode {
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
-    ClientEval? eval,
+    LocalEval? eval,
   }) = _StudyCurrentNode;
 
   factory StudyCurrentNode.illegalPosition() {

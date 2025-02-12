@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
@@ -183,26 +181,21 @@ class _PlayersListState extends ConsumerState<PlayersList> {
 
           return GestureDetector(
             onTap: () {
-              pushPlatformRoute(
-                context,
-                builder:
-                    (context) => BroadcastPlayerResultsScreen(
-                      widget.tournamentId,
-                      player.fideId != null ? player.fideId.toString() : player.name,
-                      player.title,
-                      player.name,
-                    ),
+              Navigator.of(context).push(
+                BroadcastPlayerResultsScreen.buildRoute(
+                  context,
+                  widget.tournamentId,
+                  player.fideId != null ? player.fideId.toString() : player.name,
+                  playerTitle: player.title,
+                  playerName: player.name,
+                ),
               );
             },
             child: ColoredBox(
               color:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? index.isEven
-                          ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                          : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
-                      : index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  index.isEven
+                      ? ColorScheme.of(context).surfaceContainerLow
+                      : ColorScheme.of(context).surfaceContainerHigh,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

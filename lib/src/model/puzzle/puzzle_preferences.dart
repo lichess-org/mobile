@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'puzzle_preferences.freezed.dart';
 part 'puzzle_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStorage<PuzzlePrefs> {
   // ignore: avoid_public_notifier_properties
   @override

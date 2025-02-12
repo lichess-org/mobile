@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -87,34 +88,31 @@ class PlatformCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? Card(
-                margin: margin ?? EdgeInsets.zero,
-                elevation: elevation ?? 0,
-                color: color ?? Styles.cupertinoCardColor.resolveFrom(context),
-                shadowColor: shadowColor,
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                semanticContainer: semanticContainer,
-                clipBehavior: clipBehavior,
-                child: child,
-              )
-              : Card(
-                shape:
-                    borderRadius != null
-                        ? RoundedRectangleBorder(borderRadius: borderRadius!)
-                        : const RoundedRectangleBorder(borderRadius: kCardBorderRadius),
-                color: color,
-                shadowColor: shadowColor,
-                semanticContainer: semanticContainer,
-                elevation: elevation,
-                margin: margin,
-                clipBehavior: clipBehavior,
-                child: child,
-              ),
+      child: Card(
+        shape:
+            borderRadius != null
+                ? RoundedRectangleBorder(borderRadius: borderRadius!)
+                : const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+        color: color,
+        shadowColor: shadowColor,
+        semanticContainer: semanticContainer,
+        elevation: elevation,
+        margin: margin,
+        clipBehavior: clipBehavior,
+        child: child,
+      ),
+    );
+  }
+}
+
+class PlatformShareIcon extends StatelessWidget {
+  const PlatformShareIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: (_) => const Icon(Icons.share),
+      iosBuilder: (_) => const Icon(CupertinoIcons.share),
     );
   }
 }

@@ -12,10 +12,10 @@ class PlatformBottomBar extends StatelessWidget {
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
-    this.transparentCupertinoBar = true,
+    this.transparentBackground = true,
   });
 
-  const PlatformBottomBar.empty({this.transparentCupertinoBar = true})
+  const PlatformBottomBar.empty({this.transparentBackground = true})
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -30,7 +30,7 @@ class PlatformBottomBar extends StatelessWidget {
   final bool expandChildren;
 
   /// Whether to make the Cupertino bar transparent. Defaults to true.
-  final bool transparentCupertinoBar;
+  final bool transparentBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class PlatformBottomBar extends StatelessWidget {
       return ColoredBox(
         color: CupertinoTheme.of(
           context,
-        ).barBackgroundColor.withValues(alpha: transparentCupertinoBar ? 0.0 : null),
+        ).barBackgroundColor.withValues(alpha: transparentBackground ? 0.0 : null),
         child: SizedBox(
           height: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
           child: SafeArea(
@@ -57,6 +57,7 @@ class PlatformBottomBar extends StatelessWidget {
     }
 
     return BottomAppBar(
+      color: transparentBackground ? Colors.transparent : null,
       height: kBottomBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
       child: Row(

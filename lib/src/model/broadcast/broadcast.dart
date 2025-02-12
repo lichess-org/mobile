@@ -96,6 +96,8 @@ class BroadcastGame with _$BroadcastGame {
     required Move? lastMove,
     required BroadcastResult status,
     required DateTime updatedClockAt,
+    int? cp,
+    int? mate,
   }) = _BroadcastGame;
 
   bool get isOngoing => status == BroadcastResult.ongoing;

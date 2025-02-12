@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 
-class CorrespondenceClock extends ConsumerStatefulWidget {
+class CorrespondenceClock extends StatefulWidget {
   /// The duration left on the clock.
   final Duration duration;
 
@@ -21,12 +19,12 @@ class CorrespondenceClock extends ConsumerStatefulWidget {
   const CorrespondenceClock({required this.duration, required this.active, this.onFlag, super.key});
 
   @override
-  ConsumerState<CorrespondenceClock> createState() => _CorrespondenceClockState();
+  State<CorrespondenceClock> createState() => _CorrespondenceClockState();
 }
 
 const _period = Duration(seconds: 1);
 
-class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
+class _CorrespondenceClockState extends State<CorrespondenceClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
 
@@ -88,9 +86,10 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
     final hours = timeLeft.inHours.remainder(24);
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle =
-        brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
+
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     final daysStr =

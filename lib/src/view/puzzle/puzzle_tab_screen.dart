@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
@@ -80,11 +79,10 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         onTap: () {
-          pushPlatformRoute(
+          Navigator.of(
             context,
             rootNavigator: true,
-            builder: (context) => const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix)),
-          );
+          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
         },
       );
     default:
@@ -92,11 +90,10 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: angle,
         onTap: () {
-          pushPlatformRoute(
+          Navigator.of(
             context,
             rootNavigator: true,
-            builder: (context) => PuzzleScreen(angle: angle),
-          );
+          ).push(PuzzleScreen.buildRoute(context, angle: angle));
         },
       );
   }
@@ -205,7 +202,6 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
           ),
           Expanded(
             child: CupertinoPageScaffold(
-              backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
               navigationBar: CupertinoNavigationBar(
                 transitionBetweenRoutes: false,
                 middle: Text(context.l10n.puzzleHistory),
@@ -371,10 +367,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
       leading: Icon(
         icon,
         size: Styles.mainListTileIconSize,
-        color:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoTheme.of(context).primaryColor
-                : Theme.of(context).colorScheme.primary,
+        color: ColorScheme.of(context).primary,
       ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
@@ -403,11 +396,7 @@ class _PuzzleMenu extends ConsumerWidget {
           title: context.l10n.puzzlePuzzleThemes,
           subtitle: context.l10n.mobilePuzzleThemesSubtitle,
           onTap: () {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.puzzlePuzzleThemes,
-              builder: (context) => const PuzzleThemesScreen(),
-            );
+            Navigator.of(context).push(PuzzleThemesScreen.buildRoute(context));
           },
         ),
         Opacity(
@@ -423,11 +412,10 @@ class _PuzzleMenu extends ConsumerWidget {
             onTap:
                 isOnline
                     ? () {
-                      pushPlatformRoute(
+                      Navigator.of(
                         context,
                         rootNavigator: true,
-                        builder: (context) => const StreakScreen(),
-                      );
+                      ).push(StreakScreen.buildRoute(context));
                     }
                     : null,
           ),
@@ -441,11 +429,10 @@ class _PuzzleMenu extends ConsumerWidget {
             onTap:
                 isOnline
                     ? () {
-                      pushPlatformRoute(
+                      Navigator.of(
                         context,
                         rootNavigator: true,
-                        builder: (context) => const StormScreen(),
-                      );
+                      ).push(StormScreen.buildRoute(context));
                     }
                     : null,
           ),
@@ -487,17 +474,13 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             isTablet ? _kNumberOfHistoryItemsOnTablet : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
-          cupertinoBackgroundColor: CupertinoPageScaffoldBackgroundColor.maybeOf(context),
           cupertinoClipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           headerTrailing:
               showHeader
                   ? NoPaddingTextButton(
                     onPressed:
-                        () => pushPlatformRoute(
-                          context,
-                          builder: (context) => const PuzzleHistoryScreen(),
-                        ),
+                        () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context)),
                     child: Text(context.l10n.more),
                   )
                   : null,
@@ -544,11 +527,7 @@ class _DashboardButton extends ConsumerWidget {
         .whenIs(
           online:
               () => () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.puzzlePuzzleDashboard,
-                  builder: (_) => const PuzzleDashboardScreen(),
-                );
+                Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context));
               },
           offline: () => null,
         );
@@ -575,11 +554,7 @@ class _HistoryButton extends ConsumerWidget {
         .whenIs(
           online:
               () => () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.puzzleHistory,
-                  builder: (_) => const PuzzleHistoryScreen(),
-                );
+                Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context));
               },
           offline: () => null,
         );
@@ -642,14 +617,12 @@ class DailyPuzzle extends ConsumerWidget {
           ),
           onTap: () {
             if (!context.mounted) return;
-            pushPlatformRoute(
-              context,
-              rootNavigator: true,
-              builder:
-                  (context) => PuzzleScreen(
-                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    puzzleId: data.puzzle.id,
-                  ),
+            Navigator.of(context, rootNavigator: true).push(
+              PuzzleScreen.buildRoute(
+                context,
+                angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                puzzleId: data.puzzle.id,
+              ),
             );
           },
         );

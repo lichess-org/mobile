@@ -6,8 +6,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -22,28 +20,46 @@ import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+class AnalysisScreen extends StatelessWidget {
+  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+
+  final AnalysisOptions options;
+  final bool enableDrawingShapes;
+
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
+  }
+}
+
+class _AnalysisScreen extends ConsumerStatefulWidget {
+  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 
   final bool enableDrawingShapes;
 
   @override
-  ConsumerState<AnalysisScreen> createState() => _AnalysisScreenState();
+  ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -77,16 +93,55 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       if (prefs.enableComputerAnalysis)
         EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      AppBarIconButton(
-        onPressed: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.settingsSettings,
-            builder: (_) => AnalysisSettings(widget.options),
+      Builder(
+        builder: (context) {
+          return MenuAnchor(
+            builder:
+                (context, controller, _) => AppBarIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                ),
+            menuChildren: [
+              MenuItemButton(
+                leadingIcon: const Icon(Icons.settings),
+                semanticsLabel: context.l10n.settingsSettings,
+                child: Text(context.l10n.settingsSettings),
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
+                },
+              ),
+              const ToggleSoundMenuItemButton(),
+              MenuItemButton(
+                leadingIcon: const PlatformShareIcon(),
+                semanticsLabel: context.l10n.mobileShareGamePGN,
+                child: Text(context.l10n.mobileShareGamePGN),
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(AnalysisShareScreen.buildRoute(context, options: widget.options));
+                },
+              ),
+              if (asyncState.valueOrNull?.position != null)
+                MenuItemButton(
+                  leadingIcon: const PlatformShareIcon(),
+                  semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+                  child: Text(context.l10n.mobileSharePositionAsFEN),
+                  onPressed: () {
+                    launchShareDialog(context, text: asyncState.valueOrNull!.position.fen);
+                  },
+                ),
+            ],
           );
         },
-        semanticsLabel: context.l10n.settingsSettings,
-        icon: const Icon(Icons.settings),
       ),
     ];
 
@@ -197,7 +252,7 @@ class _Body extends ConsumerWidget {
           isEngineAvailable && numEvalLines > 0
               ? EngineLines(
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                clientEval: currentNode.eval,
+                localEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
               )
               : null,
@@ -233,7 +288,7 @@ class _BottomBar extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -287,56 +342,9 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: (context) {
               final boardFen = analysisState.position.fen;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                title: context.l10n.boardEditor,
-                builder: (_) => BoardEditorScreen(initialFen: boardFen),
-              );
-            },
-          ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(options: options),
-            );
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: (_) {
-            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-            launchShareDialog(context, text: analysisState.position.fen);
-          },
-        ),
-        if (options.gameId != null)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-            onPressed: (_) async {
-              final gameId = options.gameId!;
-              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-              try {
-                final image = await ref
-                    .read(gameShareServiceProvider)
-                    .screenshotPosition(
-                      analysisState.pov,
-                      analysisState.position.fen,
-                      analysisState.lastMove,
-                    );
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    files: [image],
-                    subject: context.l10n.puzzleFromGameLink(lichessUri('/$gameId').toString()),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
-                }
-              }
+              ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
       ],

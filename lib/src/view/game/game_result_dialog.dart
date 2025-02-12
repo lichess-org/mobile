@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,7 +14,6 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -30,34 +28,10 @@ class GameResultDialog extends ConsumerStatefulWidget {
   final void Function(PlayableGame game) onNewOpponentCallback;
 
   @override
-  ConsumerState<GameResultDialog> createState() => _GameEndDialogState();
+  ConsumerState<GameResultDialog> createState() => _GameResultDialogState();
 }
 
-Widget _adaptiveDialog(BuildContext context, Widget content) {
-  // TODO return CupertinoAlertDialog on iOS when the pixelated text bug is fixed
-  const dialogColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xCCF2F2F2),
-    darkColor: Color(0xBF1E1E1E),
-  );
-
-  final screenWidth = MediaQuery.of(context).size.width;
-  final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: content);
-  return Dialog(
-    backgroundColor:
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoDynamicColor.resolve(dialogColor, context)
-            : null,
-    child: SizedBox(
-      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoPopupSurface(child: paddedContent)
-              : paddedContent,
-    ),
-  );
-}
-
-class _GameEndDialogState extends ConsumerState<GameResultDialog> {
+class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
 
@@ -170,17 +144,16 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           SecondaryButton(
             semanticsLabel: context.l10n.analysis,
             onPressed: () {
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-              );
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
             child: Text(context.l10n.analysis, textAlign: TextAlign.center),
           ),
       ],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -197,7 +170,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
       children: [GameResult(game: game), const SizedBox(height: 16.0), PlayerSummary(game: game)],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -223,19 +196,18 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
         SecondaryButton(
           semanticsLabel: context.l10n.analysis,
           onPressed: () {
-            pushPlatformRoute(
-              context,
-              builder:
-                  (_) => AnalysisScreen(
-                    options: AnalysisOptions(
-                      orientation: Side.white,
-                      standalone: (
-                        pgn: game.makePgn(),
-                        isComputerAnalysisAllowed: true,
-                        variant: game.meta.variant,
-                      ),
-                    ),
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions(
+                  orientation: Side.white,
+                  standalone: (
+                    pgn: game.makePgn(),
+                    isComputerAnalysisAllowed: true,
+                    variant: game.meta.variant,
                   ),
+                ),
+              ),
             );
           },
           child: Text(context.l10n.analysis, textAlign: TextAlign.center),
@@ -243,7 +215,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
       ],
     );
 
-    return _adaptiveDialog(context, content);
+    return _ResultDialog(child: content);
   }
 }
 
@@ -340,5 +312,22 @@ class GameResult extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _ResultDialog extends StatelessWidget {
+  const _ResultDialog({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
+    final sizedContent = SizedBox(
+      width: min(screenWidth, kMaterialPopupMenuMaxWidth),
+      child: paddedContent,
+    );
+    return Dialog(child: sizedContent);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -14,7 +13,7 @@ part 'board_preferences.g.dart';
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
-@riverpod
+@Riverpod(keepAlive: true)
 class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override

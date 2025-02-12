@@ -28,7 +28,7 @@ class UCIProtocol {
   Work? _nextWork;
   bool _stopRequested = false;
   void Function(String command)? _send;
-  ClientEval? _currentEval;
+  LocalEval? _currentEval;
   int _expectedPvs = 1;
 
   ValueListenable<bool> get isComputing => _isComputing;
@@ -136,7 +136,7 @@ class UCIProtocol {
       final pvData = PvData(moves: IList(moves), cp: isMate ? null : ev, mate: isMate ? ev : null);
 
       if (multiPv == 1) {
-        _currentEval = ClientEval(
+        _currentEval = LocalEval(
           position: _work!.position,
           searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,

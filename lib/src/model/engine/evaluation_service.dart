@@ -117,7 +117,7 @@ class EvaluationService {
   Stream<EvalResult>? start(
     UciPath path,
     Iterable<Step> steps, {
-    ClientEval? initialPositionEval,
+    LocalEval? initialPositionEval,
 
     /// A function that returns true if the evaluation should be emitted by the
     /// [EngineEvaluation] provider.
@@ -186,7 +186,7 @@ EvaluationService evaluationService(Ref ref) {
   return service;
 }
 
-typedef EngineEvaluationState = ({String engineName, EngineState state, ClientEval? eval});
+typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEval? eval});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod

@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'challenge_preferences.freezed.dart';
 part 'challenge_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ChallengePreferences extends _$ChallengePreferences
     with SessionPreferencesStorage<ChallengePrefs> {
   // ignore: avoid_public_notifier_properties

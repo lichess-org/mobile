@@ -29,6 +29,14 @@ final _openingsProvider =
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const OpeningThemeScreen(),
+      title: context.l10n.puzzlePuzzlesByOpenings,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -131,11 +139,10 @@ class _OpeningFamily extends ConsumerWidget {
                   style: TextStyle(color: textShade(context, 0.5)),
                 ),
                 onTap: () {
-                  pushPlatformRoute(
+                  Navigator.of(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzleScreen(angle: PuzzleOpening(openingFamily.key)),
-                  );
+                  ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingFamily.key)));
                 },
               ),
     );
@@ -162,11 +169,10 @@ class _OpeningTile extends StatelessWidget {
       title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
       trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
       onTap: () {
-        pushPlatformRoute(
+        Navigator.of(
           context,
           rootNavigator: true,
-          builder: (context) => PuzzleScreen(angle: PuzzleOpening(openingKey)),
-        );
+        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingKey)));
       },
     );
   }

@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = (Work, ClientEval);
+typedef EvalResult = (Work, LocalEval);
 
 /// A work item for the engine.
 @freezed
@@ -33,14 +33,14 @@ class Work with _$Work {
   int get ply => steps.lastOrNull?.position.ply ?? initialPosition.ply;
 
   /// Cached eval for the work position.
-  ClientEval? get evalCache => steps.lastOrNull?.eval;
+  LocalEval? get evalCache => steps.lastOrNull?.eval;
 }
 
 @freezed
 class Step with _$Step {
   const Step._();
 
-  const factory Step({required Position position, required SanMove sanMove, ClientEval? eval}) =
+  const factory Step({required Position position, required SanMove sanMove, LocalEval? eval}) =
       _Step;
 
   factory Step.fromNode(Branch node) {

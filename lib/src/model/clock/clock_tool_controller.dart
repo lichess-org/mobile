@@ -12,20 +12,30 @@ part 'clock_tool_controller.g.dart';
 @riverpod
 class ClockToolController extends _$ClockToolController {
   late final ChessClock _clock;
+  final Map<Side, bool> _hasPlayedLowTimeSound = {Side.white: false, Side.black: false};
+  late Duration _emergencyThreshold;
 
   @override
   ClockState build() {
     const time = Duration(minutes: 10);
     const increment = Duration.zero;
+    _emergencyThreshold = _calculateEmergencyThreshold(time);
     const options = ClockOptions(
       whiteTime: time,
       blackTime: time,
       whiteIncrement: increment,
       blackIncrement: increment,
     );
+
     _clock = ChessClock(whiteTime: time, blackTime: time, onFlag: _onFlagged);
 
+    // Add listeners for both clocks
+    _clock.whiteTime.addListener(onClockEmergency);
+    _clock.blackTime.addListener(onClockEmergency);
+
     ref.onDispose(() {
+      _clock.whiteTime.removeListener(onClockEmergency);
+      _clock.blackTime.removeListener(onClockEmergency);
       _clock.dispose();
     });
 
@@ -35,6 +45,22 @@ class ClockToolController extends _$ClockToolController {
       blackTime: _clock.blackTime,
       activeSide: Side.white,
     );
+  }
+
+  // Emergency threshold is set to 10% of the total time
+  Duration _calculateEmergencyThreshold(Duration initialTime) {
+    return Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
+  }
+
+  void onClockEmergency() {
+    final activeSide = state.activeSide;
+    if (_hasPlayedLowTimeSound[activeSide]!) return;
+    final activeSideTime =
+        activeSide == Side.white ? _clock.whiteTime.value : _clock.blackTime.value;
+    if (activeSideTime <= _emergencyThreshold) {
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      _hasPlayedLowTimeSound[activeSide] = true;
+    }
   }
 
   void _onFlagged() {
@@ -78,6 +104,9 @@ class ClockToolController extends _$ClockToolController {
 
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement);
+    _emergencyThreshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
+    _hasPlayedLowTimeSound[Side.white] = false;
+    _hasPlayedLowTimeSound[Side.black] = false;
     _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
     state = state.copyWith(
       options: options,
@@ -108,6 +137,9 @@ class ClockToolController extends _$ClockToolController {
 
   void reset() {
     _clock.setTimes(whiteTime: state.options.whiteTime, blackTime: state.options.whiteTime);
+    // Reset low time sound flags for both players
+    _hasPlayedLowTimeSound[Side.white] = false;
+    _hasPlayedLowTimeSound[Side.black] = false;
     state = state.copyWith(
       whiteTime: _clock.whiteTime,
       blackTime: _clock.blackTime,
@@ -121,7 +153,7 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void start() {
-    _clock.start();
+    _clock.startSide(Side.white);
     state = state.copyWith(started: true);
   }
 

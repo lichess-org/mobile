@@ -23,6 +23,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const PlayerScreen(), title: context.l10n.players);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
@@ -68,17 +72,13 @@ class _SearchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onUserTap(LightUser user) =>
-        pushPlatformRoute(context, builder: (ctx) => UserScreen(user: user));
+        Navigator.of(context).push(UserScreen.buildRoute(context, user));
 
     return PlatformSearchBar(
       hintText: context.l10n.searchSearch,
       focusNode: AlwaysDisabledFocusNode(),
       onTap:
-          () => pushPlatformRoute(
-            context,
-            fullscreenDialog: true,
-            builder: (_) => SearchScreen(onUserTap: onUserTap),
-          ),
+          () => Navigator.of(context).push(SearchScreen.buildRoute(context, onUserTap: onUserTap)),
     );
   }
 }
@@ -112,12 +112,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),
                 ),
-                onTap:
-                    () => pushPlatformRoute(
-                      context,
-                      title: user.name,
-                      builder: (_) => UserScreen(user: user),
-                    ),
+                onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
               ),
           ],
         );
@@ -139,10 +134,6 @@ class _OnlineFriendsWidget extends ConsumerWidget {
   }
 
   void _handleTap(BuildContext context, IList<LightUser> followingOnlines) {
-    pushPlatformRoute(
-      context,
-      title: context.l10n.friends,
-      builder: (_) => const FollowingScreen(),
-    );
+    Navigator.of(context).push(FollowingScreen.buildRoute(context));
   }
 }

@@ -168,7 +168,7 @@ flutter run \
 > Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper method
 
 > [!NOTE]
-> You can also use the production server but note that you will not be able to log in.
+> If you use the production server, note that you will not be able to log in.
 
 ### Android
 

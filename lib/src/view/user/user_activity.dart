@@ -48,7 +48,7 @@ class UserActivityWidget extends ConsumerWidget {
           () => Shimmer(
             child: ShimmerLoading(
               isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true),
+              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
             ),
           ),
     );
@@ -63,7 +63,7 @@ class UserActivityEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final leadingIconSize = theme.platform == TargetPlatform.iOS ? 26.0 : 36.0;
+    const leadingIconSize = 26.0;
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
     final redColor = theme.extension<CustomColors>()?.error;
@@ -127,7 +127,7 @@ class UserActivityEntry extends ConsumerWidget {
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
-            leading: Icon(LichessIcons.target, size: leadingIconSize),
+            leading: const Icon(LichessIcons.target, size: leadingIconSize),
             title: context.l10n.activitySolvedNbPuzzles(entry.puzzles!.win + entry.puzzles!.loss),
             subtitle: RatingPrefAware(
               child: Row(
@@ -167,21 +167,21 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.streak != null)
           _UserActivityListTile(
-            leading: Icon(LichessIcons.streak, size: leadingIconSize),
+            leading: const Icon(LichessIcons.streak, size: leadingIconSize),
             title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.streak!.runs, 'Puzzle Streak'),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(win: entry.streak!.score, draw: 0, loss: 0),
           ),
         if (entry.storm != null)
           _UserActivityListTile(
-            leading: Icon(LichessIcons.storm, size: leadingIconSize),
+            leading: const Icon(LichessIcons.storm, size: leadingIconSize),
             title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.storm!.runs, 'Puzzle Storm'),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(win: entry.storm!.score, draw: 0, loss: 0),
           ),
         if (entry.correspondenceEnds != null)
           _UserActivityListTile(
-            leading: Icon(LichessIcons.correspondence, size: leadingIconSize),
+            leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
             title: context.l10n.activityCompletedNbGames(
               entry.correspondenceEnds!.win +
                   entry.correspondenceEnds!.draw +
@@ -196,7 +196,7 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.correspondenceMovesNb != null && entry.correspondenceGamesNb != null)
           _UserActivityListTile(
-            leading: Icon(LichessIcons.correspondence, size: leadingIconSize),
+            leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
             title: context.l10n.activityPlayedNbMoves(entry.correspondenceMovesNb!),
             subtitle: Text(
               context.l10n.activityInNbCorrespondenceGames(entry.correspondenceGamesNb!),
@@ -204,7 +204,7 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.tournamentNb != null)
           _UserActivityListTile(
-            leading: Icon(Icons.emoji_events, size: leadingIconSize),
+            leading: const Icon(Icons.emoji_events, size: leadingIconSize),
             title: context.l10n.activityCompetedInNbTournaments(entry.tournamentNb!),
             subtitle:
                 entry.bestTournament != null
@@ -221,7 +221,7 @@ class UserActivityEntry extends ConsumerWidget {
           ),
         if (entry.followInNb != null)
           _UserActivityListTile(
-            leading: Icon(Icons.thumb_up, size: leadingIconSize),
+            leading: const Icon(Icons.thumb_up, size: leadingIconSize),
             title: context.l10n.activityGainedNbFollowers(entry.followInNb!),
             subtitle: emptySubtitle,
           ),

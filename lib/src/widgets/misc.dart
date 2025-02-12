@@ -43,7 +43,7 @@ class _LichessMessageState extends State<LichessMessage> {
         spans.add(
           TextSpan(
             text: match[i],
-            style: i == 2 ? TextStyle(color: Theme.of(context).colorScheme.primary) : null,
+            style: i == 2 ? TextStyle(color: ColorScheme.of(context).primary) : null,
             recognizer: i == 2 ? _recognizer : null,
           ),
         );

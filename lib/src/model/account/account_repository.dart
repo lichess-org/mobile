@@ -54,6 +54,26 @@ Future<IList<OngoingGame>> ongoingGames(Ref ref) async {
   );
 }
 
+@Riverpod(keepAlive: true)
+AccountService accountService(Ref ref) {
+  return AccountService(ref);
+}
+
+class AccountService {
+  const AccountService(this._ref);
+
+  final Ref _ref;
+
+  Future<void> setGameBookmark(GameId id, {required bool bookmark}) async {
+    final session = _ref.read(authSessionProvider);
+    if (session == null) return;
+
+    await _ref.withClient((client) => AccountRepository(client).bookmark(id, bookmark: bookmark));
+
+    _ref.invalidate(accountProvider);
+  }
+}
+
 class AccountRepository {
   AccountRepository(this.client);
 
@@ -106,6 +126,15 @@ class AccountRepository {
 
     if (response.statusCode >= 400) {
       throw http.ClientException('Failed to set preference: ${response.statusCode}', uri);
+    }
+  }
+
+  /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
+  Future<void> bookmark(GameId id, {required bool bookmark}) async {
+    final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
+    final response = await client.post(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException('Failed to bookmark game: ${response.statusCode}', uri);
     }
   }
 }

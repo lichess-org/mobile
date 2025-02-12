@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -29,12 +28,17 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StormScreen extends ConsumerStatefulWidget {
   const StormScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const StormScreen(), title: 'Puzzle Storm');
+  }
 
   @override
   ConsumerState<StormScreen> createState() => _StormScreenState();
@@ -247,12 +251,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
 }
 
 void _showStats(BuildContext context, StormRunStats stats) {
-  pushPlatformRoute(
-    context,
-    rootNavigator: true,
-    fullscreenDialog: true,
-    builder: (_) => _RunStats(stats),
-  );
+  Navigator.of(context, rootNavigator: true).push(_RunStats.buildRoute(context, stats));
 }
 
 class _TopTable extends ConsumerWidget {
@@ -296,14 +295,24 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            Icon(LichessIcons.storm, size: 50.0, color: context.lichessColors.brag),
-            const SizedBox(width: 8),
-            Text(
-              stormState.numSolved.toString(),
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: context.lichessColors.brag,
+            PlatformCard(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(LichessIcons.storm, size: 50.0, color: ColorScheme.of(context).primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      stormState.numSolved.toString().padRight(2),
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: ColorScheme.of(context).primary,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const Spacer(),
@@ -369,11 +378,11 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     final lvl = widget.combo.currentLevel();
-    final indicatorColor = Theme.of(context).colorScheme.secondary;
+    final indicatorColor = ColorScheme.of(context).secondary;
 
     final comboShades = generateShades(
-      indicatorColor,
-      ref.watch(currentBrightnessProvider) == Brightness.light,
+      ColorScheme.of(context).secondary,
+      Theme.of(context).brightness,
     );
     return AnimatedBuilder(
       animation: _controller,
@@ -469,7 +478,7 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                                     style: TextStyle(
                                       color:
                                           isCurrentLevel
-                                              ? Theme.of(context).colorScheme.onSecondary
+                                              ? ColorScheme.of(context).onSecondary
                                               : null,
                                     ),
                                   ),
@@ -487,36 +496,17 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
     );
   }
 
-  List<Color> generateShades(Color baseColor, bool light) {
-    final shades = <Color>[];
-
-    final double r = baseColor.r;
-    final double g = baseColor.g;
-    final double b = baseColor.b;
-
-    const int step = 20;
-
-    // Generate darker shades
-    for (int i = 4; i >= 2; i = i - 2) {
-      final double newR = (r - i * step).clamp(0, 255);
-      final double newG = (g - i * step).clamp(0, 255);
-      final double newB = (b - i * step).clamp(0, 255);
-      shades.add(Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB));
-    }
-
-    // Generate lighter shades
-    for (int i = 2; i <= 3; i++) {
-      final double newR = (r + i * step).clamp(0, 255);
-      final double newG = (g + i * step).clamp(0, 255);
-      final double newB = (b + i * step).clamp(0, 255);
-      shades.add(Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB));
-    }
-
-    if (light) {
-      return shades.reversed.toList();
-    }
-
-    return shades;
+  List<Color> generateShades(Color baseColor, Brightness brightness) {
+    return List.generate(4, (index) {
+      final shade = switch (index) {
+        0 => 0.1,
+        1 => 0.3,
+        2 => 0.5,
+        3 => 0.7,
+        _ => 0.0,
+      };
+      return brightness == Brightness.light ? darken(baseColor, shade) : lighten(baseColor, shade);
+    });
   }
 }
 
@@ -576,6 +566,15 @@ class _RunStats extends StatelessWidget {
   const _RunStats(this.stats);
   final StormRunStats stats;
 
+  static Route<dynamic> buildRoute(BuildContext context, StormRunStats stats) {
+    return buildScreenRoute(
+      context,
+      screen: _RunStats(stats),
+      title: 'Storm Stats',
+      fullscreenDialog: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -609,18 +608,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         widget.stats.newHigh != null
             ? [
               const SizedBox(height: 16),
-              ListTile(
-                leading: Icon(LichessIcons.storm, size: 46, color: context.lichessColors.brag),
-                title: Text(
-                  newHighTitle(context, widget.stats.newHigh!),
-                  style: Styles.sectionTitle.copyWith(color: context.lichessColors.brag),
-                ),
-                subtitle: Text(
-                  context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
-                  style: TextStyle(color: context.lichessColors.brag),
+              PlatformCard(
+                margin: Styles.bodySectionPadding,
+                child: ListTile(
+                  leading: Icon(
+                    LichessIcons.storm,
+                    size: 46,
+                    color: ColorScheme.of(context).primary,
+                  ),
+                  title: Text(
+                    newHighTitle(context, widget.stats.newHigh!),
+                    style: Styles.sectionTitle,
+                  ),
+                  subtitle: Text(
+                    context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
             ]
             : null;
 
@@ -769,10 +773,8 @@ class _StormDashboardButton extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context, AuthSessionState session) => pushPlatformRoute(
+  void _showDashboard(BuildContext context, AuthSessionState session) => Navigator.of(
     context,
     rootNavigator: true,
-    fullscreenDialog: true,
-    builder: (_) => StormDashboardModal(user: session.user),
-  );
+  ).push(StormDashboardModal.buildRoute(context, session.user));
 }

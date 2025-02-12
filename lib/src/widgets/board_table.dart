@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -139,7 +140,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs.toBoardSettings().copyWith(
-          borderRadius: isTablet ? const BorderRadius.all(Radius.circular(4.0)) : BorderRadius.zero,
+          borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
           drawShape: DrawShapeOptions(
             enable: boardPrefs.enableShapeDrawings,
@@ -405,7 +406,7 @@ class _ErrorWidget extends StatelessWidget {
               color:
                   Theme.of(context).platform == TargetPlatform.iOS
                       ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                      : Theme.of(context).colorScheme.surface,
+                      : ColorScheme.of(context).surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),

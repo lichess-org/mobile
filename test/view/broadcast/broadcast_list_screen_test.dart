@@ -65,7 +65,7 @@ void main() {
         // Wait for broadcast tournaments to load
         await tester.pump(const Duration(milliseconds: 100));
 
-        expect(find.byType(BroadcastCard), findsAtLeast(1));
+        expect(find.byType(BroadcastListTile), findsAtLeast(1));
       });
     });
 

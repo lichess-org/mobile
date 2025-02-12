@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
   // ignore: avoid_public_notifier_properties
   @override

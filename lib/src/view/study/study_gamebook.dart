@@ -14,22 +14,12 @@ class StudyGamebook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
+    return Container(
+      color: ColorScheme.of(context).surfaceContainer,
+      padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: [
-          Expanded(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [_Comment(id: id), _Hint(id: id)],
-                ),
-              ),
-            ),
-          ),
-        ],
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [_Comment(id: id), _Hint(id: id)],
       ),
     );
   }
@@ -126,7 +116,7 @@ class GamebookButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final primary = ColorScheme.of(context).primary;
 
     return Semantics(
       container: true,

@@ -3,17 +3,19 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
 // to calculate the height of the header and footer of the board
@@ -77,7 +79,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends StatelessWidget {
+class BroadcastPreview extends ConsumerWidget {
   const BroadcastPreview({
     required this.tournamentId,
     required this.roundId,
@@ -104,7 +106,10 @@ class BroadcastPreview extends StatelessWidget {
   final String roundSlug;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showEvaluationBar = ref.watch(
+      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+    );
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -114,7 +119,7 @@ class BroadcastPreview extends StatelessWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWidth =
+    final boardWithMaybeEvalBarWidth =
         (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
@@ -125,57 +130,149 @@ class BroadcastPreview extends StatelessWidget {
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
         mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
+        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+        childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
       ),
       delegate: SliverChildBuilderDelegate(
         childCount: games == null ? numberLoadingBoards : games!.length,
         (context, index) {
+          final boardSize =
+              boardWithMaybeEvalBarWidth -
+              (showEvaluationBar
+                  ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                  : 0);
+
           if (games == null) {
             return BoardThumbnail.loading(
-              size: boardWidth,
-              header: _PlayerWidgetLoading(width: boardWidth),
-              footer: _PlayerWidgetLoading(width: boardWidth),
+              size: boardSize,
+              header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+              footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
             );
           }
 
           final game = games![index];
           final playingSide = Setup.parseFen(game.fen).turn;
 
-          return BoardThumbnail(
-            animationDuration: const Duration(milliseconds: 150),
-            onTap: () {
-              pushPlatformRoute(
-                context,
-                title: title,
-                builder:
-                    (context) => BroadcastGameScreen(
-                      tournamentId: tournamentId,
-                      roundId: roundId,
-                      gameId: game.id,
-                      tournamentSlug: tournamentSlug,
-                      roundSlug: roundSlug,
-                      title: title,
-                    ),
-              );
-            },
-            orientation: Side.white,
-            fen: game.fen,
-            lastMove: game.lastMove,
-            size: boardWidth,
-            header: _PlayerWidget(
-              width: boardWidth,
-              game: game,
-              side: Side.black,
-              playingSide: playingSide,
-            ),
-            footer: _PlayerWidget(
-              width: boardWidth,
-              game: game,
-              side: Side.white,
-              playingSide: playingSide,
+          return ObservedBoardThumbnail(
+            boardKey: Key('Board-$index'),
+            roundId: roundId,
+            game: game,
+            title: title,
+            tournamentId: tournamentId,
+            tournamentSlug: tournamentSlug,
+            roundSlug: roundSlug,
+            showEvaluationBar: showEvaluationBar,
+            boardSize: boardSize,
+            boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+            playingSide: playingSide,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ObservedBoardThumbnail extends ConsumerStatefulWidget {
+  const ObservedBoardThumbnail({
+    super.key,
+    required this.boardKey,
+    required this.roundId,
+    required this.game,
+    required this.title,
+    required this.tournamentId,
+    required this.tournamentSlug,
+    required this.roundSlug,
+    required this.showEvaluationBar,
+    required this.boardSize,
+    required this.boardWithMaybeEvalBarWidth,
+    required this.playingSide,
+  });
+
+  final Key boardKey;
+  final BroadcastRoundId roundId;
+  final BroadcastGame game;
+  final String title;
+  final BroadcastTournamentId tournamentId;
+  final String tournamentSlug;
+  final String roundSlug;
+  final bool showEvaluationBar;
+  final double boardSize;
+  final double boardWithMaybeEvalBarWidth;
+  final Side playingSide;
+
+  @override
+  ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
+}
+
+class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail> {
+  bool isBoardVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: widget.boardKey,
+      onVisibilityChanged: (visibilityInfo) {
+        if (visibilityInfo.visibleFraction > 0) {
+          if (!isBoardVisible) {
+            ref
+                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
+                .addObservedGame(widget.game.id);
+            setState(() {
+              isBoardVisible = true;
+            });
+          }
+        } else {
+          if (isBoardVisible) {
+            if (context.mounted) {
+              ref
+                  .read(broadcastRoundControllerProvider(widget.roundId).notifier)
+                  .removeObservedGame(widget.game.id);
+              setState(() {
+                isBoardVisible = false;
+              });
+            }
+          }
+        }
+      },
+      child: BoardThumbnail(
+        animationDuration: const Duration(milliseconds: 150),
+        onTap: () {
+          Navigator.of(context).push(
+            BroadcastGameScreen.buildRoute(
+              context,
+              tournamentId: widget.tournamentId,
+              roundId: widget.roundId,
+              gameId: widget.game.id,
+              tournamentSlug: widget.tournamentSlug,
+              roundSlug: widget.roundSlug,
+              title: widget.title,
             ),
           );
         },
+        orientation: Side.white,
+        fen: widget.game.fen,
+        showEvaluationBar: widget.showEvaluationBar,
+        whiteWinningChances:
+            (widget.game.cp != null || widget.game.mate != null)
+                ? ExternalEval(
+                  cp: widget.game.cp,
+                  mate: widget.game.mate,
+                ).winningChances(Side.white)
+                : null,
+        lastMove: widget.game.lastMove,
+        size: widget.boardSize,
+        header: _PlayerWidget(
+          width: widget.boardWithMaybeEvalBarWidth,
+          game: widget.game,
+          side: Side.black,
+          playingSide: widget.playingSide,
+        ),
+        footer: _PlayerWidget(
+          width: widget.boardWithMaybeEvalBarWidth,
+          game: widget.game,
+          side: Side.white,
+          playingSide: widget.playingSide,
+        ),
       ),
     );
   }

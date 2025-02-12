@@ -5,8 +5,8 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -22,6 +22,8 @@ class PerfCards extends StatelessWidget {
   final bool isMe;
 
   final EdgeInsetsGeometry? padding;
+
+  static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +81,9 @@ class PerfCards extends StatelessWidget {
                 height: 100,
                 width: 100,
                 child: PlatformCard(
+                  borderRadius: _kCardBorderRadius,
                   child: AdaptiveInkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: _kCardBorderRadius,
                     onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
@@ -140,16 +143,10 @@ class PerfCards extends StatelessWidget {
   }
 
   void _handlePerfCardTap(BuildContext context, Perf perf) {
-    pushPlatformRoute(
-      context,
-      builder: (context) {
-        switch (perf) {
-          case Perf.storm:
-            return StormDashboardModal(user: user.lightUser);
-          default:
-            return PerfStatsScreen(user: user, perf: perf);
-        }
-      },
-    );
+    Navigator.of(context).push(switch (perf) {
+      Perf.puzzle => PuzzleDashboardScreen.buildRoute(context),
+      Perf.storm => StormDashboardModal.buildRoute(context, user.lightUser),
+      _ => PerfStatsScreen.buildRoute(context, user: user, perf: perf),
+    });
   }
 }

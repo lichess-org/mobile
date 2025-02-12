@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
@@ -18,21 +20,35 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
+
+enum BroadcastRoundTab { overview, boards, players }
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
+  final BroadcastRoundTab? initialTab;
 
-  const BroadcastRoundScreen({required this.broadcast});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    Broadcast broadcast, {
+    BroadcastRoundTab? initialTab,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
+      title: broadcast.title,
+    );
+  }
 
   @override
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _CupertinoView { overview, boards, players }
-
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _CupertinoView selectedTab = _CupertinoView.overview;
+  BroadcastRoundTab selectedTab = BroadcastRoundTab.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
@@ -42,7 +58,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    selectedTab = widget.initialTab ?? BroadcastRoundTab.overview;
+    _tabController = TabController(
+      initialIndex: widget.initialTab?.index ?? 0,
+      length: 3,
+      vsync: this,
+    );
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -53,7 +74,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setCupertinoTab(_CupertinoView mode) {
+  void setCupertinoTab(BroadcastRoundTab mode) {
     setState(() {
       selectedTab = mode;
     });
@@ -76,16 +97,16 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _iosBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
+    AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
+    final tabSwitcher = CupertinoSlidingSegmentedControl<BroadcastRoundTab>(
       groupValue: selectedTab,
       children: {
-        _CupertinoView.overview: Text(context.l10n.broadcastOverview),
-        _CupertinoView.boards: Text(context.l10n.broadcastBoards),
-        _CupertinoView.players: Text(context.l10n.players),
+        BroadcastRoundTab.overview: Text(context.l10n.broadcastOverview),
+        BroadcastRoundTab.boards: Text(context.l10n.broadcastBoards),
+        BroadcastRoundTab.players: Text(context.l10n.players),
       },
-      onValueChanged: (_CupertinoView? view) {
+      onValueChanged: (BroadcastRoundTab? view) {
         if (view != null) {
           setCupertinoTab(view);
         }
@@ -99,20 +120,22 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
+
+        trailing: _BroadcastSettingsButton(),
       ),
       child: Column(
         children: [
           Expanded(
             child: switch (asyncRound) {
               AsyncData(value: final _) => switch (selectedTab) {
-                _CupertinoView.overview => _TabView(
+                BroadcastRoundTab.overview => _TabView(
                   cupertinoTabSwitcher: tabSwitcher,
                   sliver: BroadcastOverviewTab(
                     broadcast: widget.broadcast,
                     tournamentId: _selectedTournamentId,
                   ),
                 ),
-                _CupertinoView.boards => _TabView(
+                BroadcastRoundTab.boards => _TabView(
                   cupertinoTabSwitcher: tabSwitcher,
                   sliver: switch (asyncTournament) {
                     AsyncData(:final value) => BroadcastBoardsTab(
@@ -123,7 +146,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     _ => const SliverFillRemaining(child: SizedBox.shrink()),
                   },
                 ),
-                _CupertinoView.players => _TabView(
+                BroadcastRoundTab.players => _TabView(
                   cupertinoTabSwitcher: tabSwitcher,
                   sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
                 ),
@@ -138,7 +161,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               setTournamentId: setTournamentId,
               setRoundId: setRoundId,
             ),
-            _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
+            _ => const PlatformBottomBar.empty(transparentBackground: false),
           },
         ],
       ),
@@ -148,7 +171,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _androidBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
+    AsyncValue<BroadcastRoundState> asyncRound,
   ) {
     return Scaffold(
       appBar: AppBar(
@@ -166,6 +189,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Tab(text: context.l10n.players),
           ],
         ),
+        actions: [_BroadcastSettingsButton()],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
@@ -199,7 +223,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
+        _ => const PlatformBottomBar.empty(transparentBackground: false),
       },
     );
   }
@@ -208,26 +232,26 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundWithGames>.loading();
+    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
 
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
         // and to know if the round has games to show
-        final round = ref.watch(
+        final roundState = ref.watch(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
         );
 
         ref.listen(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
           (_, round) {
-            if (round.hasValue && !roundLoaded) {
+            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.index = 1;
 
                 if (Theme.of(context).platform == TargetPlatform.iOS) {
-                  setCupertinoTab(_CupertinoView.boards);
+                  setCupertinoTab(BroadcastRoundTab.boards);
                 }
               }
             }
@@ -235,8 +259,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         );
 
         return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, round),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, round),
+          androidBuilder: (context) => _androidBuilder(context, asyncTour, roundState),
+          iosBuilder: (context) => _iosBuilder(context, asyncTour, roundState),
         );
 
       case _:
@@ -285,7 +309,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         if (tournament.group != null)
           AdaptiveTextButton(
@@ -478,6 +502,49 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
             },
           ),
       ],
+    );
+  }
+}
+
+class _BroadcastSettingsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => AppBarIconButton(
+    icon: const Icon(Icons.settings),
+    onPressed:
+        () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (_) => const _BroadcastSettingsBottomSheet(),
+        ),
+    semanticsLabel: context.l10n.settingsSettings,
+  );
+}
+
+class _BroadcastSettingsBottomSheet extends ConsumerWidget {
+  const _BroadcastSettingsBottomSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
+
+    return DraggableScrollableSheet(
+      initialChildSize: .6,
+      expand: false,
+      builder:
+          (context, scrollController) => ListView(
+            controller: scrollController,
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.evaluationGauge),
+                value: broadcastPreferences.showEvaluationBar,
+                onChanged: (value) {
+                  ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+                },
+              ),
+            ],
+          ),
     );
   }
 }

@@ -119,8 +119,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                 game: topGames.get(index),
                 color:
                     index.isEven
-                        ? Theme.of(context).colorScheme.surfaceContainerLow
-                        : Theme.of(context).colorScheme.surfaceContainerHigh,
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
                 ply: ply,
               );
             }, growable: false),
@@ -136,8 +136,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
                 game: recentGames.get(index),
                 color:
                     index.isEven
-                        ? Theme.of(context).colorScheme.surfaceContainerLow
-                        : Theme.of(context).colorScheme.surfaceContainerHigh,
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
                 ply: ply,
               );
             }, growable: false),

@@ -25,10 +25,28 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
 
   const BroadcastPlayerResultsScreen(
     this.tournamentId,
-    this.playerId,
+    this.playerId, {
+    required this.playerName,
     this.playerTitle,
-    this.playerName,
-  );
+  });
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastTournamentId tournamentId,
+    String playerId, {
+    String? playerTitle,
+    required String playerName,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastPlayerResultsScreen(
+        tournamentId,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,14 +207,13 @@ class _Body extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder:
-                      (context) => BroadcastGameScreen(
-                        tournamentId: tournamentId,
-                        roundId: playerResult.roundId,
-                        gameId: playerResult.gameId,
-                      ),
+                Navigator.of(context).push(
+                  BroadcastGameScreen.buildRoute(
+                    context,
+                    tournamentId: tournamentId,
+                    roundId: playerResult.roundId,
+                    gameId: playerResult.gameId,
+                  ),
                 );
               },
               child: ColoredBox(
@@ -206,8 +223,8 @@ class _Body extends ConsumerWidget {
                             ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
                             : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
                         : index.isEven
-                        ? Theme.of(context).colorScheme.surfaceContainerLow
-                        : Theme.of(context).colorScheme.surfaceContainerHigh,
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
                 child: Padding(
                   padding: _kTableRowPadding,
                   child: Row(
@@ -250,7 +267,7 @@ class _Body extends ConsumerWidget {
                                               playerResult.color == Side.black)
                                       ? Border.all(
                                         width: 2.0,
-                                        color: Theme.of(context).colorScheme.outline,
+                                        color: ColorScheme.of(context).outline,
                                       )
                                       : null,
                               shape: BoxShape.circle,

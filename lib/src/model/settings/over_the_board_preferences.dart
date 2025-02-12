@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'over_the_board_preferences.freezed.dart';
 part 'over_the_board_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class OverTheBoardPreferences extends _$OverTheBoardPreferences
     with PreferencesStorage<OverTheBoardPrefs> {
   // ignore: avoid_public_notifier_properties

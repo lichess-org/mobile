@@ -34,6 +34,14 @@ final _themesProvider = FutureProvider.autoDispose<
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const PuzzleThemesScreen(),
+      title: context.l10n.puzzlePuzzleThemes,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -75,10 +83,7 @@ class _Body extends ConsumerWidget {
                   onExpansionChanged:
                       openingsAvailable
                           ? (expanded) {
-                            pushPlatformRoute(
-                              context,
-                              builder: (ctx) => const OpeningThemeScreen(),
-                            );
+                            Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
                           }
                           : null,
                 ),
@@ -180,11 +185,10 @@ class _Category extends ConsumerWidget {
                       onTap:
                           isThemeAvailable
                               ? () {
-                                pushPlatformRoute(
+                                Navigator.of(
                                   context,
                                   rootNavigator: true,
-                                  builder: (context) => PuzzleScreen(angle: PuzzleTheme(theme)),
-                                );
+                                ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
                               }
                               : null,
                     ),

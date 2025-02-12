@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart' show ClockStyle;
 
 const _kClockFontSize = 26.0;
 
@@ -93,13 +94,20 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
   @override
   Widget build(BuildContext build) {
     final brightness = Theme.of(context).brightness;
-    final clockStyle =
-        brightness == Brightness.dark ? _ClockStyle.darkThemeStyle : _ClockStyle.lightThemeStyle;
+    final colorScheme = ColorScheme.of(context);
+    final effectiveClockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
 
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
 
-    return Padding(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color:
+            isActive
+                ? effectiveClockStyle.activeBackgroundColor
+                : effectiveClockStyle.backgroundColor,
+      ),
       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
       child: MediaQuery.withClampedTextScaling(
         maxScaleFactor: kMaxClockTextScaleFactor,
@@ -153,7 +161,10 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
               Text(
                 '$minutes:$seconds',
                 style: TextStyle(
-                  color: isActive ? clockStyle.activeTextColor : clockStyle.textColor,
+                  color:
+                      isActive
+                          ? effectiveClockStyle.activeTextColor
+                          : effectiveClockStyle.textColor,
                   fontSize: _kClockFontSize,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),
@@ -163,14 +174,4 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
       ),
     );
   }
-}
-
-enum _ClockStyle {
-  darkThemeStyle(textColor: Colors.grey, activeTextColor: Colors.white),
-  lightThemeStyle(textColor: Colors.grey, activeTextColor: Colors.black);
-
-  const _ClockStyle({required this.textColor, required this.activeTextColor});
-
-  final Color textColor;
-  final Color activeTextColor;
 }
