@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -320,12 +321,13 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
             )
             : ISet();
 
-    return Chessboard(
+    return BoardWidget(
       size: widget.boardSize,
+      boardPrefs: boardPrefs,
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
-      game: GameData(
+      gameData: GameData(
         playerSide:
             broadcastAnalysisState.position.isGameOver
                 ? PlayerSide.none

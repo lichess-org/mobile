@@ -5,6 +5,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
@@ -41,6 +42,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(state.copyWith(castlingMethod: castlingMethod));
   }
 
   Future<void> toggleHapticFeedback() {
@@ -125,6 +130,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required ClockPosition clockPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    required CastlingMethod castlingMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -150,6 +156,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
+    castlingMethod: CastlingMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
@@ -345,6 +352,19 @@ enum ClockPosition {
     ClockPosition.left => 'Left',
     ClockPosition.right => 'Right',
   };
+}
+
+enum CastlingMethod {
+  kingOverRook,
+  kingTwoSquares,
+  either;
+
+  String castlingMethodl10n(BuildContext context, CastlingMethod castlingMethod) =>
+      switch (castlingMethod) {
+        CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
+        CastlingMethod.kingTwoSquares => context.l10n.preferencesCastleByMovingTwoSquares,
+        CastlingMethod.either => context.l10n.preferencesBothClicksAndDrag,
+      };
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {

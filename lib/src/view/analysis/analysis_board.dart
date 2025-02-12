@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class AnalysisBoard extends ConsumerStatefulWidget {
@@ -66,12 +67,13 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             )
             : ISet();
 
-    return Chessboard(
+    return BoardWidget(
       size: widget.boardSize,
+      boardPrefs: boardPrefs,
       fen: analysisState.position.fen,
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
-      game: GameData(
+      gameData: GameData(
         playerSide:
             analysisState.position.isGameOver
                 ? PlayerSide.none
