@@ -172,7 +172,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        trailing: Row(children: [_filterButtonBuilder(context), const _BroadcastSettingsButton()]),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
+        ),
       ),
       child: Column(
         children: [
