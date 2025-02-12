@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,14 +52,7 @@ class CreateCustomGameScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        automaticBackgroundVisibility: false,
-        backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-        border: null,
-      ),
-      child: const _CupertinoBody(),
-    );
+    return const _CupertinoBody();
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -131,38 +123,11 @@ class _CupertinoBody extends StatefulWidget {
 
 class _CupertinoBodyState extends State<_CupertinoBody> {
   _ViewMode _selectedSegment = _ViewMode.create;
-  double headerOpacity = 0;
 
   void setViewMode(_ViewMode mode) {
     setState(() {
       _selectedSegment = mode;
-      headerOpacity = 0.0;
     });
-  }
-
-  bool handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      final ScrollMetrics metrics = notification.metrics;
-      double scrollExtent = 0.0;
-      switch (metrics.axisDirection) {
-        case AxisDirection.up:
-          scrollExtent = metrics.extentAfter;
-        case AxisDirection.down:
-          scrollExtent = metrics.extentBefore;
-        case AxisDirection.right:
-        case AxisDirection.left:
-          break;
-      }
-
-      final opacity = scrollExtent > 0.0 ? 1.0 : 0.0;
-
-      if (opacity != headerOpacity) {
-        setState(() {
-          headerOpacity = opacity;
-        });
-      }
-    }
-    return false;
   }
 
   @override
@@ -181,79 +146,30 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
         }
       },
     );
-    return NotificationListener<ScrollNotification>(
-      onNotification: handleScrollNotification,
-      child:
-          _selectedSegment == _ViewMode.create
-              ? _TabView(
-                cupertinoTabSwitcher: tabSwitcher,
-                cupertinoHeaderOpacity: headerOpacity,
-                sliver: _CreateGameBody(setViewMode: setViewMode),
-              )
-              : _TabView(
-                cupertinoTabSwitcher: tabSwitcher,
-                cupertinoHeaderOpacity: headerOpacity,
-                sliver: _ChallengesBody(setViewMode: setViewMode),
-              ),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.custom),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(44.0), child: tabSwitcher),
+      ),
+      child: _TabView(
+        sliver:
+            _selectedSegment == _ViewMode.create
+                ? _CreateGameBody(setViewMode: setViewMode)
+                : _ChallengesBody(setViewMode: setViewMode),
+      ),
     );
   }
 }
 
 class _TabView extends StatelessWidget {
-  const _TabView({
-    required this.sliver,
-    this.cupertinoTabSwitcher,
-    this.cupertinoHeaderOpacity = 0.0,
-  });
+  const _TabView({required this.sliver});
 
   final Widget sliver;
-  final Widget? cupertinoTabSwitcher;
-  final double cupertinoHeaderOpacity;
 
   @override
   Widget build(BuildContext context) {
-    final edgeInsets =
-        MediaQuery.paddingOf(context) -
-        (cupertinoTabSwitcher != null
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.verticalBodyPadding;
-    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-    return CustomScrollView(
-      slivers: [
-        if (cupertinoTabSwitcher != null)
-          PinnedHeaderSliver(
-            child: ClipRect(
-              child: BackdropFilter(
-                enabled: backgroundColor.a != 1,
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: ShapeDecoration(
-                    color:
-                        cupertinoHeaderOpacity == 1.0
-                            ? backgroundColor
-                            : backgroundColor.withAlpha(0),
-                    shape: LinearBorder.bottom(
-                      side: BorderSide(
-                        color:
-                            cupertinoHeaderOpacity == 1.0
-                                ? const Color(0x4D000000)
-                                : Colors.transparent,
-                        width: 0.0,
-                      ),
-                    ),
-                  ),
-                  padding:
-                      Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                  child: cupertinoTabSwitcher,
-                ),
-              ),
-            ),
-          ),
-        SliverPadding(padding: edgeInsets, sliver: sliver),
-      ],
-    );
+    final edgeInsets = MediaQuery.paddingOf(context) + Styles.verticalBodyPadding;
+    return CustomScrollView(slivers: [SliverPadding(padding: edgeInsets, sliver: sliver)]);
   }
 }
 
