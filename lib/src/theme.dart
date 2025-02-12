@@ -86,7 +86,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
           isIOS
               ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
               : null,
-      menuTheme: _makeMenuThemeData(context),
+      menuTheme: _makeMenuThemeData(context, themeLight.colorScheme),
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
     dark: themeDark.copyWith(
@@ -101,7 +101,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      menuTheme: _makeMenuThemeData(context),
+      menuTheme: _makeMenuThemeData(context, themeDark.colorScheme),
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
   );
@@ -153,7 +153,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
-    menuTheme: _makeMenuThemeData(context),
+    menuTheme: _makeMenuThemeData(context, baseTheme.colorScheme),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -163,15 +163,11 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
   return (light: theme, dark: theme);
 }
 
-MenuThemeData _makeMenuThemeData(BuildContext context) {
+MenuThemeData _makeMenuThemeData(BuildContext context, ColorScheme colorScheme) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   return MenuThemeData(
     style: MenuStyle(
-      // maximumSize: WidgetStatePropertyAll(
-      //   Size(MediaQuery.sizeOf(context).width / 2, MediaQuery.sizeOf(context).height * 0.8),
-      // ),
-      backgroundColor:
-          isIOS ? WidgetStatePropertyAll(ColorScheme.of(context).surfaceContainerLow) : null,
+      backgroundColor: isIOS ? WidgetStatePropertyAll(colorScheme.surfaceContainerLow) : null,
       elevation: isIOS ? const WidgetStatePropertyAll(0) : null,
       shape:
           isIOS
