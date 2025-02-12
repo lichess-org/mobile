@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -71,6 +75,13 @@ void main() {
         tester,
         home: const StudyScreen(id: testId),
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -176,6 +187,13 @@ void main() {
         tester,
         home: const StudyScreen(id: testId),
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load

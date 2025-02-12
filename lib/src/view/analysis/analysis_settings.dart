@@ -125,6 +125,13 @@ class AnalysisSettingsScreen extends ConsumerWidget {
               ),
               ListSection(
                 children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.inlineNotation),
+                    value: prefs.inlineNotation,
+                    onChanged:
+                        (value) =>
+                            ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
                   PlatformListTile(
                     title: Text(context.l10n.openingExplorer),
                     onTap:

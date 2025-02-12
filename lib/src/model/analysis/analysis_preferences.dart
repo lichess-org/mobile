@@ -61,6 +61,10 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
   Future<void> setEngineSearchTime(Duration engineSearchTime) {
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
+
+  Future<void> toggleInlineNotation() {
+    return save(state.copyWith(inlineNotation: !state.inlineNotation));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -82,6 +86,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(defaultValue: false) required bool inlineNotation,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
@@ -94,6 +99,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 10),
+    inlineNotation: false,
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
