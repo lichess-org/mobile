@@ -138,11 +138,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
     super.didPop();
   }
 
-  static const pingRating = Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-    child: SocketPingRating(size: 24.0),
-  );
-
   @override
   Widget build(BuildContext context) {
     final provider = currentGameProvider(widget.seek, widget.challenge, widget.initialGameId);
@@ -196,8 +191,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
           appBarLeading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-            data: (prevent) => prevent ? pingRating : null,
-            orElse: () => pingRating,
+            data: (prevent) => prevent ? const _PingRating() : null,
+            orElse: () => const _PingRating(),
           ),
           appBarTitle:
               gameId != null
@@ -227,7 +222,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         final body = PopScope(child: message);
 
         return PlatformScaffold(
-          appBarLeading: pingRating,
+          appBarLeading: const _PingRating(),
           appBarTitle:
               widget.seek != null
                   ? _LobbyGameTitle(seek: widget.seek!)
@@ -252,7 +247,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBarLeading: pingRating,
+          appBarLeading: const _PingRating(),
           appBarTitle:
               widget.seek != null
                   ? _LobbyGameTitle(seek: widget.seek!)
@@ -262,6 +257,21 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
           body: PopScope(canPop: false, child: loadingBoard),
         );
     }
+  }
+}
+
+class _PingRating extends StatelessWidget {
+  const _PingRating();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 16.0,
+        vertical: Theme.of(context).platform == TargetPlatform.iOS ? 12.0 : 18.0,
+      ),
+      child: const SocketPingRating(size: 24.0),
+    );
   }
 }
 
