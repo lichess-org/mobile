@@ -289,7 +289,9 @@ class ChoicePicker<T> extends StatelessWidget {
                       title: titleBuilder(value),
                       subtitle: subtitleBuilder?.call(value),
                       leading: leadingBuilder?.call(value),
-                      backgroundColorActivated: Styles.backgroundActivated(context),
+                      backgroundColorActivated: Styles.cupertinoListTileBackgroundActivated(
+                        context,
+                      ),
                       onTap:
                           onSelectedItemChanged != null
                               ? () => onSelectedItemChanged!(value)

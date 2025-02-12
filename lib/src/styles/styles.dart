@@ -62,10 +62,10 @@ abstract class Styles {
   static Color listingsScreenBackgroundColor(BuildContext context) =>
       ColorScheme.of(context).surfaceContainerLowest;
 
-  static Color backgroundActivated(BuildContext context) {
+  static Color cupertinoListTileBackgroundActivated(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     return brightness == Brightness.light
-        ? ColorScheme.of(context).surfaceContainerLow
+        ? ColorScheme.of(context).surfaceContainer
         : ColorScheme.of(context).surfaceContainerHighest;
   }
 

@@ -355,7 +355,7 @@ class PlatformListTile extends StatelessWidget {
           contentPadding: padding,
         );
       case TargetPlatform.iOS:
-        final activatedColor = Styles.backgroundActivated(context);
+        final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
         return IconTheme(
           data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
           child: GestureDetector(

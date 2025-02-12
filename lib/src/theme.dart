@@ -82,6 +82,10 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
+      bottomSheetTheme:
+          isIOS
+              ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
+              : null,
       menuTheme: _makeMenuThemeData(context),
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
