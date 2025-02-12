@@ -22,10 +22,7 @@ class LoadPositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.loadPosition)),
-      body: const _Body(),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.loadPosition), body: const _Body());
   }
 }
 

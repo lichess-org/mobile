@@ -40,7 +40,7 @@ class OpeningThemeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
+      appBarTitle: Text(context.l10n.puzzlePuzzlesByOpenings),
       body: const _Body(),
     );
   }

@@ -57,7 +57,8 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: widget.title, centerTitle: true),
+      appBarTitle: widget.title,
+      appBarCenterTitle: true,
       body: _Body(me: widget.me, id: widget.id),
     );
   }

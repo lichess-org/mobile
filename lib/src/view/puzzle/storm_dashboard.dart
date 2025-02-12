@@ -26,15 +26,13 @@ class StormDashboardModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       body: _Body(user: user),
-      appBar: PlatformAppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(LichessIcons.storm, size: 20),
-            const SizedBox(width: 8.0),
-            Text(context.l10n.stormHighscores),
-          ],
-        ),
+      appBarTitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(LichessIcons.storm, size: 20),
+          const SizedBox(width: 8.0),
+          Text(context.l10n.stormHighscores),
+        ],
       ),
     );
   }

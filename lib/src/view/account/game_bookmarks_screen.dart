@@ -28,7 +28,7 @@ class GameBookmarksScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBar: PlatformAppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
+      appBarTitle: Text(context.l10n.nbBookmarks(nbBookmarks)),
       body: const _Body(),
     );
   }

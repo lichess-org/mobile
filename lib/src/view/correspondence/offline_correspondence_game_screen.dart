@@ -64,7 +64,7 @@ class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceG
   Widget build(BuildContext context) {
     final (lastModified, game) = currentGame;
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: _Title(game)),
+      appBarTitle: _Title(game),
       body: _Body(game: game, lastModified: lastModified, onGameChanged: goToNextGame),
     );
   }

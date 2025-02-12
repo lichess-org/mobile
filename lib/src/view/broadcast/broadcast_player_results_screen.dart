@@ -51,7 +51,7 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: BroadcastPlayerWidget(title: playerTitle, name: playerName)),
+      appBarTitle: BroadcastPlayerWidget(title: playerTitle, name: playerName),
       body: _Body(tournamentId, playerId),
     );
   }

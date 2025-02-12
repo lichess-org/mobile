@@ -51,10 +51,8 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   Widget build(BuildContext context) {
     return WakelockWidget(
       child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          actions: [_StormDashboardButton(), const ToggleSoundButton()],
-          title: const Text('Puzzle Storm'),
-        ),
+        appBarActions: [_StormDashboardButton(), const ToggleSoundButton()],
+        appBarTitle: const Text('Puzzle Storm'),
         body: _Load(_boardKey),
       ),
     );
@@ -579,13 +577,11 @@ class _RunStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       body: _RunStatsPopup(stats),
-      appBar: PlatformAppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const SizedBox.shrink(),
+      appBarLeading: IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: () => Navigator.of(context).pop(),
       ),
+      appBarTitle: const SizedBox.shrink(),
     );
   }
 }

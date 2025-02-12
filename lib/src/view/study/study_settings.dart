@@ -39,7 +39,7 @@ class StudySettingsScreen extends ConsumerWidget {
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      appBarTitle: Text(context.l10n.settingsSettings),
       body: ListView(
         children: [
           if (isComputerAnalysisAllowed)

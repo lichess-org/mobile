@@ -53,13 +53,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       orElse: () => null,
     );
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: UserFullNameWidget(
-          user: updatedLightUser ?? widget.user,
-          shouldShowOnline: updatedLightUser != null,
-        ),
-        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+      appBarTitle: UserFullNameWidget(
+        user: updatedLightUser ?? widget.user,
+        shouldShowOnline: updatedLightUser != null,
       ),
+      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       body: asyncUser.when(
         data: (data) => _UserProfileListView(data.$1, isLoading, setIsLoading),
         loading: () => const Center(child: CircularProgressIndicator()),

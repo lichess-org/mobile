@@ -68,7 +68,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
         return PlatformScaffold(
-          appBar: const PlatformAppBar(title: Text('')),
+          appBarTitle: const Text(''),
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
@@ -88,18 +88,16 @@ class _StudyScreenLoader extends ConsumerWidget {
         );
       case _:
         return PlatformScaffold(
-          appBar: PlatformAppBar(
-            title: Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SizedBox(
-                  height: 24.0,
-                  width: 200.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+          appBarTitle: Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
@@ -179,18 +177,16 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: AutoSizeText(
-          widget.studyState.currentChapterTitle,
-          maxLines: 2,
-          minFontSize: 14,
-          overflow: TextOverflow.ellipsis,
-        ),
-        actions: [
-          if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          _StudyMenu(id: widget.id),
-        ],
+      appBarTitle: AutoSizeText(
+        widget.studyState.currentChapterTitle,
+        maxLines: 2,
+        minFontSize: 14,
+        overflow: TextOverflow.ellipsis,
       ),
+      appBarActions: [
+        if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+        _StudyMenu(id: widget.id),
+      ],
       body: _Body(id: widget.id, tabController: _tabController, tabs: tabs),
     );
   }

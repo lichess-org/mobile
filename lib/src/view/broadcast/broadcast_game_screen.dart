@@ -107,25 +107,23 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             };
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [
-          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          AppBarIconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                BroadcastGameSettingsScreen.buildRoute(
-                  context,
-                  roundId: widget.roundId,
-                  gameId: widget.gameId,
-                ),
-              );
-            },
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
+      appBarTitle: title,
+      appBarActions: [
+        AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+        AppBarIconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              BroadcastGameSettingsScreen.buildRoute(
+                context,
+                roundId: widget.roundId,
+                gameId: widget.gameId,
+              ),
+            );
+          },
+          semanticsLabel: context.l10n.settingsSettings,
+          icon: const Icon(Icons.settings),
+        ),
+      ],
       body: _Body(
         widget.tournamentId,
         widget.roundId,

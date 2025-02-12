@@ -34,7 +34,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
     switch (asyncState) {
       case AsyncData(:final value):
         return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+          appBarTitle: Text(context.l10n.settingsSettings),
           body: ListView(
             children: [
               if (value.isComputerAnalysisAllowed)

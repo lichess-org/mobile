@@ -62,10 +62,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text('${widget.channel.label} TV'),
-          actions: const [ToggleSoundButton()],
-        ),
+        appBarTitle: Text('${widget.channel.label} TV'),
+        appBarActions: const [ToggleSoundButton()],
         body: _Body(
           widget.channel,
           widget.initialGame,

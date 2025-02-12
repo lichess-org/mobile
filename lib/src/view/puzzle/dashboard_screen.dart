@@ -35,7 +35,8 @@ class PuzzleDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const PlatformScaffold(
       body: _Body(),
-      appBar: PlatformAppBar(title: SizedBox.shrink(), actions: [DaysSelector()]),
+      appBarTitle: SizedBox.shrink(),
+      appBarActions: [DaysSelector()],
     );
   }
 }

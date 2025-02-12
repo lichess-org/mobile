@@ -84,8 +84,25 @@ class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuIte
   }
 }
 
+class GameShareLinkMenuItemButton extends StatelessWidget {
+  const GameShareLinkMenuItemButton({required this.gameId, super.key});
+
+  final GameId gameId;
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.link_outlined),
+      onPressed: () {
+        launchShareDialog(context, uri: lichessUri('/$gameId'));
+      },
+      child: Text(context.l10n.mobileShareGameURL),
+    );
+  }
+}
+
 /// Makes a list of [MenuItemButton] for game sharing options.
-List<Widget> makeGameShareMenuItems(
+List<Widget> makeFinishedGameShareMenuItemButtons(
   BuildContext context,
   WidgetRef ref, {
   required BaseGame game,
@@ -93,92 +110,85 @@ List<Widget> makeGameShareMenuItems(
   required Side orientation,
   Move? lastMove,
 }) {
-  return [
-    MenuItemButton(
-      leadingIcon: const Icon(Icons.link_outlined),
-      onPressed: () {
-        launchShareDialog(context, uri: lichessUri('/${game.id}'));
-      },
-      child: Text(context.l10n.mobileShareGameURL),
-    ),
-    if (game.finished) ...[
-      MenuItemButton(
-        leadingIcon: const Icon(Icons.gif_outlined),
-        onPressed: () async {
-          try {
-            final gif = await ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
-            if (context.mounted) {
-              launchShareDialog(
-                context,
-                files: [gif],
-                subject:
-                    '${game.meta.perf.title} • ${context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context))}',
-              );
-            }
-          } catch (e) {
-            debugPrint(e.toString());
-            if (context.mounted) {
-              showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
-            }
-          }
-        },
-        child: Text(context.l10n.gameAsGIF),
-      ),
-      if (lastMove != null)
+  return game.finished
+      ? [
         MenuItemButton(
-          leadingIcon: const Icon(Icons.image_outlined),
+          leadingIcon: const Icon(Icons.gif_outlined),
           onPressed: () async {
             try {
-              final image = await ref
-                  .read(gameShareServiceProvider)
-                  .screenshotPosition(orientation, currentGamePosition.fen, lastMove);
+              final gif = await ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
               if (context.mounted) {
                 launchShareDialog(
                   context,
-                  files: [image],
-                  subject: context.l10n.puzzleFromGameLink(lichessUri('/${game.id}').toString()),
+                  files: [gif],
+                  subject:
+                      '${game.meta.perf.title} • ${context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context))}',
                 );
               }
             } catch (e) {
+              debugPrint(e.toString());
               if (context.mounted) {
                 showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
               }
             }
           },
-          child: Text(context.l10n.screenshotCurrentPosition),
+          child: Text(context.l10n.gameAsGIF),
         ),
-      MenuItemButton(
-        leadingIcon: const Icon(Icons.text_snippet_outlined),
-        onPressed: () async {
-          try {
-            final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
-            if (context.mounted) {
-              launchShareDialog(context, text: pgn);
+        if (lastMove != null)
+          MenuItemButton(
+            leadingIcon: const Icon(Icons.image_outlined),
+            onPressed: () async {
+              try {
+                final image = await ref
+                    .read(gameShareServiceProvider)
+                    .screenshotPosition(orientation, currentGamePosition.fen, lastMove);
+                if (context.mounted) {
+                  launchShareDialog(
+                    context,
+                    files: [image],
+                    subject: context.l10n.puzzleFromGameLink(lichessUri('/${game.id}').toString()),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+                }
+              }
+            },
+            child: Text(context.l10n.screenshotCurrentPosition),
+          ),
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.text_snippet_outlined),
+          onPressed: () async {
+            try {
+              final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+              if (context.mounted) {
+                launchShareDialog(context, text: pgn);
+              }
+            } catch (e) {
+              if (context.mounted) {
+                showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+              }
             }
-          } catch (e) {
-            if (context.mounted) {
-              showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+          },
+          child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+        ),
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.description_outlined),
+          onPressed: () async {
+            try {
+              final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
+              if (context.mounted) {
+                launchShareDialog(context, text: pgn);
+              }
+            } catch (e) {
+              if (context.mounted) {
+                showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+              }
             }
-          }
-        },
-        child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-      ),
-      MenuItemButton(
-        leadingIcon: const Icon(Icons.description_outlined),
-        onPressed: () async {
-          try {
-            final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
-            if (context.mounted) {
-              launchShareDialog(context, text: pgn);
-            }
-          } catch (e) {
-            if (context.mounted) {
-              showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
-            }
-          }
-        },
-        child: Text('PGN: ${context.l10n.downloadRaw}'),
-      ),
-    ],
-  ];
+          },
+          child: Text('PGN: ${context.l10n.downloadRaw}'),
+        ),
+      ]
+      : [];
 }

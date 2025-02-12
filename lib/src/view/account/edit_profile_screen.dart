@@ -60,7 +60,7 @@ class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
+      appBarTitle: Text(context.l10n.editProfile),
       body: PopScope(
         canPop: false,
         onPopInvokedWithResult: (bool didPop, _) async {

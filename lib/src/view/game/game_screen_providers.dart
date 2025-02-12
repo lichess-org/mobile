@@ -75,6 +75,11 @@ Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
 }
 
 @riverpod
+Future<bool> isGamePlayable(Ref ref, GameFullId gameId) {
+  return ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.playable));
+}
+
+@riverpod
 Future<bool> shouldPreventGoingBack(Ref ref, GameFullId gameId) {
   return ref.watch(
     gameControllerProvider(

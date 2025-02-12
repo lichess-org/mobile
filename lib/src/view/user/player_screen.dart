@@ -38,10 +38,7 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(title: Text(context.l10n.players)),
-        body: _Body(),
-      ),
+      child: PlatformScaffold(appBarTitle: Text(context.l10n.players), body: _Body()),
     );
   }
 }
