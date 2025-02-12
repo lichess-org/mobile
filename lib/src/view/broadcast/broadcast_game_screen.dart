@@ -173,12 +173,14 @@ class _Body extends ConsumerWidget {
               (context, boardSize, borderRadius) =>
                   _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
           boardHeader: _PlayerWidget(
+            key: const ValueKey('top'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
             widgetPosition: _PlayerWidgetPosition.top,
           ),
           boardFooter: _PlayerWidget(
+            key: const ValueKey('bottom'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
@@ -381,6 +383,7 @@ enum _PlayerWidgetPosition { bottom, top }
 
 class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
+    required super.key,
     required this.tournamentId,
     required this.roundId,
     required this.gameId,
