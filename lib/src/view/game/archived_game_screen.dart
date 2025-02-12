@@ -235,7 +235,6 @@ class _BodyState extends ConsumerState<_Body> {
                     onToggleBookmark: _toggleBookmark,
                     gameListContext: widget.gameListContext,
                   ),
-                  GameShareLinkMenuItemButton(gameId: widget.gameData!.id),
                   ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
                     AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
                       context,

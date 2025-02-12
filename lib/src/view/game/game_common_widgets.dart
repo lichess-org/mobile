@@ -84,23 +84,6 @@ class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuIte
   }
 }
 
-class GameShareLinkMenuItemButton extends StatelessWidget {
-  const GameShareLinkMenuItemButton({required this.gameId, super.key});
-
-  final GameId gameId;
-
-  @override
-  Widget build(BuildContext context) {
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.link_outlined),
-      onPressed: () {
-        launchShareDialog(context, uri: lichessUri('/$gameId'));
-      },
-      child: Text(context.l10n.mobileShareGameURL),
-    );
-  }
-}
-
 /// Makes a list of [MenuItemButton] for game sharing options.
 List<Widget> makeFinishedGameShareMenuItemButtons(
   BuildContext context,
@@ -112,6 +95,13 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
 }) {
   return game.finished
       ? [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.link_outlined),
+          onPressed: () {
+            launchShareDialog(context, uri: lichessUri('/${game.id}'));
+          },
+          child: Text(context.l10n.mobileShareGameURL),
+        ),
         MenuItemButton(
           leadingIcon: const Icon(Icons.gif_outlined),
           onPressed: () async {

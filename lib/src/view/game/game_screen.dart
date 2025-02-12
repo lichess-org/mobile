@@ -327,7 +327,6 @@ class _GameMenu extends ConsumerWidget {
               () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
           gameListContext: gameListContext,
         ),
-        GameShareLinkMenuItemButton(gameId: gameId.gameId),
         if (isGamePlayableAsync.valueOrNull == false)
           ...(switch (ref.watch(gameControllerProvider(gameId))) {
             AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
