@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -18,11 +19,27 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 enum BroadcastRoundTab { overview, boards, players }
+
+enum _BroadcastGameFilter {
+  all,
+  ongoing;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case all:
+        return l10n.mobileAllGames;
+      case ongoing:
+        // TODO: translate
+        return 'Ongoing games';
+    }
+  }
+}
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
@@ -52,9 +69,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
-  bool showOnlyOngoingGames = false;
 
   bool roundLoaded = false;
+
+  _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
   @override
   void initState() {
@@ -95,11 +113,38 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
-  void togglePlaying() {
-    setState(() {
-      showOnlyOngoingGames = !showOnlyOngoingGames;
-    });
-  }
+  Widget _filterButtonBuilder(BuildContext context) => AppBarIconButton(
+    icon: const Icon(Icons.filter_list),
+    semanticsLabel: context.l10n.filterGames,
+    onPressed:
+        () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+          builder:
+              (_) => StatefulBuilder(
+                builder: (context, setLocalState) {
+                  return BottomSheetScrollableContainer(
+                    padding: const EdgeInsets.all(16.0),
+                    children: [
+                      const SizedBox(height: 16.0),
+                      Filter<_BroadcastGameFilter>(
+                        filterType: FilterType.singleChoice,
+                        choices: _BroadcastGameFilter.values,
+                        choiceSelected: (choice) => filter == choice,
+                        choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                        onSelected: (value, selected) {
+                          setLocalState(() => filter = value);
+                          setState(() => filter = value);
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  );
+                },
+              ),
+        ),
+  );
 
   Widget _iosBuilder(
     BuildContext context,
@@ -127,11 +172,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-
-        trailing: _BroadcastSettingsButton(
-          showOnlyOngoingGames: showOnlyOngoingGames,
-          togglePlaying: togglePlaying,
-        ),
+        trailing: Row(children: [const _BroadcastSettingsButton(), _filterButtonBuilder(context)]),
       ),
       child: Column(
         children: [
@@ -152,7 +193,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       tournamentId: _selectedTournamentId,
                       roundId: _selectedRoundId ?? value.defaultRoundId,
                       tournamentSlug: widget.broadcast.tour.slug,
-                      showOnlyOngoingGames: showOnlyOngoingGames,
+                      showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
                     ),
                     _ => const SliverFillRemaining(child: SizedBox.shrink()),
                   },
@@ -200,12 +241,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Tab(text: context.l10n.players),
           ],
         ),
-        actions: [
-          _BroadcastSettingsButton(
-            showOnlyOngoingGames: showOnlyOngoingGames,
-            togglePlaying: togglePlaying,
-          ),
-        ],
+        actions: [const _BroadcastSettingsButton(), _filterButtonBuilder(context)],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
@@ -223,7 +259,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   tournamentId: _selectedTournamentId,
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentSlug: widget.broadcast.tour.slug,
-                  showOnlyOngoingGames: showOnlyOngoingGames,
+                  showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
                 ),
                 _ => const SliverFillRemaining(child: SizedBox.shrink()),
               },
@@ -524,10 +560,7 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsButton extends StatelessWidget {
-  final bool showOnlyOngoingGames;
-  final VoidCallback togglePlaying;
-
-  const _BroadcastSettingsButton({required this.showOnlyOngoingGames, required this.togglePlaying});
+  const _BroadcastSettingsButton();
 
   @override
   Widget build(BuildContext context) => AppBarIconButton(
@@ -538,41 +571,17 @@ class _BroadcastSettingsButton extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder:
-              (_) => _BroadcastSettingsBottomSheet(
-                showOnlyOngoingGames: showOnlyOngoingGames,
-                togglePlaying: togglePlaying,
-              ),
+          builder: (_) => const _BroadcastSettingsBottomSheet(),
         ),
     semanticsLabel: context.l10n.settingsSettings,
   );
 }
 
-class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  final bool showOnlyOngoingGames;
-  final VoidCallback togglePlaying;
-
-  const _BroadcastSettingsBottomSheet({
-    required this.showOnlyOngoingGames,
-    required this.togglePlaying,
-  });
+class _BroadcastSettingsBottomSheet extends ConsumerWidget {
+  const _BroadcastSettingsBottomSheet();
 
   @override
-  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
-      _BroadcastSettingsBottomSheetState();
-}
-
-class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
-  late bool showOnlyOngoingGames;
-
-  @override
-  void initState() {
-    super.initState();
-    showOnlyOngoingGames = widget.showOnlyOngoingGames;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
     return DraggableScrollableSheet(
@@ -587,16 +596,6 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                 value: broadcastPreferences.showEvaluationBar,
                 onChanged: (value) {
                   ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-                },
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.studyPlaying),
-                value: showOnlyOngoingGames,
-                onChanged: (value) {
-                  setState(() {
-                    showOnlyOngoingGames = !showOnlyOngoingGames;
-                  });
-                  widget.togglePlaying();
                 },
               ),
             ],
