@@ -96,6 +96,15 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       Builder(
         builder: (context) {
           return MenuAnchor(
+            crossAxisUnconstrained: false,
+            style: MenuStyle(
+              maximumSize: WidgetStatePropertyAll(
+                Size(
+                  MediaQuery.sizeOf(context).width * 0.6,
+                  MediaQuery.sizeOf(context).height * 0.8,
+                ),
+              ),
+            ),
             builder:
                 (context, controller, _) => AppBarIconButton(
                   icon: const Icon(Icons.more_horiz),
@@ -120,16 +129,6 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
                 },
               ),
               const ToggleSoundMenuItemButton(),
-              MenuItemButton(
-                leadingIcon: const PlatformShareIcon(),
-                semanticsLabel: context.l10n.mobileShareGamePGN,
-                child: Text(context.l10n.mobileShareGamePGN),
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisShareScreen.buildRoute(context, options: widget.options));
-                },
-              ),
               if (asyncState.valueOrNull?.position != null)
                 MenuItemButton(
                   leadingIcon: const PlatformShareIcon(),
@@ -139,6 +138,16 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
                     launchShareDialog(context, text: asyncState.valueOrNull!.position.fen);
                   },
                 ),
+              MenuItemButton(
+                leadingIcon: const Icon(Icons.description_outlined),
+                semanticsLabel: context.l10n.mobileShareGamePGN,
+                child: Text(context.l10n.mobileShareGamePGN),
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(AnalysisShareScreen.buildRoute(context, options: widget.options));
+                },
+              ),
             ],
           );
         },

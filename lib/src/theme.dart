@@ -14,9 +14,10 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
   if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
-    return _makeDefaultTheme(generalPrefs, boardPrefs, isIOS);
+    return _makeDefaultTheme(context, generalPrefs, boardPrefs, isIOS);
   } else {
     return _makeBackgroundImageTheme(
+      context,
       baseTheme: generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundTheme!.baseTheme,
       seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundTheme!.color,
       isIOS: isIOS,
@@ -25,6 +26,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
 }
 
 ({ThemeData light, ThemeData dark}) _makeDefaultTheme(
+  BuildContext context,
   GeneralPrefs generalPrefs,
   BoardPrefs boardPrefs,
   bool isIOS,
@@ -80,7 +82,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
-      menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
+      menuTheme: _makeMenuThemeData(context),
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
     dark: themeDark.copyWith(
@@ -95,13 +97,14 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
+      menuTheme: _makeMenuThemeData(context),
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
   );
 }
 
-({ThemeData light, ThemeData dark}) _makeBackgroundImageTheme({
+({ThemeData light, ThemeData dark}) _makeBackgroundImageTheme(
+  BuildContext context, {
   required ThemeData baseTheme,
   required Color seedColor,
   required bool isIOS,
@@ -146,7 +149,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
-    menuTheme: isIOS ? Styles.cupertinoAnchorMenuTheme : null,
+    menuTheme: _makeMenuThemeData(context),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -154,6 +157,26 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
   );
 
   return (light: theme, dark: theme);
+}
+
+MenuThemeData _makeMenuThemeData(BuildContext context) {
+  final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+  return MenuThemeData(
+    style: MenuStyle(
+      // maximumSize: WidgetStatePropertyAll(
+      //   Size(MediaQuery.sizeOf(context).width / 2, MediaQuery.sizeOf(context).height * 0.8),
+      // ),
+      backgroundColor:
+          isIOS ? WidgetStatePropertyAll(ColorScheme.of(context).surfaceContainerLow) : null,
+      elevation: isIOS ? const WidgetStatePropertyAll(0) : null,
+      shape:
+          isIOS
+              ? const WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+              )
+              : null,
+    ),
+  );
 }
 
 /// Makes a Cupertino text theme based on the given [colors].
