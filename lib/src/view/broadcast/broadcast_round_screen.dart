@@ -172,7 +172,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        trailing: Row(children: [const _BroadcastSettingsButton(), _filterButtonBuilder(context)]),
+        trailing: Row(children: [_filterButtonBuilder(context), const _BroadcastSettingsButton()]),
       ),
       child: Column(
         children: [
@@ -241,7 +241,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Tab(text: context.l10n.players),
           ],
         ),
-        actions: [const _BroadcastSettingsButton(), _filterButtonBuilder(context)],
+        actions: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
