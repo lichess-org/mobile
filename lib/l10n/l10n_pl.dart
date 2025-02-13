@@ -426,12 +426,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastUpcoming => 'Nadchodzące';
 
   @override
-  String get broadcastCompleted => 'Zakończone';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess wykrywa ukończenie rundy w oparciu o śledzone partie. Użyj tego przełącznika, jeśli nie ma takich partii.';
-
-  @override
   String get broadcastRoundName => 'Nazwa rundy';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Zobacz wszystkie transmisje w danym miesiącu';
+
+  @override
+  String get broadcastBackToLiveMove => 'Powrót do pozycji na żywo';
+
+  @override
+  String get broadcastSinceHideResults => 'Ponieważ zdecydowałeś się ukryć wyniki, wszystkie podglądy szachownic są puste, aby nie uprzedzać tego, co się stanie.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1519,6 +1519,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Wieża stoi obok wrogiego króla i broniona jest przez hetmana, który równocześnie blokuje wszystkie pola ucieczki tego króla. Wieża i hetman łapią króla przeciwnika w klatce 3 na 3 (tzw. \"kill box\").';
 
   @override
+  String get puzzleThemeVukovicMate => 'Mat Vukovic\'a';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Para wieża i skoczek matują króla przeciwnika. Wieża wspierana przez trzecią bierkę daje mata, podczas gdy skoczek blokuje królowi przeciwnika wszystkie pola ucieczki.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Końcówka skoczkowa';
 
   @override
@@ -1734,16 +1740,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Twoim kontem zarządza nauczyciel, nie możesz go zamknąć.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zamknięcie konta jest nieodwracalne. Czy chcesz kontynuować?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Nie będzie można otworzyć nowego konta z tą samą nazwą, nawet jeśli wielkość liter będzie inna.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Zmieniłem zdanie, nie chcę zamykać swojego konta';
+  String get settingsCancelKeepAccount => 'Anuluj i zachowaj moje konto';
 
   @override
-  String get settingsCloseAccountExplanation => 'Jesteś pewien, że chcesz zamknąć swoje konto? Zamknięcie konta jest decyzją nieodwracalną. Już NIGDY nie będziesz mógł się na nie zalogować.';
+  String get settingsCloseAccountAreYouSure => 'Czy na pewno chcesz zamknąć swoje konto?';
 
   @override
   String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
@@ -3733,6 +3736,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get followAndChallengeFriends => 'Obserwowanie i gra ze znajomymi';
 
   @override
+  String get noChallenges => 'Brak wyzwań.';
+
+  @override
   String get gameAnalysis => 'Analiza partii';
 
   @override
@@ -4328,13 +4334,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reopenYourAccount => 'Otwórz ponownie swoje konto';
 
   @override
-  String get closedAccountChangedMind => 'Jeśli zamknąłeś/aś swoje konto, ale zmieniłeś/aś zdanie, otrzymasz jedną szansę na jego odzyskanie.';
-
-  @override
-  String get onlyWorksOnce => 'To zadziała tylko raz.';
-
-  @override
-  String get cantDoThisTwice => 'Jeśli zamkniesz swoje konto po raz drugi, nie będzie możliwości jego odzyskania.';
+  String get reopenYourAccountDescription => 'Jeśli zamkniesz swoje konto, ale kiedyś zmienisz zdanie, będziesz miał szansę je odzyskać.';
 
   @override
   String get emailAssociatedToaccount => 'Adres e-mail powiązany z kontem';
@@ -4439,10 +4439,10 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count błędów',
-      many: '$count błędów',
-      few: '$count błędy',
-      one: '$count błąd',
+      other: '$count Błędów',
+      many: '$count Błędów',
+      few: '$count Błędy',
+      one: '$count Błąd',
     );
     return '$_temp0';
   }

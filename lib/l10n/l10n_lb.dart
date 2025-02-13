@@ -390,12 +390,6 @@ class AppLocalizationsLb extends AppLocalizations {
   String get broadcastUpcoming => 'Demnächst';
 
   @override
-  String get broadcastCompleted => 'Eriwwer';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Ronnennumm';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsLb extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Sprénger Endspill';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsLb extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Dësen Konto gëtt verwalt an kann net zougemaach ginn.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zoumaachen ass definitiv. Et gëtt keen zeréck. Bass du sécher?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Du wäers keen Konto mam selwechten Numm können opmaachen, och mat anerer Grouss-/Klengschreiwung.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ech hun meng Meenung geännert, maacht mäin Konto net zou';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Bass du secher dass du dësen Konto zoumaachen wëlls? En Konto zouzemaachen ass eng permanent Decisioun. Du wäers dech NIE MEI aloggen kënnen.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Dësen Konto ass zou.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsLb extends AppLocalizations {
   String get followAndChallengeFriends => 'Kolleege followen an erausfuerderen';
 
   @override
+  String get noChallenges => 'Keng Erausfuerderungen.';
+
+  @override
   String get gameAnalysis => 'Analys vun der Partie';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get reopenYourAccount => 'Konto nei opmaachen';
 
   @override
-  String get closedAccountChangedMind => 'Wanns du dein Konto zougemaach has, mee säit deem deng Meenung geännert hues, kriss du eng Chance däin Konto zeréckzekréien.';
-
-  @override
-  String get onlyWorksOnce => 'Dat hei klappt just eemol.';
-
-  @override
-  String get cantDoThisTwice => 'Wann du däin Konto eng zweete Kéier zou mëss, kann een en net méi zeréckkréien.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Email Adress associéiert mam Konto';

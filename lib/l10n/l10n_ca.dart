@@ -390,12 +390,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastUpcoming => 'Properes';
 
   @override
-  String get broadcastCompleted => 'Acabada';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detecta el final de la ronda en funció de les partides de l\'origen. Utilitzeu aquesta opció si no hi ha origen.';
-
-  @override
   String get broadcastRoundName => 'Nom de ronda';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Veure totes les retransmissions per més';
+
+  @override
+  String get broadcastBackToLiveMove => 'Torna al moviment en directe';
+
+  @override
+  String get broadcastSinceHideResults => 'Ja que heu escollit amagar els resultats, la previsualització de tots els taulers està buida per tal d\'evitar espòilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Mat de Vukovic';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Una torre i un cavall col·laboren per fer mat al rei. La torre dona el mat mentre està defensada per una altra peça. El cavall s\'utilitza per bloquejar les caselles de sortida del rei.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de cavalls';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'El vostre compte és gestionat i no es pot tancar.';
 
   @override
-  String get settingsClosingIsDefinitive => 'El tancament és definitiu. No es pot tornar enrere. N\'esteu segurs?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'No està permès crear un nou compte amb el mateix nom, ni tan sols si només canvien les majúscules o minúscules.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'He canviat d\'opinió, no tanqueu el meu compte';
+  String get settingsCancelKeepAccount => 'Cancel·la i manté el meu compte';
 
   @override
-  String get settingsCloseAccountExplanation => 'Esteu segurs que voleu eliminar el compte? Eliminar-lo és una decisió permanent. No us podreu tornar a connectar MAI MÉS.';
+  String get settingsCloseAccountAreYouSure => 'Estàs segur que vols tancar el teu compte?';
 
   @override
   String get settingsThisAccountIsClosed => 'S\'ha tancat aquest compte.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get followAndChallengeFriends => 'Seguiu i desafieu amics';
 
   @override
+  String get noChallenges => 'Sense desafiaments.';
+
+  @override
   String get gameAnalysis => 'Anàlisi de la partida';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get reopenYourAccount => 'Torna a obrir el teu compte';
 
   @override
-  String get closedAccountChangedMind => 'Si has tancat el teu compte, però des de llavors has cambiat d\'opinió, tens una oportunitat per recuperar el teu compte.';
-
-  @override
-  String get onlyWorksOnce => 'Això només funcionarà un cop.';
-
-  @override
-  String get cantDoThisTwice => 'Si tanques el teu compte per segon cop, no hi haurà manera de recuperar-ho.';
+  String get reopenYourAccountDescription => 'Si has tancat el teu compte, però des de llavors has canviat d\'opinió, tens l\'oportunitat de recuperar el teu compte.';
 
   @override
   String get emailAssociatedToaccount => 'Adreça de correu electrònic associat al teu compte';
@@ -5152,7 +5152,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyPlaying => 'Jugant';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Resultats';
 
   @override
   String get studyShowEvalBar => 'Barres d\'avaluació';

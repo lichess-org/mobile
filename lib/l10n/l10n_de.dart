@@ -390,12 +390,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastUpcoming => 'Demnächst';
 
   @override
-  String get broadcastCompleted => 'Beendet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess erkennt Rundenabschlüsse basierend auf den Quellspielen. Verwende diesen Schalter, wenn keine Quelle vorhanden ist.';
-
-  @override
   String get broadcastRoundName => 'Rundenname';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Alle Übertragungen nach Monat anzeigen';
+
+  @override
+  String get broadcastBackToLiveMove => 'Zurück zum aktuellen Zug';
+
+  @override
+  String get broadcastSinceHideResults => 'Da du dich entschieden hast, die Ergebnisse nicht anzuzeigen, sind alle Vorschau-Bretter leer, um Spoiler zu vermeiden.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic-Matt';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Ein Turm und ein Springer arbeiten zusammen, den König matt zu setzen. Der Turm setzt matt zusammen mit einer dritten Figur, und der Springer nimmt dem König die Fluchtfelder.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springerendspiel';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Dein Konto wird verwaltet und kann nicht geschlossen werden.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Die Kontoschließung ist endgültig. Es gibt kein Zurück. Bist du sicher?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Du darfst kein neues Benutzerkonto mit dem gleichen Namen eröffnen, selbst wenn die Groß-/Kleinschreibung unterschiedlich ist.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ich habe meine Meinung geändert, mein Benutzerkonto doch nicht schließen';
+  String get settingsCancelKeepAccount => 'Abbrechen und meinen Account behalten';
 
   @override
-  String get settingsCloseAccountExplanation => 'Bist du dir sicher, dass du dein Benutzerkonto schließen möchtest? Das ist eine endgültige Entscheidung. Du wirst NIE mehr in der Lage sein dich JEMALS wieder einzuloggen.';
+  String get settingsCloseAccountAreYouSure => 'Bist du sicher, dass du deinen Account schließen möchtest?';
 
   @override
   String get settingsThisAccountIsClosed => 'Dieses Benutzerkonto ist geschlossen.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get followAndChallengeFriends => 'Folge deinen Freunden und fordere sie heraus';
 
   @override
+  String get noChallenges => 'Keine Herausforderungen.';
+
+  @override
   String get gameAnalysis => 'Spielanalyse';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reopenYourAccount => 'Wiedereröffnung deines Kontos';
 
   @override
-  String get closedAccountChangedMind => 'Wenn du dein Konto geschlossen, aber danach deine Meinung geändert hast, hast du eine Chance, dein Konto zurückzuerhalten.';
-
-  @override
-  String get onlyWorksOnce => 'Das funktioniert nur einmal.';
-
-  @override
-  String get cantDoThisTwice => 'Wenn du dein Konto ein zweites Mal schließt, wird es keine Möglichkeit geben, es wiederherzustellen.';
+  String get reopenYourAccountDescription => 'Wenn du deinen Account geschlossen hast, dann aber deine Meinung geändert hast, hast du die Chance, deinen Account wieder zu erhalten.';
 
   @override
   String get emailAssociatedToaccount => 'E-Mail-Adresse deines Kontos';

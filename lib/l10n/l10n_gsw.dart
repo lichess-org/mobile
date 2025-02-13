@@ -390,12 +390,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastUpcoming => 'Demnächscht';
 
   @override
-  String get broadcastCompleted => 'Beändet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess erkännt de Rundeschluss oder au nöd! De Schalter setz das uf \"manuell\".';
-
-  @override
   String get broadcastRoundName => 'Runde Name';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Zeig alli Überträgige im Monet';
+
+  @override
+  String get broadcastBackToLiveMove => 'Zrugg zum \"Live-Zieh\"';
+
+  @override
+  String get broadcastSinceHideResults => 'Will du entschide häsch, dini Ergäbnis z\'verberge, sind - zum Spoiler verhindere - all Vorschau-Brätter leer.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vuković-Matt';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'En Turm und es Rössli schpanned zämme, zum de König matt setze: De Turm setzt de König mit Hilf vunere dritte Figur matt und s\'Rössli blockiert em König d\'Fluchtfälder.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Schpringer Ändschpil';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Dis Konto wird verwaltet, es chann nöd geschlosse werde.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Die Schlüssig isch ändgültig. Es git keis Z\'rugg! Bisch du sicher?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Es isch nöd erlaubt es neus Konto mit em gliche Name z\'eröffne, au wänn d\'Gross- und d\'Chlischribig andersch isch.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ich ha mini Meinig gändert, schlüssed mis Benutzerkonto nöd';
+  String get settingsCancelKeepAccount => 'Löschig abbräche und mis Konto b\'halte';
 
   @override
-  String get settingsCloseAccountExplanation => 'Bisch du sicher, dass du dis Benutzerkonto schlüsse wottsch? Dini Entscheidig zum Schlüsse isch ändgültigi. Du chasch nachher NIE MEH ilogge.';
+  String get settingsCloseAccountAreYouSure => 'Bisch sicher, dass du dis Konto schlüsse wottsch?';
 
   @override
   String get settingsThisAccountIsClosed => 'Das Benutzerkonto isch g\'schlosse.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get followAndChallengeFriends => 'Folg Fründe und forder sie zum Schpil';
 
   @override
+  String get noChallenges => 'Kei Useforderige.';
+
+  @override
   String get gameAnalysis => 'Schpil-Analyse';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reopenYourAccount => 'Konto wider eröffne';
 
   @override
-  String get closedAccountChangedMind => 'Wänn du s\'Konto gschlosse häsch und das bereusch, dänn gits no 1 Chance dis Konto wider zrugg z\'hole.';
-
-  @override
-  String get onlyWorksOnce => 'Das funktioniert aber nur eimal.';
-
-  @override
-  String get cantDoThisTwice => 'Wänn du dis Konto es 2. Mal schlüssisch, gits kei Möglichkeit meh das rückgängig z\'mache.';
+  String get reopenYourAccountDescription => 'Häsch dis Konto gschlosse und bereusch es, dänn chasch es jetzt wider aktiviere.';
 
   @override
   String get emailAssociatedToaccount => 'Mit dim Konto verbundeni E-Mail-Adrässe';

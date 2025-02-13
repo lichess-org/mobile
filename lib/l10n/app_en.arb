@@ -250,8 +250,6 @@
   "broadcastAddRound": "Add a round",
   "broadcastOngoing": "Ongoing",
   "broadcastUpcoming": "Upcoming",
-  "broadcastCompleted": "Completed",
-  "broadcastCompletedHelp": "Lichess detects round completion, but can get it wrong. Use this to set it manually.",
   "broadcastRoundName": "Round name",
   "broadcastRoundNumber": "Round number",
   "broadcastTournamentName": "Tournament name",
@@ -366,6 +364,8 @@
   "broadcastOptionalDetails": "Optional details",
   "broadcastPastBroadcasts": "Past broadcasts",
   "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
+  "broadcastBackToLiveMove": "Back to live move",
+  "broadcastSinceHideResults": "Since you chose to hide the results, all the preview boards are empty to avoid spoilers.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -838,6 +838,8 @@
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
   "puzzleThemeKillBoxMate": "Kill box mate",
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
+  "puzzleThemeVukovicMate": "Vukovic mate",
+  "puzzleThemeVukovicMateDescription": "A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king's escape squares.",
   "puzzleThemeKnightEndgame": "Knight endgame",
   "puzzleThemeKnightEndgameDescription": "An endgame with only knights and pawns.",
   "puzzleThemeLong": "Long puzzle",
@@ -916,10 +918,9 @@
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",
   "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",
-  "settingsClosingIsDefinitive": "Closing is definitive. There is no going back. Are you sure?",
-  "settingsCantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
-  "settingsChangedMindDoNotCloseAccount": "I changed my mind, don't close my account",
-  "settingsCloseAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
+  "settingsCantOpenSimilarAccount": "The username will NOT be available for registration again.",
+  "settingsCancelKeepAccount": "Cancel and keep my account",
+  "settingsCloseAccountAreYouSure": "Are you sure you want to close your account?",
   "settingsThisAccountIsClosed": "This account is closed.",
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
@@ -2050,6 +2051,7 @@
   "onlineAndOfflinePlay": "Online and offline play",
   "viewTheSolution": "View the solution",
   "followAndChallengeFriends": "Follow and challenge friends",
+  "noChallenges": "No challenges.",
   "gameAnalysis": "Game analysis",
   "xHostsY": "{param1} hosts {param2}",
   "@xHostsY": {
@@ -2453,9 +2455,7 @@
   "focusChat": "Focus chat",
   "showHelpDialog": "Show this help dialog",
   "reopenYourAccount": "Reopen your account",
-  "closedAccountChangedMind": "If you closed your account, but have since changed your mind, you get one chance of getting your account back.",
-  "onlyWorksOnce": "This will only work once.",
-  "cantDoThisTwice": "If you close your account a second time, there will be no way of recovering it.",
+  "reopenYourAccountDescription": "If you closed your account, but have since changed your mind, you get a chance of getting your account back.",
   "emailAssociatedToaccount": "Email address associated to the account",
   "sentEmailWithLink": "We've sent you an email with a link.",
   "tournamentEntryCode": "Tournament entry code",
@@ -3185,7 +3185,7 @@
       }
     }
   },
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
     "placeholders": {
       "count": {

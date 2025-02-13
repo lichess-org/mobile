@@ -390,12 +390,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastUpcoming => 'Opkomend';
 
   @override
-  String get broadcastCompleted => 'Voltooi';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Ronde se naam';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Terug na lewende skuif';
+
+  @override
+  String get broadcastSinceHideResults => 'Aangesien jy verkies om nie die resultate te sien nie, is al die voorskouborde leeg sodat niks weggegee word nie.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vucovic-mat';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => '\'n Toring en \'n ruiter werk saam om die koning te mat. Die toring verkry die mat gesteun deur \'n derde stuk, en die ruiter blok die koning se ontsnappingsblokkies.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ridder eindspel';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Jou rekening word bestuur en kan nie gesluit word nie.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Sluiting is finaal. Daar is geen omdraaikans nie. Is jy seker?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Jy sal nie toegelaat word om \'n nuwe rekening met dieselfde naam te open nie, selfs al is die hoof- en kleinletters verskillend.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ek het van plan verander, moenie my rekening sluit nie';
+  String get settingsCancelKeepAccount => 'Kanselleer en hou my rekening';
 
   @override
-  String get settingsCloseAccountExplanation => 'Is jy seker jy wil die rekening toemaak? Om die rekening toe te maak is \'n permanente besluit. Jy sal NOOIT WEER kan aanmeld nie.';
+  String get settingsCloseAccountAreYouSure => 'Is jy seker jy wil jou rekening sluit?';
 
   @override
   String get settingsThisAccountIsClosed => 'Hierdie rekening is gesluit.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get followAndChallengeFriends => 'Volg en daag vriende uit';
 
   @override
+  String get noChallenges => 'Geen uitdagings nie.';
+
+  @override
   String get gameAnalysis => 'Spel analise';
 
   @override
@@ -3738,10 +3744,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get backgroundImageUrl => 'Agtergrond prent URL:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Bord';
 
   @override
-  String get size => 'Size';
+  String get size => 'Grootte';
 
   @override
   String get opacity => 'Opacity';
@@ -4280,13 +4286,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get reopenYourAccount => 'Herstel jou rekening';
 
   @override
-  String get closedAccountChangedMind => 'As jou rekening gesluit het, maar het intussen van plan verander, kry jy sleg een kans om jou rekening terug te kry.';
-
-  @override
-  String get onlyWorksOnce => 'Dié sal slegs een keer werk.';
-
-  @override
-  String get cantDoThisTwice => 'In die jy jou rekening \'n tweede keer sluit, sal daar nie \'n manier wees om dit te herstel nie.';
+  String get reopenYourAccountDescription => 'Indien jy jou rekening gesluit het maar intussen anders besluit het, kry jy \'n kans om jou rekening terug te kry.';
 
   @override
   String get emailAssociatedToaccount => 'E-pos adress geassosieer met die rekening';

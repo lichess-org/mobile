@@ -390,12 +390,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastUpcoming => 'آینده';
 
   @override
-  String get broadcastCompleted => 'کامل‌شده';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess تکمیل دور را شناسایی می‌کند، اما می‌تواند آن را اشتباه بگیرد. از این کلید برای تنظیم دستی بهرایید.';
-
-  @override
   String get broadcastRoundName => 'نام دور';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'دیدن پخش‌های هر ماه';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'آخربازی اسب';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'حساب‌تان مدیریت می‌شود و نمی‌توان آن را بست.';
 
   @override
-  String get settingsClosingIsDefinitive => 'بعد از بستن حسابتان دیگر نمی توانید به آن دسترسی پیدا کنید. آیا مطمئن هستید؟';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'شما نمی توانید حساب جدیدی با این نام کاربری باز کنید، حتی اگر با دستگاه دیگری وارد شوید.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'نظرم عوض شد، حسابم را نبند';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'آیا مطمئنید که می خواهید حساب خود را ببندید؟ بستن حساب یک تصمیم دائمی است. شما هرگز نمی توانید دوباره وارد حساب خود شوید.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'این حساب بسته شده است';
@@ -2886,10 +2889,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get ifNoneLeaveEmpty => 'اگر ندارید، خالی گذارید';
 
   @override
-  String get profile => 'نمایه';
+  String get profile => 'رُخ‌نما';
 
   @override
-  String get editProfile => 'ویرایش نمایه';
+  String get editProfile => 'ویرایش رُخ‌نما';
 
   @override
   String get realName => 'نام راستین';
@@ -3685,6 +3688,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get followAndChallengeFriends => 'دنبالیدن و پیشنهاد بازی دادن به دوستان';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'تجزیه و تحلیلِ بازی';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reopenYourAccount => 'باز کردن مجدد حساب کاربری';
 
   @override
-  String get closedAccountChangedMind => 'اگر حساب کاربری خود را مسدود کردید، اما بعد از آن نظرتان عوض شد، شما یک فرصت برای بازگرداندنِ حساب کاربری خود خواهید داشت.';
-
-  @override
-  String get onlyWorksOnce => 'تنها یک‌بار کار خواهد کرد.';
-
-  @override
-  String get cantDoThisTwice => 'اگر برای بار دوم حساب کاربری خود را مسدود سازید، هیچ راهی برای بازیابی آن وجود نخواهد داشت.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'آدرس ایمیلی که به حساب کاربری مربوط شده است';
@@ -4638,8 +4638,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count سیمولتانه',
-      one: '$count سیمولتانه',
+      other: '$count همزمان',
+      one: '$count همزمان',
     );
     return '$_temp0';
   }
