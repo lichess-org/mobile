@@ -341,15 +341,7 @@ class _PlayerWidget extends StatelessWidget {
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
-                  (gameStatus == BroadcastResult.draw)
-                      ? '½'
-                      : (gameStatus == BroadcastResult.whiteWins)
-                      ? side == Side.white
-                          ? '1'
-                          : '0'
-                      : side == Side.black
-                      ? '1'
-                      : '0',
+                  gameStatus.resultToString(side),
                   style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
