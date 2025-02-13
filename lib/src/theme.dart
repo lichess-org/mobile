@@ -51,9 +51,13 @@ const kSliderTheme = SliderThemeData(
   final boardTheme = boardPrefs.boardTheme;
   final systemScheme = getDynamicColorSchemes();
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
-  final defaultLight = ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare);
+  final defaultLight = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
+  );
   final defaultDark = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
+    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
     brightness: Brightness.dark,
   );
 
