@@ -147,7 +147,7 @@ class SearchPositionScreen extends StatelessWidget {
     return buildScreenRoute(
       context,
       screen: SearchPositionScreen(onPositionSelected: onPositionSelected),
-      title: context.l10n.preferencesHowDoYouMovePieces,
+      title: context.l10n.loadPosition,
     );
   }
 
