@@ -183,17 +183,15 @@ class _OpeningsTab extends StatefulWidget {
 }
 
 class _OpeningsTabState extends State<_OpeningsTab> {
-  // TODO Provider
   late final Future<List<Position>>? _openings;
 
   @override
   void initState() {
     _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
       final List<Position> result = [];
-      for (final opening in jsonDecode(s) as List) {
-        // ignore: avoid_dynamic_calls
-        for (final position in opening['positions'] as List) {
-          result.add(Position.fromJson(position as Map<String, dynamic>));
+      for (final opening in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
+        for (final position in (opening['positions'] as List<dynamic>).cast<Map<String, dynamic>>()) {
+          result.add(Position.fromJson(position));
         }
       }
       return result;
@@ -234,15 +232,14 @@ class _EndGamesTab extends StatefulWidget {
 }
 
 class _EndGamesTabState extends State<_EndGamesTab> {
-  // TODO Provider
   late final Future<List<Position>>? _endGames;
 
   @override
   void initState() {
     _endGames = DefaultAssetBundle.of(context).loadString('assets/endgames.json').then((s) {
       final List<Position> result = [];
-      for (final position in jsonDecode(s) as List) {
-        result.add(Position.fromJson(position as Map<String, dynamic>));
+      for (final position in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
+        result.add(Position.fromJson(position));
       }
       return result;
     });
