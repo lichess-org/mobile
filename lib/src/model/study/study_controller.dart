@@ -601,8 +601,7 @@ class StudyState with _$StudyState {
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  String get currentChapterTitle =>
-      study.chapters.firstWhere((chapter) => chapter.id == currentChapter.id).name;
+  String get currentChapterTitle => study.getChapterIndexedName(study.chapter.id);
   bool get hasNextChapter => study.chapter.id != study.chapters.last.id;
 
   bool get isAtEndOfChapter => isOnMainline && currentNode.children.isEmpty;
