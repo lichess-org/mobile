@@ -103,7 +103,7 @@ const kSliderTheme = SliderThemeData(
           isIOS
               ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
               : null,
-      menuTheme: _makeMenuThemeData(context, themeLight.colorScheme),
+      menuTheme: _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLow),
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
@@ -121,7 +121,7 @@ const kSliderTheme = SliderThemeData(
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      menuTheme: _makeMenuThemeData(context, themeDark.colorScheme),
+      menuTheme: _makeCupertinoMenuThemeData(themeDark.colorScheme.surface),
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
@@ -176,7 +176,9 @@ const kSliderTheme = SliderThemeData(
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
-    menuTheme: _makeMenuThemeData(context, baseTheme.colorScheme),
+    menuTheme: _makeCupertinoMenuThemeData(
+      baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+    ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -189,18 +191,14 @@ const kSliderTheme = SliderThemeData(
   return (light: theme, dark: theme);
 }
 
-MenuThemeData _makeMenuThemeData(BuildContext context, ColorScheme colorScheme) {
-  final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+MenuThemeData _makeCupertinoMenuThemeData(Color backgroundColor) {
   return MenuThemeData(
     style: MenuStyle(
-      backgroundColor: isIOS ? WidgetStatePropertyAll(colorScheme.surfaceContainerLow) : null,
-      elevation: isIOS ? const WidgetStatePropertyAll(0) : null,
-      shape:
-          isIOS
-              ? const WidgetStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
-              )
-              : null,
+      backgroundColor: WidgetStatePropertyAll(backgroundColor),
+      elevation: const WidgetStatePropertyAll(0),
+      shape: const WidgetStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+      ),
     ),
   );
 }
