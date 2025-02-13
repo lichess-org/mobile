@@ -216,7 +216,7 @@ class _BodyState extends ConsumerState<_Body> {
                     SliverAppBar(
                       backgroundColor: Theme.of(
                         context,
-                      ).appBarTheme.backgroundColor?.withValues(alpha: 0.9),
+                      ).appBarTheme.backgroundColor?.withValues(alpha: 1),
                       automaticallyImplyLeading: false,
                       primary: false,
                       title: AutoSizeText(
