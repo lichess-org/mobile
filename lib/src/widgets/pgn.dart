@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

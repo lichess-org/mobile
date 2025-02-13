@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -17,7 +16,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
   const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});

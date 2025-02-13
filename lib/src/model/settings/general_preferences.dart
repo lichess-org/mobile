@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
-    show BoardTheme, boardPreferencesProvider;
+    show BoardPrefs, BoardTheme, boardPreferencesProvider;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -49,9 +49,14 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
   }
 
   Future<void> toggleSystemColors() {
+    final newState = state.copyWith(systemColors: !state.systemColors);
     return Future.wait([
-      save(state.copyWith(systemColors: !state.systemColors)),
-      ref.read(boardPreferencesProvider.notifier).setBoardTheme(BoardTheme.system),
+      save(newState),
+      ref
+          .read(boardPreferencesProvider.notifier)
+          .setBoardTheme(
+            newState.systemColors ? BoardTheme.system : BoardPrefs.defaults.boardTheme,
+          ),
     ]).then((_) => {});
   }
 
@@ -76,7 +81,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Whether to use system colors on android 10+.
-    @JsonKey(defaultValue: false) required bool systemColors,
+    @JsonKey(defaultValue: true) required bool systemColors,
 
     /// App theme seed
     @Deprecated('Use systemColors instead')
@@ -95,7 +100,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
-    systemColors: false,
+    systemColors: true,
     appThemeSeed: AppThemeSeed.board,
   );
 

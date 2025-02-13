@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
+import 'package:material_color_utilities/palettes/core_palette.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -49,6 +50,12 @@ Future<void> setupFirstLaunch() async {
     final sri = genRandomString(12);
     _logger.info('Generated new SRI: $sri');
     await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
+
+    // on android 12+ set board theme to system colors
+    if (getCorePalette() != null) {
+      final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
+      await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+    }
 
     await prefs.setBool('first_run', false);
   }
@@ -115,10 +122,20 @@ Future<void> preloadPieceImages() async {
 ///
 /// This is meant to be called once during app initialization.
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
-  // On android 12+ set core palette and make system board
+  // On android 12+ set dynamic color schemes
   try {
-    await DynamicColorPlugin.getCorePalette().then((value) {
-      setCorePalette(value);
+    Future.wait([DynamicColorPlugin.getCorePalette(), DynamicColorPlugin.getColorSchemes()]).then((
+      List<dynamic> value,
+    ) {
+      final CorePalette? palette = value[0] as CorePalette?;
+      final schemes = value[1] as dynamic;
+      final ColorSchemes? colorSchemes =
+          schemes != null
+              // ignore: avoid_dynamic_calls
+              ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
+              : null;
+
+      setSystemColors(palette, colorSchemes);
     });
   } catch (e) {
     _logger.fine('Device does not support core palette: $e');
