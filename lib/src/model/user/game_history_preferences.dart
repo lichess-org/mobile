@@ -37,9 +37,12 @@ enum GameHistoryDisplayMode { compact, detail }
 class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
   const GameHistoryPrefs._();
 
-  const factory GameHistoryPrefs({required GameHistoryDisplayMode displayMode}) = _GameHistoryPrefs;
+  const factory GameHistoryPrefs({
+    @JsonKey(defaultValue: GameHistoryDisplayMode.compact)
+    required GameHistoryDisplayMode displayMode,
+  }) = _GameHistoryPrefs;
 
-  static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.detail);
+  static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.compact);
 
   factory GameHistoryPrefs.fromJson(Map<String, dynamic> json) {
     return _$GameHistoryPrefsFromJson(json);

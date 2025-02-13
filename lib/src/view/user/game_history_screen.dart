@@ -100,7 +100,7 @@ class GameHistoryScreen extends ConsumerWidget {
       gameHistoryPreferencesProvider.select((value) => value.displayMode),
     );
     final displayModeButton = AppBarIconButton(
-      icon: const Icon(Icons.view_list),
+      icon: const Icon(Icons.list_outlined),
       semanticsLabel: 'Switch view',
       onPressed:
           () => showChoicePicker<GameHistoryDisplayMode>(
@@ -261,6 +261,7 @@ class _BodyState extends ConsumerState<_Body> {
                   GameHistoryDisplayMode.detail => GameListDetailTile(
                     item: item,
                     onPressedBookmark: onPressedBookmark,
+                    gameListContext: (widget.user?.id, gameFilterState),
                   ),
                 };
 

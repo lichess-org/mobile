@@ -14,12 +14,38 @@ import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
-void openGameScreen(LightArchivedGame game, Side orientation, BuildContext context) {
+/// Opens a game screen for the given [LightArchivedGame].
+///
+/// Will open [GameScreen] if the game Id is a [GameFullId], otherwise [ArchivedGameScreen].
+///
+/// If the game is not read supported, a snackbar is shown.
+void openGameScreen(
+  BuildContext context, {
+  required LightArchivedGame game,
+  required Side orientation,
+  String? loadingFen,
+  Move? loadingLastMove,
+  DateTime? lastMoveAt,
+  (UserId?, GameFilterState)? gameListContext,
+}) {
   if (game.variant.isReadSupported) {
     Navigator.of(context, rootNavigator: true).push(
       game.fullId != null
-          ? GameScreen.buildRoute(context, initialGameId: game.fullId)
-          : ArchivedGameScreen.buildRoute(context, gameData: game, orientation: orientation),
+          ? GameScreen.buildRoute(
+            context,
+            initialGameId: game.fullId,
+            loadingOrientation: orientation,
+            loadingFen: loadingFen,
+            loadingLastMove: loadingLastMove,
+            lastMoveAt: lastMoveAt,
+            gameListContext: gameListContext,
+          )
+          : ArchivedGameScreen.buildRoute(
+            context,
+            gameData: game,
+            orientation: orientation,
+            gameListContext: gameListContext,
+          ),
     );
   } else {
     showPlatformSnackbar(context, 'This variant is not supported yet.', type: SnackBarType.info);

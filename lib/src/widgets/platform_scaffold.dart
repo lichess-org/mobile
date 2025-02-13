@@ -83,7 +83,10 @@ class PlatformScaffold extends StatelessWidget {
         padding: appBarActions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
         middle: appBarTitle,
         leading: appBarLeading,
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: appBarActions),
+        trailing:
+            appBarActions.isNotEmpty
+                ? Row(mainAxisSize: MainAxisSize.min, children: appBarActions)
+                : null,
         enableBackgroundFilterBlur: enableBackgroundFilterBlur,
       ),
       backgroundColor: backgroundColor,

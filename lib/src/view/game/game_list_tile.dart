@@ -65,7 +65,15 @@ class GameListTile extends StatelessWidget {
       game: game,
       mySide: youAre,
       padding: padding,
-      onTap: () => openGameScreen(item.game, item.pov, context),
+      onTap:
+          () => openGameScreen(
+            context,
+            game: item.game,
+            orientation: item.pov,
+            loadingLastMove: game.lastMove,
+            lastMoveAt: game.lastMoveAt,
+            gameListContext: gameListContext,
+          ),
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
