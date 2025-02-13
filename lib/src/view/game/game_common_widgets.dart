@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -9,9 +10,22 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
-/// A [MenuItemButton] that toggles the bookmark status of a game.
+void openGameScreen(LightArchivedGame game, Side orientation, BuildContext context) {
+  if (game.variant.isReadSupported) {
+    Navigator.of(context, rootNavigator: true).push(
+      game.fullId != null
+          ? GameScreen.buildRoute(context, initialGameId: game.fullId)
+          : ArchivedGameScreen.buildRoute(context, gameData: game, orientation: orientation),
+    );
+  } else {
+    showPlatformSnackbar(context, 'This variant is not supported yet.', type: SnackBarType.info);
+  }
+}
+
 class GameBookmarkMenuItemButton extends ConsumerStatefulWidget {
   const GameBookmarkMenuItemButton({
     required this.id,
