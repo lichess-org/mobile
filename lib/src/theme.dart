@@ -12,6 +12,16 @@ const kPageTransitionsTheme = PageTransitionsTheme(
   },
 );
 
+const kProgressIndicatorTheme = ProgressIndicatorThemeData(
+  // ignore: deprecated_member_use
+  year2023: false,
+);
+
+const kSliderTheme = SliderThemeData(
+  // ignore: deprecated_member_use
+  year2023: false,
+);
+
 /// Makes the app theme based on the given [generalPrefs] and [boardPrefs] and the current [context].
 ({ThemeData light, ThemeData dark}) makeAppTheme(
   BuildContext context,
@@ -95,6 +105,8 @@ const kPageTransitionsTheme = PageTransitionsTheme(
               : null,
       menuTheme: _makeMenuThemeData(context, themeLight.colorScheme),
       pageTransitionsTheme: kPageTransitionsTheme,
+      progressIndicatorTheme: kProgressIndicatorTheme,
+      sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
     dark: themeDark.copyWith(
@@ -111,6 +123,8 @@ const kPageTransitionsTheme = PageTransitionsTheme(
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
       menuTheme: _makeMenuThemeData(context, themeDark.colorScheme),
       pageTransitionsTheme: kPageTransitionsTheme,
+      progressIndicatorTheme: kProgressIndicatorTheme,
+      sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
   );
@@ -167,6 +181,8 @@ const kPageTransitionsTheme = PageTransitionsTheme(
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: kPageTransitionsTheme,
+    progressIndicatorTheme: kProgressIndicatorTheme,
+    sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
 
