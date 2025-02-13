@@ -167,16 +167,15 @@ class SearchPositionScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: PlatformWidget(
-        iosBuilder:
-            (context) {
-              return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: Text(context.l10n.loadPosition),
-                bottom: tabBar,
-              ),
-              child: tabBarView,
-            );
-            },
+        iosBuilder: (context) {
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(context.l10n.loadPosition),
+              bottom: tabBar,
+            ),
+            child: tabBarView,
+          );
+        },
         androidBuilder:
             (context) => Scaffold(
               appBar: AppBar(title: Text(context.l10n.loadPosition), bottom: tabBar),
@@ -204,7 +203,8 @@ class _OpeningsTabState extends State<_OpeningsTab> {
     _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
       final List<Position> result = [];
       for (final opening in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
-        for (final position in (opening['positions'] as List<dynamic>).cast<Map<String, dynamic>>()) {
+        for (final position
+            in (opening['positions'] as List<dynamic>).cast<Map<String, dynamic>>()) {
           result.add(Position.fromJson(position));
         }
       }
