@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 
 /// Board layout that adapts to screen size and aspect ratio.
@@ -173,7 +173,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                BoardWidget(
+                InteractiveBoardWidget(
                   size: boardSize,
                   boardPrefs: boardPrefs,
                   fen: widget.fen,
@@ -271,7 +271,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                     isTablet
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                         : EdgeInsets.zero,
-                child: BoardWidget(
+                child: InteractiveBoardWidget(
                   size: boardSize,
                   boardPrefs: boardPrefs,
                   fen: widget.fen,

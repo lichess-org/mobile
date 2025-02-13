@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
-class BoardWidget extends StatelessWidget {
-  BoardWidget({
+/// A stateless widget that displays an interactive chess board.
+class InteractiveBoardWidget extends StatelessWidget {
+  InteractiveBoardWidget({
     required this.size,
     required this.boardPrefs,
     required this.fen,
@@ -37,7 +38,7 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<Square, Square> castlingMap = {
+    const Map<Square, Square> castlingMap = {
       Square.a1: Square.c1,
       Square.a8: Square.c8,
       Square.h1: Square.g1,
@@ -131,10 +132,7 @@ class _ErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                      : Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),

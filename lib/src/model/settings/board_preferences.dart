@@ -363,7 +363,7 @@ enum CastlingMethod {
       switch (castlingMethod) {
         CastlingMethod.kingOverRook => context.l10n.preferencesCastleByMovingOntoTheRook,
         CastlingMethod.kingTwoSquares => context.l10n.preferencesCastleByMovingTwoSquares,
-        CastlingMethod.either => context.l10n.preferencesBothClicksAndDrag,
+        CastlingMethod.either => 'Either', //TODO l10n string
       };
 }
 

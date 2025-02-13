@@ -293,8 +293,8 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
   static Route<dynamic> buildRoute(BuildContext context) {
     return buildScreenRoute(
       context,
-      screen: const BoardClockPositionScreen(),
-      title: 'Clock position',
+      screen: const CastlingMethodSettingsScreen(),
+      title: 'Castling method',
     );
   }
 
@@ -310,18 +310,16 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
 
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            ChoicePicker(
-              notchedTile: true,
-              choices: CastlingMethod.values,
-              selectedItem: castlingMethod,
-              titleBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
-              onSelectedItemChanged: onChanged,
-            ),
-          ],
-        ),
+      child: ListView(
+        children: [
+          ChoicePicker(
+            notchedTile: true,
+            choices: CastlingMethod.values,
+            selectedItem: castlingMethod,
+            titleBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
+            onSelectedItemChanged: onChanged,
+          ),
+        ],
       ),
     );
   }
