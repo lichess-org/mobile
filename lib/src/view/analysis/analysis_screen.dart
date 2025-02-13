@@ -230,9 +230,11 @@ class _Body extends ConsumerWidget {
     final isEngineAvailable = analysisState.isEngineAvailable;
     final hasEval = analysisState.hasAvailableEval;
     final currentNode = analysisState.currentNode;
+    final pov = analysisState.pov;
 
     return AnalysisLayout(
       tabController: controller,
+      pov: pov,
       boardBuilder:
           (context, boardSize, borderRadius) => AnalysisBoard(
             options,

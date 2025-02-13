@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -121,6 +122,7 @@ class AnalysisLayout extends StatelessWidget {
     this.tabController,
     required this.boardBuilder,
     required this.children,
+    required this.pov,
     this.boardHeader,
     this.boardFooter,
     this.engineGaugeBuilder,
@@ -134,6 +136,9 @@ class AnalysisLayout extends StatelessWidget {
 
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;
+
+  /// The side the board is displayed from.
+  final Side pov;
 
   /// A widget to show above the board.
   ///
@@ -201,6 +206,8 @@ class AnalysisLayout extends StatelessWidget {
                           children: [
                             if (boardHeader != null)
                               Container(
+                                // This key is used to preserve the state of the board header when the pov changes
+                                key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -226,6 +233,8 @@ class AnalysisLayout extends StatelessWidget {
                             ),
                             if (boardFooter != null)
                               Container(
+                                // This key is used to preserve the state of the board footer when the pov changes
+                                key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -291,7 +300,9 @@ class AnalysisLayout extends StatelessWidget {
                         child: Column(
                           children: [
                             if (boardHeader != null)
+                              // This key is used to preserve the state of the board header when the pov changes
                               Container(
+                                key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -314,6 +325,8 @@ class AnalysisLayout extends StatelessWidget {
                             ),
                             if (boardFooter != null)
                               Container(
+                                // This key is used to preserve the state of the board footer when the pov changes
+                                key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
