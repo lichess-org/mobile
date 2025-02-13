@@ -5,6 +5,13 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 
+const kPageTransitionsTheme = PageTransitionsTheme(
+  builders: {
+    TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  },
+);
+
 /// Makes the app theme based on the given [generalPrefs] and [boardPrefs] and the current [context].
 ({ThemeData light, ThemeData dark}) makeAppTheme(
   BuildContext context,
@@ -87,6 +94,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
               : null,
       menuTheme: _makeMenuThemeData(context, themeLight.colorScheme),
+      pageTransitionsTheme: kPageTransitionsTheme,
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
     dark: themeDark.copyWith(
@@ -102,6 +110,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
       menuTheme: _makeMenuThemeData(context, themeDark.colorScheme),
+      pageTransitionsTheme: kPageTransitionsTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
   );
@@ -157,6 +166,7 @@ import 'package:lichess_mobile/src/utils/color_palette.dart';
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
+    pageTransitionsTheme: kPageTransitionsTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
 
