@@ -17,7 +17,7 @@ class PlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.play)),
+      appBarTitle: Text(context.l10n.play),
       body: const SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

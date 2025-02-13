@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -108,25 +107,24 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             };
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [
-          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          AppBarIconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                BroadcastGameSettingsScreen.buildRoute(
-                  context,
-                  roundId: widget.roundId,
-                  gameId: widget.gameId,
-                ),
-              );
-            },
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
+      enableBackgroundFilterBlur: false,
+      appBarTitle: title,
+      appBarActions: [
+        AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+        AppBarIconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              BroadcastGameSettingsScreen.buildRoute(
+                context,
+                roundId: widget.roundId,
+                gameId: widget.gameId,
+              ),
+            );
+          },
+          semanticsLabel: context.l10n.settingsSettings,
+          icon: const Icon(Icons.settings),
+        ),
+      ],
       body: _Body(
         widget.tournamentId,
         widget.roundId,
@@ -174,12 +172,16 @@ class _Body extends ConsumerWidget {
               (context, boardSize, borderRadius) =>
                   _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
           boardHeader: _PlayerWidget(
+            // We need to use a key to preserve the state of the clock when board is flipped
+            key: const ValueKey('top'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
             widgetPosition: _PlayerWidgetPosition.top,
           ),
           boardFooter: _PlayerWidget(
+            // We need to use a key to preserve the state of the clock when board is flipped
+            key: const ValueKey('bottom'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
@@ -206,7 +208,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && numEvalLines > 0
                   ? EngineLines(
-                    clientEval: currentNode.eval,
+                    localEval: currentNode.eval,
                     isGameOver: currentNode.position.isGameOver,
                     onTapMove:
                         ref
@@ -383,6 +385,7 @@ enum _PlayerWidgetPosition { bottom, top }
 
 class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
+    required super.key,
     required this.tournamentId,
     required this.roundId,
     required this.gameId,
@@ -435,15 +438,7 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    (gameStatus == BroadcastResult.draw)
-                        ? '½'
-                        : (gameStatus == BroadcastResult.whiteWins)
-                        ? side == Side.white
-                            ? '1'
-                            : '0'
-                        : side == Side.black
-                        ? '1'
-                        : '0',
+                    gameStatus.resultToString(side),
                     style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),

@@ -36,22 +36,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: account.when(
-          data:
-              (user) =>
-                  user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
-          loading: () => const SizedBox.shrink(),
-          error: (error, _) => const SizedBox.shrink(),
-        ),
-        actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.edit),
-            semanticsLabel: context.l10n.editProfile,
-            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
-          ),
-        ],
+      appBarTitle: account.when(
+        data:
+            (user) =>
+                user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+        loading: () => const SizedBox.shrink(),
+        error: (error, _) => const SizedBox.shrink(),
       ),
+      appBarActions: [
+        AppBarIconButton(
+          icon: const Icon(Icons.edit),
+          semanticsLabel: context.l10n.editProfile,
+          onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
+        ),
+      ],
       body: account.when(
         data: (user) {
           if (user == null) {

@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "88399e291da5f7e889359681a8f64b18c5123e03576b01f32a6a276611e511c3"
+      sha256: dc27559385e905ad30838356c5f5d574014ba39872d732111cd07ac0beff4c57
       url: "https://pub.dev"
     source: hosted
-    version: "78.0.0"
+    version: "80.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -17,19 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.51"
-  _macros:
-    dependency: transitive
-    description: dart
-    source: sdk
-    version: "0.3.3"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "62899ef43d0b962b056ed2ebac6b47ec76ffd003d5f7c4e4dc870afe63188e33"
+      sha256: "192d1c5b944e7e53b24b5586db760db934b177d4147c42fbca8c8c5f1eb8d11e"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.0"
+    version: "7.3.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -346,10 +341,10 @@ packages:
     dependency: transitive
     description:
       name: custom_lint_visitor
-      sha256: "14df0760dfa81b7b0c398c876045f4e4a343eb2c9d200c66163671dd3e337c1b"
+      sha256: "36282d85714af494ee2d7da8c8913630aa6694da99f104fb2ed4afcf8fc857d8"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0+7.1.0"
+    version: "1.0.0+7.3.0"
   dart_style:
     dependency: transitive
     description:
@@ -398,14 +393,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.2"
-  dynamic_color:
+  dynamic_system_colors:
     dependency: "direct main"
     description:
-      name: dynamic_color
-      sha256: eae98052fa6e2826bdac3dd2e921c6ce2903be15c6b7f8b6d8a5d49b5086298d
+      name: dynamic_system_colors
+      sha256: "43794e658fa88cbdec9f397dd1afd2eb69b6c9717e99b93b16ba37c3aa3b3a8c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.8.0"
   equatable:
     dependency: transitive
     description:
@@ -644,10 +639,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: b3ff1ef5fb3924ee02b4d38b974ffae3969d50603e68787684ee9dd45f6f144a
+      sha256: e7bbc718adc9476aa14cfddc1ef048d2e21e4e8f18311aaac723266db9f9e7b5
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.6+1"
+    version: "0.7.6+2"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -954,6 +949,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.9.3"
+  l10n_esperanto:
+    dependency: "direct main"
+    description:
+      name: l10n_esperanto
+      sha256: "8bdaf08ac603c6c6255f71ce31aabaea676a722c2936e1a028ef222db6448689"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.12"
   leak_tracker:
     dependency: transitive
     description:
@@ -1002,14 +1005,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  macros:
-    dependency: transitive
-    description:
-      name: macros
-      sha256: "1d9e801cd66f7ea3663c45fc708450db1fa57f988142c64289142c9b7ee80656"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.3-main.0"
   markdown:
     dependency: transitive
     description:
@@ -1326,18 +1321,18 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
-      sha256: "688ee90fbfb6989c980254a56cb26ebe9bb30a3a2dff439a78894211f73de67a"
+      sha256: "846849e3e9b68f3ef4b60c60cf4b3e02e9321bc7f4d8c4692cf87ffa82fc8a3a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.2"
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "650584dcc0a39856f369782874e562efd002a9c94aec032412c9eb81419cce1f"
+      sha256: ea86be7b7114f9e94fddfbb52649e59a03d6627ccd2387ebddcd6624719e9f16
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.4"
+    version: "2.4.5"
   shared_preferences_foundation:
     dependency: transitive
     description:

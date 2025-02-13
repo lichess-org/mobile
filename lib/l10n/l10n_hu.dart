@@ -390,12 +390,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastUpcoming => 'Közelgő';
 
   @override
-  String get broadcastCompleted => 'Befejeződött';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Forduló neve';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Huszár végjáték';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'A felhasználói fiókod felügyelet alatt áll, ezért nem zárolható.';
 
   @override
-  String get settingsClosingIsDefinitive => 'A fiók törlése végleges. Nem lehet visszavonni. Biztos vagy benne?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Nem fogsz tudni új fiókot nyitni ugyanezzel a névvel, még eltérő kis- és nagybetűkkel sem.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Meggondoltam magam, mégsem zárolom a fiókomat';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Biztos, hogy zárolni akarod a fiókod? A döntés végleges és visszavonhatatlan. Nem fogsz tudni belépni SOHA TÖBBÉ.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Ez a fiók zárolva van.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get followAndChallengeFriends => 'Kövesd és hívd ki  a barátaidat';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Játék elemzés';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get reopenYourAccount => 'Fiók újranyitása';
 
   @override
-  String get closedAccountChangedMind => 'Ha lezártad a fiókod, de azóta meggondoltad magad, van egy lehetőséged visszakapni a régi fiókod.';
-
-  @override
-  String get onlyWorksOnce => 'Ez csak egyszer működik.';
-
-  @override
-  String get cantDoThisTwice => 'Ha lezárod a fiókod másodszor is, utána már nincs lehetőség a visszaállításra.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'A fiókhoz rendelt email cím';

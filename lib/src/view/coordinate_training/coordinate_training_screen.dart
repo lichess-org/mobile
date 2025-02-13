@@ -35,24 +35,23 @@ class CoordinateTrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: const Text('Coordinate Training'), // TODO l10n once script works
-        actions: [
-          Builder(
-            builder: (context) {
-              return AppBarIconButton(
-                icon: const Icon(Icons.settings),
-                semanticsLabel: context.l10n.settingsSettings,
-                onPressed:
-                    () => showAdaptiveBottomSheet<void>(
-                      context: context,
-                      builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                    ),
-              );
-            },
-          ),
-        ],
-      ),
+      enableBackgroundFilterBlur: false,
+      appBarTitle: const Text('Coordinate Training'), // TODO l10n once script works
+      appBarActions: [
+        Builder(
+          builder: (context) {
+            return AppBarIconButton(
+              icon: const Icon(Icons.settings),
+              semanticsLabel: context.l10n.settingsSettings,
+              onPressed:
+                  () => showAdaptiveBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                  ),
+            );
+          },
+        ),
+      ],
       body: const _Body(),
     );
   }

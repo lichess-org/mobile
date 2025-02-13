@@ -1,4 +1,4 @@
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -49,14 +49,6 @@ abstract class Styles {
   // cards
   static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
 
-  static Color cardColor(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final colorScheme = ColorScheme.of(context);
-    return brightness == Brightness.light
-        ? colorScheme.surfaceContainerLowest
-        : colorScheme.surfaceContainerHigh;
-  }
-
   // boards
   static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
 
@@ -70,11 +62,15 @@ abstract class Styles {
   static Color listingsScreenBackgroundColor(BuildContext context) =>
       ColorScheme.of(context).surfaceContainerLowest;
 
-  static Color backgroundActivated(BuildContext context) {
+  static Color cupertinoListTileBackgroundActivated(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     return brightness == Brightness.light
-        ? ColorScheme.of(context).surfaceContainerLow
+        ? ColorScheme.of(context).surfaceContainer
         : ColorScheme.of(context).surfaceContainerHighest;
+  }
+
+  static Color chartColor(BuildContext context) {
+    return ColorScheme.of(context).tertiary;
   }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);

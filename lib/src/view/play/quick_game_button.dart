@@ -20,7 +20,6 @@ class QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    const buttonTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
     return Row(
       children: [
@@ -85,7 +84,7 @@ class QuickGameButton extends ConsumerWidget {
                               );
                             }
                             : null,
-                    child: Text(context.l10n.play, style: buttonTextStyle),
+                    child: Text(context.l10n.play),
                   )
                   : FilledButton(
                     onPressed:
@@ -104,7 +103,7 @@ class QuickGameButton extends ConsumerWidget {
                             : null,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(context.l10n.play, style: buttonTextStyle),
+                      child: Text(context.l10n.play),
                     ),
                   ),
         ),

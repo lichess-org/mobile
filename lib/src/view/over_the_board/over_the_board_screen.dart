@@ -34,16 +34,14 @@ class OverTheBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: const Text('Over the board'), // TODO: l10n
-        actions: [
-          AppBarIconButton(
-            onPressed: () => showConfigureDisplaySettings(context),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
+      appBarTitle: const Text('Over the board'), // TODO: l10n
+      appBarActions: [
+        AppBarIconButton(
+          onPressed: () => showConfigureDisplaySettings(context),
+          semanticsLabel: context.l10n.settingsSettings,
+          icon: const Icon(Icons.settings),
+        ),
+      ],
       body: const _Body(),
     );
   }

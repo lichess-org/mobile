@@ -40,23 +40,21 @@ class StudyListScreen extends ConsumerWidget {
 
     return PlatformScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.filter_list),
-            // TODO: translate
-            semanticsLabel: 'Filter studies',
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-                ),
-          ),
-        ],
-      ),
+      appBarTitle: title,
+      appBarActions: [
+        AppBarIconButton(
+          icon: const Icon(Icons.filter_list),
+          // TODO: translate
+          semanticsLabel: 'Filter studies',
+          onPressed:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
+              ),
+        ),
+      ],
       body: SafeArea(top: false, child: _Body(filter: filter)),
     );
   }

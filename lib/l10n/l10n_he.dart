@@ -426,12 +426,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastUpcoming => 'בקרוב';
 
   @override
-  String get broadcastCompleted => 'שהושלמו';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess מאתר מתי הושלם הסבב על פי המשחקים שבקישור למהלכים בשידור חי (המקור). הפעילו את האפשרות הזאת אם אין מקור שממנו נשאבים המשחקים.';
-
-  @override
   String get broadcastRoundName => 'שם סבב';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'צפו בכל ההקרנות לפי חודש';
+
+  @override
+  String get broadcastBackToLiveMove => 'חזרה לשידור החי';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1519,6 +1519,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'הצריח ממוקם ליד המלך של היריב והוא נתמך על ידי מלכה, שמצדה חוסמת את נתיב הבריחה של המלך. הצריח והמלכה לוכדים את המלך ב״קופסת חנק״ בגודל 3X3.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'סיום פרשים';
 
   @override
@@ -1734,16 +1740,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'חשבונך מנוהל, ולכן לא ניתן לסגור אותו.';
 
   @override
-  String get settingsClosingIsDefinitive => 'הסגירה היא סופית. אין דרך חזרה. האם את/ה בטוח/ה?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'לא תוכל/י לפתוח חשבון חדש עם אותו השם, אפילו בשינוי אותיות קטנות לגדולות והפוך.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'שיניתי את דעתי, אל תסגרו את החשבון שלי';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'האם אכן ברצונך לסגור את חשבונך? סגירת חשבונך היא החלטה סופית. לעולם לא יהיה אפשר להתחבר לחשבון הזה שוב.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'החשבון הזה סגור.';
@@ -3733,6 +3736,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get followAndChallengeFriends => 'עקבו אחר חברים והזמינו אותם למשחק';
 
   @override
+  String get noChallenges => 'אין הזמנות למשחק.';
+
+  @override
   String get gameAnalysis => 'ניתוח המשחק';
 
   @override
@@ -4328,13 +4334,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reopenYourAccount => 'פתח/י את חשבונך מחדש';
 
   @override
-  String get closedAccountChangedMind => 'אם סגרת את חשבונך אך התחרטת, יש לך הזדמנות אחת לפתוח אותו.';
-
-  @override
-  String get onlyWorksOnce => 'פעולה זו היא חד פעמית.';
-
-  @override
-  String get cantDoThisTwice => 'עם סגירת החשבון בשנית לא תתאפשר עוד פתיחתו לעולם.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'כתובת האימייל שמקושרת למשתמש';

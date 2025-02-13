@@ -2,7 +2,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -10,9 +10,9 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/color_palette.dart' show getCorePalette;
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -243,7 +243,7 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker<Locale>(
                   context,
-                  choices: kSupportedLocales,
+                  choices: AppLocalizations.supportedLocales,
                   selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                   labelBuilder: (t) => Text(localeToLocalizedName(t)),
                   onSelectedItemChanged:
@@ -255,15 +255,6 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
-          if (getCorePalette() != null)
-            SwitchSettingTile(
-              leading: const Icon(Icons.colorize_outlined),
-              title: Text(context.l10n.mobileSystemColors),
-              value: generalPrefs.systemColors,
-              onChanged: (value) {
-                ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
-              },
-            ),
         ],
       ),
       ListSection(
@@ -346,6 +337,36 @@ class _Body extends ConsumerWidget {
           ),
         ],
       ),
+      if (userSession != null)
+        ListSection(
+          hasLeading: true,
+          children: [
+            // if (Theme.of(context).platform == TargetPlatform.iOS)
+            //   PlatformListTile(
+            //     leading: Icon(Icons.report_outlined, color: context.lichessColors.error),
+            //     title: Text(
+            //       'Delete your account',
+            //       style: TextStyle(color: context.lichessColors.error),
+            //     ),
+            //     trailing: const _OpenInNewIcon(),
+            //     onTap: () {
+            //       launchUrl(lichessUri('/account/delete'));
+            //     },
+            //   )
+            // else
+            PlatformListTile(
+              leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
+              title: Text(
+                context.l10n.settingsCloseAccount,
+                style: TextStyle(color: context.lichessColors.error),
+              ),
+              trailing: const _OpenInNewIcon(),
+              onTap: () {
+                launchUrl(lichessUri('/account/close'));
+              },
+            ),
+          ],
+        ),
       Padding(
         padding: Styles.bodySectionPadding,
         child: Column(

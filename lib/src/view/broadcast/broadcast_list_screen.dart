@@ -180,7 +180,7 @@ class _BodyState extends ConsumerState<_Body> {
       ),
       (
         'past',
-        context.l10n.broadcastCompleted,
+        context.l10n.broadcastPastBroadcasts,
         broadcasts.value!.past.where((b) => widget.filter == _BroadcastFilter.all).toList(),
       ),
     ];
@@ -214,7 +214,11 @@ class _BodyState extends ConsumerState<_Body> {
                     )
                   else
                     SliverAppBar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).appBarTheme.backgroundColor?.withValues(alpha: 1),
                       automaticallyImplyLeading: false,
+                      primary: false,
                       title: AutoSizeText(
                         section.$2,
                         maxLines: 1,
@@ -432,7 +436,8 @@ class BroadcastListTile extends StatelessWidget {
                     Text(
                       relativeDate(context.l10n, broadcast.round.startsAt!).toUpperCase(),
                       style: TextStyle(
-                        color: textShade(context, Styles.subtitleOpacity),
+                        color: textShade(context, 0.6),
+                        fontWeight: FontWeight.bold,
                         height: 1,
                       ),
                     ),

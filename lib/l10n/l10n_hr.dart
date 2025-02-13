@@ -21,7 +21,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileClearButton => 'Očisti';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Izbriši spremljeni potez';
 
   @override
   String get mobileCustomGameJoinAGame => 'Pridružite se partiji';
@@ -50,7 +50,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Morate biti prijavljeni kako bi vidjeli ovu stranicu.';
 
   @override
-  String get mobileNoSearchResults => 'Bez rezultata';
+  String get mobileNoSearchResults => 'Nema rezultata';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ne pratite nijednog korisnika.';
@@ -64,7 +64,7 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Povečaj figuru koja se vuče';
+  String get mobilePrefMagnifyDraggedPiece => 'Povećaj figuru koja se vuče';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Želite li završiti ovu rundu?';
@@ -73,7 +73,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Bez rezultata, molimo Vas promijenite filtere';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Bez rezultata. Odigrajte koju rundu Puzzle Storm-a.';
+  String get mobilePuzzleStormNothingToShow => 'Nema rezultata. Odigrajte koju rundu Puzzle Storm-a.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Riješite što više zadataka u 3 minute.';
@@ -85,7 +85,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobilePuzzleThemesSubtitle => 'Rješavajte zadatke iz Vaših najdražih otvaranja, ili izaberite temu.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Zagonetke';
 
   @override
   String get mobileRecentSearches => 'Nedavna pretraživanja';
@@ -408,12 +408,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get broadcastUpcoming => 'Nadolazi';
 
   @override
-  String get broadcastCompleted => 'Završeno';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess otkriva kraj runde, ali može pogriješiti. Koristite ovo kako bi postavili ručno.';
-
-  @override
   String get broadcastRoundName => 'Ime runde';
 
   @override
@@ -612,6 +606,12 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Pogledaj sve prijenose prema mjesecu';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1318,16 +1318,16 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get puzzleThemeAdvancedPawn => 'Pješak napreduje';
+  String get puzzleThemeAdvancedPawn => 'Napredan pješak';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription => 'Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.';
+  String get puzzleThemeAdvancedPawnDescription => 'Jedan od tvojih pješaka je duboko u protivničkoj poziciji, možda prijeti promocijom.';
 
   @override
   String get puzzleThemeAdvantage => 'Prednost';
 
   @override
-  String get puzzleThemeAdvantageDescription => 'Iskoristi priliku i pridobij odlučujuču prednost. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription => 'Iskoristi priliku i pridobij odlučujuću prednost. (200cp ≤ eval ≤ 600cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Anastazijin mat';
@@ -1339,10 +1339,10 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeArabianMate => 'Arapski mat';
 
   @override
-  String get puzzleThemeArabianMateDescription => 'Skakač i top udružuju snage kako bi zarobili suparničkog kralja u uglu igraće ploče.';
+  String get puzzleThemeArabianMateDescription => 'Skakač i top udružuju snage kako bi zarobili protivničkog kralja u uglu igraće ploče.';
 
   @override
-  String get puzzleThemeAttackingF2F7 => 'Napad na f2 ili f7 polje';
+  String get puzzleThemeAttackingF2F7 => 'Napad na f2 ili f7';
 
   @override
   String get puzzleThemeAttackingF2F7Description => 'Napad na f2 ili f7 pješaka kao što je napad lovcem popularno nazvan \"fried liver opening\".';
@@ -1351,7 +1351,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeAttraction => 'Privlačenje';
 
   @override
-  String get puzzleThemeAttractionDescription => 'Razmjena ili žrtva koja potiče ili forsira protivničke figure u poziciju koja omogućuje taktičke poteze koji donose prednost.';
+  String get puzzleThemeAttractionDescription => 'Razmjena ili žrtva koja potiče ili prisiljava protivničke figure u poziciju koja omogućuje taktičke poteze koji donose prednost.';
 
   @override
   String get puzzleThemeBackRankMate => 'Mat na zadnjem redu';
@@ -1453,7 +1453,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika koja uključuje pravilo \"en passant\" po kojem pješak uzima protivničkog pješaka koji ga preskače koristeći inicijalno otvaranje pješaka za dva polja.';
 
   @override
-  String get puzzleThemeExposedKing => 'Golišavi kralj';
+  String get puzzleThemeExposedKing => 'Izloženi kralj';
 
   @override
   String get puzzleThemeExposedKingDescription => 'Taktika koja uključuje kralja okruženim nekolicinom obrambenih figura što često rezultira matom.';
@@ -1489,10 +1489,16 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Potez koji se igra prije očekivanog poteza koji predstavlja direktnu prijetnju na koju protivnik mora odgovoriti.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'Mat u mreži';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Top je pored protivničkog kralja i podržan je kraljicom koja također blokira kraljeva polja za bijeg. Top i kraljica zarobljavaju protivničkog kralja u 3 sa 3 matnoj mreži.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mat';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Top i skakač se udruže da matiraju kralja. Top matira podržan trećom figurom, i skakač se koristi da blokira kraljeva polja za bijeg.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Skakačeva završnica';
@@ -1710,16 +1716,13 @@ class AppLocalizationsHr extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Vašim računom se upravlja i ne može se zatvoriti.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zatvaranje je konačno. Nema povratka. Jesi li siguran?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Neće ti biti dopušteno otvaranje novog računa s istim imenom, čak i ako kapitalizacija slova bude drugačija.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Predomislio/la sam se, ne zatvaraj moj račun';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Jeste li sigurni da želite zatvoriti račun? Zatvaranje računa je trajna odluka. Više se NIKADA nećete moći prijaviti.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Račun je zatvoren.';
@@ -3709,6 +3712,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get followAndChallengeFriends => 'Prati i izazovi prijatelje';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Analiza partije';
 
   @override
@@ -4304,13 +4310,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get reopenYourAccount => 'Ponovno otvorite svoj račun';
 
   @override
-  String get closedAccountChangedMind => 'Ako ste zatvorili svoj račun, ali ste se predomislili, imate jednu priliku da vratite svoj račun.';
-
-  @override
-  String get onlyWorksOnce => 'Ovo će raditi samo jednom.';
-
-  @override
-  String get cantDoThisTwice => 'Ako drugi put zatvorite svoj račun, nećete ga moći oporaviti.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Email adresa povezana s računom';

@@ -390,12 +390,6 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastUpcoming => 'Proximamente';
 
   @override
-  String get broadcastCompleted => 'Completadas';
-
-  @override
-  String get broadcastCompletedHelp => 'Malia que Lichess detecta o final das roldas, pódese equivocar. Usa esta opción para facelo manualmente.';
-
-  @override
   String get broadcastRoundName => 'Nome da rolda';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Ver todas as emisións por mes';
+
+  @override
+  String get broadcastBackToLiveMove => 'Voltar á xogada en directo';
+
+  @override
+  String get broadcastSinceHideResults => 'Os taboleiros de vista previa están baleiros xa que elixiches agochar os resultados.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Unha torre canda o rei do adversario, defendida por unha dama que tamén bloquea as casas de escape do rei. A torre e a dama apreixan ao rei nun curruncho de 3 por 3.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Mate de Vuković';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Unha torre e un cabalo xúntanse para darlle mate ao rei. A torre dá o mate apoiada por unha terceira peza e o cabalo é usado para bloquear as casas de escape do rei.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de cabalos';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsGl extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'A túa conta é xestionada e non pode pecharse.';
 
   @override
-  String get settingsClosingIsDefinitive => 'A eliminación da conta é irreversible. Estás seguro de querer continuar?';
+  String get settingsCantOpenSimilarAccount => 'O nome de usuario NON volverá estar dispoñible pra creares unha nova conta.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'Non se che permitirá abrir outra conta co mesmo nome, nin sequera cambiando maiúsculas e minúsculas.';
+  String get settingsCancelKeepAccount => 'Cancelar e manter a miña conta';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Cambiei de opinión, non pechedes a miña conta';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Estás seguro de que queres eliminar a túa conta? Esta decisión é irreversible. NUNCA poderás volver acceder a ela.';
+  String get settingsCloseAccountAreYouSure => 'Estás seguro de que queres eliminar a túa conta?';
 
   @override
   String get settingsThisAccountIsClosed => 'Esta conta foi pechada.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get followAndChallengeFriends => 'Segue e reta ós teus amigos';
 
   @override
+  String get noChallenges => 'Sen desafíos.';
+
+  @override
   String get gameAnalysis => 'Análise da partida';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get reopenYourAccount => 'Abre de novo a túa conta';
 
   @override
-  String get closedAccountChangedMind => 'Se pechaches a túa conta pero mudaches de idea, tes unha oportunidade de volver a reactivala.';
-
-  @override
-  String get onlyWorksOnce => 'Só funcionará unha vez.';
-
-  @override
-  String get cantDoThisTwice => 'Se pechas a túa conta de novo, non haberá maneira de recuperala.';
+  String get reopenYourAccountDescription => 'Se pechaches a túa conta pero mudaches de idea, tes a posibilidade de recuperala.';
 
   @override
   String get emailAssociatedToaccount => 'Enderezo de correo electrónico asociado á conta';
@@ -5539,7 +5539,7 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Pega o teu texto PGN aquí, ata $count partidas',
+      other: 'Pega aquí o PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata $count capítulos.',
       one: 'Pega o teu texto PGN aquí, ata $count partida',
     );
     return '$_temp0';

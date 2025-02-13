@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -17,7 +16,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
   const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
@@ -167,7 +165,7 @@ class ArchivedGameResultDialog extends StatelessWidget {
     final content = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [GameResult(game: game), const SizedBox(height: 16.0), PlayerSummary(game: game)],
+      children: [GameResult(game: game)],
     );
 
     return _ResultDialog(child: content);
@@ -216,66 +214,6 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
     );
 
     return _ResultDialog(child: content);
-  }
-}
-
-class PlayerSummary extends ConsumerWidget {
-  const PlayerSummary({required this.game, super.key});
-
-  final BaseGame game;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    final youAre = session != null ? game.playerSideOf(session.user.id) : null;
-    final me = youAre == null ? null : game.playerOf(youAre);
-
-    if (me == null || me.analysis == null) {
-      return const SizedBox.shrink();
-    }
-
-    Widget makeStatCol(int value, String Function(int count) labelFn, Color? color) {
-      return Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              value.toString(),
-              style: TextStyle(fontSize: 18.0, color: color, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4.0),
-            FittedBox(
-              child: Text(
-                labelFn(value).replaceAll(RegExp(r'\d+'), '').trim(),
-                style: TextStyle(color: color),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        makeStatCol(
-          me.analysis!.inaccuracies,
-          context.l10n.nbInaccuracies,
-          me.analysis!.inaccuracies > 0 ? innacuracyColor : null,
-        ),
-        makeStatCol(
-          me.analysis!.mistakes,
-          context.l10n.nbMistakes,
-          me.analysis!.mistakes > 0 ? mistakeColor : null,
-        ),
-        makeStatCol(
-          me.analysis!.blunders,
-          context.l10n.nbBlunders,
-          me.analysis!.blunders > 0 ? blunderColor : null,
-        ),
-      ],
-    );
   }
 }
 

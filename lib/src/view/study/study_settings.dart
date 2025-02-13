@@ -15,13 +15,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class StudySettings extends ConsumerWidget {
-  const StudySettings(this.id);
+class StudySettingsScreen extends ConsumerWidget {
+  const StudySettingsScreen(this.id);
 
   final StudyId id;
 
   static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
-    return buildScreenRoute(context, screen: StudySettings(id));
+    return buildScreenRoute(context, screen: StudySettingsScreen(id));
   }
 
   @override
@@ -39,7 +39,7 @@ class StudySettings extends ConsumerWidget {
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      appBarTitle: Text(context.l10n.settingsSettings),
       body: ListView(
         children: [
           if (isComputerAnalysisAllowed)
@@ -54,6 +54,13 @@ class StudySettings extends ConsumerWidget {
             ),
           ListSection(
             children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: analysisPrefs.inlineNotation,
+                onChanged:
+                    (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
               SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
                 value: studyPrefs.showVariationArrows,

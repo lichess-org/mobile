@@ -441,12 +441,6 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastUpcoming => 'Le teacht';
 
   @override
-  String get broadcastCompleted => 'Críochnaithe';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Ainm babhta';
 
   @override
@@ -645,6 +639,12 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1537,6 +1537,12 @@ class AppLocalizationsGa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Cor deiridh ridire';
 
   @override
@@ -1752,16 +1758,13 @@ class AppLocalizationsGa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Tá do chuntas á bhainistiú, agus ní féidir é a dhúnadh.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Tá clabhsúr glan. Níl aon dul ar ais. An bhfuil tú cinnte?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Ní cheadófar duit cuntas nua a oscailt leis an ainm céanna, fiú má tá an cás difriúil.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'D’athraigh mé m’intinn, ná dún mo chuntas';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'An bhfuil tú cinnte gur mhaith leat do chuntas a dhúnadh? Is buancinneadh é do chuntas a dhúnadh. NÍ bheidh tú riamh in ann logáil isteach RIAMH ARÍS.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Tá an cuntas seo dúnta.';
@@ -3751,6 +3754,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get followAndChallengeFriends => 'Lean agus tabhair dúshlán do chairde';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Anailís cluichí';
 
   @override
@@ -4346,13 +4352,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get reopenYourAccount => 'Athoscailt do chuntas';
 
   @override
-  String get closedAccountChangedMind => 'Má dhún tú do chuntas, ach d’athraigh tú d’intinn, gheobhaidh tú seans amháin do chuntas a fháil ar ais.';
-
-  @override
-  String get onlyWorksOnce => 'Ní oibreoidh sé seo ach uair amháin.';
-
-  @override
-  String get cantDoThisTwice => 'Má dhúnann tú do chuntas an dara huair, ní bheidh aon bhealach ann é a athshlánú.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Seoladh ríomhphoist a bhaineann leis an gcuntas';

@@ -390,12 +390,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastUpcoming => 'Tulossa';
 
   @override
-  String get broadcastCompleted => 'Päättyneet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess tunnistaa lähteenä olevista peleistä, milloin kierros on viety päätökseen. Lähteen puuttuessa voit käyttää tätä asetusta.';
-
-  @override
   String get broadcastRoundName => 'Kierroksen nimi';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Näytä kaikki lähetykset kuukausikohtaisesti';
+
+  @override
+  String get broadcastBackToLiveMove => 'Takaisin siirtojen reaaliaikaiseen seurantaan';
+
+  @override
+  String get broadcastSinceHideResults => 'Koska olet päättänyt piilottaa tulokset ja koska vältämme spoilereita, ovat kaikkien lautojen esikatselut tyhjiä.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Torni on vastustajan kuninkaan vieressä, ja sitä suojelee daami, joka myös vie kuninkaalta pakoruudut. Vastustajan kuningas jää kiinni tornin ja daamin muodostamaan 3x3-ruudun \"tapponeliöön\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovićin matti';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Torni ja ratsu matittavat kuninkaan yhdessä. Torni tekee matin kolmannen nappulan suojaamana, ja ratsua käytetään kuninkaan pakoruutujen tilkitsemiseen.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ratsuloppupeli';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Käyttäjätunnuksesi on hallinnassa, eikä sitä voi sulkea.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Tunnuksen sulku on lopullinen. Et voi myöhemmin peruuttaa sitä. Oletko varma?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Et voi luoda uutta käyttäjätunnusta samalla nimellä, et vaikka muuttaisit isoja kirjaimia pieniksi tai päinvastoin.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Muutin mieleni, älä sulje tunnustani';
+  String get settingsCancelKeepAccount => 'Peruuta ja säilytä tunnukseni';
 
   @override
-  String get settingsCloseAccountExplanation => 'Haluatko varmasti sulkea tilisi? Sulkeminen on pysyvä päätös. Et voi ENÄÄ KOSKAAN kirjautua sisään.';
+  String get settingsCloseAccountAreYouSure => 'Oletko varma, että haluat sulkea käyttäjätunnuksesi?';
 
   @override
   String get settingsThisAccountIsClosed => 'Tämä tunnus on suljettu.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get followAndChallengeFriends => 'Seuraa ja haasta kavereitasi';
 
   @override
+  String get noChallenges => 'Ei haasteita.';
+
+  @override
   String get gameAnalysis => 'Pelianalyysi';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get reopenYourAccount => 'Avaa käyttäjätunnuksesi uudelleen';
 
   @override
-  String get closedAccountChangedMind => 'Jos olet sulkenut käyttäjätunnuksesi mutta sen jälkeen muuttanut mieltäsi, saat yhden mahdollisuuden palauttaa tunnuksesi.';
-
-  @override
-  String get onlyWorksOnce => 'Tämä toimii vain kerran.';
-
-  @override
-  String get cantDoThisTwice => 'Jos suljet tunnuksesi toisen kerran, sitä ei voi palauttaa enää millään tavalla.';
+  String get reopenYourAccountDescription => 'Jos olet sulkenut käyttäjätunnuksesi mutta sen jälkeen muuttanut mieltäsi, saat mahdollisuuden palauttaa tunnuksesi.';
 
   @override
   String get emailAssociatedToaccount => 'Tunnukseen kuuluva sähköpostiosoite';

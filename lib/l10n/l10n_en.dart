@@ -390,12 +390,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastUpcoming => 'Upcoming';
 
   @override
-  String get broadcastCompleted => 'Completed';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Round name';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1469,6 +1469,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Knight endgame';
 
   @override
@@ -1684,16 +1690,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Closing is definitive. There is no going back. Are you sure?';
+  String get settingsCantOpenSimilarAccount => 'The username will NOT be available for registration again.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'You will not be allowed to open a new account with the same name, even if the case is different.';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'I changed my mind, don\'t close my account';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'This account is closed.';
@@ -3683,6 +3686,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get followAndChallengeFriends => 'Follow and challenge friends';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Game analysis';
 
   @override
@@ -4278,13 +4284,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reopenYourAccount => 'Reopen your account';
 
   @override
-  String get closedAccountChangedMind => 'If you closed your account, but have since changed your mind, you get one chance of getting your account back.';
-
-  @override
-  String get onlyWorksOnce => 'This will only work once.';
-
-  @override
-  String get cantDoThisTwice => 'If you close your account a second time, there will be no way of recovering it.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Email address associated to the account';
@@ -5537,7 +5537,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste your PGN text here, up to $count games',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
       one: 'Paste your PGN text here, up to $count game',
     );
     return '$_temp0';
@@ -6102,12 +6102,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get broadcastUpcoming => 'Upcoming';
-
-  @override
-  String get broadcastCompleted => 'Completed';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
 
   @override
   String get broadcastRoundName => 'Round name';
@@ -7394,16 +7388,13 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed and cannot be closed.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Closing is definitive. There is no going back. Are you sure?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'You will not be allowed to open a new account with the same name, even if the case is different.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'I changed my mind, don\'t close my account';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'This account is closed.';
@@ -9988,13 +9979,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get reopenYourAccount => 'Reopen your account';
 
   @override
-  String get closedAccountChangedMind => 'If you closed your account, but have since changed your mind, you get one chance of getting your account back.';
-
-  @override
-  String get onlyWorksOnce => 'This will only work once.';
-
-  @override
-  String get cantDoThisTwice => 'If you close your account a second time, there will be no way of recovering it.';
+  String get reopenYourAccountDescription => 'If you closed your account but have since changed your mind, you may reopen it now.';
 
   @override
   String get emailAssociatedToaccount => 'Email address associated to the account';

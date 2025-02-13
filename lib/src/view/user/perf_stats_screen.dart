@@ -58,7 +58,8 @@ class PerfStatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(androidTitleSpacing: 0, title: _Title(user: user, perf: perf)),
+      appBarAndroidTitleSpacing: 0,
+      appBarTitle: _Title(user: user, perf: perf),
       body: _Body(user: user, perf: perf),
     );
   }
@@ -151,7 +152,7 @@ class _Body extends ConsumerWidget {
                   (element) => element.perf == perf,
                 );
 
-                if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.isEmpty) {
+                if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.length <= 1) {
                   return const SizedBox.shrink();
                 }
                 return PlatformCard(
@@ -756,7 +757,7 @@ class _EloChartState extends State<_EloChart> {
   @override
   Widget build(BuildContext context) {
     final borderColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
-    final chartColor = ColorScheme.of(context).secondary;
+    final chartColor = Styles.chartColor(context);
     final chartDateFormatter = switch (_selectedRange) {
       DateRange.oneWeek => DateFormat.MMMd(),
       DateRange.oneMonth => DateFormat.MMMd(),
@@ -919,7 +920,7 @@ class _RangeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chartColor = ColorScheme.of(context).secondary;
+    final chartColor = Styles.chartColor(context);
 
     return PlatformCard(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,

@@ -34,6 +34,7 @@ class ToggleSoundMenuItemButton extends ConsumerWidget {
     );
 
     return MenuItemButton(
+      closeOnActivate: false,
       leadingIcon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
       semanticsLabel: context.l10n.sound,
       child: Text(context.l10n.sound),

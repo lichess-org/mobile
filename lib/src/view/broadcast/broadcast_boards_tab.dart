@@ -29,11 +29,13 @@ class BroadcastBoardsTab extends ConsumerWidget {
     required this.tournamentId,
     required this.roundId,
     required this.tournamentSlug,
+    required this.showOnlyOngoingGames,
   });
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final String tournamentSlug;
+  final bool showOnlyOngoingGames;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +65,10 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 ),
               )
               : BroadcastPreview(
-                games: value.games.values.toIList(),
+                games:
+                    showOnlyOngoingGames
+                        ? value.games.values.where((game) => game.isOngoing).toIList()
+                        : value.games.values.toIList(),
                 tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,
@@ -315,6 +320,8 @@ class _PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = game.players[side]!;
     final gameStatus = game.status;
+    // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
+    final isClockActive = game.lastMove != null && side == playingSide;
 
     return SizedBox(
       width: width,
@@ -336,26 +343,18 @@ class _PlayerWidget extends StatelessWidget {
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
-                  (gameStatus == BroadcastResult.draw)
-                      ? '½'
-                      : (gameStatus == BroadcastResult.whiteWins)
-                      ? side == Side.white
-                          ? '1'
-                          : '0'
-                      : side == Side.black
-                      ? '1'
-                      : '0',
+                  gameStatus.resultToString(side),
                   style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
                 CountdownClockBuilder(
                   timeLeft: player.clock!,
-                  active: side == playingSide,
+                  active: isClockActive,
                   builder:
                       (context, timeLeft) => Text(
                         timeLeft.toHoursMinutesSeconds(),
                         style: TextStyle(
-                          color: (side == playingSide) ? Colors.orange[900] : null,
+                          color: isClockActive ? Colors.orange[900] : null,
                           fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),

@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.14.4+001404 # See README.md for details about versioning
+version: 0.14.5+001405 # See README.md for details about versioning
 
 environment:
   sdk: '^3.7.0-209.1.beta'
@@ -25,7 +25,7 @@ dependencies:
   dartchess: ^0.9.0
   deep_pick: ^1.0.0
   device_info_plus: ^11.0.0
-  dynamic_color: ^1.6.9
+  dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^10.0.0
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
@@ -51,6 +51,7 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.19.0
   json_annotation: ^4.7.0
+  l10n_esperanto: ^2.0.12
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1

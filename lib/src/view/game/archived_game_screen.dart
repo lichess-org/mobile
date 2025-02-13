@@ -195,42 +195,59 @@ class _BodyState extends ConsumerState<_Body> {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title:
-            widget.gameData != null
-                ? _GameTitle(gameData: widget.gameData!)
-                : const SizedBox.shrink(),
-        actions: [
-          if (widget.gameData == null && widget.error == null)
-            const PlatformAppBarLoadingIndicator(),
-          if (widget.gameData != null && isLoggedIn)
-            MenuAnchor(
-              builder:
-                  (context, controller, _) => AppBarIconButton(
-                    icon: const Icon(Icons.more_horiz),
-                    semanticsLabel: context.l10n.menu,
-                    onPressed: () {
-                      if (controller.isOpen) {
-                        controller.close();
-                      } else {
-                        controller.open();
-                      }
-                    },
-                  ),
-              menuChildren: [
-                const ToggleSoundMenuItemButton(),
-                GameBookmarkMenuItemButton(
-                  id: widget.gameData!.id,
-                  bookmarked: _bookmarked,
-                  onToggleBookmark: _toggleBookmark,
-                  gameListContext: widget.gameListContext,
+      appBarTitle:
+          widget.gameData != null
+              ? _GameTitle(gameData: widget.gameData!)
+              : const SizedBox.shrink(),
+      appBarActions: [
+        if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
+        if (widget.gameData != null && isLoggedIn)
+          MenuAnchor(
+            crossAxisUnconstrained: false,
+            style: MenuStyle(
+              maximumSize: WidgetStatePropertyAll(
+                Size(
+                  MediaQuery.sizeOf(context).width * 0.6,
+                  MediaQuery.sizeOf(context).height * 0.8,
                 ),
-              ],
-            )
-          else
-            const ToggleSoundButton(),
-        ],
-      ),
+              ),
+            ),
+            builder:
+                (context, controller, _) => AppBarIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                ),
+            menuChildren: [
+              const ToggleSoundMenuItemButton(),
+              GameBookmarkMenuItemButton(
+                id: widget.gameData!.id,
+                bookmarked: _bookmarked,
+                onToggleBookmark: _toggleBookmark,
+                gameListContext: widget.gameListContext,
+              ),
+              ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
+                AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
+                  context,
+                  ref,
+                  game: value.$1,
+                  orientation: value.$1.youAre ?? Side.white,
+                  currentGamePosition: value.$1.positionAt(value.$2),
+                  lastMove: value.$1.moveAt(value.$2),
+                ),
+                _ => [],
+              }),
+            ],
+          )
+        else
+          const ToggleSoundButton(),
+      ],
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -383,8 +400,6 @@ class _BottomBar extends ConsumerWidget {
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     Future<void> showGameMenu() {
-      final game = gameCursor.valueOrNull?.$1;
-      final cursor = gameCursor.valueOrNull?.$2;
       return showAdaptiveActionSheet(
         context: context,
         actions: [
@@ -394,15 +409,6 @@ class _BottomBar extends ConsumerWidget {
               ref.read(isBoardTurnedProvider.notifier).toggle();
             },
           ),
-          if (game != null && cursor != null)
-            ...makeFinishedGameShareActions(
-              game,
-              context: context,
-              ref: ref,
-              currentGamePosition: game.positionAt(cursor),
-              orientation: orientation,
-              lastMove: game.moveAt(cursor),
-            ),
         ],
       );
     }

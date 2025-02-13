@@ -372,12 +372,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastUpcoming => '予定';
 
   @override
-  String get broadcastCompleted => '終了';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess は元になる対局に基づいてラウンド終了を検出します。元になる対局がない時はこのトグルを使ってください。';
-
-  @override
   String get broadcastRoundName => 'ラウンド名';
 
   @override
@@ -576,6 +570,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'すべての中継を月別に表示';
+
+  @override
+  String get broadcastBackToLiveMove => '実際の手に戻る';
+
+  @override
+  String get broadcastSinceHideResults => '結果を非表示にするよう選択したため、結果が見えないようプレビューボードはすべて空白です。';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1447,6 +1447,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
 
   @override
+  String get puzzleThemeVukovicMate => 'ヴコヴィッチのメイト';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'ルークとナイトでのメイト。別の駒で守られた ルークがチェックをかけ、ナイトがキングの逃げ道を抑える。';
+
+  @override
   String get puzzleThemeKnightEndgame => 'ナイト・エンドゲーム';
 
   @override
@@ -1662,16 +1668,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'あなたのアカウントは別の人が管理しており、自分では停止できません。';
 
   @override
-  String get settingsClosingIsDefinitive => 'アカウント停止は不可逆で、元には戻せません。ほんとうに停止しますか？';
-
-  @override
   String get settingsCantOpenSimilarAccount => '同じ名前（大文字・小文字が違っていても）で別のアカウントを作ることもできません。';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '気が変わったのでアカウントを停止しない';
+  String get settingsCancelKeepAccount => 'キャンセルしてアカウントを保持する';
 
   @override
-  String get settingsCloseAccountExplanation => 'ほんとうにアカウントを停止しますか？　これは永久的な決定です。このアカウントには二度とログインできなくなります。';
+  String get settingsCloseAccountAreYouSure => 'ほんとうにアカウントを閉鎖しますか？';
 
   @override
   String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
@@ -3661,6 +3664,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get followAndChallengeFriends => '友達をフォローして対局しよう';
 
   @override
+  String get noChallenges => 'チャレンジはありません。';
+
+  @override
   String get gameAnalysis => '棋譜解析';
 
   @override
@@ -4256,13 +4262,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reopenYourAccount => 'アカウントを再開する';
 
   @override
-  String get closedAccountChangedMind => 'アカウントを閉鎖して、後で気が変わった場合、一度だけアカウントを再開することができます。';
-
-  @override
-  String get onlyWorksOnce => '再開は一回限りです。';
-
-  @override
-  String get cantDoThisTwice => '二度目にアカウントを閉鎖した場合、アカウントを復元する方法はありません。';
+  String get reopenYourAccountDescription => 'アカウントを閉鎖して、後で気が変わった場合、一度だけアカウントを再開することができます。';
 
   @override
   String get emailAssociatedToaccount => 'アカウントに登録されたメールアドレス';

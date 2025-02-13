@@ -29,7 +29,7 @@ class BoardSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.preferencesGameBehavior)),
+      appBarTitle: Text(context.l10n.preferencesGameBehavior),
       body: const _Body(),
     );
   }

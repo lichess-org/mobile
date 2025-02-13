@@ -232,7 +232,10 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = _cardColors?.primaryContainer ?? Styles.cardColor(context);
+    final backgroundColor =
+        _cardColors?.primaryContainer ??
+        Theme.of(context).cardTheme.color ??
+        Theme.of(context).colorScheme.surfaceContainerLow;
     final screenWidth = MediaQuery.sizeOf(context).width;
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;

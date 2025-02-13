@@ -2,27 +2,30 @@ import 'dart:ui';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/material.dart' show ColorScheme;
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-CorePalette? _corePalette;
+typedef ColorSchemes = ({ColorScheme light, ColorScheme dark});
 
-({ColorScheme light, ColorScheme dark})? _colorSchemes;
+ColorSchemes? _dynamicColorSchemes;
+
+CorePalette? _corePalette;
 
 ChessboardColorScheme? _boardColorScheme;
 
 /// Set the system core palette if available (android 12+ only).
 ///
 /// It also defines the system board colors based on the core palette.
-void setCorePalette(CorePalette? palette) {
+void setSystemColors(CorePalette? palette, ColorSchemes? schemes) {
   _corePalette ??= palette;
+  _dynamicColorSchemes ??= schemes;
 
   if (palette != null) {
-    final lightScheme = palette.toColorScheme();
-    final darkScheme = palette.toColorScheme(brightness: Brightness.dark);
-
-    _colorSchemes ??= _generateDynamicColourSchemes(lightScheme, darkScheme);
+    _dynamicColorSchemes ??= (
+      light: palette.toColorScheme(),
+      dark: palette.toColorScheme(brightness: Brightness.dark),
+    );
 
     final darkSquare = Color(palette.secondary.get(60));
     final lightSquare = Color(palette.primary.get(95));
@@ -60,55 +63,11 @@ CorePalette? getCorePalette() {
 }
 
 /// Get the system color schemes based on the core palette, if available (android 12+).
-({ColorScheme light, ColorScheme dark})? getDynamicColorSchemes() {
-  return _colorSchemes;
+ColorSchemes? getDynamicColorSchemes() {
+  return _dynamicColorSchemes;
 }
 
 /// Get the board colors based on the core palette, if available (android 12+).
 ChessboardColorScheme? getBoardColorScheme() {
   return _boardColorScheme;
 }
-
-// --
-
-({ColorScheme light, ColorScheme dark}) _generateDynamicColourSchemes(
-  ColorScheme lightDynamic,
-  ColorScheme darkDynamic,
-) {
-  final lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
-  final darkBase = ColorScheme.fromSeed(
-    seedColor: darkDynamic.primary,
-    brightness: Brightness.dark,
-  );
-
-  final lightAdditionalColours = _extractAdditionalColours(lightBase);
-  final darkAdditionalColours = _extractAdditionalColours(darkBase);
-
-  final lightScheme = _insertAdditionalColours(lightBase, lightAdditionalColours);
-  final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
-
-  return (light: lightScheme.harmonized(), dark: darkScheme.harmonized());
-}
-
-List<Color> _extractAdditionalColours(ColorScheme scheme) => [
-  scheme.surface,
-  scheme.surfaceDim,
-  scheme.surfaceBright,
-  scheme.surfaceContainerLowest,
-  scheme.surfaceContainerLow,
-  scheme.surfaceContainer,
-  scheme.surfaceContainerHigh,
-  scheme.surfaceContainerHighest,
-];
-
-ColorScheme _insertAdditionalColours(ColorScheme scheme, List<Color> additionalColours) =>
-    scheme.copyWith(
-      surface: additionalColours[0],
-      surfaceDim: additionalColours[1],
-      surfaceBright: additionalColours[2],
-      surfaceContainerLowest: additionalColours[3],
-      surfaceContainerLow: additionalColours[4],
-      surfaceContainer: additionalColours[5],
-      surfaceContainerHigh: additionalColours[6],
-      surfaceContainerHighest: additionalColours[7],
-    );

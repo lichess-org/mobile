@@ -35,10 +35,7 @@ class BoardEditorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.boardEditor)),
-      body: _Body(initialFen),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.boardEditor), body: _Body(initialFen));
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -10,12 +11,12 @@ import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -119,14 +120,19 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final (light: themeLight, dark: themeDark) = ref.watch(applicationThemeProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final (light: themeLight, dark: themeDark) = makeAppTheme(context, generalPrefs, boardPrefs);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        MaterialLocalizationsEo.delegate,
+        CupertinoLocalizationsEo.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       locale: generalPrefs.locale,
       theme: themeLight.copyWith(
@@ -138,7 +144,6 @@ class _AppState extends ConsumerState<Application> {
         navigationBarTheme: NavigationBarTheme.of(
           context,
         ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
-        extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
       ),
       themeMode:
           generalPrefs.isForcedDarkMode

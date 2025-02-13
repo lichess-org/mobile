@@ -30,7 +30,7 @@ class ChallengeRequestsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBar: PlatformAppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
+      appBarTitle: Text(context.l10n.preferencesNotifyChallenge),
       body: _Body(),
     );
   }

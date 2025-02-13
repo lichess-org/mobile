@@ -220,47 +220,49 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }) {
     final homePrefs = ref.watch(homePreferencesProvider);
     final hasOngoingGames =
-        ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false) ||
-        offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false);
+        (status.isOnline &&
+            ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
+        (!status.isOnline &&
+            offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false));
     final list = [
       _EditableWidget(
-        widget: EnabledWidget.hello,
+        widget: HomeEditableWidget.hello,
         shouldShow: true,
-        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.hello),
+        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.hello),
         child: const _HelloWidget(),
       ),
       _EditableWidget(
-        widget: EnabledWidget.perfCards,
+        widget: HomeEditableWidget.perfCards,
         shouldShow: session != null && status.isOnline,
-        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.perfCards),
+        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.perfCards),
         child: AccountPerfCards(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
         ),
       ),
       _EditableWidget(
-        widget: EnabledWidget.quickPairing,
+        widget: HomeEditableWidget.quickPairing,
         shouldShow: status.isOnline,
-        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.quickPairing),
+        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.quickPairing),
         child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
       _EditableWidget(
-        widget: EnabledWidget.ongoingGames,
+        widget: HomeEditableWidget.ongoingGames,
         shouldShow: hasOngoingGames,
-        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.ongoingGames),
+        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.ongoingGames),
         child:
             status.isOnline
                 ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                 : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
       ),
       _EditableWidget(
-        widget: EnabledWidget.recentGames,
-        index: homePrefs.enabledWidgets.indexOf(EnabledWidget.recentGames),
+        widget: HomeEditableWidget.recentGames,
+        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.recentGames),
         shouldShow: true,
         child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       ),
     ].sortedBy((_EditableWidget widget) {
       final i = homePrefs.enabledWidgets.indexOf(widget.widget);
-      return i != -1 ? i : EnabledWidget.values.length;
+      return i != -1 ? i : HomeEditableWidget.values.length;
     });
     return [
       ...list,
@@ -324,7 +326,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       else ...[
         if (status.isOnline)
           const _EditableWidget(
-            widget: EnabledWidget.quickPairing,
+            widget: HomeEditableWidget.quickPairing,
             shouldShow: true,
             child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
@@ -342,10 +344,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required int nbOfGames,
   }) {
     return [
-      const _EditableWidget(widget: EnabledWidget.hello, shouldShow: true, child: _HelloWidget()),
+      const _EditableWidget(
+        widget: HomeEditableWidget.hello,
+        shouldShow: true,
+        child: _HelloWidget(),
+      ),
       if (status.isOnline)
         _EditableWidget(
-          widget: EnabledWidget.perfCards,
+          widget: HomeEditableWidget.perfCards,
           shouldShow: session != null,
           child: const AccountPerfCards(padding: Styles.bodySectionPadding),
         ),
@@ -428,7 +434,7 @@ class _EditableWidget extends ConsumerWidget {
   });
 
   final Widget child;
-  final EnabledWidget widget;
+  final HomeEditableWidget widget;
   final bool shouldShow;
   final int? index;
 
@@ -464,7 +470,7 @@ class _EditableWidget extends ConsumerWidget {
                   Checkbox.adaptive(
                     value: isEnabled,
                     onChanged:
-                        widget == EnabledWidget.ongoingGames
+                        widget.alwaysEnabled
                             ? null
                             : (_) {
                               ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
@@ -486,7 +492,7 @@ class _EditableWidget extends ConsumerWidget {
             Expanded(child: IgnorePointer(ignoring: isEditing, child: child)),
           ],
         )
-        : isEnabled
+        : widget.alwaysEnabled || isEnabled
         ? child
         : const SizedBox.shrink();
   }
@@ -550,7 +556,7 @@ class _TabletCreateAGameSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _EditableWidget(
-          widget: EnabledWidget.quickPairing,
+          widget: HomeEditableWidget.quickPairing,
           shouldShow: true,
           child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),

@@ -228,7 +228,7 @@ void main() {
         home: Builder(
           builder:
               (context) => PlatformScaffold(
-                appBar: const PlatformAppBar(title: Text('Test Streak Screen')),
+                appBarTitle: const Text('Test Streak Screen'),
                 body: FatButton(
                   semanticsLabel: 'Start Streak',
                   child: const Text('Start Streak'),

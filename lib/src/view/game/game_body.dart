@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
-import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
@@ -600,6 +599,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: CupertinoIcons.chevron_forward,
                 showTooltip: false,
                 blink:
+                    gameState.game.playable &&
                     gameState.stepCursor != gameState.game.steps.length - 1 &&
                     gameState.game.sideToMove == gameState.game.youAre,
               ),
@@ -741,15 +741,6 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: (_) => onNewOpponentCallback(gameState.game),
-          ),
-        if (gameState.game.finished)
-          ...makeFinishedGameShareActions(
-            gameState.game,
-            currentGamePosition: gameState.game.positionAt(gameState.stepCursor),
-            lastMove: gameState.game.moveAt(gameState.stepCursor),
-            orientation: gameState.game.youAre ?? Side.white,
-            context: context,
-            ref: ref,
           ),
       ],
     );

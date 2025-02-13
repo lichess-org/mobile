@@ -441,12 +441,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastUpcoming => 'A-benn nebeut';
 
   @override
-  String get broadcastCompleted => 'Tremenet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Round name';
 
   @override
@@ -645,6 +639,12 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1523,6 +1523,12 @@ class AppLocalizationsBr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Knight endgame';
 
   @override
@@ -1738,16 +1744,13 @@ class AppLocalizationsBr extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Meret eo ho kont ha ne c\'hall ket bezañ serret.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Serret e vo ho kont da viken. Ne c\'halloc\'h ket cheñch ho soñj. Sur oc\'h?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Ne voc\'h ket aotreet da grouiñ ur gont nevez gant ar memes anv, pa vije gant ur ment lizherennoù disheñvel.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Cheñchet em eus ma soñj, na serrit ket ma c\'hont';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Serret e vo ho kont, sur oc\'h? Un diviz-pad an hini eo. NE c\'halloc\'h KET adkavout anezhi ken, BIKEN.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Serr eo ar gont-mañ.';
@@ -3737,6 +3740,9 @@ class AppLocalizationsBr extends AppLocalizations {
   String get followAndChallengeFriends => 'Heuliañ ha c\'hoari a-enep mignoned';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Dielfennañ ar c\'hrogad';
 
   @override
@@ -4332,13 +4338,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get reopenYourAccount => 'Addigeriñ ho kont';
 
   @override
-  String get closedAccountChangedMind => 'M\'ho peus serret ho kont, met cheñchet ho soñj ganeoc\'h, ho peus un tu da gaout ho kont en dro.';
-
-  @override
-  String get onlyWorksOnce => 'Ur wech e yelo en dro an dra se nemetken.';
-
-  @override
-  String get cantDoThisTwice => 'Ma serrit ho kont un eil gwech, ne vo ket tu deoc\'h adtapout anezhañ.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Postel liammet ouzh ar gont';

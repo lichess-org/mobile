@@ -22,7 +22,7 @@ Future<void> showChoicePicker<T>(
         builder: (context) {
           return AlertDialog(
             clipBehavior: Clip.hardEdge,
-            contentPadding: EdgeInsets.zero,
+            contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0, left: 0, right: 0),
             scrollable: true,
             content: Builder(
               builder: (context) {

@@ -390,12 +390,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastUpcoming => 'Kommende';
 
   @override
-  String get broadcastCompleted => 'Afsluttet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess registrerer rund-færdiggørelse baseret på kildepartierne. Brug denne skifter, hvis der ikke er nogen kilde.';
-
-  @override
   String get broadcastRoundName => 'Rundenavn';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Vis alle udsendelser efter måned';
+
+  @override
+  String get broadcastBackToLiveMove => 'Tilbage til live træk';
+
+  @override
+  String get broadcastSinceHideResults => 'Da du har valgt at skjule resultaterne, er alle forhåndsvisningerne af brætter tomme for at undgå afsløringer.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden af fjendens konge og støttes af en dronning, som også blokerer kongens flugtfelter. Tårnet og dronningen fanger fjendens konge i en 3 x 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovics mat';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Et tårn og en springer går sammen om at sætte kongen mat. Tårnet leverer mat, mens det støttes af en tredje brik, og springeren bruges til at blokere kongens flugtfelter.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springerslutspil';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Din konto er under administration og kan ikke lukkes.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Lukning er uigenkaldelig. Der er ingen fortrydelsesret. Er du sikker?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Du vil ikke få lov til at åbne en ny konto med det samme navn, selv hvis du ændrer på store og små bogstaver.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Jeg har skiftet mening, lad være med at lukke min konto';
+  String get settingsCancelKeepAccount => 'Annuller og behold min konto';
 
   @override
-  String get settingsCloseAccountExplanation => 'Er du sikker på, at du vil lukke din konto? Lukning af din konto er en permanent beslutning. Du vil ALDRIG kunne logge ind igen.';
+  String get settingsCloseAccountAreYouSure => 'Er du sikker på, at du vil lukke din konto?';
 
   @override
   String get settingsThisAccountIsClosed => 'Denne konto er lukket.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get followAndChallengeFriends => 'Følg og udfordre dine venner';
 
   @override
+  String get noChallenges => 'Ingen udfordringer.';
+
+  @override
   String get gameAnalysis => 'Spilanalyse';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reopenYourAccount => 'Genåbn din konto';
 
   @override
-  String get closedAccountChangedMind => 'Hvis du har lukket din konto, men siden ombestemt dig, har du én chance for at få din konto tilbage.';
-
-  @override
-  String get onlyWorksOnce => 'Det vil kun fungere én gang.';
-
-  @override
-  String get cantDoThisTwice => 'Hvis du lukker din konto for anden gang, vil der ikke være nogen mulighed for at gendanne den.';
+  String get reopenYourAccountDescription => 'Hvis du har lukket din konto, men siden har ombestemt dig, har du en chance for at få din konto tilbage.';
 
   @override
   String get emailAssociatedToaccount => 'E-mailadresse tilknyttet kontoen';

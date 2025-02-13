@@ -207,7 +207,10 @@ class ListSection extends StatelessWidget {
                     clipBehavior: cupertinoClipBehavior,
                     backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
                     decoration: BoxDecoration(
-                      color: backgroundColor ?? Styles.cardColor(context),
+                      color:
+                          backgroundColor ??
+                          theme.cardTheme.color ??
+                          theme.colorScheme.surfaceContainerLow,
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -352,7 +355,7 @@ class PlatformListTile extends StatelessWidget {
           contentPadding: padding,
         );
       case TargetPlatform.iOS:
-        final activatedColor = Styles.backgroundActivated(context);
+        final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
         return IconTheme(
           data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
           child: GestureDetector(

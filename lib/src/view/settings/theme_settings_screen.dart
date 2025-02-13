@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -155,6 +156,9 @@ class _BodyState extends ConsumerState<_Body> {
             )
           else
             SliverAppBar(
+              backgroundColor: Theme.of(
+                context,
+              ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
               pinned: true,
               title: Text(context.l10n.mobileTheme),
               bottom: PreferredSize(
@@ -175,14 +179,15 @@ class _BodyState extends ConsumerState<_Body> {
               ListSection(
                 hasLeading: true,
                 children: [
-                  SettingsListTile(
-                    icon: const Icon(LichessIcons.chess_board),
-                    settingsLabel: Text(context.l10n.board),
-                    settingsValue: boardPrefs.boardTheme.label,
-                    onTap: () {
-                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
-                    },
-                  ),
+                  if (getCorePalette() != null)
+                    SwitchSettingTile(
+                      leading: const Icon(Icons.colorize_outlined),
+                      title: Text(context.l10n.mobileSystemColors),
+                      value: generalPrefs.systemColors,
+                      onChanged: (value) {
+                        ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+                      },
+                    ),
                   SettingsListTile(
                     icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
@@ -203,6 +208,14 @@ class _BodyState extends ConsumerState<_Body> {
                             .setBackground(backgroundTheme: null, backgroundImage: null);
                       },
                     ),
+                  SettingsListTile(
+                    icon: const Icon(LichessIcons.chess_board),
+                    settingsLabel: Text(context.l10n.board),
+                    settingsValue: boardPrefs.boardTheme.label,
+                    onTap: () {
+                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
+                    },
+                  ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.chess_pawn),
                     settingsLabel: Text(context.l10n.pieceSet),

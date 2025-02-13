@@ -38,11 +38,6 @@ class CreateGameOptions extends ConsumerWidget {
               onTap:
                   isOnline
                       ? () {
-                        // pushPlatformRoute(
-                        //   context,
-                        //   title: context.l10n.onlineBots,
-                        //   builder: (_) => const OnlineBotsScreen(),
-                        // );
                         Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
                       }
                       : null,
@@ -104,13 +99,6 @@ class _CreateGamePlatformButton extends StatelessWidget {
           title: Text(label, style: Styles.mainListTileTitle),
           onTap: onTap,
         )
-        : FilledButton.tonalIcon(
-          onPressed: onTap,
-          icon: Icon(icon),
-          label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-          style: const ButtonStyle(
-            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 8.0)),
-          ),
-        );
+        : FilledButton.tonalIcon(onPressed: onTap, icon: Icon(icon), label: Text(label));
   }
 }

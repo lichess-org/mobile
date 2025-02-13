@@ -424,12 +424,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastUpcoming => 'Artėjančios';
 
   @override
-  String get broadcastCompleted => 'Pasibaigę';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess aptiko turo užbaigimą, bet galimai klaidingai. Naudokite tai, norėdami nustatyti rankiniu būdu.';
-
-  @override
   String get broadcastRoundName => 'Raundo pavadinimas';
 
   @override
@@ -628,6 +622,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Rodyti visas transliacijas pagal mėnesį';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1517,6 +1517,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Žirgų endšpilis';
 
   @override
@@ -1732,16 +1738,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Jūsų paskyra yra valdoma ir negali būti uždaryta.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Uždarymas yra galutinis. Kelio atgal nebus. Ar tikrai to norite?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Negalėsite susikurti kitos paskyros su tokiu pačiu vardu, net jeigu skirsis didžiosios / mažosios raidės.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Persigalvojau, neuždarykite mano paskyros';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Ar tikrai norite uždaryti savo paskyrą? Uždarymas yra galutinis veiksmas. Daugiau NIEKADA nebegalėsite prisijungti.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Ši paskyra uždaryta.';
@@ -3731,6 +3734,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get followAndChallengeFriends => 'Sekti ir žaisti su draugais';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Partijos analizė';
 
   @override
@@ -4326,13 +4332,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get reopenYourAccount => 'Atidaryti uždarytą paskyrą';
 
   @override
-  String get closedAccountChangedMind => 'Jei uždarėte savo paskyrą, tačiau apsigalvojote, turite vieną šansą ją atgauti.';
-
-  @override
-  String get onlyWorksOnce => 'Tai suveiks tik kartą.';
-
-  @override
-  String get cantDoThisTwice => 'Jei uždarysite savo paskyrą antrą kartą nebebus jokio būdo ją atkurti.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Elektroninio pašto adresas susietas su paskyra';

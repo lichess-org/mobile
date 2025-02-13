@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -18,11 +19,27 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 enum BroadcastRoundTab { overview, boards, players }
+
+enum _BroadcastGameFilter {
+  all,
+  ongoing;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case all:
+        return l10n.mobileAllGames;
+      case ongoing:
+        // TODO: translate
+        return 'Ongoing games';
+    }
+  }
+}
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
@@ -54,6 +71,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   BroadcastRoundId? _selectedRoundId;
 
   bool roundLoaded = false;
+
+  _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
   @override
   void initState() {
@@ -94,6 +113,39 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
+  Widget _filterButtonBuilder(BuildContext context) => AppBarIconButton(
+    icon: const Icon(Icons.filter_list),
+    semanticsLabel: context.l10n.filterGames,
+    onPressed:
+        () => showAdaptiveBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+          builder:
+              (_) => StatefulBuilder(
+                builder: (context, setLocalState) {
+                  return BottomSheetScrollableContainer(
+                    padding: const EdgeInsets.all(16.0),
+                    children: [
+                      const SizedBox(height: 16.0),
+                      Filter<_BroadcastGameFilter>(
+                        filterType: FilterType.singleChoice,
+                        choices: _BroadcastGameFilter.values,
+                        choiceSelected: (choice) => filter == choice,
+                        choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                        onSelected: (value, selected) {
+                          setLocalState(() => filter = value);
+                          setState(() => filter = value);
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  );
+                },
+              ),
+        ),
+  );
+
   Widget _iosBuilder(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
@@ -120,8 +172,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-
-        trailing: _BroadcastSettingsButton(),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
+        ),
       ),
       child: Column(
         children: [
@@ -142,6 +196,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       tournamentId: _selectedTournamentId,
                       roundId: _selectedRoundId ?? value.defaultRoundId,
                       tournamentSlug: widget.broadcast.tour.slug,
+                      showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
                     ),
                     _ => const SliverFillRemaining(child: SizedBox.shrink()),
                   },
@@ -189,7 +244,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             Tab(text: context.l10n.players),
           ],
         ),
-        actions: [_BroadcastSettingsButton()],
+        actions: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
@@ -207,6 +262,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   tournamentId: _selectedTournamentId,
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentSlug: widget.broadcast.tour.slug,
+                  showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
                 ),
                 _ => const SliverFillRemaining(child: SizedBox.shrink()),
               },
@@ -507,6 +563,8 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsButton extends StatelessWidget {
+  const _BroadcastSettingsButton();
+
   @override
   Widget build(BuildContext context) => AppBarIconButton(
     icon: const Icon(Icons.settings),

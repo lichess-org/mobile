@@ -149,19 +149,7 @@ BroadcastRoundGames _gamesFromPick(RequiredPick pick) =>
 MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   final stringStatus = pick('status').asStringOrNull();
 
-  final status =
-      (stringStatus == null)
-          ? BroadcastResult.noResultPgnTag
-          : switch (stringStatus) {
-            '½-½' => BroadcastResult.draw,
-            '1-0' => BroadcastResult.whiteWins,
-            '0-1' => BroadcastResult.blackWins,
-            '*' => BroadcastResult.ongoing,
-            _ =>
-              throw FormatException(
-                "value $stringStatus can't be interpreted as a broadcast result",
-              ),
-          };
+  final status = BroadcastResult.resultFromString(stringStatus);
 
   /// The amount of time that the player whose turn it is has been thinking since his last move
   final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
@@ -203,7 +191,7 @@ BroadcastPlayer _playerFromPick(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    clock: updatedClock,
+    clock: (updatedClock?.isNegative ?? false) ? Duration.zero : updatedClock,
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
   );
