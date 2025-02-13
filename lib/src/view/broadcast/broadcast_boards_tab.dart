@@ -320,6 +320,8 @@ class _PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = game.players[side]!;
     final gameStatus = game.status;
+    // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
+    final isClockActive = game.lastMove != null && side == playingSide;
 
     return SizedBox(
       width: width,
@@ -347,12 +349,12 @@ class _PlayerWidget extends StatelessWidget {
               else if (player.clock != null)
                 CountdownClockBuilder(
                   timeLeft: player.clock!,
-                  active: side == playingSide,
+                  active: isClockActive,
                   builder:
                       (context, timeLeft) => Text(
                         timeLeft.toHoursMinutesSeconds(),
                         style: TextStyle(
-                          color: (side == playingSide) ? Colors.orange[900] : null,
+                          color: isClockActive ? Colors.orange[900] : null,
                           fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
