@@ -372,12 +372,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastUpcoming => '即将举行';
 
   @override
-  String get broadcastCompleted => '已完成';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess基于源游戏检测游戏的完成状态。如果没有源，请使用此选项。';
-
-  @override
   String get broadcastRoundName => '轮次名称';
 
   @override
@@ -576,6 +570,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => '按月查看所有转播';
+
+  @override
+  String get broadcastBackToLiveMove => '回到实时着法';
+
+  @override
+  String get broadcastSinceHideResults => '由于您选择隐藏比赛结果，为避免剧透，所有棋局预览均为空白状态。';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1447,6 +1447,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => '车和马一起合作将死了王。车在第三个子的合作下杀死了王，马用来挡住敌王的出路格子。';
+
+  @override
   String get puzzleThemeKnightEndgame => '马残局';
 
   @override
@@ -1662,16 +1668,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => '你的账号已被管理，无法被关闭。';
 
   @override
-  String get settingsClosingIsDefinitive => '关闭账户是不可回退的决定。你真的确定吗？';
-
-  @override
   String get settingsCantOpenSimilarAccount => '新账号名称不能和旧账号相同，只有大小写差别也不被允许。';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '我改主意了，不要关闭帐号';
+  String get settingsCancelKeepAccount => '取消，保留我的账户';
 
   @override
-  String get settingsCloseAccountExplanation => '你确定要关闭你的账户？关闭账户是不可回退的决定。 你将再不能再使用此账户登录。';
+  String get settingsCloseAccountAreYouSure => '您确定要关闭您的账户吗？';
 
   @override
   String get settingsThisAccountIsClosed => '此帐户已被关闭。';
@@ -3661,6 +3664,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get followAndChallengeFriends => '关注并挑战朋友';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => '棋局分析';
 
   @override
@@ -4256,13 +4262,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reopenYourAccount => '恢复你的账户';
 
   @override
-  String get closedAccountChangedMind => '如果你关闭了账户，但此后又改变了主意，你可以获得一次恢复账户的机会。';
-
-  @override
-  String get onlyWorksOnce => '账户关闭后只能恢复一次';
-
-  @override
-  String get cantDoThisTwice => '如果你第二次关闭账户，将无法恢复。';
+  String get reopenYourAccountDescription => '如果您关闭了账户，但此后又改变了主意，您可以获得一次恢复账户的机会。';
 
   @override
   String get emailAssociatedToaccount => '与账户关联的电子邮件地址';
@@ -5081,7 +5081,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyPlaying => '正在对局';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => '结果';
 
   @override
   String get studyShowEvalBar => '评估条';
@@ -5996,12 +5996,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get broadcastUpcoming => '即將舉行';
-
-  @override
-  String get broadcastCompleted => '已結束';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess 偵測棋局的結束，但有可能會偵測錯誤。請在這自行設定。';
 
   @override
   String get broadcastRoundName => '回合名稱';
@@ -7282,16 +7276,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settingsManagedAccountCannotBeClosed => '您的帳號已被管理並且無法關閉。';
 
   @override
-  String get settingsClosingIsDefinitive => '您確定要刪除帳號嗎？這是無法挽回的。';
-
-  @override
   String get settingsCantOpenSimilarAccount => '即使名稱大小寫不同，您也不能使用相同的名稱開設新帳戶';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '我改變主意了，不要關閉我的帳號';
+  String get settingsCancelKeepAccount => '取消併保留我的帳號';
 
   @override
-  String get settingsCloseAccountExplanation => '您真的確定要刪除帳戶嗎？ 關閉帳戶是永久性的決定， 您將「永遠無法」再次登入。';
+  String get settingsCloseAccountAreYouSure => '確定要關閉您的帳戶嗎？';
 
   @override
   String get settingsThisAccountIsClosed => '此帳號已被關閉。';
@@ -9874,15 +9865,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reopenYourAccount => '重新開啟帳戶';
-
-  @override
-  String get closedAccountChangedMind => '如果你停用了自己的帳號，但是改變了心意，你有一次的機會可以拿回帳號。';
-
-  @override
-  String get onlyWorksOnce => '這只能復原一次。';
-
-  @override
-  String get cantDoThisTwice => '如果你決定再次停用你的帳號，則不會有任何方式去復原。';
 
   @override
   String get emailAssociatedToaccount => '和此帳號相關的電子信箱';

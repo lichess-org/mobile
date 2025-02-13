@@ -390,12 +390,6 @@ class AppLocalizationsNn extends AppLocalizations {
   String get broadcastUpcoming => 'Kommande';
 
   @override
-  String get broadcastCompleted => 'Fullførde';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detekterer ferdigspela rundar basert på kjeldeparita. Bruk denne innstillinga om det ikkje finst ei kjelde.';
-
-  @override
   String get broadcastRoundName => 'Rundenamn';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsNn extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Vis alle overføringar etter månad';
+
+  @override
+  String get broadcastBackToLiveMove => 'Attende til gjeldande trekk';
+
+  @override
+  String get broadcastSinceHideResults => 'Du valde skjula resultatane, så alle forhåndsvisningane av bretta er tome for å unngå å røpa noko.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsNn extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Eit tårn står ved sida av motspelarens konge og er støtta av ei dronning som i tillegg stengjer fluktfelta til kongen. Tårnet og dronninga fangar motspelarkongen i ei 3x3 «kasse».';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vuković-matt';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Tårn og springar samarbeider om å sette kongen matt. Tårnet gjev matt med støtte frå ein tredje brikke, medan springaren blokkerer fluktfelta til kongen.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springarsluttspel';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsNn extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Kontoen din er under administrasjon og kan ikkje stengast.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Å stenge kontoen er ei avgjerd som ikkje kan reverseras. Er du heilt sikker?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Du kan ikkje oppretta ein ny konto med det same brukarnamnet, sjølv om du endrar bokstavstorleiken (små bokstaver til STORE eller STORE bokstavar til små).';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Eg ombestemte meg, ikkje steng kontoen min';
+  String get settingsCancelKeepAccount => 'Avbryt og behald kontoen min';
 
   @override
-  String get settingsCloseAccountExplanation => 'Er du heilt sikker på at du vil lukke denne kontoen? Det er ei permanent avgjerd. Du vil aldri bli i stand til å logg inn att.';
+  String get settingsCloseAccountAreYouSure => 'Er du sikker på at du vil avslutta kontoen din?';
 
   @override
   String get settingsThisAccountIsClosed => 'Denne kontoen er stengd.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsNn extends AppLocalizations {
   String get followAndChallengeFriends => 'Følg og utfordre vener';
 
   @override
+  String get noChallenges => 'Ingen utfordringar.';
+
+  @override
   String get gameAnalysis => 'Analyse av partiet';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsNn extends AppLocalizations {
   String get reopenYourAccount => 'Opne kontoen din på ny';
 
   @override
-  String get closedAccountChangedMind => 'Om du har stengd kontoen din, men ynskjer å ta den attende, får du eitt høve til å opna den på ny.';
-
-  @override
-  String get onlyWorksOnce => 'Dette kan du berre gjera ein einaste gong.';
-
-  @override
-  String get cantDoThisTwice => 'Om du stengde kontoen ein andre gong, er det ikkje lengre mogleg å opna den att.';
+  String get reopenYourAccountDescription => 'Om du har stengd kontoen din, men ynskjer å ta den attende, har du høve til å opna den på ny.';
 
   @override
   String get emailAssociatedToaccount => 'E-postadressa som er tilknytt kontoen';

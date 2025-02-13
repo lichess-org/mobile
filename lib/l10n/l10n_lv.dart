@@ -407,12 +407,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastUpcoming => 'Gaidāmie';
 
   @override
-  String get broadcastCompleted => 'Notikušie';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Raunda nosaukums';
 
   @override
@@ -611,6 +605,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1493,6 +1493,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Zirdziņu beigu spēle';
 
   @override
@@ -1708,16 +1714,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Jūsu konts tiek pārvaldīts, un to nevar slēgt.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Slēgšana ir galīga. Atpakaļceļa nav. Vai esat pārliecināts?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Nevarēsiet atvērt jaunu kontu ar to pašu vārdu, pat ja burtu lielumi atšķirsies.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Es pārdomāju, neslēdziet manu kontu';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Vai esat pārliecināts, ka vēlaties slēgt kontu? Konta slēgšanu nevar atsaukt. Jūs vairs nekad nevarēsiet ierakstīties.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Šis konts ir slēgts.';
@@ -3707,6 +3710,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get followAndChallengeFriends => 'Sekojiet draugiem un izaiciniet tos';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Spēles analīze';
 
   @override
@@ -4302,13 +4308,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get reopenYourAccount => 'Atgūt savu kontu';
 
   @override
-  String get closedAccountChangedMind => 'Ja esat slēdzis kontu, bet pārdomājāt, jums ir viena iespēja atgūt kontu.';
-
-  @override
-  String get onlyWorksOnce => 'Tā darbosies tikai vienu reizi.';
-
-  @override
-  String get cantDoThisTwice => 'Ja slēgsiet kontu otrreiz, nebūs iespēju to atgūt.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Ar kontu saistītais epasts';

@@ -390,12 +390,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastUpcoming => 'Prossimamente';
 
   @override
-  String get broadcastCompleted => 'Conclusa';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess rileva il completamento del turno a seconda delle partite di origine. Utilizza questo interruttore se non è presente alcuna origine.';
-
-  @override
   String get broadcastRoundName => 'Nome turno';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Visualizza tutte le trasmissioni per mese';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Finale di cavallo';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Il tuo account è gestito esternamente e non può essere chiuso.';
 
   @override
-  String get settingsClosingIsDefinitive => 'L\'eliminazione dell\'account è definitiva. Una volta cancellato non è più possibile tornare indietro. Sei sicuro?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Non potrai creare un nuovo account con lo stesso nome, nemmeno con diverse maiuscole/minuscole.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ci ho ripensato, non eliminare il mio account';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Sei sicuro di voler eliminare il tuo account? L\'eliminazione del tuo account è un\'azione irreversibile. Non ti sarà MAI più possibile effettuare il login e la pagina del tuo profilo non sarà più accessibile.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Questo account è stato eliminato.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get followAndChallengeFriends => 'Segui e sfida gli amici';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Analisi partita';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reopenYourAccount => 'Riapri il tuo account';
 
   @override
-  String get closedAccountChangedMind => 'Se hai chiuso il tuo account, ma da allora hai cambiato idea, ottieni una possibilità di recuperare il tuo account.';
-
-  @override
-  String get onlyWorksOnce => 'Questo funzionerà una sola volta.';
-
-  @override
-  String get cantDoThisTwice => 'Se chiudi il tuo account una seconda volta, non ci sarà modo di recuperarlo.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Indirizzo email associato all\'account';

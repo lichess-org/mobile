@@ -406,12 +406,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastUpcoming => 'Предстојећа';
 
   @override
-  String get broadcastCompleted => 'Завршена';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Round name';
 
   @override
@@ -610,6 +604,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1486,6 +1486,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Скакачка завршница';
 
   @override
@@ -1701,16 +1707,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Затварање је коначно. Нема повратка. Да ли сте сигурни?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Неће Вам бити допуштено да отворите нови налог са истим именом, чак и ако капитализација слова буде другачија.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Предомислио/ла сам се, немојте затворити мој налог';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Да ли сте сигурни да желите затворити Ваш налог? Затварање Вашег налога је трајна одлука. Више се НИКАДА нећете моћи пријавити.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Овај налог је затворен.';
@@ -3700,6 +3703,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get followAndChallengeFriends => 'Прати и изазови пријатеља';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Анализа партије';
 
   @override
@@ -4295,13 +4301,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get reopenYourAccount => 'Поново отвори свој налог';
 
   @override
-  String get closedAccountChangedMind => 'Ако си затворио налог, али си се после предомислио, имаш једну прилику да повратиш свој налог.';
-
-  @override
-  String get onlyWorksOnce => 'Ово ће радити само једном.';
-
-  @override
-  String get cantDoThisTwice => 'Ако си затворио налог по други пут, не постоји начин да га повратиш.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Мејл адреса повезана са налогом';

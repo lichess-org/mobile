@@ -180,7 +180,7 @@ class _BodyState extends ConsumerState<_Body> {
       ),
       (
         'past',
-        context.l10n.broadcastCompleted,
+        context.l10n.broadcastPastBroadcasts,
         broadcasts.value!.past.where((b) => widget.filter == _BroadcastFilter.all).toList(),
       ),
     ];

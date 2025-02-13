@@ -390,12 +390,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastUpcoming => 'आगामी';
 
   @override
-  String get broadcastCompleted => 'पूर्ण';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'दौर का नाम';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1469,6 +1469,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'नाइट एंडगेम';
 
   @override
@@ -1684,16 +1690,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'आपका खाता प्रबंधित है, और बंद नहीं किया जा सकता|';
 
   @override
-  String get settingsClosingIsDefinitive => 'समापन निश्चित है। वहां से कोई वापसी नहीं है। क्या आपने सुनिश्चित कर लिया है?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'आपको इस नाम से कोई नया खाता खोलने की अनुमति नहीं दी जाएगी।';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'मैंने अपना मन बदल लिया, मेरे खाता को बंद न करें';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'क्या आप वाकई अपना खाता बंद करना चाहते हैं? अपना खाता बंद करना एक स्थायी निर्णय है। आप कभी भी लॉग इन नहीं कर पाएंगे।';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'यह ख़ाता बंद है|';
@@ -3683,6 +3686,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get followAndChallengeFriends => 'अपने दोस्तों को चुनौती';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'खेल अध्ययन';
 
   @override
@@ -4278,13 +4284,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reopenYourAccount => 'अपना खाता पुनः खोलें।';
 
   @override
-  String get closedAccountChangedMind => 'अगर आपने अपना खाता बंद कर दिया था, लेकिन अब आपने मन बदल लिया है, तो आपको अपना खाता वापस पाने का एक अवसर मिलता है।';
-
-  @override
-  String get onlyWorksOnce => 'यह केवल एक बार काम करेगा।';
-
-  @override
-  String get cantDoThisTwice => 'अगर आपने दूसरी बार अपना खाता बंद किया, तो उसे वापस पाने का कोई रास्ता नहीं होगा।';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'खाते से संबंधित ईमेल पता';

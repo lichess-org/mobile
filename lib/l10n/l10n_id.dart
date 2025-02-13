@@ -373,12 +373,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastUpcoming => 'Akan datang';
 
   @override
-  String get broadcastCompleted => 'Telah selesai';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Nama ronde';
 
   @override
@@ -577,6 +571,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1449,6 +1449,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Babak akhir kuda';
 
   @override
@@ -1664,16 +1670,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Akun Anda dikelola, dan tidak dapat ditutup.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Menghapus akun tidak dapat dibatalkan. Apakah Anda yakin?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Anda tidak akan diizinkan untuk membuka akun baru dengan nama yang sama, meskipun besar-kecil hurufnya berbeda.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Saya berubah pikiran, jangan tutup akun saya';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Apakah Anda yakin ingin menutup akun Anda? Menutup akun Anda adalah keputusan permanen. Anda tidak akan PERNAH bisa MASUK lagi.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Akun ini telah ditutup.';
@@ -1881,10 +1884,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get deleteFromHere => 'Hapus dari sini';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Tutup variasi';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Buka variasi';
 
   @override
   String get forceVariation => 'Paksakan variasi';
@@ -3663,6 +3666,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get followAndChallengeFriends => 'Mengikuti dan menantang teman';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Analisa Permainan';
 
   @override
@@ -4258,13 +4264,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get reopenYourAccount => 'Buka kembali akun Anda';
 
   @override
-  String get closedAccountChangedMind => 'Jika Anda telah menutup akun, Anda dapat satu kesempatan untuk mengembalikan akun anda.';
-
-  @override
-  String get onlyWorksOnce => 'Ini hanya dapat dilakukan sekali.';
-
-  @override
-  String get cantDoThisTwice => 'Jika Anda menutup akun untuk yang kedua kalinya, akun tersebut tidak dapat dikembalikan lagi.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Alamat e-mail yang terkait dengan akun ini';

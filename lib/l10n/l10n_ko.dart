@@ -372,12 +372,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastUpcoming => '방영 예정';
 
   @override
-  String get broadcastCompleted => '종료됨';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess는 경기 완료를 감지하지만, 잘못될 때가 있을 수 있습니다. 수동으로 설정하기 위해 이걸 사용하세요.';
-
-  @override
   String get broadcastRoundName => '라운드 이름';
 
   @override
@@ -576,6 +570,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => '월별 방송들 모두 보기';
+
+  @override
+  String get broadcastBackToLiveMove => '실시간 수로 돌아가기';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1441,10 +1441,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => '킬 박스 체크메이트';
 
   @override
   String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
 
   @override
   String get puzzleThemeKnightEndgame => '나이트 엔딩';
@@ -1662,16 +1668,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => '당신의 계정은 관리되고 있으며, 폐쇄될 수 없습니다.';
 
   @override
-  String get settingsClosingIsDefinitive => '폐쇄 결정은 바꾸거나, 되돌릴 수 없습니다. 정말로 하실 건가요?';
-
-  @override
   String get settingsCantOpenSimilarAccount => '대소문자가 다르더라도, 똑같은 이름으로 계정을 다시 열 수 없습니다.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '마음이 바뀌었습니다, 계정을 폐쇄하지 않겠습니다';
+  String get settingsCancelKeepAccount => '취소하고 계정 지키기';
 
   @override
-  String get settingsCloseAccountExplanation => '정말로 계정을 닫고 싶으신가요? 계정 폐쇄는 되돌릴 수 없습니다. 절대로 다시 로그인 할 수 없습니다.';
+  String get settingsCloseAccountAreYouSure => '계정을 정말로 폐쇄하시겠습니까?';
 
   @override
   String get settingsThisAccountIsClosed => '계정이 폐쇄되었습니다.';
@@ -3661,6 +3664,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get followAndChallengeFriends => '친구를 팔로우하고 도전하기';
 
   @override
+  String get noChallenges => '도전 없음.';
+
+  @override
   String get gameAnalysis => '게임 분석기';
 
   @override
@@ -4256,13 +4262,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reopenYourAccount => '계정 재활성화';
 
   @override
-  String get closedAccountChangedMind => '계정을 폐쇄한 후 마음이 바뀌었다면, 계정을 다시 활성화할 수 있는 기회가 한 번 있습니다.';
-
-  @override
-  String get onlyWorksOnce => '단 한번만 가능합니다.';
-
-  @override
-  String get cantDoThisTwice => '계정을 두 번째로 폐쇄했다면 복구할 방법이 없습니다.';
+  String get reopenYourAccountDescription => '계정을 폐쇄한 후 마음이 바뀌었다면, 계정을 다시 활성화할 수 있는 기회가 한 번 있습니다.';
 
   @override
   String get emailAssociatedToaccount => '계정에 등록된 이메일 주소';

@@ -426,12 +426,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastUpcoming => 'Chystané';
 
   @override
-  String get broadcastCompleted => 'Dokončené';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detekuje dokončení kola na základě zdrojových her. Tento přepínač použijte, pokud není k dispozici žádný zdroj.';
-
-  @override
   String get broadcastRoundName => 'Číslo kola';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Zobrazit všechny vysílání podle měsíce';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1519,6 +1519,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Jezdcové koncovky';
 
   @override
@@ -1734,16 +1740,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Váš účet je spravován a nemůže být zrušen.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zrušení účtu je trvalé. Tato akce je nevratná. Jste si jisti, že chcete svůj účet uzavřít?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Nebudete moci založit nový účet se stejným jménem, a to ani když se bude lišit velikost písmen.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Změnil jsem názor, nechci zrušit svůj účet';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Jste si jisti, že chcete uzavřít svůj účet? Uzavření účtu je trvalé rozhodnutí. Již NIKDY SE ZNOVU nebudete moci přihlásit.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Tento účet je zrušen.';
@@ -3733,6 +3736,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get followAndChallengeFriends => 'Hraj s přáteli';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Analýza hry';
 
   @override
@@ -4328,13 +4334,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reopenYourAccount => 'Znovu otevřít svůj účet';
 
   @override
-  String get closedAccountChangedMind => 'Pokud jste uzavřel svůj účet, ale od té doby jste změnili názor, dostanete jednu šanci získat svůj účet zpět.';
-
-  @override
-  String get onlyWorksOnce => 'Toto je možné provést pouze jednou.';
-
-  @override
-  String get cantDoThisTwice => 'Pokud svůj účet zrušíte podruhé, nebude ho už možné obnovit.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'E-mailová adresa přidružená k tomuto účtu';

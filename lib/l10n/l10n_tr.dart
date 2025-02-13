@@ -390,12 +390,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastUpcoming => 'Yaklaşan turnuvalar';
 
   @override
-  String get broadcastCompleted => 'Tamamlanan turnuvalar';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess, tur tamamlanmasını kaynak oyunlara dayanarak algılar. Kaynak yoksa bu anahtarı kullanın.';
-
-  @override
   String get broadcastRoundName => 'Tur ismi';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Tüm yayınları aylara göre görüntüleyin';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'At oyunsonu';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Hesabınız başkası tarafından yönetiliyor, kapatılamaz.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Hesabı kapatma işleminin geri dönüşü yoktur. Bundan emin misiniz?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Büyük-küçük harf değişiklikleri yapsanız dahi aynı kullanıcı adıyla yeni bir hesap açamazsınız.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Fikrimi değiştirdim, hesabımı kapatmayacağım.';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Hesabınızı kapatmak istediğinizden emin misiniz? Hesap kapatmak geri dönüşü olmayan bir karardır. BİR DAHA ASLA giriş yapamayacaksınız.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get followAndChallengeFriends => 'Arkadaşlarınızı takip edin ve onlarla maç yapın';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Oyun analizi';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reopenYourAccount => 'Hesabı aktifleştir';
 
   @override
-  String get closedAccountChangedMind => 'Hesabınızı kapatıp sonradan fikrinizi değiştirdiyseniz bir kereliğine mahsus olmak üzere hesabı tekrar açabilirsiniz.';
-
-  @override
-  String get onlyWorksOnce => 'Bu işlemi yalnızca bir kez yapabilirsiniz.';
-
-  @override
-  String get cantDoThisTwice => 'Hesabınızı ikinci kez kapatırsanız tekrar aktifleştiremezsiniz.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Hesabın bağlı olduğu e-posta adresi';
