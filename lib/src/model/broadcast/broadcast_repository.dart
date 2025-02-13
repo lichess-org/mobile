@@ -203,7 +203,7 @@ BroadcastPlayer _playerFromPick(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    clock: updatedClock,
+    clock: (updatedClock?.isNegative ?? false) ? Duration.zero : updatedClock,
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
   );
