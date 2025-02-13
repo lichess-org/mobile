@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -437,15 +436,7 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    (gameStatus == BroadcastResult.draw)
-                        ? '½'
-                        : (gameStatus == BroadcastResult.whiteWins)
-                        ? side == Side.white
-                            ? '1'
-                            : '0'
-                        : side == Side.black
-                        ? '1'
-                        : '0',
+                    gameStatus.resultToString(side),
                     style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),
