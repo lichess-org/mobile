@@ -17,8 +17,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -67,34 +66,14 @@ class GameListTile extends StatelessWidget {
       mySide: youAre,
       padding: padding,
       onTap:
-          game.variant.isReadSupported
-              ? () {
-                Navigator.of(context, rootNavigator: true).push(
-                  game.fullId != null
-                      ? GameScreen.buildRoute(
-                        context,
-                        initialGameId: game.fullId,
-                        loadingFen: game.lastFen,
-                        loadingLastMove: game.lastMove,
-                        loadingOrientation: youAre,
-                        lastMoveAt: game.lastMoveAt,
-                        gameListContext: gameListContext,
-                      )
-                      : ArchivedGameScreen.buildRoute(
-                        context,
-                        gameData: game,
-                        orientation: youAre,
-                        gameListContext: gameListContext,
-                      ),
-                );
-              }
-              : () {
-                showPlatformSnackbar(
-                  context,
-                  'This variant is not supported yet.',
-                  type: SnackBarType.info,
-                );
-              },
+          () => openGameScreen(
+            context,
+            game: item.game,
+            orientation: item.pov,
+            loadingLastMove: game.lastMove,
+            lastMoveAt: game.lastMoveAt,
+            gameListContext: gameListContext,
+          ),
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
@@ -153,14 +132,12 @@ class _GameListTile extends StatelessWidget {
           isScrollControlled: true,
           showDragHandle: true,
           builder:
-              (context) => _ContextMenu(
+              (context) => GameContextMenu(
                 game: game,
                 mySide: mySide,
-                oppponentTitle: opponentTitle,
+                showGameSummary: true,
+                opponentTitle: opponentTitle,
                 onPressedBookmark: onPressedBookmark,
-                icon: icon,
-                subtitle: subtitle,
-                trailing: trailing,
               ),
         );
       },
@@ -179,25 +156,21 @@ class _GameListTile extends StatelessWidget {
   }
 }
 
-class _ContextMenu extends ConsumerWidget {
-  const _ContextMenu({
+class GameContextMenu extends ConsumerWidget {
+  const GameContextMenu({
     required this.game,
     required this.mySide,
-    required this.oppponentTitle,
+    required this.opponentTitle,
     required this.onPressedBookmark,
-    this.icon,
-    this.subtitle,
-    this.trailing,
+    required this.showGameSummary,
   });
 
   final LightArchivedGame game;
   final Side mySide;
-  final Widget oppponentTitle;
+  final Widget opponentTitle;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
 
-  final IconData? icon;
-  final Widget? subtitle;
-  final Widget? trailing;
+  final bool showGameSummary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -218,88 +191,89 @@ class _ContextMenu extends ConsumerWidget {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.5),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 8.0)),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return IntrinsicHeight(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    if (game.lastFen != null)
-                      BoardThumbnail(
-                        size: constraints.maxWidth - (constraints.maxWidth / 1.618),
-                        fen: game.lastFen!,
-                        orientation: mySide,
-                        lastMove: game.lastMove,
-                      ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+        if (showGameSummary)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ).add(const EdgeInsets.only(bottom: 8.0)),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      if (game.lastFen != null)
+                        BoardThumbnail(
+                          size: constraints.maxWidth - (constraints.maxWidth / 1.618),
+                          fen: game.lastFen!,
+                          orientation: mySide,
+                          lastMove: game.lastMove,
+                        ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                    style: const TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    _dateFormatter.format(game.lastMoveAt),
+                                    style: TextStyle(
+                                      color: textShade(context, Styles.subtitleOpacity),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (game.lastFen != null)
                                 Text(
-                                  '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  gameStatusL10n(
+                                    context,
+                                    variant: game.variant,
+                                    status: game.status,
+                                    lastPosition: Position.setupPosition(
+                                      game.variant.rule,
+                                      Setup.parseFen(game.lastFen!),
+                                    ),
+                                    winner: game.winner,
+                                  ),
+                                  style: TextStyle(
+                                    color:
+                                        game.winner == null
+                                            ? customColors?.brag
+                                            : game.winner == mySide
+                                            ? customColors?.good
+                                            : customColors?.error,
+                                  ),
                                 ),
+                              if (game.opening != null)
                                 Text(
-                                  _dateFormatter.format(game.lastMoveAt),
+                                  game.opening!.name,
+                                  maxLines: 2,
                                   style: TextStyle(
                                     color: textShade(context, Styles.subtitleOpacity),
                                     fontSize: 12,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
-                            if (game.lastFen != null)
-                              Text(
-                                gameStatusL10n(
-                                  context,
-                                  variant: game.variant,
-                                  status: game.status,
-                                  lastPosition: Position.setupPosition(
-                                    game.variant.rule,
-                                    Setup.parseFen(game.lastFen!),
-                                  ),
-                                  winner: game.winner,
-                                ),
-                                style: TextStyle(
-                                  color:
-                                      game.winner == null
-                                          ? customColors?.brag
-                                          : game.winner == mySide
-                                          ? customColors?.good
-                                          : customColors?.error,
-                                ),
-                              ),
-                            if (game.opening != null)
-                              Text(
-                                game.opening!.name,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  color: textShade(context, Styles.subtitleOpacity),
-                                  fontSize: 12,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
         BottomSheetContextMenuAction(
           icon: Icons.biotech,
           onPressed:

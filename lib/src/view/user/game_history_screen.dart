@@ -7,18 +7,31 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+
+// TODO l10n
+String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
+  switch (mode) {
+    case GameHistoryDisplayMode.compact:
+      return 'Compact';
+    case GameHistoryDisplayMode.detail:
+      return 'Detailed';
+  }
+}
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -83,10 +96,28 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
+    final displayMode = ref.watch(
+      gameHistoryPreferencesProvider.select((value) => value.displayMode),
+    );
+    final displayModeButton = AppBarIconButton(
+      icon: const Icon(Icons.list_outlined),
+      semanticsLabel: 'Switch view',
+      onPressed:
+          () => showChoicePicker<GameHistoryDisplayMode>(
+            context,
+            choices: GameHistoryDisplayMode.values,
+            selectedItem: displayMode,
+            labelBuilder: (choice) => Text(displayModeL10n(context, choice)),
+            onSelectedItemChanged:
+                (choice) =>
+                    ref.read(gameHistoryPreferencesProvider.notifier).setDisplayMode(choice),
+          ),
+    );
+
     return PlatformScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: title,
-      appBarActions: [filterBtn],
+      appBarActions: [filterBtn, displayModeButton],
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -211,16 +242,28 @@ class _BodyState extends ConsumerState<_Body> {
                   }
                 }
 
-                final gameTile = GameListTile(
-                  item: list[index],
-                  // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                  padding:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-                          : null,
-                  onPressedBookmark: onPressedBookmark,
-                  gameListContext: (widget.user?.id, gameFilterState),
+                final displayMode = ref.watch(
+                  gameHistoryPreferencesProvider.select((value) => value.displayMode),
                 );
+
+                final item = list[index];
+                final gameTile = switch (displayMode) {
+                  GameHistoryDisplayMode.compact => GameListTile(
+                    item: item,
+                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                    padding:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                            : null,
+                    onPressedBookmark: onPressedBookmark,
+                    gameListContext: (widget.user?.id, gameFilterState),
+                  ),
+                  GameHistoryDisplayMode.detail => GameListDetailTile(
+                    item: item,
+                    onPressedBookmark: onPressedBookmark,
+                    gameListContext: (widget.user?.id, gameFilterState),
+                  ),
+                };
 
                 return isLoggedIn
                     ? Slidable(
