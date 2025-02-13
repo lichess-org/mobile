@@ -55,7 +55,6 @@ const whiteLists = {
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'pt-PT' is before 'pt-BR'
 // Note that 'en-GB' is omitted here on purpose because it is the locale used in template ARB.
-// This list must be consistent with the `kSupportedLocales` constant defined in `lib/constants.dart`.
 const locales = [
   'af-ZA',
   'ar-SA',

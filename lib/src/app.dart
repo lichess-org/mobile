@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -126,8 +127,12 @@ class _AppState extends ConsumerState<Application> {
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        MaterialLocalizationsEo.delegate,
+        CupertinoLocalizationsEo.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       onGenerateTitle: (BuildContext context) => 'lichess.org',
       locale: generalPrefs.locale,
       theme: themeLight.copyWith(

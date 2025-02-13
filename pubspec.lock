@@ -949,6 +949,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.9.3"
+  l10n_esperanto:
+    dependency: "direct main"
+    description:
+      name: l10n_esperanto
+      sha256: "8bdaf08ac603c6c6255f71ce31aabaea676a722c2936e1a028ef222db6448689"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.12"
   leak_tracker:
     dependency: transitive
     description:

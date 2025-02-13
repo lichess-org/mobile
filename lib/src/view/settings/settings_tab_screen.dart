@@ -2,7 +2,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -243,7 +243,7 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker<Locale>(
                   context,
-                  choices: kSupportedLocales,
+                  choices: AppLocalizations.supportedLocales,
                   selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                   labelBuilder: (t) => Text(localeToLocalizedName(t)),
                   onSelectedItemChanged:
