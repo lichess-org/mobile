@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart' hide Position;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -12,7 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardEditorMenu extends ConsumerWidget {
   const BoardEditorMenu({required this.initialFen, super.key});
@@ -37,13 +38,13 @@ class BoardEditorMenu extends ConsumerWidget {
                 child: Text(context.l10n.loadPosition),
                 onPressed: () {
                   final notifier = ref.read(editorController.notifier);
-                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                  Navigator.of(context).pushReplacement(
                     SearchPositionScreen.buildRoute(
                       context,
                       onPositionSelected:
                           (position) => {
                             notifier.loadFen(position.fen),
-                            Navigator.of(context, rootNavigator: true).pop(),
+                            Navigator.of(context).pop(),
                           },
                     ),
                   );
@@ -153,21 +154,34 @@ class SearchPositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabBar = TabBar(
+      tabs: [Tab(text: context.l10n.openings), Tab(text: context.l10n.endgamePositions)],
+    );
+    final tabBarView = TabBarView(
+      children: [
+        _OpeningsTab(onPositionSelected: onPositionSelected),
+        _EndGamesTab(onPositionSelected: onPositionSelected),
+      ],
+    );
+
     return DefaultTabController(
       length: 2,
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.loadPosition),
-          bottom: TabBar(
-            tabs: [Tab(text: context.l10n.openings), Tab(text: context.l10n.endgamePositions)],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            _OpeningsTab(onPositionSelected: onPositionSelected),
-            _EndGamesTab(onPositionSelected: onPositionSelected),
-          ],
-        ),
+      child: PlatformWidget(
+        iosBuilder:
+            (context) {
+              return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: Text(context.l10n.loadPosition),
+                bottom: tabBar,
+              ),
+              child: tabBarView,
+            );
+            },
+        androidBuilder:
+            (context) => Scaffold(
+              appBar: AppBar(title: Text(context.l10n.loadPosition), bottom: tabBar),
+              body: tabBarView,
+            ),
       ),
     );
   }
