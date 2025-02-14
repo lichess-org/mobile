@@ -73,6 +73,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
                     size: boardSize,
@@ -108,6 +109,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
                     size: boardSize,
@@ -369,6 +371,7 @@ class _Body extends ConsumerWidget {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
+          pov: Side.white,
           boardBuilder:
               (context, boardSize, borderRadius) => SizedBox.square(
                 dimension: boardSize,
@@ -388,11 +391,13 @@ class _Body extends ConsumerWidget {
     final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
     final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
     final currentNode = studyState.currentNode;
+    final pov = studyState.pov;
 
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
       tabController: tabController,
+      pov: pov,
       boardBuilder:
           (context, boardSize, borderRadius) =>
               _StudyBoard(id: id, boardSize: boardSize, borderRadius: borderRadius),
