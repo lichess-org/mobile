@@ -93,10 +93,24 @@ HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 Client loggingClient(Ref ref) {
   final client = LoggingClient(
     ref.read(httpClientFactoryProvider)(),
+    onRequest: (request) async {
+      final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+      httpLogStorage.save(
+        HttpLog(
+          // FIXME use hashCode??
+          id: request.hashCode.toString(),
+          lastModified: DateTime.now(),
+          requestMethod: request.method,
+          requestUrl: request.url.toString(),
+        ),
+      );
+    } ,
     onResponse: (response) async {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
       httpLogStorage.save(
         HttpLog(
+          // FIXME use hashCode??
+          id: response.request!.hashCode.toString(),
           lastModified: DateTime.now(),
           requestMethod: response.request!.method,
           requestUrl: response.request!.url.toString(),

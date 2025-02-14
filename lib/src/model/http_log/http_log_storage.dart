@@ -30,18 +30,22 @@ class HttpLogStorage {
       limit: limit,
       offset: offset,
     );
-
     return list.map(HttpLog.fromMap).toIList();
   }
 
   /// Saves an [HttpLog] entry to the database.
   Future<void> save(HttpLog httpLog) async {
-    await _db.insert(kHttpLogStorageTable, httpLog.toMap());
+    await _db.insert(
+      kHttpLogStorageTable,
+      httpLog.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }
 
 /// Represents an HTTP log entry.
 class HttpLog {
+  final String id;
   final DateTime lastModified;
   final String requestMethod;
   final String requestUrl;
@@ -50,6 +54,7 @@ class HttpLog {
 
   /// Creates an instance of [HttpLog].
   HttpLog({
+    required this.id,
     required this.lastModified,
     required this.requestMethod,
     required this.requestUrl,
@@ -60,6 +65,7 @@ class HttpLog {
   /// Creates an [HttpLog] from a map.
   factory HttpLog.fromMap(Map<String, dynamic> map) {
     return HttpLog(
+      id: map['id'].toString(),
       requestMethod: map['requestMethod'] as String,
       requestUrl: map['requestUrl'] as String,
       responseCode: map['responseCode'] as int?,
@@ -71,6 +77,7 @@ class HttpLog {
   /// Converts the [HttpLog] to a map.
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'requestMethod': requestMethod,
       'requestUrl': requestUrl,
       'responseCode': responseCode,
