@@ -147,7 +147,7 @@ class _ChoiceChipState extends State<_ChoiceChip> {
       opacity: widget.onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(
-          color: bgColor.withValues(alpha: 0.8),
+          color: bgColor.withValues(alpha: 0.7),
           borderRadius: _kBorderRadius,
         ),
         child: AdaptiveInkWell(

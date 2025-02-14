@@ -38,6 +38,7 @@ const kSliderTheme = SliderThemeData(
       baseTheme: generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundTheme!.baseTheme,
       seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundTheme!.color,
       isIOS: isIOS,
+      isBackgroundImage: generalPrefs.backgroundImage != null,
     );
   }
 }
@@ -51,13 +52,9 @@ const kSliderTheme = SliderThemeData(
   final boardTheme = boardPrefs.boardTheme;
   final systemScheme = getDynamicColorSchemes();
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
-  final defaultLight = ColorScheme.fromSeed(
-    seedColor: boardTheme.colors.darkSquare,
-    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
-  );
+  final defaultLight = ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare);
   final defaultDark = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
-    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
     brightness: Brightness.dark,
   );
 
@@ -107,7 +104,8 @@ const kSliderTheme = SliderThemeData(
           isIOS
               ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
               : null,
-      menuTheme: _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLow),
+      menuTheme:
+          isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
@@ -125,7 +123,7 @@ const kSliderTheme = SliderThemeData(
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      menuTheme: _makeCupertinoMenuThemeData(themeDark.colorScheme.surface),
+      menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
@@ -139,6 +137,7 @@ const kSliderTheme = SliderThemeData(
   required ThemeData baseTheme,
   required Color seedColor,
   required bool isIOS,
+  required bool isBackgroundImage,
 }) {
   final primary = baseTheme.colorScheme.primary;
   final onPrimary = baseTheme.colorScheme.onPrimary;
@@ -152,7 +151,7 @@ const kSliderTheme = SliderThemeData(
     applyThemeToAll: true,
   );
 
-  const baseSurfaceAlpha = 0.7;
+  final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.25;
 
   final theme = baseTheme.copyWith(
     colorScheme: baseTheme.colorScheme.copyWith(
@@ -180,13 +179,30 @@ const kSliderTheme = SliderThemeData(
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
-    menuTheme: _makeCupertinoMenuThemeData(
-      baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-    ),
+    menuTheme:
+        isIOS
+            ? _makeCupertinoMenuThemeData(
+              baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+            )
+            : MenuThemeData(
+              style: MenuStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: kPageTransitionsTheme,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+          backgroundColor: seedColor.withValues(alpha: 0),
+        ),
+        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+      },
+    ),
+
     progressIndicatorTheme: kProgressIndicatorTheme,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
