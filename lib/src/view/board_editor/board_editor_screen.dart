@@ -19,9 +19,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class BoardEditorScreen extends StatelessWidget {
+class BoardEditorScreen extends ConsumerWidget {
   const BoardEditorScreen({super.key, this.initialFen});
 
   final String? initialFen;
@@ -35,76 +37,75 @@ class BoardEditorScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.boardEditor), body: _Body(initialFen));
-  }
-}
-
-class _Body extends ConsumerWidget {
-  const _Body(this.initialFen);
-
-  final String? initialFen;
-
-  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(initialFen));
 
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final aspectRatio = constraints.biggest.aspectRatio;
+    return PlatformScaffold(
+      appBarTitle: Text(context.l10n.boardEditor),
+      appBarActions: [
+        AppBarIconButton(
+          semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+          onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
+          icon: const PlatformShareIcon(),
+        ),
+      ],
+      body: Column(
+        children: [
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize =
-                    isTablet || isSmallScreen
-                        ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                        : defaultBoardSize;
+                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final isTablet = isTabletOrLarger(context);
+                  final remainingHeight = constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final boardSize =
+                      isTablet || isSmallScreen
+                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                          : defaultBoardSize;
 
-                final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                  final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
-                return Flex(
-                  direction: direction,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _PieceMenu(
-                      boardSize,
-                      initialFen: initialFen,
-                      direction: flipAxis(direction),
-                      side: boardEditorState.orientation.opposite,
-                      isTablet: isTablet,
-                    ),
-                    _BoardEditor(
-                      boardSize,
-                      initialFen: initialFen,
-                      orientation: boardEditorState.orientation,
-                      isTablet: isTablet,
-                      // unlockView is safe because chessground will never modify the pieces
-                      pieces: boardEditorState.pieces.unlockView,
-                    ),
-                    _PieceMenu(
-                      boardSize,
-                      initialFen: initialFen,
-                      direction: flipAxis(direction),
-                      side: boardEditorState.orientation,
-                      isTablet: isTablet,
-                    ),
-                  ],
-                );
-              },
+                  return Flex(
+                    direction: direction,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _PieceMenu(
+                        boardSize,
+                        initialFen: initialFen,
+                        direction: flipAxis(direction),
+                        side: boardEditorState.orientation.opposite,
+                        isTablet: isTablet,
+                      ),
+                      _BoardEditor(
+                        boardSize,
+                        initialFen: initialFen,
+                        orientation: boardEditorState.orientation,
+                        isTablet: isTablet,
+                        // unlockView is safe because chessground will never modify the pieces
+                        pieces: boardEditorState.pieces.unlockView,
+                      ),
+                      _PieceMenu(
+                        boardSize,
+                        initialFen: initialFen,
+                        direction: flipAxis(direction),
+                        side: boardEditorState.orientation,
+                        isTablet: isTablet,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        _BottomBar(initialFen),
-      ],
+          _BottomBar(initialFen),
+        ],
+      ),
     );
   }
 }
@@ -321,25 +322,14 @@ class _BottomBar extends ConsumerWidget {
               ),
         ),
         BottomBarButton(
-          label: 'Filters',
-          onTap:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
-                showDragHandle: true,
-                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-              ),
-          icon: Icons.tune,
-        ),
-        BottomBarButton(
           key: const Key('flip-button'),
           label: context.l10n.flipBoard,
           onTap: ref.read(boardEditorControllerProvider(initialFen).notifier).flipBoard,
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         BottomBarButton(
-          label: context.l10n.analysis,
           key: const Key('analysis-board-button'),
+          label: context.l10n.analysis,
           onTap:
               editorState.pgn != null &&
                       // 1 condition (of many) where stockfish segfaults
@@ -364,10 +354,15 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.biotech,
         ),
         BottomBarButton(
-          label: context.l10n.mobileSharePositionAsFEN,
-          onTap: () => launchShareDialog(context, text: editorState.fen),
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+          label: 'Filters',
+          onTap:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
+                showDragHandle: true,
+                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+              ),
+          icon: Icons.tune,
         ),
       ],
     );
