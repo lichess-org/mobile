@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -334,6 +335,11 @@ class _Body extends ConsumerWidget {
                     ? null
                     : Text(_getSizeString(dbSize.value)),
             additionalInfo: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.http),
+            title: const Text('HTTP logs'),
+            onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
           ),
         ],
       ),
