@@ -112,7 +112,7 @@ class _Title extends StatelessWidget {
                           ),
                         ],
                       ),
-                  onPressed: (ctx) {
+                  onPressed: () {
                     Navigator.of(
                       context,
                     ).pushReplacement(PerfStatsScreen.buildRoute(context, user: user, perf: p));

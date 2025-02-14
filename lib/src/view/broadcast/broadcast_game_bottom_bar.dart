@@ -44,7 +44,7 @@ class BroadcastGameBottomBar extends ConsumerWidget {
                 if (tournamentSlug != null && roundSlug != null)
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                    onPressed: (context) async {
+                    onPressed: () async {
                       launchShareDialog(
                         context,
                         uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
@@ -53,7 +53,7 @@ class BroadcastGameBottomBar extends ConsumerWidget {
                   ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     try {
                       final pgn = await ref.withClient(
                         (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
@@ -74,7 +74,7 @@ class BroadcastGameBottomBar extends ConsumerWidget {
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => const Text('GIF'),
-                  onPressed: (_) async {
+                  onPressed: () async {
                     try {
                       final gif = await ref
                           .read(gameShareServiceProvider)

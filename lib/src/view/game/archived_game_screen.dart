@@ -405,7 +405,7 @@ class _BottomBar extends ConsumerWidget {
         actions: [
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.flipBoard),
-            onPressed: (context) {
+            onPressed: () {
               ref.read(isBoardTurnedProvider.notifier).toggle();
             },
           ),

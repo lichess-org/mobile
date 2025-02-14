@@ -350,7 +350,7 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
-            onPressed: (context) {
+            onPressed: () {
               final boardFen = analysisState.position.fen;
               Navigator.of(
                 context,

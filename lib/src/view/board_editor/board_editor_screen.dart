@@ -14,7 +14,8 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_menu.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -281,17 +282,50 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editorState = ref.watch(boardEditorControllerProvider(initialFen));
+    final editorController = boardEditorControllerProvider(initialFen);
+    final editorState = ref.watch(editorController);
     final pieceCount = editorState.pieces.length;
 
     return PlatformBottomBar(
       children: [
         BottomBarButton(
+          icon: Icons.menu,
           label: context.l10n.menu,
+          onTap:
+              () => showAdaptiveActionSheet<void>(
+                context: context,
+                actions: [
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.loadPosition),
+                    onPressed: () {
+                      final notifier = ref.read(editorController.notifier);
+                      Navigator.of(context).push(
+                        SearchPositionScreen.buildRoute(
+                          context,
+                          onPositionSelected:
+                              (position) => {
+                                notifier.loadFen(position.fen),
+                                Navigator.of(context).pop(),
+                              },
+                        ),
+                      );
+                    },
+                  ),
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.clearBoard),
+                    onPressed: () {
+                      ref.read(editorController.notifier).loadFen(kEmptyFen);
+                    },
+                  ),
+                ],
+              ),
+        ),
+        BottomBarButton(
+          label: 'Filters',
           onTap:
               () => showAdaptiveBottomSheet<void>(
                 context: context,
-                builder: (BuildContext context) => BoardEditorMenu(initialFen: initialFen),
+                builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
                 showDragHandle: true,
                 constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
               ),

@@ -96,7 +96,7 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
                 return BottomSheetAction(
                   leading: Icon(tab.icon),
                   makeLabel: (context) => Text(tab.l10n(context.l10n)),
-                  onPressed: (_) {
+                  onPressed: () {
                     widget.controller.animateTo(widget.tabs.indexOf(tab));
                   },
                 );

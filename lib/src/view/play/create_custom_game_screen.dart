@@ -344,7 +344,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                           context,
                           title: Text(context.l10n.accept),
                           isDestructiveAction: true,
-                          onConfirm: (_) {
+                          onConfirm: () {
                             socketClient.send('joinSeek', challenge.id.toString());
                           },
                         );

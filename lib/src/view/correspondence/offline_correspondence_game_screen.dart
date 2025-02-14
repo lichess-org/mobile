@@ -277,7 +277,7 @@ class _BodyState extends ConsumerState<_Body> {
                           context,
                           title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
                           isDestructiveAction: true,
-                          onConfirm: (_) => deleteRegisteredMove(),
+                          onConfirm: () => deleteRegisteredMove(),
                         );
                       }
                       : null,

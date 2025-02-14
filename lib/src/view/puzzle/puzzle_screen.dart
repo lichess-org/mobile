@@ -433,7 +433,7 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePuzzle),
-          onPressed: (context) {
+          onPressed: () {
             launchShareDialog(
               context,
               text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
@@ -442,7 +442,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.analysis),
-          onPressed: (context) {
+          onPressed: () {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
@@ -462,7 +462,7 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel:
               (context) => Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
-          onPressed: (_) async {
+          onPressed: () async {
             final game = await ref.read(
               archivedGameProvider(id: puzzleState.puzzle.game.id).future,
             );

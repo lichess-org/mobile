@@ -247,13 +247,13 @@ class _StudyMenu extends ConsumerWidget {
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
                   },
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     launchShareDialog(
                       context,
                       uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
@@ -263,7 +263,7 @@ class _StudyMenu extends ConsumerWidget {
                 if (!state.gamebookActive) ...[
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: (context) async {
+                    onPressed: () async {
                       try {
                         final pgn = await ref
                             .read(studyRepositoryProvider)
@@ -284,14 +284,14 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: (context) async {
+                    onPressed: () async {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),
                   if (state.position != null)
                     BottomSheetAction(
                       makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-                      onPressed: (_) async {
+                      onPressed: () async {
                         try {
                           final image = await ref
                               .read(gameShareServiceProvider)
@@ -318,7 +318,7 @@ class _StudyMenu extends ConsumerWidget {
                     ),
                   BottomSheetAction(
                     makeLabel: (context) => const Text('GIF'),
-                    onPressed: (_) async {
+                    onPressed: () async {
                       try {
                         final gif = await ref
                             .read(gameShareServiceProvider)

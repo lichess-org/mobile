@@ -393,7 +393,7 @@ class _Body extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
-            onPressed: (context) async {
+            onPressed: () async {
               await ref.read(authControllerProvider.notifier).signOut();
             },
           ),

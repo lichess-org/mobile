@@ -126,7 +126,7 @@ class ChallengeService {
                   .map(
                     (reason) => BottomSheetAction(
                       makeLabel: (context) => Text(reason.label(context.l10n)),
-                      onPressed: (_) {
+                      onPressed: () {
                         final repo = ref.read(challengeRepositoryProvider);
                         repo.decline(challengeId, reason: reason);
                       },
