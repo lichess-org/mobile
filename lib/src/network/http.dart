@@ -22,7 +22,6 @@ import 'package:http/http.dart'
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -31,7 +30,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 part 'http.g.dart';
 
