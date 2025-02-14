@@ -22,13 +22,16 @@ import 'package:http/http.dart'
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'http.g.dart';
 
@@ -74,6 +77,38 @@ class HttpClientFactory {
 @Riverpod(keepAlive: true)
 HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 
+/// Creates a `LoggingClient` that logs HTTP requests and responses.
+///
+/// The `LoggingClient` is created using the `httpClientFactoryProvider` and logs
+/// the details of each HTTP response using the `httpLogStorageProvider`.
+///
+/// The client is kept alive and disposed of when no longer needed.
+///
+/// Parameters:
+/// - `ref`: A reference to the Riverpod provider.
+///
+/// Returns:
+/// - A `LoggingClient` instance.
+@Riverpod(keepAlive: true)
+Client loggingClient(Ref ref) {
+  final client = LoggingClient(
+    ref.read(httpClientFactoryProvider)(),
+    onResponse: (response) async {
+      final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+      httpLogStorage.save(
+        HttpLog(
+          lastModified: DateTime.now(),
+          requestMethod: response.request!.method,
+          requestUrl: response.request!.url.toString(),
+          responseCode: response.statusCode,
+        ),
+      );
+    },
+  );
+  ref.onDispose(() => client.close());
+  return client;
+}
+
 /// The default http client.
 ///
 /// This client is used for all requests that don't go to the lichess server, for
@@ -81,7 +116,10 @@ HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(Ref ref) {
-  final client = LoggingClient(ref.read(httpClientFactoryProvider)());
+  final client = LoggingClient(
+    ref.read(loggingClientProvider),
+    onRequest: (request) => _logger.info('${request.method} ${request.url}'),
+  );
   ref.onDispose(() => client.close());
   return client;
 }
@@ -94,7 +132,7 @@ LichessClient lichessClient(Ref ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
-      ref.read(httpClientFactoryProvider)(),
+      ref.read(loggingClientProvider),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
@@ -135,14 +173,34 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 
 /// A [Client] that logs all requests.
 class LoggingClient extends BaseClient {
-  LoggingClient(this._inner);
+  LoggingClient(this._inner, {this.onRequest, this.onResponse, this.onError});
 
   final Client _inner;
 
+  final void Function(BaseRequest request)? onRequest;
+  final void Function(Response response)? onResponse;
+  final void Function(Object error, [StackTrace? stackTrace])? onError;
+
   @override
-  Future<StreamedResponse> send(BaseRequest request) {
-    _logger.info('${request.method} ${request.url}');
-    return _inner.send(request);
+  Future<StreamedResponse> send(BaseRequest request) async {
+    try {
+      onRequest?.call(request);
+      final streamedResponse = await _inner.send(request);
+      if (onResponse != null) {
+        unawaited(
+          Response.fromStream(streamedResponse).then((response) async => onResponse!(response)),
+        );
+      }
+      return streamedResponse;
+    } catch (error, st) {
+      onError?.call(error, st);
+      rethrow;
+    }
+  }
+
+  @override
+  void close() {
+    _inner.close();
   }
 }
 
