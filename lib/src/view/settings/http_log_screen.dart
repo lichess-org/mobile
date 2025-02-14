@@ -12,11 +12,7 @@ class HttpLogScreen extends ConsumerWidget {
   const HttpLogScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const HttpLogScreen(),
-      title: 'HTTP Logs',
-    );
+    return buildScreenRoute(context, screen: const HttpLogScreen(), title: 'HTTP Logs');
   }
 
   static const _pageSize = 20;
@@ -25,15 +21,13 @@ class HttpLogScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
       appBar: const PlatformAppBar(title: Text('HTTP Logs')),
-      body: ListView.builder(
-        itemBuilder: (context, index) => itemBuilder(context, index, ref),
-      ),
+      body: ListView.builder(itemBuilder: (context, index) => itemBuilder(context, index, ref)),
     );
   }
 
   /// Builds the item widget for the ListView.
-  /// 
-  /// This method fetches the HTTP logs data asynchronously and builds the 
+  ///
+  /// This method fetches the HTTP logs data asynchronously and builds the
   /// corresponding widget based on the current index.
   Widget? itemBuilder(BuildContext context, int index, WidgetRef ref) {
     // Calculate the current page and the index within that page.
