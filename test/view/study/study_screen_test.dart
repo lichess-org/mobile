@@ -129,8 +129,8 @@ void main() {
       // Wait for study to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
@@ -143,8 +143,8 @@ void main() {
       // Wait for next chapter to load (even though it shouldn't)
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsNothing);
-      expect(find.text('Chapter 2'), findsOneWidget);
+      expect(find.text('1. Chapter 1'), findsNothing);
+      expect(find.text('2. Chapter 2'), findsOneWidget);
 
       expect(find.text('pgn 1'), findsNothing);
       expect(find.text('pgn 2'), findsOneWidget);
@@ -155,20 +155,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('Chapter 1')),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('1. Chapter 1')),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('Chapter 2')),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('2. Chapter 2')),
         findsOneWidget,
       );
 
-      await tester.tap(find.text('Chapter 1'));
+      await tester.tap(find.text('1. Chapter 1'));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
