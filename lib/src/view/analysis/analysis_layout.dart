@@ -206,7 +206,7 @@ class AnalysisLayout extends StatelessWidget {
                           children: [
                             if (boardHeader != null)
                               Container(
-                                // This key is used to force recreation of the board header when the pov changes
+                                // This key is used to preserve the state of the board header when the pov changes
                                 key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
                                   borderRadius:
@@ -233,7 +233,7 @@ class AnalysisLayout extends StatelessWidget {
                             ),
                             if (boardFooter != null)
                               Container(
-                                // This key is used to force recreation of the board footer when the pov changes
+                                // This key is used to preserve the state of the board footer when the pov changes
                                 key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
@@ -300,7 +300,7 @@ class AnalysisLayout extends StatelessWidget {
                         child: Column(
                           children: [
                             if (boardHeader != null)
-                              // This key is used to force recreation of the board header when the pov changes
+                              // This key is used to preserve the state of the board header when the pov changes
                               Container(
                                 key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
@@ -325,7 +325,7 @@ class AnalysisLayout extends StatelessWidget {
                             ),
                             if (boardFooter != null)
                               Container(
-                                // This key is used to force recreation of the board footer when the pov changes
+                                // This key is used to preserve the state of the board footer when the pov changes
                                 key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
