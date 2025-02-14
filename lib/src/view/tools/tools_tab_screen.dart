@@ -104,7 +104,6 @@ class _Body extends ConsumerWidget {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     final content = [
-      if (Theme.of(context).platform == TargetPlatform.android) const SizedBox(height: 16.0),
       ListSection(
         hasLeading: true,
         children: [
