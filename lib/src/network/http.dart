@@ -104,7 +104,7 @@ Client loggingClient(Ref ref) {
           requestUrl: request.url.toString(),
         ),
       );
-    } ,
+    },
     onResponse: (response) async {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
       httpLogStorage.save(

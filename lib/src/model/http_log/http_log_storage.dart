@@ -21,15 +21,8 @@ class HttpLogStorage {
   final Database _db;
 
   /// Retrieves a paginated list of [HttpLog] entries from the database.
-  Future<IList<HttpLog>> page({
-    int offset = 0,
-    int limit = 100,
-  }) async {
-    final list = await _db.query(
-      kHttpLogStorageTable,
-      limit: limit,
-      offset: offset,
-    );
+  Future<IList<HttpLog>> page({int offset = 0, int limit = 100}) async {
+    final list = await _db.query(kHttpLogStorageTable, limit: limit, offset: offset);
     return list.map(HttpLog.fromMap).toIList();
   }
 
