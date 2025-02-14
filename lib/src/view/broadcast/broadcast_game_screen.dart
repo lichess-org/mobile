@@ -164,23 +164,21 @@ class _Body extends ConsumerWidget {
         final engineGaugeParams = state.engineGaugeParams;
         final isLocalEvaluationEnabled = state.isLocalEvaluationEnabled;
         final currentNode = state.currentNode;
+        final pov = state.pov;
 
         return AnalysisLayout(
+          pov: pov,
           tabController: tabController,
           boardBuilder:
               (context, boardSize, borderRadius) =>
                   _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
           boardHeader: _PlayerWidget(
-            // We need to use a key to preserve the state of the clock when board is flipped
-            key: const ValueKey('top'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
             widgetPosition: _PlayerWidgetPosition.top,
           ),
           boardFooter: _PlayerWidget(
-            // We need to use a key to preserve the state of the clock when board is flipped
-            key: const ValueKey('bottom'),
             tournamentId: tournamentId,
             roundId: roundId,
             gameId: gameId,
@@ -383,7 +381,6 @@ enum _PlayerWidgetPosition { bottom, top }
 
 class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
-    required super.key,
     required this.tournamentId,
     required this.roundId,
     required this.gameId,

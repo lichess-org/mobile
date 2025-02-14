@@ -22,6 +22,7 @@ void main() {
           home: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              pov: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
                 return Chessboard.fixed(
                   size: boardSize,
@@ -69,6 +70,7 @@ void main() {
           home: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              pov: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
                 return Chessboard.fixed(
                   size: boardSize,
