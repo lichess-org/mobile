@@ -112,6 +112,8 @@ flutter:
     - assets/sounds/standard/
     - assets/sounds/sfx/
     - assets/board-thumbnails/
+    - assets/positions.json
+    - assets/endgames.json
 
   fonts:
     - family: LichessIcons
