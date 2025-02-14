@@ -184,12 +184,13 @@ void _createHttpLogTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS http_log');
   batch.execute('''
     CREATE TABLE http_log(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    httpLogId TEXT NOT NULL,,
     lastModified TEXT NOT NULL,
     requestMethod TEXT NOT NULL,
     requestUrl TEXT NOT NULL,
     responseCode INTEGER,
-    responseBody TEXT
+    responseBody TEXT,
+    PRIMARY KEY (httpLogId)
   )
     ''');
 }
