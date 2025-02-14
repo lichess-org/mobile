@@ -89,6 +89,27 @@ extension TimeExtension on Pick {
     }
   }
 
+  /// Matches a Duration from minutes.
+  Duration asDurationFromMinutesOrThrow() {
+    final value = required().value;
+    if (value is Duration) {
+      return value;
+    }
+    if (value is int) {
+      return Duration(minutes: value);
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to Duration");
+  }
+
+  Duration? asDurationFromMinutesOrNull() {
+    if (value == null) return null;
+    try {
+      return asDurationFromMinutesOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Matches a Duration from seconds
   Duration asDurationFromSecondsOrThrow() {
     final value = required().value;
