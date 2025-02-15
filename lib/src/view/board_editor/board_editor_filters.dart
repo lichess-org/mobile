@@ -191,6 +191,7 @@ class _OpeningsTabState extends State<_OpeningsTab> {
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
             return PlatformListTile(
+              backgroundColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );
@@ -238,6 +239,7 @@ class _EndGamesTabState extends State<_EndGamesTab> {
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
             return PlatformListTile(
+              backgroundColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );

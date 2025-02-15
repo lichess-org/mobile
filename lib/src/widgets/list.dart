@@ -350,6 +350,7 @@ class PlatformListTile extends StatelessWidget {
           visualDensity: visualDensity,
           onTap: onTap,
           onLongPress: onLongPress,
+          tileColor: backgroundColor,
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,
