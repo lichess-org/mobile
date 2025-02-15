@@ -79,18 +79,6 @@ class ListSection extends StatelessWidget {
         return _isLoading
             ? Column(
               children: [
-                if (header != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 25,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                    ),
-                  ),
                 PlatformCard(
                   clipBehavior: Clip.hardEdge,
                   margin: margin ?? Styles.bodySectionPadding,
@@ -98,6 +86,18 @@ class ListSection extends StatelessWidget {
                   child: Column(
                     children: [
                       const SizedBox(height: materialVerticalPadding),
+                      if (header != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
+                        ),
                       for (int i = 0; i < children.length; i++)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
