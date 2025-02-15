@@ -190,20 +190,16 @@ class LoggingClient extends BaseClient {
   final Client _inner;
 
   final void Function(BaseRequest request)? onRequest;
-  final void Function(Response response)? onResponse;
+  final void Function(BaseResponse response)? onResponse;
   final void Function(Object error, [StackTrace? stackTrace])? onError;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     try {
       onRequest?.call(request);
-      final streamedResponse = await _inner.send(request);
-      if (onResponse != null) {
-        unawaited(
-          Response.fromStream(streamedResponse).then((response) async => onResponse!(response)),
-        );
-      }
-      return streamedResponse;
+      final response = await _inner.send(request);
+      onResponse?.call(response);
+      return response;
     } catch (error, st) {
       onError?.call(error, st);
       rethrow;
