@@ -96,7 +96,7 @@ Client loggingClient(Ref ref) {
       httpLogStorage.save(
         HttpLog(
           // FIXME use hashCode??
-          id: request.hashCode.toString(),
+          httpLogId: request.hashCode.toString(),
           lastModified: DateTime.now(),
           requestMethod: request.method,
           requestUrl: request.url.toString(),
@@ -108,7 +108,7 @@ Client loggingClient(Ref ref) {
       httpLogStorage.save(
         HttpLog(
           // FIXME use hashCode??
-          id: response.request!.hashCode.toString(),
+          httpLogId: response.request!.hashCode.toString(),
           lastModified: DateTime.now(),
           requestMethod: response.request!.method,
           requestUrl: response.request!.url.toString(),
