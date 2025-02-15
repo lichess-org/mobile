@@ -33,33 +33,30 @@ class StudyTreeView extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return ColoredBox(
-      color: ColorScheme.of(context).surfaceContainer,
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: DebouncedPgnTreeView(
-                    root: root,
-                    currentPath: currentPath,
-                    pgnRootComments: pgnRootComments,
-                    notifier: ref.read(studyControllerProvider(id).notifier),
-                    shouldShowAnnotations: analysisPrefs.showAnnotations,
-                    displayMode:
-                        analysisPrefs.inlineNotation
-                            ? PgnTreeDisplayMode.inlineNotation
-                            : PgnTreeDisplayMode.twoColumn,
-                  ),
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: DebouncedPgnTreeView(
+                  root: root,
+                  currentPath: currentPath,
+                  pgnRootComments: pgnRootComments,
+                  notifier: ref.read(studyControllerProvider(id).notifier),
+                  shouldShowAnnotations: analysisPrefs.showAnnotations,
+                  displayMode:
+                      analysisPrefs.inlineNotation
+                          ? PgnTreeDisplayMode.inlineNotation
+                          : PgnTreeDisplayMode.twoColumn,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

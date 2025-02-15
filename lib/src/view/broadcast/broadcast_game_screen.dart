@@ -242,17 +242,14 @@ class _BroadcastGameTreeView extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return ColoredBox(
-      color: ColorScheme.of(context).surfaceContainer,
-      child: SingleChildScrollView(
-        child: DebouncedPgnTreeView(
-          root: state.root,
-          currentPath: state.currentPath,
-          broadcastLivePath: state.broadcastLivePath,
-          pgnRootComments: state.pgnRootComments,
-          shouldShowAnnotations: analysisPrefs.showAnnotations,
-          notifier: ref.read(ctrlProvider.notifier),
-        ),
+    return SingleChildScrollView(
+      child: DebouncedPgnTreeView(
+        root: state.root,
+        currentPath: state.currentPath,
+        broadcastLivePath: state.broadcastLivePath,
+        pgnRootComments: state.pgnRootComments,
+        shouldShowAnnotations: analysisPrefs.showAnnotations,
+        notifier: ref.read(ctrlProvider.notifier),
       ),
     );
   }

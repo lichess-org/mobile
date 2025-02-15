@@ -351,7 +351,12 @@ class AnalysisLayout extends StatelessWidget {
                                     horizontal: kTabletBoardTableSidePadding,
                                   )
                                   : EdgeInsets.zero,
-                          child: TabBarView(controller: tabController, children: children),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorScheme.of(context).surfaceContainerLowest,
+                            ),
+                            child: TabBarView(controller: tabController, children: children),
+                          ),
                         ),
                       ),
                     ],
