@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,10 +27,7 @@ part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
 CorrespondenceService correspondenceService(Ref ref) {
-  return CorrespondenceService(
-    Logger('CorrespondenceService'),
-    ref: ref,
-  );
+  return CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
 }
 
 /// Services that manages correspondence games.
@@ -51,11 +47,10 @@ class CorrespondenceService {
       rootNavState.popUntil((route) => route.isFirst);
     }
 
-    pushPlatformRoute(
+    Navigator.of(
       context,
       rootNavigator: true,
-      builder: (_) => GameScreen(initialGameId: fullId),
-    );
+    ).push(GameScreen.buildRoute(context, initialGameId: fullId));
   }
 
   /// Syncs offline correspondence games with the server.
@@ -68,8 +63,7 @@ class CorrespondenceService {
 
     await playRegisteredMoves();
 
-    final storedOngoingGames =
-        await (await _storage).fetchOngoingGames(_session?.user.id);
+    final storedOngoingGames = await (await _storage).fetchOngoingGames(_session?.user.id);
 
     ref.withClient((client) async {
       try {
@@ -113,16 +107,11 @@ class CorrespondenceService {
 
     final games = await (await _storage)
         .fetchGamesWithRegisteredMove(_session?.user.id)
-        .then(
-          (games) => games.map((e) => e.$2).toList(),
-        );
+        .then((games) => games.map((e) => e.$2).toList());
 
     WebSocket.userAgent = ref.read(userAgentProvider);
-    final Map<String, String> wsHeaders = _session != null
-        ? {
-            'Authorization': 'Bearer ${signBearerToken(_session!.token)}',
-          }
-        : {};
+    final Map<String, String> wsHeaders =
+        _session != null ? {'Authorization': 'Bearer ${signBearerToken(_session!.token)}'} : {};
 
     int movesPlayed = 0;
 
@@ -134,14 +123,14 @@ class CorrespondenceService {
       WebSocket? socket;
       StreamSubscription<SocketEvent>? streamSubscription;
       try {
-        socket = await WebSocket.connect(uri.toString(), headers: wsHeaders)
-            .timeout(const Duration(seconds: 5));
+        socket = await WebSocket.connect(
+          uri.toString(),
+          headers: wsHeaders,
+        ).timeout(const Duration(seconds: 5));
 
-        final eventStream = socket.where((e) => e != '0').map(
-              (e) => SocketEvent.fromJson(
-                jsonDecode(e as String) as Map<String, dynamic>,
-              ),
-            );
+        final eventStream = socket
+            .where((e) => e != '0')
+            .map((e) => SocketEvent.fromJson(jsonDecode(e as String) as Map<String, dynamic>));
 
         final Completer<PlayableGame> gameCompleter = Completer();
         final Completer<void> movePlayedCompleter = Completer();
@@ -149,14 +138,11 @@ class CorrespondenceService {
         streamSubscription = eventStream.listen((event) {
           switch (event.topic) {
             case 'full':
-              final playableGame = GameFullEvent.fromJson(
-                event.data as Map<String, dynamic>,
-              ).game;
+              final playableGame = GameFullEvent.fromJson(event.data as Map<String, dynamic>).game;
               gameCompleter.complete(playableGame);
 
             case 'move':
-              final moveEvent =
-                  MoveEvent.fromJson(event.data as Map<String, dynamic>);
+              final moveEvent = MoveEvent.fromJson(event.data as Map<String, dynamic>);
               // move acknowledged
               if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$2.uci) {
                 movesPlayed++;
@@ -174,31 +160,21 @@ class CorrespondenceService {
           socket.add(
             jsonEncode({
               't': 'move',
-              'd': {
-                'u': gameToSync.registeredMoveAtPgn!.$2.uci,
-              },
+              'd': {'u': gameToSync.registeredMoveAtPgn!.$2.uci},
             }),
           );
 
           await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
 
-          (await ref.read(correspondenceGameStorageProvider.future)).save(
-            gameToSync.copyWith(
-              registeredMoveAtPgn: null,
-            ),
-          );
+          (await ref.read(
+            correspondenceGameStorageProvider.future,
+          )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
-          _log.info(
-            'Cannot play game ${gameToSync.id} move because its state has changed',
-          );
+          _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
           updateGame(gameToSync.fullId, playableGame);
         }
       } catch (e, s) {
-        _log.severe(
-          'Failed to sync correspondence game ${gameToSync.id}',
-          e,
-          s,
-        );
+        _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, s);
       } finally {
         streamSubscription?.cancel();
         socket?.close();
@@ -240,7 +216,7 @@ class CorrespondenceService {
         perf: game.meta.perf,
         white: game.white,
         black: game.black,
-        youAre: game.youAre!,
+        youAre: game.youAre,
         daysPerTurn: game.meta.daysPerTurn,
         clock: game.correspondenceClock,
         winner: game.winner,

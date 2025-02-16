@@ -14,65 +14,58 @@ import 'package:popover/popover.dart';
 class EngineDepth extends ConsumerWidget {
   const EngineDepth({this.defaultEval});
 
-  final ClientEval? defaultEval;
+  final LocalEval? defaultEval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final depth = ref.watch(
-          engineEvaluationProvider.select((value) => value.eval?.depth),
-        ) ??
+    final depth =
+        ref.watch(engineEvaluationProvider.select((value) => value.eval?.depth)) ??
         defaultEval?.depth;
 
     return depth != null
         ? AppBarTextButton(
-            onPressed: () {
-              showPopover(
-                context: context,
-                bodyBuilder: (context) {
-                  return _StockfishInfo(defaultEval);
-                },
-                direction: PopoverDirection.top,
-                width: 240,
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? Theme.of(context).dialogBackgroundColor
-                        : CupertinoDynamicColor.resolve(
-                            CupertinoColors.tertiarySystemBackground,
-                            context,
-                          ),
-                transitionDuration: Duration.zero,
-                popoverTransitionBuilder: (_, child) => child,
-              );
-            },
-            child: RepaintBoundary(
-              child: Container(
-                width: 20.0,
-                height: 20.0,
-                padding: const EdgeInsets.all(2.0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).platform == TargetPlatform.android
-                      ? Theme.of(context).colorScheme.secondary
-                      : CupertinoTheme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Text(
-                    '${math.min(99, depth)}',
-                    style: TextStyle(
-                      color: Theme.of(context).platform ==
-                              TargetPlatform.android
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : CupertinoTheme.of(context).primaryContrastingColor,
-                      fontFeatures: const [
-                        FontFeature.tabularFigures(),
-                      ],
-                    ),
+          onPressed: () {
+            showPopover(
+              context: context,
+              bodyBuilder: (context) {
+                return _StockfishInfo(defaultEval);
+              },
+              direction: PopoverDirection.top,
+              width: 240,
+              backgroundColor:
+                  Theme.of(context).platform == TargetPlatform.android
+                      ? DialogTheme.of(context).backgroundColor ??
+                          ColorScheme.of(context).surfaceContainerHigh
+                      : CupertinoDynamicColor.resolve(
+                        CupertinoColors.tertiarySystemBackground,
+                        context,
+                      ),
+              transitionDuration: Duration.zero,
+              popoverTransitionBuilder: (_, child) => child,
+            );
+          },
+          child: RepaintBoundary(
+            child: Container(
+              width: 20.0,
+              height: 20.0,
+              padding: const EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                color: ColorScheme.of(context).secondary,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text(
+                  '${math.min(99, depth)}',
+                  style: TextStyle(
+                    color: ColorScheme.of(context).onSecondary,
+                    fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),
               ),
             ),
-          )
+          ),
+        )
         : const SizedBox.shrink();
   }
 }
@@ -80,33 +73,26 @@ class EngineDepth extends ConsumerWidget {
 class _StockfishInfo extends ConsumerWidget {
   const _StockfishInfo(this.defaultEval);
 
-  final ClientEval? defaultEval;
+  final LocalEval? defaultEval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (engineName: engineName, eval: eval, state: engineState) =
-        ref.watch(engineEvaluationProvider);
+    final (engineName: engineName, eval: eval, state: engineState) = ref.watch(
+      engineEvaluationProvider,
+    );
 
     final currentEval = eval ?? defaultEval;
 
-    final knps = engineState == EngineState.computing
-        ? ', ${eval?.knps.round()}kn/s'
-        : '';
+    final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         PlatformListTile(
-          leading: Image.asset(
-            'assets/images/stockfish/icon.png',
-            width: 44,
-            height: 44,
-          ),
+          leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
           title: Text(engineName),
-          subtitle: Text(
-            context.l10n.depthX('$depth$knps'),
-          ),
+          subtitle: Text(context.l10n.depthX('$depth$knps')),
         ),
       ],
     );

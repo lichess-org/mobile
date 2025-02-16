@@ -107,6 +107,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Photo Library Access Warning</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

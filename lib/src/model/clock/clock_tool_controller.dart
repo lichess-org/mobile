@@ -12,24 +12,30 @@ part 'clock_tool_controller.g.dart';
 @riverpod
 class ClockToolController extends _$ClockToolController {
   late final ChessClock _clock;
+  final Map<Side, bool> _hasPlayedLowTimeSound = {Side.white: false, Side.black: false};
+  late Duration _emergencyThreshold;
 
   @override
   ClockState build() {
     const time = Duration(minutes: 10);
     const increment = Duration.zero;
+    _emergencyThreshold = _calculateEmergencyThreshold(time);
     const options = ClockOptions(
       whiteTime: time,
       blackTime: time,
       whiteIncrement: increment,
       blackIncrement: increment,
     );
-    _clock = ChessClock(
-      whiteTime: time,
-      blackTime: time,
-      onFlag: _onFlagged,
-    );
+
+    _clock = ChessClock(whiteTime: time, blackTime: time, onFlag: _onFlagged);
+
+    // Add listeners for both clocks
+    _clock.whiteTime.addListener(onClockEmergency);
+    _clock.blackTime.addListener(onClockEmergency);
 
     ref.onDispose(() {
+      _clock.whiteTime.removeListener(onClockEmergency);
+      _clock.blackTime.removeListener(onClockEmergency);
       _clock.dispose();
     });
 
@@ -39,6 +45,22 @@ class ClockToolController extends _$ClockToolController {
       blackTime: _clock.blackTime,
       activeSide: Side.white,
     );
+  }
+
+  // Emergency threshold is set to 10% of the total time
+  Duration _calculateEmergencyThreshold(Duration initialTime) {
+    return Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
+  }
+
+  void onClockEmergency() {
+    final activeSide = state.activeSide;
+    if (_hasPlayedLowTimeSound[activeSide]!) return;
+    final activeSideTime =
+        activeSide == Side.white ? _clock.whiteTime.value : _clock.blackTime.value;
+    if (activeSideTime <= _emergencyThreshold) {
+      ref.read(soundServiceProvider).play(Sound.lowTime);
+      _hasPlayedLowTimeSound[activeSide] = true;
+    }
   }
 
   void _onFlagged() {
@@ -65,9 +87,7 @@ class ClockToolController extends _$ClockToolController {
     _clock.startSide(playerType.opposite);
     _clock.incTime(
       playerType,
-      playerType == Side.white
-          ? state.options.whiteIncrement
-          : state.options.blackIncrement,
+      playerType == Side.white ? state.options.whiteIncrement : state.options.blackIncrement,
     );
   }
 
@@ -77,21 +97,17 @@ class ClockToolController extends _$ClockToolController {
     }
 
     _clock.setTimes(
-      whiteTime: playerType == Side.white
-          ? duration + state.options.whiteIncrement
-          : null,
-      blackTime: playerType == Side.black
-          ? duration + state.options.blackIncrement
-          : null,
+      whiteTime: playerType == Side.white ? duration + state.options.whiteIncrement : null,
+      blackTime: playerType == Side.black ? duration + state.options.blackIncrement : null,
     );
   }
 
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement);
-    _clock.setTimes(
-      whiteTime: options.whiteTime,
-      blackTime: options.blackTime,
-    );
+    _emergencyThreshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
+    _hasPlayedLowTimeSound[Side.white] = false;
+    _hasPlayedLowTimeSound[Side.black] = false;
+    _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
     state = state.copyWith(
       options: options,
       whiteTime: _clock.whiteTime,
@@ -99,28 +115,16 @@ class ClockToolController extends _$ClockToolController {
     );
   }
 
-  void updateOptionsCustom(
-    TimeIncrement clock,
-    Side player,
-  ) {
+  void updateOptionsCustom(TimeIncrement clock, Side player) {
     final options = ClockOptions(
-      whiteTime: player == Side.white
-          ? Duration(seconds: clock.time)
-          : state.options.whiteTime,
-      blackTime: player == Side.black
-          ? Duration(seconds: clock.time)
-          : state.options.blackTime,
-      whiteIncrement: player == Side.white
-          ? Duration(seconds: clock.increment)
-          : state.options.whiteIncrement,
-      blackIncrement: player == Side.black
-          ? Duration(seconds: clock.increment)
-          : state.options.blackIncrement,
+      whiteTime: player == Side.white ? Duration(seconds: clock.time) : state.options.whiteTime,
+      blackTime: player == Side.black ? Duration(seconds: clock.time) : state.options.blackTime,
+      whiteIncrement:
+          player == Side.white ? Duration(seconds: clock.increment) : state.options.whiteIncrement,
+      blackIncrement:
+          player == Side.black ? Duration(seconds: clock.increment) : state.options.blackIncrement,
     );
-    _clock.setTimes(
-      whiteTime: options.whiteTime,
-      blackTime: options.blackTime,
-    );
+    _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
     state = ClockState(
       options: options,
       whiteTime: _clock.whiteTime,
@@ -129,14 +133,13 @@ class ClockToolController extends _$ClockToolController {
     );
   }
 
-  void setBottomPlayer(Side playerType) =>
-      state = state.copyWith(bottomPlayer: playerType);
+  void setBottomPlayer(Side playerType) => state = state.copyWith(bottomPlayer: playerType);
 
   void reset() {
-    _clock.setTimes(
-      whiteTime: state.options.whiteTime,
-      blackTime: state.options.whiteTime,
-    );
+    _clock.setTimes(whiteTime: state.options.whiteTime, blackTime: state.options.whiteTime);
+    // Reset low time sound flags for both players
+    _hasPlayedLowTimeSound[Side.white] = false;
+    _hasPlayedLowTimeSound[Side.black] = false;
     state = state.copyWith(
       whiteTime: _clock.whiteTime,
       blackTime: _clock.blackTime,
@@ -150,7 +153,7 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void start() {
-    _clock.start();
+    _clock.startSide(Side.white);
     state = state.copyWith(started: true);
   }
 
@@ -176,24 +179,22 @@ class ClockOptions with _$ClockOptions {
     required Duration blackIncrement,
   }) = _ClockOptions;
 
-  factory ClockOptions.fromTimeIncrement(TimeIncrement timeIncrement) =>
-      ClockOptions(
-        whiteTime: Duration(seconds: timeIncrement.time),
-        blackTime: Duration(seconds: timeIncrement.time),
-        whiteIncrement: Duration(seconds: timeIncrement.increment),
-        blackIncrement: Duration(seconds: timeIncrement.increment),
-      );
+  factory ClockOptions.fromTimeIncrement(TimeIncrement timeIncrement) => ClockOptions(
+    whiteTime: Duration(seconds: timeIncrement.time),
+    blackTime: Duration(seconds: timeIncrement.time),
+    whiteIncrement: Duration(seconds: timeIncrement.increment),
+    blackIncrement: Duration(seconds: timeIncrement.increment),
+  );
 
   factory ClockOptions.fromSeparateTimeIncrements(
     TimeIncrement playerTop,
     TimeIncrement playerBottom,
-  ) =>
-      ClockOptions(
-        whiteTime: Duration(seconds: playerTop.time),
-        blackTime: Duration(seconds: playerBottom.time),
-        whiteIncrement: Duration(seconds: playerTop.increment),
-        blackIncrement: Duration(seconds: playerBottom.increment),
-      );
+  ) => ClockOptions(
+    whiteTime: Duration(seconds: playerTop.time),
+    blackTime: Duration(seconds: playerBottom.time),
+    whiteIncrement: Duration(seconds: playerTop.increment),
+    blackIncrement: Duration(seconds: playerBottom.increment),
+  );
 }
 
 @freezed
@@ -216,14 +217,11 @@ class ClockState with _$ClockState {
   ValueListenable<Duration> getDuration(Side playerType) =>
       playerType == Side.white ? whiteTime : blackTime;
 
-  int getMovesCount(Side playerType) =>
-      playerType == Side.white ? whiteMoves : blackMoves;
+  int getMovesCount(Side playerType) => playerType == Side.white ? whiteMoves : blackMoves;
 
-  bool isPlayersTurn(Side playerType) =>
-      started && activeSide == playerType && flagged == null;
+  bool isPlayersTurn(Side playerType) => started && activeSide == playerType && flagged == null;
 
-  bool isPlayersMoveAllowed(Side playerType) =>
-      isPlayersTurn(playerType) && !paused;
+  bool isPlayersMoveAllowed(Side playerType) => isPlayersTurn(playerType) && !paused;
 
   bool isActivePlayer(Side playerType) => isPlayersTurn(playerType) && !paused;
 

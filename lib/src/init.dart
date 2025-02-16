@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -12,12 +12,14 @@ import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
+import 'package:material_color_utilities/palettes/core_palette.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -31,8 +33,12 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
-  if (installedVersion == null ||
-      Version.parse(installedVersion) != appVersion) {
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
+    // TODO remove this migration code after a few releases
+    _migrateThemeSettings();
+  }
+
+  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 
@@ -45,7 +51,37 @@ Future<void> setupFirstLaunch() async {
     _logger.info('Generated new SRI: $sri');
     await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
 
+    // on android 12+ set board theme to system colors
+    if (getCorePalette() != null) {
+      final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
+      await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+    }
+
     await prefs.setBool('first_run', false);
+  }
+}
+
+Future<void> _migrateThemeSettings() async {
+  if (getCorePalette() == null) {
+    return;
+  }
+  final prefs = LichessBinding.instance.sharedPreferences;
+  try {
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      PrefCategory.general.storageKey,
+    );
+    if (stored == null) {
+      return;
+    }
+    final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
+    final migrated = generalPrefs.copyWith(
+      systemColors:
+          // ignore: deprecated_member_use_from_same_package
+          generalPrefs.appThemeSeed == AppThemeSeed.system,
+    );
+    await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
+  } catch (e) {
+    _logger.warning('Failed to migrate theme settings: $e');
   }
 }
 
@@ -62,8 +98,7 @@ Future<void> initializeLocalNotifications(Locale locale) async {
         ],
       ),
     ),
-    onDidReceiveNotificationResponse:
-        NotificationService.onDidReceiveNotificationResponse,
+    onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 }
@@ -74,8 +109,7 @@ Future<void> preloadPieceImages() async {
   BoardPrefs boardPrefs = BoardPrefs.defaults;
   if (storedPrefs != null) {
     try {
-      boardPrefs =
-          BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
+      boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
     } catch (e) {
       _logger.warning('Failed to decode board preferences: $e');
     }
@@ -88,22 +122,20 @@ Future<void> preloadPieceImages() async {
 ///
 /// This is meant to be called once during app initialization.
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
-  final prefs = LichessBinding.instance.sharedPreferences;
-
-  // On android 12+ get core palette and set the board theme to system if it is not set
+  // On android 12+ set dynamic color schemes
   try {
-    await DynamicColorPlugin.getCorePalette().then((value) {
-      setCorePalette(value);
+    Future.wait([DynamicColorPlugin.getCorePalette(), DynamicColorPlugin.getColorSchemes()]).then((
+      List<dynamic> value,
+    ) {
+      final CorePalette? palette = value[0] as CorePalette?;
+      final schemes = value[1] as dynamic;
+      final ColorSchemes? colorSchemes =
+          schemes != null
+              // ignore: avoid_dynamic_calls
+              ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
+              : null;
 
-      if (getCorePalette() != null &&
-          prefs.getString(PrefCategory.board.storageKey) == null) {
-        prefs.setString(
-          PrefCategory.board.storageKey,
-          jsonEncode(
-            BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system),
-          ),
-        );
-      }
+      setSystemColors(palette, colorSchemes);
     });
   } catch (e) {
     _logger.fine('Device does not support core palette: $e');
@@ -130,17 +162,13 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   final List<DisplayMode> supported = await FlutterDisplayMode.supported;
   final DisplayMode active = await FlutterDisplayMode.active;
 
-  final List<DisplayMode> sameResolution = supported
-      .where(
-        (DisplayMode m) => m.width == active.width && m.height == active.height,
-      )
-      .toList()
-    ..sort(
-      (DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate),
-    );
+  final List<DisplayMode> sameResolution =
+      supported
+          .where((DisplayMode m) => m.width == active.width && m.height == active.height)
+          .toList()
+        ..sort((DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate));
 
-  final DisplayMode mostOptimalMode =
-      sameResolution.isNotEmpty ? sameResolution.first : active;
+  final DisplayMode mostOptimalMode = sameResolution.isNotEmpty ? sameResolution.first : active;
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);

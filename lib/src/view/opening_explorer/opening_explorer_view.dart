@@ -45,9 +45,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   @override
   Widget build(BuildContext context) {
     if (widget.position.ply >= 50) {
-      return Center(
-        child: Text(context.l10n.maxDepthReached),
-      );
+      return Center(child: Text(context.l10n.maxDepthReached));
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
@@ -59,22 +57,15 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       );
     }
 
-    final cacheKey = OpeningExplorerCacheKey(
-      fen: widget.position.fen,
-      prefs: prefs,
-    );
+    final cacheKey = OpeningExplorerCacheKey(fen: widget.position.fen, prefs: prefs);
     final cacheOpeningExplorer = cache[cacheKey];
-    final openingExplorerAsync = cacheOpeningExplorer != null
-        ? AsyncValue.data(
-            (entry: cacheOpeningExplorer, isIndexing: false),
-          )
-        : ref.watch(
-            openingExplorerProvider(fen: widget.position.fen),
-          );
+    final openingExplorerAsync =
+        cacheOpeningExplorer != null
+            ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
+            : ref.watch(openingExplorerProvider(fen: widget.position.fen));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(fen: widget.position.fen),
-          (_, curAsync) {
+      ref.listen(openingExplorerProvider(fen: widget.position.fen), (_, curAsync) {
         curAsync.whenData((cur) {
           if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;
@@ -89,7 +80,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           return _ExplorerListView(
             scrollable: widget.scrollable,
             isLoading: true,
-            children: lastExplorerWidgets ??
+            children:
+                lastExplorerWidgets ??
                 [
                   const Shimmer(
                     child: ShimmerLoading(
@@ -107,8 +99,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         final ply = widget.position.ply;
 
         final children = [
-          if (widget.opening != null)
-            OpeningNameHeader(opening: widget.opening!),
+          if (widget.opening != null) OpeningNameHeader(opening: widget.opening!),
           OpeningExplorerMoveTable(
             moves: value.entry.moves,
             whiteWins: value.entry.white,
@@ -122,40 +113,34 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               key: const Key('topGamesHeader'),
               child: Text(context.l10n.topGames),
             ),
-            ...List.generate(
-              topGames.length,
-              (int index) {
-                return OpeningExplorerGameTile(
-                  key: Key('top-game-${topGames.get(index).id}'),
-                  game: topGames.get(index),
-                  color: index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
-                  ply: ply,
-                );
-              },
-              growable: false,
-            ),
+            ...List.generate(topGames.length, (int index) {
+              return OpeningExplorerGameTile(
+                key: Key('top-game-${topGames.get(index).id}'),
+                game: topGames.get(index),
+                color:
+                    index.isEven
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
+                ply: ply,
+              );
+            }, growable: false),
           ],
           if (recentGames != null && recentGames.isNotEmpty) ...[
             OpeningExplorerHeaderTile(
               key: const Key('recentGamesHeader'),
               child: Text(context.l10n.recentGames),
             ),
-            ...List.generate(
-              recentGames.length,
-              (int index) {
-                return OpeningExplorerGameTile(
-                  key: Key('recent-game-${recentGames.get(index).id}'),
-                  game: recentGames.get(index),
-                  color: index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
-                  ply: ply,
-                );
-              },
-              growable: false,
-            ),
+            ...List.generate(recentGames.length, (int index) {
+              return OpeningExplorerGameTile(
+                key: Key('recent-game-${recentGames.get(index).id}'),
+                game: recentGames.get(index),
+                color:
+                    index.isEven
+                        ? ColorScheme.of(context).surfaceContainerLow
+                        : ColorScheme.of(context).surfaceContainerHigh,
+                ply: ply,
+              );
+            }, growable: false),
           ],
         ];
 
@@ -167,32 +152,23 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           children: children,
         );
       case AsyncError(:final error):
-        debugPrint(
-          'SEVERE: [OpeningExplorerView] could not load opening explorer data; $error',
-        );
+        debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
         // TODO l10n
         final message = connectivity.whenIs(
           online: () => 'Could not load opening explorer data.',
           offline: () => 'Opening Explorer is not available offline.',
         );
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(message),
-          ),
-        );
+        return Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)));
       case _:
         return _ExplorerListView(
           scrollable: widget.scrollable,
           isLoading: true,
-          children: lastExplorerWidgets ??
+          children:
+              lastExplorerWidgets ??
               [
                 const Shimmer(
-                  child: ShimmerLoading(
-                    isLoading: true,
-                    child: OpeningExplorerMoveTable.loading(),
-                  ),
+                  child: ShimmerLoading(isLoading: true, child: OpeningExplorerMoveTable.loading()),
                 ),
               ],
         );
@@ -221,9 +197,7 @@ class _ExplorerListView extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.fastOutSlowIn,
           opacity: isLoading ? 0.20 : 0.0,
-          child: ColoredBox(
-            color: brightness == Brightness.dark ? Colors.black : Colors.white,
-          ),
+          child: ColoredBox(color: brightness == Brightness.dark ? Colors.black : Colors.white),
         ),
       ),
     );

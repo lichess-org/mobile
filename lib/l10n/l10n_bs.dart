@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -9,7 +9,7 @@ class AppLocalizationsBs extends AppLocalizations {
   AppLocalizationsBs([String locale = 'bs']) : super(locale);
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Sve partije';
 
   @override
   String get mobileAreYouSure => 'Are you sure?';
@@ -380,22 +380,22 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Prenos turnira uživo';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Kalendar emitovanja';
 
   @override
   String get broadcastNewBroadcast => 'Novo emitovanje uživo';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+  String get broadcastSubscribedBroadcasts => 'Pretplaćena emitovanja';
 
   @override
-  String get broadcastAboutBroadcasts => 'About broadcasts';
+  String get broadcastAboutBroadcasts => 'O emitovanjima';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
+  String get broadcastHowToUseLichessBroadcasts => 'Kako koristiti Lichess emitovanje.';
 
   @override
-  String get broadcastTheNewRoundHelp => 'The new round will have the same members and contributors as the previous one.';
+  String get broadcastTheNewRoundHelp => 'Nova runda će imati isti broj članova i doprinositelja kao i prijašnja.';
 
   @override
   String get broadcastAddRound => 'Dodajte kolo';
@@ -405,12 +405,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get broadcastUpcoming => 'Nadolazeći';
-
-  @override
-  String get broadcastCompleted => 'Završeno';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
 
   @override
   String get broadcastRoundName => 'Ime kola';
@@ -433,17 +427,17 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'Izvorni URL PGN-a';
 
   @override
   String get broadcastSourceUrlHelp => 'Link koji će Lichess koristiti kako bi redovno ažurirao PGN. Mora biti javno dostupan na internetu.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'Do 64 identifikacijska broja Lichess mečeva, odvojeni razmakom.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Datum početka u lokalnoj vremenskoj zoni turnira: $param';
   }
 
   @override
@@ -477,140 +471,146 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Definitivno izbrišite cijeli turnir, sva kola i sve partije.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Prikaži bodove igrača bazirane na rezultatima mečeva';
 
   @override
-  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+  String get broadcastReplacePlayerTags => 'Opcionalno: zamjeni imena igrača, rejtinge i titule';
 
   @override
-  String get broadcastFideFederations => 'FIDE federations';
+  String get broadcastFideFederations => 'FIDE federacije';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => 'Top 10 rejtinga';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'FIDE igrači';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+  String get broadcastFidePlayerNotFound => 'FIDE igrač nije pronađen';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'FIDE profil';
 
   @override
-  String get broadcastFederation => 'Federation';
+  String get broadcastFederation => 'Federacija';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Starost ove godine';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'Nema rejting';
 
   @override
-  String get broadcastRecentTournaments => 'Recent tournaments';
+  String get broadcastRecentTournaments => 'Nedavni turniri';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Otvori na Lichess-u';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Timovi';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Ploče';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Pregled';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Pretplatite se da biste bili obavješteni o počecima svake runde. Možete prilagoditi obavještenja o emitovanjima u preferencama vašeg računa.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Ubacite sliku turnira';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => 'Ploče nisu još dostupne. Iste će se prikazati čim mečevi budu unešeni.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Ploče se mogu unijeti pomoću izvora ili preko $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Počinje poslije $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Emitovanje će ubrzo započeti.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Emitovanje još nije počelo.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Oficijelna web-stranica';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Rang lista';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Oficijelna rang lista';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Više opcija na $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'stranica web-mastera';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Javni, u stvarnom vremenu PGN izvor za ovu rundu. Nudimo također $param za bržu i efikasniju sinkronizaciju.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Uvežite ovo emitovanje u vašu web stranicu';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Uvežite $param u vašu web-stranicu';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Razlika u rejtingu';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Mečevi u ovom turniru';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Bodovi';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Svi timovi';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Format turnira';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Lokacija turnira';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Najbolji igrači';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Vremenska zona';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Kategorija FIDE rejtinga';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Opcionalni detalji';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Prošla emitovanja';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Vidi sva moja emitovanja ovaj mjesec';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -868,7 +868,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Pokažite igračeve ocjene';
 
   @override
-  String get preferencesShowFlairs => 'Show player flairs';
+  String get preferencesShowFlairs => 'Prikaži igračeve ukrasne ikone';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Omogućuje sakrivanje svih rejtinga sa sajta da bi fokus bio na šahu. Partije i dalje mogu biti bodovane; postavka utječe samo na prikaz.';
@@ -881,6 +881,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Samo unutar igre';
+
+  @override
+  String get preferencesExceptInGame => 'Except in-game';
 
   @override
   String get preferencesChessClock => 'Sat';
@@ -1485,6 +1488,18 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Umjesto igranja očekivanog poteza, prvo ubacite drugi potez koji predstavlja neposrednu prijetnju na koju protivnik mora odgovoriti. Poznat i kao \"Zwischenzug\" ili \"Između\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Vitezova krajnica';
 
   @override
@@ -1700,16 +1715,13 @@ class AppLocalizationsBs extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Vaš je račun pod administracijom i ne može biti zatvoren.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zatvaranje računa je trajno! Nakon ovog koraka nema povratka. Jeste li sigurni da želite zatvoriti Vaš korisnički račun?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Neće vam biti dopušteno kreiranje novog računa sa istim imenom, čak i ako je veličina slova drugačija.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Predomislio/la sam se, ne zatvarajte moj korisnički račun';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Jeste li sigurni da želite zatvoriti Vaš korisnički račun? Zatvaranje vašeg računa je trajna odluka. Više se NIKADA nećete moći prijaviti na svoj račun.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Ovaj račun je zatvoren.';
@@ -3699,6 +3711,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get followAndChallengeFriends => 'Prati i izazovi prijatelje';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Analiza partije';
 
   @override
@@ -4294,13 +4309,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get reopenYourAccount => 'Iznova otvorite vaš račun';
 
   @override
-  String get closedAccountChangedMind => 'Ako ste zatvorili svoj račun, a predomislili ste se, imate jednu šansu da vratite svoj račun.';
-
-  @override
-  String get onlyWorksOnce => 'Ovo će samo jednom uspjeti.';
-
-  @override
-  String get cantDoThisTwice => 'Ako drugi put zatvorite svoj račun, nećete ga ni moći oporaviti.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Mejl adresa povezana s računom';
@@ -4398,6 +4407,18 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Velike greške',
+      few: '$count Velike greške',
+      one: '$count Velika greška',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4410,6 +4431,18 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Greške',
+      few: '$count Greške',
+      one: '$count Greška',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4417,6 +4450,18 @@ class AppLocalizationsBs extends AppLocalizations {
       other: '$count nepreciznosti',
       few: '$count nepreciznosti',
       one: '$count nepreciznost',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Nepreciznosti',
+      few: '$count Nepreciznosti',
+      one: '$count Nepreciznost',
     );
     return '$_temp0';
   }
@@ -5177,6 +5222,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyPlaying => 'U toku';
 
   @override
+  String get studyShowResults => 'Results';
+
+  @override
   String get studyShowEvalBar => 'Evaluacijske trake';
 
   @override
@@ -5567,6 +5615,193 @@ class AppLocalizationsBs extends AppLocalizations {
       other: 'Ovdje zalijepite svoj PGN tekst, do $count partija',
       few: 'Ovdje zalijepite svoj PGN tekst, do $count partije',
       one: 'Ovdje zalijepite svoj PGN tekst, do $count partije',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'upravo sada';
+
+  @override
+  String get timeagoRightNow => 'upravo sada';
+
+  @override
+  String get timeagoCompleted => 'completed';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count sekundi',
+      few: 'za $count sekunde',
+      one: 'za $count sekundu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count minuta',
+      few: 'za $count minute',
+      one: 'za $count minutu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count sati',
+      few: 'za $count sata',
+      one: 'za $count sat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count dana',
+      few: 'za $count dana',
+      one: 'za $count dan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count sedmica',
+      few: 'za $count sedmice',
+      one: 'za $count sedmicu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count mjeseci',
+      few: 'za $count mjeseca',
+      one: 'za $count mjesec',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count godina',
+      few: 'za $count godine',
+      one: 'za $count godinu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count minuta',
+      few: 'prije $count minute',
+      one: 'prije $count minutu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count sati',
+      few: 'prije $count sata',
+      one: 'prije $count sat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count dana',
+      few: 'prije $count dana',
+      one: 'prije $count dan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count sedmica',
+      few: 'prije $count sedmice',
+      one: 'prije $count sedmicu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count mjeseci',
+      few: 'prije $count mjeseca',
+      one: 'prije $count mjesec',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'prije $count godina',
+      few: 'prije $count godine',
+      one: 'prije $count godinu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes remaining',
+      one: '$count minute remaining',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours remaining',
+      one: '$count hour remaining',
     );
     return '$_temp0';
   }

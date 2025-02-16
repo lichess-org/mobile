@@ -29,8 +29,7 @@ class FeaturedPlayer with _$FeaturedPlayer {
   }
 
   Player get asPlayer => Player(
-        user:
-            LightUser(id: UserId(name.toLowerCase()), name: name, title: title),
-        rating: rating,
-      );
+    user: LightUser(id: UserId(name.toLowerCase()), name: name, title: title),
+    rating: rating,
+  );
 }

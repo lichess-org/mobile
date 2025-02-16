@@ -26,10 +26,7 @@ class GameSeek with _$GameSeek {
     'ratingDelta == null || ratingRange == null',
     'Rating delta and rating range cannot be used together',
   )
-  @Assert(
-    'clock != null || days != null',
-    'Either clock or days must be set',
-  )
+  @Assert('clock != null || days != null', 'Either clock or days must be set')
   const factory GameSeek({
     (Duration time, Duration increment)? clock,
     int? days,
@@ -46,10 +43,7 @@ class GameSeek with _$GameSeek {
   /// Construct a game seek from a predefined time control.
   factory GameSeek.fastPairing(TimeIncrement setup, AuthSessionState? session) {
     return GameSeek(
-      clock: (
-        Duration(seconds: setup.time),
-        Duration(seconds: setup.increment),
-      ),
+      clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
       rated: session != null,
     );
   }
@@ -63,8 +57,7 @@ class GameSeek with _$GameSeek {
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange:
-          account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
     );
   }
 
@@ -74,25 +67,19 @@ class GameSeek with _$GameSeek {
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange:
-          account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
     );
   }
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(
-    PlayableGame game,
-    GameSetupPrefs setup,
-  ) {
+  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
     return GameSeek(
-      clock: game.meta.clock != null
-          ? (game.meta.clock!.initial, game.meta.clock!.increment)
-          : null,
+      clock:
+          game.meta.clock != null ? (game.meta.clock!.initial, game.meta.clock!.increment) : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
-      ratingDelta:
-          game.source == GameSource.lobby ? setup.customRatingDelta : null,
+      ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,
     );
   }
 
@@ -109,27 +96,20 @@ class GameSeek with _$GameSeek {
     return copyWith(ratingRange: range, ratingDelta: null);
   }
 
-  TimeIncrement? get timeIncrement => clock != null
-      ? TimeIncrement(
-          clock!.$1.inSeconds,
-          clock!.$2.inSeconds,
-        )
-      : null;
+  TimeIncrement? get timeIncrement =>
+      clock != null ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds) : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
-        variant ?? Variant.standard,
-        timeIncrement != null
-            ? Speed.fromTimeIncrement(timeIncrement!)
-            : Speed.correspondence,
-      );
+    variant ?? Variant.standard,
+    timeIncrement != null ? Speed.fromTimeIncrement(timeIncrement!) : Speed.correspondence,
+  );
 
   Map<String, String> get requestBody => {
-        if (clock != null) 'time': (clock!.$1.inSeconds / 60).toString(),
-        if (clock != null) 'increment': clock!.$2.inSeconds.toString(),
-        if (days != null) 'days': days.toString(),
-        'rated': rated.toString(),
-        if (variant != null) 'variant': variant!.name,
-        if (ratingRange != null)
-          'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
-      };
+    if (clock != null) 'time': (clock!.$1.inSeconds / 60).toString(),
+    if (clock != null) 'increment': clock!.$2.inSeconds.toString(),
+    if (days != null) 'days': days.toString(),
+    'rated': rated.toString(),
+    if (variant != null) 'variant': variant!.name,
+    if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
+  };
 }

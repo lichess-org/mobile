@@ -8,42 +8,24 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudyGamebook extends StatelessWidget {
-  const StudyGamebook(
-    this.id,
-  );
+  const StudyGamebook(this.id);
 
   final StudyId id;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: [
-          Expanded(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _Comment(id: id),
-                    _Hint(id: id),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [_Comment(id: id), _Hint(id: id)],
       ),
     );
   }
 }
 
 class _Comment extends ConsumerWidget {
-  const _Comment({
-    required this.id,
-  });
+  const _Comment({required this.id});
 
   final StudyId id;
 
@@ -51,14 +33,14 @@ class _Comment extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    final comment = state.gamebookComment ??
+    final comment =
+        state.gamebookComment ??
         switch (state.gamebookState) {
           GamebookState.findTheMove => context.l10n.studyWhatWouldYouPlay,
           GamebookState.correctMove => context.l10n.studyGoodMove,
           GamebookState.incorrectMove => context.l10n.puzzleNotTheMove,
-          GamebookState.lessonComplete =>
-            context.l10n.studyYouCompletedThisLesson,
-          _ => ''
+          GamebookState.lessonComplete => context.l10n.studyYouCompletedThisLesson,
+          _ => '',
         };
 
     return Expanded(
@@ -68,9 +50,7 @@ class _Comment extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Linkify(
               text: comment,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontSize: 16),
               onOpen: (link) async {
                 launchUrl(Uri.parse(link.url));
               },
@@ -83,9 +63,7 @@ class _Comment extends ConsumerWidget {
 }
 
 class _Hint extends ConsumerStatefulWidget {
-  const _Hint({
-    required this.id,
-  });
+  const _Hint({required this.id});
 
   final StudyId id;
 
@@ -98,15 +76,15 @@ class _HintState extends ConsumerState<_Hint> {
 
   @override
   Widget build(BuildContext context) {
-    final hint =
-        ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
+    final hint = ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()
         : SizedBox(
-            height: 40,
-            child: showHint
-                ? Center(child: Text(hint))
-                : TextButton(
+          height: 40,
+          child:
+              showHint
+                  ? Center(child: Text(hint))
+                  : TextButton(
                     onPressed: () {
                       setState(() {
                         showHint = true;
@@ -114,7 +92,7 @@ class _HintState extends ConsumerState<_Hint> {
                     },
                     child: Text(context.l10n.getAHint),
                   ),
-          );
+        );
   }
 }
 
@@ -137,7 +115,7 @@ class GamebookButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final primary = ColorScheme.of(context).primary;
 
     return Semantics(
       container: true,
@@ -159,10 +137,7 @@ class GamebookButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: highlighted ? primary : null,
-                  ),
+                  style: TextStyle(fontSize: 16.0, color: highlighted ? primary : null),
                 ),
               ),
             ],

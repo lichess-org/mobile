@@ -49,9 +49,7 @@ Future<ProviderContainer> makeContainer({
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 
-  FlutterSecureStorage.setMockInitialValues({
-    kSRIStorageKey: 'test',
-  });
+  FlutterSecureStorage.setMockInitialValues({kSRIStorageKey: 'test'});
 
   final container = ProviderContainer(
     overrides: [
@@ -62,8 +60,7 @@ Future<ProviderContainer> makeContainer({
         return FakeNotificationDisplay();
       }),
       databaseProvider.overrideWith((ref) async {
-        final db =
-            await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+        final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
         ref.onDispose(db.close);
         return db;
       }),
@@ -100,6 +97,7 @@ Future<ProviderContainer> makeContainer({
           }),
           userSession: userSession,
           engineMaxMemoryInMb: 256,
+          appDocumentsDirectory: null,
         );
       }),
       ...overrides ?? [],

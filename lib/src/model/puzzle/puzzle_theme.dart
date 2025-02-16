@@ -50,6 +50,7 @@ enum PuzzleThemeKey {
   hookMate(PuzzleIcons.hookMate),
   interference(PuzzleIcons.interference),
   intermezzo(PuzzleIcons.intermezzo),
+  killBoxMate(PuzzleIcons.killBoxMate),
   kingsideAttack(PuzzleIcons.kingsideAttack),
   knightEndgame(PuzzleIcons.knightEndgame),
   long(PuzzleIcons.long),
@@ -238,6 +239,11 @@ enum PuzzleThemeKey {
           name: l10n.puzzleThemeIntermezzo,
           description: l10n.puzzleThemeIntermezzoDescription,
         );
+      case PuzzleThemeKey.killBoxMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeKillBoxMate,
+          description: l10n.puzzleThemeKillBoxMateDescription,
+        );
       case PuzzleThemeKey.kingsideAttack:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeKingsideAttack,
@@ -402,8 +408,7 @@ enum PuzzleThemeKey {
   }
 }
 
-final IMap<String, PuzzleThemeKey> puzzleThemeNameMap =
-    IMap(PuzzleThemeKey.values.asNameMap());
+final IMap<String, PuzzleThemeKey> puzzleThemeNameMap = IMap(PuzzleThemeKey.values.asNameMap());
 
 typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 
@@ -412,12 +417,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
   final l10n = ref.watch(localizationsProvider);
 
   return IList([
-    (
-      l10n.strings.puzzleRecommended,
-      [
-        PuzzleThemeKey.mix,
-      ],
-    ),
+    (l10n.strings.puzzleRecommended, [PuzzleThemeKey.mix]),
     (
       l10n.strings.puzzlePhases,
       [
@@ -481,6 +481,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
         PuzzleThemeKey.doubleBishopMate,
         PuzzleThemeKey.dovetailMate,
         PuzzleThemeKey.hookMate,
+        PuzzleThemeKey.killBoxMate,
         PuzzleThemeKey.smotheredMate,
       ],
     ),
@@ -504,20 +505,11 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
     ),
     (
       l10n.strings.puzzleLengths,
-      [
-        PuzzleThemeKey.oneMove,
-        PuzzleThemeKey.short,
-        PuzzleThemeKey.long,
-        PuzzleThemeKey.veryLong,
-      ],
+      [PuzzleThemeKey.oneMove, PuzzleThemeKey.short, PuzzleThemeKey.long, PuzzleThemeKey.veryLong],
     ),
     (
       l10n.strings.puzzleOrigin,
-      [
-        PuzzleThemeKey.master,
-        PuzzleThemeKey.masterVsMaster,
-        PuzzleThemeKey.superGM,
-      ],
+      [PuzzleThemeKey.master, PuzzleThemeKey.masterVsMaster, PuzzleThemeKey.superGM],
     ),
   ]);
 }

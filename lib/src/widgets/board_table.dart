@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -44,30 +45,30 @@ class BoardTable extends ConsumerStatefulWidget {
     this.zenMode = false,
     super.key,
   }) : assert(
-          moves == null || currentMoveIndex != null,
-          'You must provide `currentMoveIndex` along with `moves`',
-        );
+         moves == null || currentMoveIndex != null,
+         'You must provide `currentMoveIndex` along with `moves`',
+       );
 
   /// Creates an empty board table (useful for loading).
   const BoardTable.empty({
     this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.errorMessage,
-  })  : fen = kEmptyBoardFEN,
-        orientation = Side.white,
-        gameData = null,
-        lastMove = null,
-        boardSettingsOverrides = null,
-        topTable = const SizedBox.shrink(),
-        bottomTable = const SizedBox.shrink(),
-        shapes = null,
-        engineGauge = null,
-        moves = null,
-        currentMoveIndex = null,
-        onSelectMove = null,
-        boardOverlay = null,
-        boardKey = null,
-        zenMode = false;
+  }) : fen = kEmptyBoardFEN,
+       orientation = Side.white,
+       gameData = null,
+       lastMove = null,
+       boardSettingsOverrides = null,
+       topTable = const SizedBox.shrink(),
+       bottomTable = const SizedBox.shrink(),
+       shapes = null,
+       engineGauge = null,
+       moves = null,
+       currentMoveIndex = null,
+       onSelectMove = null,
+       boardOverlay = null,
+       boardKey = null,
+       zenMode = false;
 
   final String fen;
 
@@ -132,39 +133,40 @@ class _BoardTableState extends ConsumerState<BoardTable> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final orientation = constraints.maxWidth > constraints.maxHeight
-            ? Orientation.landscape
-            : Orientation.portrait;
+        final orientation =
+            constraints.maxWidth > constraints.maxHeight
+                ? Orientation.landscape
+                : Orientation.portrait;
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs.toBoardSettings().copyWith(
-              borderRadius: isTablet
-                  ? const BorderRadius.all(Radius.circular(4.0))
-                  : BorderRadius.zero,
-              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-              drawShape: DrawShapeOptions(
-                enable: boardPrefs.enableShapeDrawings,
-                onCompleteShape: _onCompleteShape,
-                onClearShapes: _onClearShapes,
-                newShapeColor: boardPrefs.shapeColor.color,
-              ),
-            );
+          borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          drawShape: DrawShapeOptions(
+            enable: boardPrefs.enableShapeDrawings,
+            onCompleteShape: _onCompleteShape,
+            onClearShapes: _onClearShapes,
+            newShapeColor: boardPrefs.shapeColor.color,
+          ),
+        );
 
-        final settings = widget.boardSettingsOverrides != null
-            ? widget.boardSettingsOverrides!.merge(defaultSettings)
-            : defaultSettings;
+        final settings =
+            widget.boardSettingsOverrides != null
+                ? widget.boardSettingsOverrides!.merge(defaultSettings)
+                : defaultSettings;
 
         final shapes = userShapes.union(widget.shapes ?? ISet());
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
         if (orientation == Orientation.landscape) {
-          final defaultBoardSize = constraints.biggest.shortestSide -
-              (kTabletBoardTableSidePadding * 2);
+          final defaultBoardSize =
+              constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
           final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-          final boardSize = sideWidth >= 250
-              ? defaultBoardSize
-              : constraints.biggest.longestSide / kGoldenRatio -
-                  (kTabletBoardTableSidePadding * 2);
+          final boardSize =
+              sideWidth >= 250
+                  ? defaultBoardSize
+                  : constraints.biggest.longestSide / kGoldenRatio -
+                      (kTabletBoardTableSidePadding * 2);
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
@@ -222,30 +224,25 @@ class _BoardTableState extends ConsumerState<BoardTable> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
-          final double boardSize = isTablet
-              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-              : defaultBoardSize;
+          final double boardSize =
+              isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize;
 
           // vertical space left on portrait mode to check if we can display the
           // move list
-          final verticalSpaceLeftBoardOnPortrait =
-              constraints.biggest.height - boardSize;
+          final verticalSpaceLeftBoardOnPortrait = constraints.biggest.height - boardSize;
 
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (!widget.zenMode &&
-                  slicedMoves != null &&
-                  verticalSpaceLeftBoardOnPortrait >= 130)
+              if (!widget.zenMode && slicedMoves != null && verticalSpaceLeftBoardOnPortrait >= 130)
                 MoveList(
                   type: MoveListType.inline,
                   slicedMoves: slicedMoves,
                   currentMoveIndex: widget.currentMoveIndex ?? 0,
                   onSelectMove: widget.onSelectMove,
                 )
-              else if (widget.showMoveListPlaceholder &&
-                  verticalSpaceLeftBoardOnPortrait >= 130)
+              else if (widget.showMoveListPlaceholder && verticalSpaceLeftBoardOnPortrait >= 130)
                 const SizedBox(height: 40),
               Expanded(
                 child: Padding(
@@ -257,11 +254,10 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               ),
               if (widget.engineGauge != null)
                 Padding(
-                  padding: isTablet
-                      ? const EdgeInsets.symmetric(
-                          horizontal: kTabletBoardTableSidePadding,
-                        )
-                      : EdgeInsets.zero,
+                  padding:
+                      isTablet
+                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                          : EdgeInsets.zero,
                   child: EngineGauge(
                     params: widget.engineGauge!,
                     displayMode: EngineGaugeDisplayMode.horizontal,
@@ -270,11 +266,10 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               else if (widget.showEngineGaugePlaceholder)
                 const SizedBox(height: kEvalGaugeSize),
               Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(
-                        horizontal: kTabletBoardTableSidePadding,
-                      )
-                    : EdgeInsets.zero,
+                padding:
+                    isTablet
+                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                        : EdgeInsets.zero,
                 child: _BoardWidget(
                   size: boardSize,
                   boardPrefs: boardPrefs,
@@ -386,15 +381,7 @@ class _BoardWidget extends StatelessWidget {
     } else if (error != null) {
       return SizedBox.square(
         dimension: size,
-        child: Stack(
-          children: [
-            board,
-            _ErrorWidget(
-              errorMessage: error!,
-              boardSize: size,
-            ),
-          ],
-        ),
+        child: Stack(children: [board, _ErrorWidget(errorMessage: error!, boardSize: size)]),
       );
     }
 
@@ -403,10 +390,7 @@ class _BoardWidget extends StatelessWidget {
 }
 
 class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({
-    required this.errorMessage,
-    required this.boardSize,
-  });
+  const _ErrorWidget({required this.errorMessage, required this.boardSize});
   final double boardSize;
   final String errorMessage;
 
@@ -419,16 +403,13 @@ class _ErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoColors.secondarySystemBackground
-                      .resolveFrom(context)
-                  : Theme.of(context).colorScheme.surface,
+              color:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
+                      : ColorScheme.of(context).surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(errorMessage),
-            ),
+            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
           ),
         ),
       ),

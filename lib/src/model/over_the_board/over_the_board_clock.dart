@@ -19,8 +19,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
   OverTheBoardClockState build() {
     _updateTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
       if (_stopwatch.isRunning) {
-        final newTime =
-            state.timeLeft(state.activeClock!)! - _stopwatch.elapsed;
+        final newTime = state.timeLeft(state.activeClock!)! - _stopwatch.elapsed;
 
         if (state.activeClock == Side.white) {
           state = state.copyWith(whiteTimeLeft: newTime);
@@ -29,9 +28,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
         }
 
         if (newTime <= Duration.zero) {
-          state = state.copyWith(
-            flagSide: state.activeClock,
-          );
+          state = state.copyWith(flagSide: state.activeClock);
         }
 
         _stopwatch.reset();
@@ -43,10 +40,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
     });
 
     return OverTheBoardClockState.fromTimeIncrement(
-      TimeIncrement(
-        const Duration(minutes: 5).inSeconds,
-        const Duration(seconds: 3).inSeconds,
-      ),
+      TimeIncrement(const Duration(minutes: 5).inSeconds, const Duration(seconds: 3).inSeconds),
     );
   }
 
@@ -64,8 +58,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
   void switchSide({required Side newSideToMove, required bool addIncrement}) {
     if (state.timeIncrement.isInfinite || state.flagSide != null) return;
 
-    final increment =
-        Duration(seconds: addIncrement ? state.timeIncrement.increment : 0);
+    final increment = Duration(seconds: addIncrement ? state.timeIncrement.increment : 0);
     if (newSideToMove == Side.black) {
       state = state.copyWith(
         whiteTimeLeft: state.whiteTimeLeft! + increment,
@@ -88,9 +81,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
 
   void pause() {
     if (_stopwatch.isRunning) {
-      state = state.copyWith(
-        activeClock: null,
-      );
+      state = state.copyWith(activeClock: null);
       _stopwatch.reset();
       _stopwatch.stop();
     }
@@ -100,9 +91,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
     _stopwatch.reset();
     _stopwatch.start();
 
-    state = state.copyWith(
-      activeClock: newSideToMove,
-    );
+    state = state.copyWith(activeClock: newSideToMove);
   }
 }
 
@@ -118,12 +107,11 @@ class OverTheBoardClockState with _$OverTheBoardClockState {
     required Side? flagSide,
   }) = _OverTheBoardClockState;
 
-  factory OverTheBoardClockState.fromTimeIncrement(
-    TimeIncrement timeIncrement,
-  ) {
-    final initialTime = timeIncrement.isInfinite
-        ? null
-        : Duration(seconds: max(timeIncrement.time, timeIncrement.increment));
+  factory OverTheBoardClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
+    final initialTime =
+        timeIncrement.isInfinite
+            ? null
+            : Duration(seconds: max(timeIncrement.time, timeIncrement.increment));
 
     return OverTheBoardClockState(
       timeIncrement: timeIncrement,
@@ -136,6 +124,5 @@ class OverTheBoardClockState with _$OverTheBoardClockState {
 
   bool get active => activeClock != null || flagSide != null;
 
-  Duration? timeLeft(Side side) =>
-      side == Side.white ? whiteTimeLeft : blackTimeLeft;
+  Duration? timeLeft(Side side) => side == Side.white ? whiteTimeLeft : blackTimeLeft;
 }

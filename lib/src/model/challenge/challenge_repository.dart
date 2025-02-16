@@ -16,10 +16,7 @@ ChallengeRepository challengeRepository(Ref ref) {
   return ChallengeRepository(ref.read(lichessClientProvider));
 }
 
-typedef ChallengesList = ({
-  IList<Challenge> inward,
-  IList<Challenge> outward,
-});
+typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
 
 class ChallengeRepository {
   const ChallengeRepository(this.client);
@@ -42,10 +39,7 @@ class ChallengeRepository {
 
   Future<Challenge> show(ChallengeId id) async {
     final uri = Uri(path: '/api/challenge/$id/show');
-    return client.readJson(
-      uri,
-      mapper: Challenge.fromServerJson,
-    );
+    return client.readJson(uri, mapper: Challenge.fromServerJson);
   }
 
   Future<Challenge> create(ChallengeRequest challenge) async {
@@ -62,25 +56,16 @@ class ChallengeRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to accept challenge: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to accept challenge: ${response.statusCode}', uri);
     }
   }
 
   Future<void> decline(ChallengeId id, {ChallengeDeclineReason? reason}) async {
     final uri = Uri(path: '/api/challenge/$id/decline');
-    final response = await client.post(
-      uri,
-      body: reason != null ? {'reason': reason.name} : null,
-    );
+    final response = await client.post(uri, body: reason != null ? {'reason': reason.name} : null);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to decline challenge: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to decline challenge: ${response.statusCode}', uri);
     }
   }
 
@@ -89,10 +74,7 @@ class ChallengeRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to cancel challenge: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to cancel challenge: ${response.statusCode}', uri);
     }
   }
 }

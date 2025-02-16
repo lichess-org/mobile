@@ -42,20 +42,15 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     });
 
     _connectivitySubscription?.cancel();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((result) {
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((result) {
       _connectivityChangesDebouncer(() => _onConnectivityChange(result));
     });
 
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;
 
-    _appLifecycleListener = AppLifecycleListener(
-      onStateChange: _onAppLifecycleChange,
-    );
+    _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    return _connectivity
-        .checkConnectivity()
-        .then((r) => _getConnectivityStatus(r, appState));
+    return _connectivity.checkConnectivity().then((r) => _getConnectivityStatus(r, appState));
   }
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {
@@ -64,9 +59,9 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     }
 
     if (appState == AppLifecycleState.resumed) {
-      final newConn = await _connectivity
-          .checkConnectivity()
-          .then((r) => _getConnectivityStatus(r, appState));
+      final newConn = await _connectivity.checkConnectivity().then(
+        (r) => _getConnectivityStatus(r, appState),
+      );
 
       state = AsyncValue.data(newConn);
     } else {
@@ -88,12 +83,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
 
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $result, isOnline: $isOnline');
-      state = AsyncValue.data(
-        (
-          isOnline: newIsOnline,
-          appState: state.valueOrNull?.appState,
-        ),
-      );
+      state = AsyncValue.data((isOnline: newIsOnline, appState: state.valueOrNull?.appState));
     }
   }
 
@@ -101,19 +91,13 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     List<ConnectivityResult> result,
     AppLifecycleState? appState,
   ) async {
-    final status = (
-      isOnline: await isOnline(_defaultClient),
-      appState: appState,
-    );
+    final status = (isOnline: await isOnline(_defaultClient), appState: appState);
     _logger.info('Connectivity status: $result, isOnline: ${status.isOnline}');
     return status;
   }
 }
 
-typedef ConnectivityStatus = ({
-  bool isOnline,
-  AppLifecycleState? appState,
-});
+typedef ConnectivityStatus = ({bool isOnline, AppLifecycleState? appState});
 
 final _internetCheckUris = [
   Uri.parse('https://www.gstatic.com/generate_204'),
@@ -126,10 +110,10 @@ Future<bool> isOnline(Client client) {
   try {
     int remaining = _internetCheckUris.length;
     final futures = _internetCheckUris.map(
-      (uri) => client.head(uri).timeout(const Duration(seconds: 10)).then(
-            (response) => true,
-            onError: (_) => false,
-          ),
+      (uri) => client
+          .head(uri)
+          .timeout(const Duration(seconds: 10))
+          .then((response) => true, onError: (_) => false),
     );
     for (final future in futures) {
       future.then((value) {
@@ -169,10 +153,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
   ///   offline: () => 'Offline',
   /// );
   /// ```
-  R whenIs<R>({
-    required R Function() online,
-    required R Function() offline,
-  }) {
+  R whenIs<R>({required R Function() online, required R Function() offline}) {
     return maybeWhen(
       skipLoadingOnReload: true,
       data: (status) => status.isOnline ? online() : offline(),

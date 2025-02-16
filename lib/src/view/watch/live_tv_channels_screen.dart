@@ -14,6 +14,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Lichess TV', screen: const LiveTvChannelsScreen());
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
@@ -25,12 +29,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
           ref.read(liveTvChannelsProvider.notifier).stopWatching();
         }
       },
-      child: const PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text('Lichess TV'),
-        ),
-        body: _Body(),
-      ),
+      child: const PlatformScaffold(appBarTitle: Text('Lichess TV'), body: _Body()),
     );
   }
 }
@@ -53,12 +52,12 @@ class _Body extends ConsumerWidget {
             final game = list[index];
             return SmallBoardPreview(
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (_) => TvScreen(
-                    channel: game.channel,
-                    initialGame: (game.id, game.orientation),
+                Navigator.of(context, rootNavigator: true).push(
+                  TvScreen.buildRoute(
+                    context,
+                    game.channel,
+                    gameId: game.id,
+                    orientation: game.orientation,
                   ),
                 );
               },
@@ -70,15 +69,8 @@ class _Body extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    game.channel.label,
-                    style: Styles.boardPreviewTitle,
-                  ),
-                  Icon(
-                    game.channel.icon,
-                    color: context.lichessColors.brag,
-                    size: 30,
-                  ),
+                  Text(game.channel.label, style: Styles.boardPreviewTitle),
+                  Icon(game.channel.icon, color: ColorScheme.of(context).primary, size: 30),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,
                     aiLevel: game.player.asPlayer.aiLevel,
@@ -90,12 +82,8 @@ class _Body extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
 }

@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -240,8 +240,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Completed $count $param2 correspondence games',
-      one: 'Completed $count $param2 correspondence game',
+      other: '下完了$count$param2局通信棋局',
     );
     return '$_temp0';
   }
@@ -373,12 +372,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastUpcoming => '即将举行';
 
   @override
-  String get broadcastCompleted => '已完成';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess基于源游戏检测游戏的完成状态。如果没有源，请使用此选项。';
-
-  @override
   String get broadcastRoundName => '轮次名称';
 
   @override
@@ -409,7 +402,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return '锦标赛本地时区的开始时间：$param';
   }
 
   @override
@@ -476,107 +469,113 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastRecentTournaments => '最近的比赛';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => '在 Lichess中打开';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => '团队';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => '棋盘';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => '概览';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => '订阅后会在每轮开始时通知。您可以在帐户首选项中切换铃声或推送广播通知。';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => '上传锦标赛图像';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet => '尚无看板。这些游戏一旦上传就会出现。';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return '可以通过 $param加载看板';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return '从 $param 开始';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => '转播将很快开始。';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => '转播尚未开始。';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => '官网';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => '积分榜';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => '官方排名';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return '$param 上的更多选项';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => '网页管理员页面';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return '此回合有公开实时的PGN源。我们还提供一个 $param ，用于更快并更有效的同步刷新。';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => '将此广播嵌入您的网站';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return '将 $param 嵌入到您的网站';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => '积分差别';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => '这个锦标赛中的游戏';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => '得分';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => '所有团队';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => '锦标赛格式';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => '锦标赛地点';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => '最强棋手';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => '时区';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE 评分类别';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => '可填的信息';
 
   @override
   String get broadcastPastBroadcasts => '结束的转播';
 
   @override
   String get broadcastAllBroadcastsByMonth => '按月查看所有转播';
+
+  @override
+  String get broadcastBackToLiveMove => '回到实时着法';
+
+  @override
+  String get broadcastSinceHideResults => '由于您选择隐藏比赛结果，为避免剧透，所有棋局预览均为空白状态。';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -847,6 +846,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesInGameOnly => '仅在对局中';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => '棋钟';
 
   @override
@@ -901,7 +903,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '在三次重复局面时自动要求和局';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '当剩余时间小于30秒';
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '时间剩余 < 30秒时';
 
   @override
   String get preferencesMoveConfirmation => '确认走棋';
@@ -1439,6 +1441,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '不走预期的着法，而是走一着对手必须应对的直接威胁。';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => '车和马一起合作将死了王。车在第三个子的合作下杀死了王，马用来挡住敌王的出路格子。';
+
+  @override
   String get puzzleThemeKnightEndgame => '马残局';
 
   @override
@@ -1654,16 +1668,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => '你的账号已被管理，无法被关闭。';
 
   @override
-  String get settingsClosingIsDefinitive => '关闭账户是不可回退的决定。你真的确定吗？';
-
-  @override
   String get settingsCantOpenSimilarAccount => '新账号名称不能和旧账号相同，只有大小写差别也不被允许。';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '我改主意了，不要关闭帐号';
+  String get settingsCancelKeepAccount => '取消，保留我的账户';
 
   @override
-  String get settingsCloseAccountExplanation => '你确定要关闭你的账户？关闭账户是不可回退的决定。 你将再不能再使用此账户登录。';
+  String get settingsCloseAccountAreYouSure => '您确定要关闭您的账户吗？';
 
   @override
   String get settingsThisAccountIsClosed => '此帐户已被关闭。';
@@ -2293,7 +2304,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gamesPlayed => '棋局';
 
   @override
-  String get ok => 'OK';
+  String get ok => '好的';
 
   @override
   String get cancel => '取消';
@@ -3653,6 +3664,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get followAndChallengeFriends => '关注并挑战朋友';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => '棋局分析';
 
   @override
@@ -4248,13 +4262,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reopenYourAccount => '恢复你的账户';
 
   @override
-  String get closedAccountChangedMind => '如果你关闭了账户，但此后又改变了主意，你可以获得一次恢复账户的机会。';
-
-  @override
-  String get onlyWorksOnce => '账户关闭后只能恢复一次';
-
-  @override
-  String get cantDoThisTwice => '如果你第二次关闭账户，将无法恢复。';
+  String get reopenYourAccountDescription => '如果您关闭了账户，但此后又改变了主意，您可以获得一次恢复账户的机会。';
 
   @override
   String get emailAssociatedToaccount => '与账户关联的电子邮件地址';
@@ -4313,7 +4321,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nothingToSeeHere => '此刻没有什么可看的。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '统计信息';
 
   @override
   String opponentLeftCounter(int count) {
@@ -4346,6 +4354,16 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次漏着',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4356,7 +4374,27 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次错着',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次失准',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5043,6 +5081,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyPlaying => '正在对局';
 
   @override
+  String get studyShowResults => '结果';
+
+  @override
   String get studyShowEvalBar => '评估条';
 
   @override
@@ -5386,7 +5427,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param 每页';
   }
 
   @override
@@ -5428,6 +5469,165 @@ class AppLocalizationsZh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get timeagoJustNow => '刚刚';
+
+  @override
+  String get timeagoRightNow => '刚刚';
+
+  @override
+  String get timeagoCompleted => '已完成';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 秒内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 分钟内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 小时内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 天内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 周内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 月内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在 $count 年内',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 分钟前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 小时前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 天前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 周前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 月前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 年前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '还剩 $count 分钟',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '还剩 $count 小时',
+    );
+    return '$_temp0';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5464,7 +5664,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileGreetingWithoutName => '您好';
 
   @override
-  String get mobileHideVariation => '隱藏變體';
+  String get mobileHideVariation => '隱藏變化';
 
   @override
   String get mobileHomeTab => '首頁';
@@ -5479,7 +5679,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileNoSearchResults => '沒有任何搜尋結果';
 
   @override
-  String get mobileNotFollowingAnyUser => '您未被任何使用者追蹤。';
+  String get mobileNotFollowingAnyUser => '您未追蹤任何使用者。';
 
   @override
   String get mobileOkButton => '確認';
@@ -5554,6 +5754,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileSystemColors => '系統顏色';
+
+  @override
+  String get mobileTheme => '佈景主題';
 
   @override
   String get mobileToolsTab => '工具';
@@ -5795,12 +5998,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastUpcoming => '即將舉行';
 
   @override
-  String get broadcastCompleted => '已結束';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess 偵測棋局的結束，但有可能會偵測錯誤。請在這自行設定。';
-
-  @override
   String get broadcastRoundName => '回合名稱';
 
   @override
@@ -5939,6 +6136,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get broadcastStandings => '排行榜';
+
+  @override
+  String get broadcastOfficialStandings => '官方排名';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -6264,6 +6464,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get preferencesInGameOnly => '只在遊戲中';
+
+  @override
+  String get preferencesExceptInGame => '僅適用於非評分局中';
 
   @override
   String get preferencesChessClock => '棋鐘';
@@ -7073,16 +7276,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settingsManagedAccountCannotBeClosed => '您的帳號已被管理並且無法關閉。';
 
   @override
-  String get settingsClosingIsDefinitive => '您確定要刪除帳號嗎？這是無法挽回的。';
-
-  @override
   String get settingsCantOpenSimilarAccount => '即使名稱大小寫不同，您也不能使用相同的名稱開設新帳戶';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '我改變主意了，不要關閉我的帳號';
+  String get settingsCancelKeepAccount => '取消併保留我的帳號';
 
   @override
-  String get settingsCloseAccountExplanation => '您真的確定要刪除帳戶嗎？ 關閉帳戶是永久性的決定， 您將「永遠無法」再次登入。';
+  String get settingsCloseAccountAreYouSure => '確定要關閉您的帳戶嗎？';
 
   @override
   String get settingsThisAccountIsClosed => '此帳號已被關閉。';
@@ -7100,7 +7300,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get gameOver => '遊戲結束';
 
   @override
-  String get waitingForOpponent => '等待對手';
+  String get waitingForOpponent => '正在等待對手';
 
   @override
   String get orLetYourOpponentScanQrCode => '或是讓對手掃描這個 QR code';
@@ -7710,6 +7910,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get gamesPlayed => '下過局數';
+
+  @override
+  String get ok => '確認';
 
   @override
   String get cancel => '取消';
@@ -9664,15 +9867,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get reopenYourAccount => '重新開啟帳戶';
 
   @override
-  String get closedAccountChangedMind => '如果你停用了自己的帳號，但是改變了心意，你有一次的機會可以拿回帳號。';
-
-  @override
-  String get onlyWorksOnce => '這只能復原一次。';
-
-  @override
-  String get cantDoThisTwice => '如果你決定再次停用你的帳號，則不會有任何方式去復原。';
-
-  @override
   String get emailAssociatedToaccount => '和此帳號相關的電子信箱';
 
   @override
@@ -9762,6 +9956,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次漏著',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -9772,7 +9976,27 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次失誤',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 次輕微失誤',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -10801,6 +11025,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get studyYouCompletedThisLesson => '恭喜！您完成了這個課程。';
 
   @override
+  String studyPerPage(String param) {
+    return '$param 每頁';
+  }
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -10836,6 +11065,165 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       count,
       locale: localeName,
       other: '在此貼上PGN文本，最多可導入$count個棋局',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => '剛剛';
+
+  @override
+  String get timeagoRightNow => '現在';
+
+  @override
+  String get timeagoCompleted => '已結束';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count秒後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count分後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count小時後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count天後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count週後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count個月後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count年後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count分前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count小時前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count天前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count週前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count個月前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count年前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '剩下 $count 分鐘',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '剩下 $count 小時',
     );
     return '$_temp0';
   }

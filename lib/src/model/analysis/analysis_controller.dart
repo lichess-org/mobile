@@ -29,11 +29,7 @@ part 'analysis_controller.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
-typedef StandaloneAnalysis = ({
-  String pgn,
-  Variant variant,
-  bool isComputerAnalysisAllowed,
-});
+typedef StandaloneAnalysis = ({String pgn, Variant variant, bool isComputerAnalysisAllowed});
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
@@ -51,8 +47,7 @@ class AnalysisOptions with _$AnalysisOptions {
 }
 
 @riverpod
-class AnalysisController extends _$AnalysisController
-    implements PgnTreeNotifier {
+class AnalysisController extends _$AnalysisController implements PgnTreeNotifier {
   late Root _root;
   late Variant _variant;
 
@@ -71,8 +66,7 @@ class AnalysisController extends _$AnalysisController
     late final Division? division;
 
     if (options.gameId != null) {
-      final game =
-          await ref.watch(archivedGameProvider(id: options.gameId!).future);
+      final game = await ref.watch(archivedGameProvider(id: options.gameId!).future);
       _variant = game.meta.variant;
       pgn = game.makePgn();
       opening = game.data.opening;
@@ -91,27 +85,30 @@ class AnalysisController extends _$AnalysisController
 
     final game = PgnGame.parsePgn(
       pgn,
-      initHeaders: () => options.isLichessGameAnalysis
-          ? {}
-          : {
-              'Event': '?',
-              'Site': '?',
-              'Date': _dateFormat.format(DateTime.now()),
-              'Round': '?',
-              'White': '?',
-              'Black': '?',
-              'Result': '*',
-              'WhiteElo': '?',
-              'BlackElo': '?',
-            },
+      initHeaders:
+          () =>
+              options.isLichessGameAnalysis
+                  ? {}
+                  : {
+                    'Event': '?',
+                    'Site': '?',
+                    'Date': _dateFormat.format(DateTime.now()),
+                    'Round': '?',
+                    'White': '?',
+                    'Black': '?',
+                    'Result': '*',
+                    'WhiteElo': '?',
+                    'BlackElo': '?',
+                  },
     );
 
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    final isComputerAnalysisAllowed = options.isLichessGameAnalysis
-        ? pgnHeaders['Result'] != '*'
-        : options.standalone!.isComputerAnalysisAllowed;
+    final isComputerAnalysisAllowed =
+        options.isLichessGameAnalysis
+            ? pgnHeaders['Result'] != '*'
+            : options.standalone!.isComputerAnalysisAllowed;
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
@@ -122,8 +119,7 @@ class AnalysisController extends _$AnalysisController
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
-            branch.position.ply <=
-                root.position.ply + options.initialMoveCursor!) {
+            branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }
@@ -134,26 +130,27 @@ class AnalysisController extends _$AnalysisController
     );
 
     // wait for the opening to be fetched to recompute the branch opening
-    Future.wait(openingFutures).then((list) {
-      bool hasOpening = false;
-      for (final updated in list) {
-        if (updated != null) {
-          hasOpening = true;
-          final (path, opening) = updated;
-          _root.updateAt(path, (node) => node.opening = opening);
-        }
-      }
-      return hasOpening;
-    }).then((hasOpening) {
-      if (hasOpening) {
-        scheduleMicrotask(() {
-          _setPath(state.requireValue.currentPath);
+    Future.wait(openingFutures)
+        .then((list) {
+          bool hasOpening = false;
+          for (final updated in list) {
+            if (updated != null) {
+              hasOpening = true;
+              final (path, opening) = updated;
+              _root.updateAt(path, (node) => node.opening = opening);
+            }
+          }
+          return hasOpening;
+        })
+        .then((hasOpening) {
+          if (hasOpening) {
+            scheduleMicrotask(() {
+              _setPath(state.requireValue.currentPath);
+            });
+          }
         });
-      }
-    });
 
-    final currentPath =
-        options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
     final currentNode = _root.nodeAt(currentPath);
 
     // don't use ref.watch here: we don't want to invalidate state when the
@@ -168,12 +165,10 @@ class AnalysisController extends _$AnalysisController
       if (isEngineAllowed) {
         evaluationService.disposeEngine();
       }
-      serverAnalysisService.lastAnalysisEvent
-          .removeListener(_listenToServerAnalysisEvents);
+      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
-    serverAnalysisService.lastAnalysisEvent
-        .addListener(_listenToServerAnalysisEvents);
+    serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
     final analysisState = AnalysisState(
       variant: _variant,
@@ -196,16 +191,7 @@ class AnalysisController extends _$AnalysisController
     );
 
     if (analysisState.isEngineAvailable) {
-      evaluationService
-          .initEngine(
-        _evaluationContext,
-        options: EvaluationOptions(
-          multiPv: prefs.numEvalLines,
-          cores: prefs.numEngineCores,
-          searchTime: prefs.engineSearchTime,
-        ),
-      )
-          .then((_) {
+      evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
         _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
           _startEngineEval();
         });
@@ -215,18 +201,17 @@ class AnalysisController extends _$AnalysisController
     return analysisState;
   }
 
-  EvaluationContext get _evaluationContext => EvaluationContext(
-        variant: _variant,
-        initialPosition: _root.position,
-      );
+  EvaluationContext get _evaluationContext =>
+      EvaluationContext(variant: _variant, initialPosition: _root.position);
+
+  EvaluationOptions get _evaluationOptions =>
+      ref.read(analysisPreferencesProvider).evaluationOptions;
 
   void onUserMove(NormalMove move, {bool shouldReplace = false}) {
     if (!state.requireValue.position.isLegal(move)) return;
 
     if (isPromotionPawnMove(state.requireValue.position, move)) {
-      state = AsyncValue.data(
-        state.requireValue.copyWith(promotionMove: move),
-      );
+      state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
 
@@ -236,11 +221,7 @@ class AnalysisController extends _$AnalysisController
       replace: shouldReplace,
     );
     if (newPath != null) {
-      _setPath(
-        newPath,
-        shouldRecomputeRootView: isNewNode,
-        shouldForceShowVariation: true,
-      );
+      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
   }
 
@@ -260,8 +241,7 @@ class AnalysisController extends _$AnalysisController
     final curState = state.requireValue;
     if (!curState.currentNode.hasChild) return;
     _setPath(
-      curState.currentPath +
-          _root.nodeAt(curState.currentPath).children.first.id,
+      curState.currentPath + _root.nodeAt(curState.currentPath).children.first.id,
       replaying: true,
     );
   }
@@ -307,8 +287,7 @@ class AnalysisController extends _$AnalysisController
   void expandVariations(UciPath path) {
     final node = _root.nodeAt(path);
 
-    final childrenToShow =
-        _root.isOnMainline(path) ? node.children.skip(1) : node.children;
+    final childrenToShow = _root.isOnMainline(path) ? node.children.skip(1) : node.children;
 
     for (final child in childrenToShow) {
       child.isCollapsed = false;
@@ -335,10 +314,7 @@ class AnalysisController extends _$AnalysisController
     _root.promoteAt(path, toMainline: toMainline);
     final curState = state.requireValue;
     state = AsyncData(
-      curState.copyWith(
-        isOnMainline: _root.isOnMainline(curState.currentPath),
-        root: _root.view,
-      ),
+      curState.copyWith(isOnMainline: _root.isOnMainline(curState.currentPath), root: _root.view),
     );
   }
 
@@ -352,17 +328,13 @@ class AnalysisController extends _$AnalysisController
   ///
   /// Acts both on local evaluation and server analysis.
   Future<void> toggleComputerAnalysis() async {
-    await ref
-        .read(analysisPreferencesProvider.notifier)
-        .toggleEnableComputerAnalysis();
+    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
     final engineWasAvailable = curState.isEngineAvailable;
 
     state = AsyncData(
-      curState.copyWith(
-        isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled,
-      ),
+      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
     );
 
     final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
@@ -373,9 +345,7 @@ class AnalysisController extends _$AnalysisController
 
   /// Toggles the local evaluation on/off.
   Future<void> toggleLocalEvaluation() async {
-    await ref
-        .read(analysisPreferencesProvider.notifier)
-        .toggleEnableLocalEvaluation();
+    await ref.read(analysisPreferencesProvider.notifier).toggleEnableLocalEvaluation();
 
     state = AsyncData(
       state.requireValue.copyWith(
@@ -384,15 +354,9 @@ class AnalysisController extends _$AnalysisController
     );
 
     if (state.requireValue.isEngineAvailable) {
-      final prefs = ref.read(analysisPreferencesProvider);
-      await ref.read(evaluationServiceProvider).initEngine(
-            _evaluationContext,
-            options: EvaluationOptions(
-              multiPv: prefs.numEvalLines,
-              cores: prefs.numEngineCores,
-              searchTime: prefs.engineSearchTime,
-            ),
-          );
+      await ref
+          .read(evaluationServiceProvider)
+          .initEngine(_evaluationContext, options: _evaluationOptions);
       _startEngineEval();
     } else {
       _stopEngineEval();
@@ -401,25 +365,16 @@ class AnalysisController extends _$AnalysisController
   }
 
   void setNumEvalLines(int numEvalLines) {
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setNumEvalLines(numEvalLines);
+    ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
-    ref.read(evaluationServiceProvider).setOptions(
-          EvaluationOptions(
-            multiPv: numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _root.updateAll((node) => node.eval = null);
 
     final curState = state.requireValue;
     state = AsyncData(
       curState.copyWith(
-        currentNode:
-            AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
       ),
     );
 
@@ -427,33 +382,17 @@ class AnalysisController extends _$AnalysisController
   }
 
   void setEngineCores(int numEngineCores) {
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setEngineCores(numEngineCores);
+    ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
 
-    ref.read(evaluationServiceProvider).setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: numEngineCores,
-            searchTime: ref.read(analysisPreferencesProvider).engineSearchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
 
   void setEngineSearchTime(Duration searchTime) {
-    ref
-        .read(analysisPreferencesProvider.notifier)
-        .setEngineSearchTime(searchTime);
+    ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
 
-    ref.read(evaluationServiceProvider).setOptions(
-          EvaluationOptions(
-            multiPv: ref.read(analysisPreferencesProvider).numEvalLines,
-            cores: ref.read(analysisPreferencesProvider).numEngineCores,
-            searchTime: searchTime,
-          ),
-        );
+    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
 
     _startEngineEval();
   }
@@ -505,9 +444,7 @@ class AnalysisController extends _$AnalysisController
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
-    if (shouldForceShowVariation &&
-        currentNode is Branch &&
-        currentNode.isCollapsed) {
+    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
         if (node is Branch) node.isCollapsed = false;
       });
@@ -516,9 +453,8 @@ class AnalysisController extends _$AnalysisController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
-        ? _root.view
-        : curState.root;
+    final rootView =
+        shouldForceShowVariation || shouldRecomputeRootView ? _root.view : curState.root;
 
     final isForward = path.size > curState.currentPath.size;
     if (currentNode is Branch) {
@@ -526,9 +462,7 @@ class AnalysisController extends _$AnalysisController
         if (isForward) {
           final isCheck = currentNode.sanMove.isCheck;
           if (currentNode.sanMove.isCapture) {
-            ref
-                .read(moveFeedbackServiceProvider)
-                .captureFeedback(check: isCheck);
+            ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
           } else {
             ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
           }
@@ -581,18 +515,22 @@ class AnalysisController extends _$AnalysisController
     }
   }
 
-  Future<(UciPath, FullOpening)?> _fetchOpening(
-    Node fromNode,
-    UciPath path,
-  ) async {
+  void _refreshCurrentNode() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
+
+  Future<(UciPath, FullOpening)?> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(_variant)) return null;
 
     final moves = fromNode.branchesOn(path).map((node) => node.sanMove.move);
     if (moves.isEmpty) return null;
     if (moves.length > 40) return null;
 
-    final opening =
-        await ref.read(openingServiceProvider).fetchFromMoves(moves);
+    final opening = await ref.read(openingServiceProvider).fetchFromMoves(moves);
     if (opening != null) {
       return (path, opening);
     }
@@ -604,17 +542,16 @@ class AnalysisController extends _$AnalysisController
 
     final curState = state.requireValue;
     if (curState.currentPath == path) {
-      state = AsyncData(
-        curState.copyWith(
-          currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(path)),
-        ),
-      );
+      _refreshCurrentNode();
     }
   }
 
-  void _startEngineEval() {
+  Future<void> _startEngineEval() async {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable) return;
+    await ref
+        .read(evaluationServiceProvider)
+        .ensureEngineInitialized(_evaluationContext, options: _evaluationOptions);
     ref
         .read(evaluationServiceProvider)
         .start(
@@ -623,9 +560,13 @@ class AnalysisController extends _$AnalysisController
           initialPositionEval: _root.eval,
           shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
         )
-        ?.forEach(
-          (t) => _root.updateAt(t.$1.path, (node) => node.eval = t.$2),
-        );
+        ?.forEach((t) {
+          final (work, eval) = t;
+          _root.updateAt(work.path, (node) => node.eval = eval);
+          if (work.path == curState.currentPath && eval.searchTime >= work.searchTime) {
+            _refreshCurrentNode();
+          }
+        });
   }
 
   void _debouncedStartEngineEval() {
@@ -637,29 +578,20 @@ class AnalysisController extends _$AnalysisController
   void _stopEngineEval() {
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
-    final curState = state.requireValue;
-    state = AsyncData(
-      curState.copyWith(
-        currentNode:
-            AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
-      ),
-    );
+    _refreshCurrentNode();
   }
 
   void _listenToServerAnalysisEvents() {
-    final event =
-        ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
+    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
     if (event != null && event.$1 == state.requireValue.gameId) {
       _mergeOngoingAnalysis(_root, event.$2.tree);
       state = AsyncData(
         state.requireValue.copyWith(
           acplChartData: _makeAcplChartData(),
-          playersAnalysis: event.$2.analysis != null
-              ? (
-                  white: event.$2.analysis!.white,
-                  black: event.$2.analysis!.black
-                )
-              : null,
+          playersAnalysis:
+              event.$2.analysis != null
+                  ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
+                  : null,
           root: _root.view,
         ),
       );
@@ -670,19 +602,18 @@ class AnalysisController extends _$AnalysisController
     final eval = n2['eval'] as Map<String, dynamic>?;
     final cp = eval?['cp'] as int?;
     final mate = eval?['mate'] as int?;
-    final pgnEval = cp != null
-        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
-        : mate != null
+    final pgnEval =
+        cp != null
+            ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
+            : mate != null
             ? PgnEvaluation.mate(mate: mate)
             : null;
     final glyphs = n2['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
-    final comment =
-        (comments?.first as Map<String, dynamic>?)?['text'] as String?;
+    final comment = (comments?.first as Map<String, dynamic>?)?['text'] as String?;
     final children = n2['children'] as List<dynamic>? ?? [];
-    final pgnComment =
-        pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
+    final pgnComment = pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
     if (n1 is Branch) {
       if (pgnComment != null) {
         if (n1.lichessAnalysisComments == null) {
@@ -723,34 +654,32 @@ class AnalysisController extends _$AnalysisController
     }
     final list = _root.mainline
         .map(
-      (node) => (
-        node.position.isCheckmate,
-        node.position.turn,
-        node.lichessAnalysisComments
-            ?.firstWhereOrNull((c) => c.eval != null)
-            ?.eval
-      ),
-    )
-        .map(
-      (el) {
-        final (isCheckmate, side, eval) = el;
-        return eval != null
-            ? ExternalEval(
+          (node) => (
+            node.position.isCheckmate,
+            node.position.turn,
+            node.lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+          ),
+        )
+        .map((el) {
+          final (isCheckmate, side, eval) = el;
+          return eval != null
+              ? ExternalEval(
                 cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
                 mate: eval.mate,
                 depth: eval.depth,
               )
-            : ExternalEval(
+              : ExternalEval(
                 cp: null,
                 // hack to display checkmate as the max eval
-                mate: isCheckmate
-                    ? side == Side.white
-                        ? -1
-                        : 1
-                    : null,
+                mate:
+                    isCheckmate
+                        ? side == Side.white
+                            ? -1
+                            : 1
+                        : null,
               );
-      },
-    ).toList(growable: false);
+        })
+        .toList(growable: false);
     return list.isEmpty ? null : IList(list);
   }
 }
@@ -833,10 +762,8 @@ class AnalysisState with _$AnalysisState {
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
 
-  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(
-        currentNode.position,
-        isChess960: variant == Variant.chess960,
-      );
+  IMap<Square, ISet<Square>> get validMoves =>
+      makeLegalMoves(currentNode.position, isChess960: variant == Variant.chess960);
 
   /// Whether the user can request server analysis.
   ///
@@ -852,17 +779,14 @@ class AnalysisState with _$AnalysisState {
   /// Whether an evaluation can be available
   bool get hasAvailableEval =>
       isEngineAvailable ||
-      (isComputerAnalysisAllowedAndEnabled &&
-          acplChartData != null &&
-          acplChartData!.isNotEmpty);
+      (isComputerAnalysisAllowedAndEnabled && acplChartData != null && acplChartData!.isNotEmpty);
 
   bool get isComputerAnalysisAllowedAndEnabled =>
       isComputerAnalysisAllowed && isComputerAnalysisEnabled;
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
-      isComputerAnalysisAllowedAndEnabled &&
-      engineSupportedVariants.contains(variant);
+      isComputerAnalysisAllowedAndEnabled && engineSupportedVariants.contains(variant);
 
   /// Whether the engine is available for evaluation
   bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
@@ -872,11 +796,11 @@ class AnalysisState with _$AnalysisState {
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
   EngineGaugeParams get engineGaugeParams => (
-        orientation: pov,
-        isLocalEngineAvailable: isEngineAvailable,
-        position: position,
-        savedEval: currentNode.eval ?? currentNode.serverEval,
-      );
+    orientation: pov,
+    isLocalEngineAvailable: isEngineAvailable,
+    position: position,
+    savedEval: currentNode.eval ?? currentNode.serverEval,
+  );
 }
 
 @freezed
@@ -889,7 +813,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     required bool isRoot,
     SanMove? sanMove,
     Opening? opening,
-    ClientEval? eval,
+    LocalEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
@@ -925,14 +849,13 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
   ///
   /// For now we only trust the eval coming from lichess analysis.
   ExternalEval? get serverEval {
-    final pgnEval =
-        lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null
         ? ExternalEval(
-            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-            mate: pgnEval.mate,
-            depth: pgnEval.depth,
-          )
+          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+          mate: pgnEval.mate,
+          depth: pgnEval.depth,
+        )
         : null;
   }
 }

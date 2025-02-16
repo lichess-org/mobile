@@ -106,45 +106,27 @@ void main() {
       ]) {
         expect(
           () => method(Uri(path: '/will/return/500')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 500),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 500)),
         );
         expect(
           () => method(Uri(path: '/will/return/503')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 503),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 503)),
         );
         expect(
           () => method(Uri(path: '/will/return/400')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 400),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 400)),
         );
         expect(
           () => method(Uri(path: '/will/return/404')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 404),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 404)),
         );
         expect(
           () => method(Uri(path: '/will/return/401')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 401),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 401)),
         );
         expect(
           () => method(Uri(path: '/will/return/403')),
-          throwsA(
-            isA<ServerException>()
-                .having((e) => e.statusCode, 'statusCode', 403),
-          ),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', 403)),
         );
       }
     });
@@ -158,37 +140,13 @@ void main() {
         ],
       );
       final client = container.read(lichessClientProvider);
-      for (final method in [
-        client.get,
-        client.post,
-        client.put,
-        client.patch,
-        client.delete,
-      ]) {
-        expect(
-          () => method(Uri(path: '/will/return/500')),
-          returnsNormally,
-        );
-        expect(
-          () => method(Uri(path: '/will/return/503')),
-          returnsNormally,
-        );
-        expect(
-          () => method(Uri(path: '/will/return/400')),
-          returnsNormally,
-        );
-        expect(
-          () => method(Uri(path: '/will/return/404')),
-          returnsNormally,
-        );
-        expect(
-          () => method(Uri(path: '/will/return/401')),
-          returnsNormally,
-        );
-        expect(
-          () => method(Uri(path: '/will/return/403')),
-          returnsNormally,
-        );
+      for (final method in [client.get, client.post, client.put, client.patch, client.delete]) {
+        expect(() => method(Uri(path: '/will/return/500')), returnsNormally);
+        expect(() => method(Uri(path: '/will/return/503')), returnsNormally);
+        expect(() => method(Uri(path: '/will/return/400')), returnsNormally);
+        expect(() => method(Uri(path: '/will/return/404')), returnsNormally);
+        expect(() => method(Uri(path: '/will/return/401')), returnsNormally);
+        expect(() => method(Uri(path: '/will/return/403')), returnsNormally);
       }
     });
 
@@ -203,23 +161,11 @@ void main() {
       final client = container.read(lichessClientProvider);
       expect(
         () => client.get(Uri(path: '/will/throw/socket/exception')),
-        throwsA(
-          isA<SocketException>().having(
-            (e) => e.message,
-            'message',
-            'no internet',
-          ),
-        ),
+        throwsA(isA<SocketException>().having((e) => e.message, 'message', 'no internet')),
       );
       expect(
         () => client.get(Uri(path: '/will/throw/tls/exception')),
-        throwsA(
-          isA<TlsException>().having(
-            (e) => e.message,
-            'message',
-            'tls error',
-          ),
-        ),
+        throwsA(isA<TlsException>().having((e) => e.message, 'message', 'tls error')),
       );
     });
 
@@ -249,8 +195,7 @@ void main() {
       );
     });
 
-    test('adds a signed bearer token when a session is available the request',
-        () async {
+    test('adds a signed bearer token when a session is available the request', () async {
       final container = await makeContainer(
         overrides: [
           httpClientFactoryProvider.overrideWith((ref) {
@@ -282,63 +227,62 @@ void main() {
     });
 
     test(
-        'when receiving a 401, will test session token and delete session if not valid anymore',
-        () async {
-      int nbTokenTestRequests = 0;
-      final container = await makeContainer(
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => FakeClient());
-          }),
-          defaultClientProvider.overrideWith((ref) {
-            return MockClient((request) async {
-              if (request.url.path == '/api/token/test') {
-                nbTokenTestRequests++;
-                final token = request.body.split(',')[0];
-                final response = '{"$token": null}';
-                return http.Response(response, 200);
-              }
-              return http.Response('', 404);
-            });
-          }),
-        ],
-        userSession: const AuthSessionState(
-          token: 'test-token',
-          user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
-        ),
-      );
-
-      fakeAsync((async) {
-        final session = container.read(authSessionProvider);
-        expect(session, isNotNull);
-
-        final client = container.read(lichessClientProvider);
-        try {
-          client.get(Uri(path: '/will/return/401'));
-        } on ServerException catch (_) {}
-
-        async.flushMicrotasks();
-
-        final requests = FakeClient.verifyRequests();
-        expect(requests.length, 1);
-        expect(
-          requests.first,
-          isA<http.BaseRequest>().having(
-            (r) => r.headers['Authorization'],
-            'Authorization',
-            'Bearer ${signBearerToken('test-token')}',
+      'when receiving a 401, will test session token and delete session if not valid anymore',
+      () async {
+        int nbTokenTestRequests = 0;
+        final container = await makeContainer(
+          overrides: [
+            httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => FakeClient());
+            }),
+            defaultClientProvider.overrideWith((ref) {
+              return MockClient((request) async {
+                if (request.url.path == '/api/token/test') {
+                  nbTokenTestRequests++;
+                  final token = request.body.split(',')[0];
+                  final response = '{"$token": null}';
+                  return http.Response(response, 200);
+                }
+                return http.Response('', 404);
+              });
+            }),
+          ],
+          userSession: const AuthSessionState(
+            token: 'test-token',
+            user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
           ),
         );
 
-        expect(nbTokenTestRequests, 1);
+        fakeAsync((async) {
+          final session = container.read(authSessionProvider);
+          expect(session, isNotNull);
 
-        expect(container.read(authSessionProvider), isNull);
-      });
-    });
+          final client = container.read(lichessClientProvider);
+          try {
+            client.get(Uri(path: '/will/return/401'));
+          } on ServerException catch (_) {}
 
-    test(
-        'when receiving a 401, will test session token and keep session if still valid',
-        () async {
+          async.flushMicrotasks();
+
+          final requests = FakeClient.verifyRequests();
+          expect(requests.length, 1);
+          expect(
+            requests.first,
+            isA<http.BaseRequest>().having(
+              (r) => r.headers['Authorization'],
+              'Authorization',
+              'Bearer ${signBearerToken('test-token')}',
+            ),
+          );
+
+          expect(nbTokenTestRequests, 1);
+
+          expect(container.read(authSessionProvider), isNull);
+        });
+      },
+    );
+
+    test('when receiving a 401, will test session token and keep session if still valid', () async {
       int nbTokenTestRequests = 0;
       final container = await makeContainer(
         overrides: [

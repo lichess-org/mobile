@@ -11,30 +11,23 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
-List<ArchivedGame> generateArchivedGames({
-  int count = 100,
-  String? username,
-}) {
+List<ArchivedGame> generateArchivedGames({int count = 100, String? username}) {
   return List.generate(count, (index) {
     final id = GameId('game${index.toString().padLeft(4, '0')}');
     final whitePlayer = Player(
-      user: username != null && index.isEven
-          ? LightUser(
-              id: UserId.fromUserName(username),
-              name: username,
-            )
-          : username != null
+      user:
+          username != null && index.isEven
+              ? LightUser(id: UserId.fromUserName(username), name: username)
+              : username != null
               ? const LightUser(id: UserId('whiteId'), name: 'White')
               : null,
       rating: username != null ? 1500 : null,
     );
     final blackPlayer = Player(
-      user: username != null && index.isOdd
-          ? LightUser(
-              id: UserId.fromUserName(username),
-              name: username,
-            )
-          : username != null
+      user:
+          username != null && index.isOdd
+              ? LightUser(id: UserId.fromUserName(username), name: username)
+              : username != null
               ? const LightUser(id: UserId('blackId'), name: 'Black')
               : null,
       rating: username != null ? 1500 : null,
@@ -60,22 +53,18 @@ List<ArchivedGame> generateArchivedGames({
         status: GameStatus.started,
         white: whitePlayer,
         black: blackPlayer,
-        clock: (
-          initial: const Duration(minutes: 2),
-          increment: const Duration(seconds: 3),
-        ),
+        clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
       ),
-      steps: _makeSteps(
-        'e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2',
-      ),
+      steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
       status: GameStatus.started,
       white: whitePlayer,
       black: blackPlayer,
-      youAre: username != null
-          ? index.isEven
-              ? Side.white
-              : Side.black
-          : null,
+      youAre:
+          username != null
+              ? index.isEven
+                  ? Side.white
+                  : Side.black
+              : null,
     );
   });
 }

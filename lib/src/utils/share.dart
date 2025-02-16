@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 /// in order to make it work on iPads.
 Future<void> launchShareDialog(
   BuildContext context, {
+
   /// The uri to share.
   Uri? uri,
 
@@ -26,12 +27,7 @@ Future<void> launchShareDialog(
   if (uri != null) {
     return Share.shareUri(uri);
   } else if (files != null) {
-    return Share.shareXFiles(
-      files,
-      subject: subject,
-      text: text,
-      sharePositionOrigin: origin,
-    );
+    return Share.shareXFiles(files, subject: subject, text: text, sharePositionOrigin: origin);
   } else if (text != null) {
     return Share.share(text, subject: subject, sharePositionOrigin: origin);
   }

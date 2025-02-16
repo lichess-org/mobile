@@ -29,8 +29,6 @@ class SocialIcons {
   static const _kFontFam = 'SocialIcons';
   static const String? _kFontPkg = null;
 
-  static const IconData youtube =
-      IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData twitch =
-      IconData(0xf1e8, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube = IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData twitch = IconData(0xf1e8, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

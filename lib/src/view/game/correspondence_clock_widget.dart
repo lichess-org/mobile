@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 
-class CorrespondenceClock extends ConsumerStatefulWidget {
+class CorrespondenceClock extends StatefulWidget {
   /// The duration left on the clock.
   final Duration duration;
 
@@ -18,21 +16,15 @@ class CorrespondenceClock extends ConsumerStatefulWidget {
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
-  const CorrespondenceClock({
-    required this.duration,
-    required this.active,
-    this.onFlag,
-    super.key,
-  });
+  const CorrespondenceClock({required this.duration, required this.active, this.onFlag, super.key});
 
   @override
-  ConsumerState<CorrespondenceClock> createState() =>
-      _CorrespondenceClockState();
+  State<CorrespondenceClock> createState() => _CorrespondenceClockState();
 }
 
 const _period = Duration(seconds: 1);
 
-class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
+class _CorrespondenceClockState extends State<CorrespondenceClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
 
@@ -94,28 +86,26 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
     final hours = timeLeft.inHours.remainder(24);
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = brightness == Brightness.dark
-        ? ClockStyle.darkThemeStyle
-        : ClockStyle.lightThemeStyle;
+    final brightness = Theme.of(context).brightness;
+    final colorScheme = ColorScheme.of(context);
+    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
+
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final daysStr = days > 1
-        ? context.l10n.nbDays(days)
-        : days == 1
+    final daysStr =
+        days > 1
+            ? context.l10n.nbDays(days)
+            : days == 1
             ? context.l10n.oneDay
             : '';
 
-    final hoursStr =
-        days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
+    final hoursStr = days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
 
     return RepaintBoundary(
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active
-              ? clockStyle.activeBackgroundColor
-              : clockStyle.backgroundColor,
+          color: widget.active ? clockStyle.activeBackgroundColor : clockStyle.backgroundColor,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -127,19 +117,10 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
               text: TextSpan(
                 text: '$daysStr$hoursStr',
                 style: TextStyle(
-                  color: widget.active
-                      ? clockStyle.activeTextColor
-                      : clockStyle.textColor,
+                  color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
                   fontSize: 18,
-                  height:
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                          ? 1.0
-                          : null,
-                  fontFeatures: days == 0
-                      ? const [
-                          FontFeature.tabularFigures(),
-                        ]
-                      : null,
+                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
+                  fontFeatures: days == 0 ? const [FontFeature.tabularFigures()] : null,
                 ),
                 children: [
                   if (days == 0) ...[
@@ -147,17 +128,14 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
                     TextSpan(
                       text: ':',
                       style: TextStyle(
-                        color: widget.active &&
-                                timeLeft.inSeconds.remainder(2) == 0
-                            ? clockStyle.activeTextColor.withValues(alpha: 0.5)
-                            : null,
+                        color:
+                            widget.active && timeLeft.inSeconds.remainder(2) == 0
+                                ? clockStyle.activeTextColor.withValues(alpha: 0.5)
+                                : null,
                       ),
                     ),
                     TextSpan(text: mins.toString().padLeft(2, '0')),
-                    if (hours == 0) ...[
-                      const TextSpan(text: ':'),
-                      TextSpan(text: secs),
-                    ],
+                    if (hours == 0) ...[const TextSpan(text: ':'), TextSpan(text: secs)],
                   ],
                 ],
               ),

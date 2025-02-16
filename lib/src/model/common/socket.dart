@@ -21,10 +21,7 @@ class SocketEvent with _$SocketEvent {
   factory SocketEvent.fromJson(Map<String, dynamic> json) {
     if (json['t'] == null) {
       if (json['v'] != null) {
-        return SocketEvent(
-          topic: '_version',
-          version: json['v'] as int,
-        );
+        return SocketEvent(topic: '_version', version: json['v'] as int);
       } else {
         assert(false, 'Unsupported socket event json: $json');
         return pong;
@@ -34,16 +31,9 @@ class SocketEvent with _$SocketEvent {
     if (topic == 'n') {
       return SocketEvent(
         topic: topic,
-        data: {
-          'nbPlayers': json['d'] as int,
-          'nbGames': json['r'] as int,
-        },
+        data: {'nbPlayers': json['d'] as int, 'nbGames': json['r'] as int},
       );
     }
-    return SocketEvent(
-      topic: topic,
-      data: json['d'],
-      version: json['v'] as int?,
-    );
+    return SocketEvent(topic: topic, data: json['d'], version: json['v'] as int?);
   }
 }

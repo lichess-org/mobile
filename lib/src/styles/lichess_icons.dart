@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/LichessIcons.ttf
 ///
-/// 
+///
 /// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -33,6 +33,7 @@ class LichessIcons {
   static const _kFontFam = 'LichessIcons';
   static const String? _kFontPkg = null;
 
+  // dart format off
   static const IconData patron = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData target = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData blitz = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);

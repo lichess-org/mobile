@@ -20,22 +20,16 @@ part 'over_the_board_game_controller.g.dart';
 class OverTheBoardGameController extends _$OverTheBoardGameController {
   @override
   OverTheBoardGameState build() => OverTheBoardGameState.fromVariant(
-        Variant.standard,
-        Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
-      );
+    Variant.standard,
+    Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
+  );
 
   void startNewGame(Variant variant, TimeIncrement timeIncrement) {
-    state = OverTheBoardGameState.fromVariant(
-      variant,
-      Speed.fromTimeIncrement(timeIncrement),
-    );
+    state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
   }
 
   void rematch() {
-    state = OverTheBoardGameState.fromVariant(
-      state.game.meta.variant,
-      state.game.meta.speed,
-    );
+    state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
   }
 
   void makeMove(NormalMove move) {
@@ -44,8 +38,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       return;
     }
 
-    final (newPos, newSan) =
-        state.currentPosition.makeSan(Move.parse(move.uci)!);
+    final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       position: newPos,
@@ -67,17 +60,10 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 
     if (state.currentPosition.isCheckmate) {
       state = state.copyWith(
-        game: state.game.copyWith(
-          status: GameStatus.mate,
-          winner: state.turn.opposite,
-        ),
+        game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
     } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(
-        game: state.game.copyWith(
-          status: GameStatus.stalemate,
-        ),
-      );
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     }
 
     _moveFeedback(sanMove);
@@ -98,10 +84,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 
   void onFlag(Side side) {
     state = state.copyWith(
-      game: state.game.copyWith(
-        status: GameStatus.outoftime,
-        winner: side.opposite,
-      ),
+      game: state.game.copyWith(status: GameStatus.outoftime, winner: side.opposite),
     );
   }
 
@@ -113,9 +96,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(
-        stepCursor: state.stepCursor - 1,
-      );
+      state = state.copyWith(stepCursor: state.stepCursor - 1);
     }
   }
 
@@ -139,20 +120,12 @@ class OverTheBoardGameState with _$OverTheBoardGameState {
     @Default(null) NormalMove? promotionMove,
   }) = _OverTheBoardGameState;
 
-  factory OverTheBoardGameState.fromVariant(
-    Variant variant,
-    Speed speed,
-  ) {
-    final position = variant == Variant.chess960
-        ? randomChess960Position()
-        : variant.initialPosition;
+  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed) {
+    final position =
+        variant == Variant.chess960 ? randomChess960Position() : variant.initialPosition;
     return OverTheBoardGameState(
       game: OverTheBoardGame(
-        steps: [
-          GameStep(
-            position: position,
-          ),
-        ].lock,
+        steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
         initialFen: position.fen,
         meta: GameMeta(
@@ -169,21 +142,17 @@ class OverTheBoardGameState with _$OverTheBoardGameState {
   Position get currentPosition => game.stepAt(stepCursor).position;
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
-  NormalMove? get lastMove => stepCursor > 0
-      ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci)
-      : null;
+  NormalMove? get lastMove =>
+      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
 
-  IMap<Square, ISet<Square>> get legalMoves => makeLegalMoves(
-        currentPosition,
-        isChess960: game.meta.variant == Variant.chess960,
-      );
+  IMap<Square, ISet<Square>> get legalMoves =>
+      makeLegalMoves(currentPosition, isChess960: game.meta.variant == Variant.chess960);
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);
   }
 
-  List<String> get moves =>
-      game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
+  List<String> get moves => game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
 
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBack => stepCursor > 0;

@@ -1,8 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class FakeNotificationDisplay extends Fake
-    implements FlutterLocalNotificationsPlugin {
+class FakeNotificationDisplay extends Fake implements FlutterLocalNotificationsPlugin {
   final Map<int, ActiveNotification> _activeNotifications = {};
 
   @override

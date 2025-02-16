@@ -16,36 +16,29 @@ final client = MockClient((request) {
 
 void main() {
   group('LeaderboardScreen', () {
-    testWidgets(
-      'meets accessibility guidelines',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-          home: const LeaderboardScreen(),
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        home: const LeaderboardScreen(),
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await tester.pump(const Duration(milliseconds: 200));
+      await tester.pump(const Duration(milliseconds: 200));
 
-        // TODO find why it fails on android
-        // await meetsTapTargetGuideline(tester);
+      // TODO find why it fails on android
+      // await meetsTapTargetGuideline(tester);
 
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
-          await expectLater(tester, meetsGuideline(textContrastGuideline));
-        }
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      if (debugDefaultTargetPlatformOverride == TargetPlatform.android) {
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      handle.dispose();
+    }, variant: kPlatformVariant);
   });
 }
 

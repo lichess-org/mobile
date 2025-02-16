@@ -10,16 +10,15 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-
-import 'puzzle.dart';
-import 'puzzle_angle.dart';
-import 'puzzle_difficulty.dart';
-import 'puzzle_opening.dart';
-import 'puzzle_streak.dart';
-import 'puzzle_theme.dart';
-import 'storm.dart';
 
 part 'puzzle_repository.freezed.dart';
 
@@ -36,10 +35,7 @@ class PuzzleRepository {
     return client.readJson(
       Uri(
         path: '/api/puzzle/batch/${angle.key}',
-        queryParameters: {
-          'nb': nb.toString(),
-          'difficulty': difficulty.name,
-        },
+        queryParameters: {'nb': nb.toString(), 'difficulty': difficulty.name},
       ),
       mapper: _decodeBatchResponse,
     );
@@ -54,32 +50,18 @@ class PuzzleRepository {
     return client.postReadJson(
       Uri(
         path: '/api/puzzle/batch/${angle.key}',
-        queryParameters: {
-          'nb': nb.toString(),
-          'difficulty': difficulty.name,
-        },
+        queryParameters: {'nb': nb.toString(), 'difficulty': difficulty.name},
       ),
       headers: {'Content-type': 'application/json'},
       body: jsonEncode({
-        'solutions': solved
-            .map(
-              (e) => {
-                'id': e.id,
-                'win': e.win,
-                'rated': e.rated,
-              },
-            )
-            .toList(),
+        'solutions': solved.map((e) => {'id': e.id, 'win': e.win, 'rated': e.rated}).toList(),
       }),
       mapper: _decodeBatchResponse,
     );
   }
 
   Future<Puzzle> fetch(PuzzleId id) {
-    return client.readJson(
-      Uri(path: '/api/puzzle/$id'),
-      mapper: _puzzleFromJson,
-    );
+    return client.readJson(Uri(path: '/api/puzzle/$id'), mapper: _puzzleFromJson);
   }
 
   Future<PuzzleStreakResponse> streak() {
@@ -88,11 +70,7 @@ class PuzzleRepository {
       mapper: (Map<String, dynamic> json) {
         return PuzzleStreakResponse(
           puzzle: _puzzleFromPick(pick(json).required()),
-          streak: IList(
-            pick(json['streak']).asStringOrThrow().split(' ').map(
-                  (e) => PuzzleId(e),
-                ),
-          ),
+          streak: IList(pick(json['streak']).asStringOrThrow().split(' ').map((e) => PuzzleId(e))),
           timestamp: DateTime.now(),
         );
       },
@@ -103,10 +81,7 @@ class PuzzleRepository {
     final uri = Uri(path: '/api/streak/$run');
     final response = await client.post(uri);
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to post streak run: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to post streak run: ${response.statusCode}', uri);
     }
   }
 
@@ -115,9 +90,7 @@ class PuzzleRepository {
       Uri(path: '/api/storm'),
       mapper: (Map<String, dynamic> json) {
         return PuzzleStormResponse(
-          puzzles: IList(
-            pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
-          ),
+          puzzles: IList(pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick)),
           highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
           key: pick(json['key']).asStringOrNull(),
           timestamp: DateTime.now(),
@@ -155,15 +128,8 @@ class PuzzleRepository {
 
   Future<Puzzle> daily() {
     return client
-        .readJson(
-          Uri(path: '/api/puzzle/daily'),
-          mapper: _puzzleFromJson,
-        )
-        .then(
-          (puzzle) => puzzle.copyWith(
-            isDailyPuzzle: true,
-          ),
-        );
+        .readJson(Uri(path: '/api/puzzle/daily'), mapper: _puzzleFromJson)
+        .then((puzzle) => puzzle.copyWith(isDailyPuzzle: true));
   }
 
   Future<PuzzleDashboard> puzzleDashboard(int days) {
@@ -173,17 +139,13 @@ class PuzzleRepository {
     );
   }
 
-  Future<IList<PuzzleHistoryEntry>> puzzleActivity(
-    int max, {
-    DateTime? before,
-  }) {
+  Future<IList<PuzzleHistoryEntry>> puzzleActivity(int max, {DateTime? before}) {
     return client.readNdJsonList(
       Uri(
         path: '/api/puzzle/activity',
         queryParameters: {
           'max': max.toString(),
-          if (before != null)
-            'before': before.millisecondsSinceEpoch.toString(),
+          if (before != null) 'before': before.millisecondsSinceEpoch.toString(),
         },
       ),
       mapper: _puzzleActivityFromJson,
@@ -228,13 +190,9 @@ class PuzzleRepository {
         }),
       ),
       glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
-      rounds: pick(json['rounds']).letOrNull(
-        (p0) => IList(
-          p0.asListOrNull(
-            (p1) => _puzzleRoundFromPick(p1),
-          ),
-        ),
-      ),
+      rounds: pick(
+        json['rounds'],
+      ).letOrNull((p0) => IList(p0.asListOrNull((p1) => _puzzleRoundFromPick(p1)))),
     );
   }
 }
@@ -284,15 +242,12 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
 PuzzleHistoryEntry _puzzleActivityFromJson(Map<String, dynamic> json) =>
     _historyPuzzleFromPick(pick(json).required());
 
-Puzzle _puzzleFromJson(Map<String, dynamic> json) =>
-    _puzzleFromPick(pick(json).required());
+Puzzle _puzzleFromJson(Map<String, dynamic> json) => _puzzleFromPick(pick(json).required());
 
 PuzzleDashboard _puzzleDashboardFromJson(Map<String, dynamic> json) =>
     _puzzleDashboardFromPick(pick(json).required());
 
-IMap<PuzzleThemeKey, PuzzleThemeData> _puzzleThemeFromJson(
-  Map<String, dynamic> json,
-) =>
+IMap<PuzzleThemeKey, PuzzleThemeData> _puzzleThemeFromJson(Map<String, dynamic> json) =>
     _puzzleThemeFromPick(pick(json).required());
 
 IList<PuzzleOpeningFamily> _puzzleOpeningFromJson(Map<String, dynamic> json) =>
@@ -317,20 +272,17 @@ StormDashboard _stormDashboardFromPick(RequiredPick pick) {
       month: pick('high', 'month').asIntOrThrow(),
       week: pick('high', 'week').asIntOrThrow(),
     ),
-    dayHighscores: pick('days')
-        .asListOrThrow((p0) => _stormDayFromPick(p0, dateFormat))
-        .toIList(),
+    dayHighscores: pick('days').asListOrThrow((p0) => _stormDayFromPick(p0, dateFormat)).toIList(),
   );
 }
 
-StormDayScore _stormDayFromPick(RequiredPick pick, DateFormat format) =>
-    StormDayScore(
-      runs: pick('runs').asIntOrThrow(),
-      score: pick('score').asIntOrThrow(),
-      time: pick('time').asIntOrThrow(),
-      highest: pick('highest').asIntOrThrow(),
-      day: format.parse(pick('_id').asStringOrThrow()),
-    );
+StormDayScore _stormDayFromPick(RequiredPick pick, DateFormat format) => StormDayScore(
+  runs: pick('runs').asIntOrThrow(),
+  score: pick('score').asIntOrThrow(),
+  time: pick('time').asIntOrThrow(),
+  highest: pick('highest').asIntOrThrow(),
+  day: format.parse(pick('_id').asStringOrThrow()),
+);
 
 LitePuzzle _litePuzzleFromPick(RequiredPick pick) {
   return LitePuzzle(
@@ -357,8 +309,7 @@ PuzzleData _puzzleDatafromPick(RequiredPick pick) {
     plays: pick('plays').asIntOrThrow(),
     initialPly: pick('initialPly').asIntOrThrow(),
     solution: pick('solution').asListOrThrow((p0) => p0.asStringOrThrow()).lock,
-    themes:
-        pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
+    themes: pick('themes').asListOrThrow((p0) => p0.asStringOrThrow()).toSet().lock,
   );
 }
 
@@ -384,14 +335,10 @@ PuzzleGame _puzzleGameFromPick(RequiredPick pick) {
     perf: pick('perf', 'key').asPerfOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     white: pick('players').letOrThrow(
-      (it) => it
-          .asListOrThrow(_puzzlePlayerFromPick)
-          .firstWhere((p) => p.side == Side.white),
+      (it) => it.asListOrThrow(_puzzlePlayerFromPick).firstWhere((p) => p.side == Side.white),
     ),
     black: pick('players').letOrThrow(
-      (it) => it
-          .asListOrThrow(_puzzlePlayerFromPick)
-          .firstWhere((p) => p.side == Side.black),
+      (it) => it.asListOrThrow(_puzzlePlayerFromPick).firstWhere((p) => p.side == Side.black),
     ),
     pgn: pick('pgn').asStringOrThrow(),
   );
@@ -417,29 +364,24 @@ PuzzleHistoryEntry _historyPuzzleFromPick(RequiredPick pick) {
 }
 
 PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
-      global: PuzzleDashboardData(
-        nb: pick('global')('nb').asIntOrThrow(),
-        firstWins: pick('global')('firstWins').asIntOrThrow(),
-        replayWins: pick('global')('replayWins').asIntOrThrow(),
-        performance: pick('global')('performance').asIntOrThrow(),
-        theme: PuzzleThemeKey.mix,
-      ),
-      themes: pick('themes')
+  global: PuzzleDashboardData(
+    nb: pick('global')('nb').asIntOrThrow(),
+    firstWins: pick('global')('firstWins').asIntOrThrow(),
+    replayWins: pick('global')('replayWins').asIntOrThrow(),
+    performance: pick('global')('performance').asIntOrThrow(),
+    theme: PuzzleThemeKey.mix,
+  ),
+  themes:
+      pick('themes')
           .asMapOrThrow<String, Map<String, dynamic>>()
           .keys
           .map(
-            (key) => _puzzleDashboardDataFromPick(
-              pick('themes')(key)('results').required(),
-              key,
-            ),
+            (key) => _puzzleDashboardDataFromPick(pick('themes')(key)('results').required(), key),
           )
           .toIList(),
-    );
+);
 
-PuzzleDashboardData _puzzleDashboardDataFromPick(
-  RequiredPick results,
-  String themeKey,
-) =>
+PuzzleDashboardData _puzzleDashboardDataFromPick(RequiredPick results, String themeKey) =>
     PuzzleDashboardData(
       nb: results('nb').asIntOrThrow(),
       firstWins: results('firstWins').asIntOrThrow(),
@@ -457,8 +399,7 @@ IMap<PuzzleThemeKey, PuzzleThemeData> _puzzleThemeFromPick(RequiredPick pick) {
           return PuzzleThemeData(
             count: listPick('count').asIntOrThrow(),
             desc: listPick('desc').asStringOrThrow(),
-            key: themeMap[listPick('key').asStringOrThrow()] ??
-                PuzzleThemeKey.unsupported,
+            key: themeMap[listPick('key').asStringOrThrow()] ?? PuzzleThemeKey.unsupported,
             name: listPick('name').asStringOrThrow(),
           );
         })
@@ -486,9 +427,7 @@ IList<PuzzleOpeningFamily> _puzzleOpeningFromPick(RequiredPick pick) {
       key: familyPick('key').asStringOrThrow(),
       name: familyPick('name').asStringOrThrow(),
       count: familyPick('count').asIntOrThrow(),
-      openings: openings != null
-          ? openings.toIList()
-          : IList<PuzzleOpeningData>(const []),
+      openings: openings != null ? openings.toIList() : IList<PuzzleOpeningData>(const []),
     );
   }).toIList();
 }

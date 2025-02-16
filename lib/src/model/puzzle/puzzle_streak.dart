@@ -21,6 +21,5 @@ class PuzzleStreak with _$PuzzleStreak {
 
   PuzzleId? get nextId => streak.getOrNull(index + 1);
 
-  factory PuzzleStreak.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleStreakFromJson(json);
+  factory PuzzleStreak.fromJson(Map<String, dynamic> json) => _$PuzzleStreakFromJson(json);
 }

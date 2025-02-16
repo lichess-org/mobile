@@ -57,9 +57,7 @@ class FakeCrashlytics implements FirebaseCrashlytics {
   }) async {}
 
   @override
-  Future<void> recordFlutterFatalError(
-    FlutterErrorDetails flutterErrorDetails,
-  ) async {}
+  Future<void> recordFlutterFatalError(FlutterErrorDetails flutterErrorDetails) async {}
 
   @override
   Future<void> sendUnsentReports() async {}

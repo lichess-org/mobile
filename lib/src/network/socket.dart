@@ -34,11 +34,7 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 final _logger = Logger('Socket');
 
 /// Set of topics that are allowed to be broadcasted to the global stream.
-const _globalSocketStreamAllowedTopics = {
-  'n',
-  'message',
-  'challenges',
-};
+const _globalSocketStreamAllowedTopics = {'n', 'message', 'challenges'};
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
 
@@ -51,24 +47,23 @@ final _globalStreamController = StreamController<SocketEvent>.broadcast();
 final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
-Uri lichessWSUri(
-  String unencodedPath, [
-  Map<String, String>? queryParameters,
-]) =>
-    kLichessWSHost.startsWith('localhost')
+Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =>
+    kLichessWSHost.startsWith('localhost') ||
+            kLichessWSHost.startsWith('10.') ||
+            kLichessWSHost.startsWith('192.168.')
         ? Uri(
-            scheme: 'ws',
-            host: kLichessWSHost.split(':')[0],
-            port: int.parse(kLichessWSHost.split(':')[1]),
-            path: unencodedPath,
-            queryParameters: queryParameters,
-          )
+          scheme: 'ws',
+          host: kLichessWSHost.split(':')[0],
+          port: int.parse(kLichessWSHost.split(':')[1]),
+          path: unencodedPath,
+          queryParameters: queryParameters,
+        )
         : Uri(
-            scheme: 'wss',
-            host: kLichessWSHost,
-            path: unencodedPath,
-            queryParameters: queryParameters,
-          );
+          scheme: 'wss',
+          host: kLichessWSHost,
+          path: unencodedPath,
+          queryParameters: queryParameters,
+        );
 
 /// A lichess WebSocket client.
 ///
@@ -127,13 +122,9 @@ class SocketClient {
   final VoidCallback? onStreamCancel;
 
   late final StreamController<SocketEvent> _streamController =
-      StreamController<SocketEvent>.broadcast(
-    onListen: onStreamListen,
-    onCancel: onStreamCancel,
-  );
+      StreamController<SocketEvent>.broadcast(onListen: onStreamListen, onCancel: onStreamCancel);
 
-  late final StreamController<void> _socketOpenController =
-      StreamController<void>.broadcast();
+  late final StreamController<void> _socketOpenController = StreamController<void>.broadcast();
 
   Completer<void> _firstConnection = Completer<void>();
 
@@ -203,13 +194,9 @@ class SocketClient {
 
     final session = getSession();
     final uri = lichessWSUri(route.path);
-    final Map<String, String> headers = session != null
-        ? {
-            'Authorization': 'Bearer ${signBearerToken(session.token)}',
-          }
-        : {};
-    WebSocket.userAgent =
-        makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
+    final Map<String, String> headers =
+        session != null ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'} : {};
+    WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
 
     _logger.info('Creating WebSocket connection to $route');
 
@@ -225,14 +212,14 @@ class SocketClient {
       _channel = channel;
 
       _socketStreamSubscription?.cancel();
-      _socketStreamSubscription = channel.stream.map((raw) {
-        if (raw == '0') {
-          return SocketEvent.pong;
-        }
-        return SocketEvent.fromJson(
-          jsonDecode(raw as String) as Map<String, dynamic>,
-        );
-      }).listen(_handleEvent);
+      _socketStreamSubscription = channel.stream
+          .map((raw) {
+            if (raw == '0') {
+              return SocketEvent.pong;
+            }
+            return SocketEvent.fromJson(jsonDecode(raw as String) as Map<String, dynamic>);
+          })
+          .listen(_handleEvent);
 
       _logger.fine('WebSocket connection to $route established.');
 
@@ -258,12 +245,7 @@ class SocketClient {
   }
 
   /// Sends a message to the websocket.
-  void send(
-    String topic,
-    Object? data, {
-    bool? ackable,
-    bool? withLag,
-  }) {
+  void send(String topic, Object? data, {bool? ackable, bool? withLag}) {
     Map<String, Object> message;
 
     if (ackable == true) {
@@ -281,10 +263,7 @@ class SocketClient {
       message = {
         't': topic,
         if (data != null && data is Map<String, Object>)
-          'd': {
-            ...data,
-            if (withLag == true) 'l': _averageLag.value.inMilliseconds,
-          }
+          'd': {...data, if (withLag == true) 'l': _averageLag.value.inMilliseconds}
         else if (data != null)
           'd': data,
       };
@@ -323,22 +302,23 @@ class SocketClient {
   ///
   /// Returns a [Future] that completes when the connection is closed.
   Future<void> _disconnect() {
-    final future = _sink?.close().then((_) {
-          _logger.fine('WebSocket connection to $route was properly closed.');
-          if (isDisposed) {
-            return;
-          }
-          _averageLag.value = Duration.zero;
-        }).catchError((Object? error) {
-          _logger.warning(
-            'WebSocket connection to $route could not be closed: $error',
-            error,
-          );
-          if (isDisposed) {
-            return;
-          }
-          _averageLag.value = Duration.zero;
-        }) ??
+    final future =
+        _sink
+            ?.close()
+            .then((_) {
+              _logger.fine('WebSocket connection to $route was properly closed.');
+              if (isDisposed) {
+                return;
+              }
+              _averageLag.value = Duration.zero;
+            })
+            .catchError((Object? error) {
+              _logger.warning('WebSocket connection to $route could not be closed: $error', error);
+              if (isDisposed) {
+                return;
+              }
+              _averageLag.value = Duration.zero;
+            }) ??
         Future.value();
     _channel = null;
     _socketStreamSubscription?.cancel();
@@ -352,20 +332,23 @@ class SocketClient {
   void _handleEvent(SocketEvent event) {
     switch (event.topic) {
       case '_pong':
+        _handlePong(pingDelay);
       case 'n':
         _handlePong(pingDelay);
+        continue addToStream;
       case 'ack':
         _onServerAck(event);
-    }
-
-    if (event != SocketEvent.pong && event.topic != 'ack') {
-      if (_streamController.hasListener) {
-        _streamController.add(event);
-      }
-      if (_globalStreamController.hasListener &&
-          _globalSocketStreamAllowedTopics.contains(event.topic)) {
-        _globalStreamController.add(event);
-      }
+      case 'batch':
+        _handleBatch(event);
+      addToStream:
+      case _:
+        if (_streamController.hasListener) {
+          _streamController.add(event);
+        }
+        if (_globalStreamController.hasListener &&
+            _globalSocketStreamAllowedTopics.contains(event.topic)) {
+          _globalStreamController.add(event);
+        }
     }
   }
 
@@ -378,10 +361,7 @@ class SocketClient {
   void _sendPing() {
     _sink?.add(
       _pongCount % 10 == 2
-          ? jsonEncode({
-              't': 'p',
-              'l': (_averageLag.value.inMilliseconds * 0.1).round(),
-            })
+          ? jsonEncode({'t': 'p', 'l': (_averageLag.value.inMilliseconds * 0.1).round()})
           : 'p',
     );
     _lastPing = DateTime.now();
@@ -396,8 +376,7 @@ class SocketClient {
     _schedulePing(pingDelay);
     _pongCount++;
     final currentLag = Duration(
-      milliseconds:
-          math.min(DateTime.now().difference(_lastPing).inMilliseconds, 10000),
+      milliseconds: math.min(DateTime.now().difference(_lastPing).inMilliseconds, 10000),
     );
 
     // Average first 4 pings, then switch to decaying average.
@@ -413,9 +392,7 @@ class SocketClient {
         _averageLag.value = Duration.zero;
         connect();
       } else {
-        _logger.warning(
-          'Scheduled reconnect after $delay failed since client is disposed.',
-        );
+        _logger.warning('Scheduled reconnect after $delay failed since client is disposed.');
       }
     });
   }
@@ -428,12 +405,21 @@ class SocketClient {
   }
 
   void _resendAcks() {
-    final resendCutoff =
-        DateTime.now().subtract(const Duration(milliseconds: 2500));
+    final resendCutoff = DateTime.now().subtract(const Duration(milliseconds: 2500));
     for (final (at, _, ack) in _acks) {
       if (at.isBefore(resendCutoff)) {
         _sink?.add(jsonEncode(ack));
       }
+    }
+  }
+
+  void _handleBatch(SocketEvent batchEvent) {
+    final jsonEventList = batchEvent.data as List<dynamic>;
+
+    for (final jsonEvent in jsonEventList) {
+      final event = SocketEvent.fromJson(jsonEvent as Map<String, dynamic>);
+
+      _streamController.add(event);
     }
   }
 }
@@ -452,10 +438,7 @@ class SocketClient {
 /// When a requested client is disposed, the pool will automatically reconnect
 /// the default client.
 class SocketPool {
-  SocketPool(
-    this._ref, {
-    this.idleTimeout = _kIdleTimeout,
-  }) {
+  SocketPool(this._ref, {this.idleTimeout = _kIdleTimeout}) {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
       _currentRoute,
@@ -503,10 +486,7 @@ class SocketPool {
   /// It will use an existing connection if it is already active, unless
   /// [forceReconnect] is set to true.
   /// Any other active connection will be closed.
-  SocketClient open(
-    Uri route, {
-    bool? forceReconnect,
-  }) {
+  SocketClient open(Uri route, {bool? forceReconnect}) {
     _currentRoute = route;
 
     if (_pool[route] == null) {
@@ -579,15 +559,12 @@ SocketPool socketPool(Ref ref) {
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
       closeInBackgroundTimer?.cancel();
-      closeInBackgroundTimer = Timer(
-        _kDisconnectOnBackgroundTimeout,
-        () {
-          _logger.info(
-            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
-          );
-          pool.currentClient.close();
-        },
-      );
+      closeInBackgroundTimer = Timer(_kDisconnectOnBackgroundTimeout, () {
+        _logger.info(
+          'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+        );
+        pool.currentClient.close();
+      });
     },
     onShow: () {
       closeInBackgroundTimer?.cancel();
@@ -650,8 +627,7 @@ class WebSocketChannelFactory {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 10),
   }) async {
-    final socket =
-        await WebSocket.connect(url, headers: headers).timeout(timeout);
+    final socket = await WebSocket.connect(url, headers: headers).timeout(timeout);
 
     return IOWebSocketChannel(socket);
   }

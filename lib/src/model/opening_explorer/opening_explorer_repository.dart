@@ -18,9 +18,7 @@ class OpeningExplorer extends _$OpeningExplorer {
   StreamSubscription<OpeningExplorerEntry>? _openingExplorerSubscription;
 
   @override
-  Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({
-    required String fen,
-  }) async {
+  Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({required String fen}) async {
     await ref.debounce(const Duration(milliseconds: 300));
     ref.onDispose(() {
       _openingExplorerSubscription?.cancel();
@@ -30,15 +28,12 @@ class OpeningExplorer extends _$OpeningExplorer {
     final client = ref.read(defaultClientProvider);
     switch (prefs.db) {
       case OpeningDatabase.master:
-        final openingExplorer =
-            await OpeningExplorerRepository(client).getMasterDatabase(
-          fen,
-          since: prefs.masterDb.sinceYear,
-        );
+        final openingExplorer = await OpeningExplorerRepository(
+          client,
+        ).getMasterDatabase(fen, since: prefs.masterDb.sinceYear);
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.lichess:
-        final openingExplorer =
-            await OpeningExplorerRepository(client).getLichessDatabase(
+        final openingExplorer = await OpeningExplorerRepository(client).getLichessDatabase(
           fen,
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
@@ -46,8 +41,7 @@ class OpeningExplorer extends _$OpeningExplorer {
         );
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.player:
-        final openingExplorerStream =
-            await OpeningExplorerRepository(client).getPlayerDatabase(
+        final openingExplorerStream = await OpeningExplorerRepository(client).getPlayerDatabase(
           fen,
           // null check handled by widget
           usernameOrId: prefs.playerDb.username!,
@@ -58,16 +52,15 @@ class OpeningExplorer extends _$OpeningExplorer {
         );
 
         _openingExplorerSubscription = openingExplorerStream.listen(
-          (openingExplorer) => state =
-              AsyncValue.data((entry: openingExplorer, isIndexing: true)),
-          onDone: () => state.value != null
-              ? state = AsyncValue.data(
-                  (entry: state.value!.entry, isIndexing: false),
-                )
-              : state = AsyncValue.error(
-                  'No opening explorer data returned for player ${prefs.playerDb.username}',
-                  StackTrace.current,
-                ),
+          (openingExplorer) => state = AsyncValue.data((entry: openingExplorer, isIndexing: true)),
+          onDone:
+              () =>
+                  state.value != null
+                      ? state = AsyncValue.data((entry: state.value!.entry, isIndexing: false))
+                      : state = AsyncValue.error(
+                        'No opening explorer data returned for player ${prefs.playerDb.username}',
+                        StackTrace.current,
+                      ),
         );
         return null;
     }
@@ -79,19 +72,12 @@ class OpeningExplorerRepository {
 
   final Client client;
 
-  Future<OpeningExplorerEntry> getMasterDatabase(
-    String fen, {
-    int? since,
-  }) {
+  Future<OpeningExplorerEntry> getMasterDatabase(String fen, {int? since}) {
     return client.readJson(
-      Uri.https(
-        kLichessOpeningExplorerHost,
-        '/masters',
-        {
-          'fen': fen,
-          if (since != null) 'since': since.toString(),
-        },
-      ),
+      Uri.https(kLichessOpeningExplorerHost, '/masters', {
+        'fen': fen,
+        if (since != null) 'since': since.toString(),
+      }),
       mapper: OpeningExplorerEntry.fromJson,
     );
   }
@@ -103,17 +89,12 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readJson(
-      Uri.https(
-        kLichessOpeningExplorerHost,
-        '/lichess',
-        {
-          'fen': fen,
-          if (speeds.isNotEmpty)
-            'speeds': speeds.map((speed) => speed.name).join(','),
-          if (ratings.isNotEmpty) 'ratings': ratings.join(','),
-          if (since != null) 'since': '${since.year}-${since.month}',
-        },
-      ),
+      Uri.https(kLichessOpeningExplorerHost, '/lichess', {
+        'fen': fen,
+        if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
+        if (ratings.isNotEmpty) 'ratings': ratings.join(','),
+        if (since != null) 'since': '${since.year}-${since.month}',
+      }),
       mapper: OpeningExplorerEntry.fromJson,
     );
   }
@@ -127,20 +108,14 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readNdJsonStream(
-      Uri.https(
-        kLichessOpeningExplorerHost,
-        '/player',
-        {
-          'fen': fen,
-          'player': usernameOrId,
-          'color': color.name,
-          if (speeds.isNotEmpty)
-            'speeds': speeds.map((speed) => speed.name).join(','),
-          if (gameModes.isNotEmpty)
-            'modes': gameModes.map((gameMode) => gameMode.name).join(','),
-          if (since != null) 'since': '${since.year}-${since.month}',
-        },
-      ),
+      Uri.https(kLichessOpeningExplorerHost, '/player', {
+        'fen': fen,
+        'player': usernameOrId,
+        'color': color.name,
+        if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
+        if (gameModes.isNotEmpty) 'modes': gameModes.map((gameMode) => gameMode.name).join(','),
+        if (since != null) 'since': '${since.year}-${since.month}',
+      }),
       mapper: OpeningExplorerEntry.fromJson,
     );
   }

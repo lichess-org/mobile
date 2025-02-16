@@ -15,34 +15,35 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
-import 'puzzle_feedback_widget.dart';
-
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Puzzle Streak', screen: const StreakScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
     return const WakelockWidget(
       child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          actions: [ToggleSoundButton()],
-          title: Text('Puzzle Streak'),
-        ),
+        appBarActions: [ToggleSoundButton()],
+        appBarTitle: Text('Puzzle Streak'),
         body: _Load(),
       ),
     );
@@ -70,9 +71,7 @@ class _Load extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
-        debugPrint(
-          'SEVERE: [StreakScreen] could not load streak; $e\n$s',
-        );
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $e\n$s');
         return Center(
           child: BoardTable(
             topTable: kEmptyWidget,
@@ -88,29 +87,28 @@ class _Load extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({
-    required this.initialPuzzleContext,
-    required this.streak,
-  });
+  const _Body({required this.initialPuzzleContext, required this.streak});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider =
-        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
-    ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError),
-        (_, shouldShowDialog) {
+    ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError), (
+      _,
+      shouldShowDialog,
+    ) {
       if (shouldShowDialog) {
         showAdaptiveDialog<void>(
           context: context,
-          builder: (context) => _RetryFetchPuzzleDialog(
-            initialPuzzleContext: initialPuzzleContext,
-            streak: streak,
-          ),
+          builder:
+              (context) => _RetryFetchPuzzleDialog(
+                initialPuzzleContext: initialPuzzleContext,
+                streak: streak,
+              ),
         );
       }
     });
@@ -125,14 +123,14 @@ class _Body extends ConsumerWidget {
                 fen: puzzleState.fen,
                 lastMove: puzzleState.lastMove as NormalMove?,
                 gameData: GameData(
-                  playerSide: puzzleState.mode == PuzzleMode.load ||
-                          puzzleState.position.isGameOver
-                      ? PlayerSide.none
-                      : puzzleState.mode == PuzzleMode.view
+                  playerSide:
+                      puzzleState.mode == PuzzleMode.load || puzzleState.position.isGameOver
+                          ? PlayerSide.none
+                          : puzzleState.mode == PuzzleMode.view
                           ? PlayerSide.both
                           : puzzleState.pov == Side.white
-                              ? PlayerSide.white
-                              : PlayerSide.black,
+                          ? PlayerSide.white
+                          : PlayerSide.black,
                   isCheck: puzzleState.position.isCheck,
                   sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
@@ -146,9 +144,7 @@ class _Body extends ConsumerWidget {
                 ),
                 topTable: Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: PuzzleFeedbackWidget(
                       puzzle: puzzleState.puzzle,
                       state: puzzleState,
@@ -157,37 +153,34 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
                 bottomTable: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10.0,
-                    left: 10.0,
-                    right: 10.0,
-                  ),
+                  padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            LichessIcons.streak,
-                            size: 40.0,
-                            color: context.lichessColors.brag,
+                      PlatformCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                LichessIcons.streak,
+                                size: 50.0,
+                                color: ColorScheme.of(context).primary,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                puzzleState.streak!.index.toString(),
+                                style: TextStyle(
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorScheme.of(context).primary,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8.0),
-                          Text(
-                            puzzleState.streak!.index.toString(),
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                              color: context.lichessColors.brag,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        context.l10n.puzzleRatingX(
-                          puzzleState.puzzle.puzzle.rating.toString(),
                         ),
                       ),
+                      Text(context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString())),
                     ],
                   ),
                 ),
@@ -195,10 +188,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
-          streak: streak,
-        ),
+        _BottomBar(initialPuzzleContext: initialPuzzleContext, streak: streak),
       ],
     );
 
@@ -211,16 +201,13 @@ class _Body extends ConsumerWidget {
         final NavigatorState navigator = Navigator.of(context);
         final shouldPop = await showAdaptiveDialog<bool>(
           context: context,
-          builder: (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content:
-                const Text('No worries, your score will be saved locally.'),
-            onYes: () {
-              ref.read(ctrlProvider.notifier).saveStreakResultLocally();
-              return Navigator.of(context).pop(true);
-            },
-            onNo: () => Navigator.of(context).pop(false),
-          ),
+          builder:
+              (context) => YesNoDialog(
+                title: Text(context.l10n.mobileAreYouSure),
+                content: const Text('No worries, your score will be saved locally.'),
+                onYes: () => Navigator.of(context).pop(true),
+                onNo: () => Navigator.of(context).pop(false),
+              ),
         );
         if (shouldPop ?? false) {
           navigator.pop();
@@ -232,21 +219,17 @@ class _Body extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.initialPuzzleContext,
-    required this.streak,
-  });
+  const _BottomBar({required this.initialPuzzleContext, required this.streak});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider =
-        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         if (!puzzleState.streak!.finished)
           BottomBarButton(
@@ -260,33 +243,32 @@ class _BottomBar extends ConsumerWidget {
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
             showLabel: true,
-            onTap: puzzleState.streak!.hasSkipped ||
-                    puzzleState.mode == PuzzleMode.view
-                ? null
-                : () => ref.read(ctrlProvider.notifier).skipMove(),
+            onTap:
+                puzzleState.streak!.hasSkipped || puzzleState.mode == PuzzleMode.view
+                    ? null
+                    : () => ref.read(ctrlProvider.notifier).skipMove(),
           ),
         if (puzzleState.streak!.finished)
           BottomBarButton(
             onTap: () {
               launchShareDialog(
                 context,
-                text: lichessUri(
-                  '/training/${puzzleState.puzzle.puzzle.id}',
-                ).toString(),
+                text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
               );
             },
             label: 'Share this puzzle',
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoIcons.share
-                : Icons.share,
+            icon:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoIcons.share
+                    : Icons.share,
           ),
         if (puzzleState.streak!.finished)
           BottomBarButton(
             onTap: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => AnalysisScreen(
-                  options: AnalysisOptions(
+              Navigator.of(context, rootNavigator: true).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  AnalysisOptions(
                     orientation: puzzleState.pov,
                     standalone: (
                       pgn: ref.read(ctrlProvider.notifier).makePgn(),
@@ -303,25 +285,23 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (puzzleState.streak!.finished)
           BottomBarButton(
-            onTap: puzzleState.canGoBack
-                ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                : null,
+            onTap:
+                puzzleState.canGoBack ? () => ref.read(ctrlProvider.notifier).userPrevious() : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
           ),
         if (puzzleState.streak!.finished)
           BottomBarButton(
-            onTap: puzzleState.canGoNext
-                ? () => ref.read(ctrlProvider.notifier).userNext()
-                : null,
+            onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
             label: context.l10n.next,
             icon: CupertinoIcons.chevron_forward,
           ),
         if (puzzleState.streak!.finished)
           BottomBarButton(
-            onTap: ref.read(streakProvider).isLoading == false
-                ? () => ref.invalidate(streakProvider)
-                : null,
+            onTap:
+                ref.read(streakProvider).isLoading == false
+                    ? () => ref.invalidate(streakProvider)
+                    : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
             icon: CupertinoIcons.play_arrow_solid,
@@ -333,25 +313,23 @@ class _BottomBar extends ConsumerWidget {
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder: (context) => PlatformAlertDialog(
-        title: Text(context.l10n.aboutX('Puzzle Streak')),
-        content: Text(context.l10n.puzzleStreakDescription),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
+      builder:
+          (context) => PlatformAlertDialog(
+            title: Text(context.l10n.aboutX('Puzzle Streak')),
+            content: Text(context.l10n.puzzleStreakDescription),
+            actions: [
+              PlatformDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(context.l10n.mobileOkButton),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }
 
 class _RetryFetchPuzzleDialog extends ConsumerWidget {
-  const _RetryFetchPuzzleDialog({
-    required this.initialPuzzleContext,
-    required this.streak,
-  });
+  const _RetryFetchPuzzleDialog({required this.initialPuzzleContext, required this.streak});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
@@ -361,8 +339,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider =
-        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final state = ref.watch(ctrlProvider);
 
     Future<void> retryStreakNext() async {
@@ -375,18 +352,18 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
             Navigator.of(context).pop();
           }
           if (data != null) {
-            ref.read(ctrlProvider.notifier).loadPuzzle(
+            ref
+                .read(ctrlProvider.notifier)
+                .onLoadPuzzle(
                   data,
-                  nextStreak:
-                      state.streak!.copyWith(index: state.streak!.index + 1),
+                  nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
                 );
           }
         },
       );
     }
 
-    final canRetry = state.nextPuzzleStreakFetchError &&
-        !state.nextPuzzleStreakFetchIsRetrying;
+    final canRetry = state.nextPuzzleStreakFetchError && !state.nextPuzzleStreakFetchIsRetrying;
 
     return PlatformAlertDialog(
       title: const Text(title),

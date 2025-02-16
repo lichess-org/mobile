@@ -5,12 +5,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'game_screen_providers.dart';
 
 class GameSettings extends ConsumerWidget {
   const GameSettings({required this.id, super.key});
@@ -29,32 +28,22 @@ class GameSettings extends ConsumerWidget {
             return [
               if (data.prefs?.submitMove == true)
                 SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesMoveConfirmation,
-                  ),
+                  title: Text(context.l10n.preferencesMoveConfirmation),
                   value: data.shouldConfirmMove,
                   onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleMoveConfirmation();
+                    ref.read(gameControllerProvider(id).notifier).toggleMoveConfirmation();
                   },
                 ),
               if (data.prefs?.autoQueen == AutoQueen.always)
                 SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesPromoteToQueenAutomatically,
-                  ),
+                  title: Text(context.l10n.preferencesPromoteToQueenAutomatically),
                   value: data.canAutoQueen,
                   onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleAutoQueen();
+                    ref.read(gameControllerProvider(id).notifier).toggleAutoQueen();
                   },
                 ),
               SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesZenMode,
-                ),
+                title: Text(context.l10n.preferencesZenMode),
                 value: data.isZenModeEnabled,
                 onChanged: (value) {
                   ref.read(gameControllerProvider(id).notifier).toggleZenMode();
@@ -69,17 +58,13 @@ class GameSettings extends ConsumerWidget {
           title: const Text('Board settings'),
           trailing: const Icon(CupertinoIcons.chevron_right),
           onTap: () {
-            pushPlatformRoute(
+            Navigator.of(
               context,
-              fullscreenDialog: true,
-              screen: const BoardSettingsScreen(),
-            );
+            ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
           },
         ),
         SwitchSettingTile(
-          title: Text(
-            context.l10n.toggleTheChat,
-          ),
+          title: Text(context.l10n.toggleTheChat),
           value: gamePrefs.enableChat ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleChat();

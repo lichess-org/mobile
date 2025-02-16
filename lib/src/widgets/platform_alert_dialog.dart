@@ -23,16 +23,9 @@ class PlatformAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
-      androidBuilder: (context) => AlertDialog(
-        title: title,
-        content: content,
-        actions: actions,
-      ),
-      iosBuilder: (context) => CupertinoAlertDialog(
-        title: title,
-        content: content,
-        actions: actions,
-      ),
+      androidBuilder: (context) => AlertDialog(title: title, content: content, actions: actions),
+      iosBuilder:
+          (context) => CupertinoAlertDialog(title: title, content: content, actions: actions),
     );
   }
 }
@@ -62,16 +55,14 @@ class PlatformDialogAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
-      androidBuilder: (context) => TextButton(
-        onPressed: onPressed,
-        child: child,
-      ),
-      iosBuilder: (context) => CupertinoDialogAction(
-        onPressed: onPressed,
-        isDefaultAction: cupertinoIsDefaultAction,
-        isDestructiveAction: cupertinoIsDestructiveAction,
-        child: child,
-      ),
+      androidBuilder: (context) => TextButton(onPressed: onPressed, child: child),
+      iosBuilder:
+          (context) => CupertinoDialogAction(
+            onPressed: onPressed,
+            isDefaultAction: cupertinoIsDefaultAction,
+            isDestructiveAction: cupertinoIsDestructiveAction,
+            child: child,
+          ),
     );
   }
 }

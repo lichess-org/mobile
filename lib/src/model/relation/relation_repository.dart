@@ -22,10 +22,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to follow user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to follow user: ${response.statusCode}', uri);
     }
   }
 
@@ -34,10 +31,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to unfollow user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to unfollow user: ${response.statusCode}', uri);
     }
   }
 
@@ -46,10 +40,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to block user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to block user: ${response.statusCode}', uri);
     }
   }
 
@@ -58,10 +49,7 @@ class RelationRepository {
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to unblock user: ${response.statusCode}',
-        uri,
-      );
+      throw http.ClientException('Failed to unblock user: ${response.statusCode}', uri);
     }
   }
 }

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
@@ -64,8 +65,7 @@ enum BottomTab {
   }
 }
 
-final currentBottomTabProvider =
-    StateProvider<BottomTab>((ref) => BottomTab.home);
+final currentBottomTabProvider = StateProvider<BottomTab>((ref) => BottomTab.home);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
@@ -111,10 +111,35 @@ final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
-final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
-    RouteObserver<PageRoute<void>>();
+final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
 final _cupertinoTabController = CupertinoTabController();
+
+/// A [ChangeNotifier] that can be used to notify when the Home tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final homeTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Puzzles tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final puzzlesTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Tools tab is tapped, and all the built interactions
+/// (pop stack, scroll to top) are done.
+final toolsTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final watchTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the Settings tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final settingsTabInteraction = _BottomTabInteraction();
+
+class _BottomTabInteraction extends ChangeNotifier {
+  void notifyItemTapped() {
+    notifyListeners();
+  }
+}
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
@@ -131,50 +156,45 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        return Scaffold(
-          body: _TabSwitchingView(
-            currentTab: currentTab,
-            tabBuilder: _androidTabBuilder,
-          ),
-          bottomNavigationBar: Consumer(
-            builder: (context, ref, _) {
-              final isOnline = ref
-                      .watch(connectivityChangesProvider)
-                      .valueOrNull
-                      ?.isOnline ??
-                  true;
-              return NavigationBar(
-                selectedIndex: currentTab.index,
-                destinations: [
-                  for (final tab in BottomTab.values)
-                    NavigationDestination(
-                      icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                      label: tab.label(context.l10n),
-                    ),
-                ],
-                onDestinationSelected: (i) =>
-                    _onItemTapped(ref, i, isOnline: isOnline),
-              );
-            },
+        return FullScreenBackground(
+          child: Scaffold(
+            body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
+            bottomNavigationBar: Consumer(
+              builder: (context, ref, _) {
+                final isOnline =
+                    ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+                return NavigationBar(
+                  selectedIndex: currentTab.index,
+                  destinations: [
+                    for (final tab in BottomTab.values)
+                      NavigationDestination(
+                        icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+                );
+              },
+            ),
           ),
         );
       case TargetPlatform.iOS:
-        final isOnline =
-            ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ??
-                true;
-        return CupertinoTabScaffold(
-          tabBuilder: _iOSTabBuilder,
-          controller: _cupertinoTabController,
-          tabBar: CupertinoTabBar(
-            currentIndex: currentTab.index,
-            items: [
-              for (final tab in BottomTab.values)
-                BottomNavigationBarItem(
-                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                  label: tab.label(context.l10n),
-                ),
-            ],
-            onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+        final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+        return FullScreenBackground(
+          child: CupertinoTabScaffold(
+            tabBuilder: _iOSTabBuilder,
+            controller: _cupertinoTabController,
+            tabBar: CupertinoTabBar(
+              currentIndex: currentTab.index,
+              items: [
+                for (final tab in BottomTab.values)
+                  BottomNavigationBarItem(
+                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                    label: tab.label(context.l10n),
+                  ),
+              ],
+              onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+            ),
           ),
         );
       default:
@@ -191,11 +211,7 @@ class BottomNavScaffold extends ConsumerWidget {
   void _onItemTapped(WidgetRef ref, int index, {required bool isOnline}) {
     if (index == BottomTab.watch.index && !isOnline) {
       _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
-      showPlatformSnackbar(
-        ref.context,
-        'Not available in offline mode',
-        type: SnackBarType.info,
-      );
+      showPlatformSnackbar(ref.context, 'Not available in offline mode', type: SnackBarType.info);
       return;
     }
 
@@ -204,16 +220,27 @@ class BottomNavScaffold extends ConsumerWidget {
 
     if (tappedTab == curTab) {
       final navState = ref.read(currentNavigatorKeyProvider).currentState;
+      final scrollController = ref.read(currentRootScrollControllerProvider);
       if (navState?.canPop() == true) {
         navState?.popUntil((route) => route.isFirst);
+      } else if (scrollController.hasClients && scrollController.offset > 0) {
+        scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       } else {
-        final scrollController = ref.read(currentRootScrollControllerProvider);
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
+        switch (tappedTab) {
+          case BottomTab.home:
+            homeTabInteraction.notifyItemTapped();
+          case BottomTab.puzzles:
+            puzzlesTabInteraction.notifyItemTapped();
+          case BottomTab.tools:
+            toolsTabInteraction.notifyItemTapped();
+          case BottomTab.watch:
+            watchTabInteraction.notifyItemTapped();
+          case BottomTab.settings:
+            settingsTabInteraction.notifyItemTapped();
         }
       }
     } else {
@@ -306,10 +333,7 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
 /// A widget laying out multiple tabs with only one active tab being built
 /// at a time and on stage. Off stage tabs' animations are stopped.
 class _TabSwitchingView extends StatefulWidget {
-  const _TabSwitchingView({
-    required this.currentTab,
-    required this.tabBuilder,
-  });
+  const _TabSwitchingView({required this.currentTab, required this.tabBuilder});
 
   final BottomTab currentTab;
   final IndexedWidgetBuilder tabBuilder;
@@ -352,24 +376,19 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
     if (tabFocusNodes.length != BottomTab.values.length) {
       if (tabFocusNodes.length > BottomTab.values.length) {
         discardedNodes.addAll(tabFocusNodes.sublist(BottomTab.values.length));
-        tabFocusNodes.removeRange(
-          BottomTab.values.length,
-          tabFocusNodes.length,
-        );
+        tabFocusNodes.removeRange(BottomTab.values.length, tabFocusNodes.length);
       } else {
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             BottomTab.values.length - tabFocusNodes.length,
             (int index) => FocusScopeNode(
-              debugLabel:
-                  '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
+              debugLabel: '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
             ),
           ),
         );
       }
     }
-    FocusScope.of(context)
-        .setFirstFocus(tabFocusNodes[widget.currentTab.index]);
+    FocusScope.of(context).setFirstFocus(tabFocusNodes[widget.currentTab.index]);
   }
 
   @override
@@ -401,9 +420,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
                 node: tabFocusNodes[index],
                 child: Builder(
                   builder: (BuildContext context) {
-                    return shouldBuildTab[index]
-                        ? widget.tabBuilder(context, index)
-                        : Container();
+                    return shouldBuildTab[index] ? widget.tabBuilder(context, index) : Container();
                   },
                 ),
               ),
@@ -420,20 +437,20 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
 
 class _MaterialTabView extends ConsumerStatefulWidget {
   const _MaterialTabView({
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     super.key,
     required this.tab,
     this.builder,
     this.navigatorKey,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.routes,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.onGenerateRoute,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.onUnknownRoute,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.navigatorObservers = const <NavigatorObserver>[],
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.restorationScopeId,
   });
 
@@ -490,11 +507,12 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
     final currentTab = ref.watch(currentBottomTabProvider);
     final enablePopHandler = currentTab == widget.tab;
     return NavigatorPopHandler(
-      onPopWithResult: enablePopHandler
-          ? (_) {
-              widget.navigatorKey?.currentState?.maybePop();
-            }
-          : null,
+      onPopWithResult:
+          enablePopHandler
+              ? (_) {
+                widget.navigatorKey?.currentState?.maybePop();
+              }
+              : null,
       enabled: enablePopHandler,
       child: Navigator(
         key: widget.navigatorKey,
@@ -515,10 +533,7 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
       routeBuilder = widget.routes![name];
     }
     if (routeBuilder != null) {
-      return MaterialPageRoute<dynamic>(
-        builder: routeBuilder,
-        settings: settings,
-      );
+      return MaterialPageRoute<dynamic>(builder: routeBuilder, settings: settings);
     }
     if (widget.onGenerateRoute != null) {
       return widget.onGenerateRoute!(settings);

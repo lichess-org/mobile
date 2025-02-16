@@ -14,51 +14,35 @@ import 'test_provider_scope.dart';
 
 void main() {
   testWidgets('App loads', (tester) async {
-    final app = await makeTestProviderScope(
-      tester,
-      child: const Application(),
-    );
+    final app = await makeTestProviderScope(tester, child: const Application());
 
     await tester.pumpWidget(app);
 
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 
-  testWidgets('App loads with system theme, which defaults to light',
-      (tester) async {
-    final app = await makeTestProviderScope(
-      tester,
-      child: const Application(),
-    );
+  testWidgets('App loads with system theme, which defaults to light', (tester) async {
+    final app = await makeTestProviderScope(tester, child: const Application());
 
     await tester.pumpWidget(app);
 
-    expect(
-      Theme.of(tester.element(find.byType(MaterialApp))).brightness,
-      Brightness.light,
-    );
+    expect(Theme.of(tester.element(find.byType(MaterialApp))).brightness, Brightness.light);
   });
 
-  testWidgets(
-      'App will delete a stored session on startup if one request return 401',
-      (tester) async {
+  testWidgets('App will delete a stored session on startup if one request return 401', (
+    tester,
+  ) async {
     int tokenTestRequests = 0;
     final mockClient = MockClient((request) async {
       if (request.url.path == '/api/token/test') {
         tokenTestRequests++;
-        return mockResponse(
-          '''
+        return mockResponse('''
 {
   "${fakeSession.token}": null
 }
-        ''',
-          200,
-        );
+        ''', 200);
       } else if (request.url.path == '/api/account') {
-        return mockResponse(
-          '{"error": "Unauthorized"}',
-          401,
-        );
+        return mockResponse('{"error": "Unauthorized"}', 401);
       }
       return mockResponse('', 404);
     });
@@ -68,8 +52,7 @@ void main() {
       child: const Application(),
       userSession: fakeSession,
       overrides: [
-        httpClientFactoryProvider
-            .overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
+        httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
       ],
     );
 
@@ -98,10 +81,7 @@ void main() {
   });
 
   testWidgets('Bottom navigation', (tester) async {
-    final app = await makeTestProviderScope(
-      tester,
-      child: const Application(),
-    );
+    final app = await makeTestProviderScope(tester, child: const Application());
 
     await tester.pumpWidget(app);
 

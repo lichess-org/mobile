@@ -26,10 +26,14 @@ analyzer:
   plugins:
     - custom_lint
 
+formatter:
+  page_width: 100
+
 linter:
   rules:
+    require_trailing_commas: false
     prefer_single_quotes: true
-    always_use_package_imports: false
+    always_use_package_imports: true
     avoid_redundant_argument_values: false
     sort_pub_dependencies: true
     sort_unnamed_constructors_first: false

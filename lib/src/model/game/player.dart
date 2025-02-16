@@ -50,10 +50,7 @@ class Player with _$Player {
       user?.name ??
       name ??
       (aiLevel != null
-          ? context.l10n.aiNameLevelAiLevel(
-              'Stockfish',
-              aiLevel.toString(),
-            )
+          ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
           : context.l10n.anonymous);
 
   Player setOnGame(bool onGame) {
@@ -77,6 +74,5 @@ class PlayerAnalysis with _$PlayerAnalysis {
     int? accuracy,
   }) = _PlayerAnalysis;
 
-  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) =>
-      _$PlayerAnalysisFromJson(json);
+  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
 }

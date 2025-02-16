@@ -9,8 +9,8 @@ class NonLinearSlider extends StatefulWidget {
     this.onChange,
     this.onChangeEnd,
     super.key,
-  })  : assert(values.length > 1),
-        assert(values.contains(value));
+  }) : assert(values.length > 1),
+       assert(values.contains(value));
 
   final num value;
   final List<num> values;
@@ -46,27 +46,25 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: Theme.of(context).platform != TargetPlatform.iOS ||
-              widget.onChangeEnd != null
-          ? 1
-          : 0.5,
+      opacity:
+          Theme.of(context).platform != TargetPlatform.iOS || widget.onChangeEnd != null ? 1 : 0.5,
       child: Slider.adaptive(
         value: _index.toDouble(),
         min: 0,
         max: widget.values.length.toDouble() - 1,
         divisions: widget.values.length - 1,
-        label: widget.labelBuilder?.call(widget.values[_index]) ??
-            widget.values[_index].toString(),
-        onChanged: widget.onChangeEnd != null
-            ? (double value) {
-                final newIndex = value.toInt();
-                setState(() {
-                  _index = newIndex;
-                });
+        label: widget.labelBuilder?.call(widget.values[_index]) ?? widget.values[_index].toString(),
+        onChanged:
+            widget.onChangeEnd != null
+                ? (double value) {
+                  final newIndex = value.toInt();
+                  setState(() {
+                    _index = newIndex;
+                  });
 
-                widget.onChange?.call(widget.values[_index]);
-              }
-            : null,
+                  widget.onChange?.call(widget.values[_index]);
+                }
+                : null,
         onChangeEnd: (double value) {
           widget.onChangeEnd?.call(widget.values[_index]);
         },

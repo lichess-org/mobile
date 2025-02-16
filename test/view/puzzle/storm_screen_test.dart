@@ -23,105 +23,77 @@ final client = MockClient((request) {
 
 void main() {
   group('StormScreen', () {
-    testWidgets(
-      'meets accessibility guidelines',
-      (tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
+    testWidgets('meets accessibility guidelines', (tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const StormScreen(),
-          overrides: [
-            stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: [
+          stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'Load puzzle and play white pieces',
-      (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const StormScreen(),
-          overrides: [
-            stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('Load puzzle and play white pieces', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: [
+          stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(Chessboard), findsOneWidget);
-        expect(
-          find.text('You play the white pieces in all puzzles'),
-          findsWidgets,
-        );
-      },
-      variant: kPlatformVariant,
-    );
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.text('You play the white pieces in all puzzles'), findsWidgets);
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'Play one puzzle',
-      (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const StormScreen(),
-          overrides: [
-            stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('Play one puzzle', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: [
+          stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        // before the first move is played, puzzle is not interactable
-        expect(find.byKey(const Key('h5-whiterook')), findsOneWidget);
-        await tester.tap(find.byKey(const Key('h5-whiterook')));
-        await tester.pump();
-        expect(find.byKey(const Key('h5-selected')), findsNothing);
+      // before the first move is played, puzzle is not interactable
+      expect(find.byKey(const Key('h5-whiterook')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('h5-whiterook')));
+      await tester.pump();
+      expect(find.byKey(const Key('h5-selected')), findsNothing);
 
-        // wait for first move to be played
-        await tester.pump(const Duration(seconds: 1));
+      // wait for first move to be played
+      await tester.pump(const Duration(seconds: 1));
 
-        expect(find.byKey(const Key('g8-blackking')), findsOneWidget);
+      expect(find.byKey(const Key('g8-blackking')), findsOneWidget);
 
-        await playMove(
-          tester,
-          'h5',
-          'h7',
-          orientation: Side.white,
-        );
+      await playMove(tester, 'h5', 'h7', orientation: Side.white);
 
-        await tester.pump(const Duration(milliseconds: 500));
-        await tester.pumpAndSettle();
-        expect(find.byKey(const Key('h7-whiterook')), findsOneWidget);
-        expect(find.byKey(const Key('d1-blackqueen')), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('h7-whiterook')), findsOneWidget);
+      expect(find.byKey(const Key('d1-blackqueen')), findsOneWidget);
 
-        await playMove(
-          tester,
-          'e3',
-          'g1',
-          orientation: Side.white,
-        );
+      await playMove(tester, 'e3', 'g1', orientation: Side.white);
 
-        await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
 
-        // should have loaded next puzzle
-        expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
-      },
-      variant: kPlatformVariant,
-    );
+      // should have loaded next puzzle
+      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
+    }, variant: kPlatformVariant);
 
     testWidgets('shows end run result', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -129,8 +101,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 
@@ -139,20 +110,10 @@ void main() {
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));
 
-      await playMove(
-        tester,
-        'h5',
-        'h7',
-        orientation: Side.white,
-      );
+      await playMove(tester, 'h5', 'h7', orientation: Side.white);
 
       await tester.pump(const Duration(milliseconds: 500));
-      await playMove(
-        tester,
-        'e3',
-        'g1',
-        orientation: Side.white,
-      );
+      await playMove(tester, 'e3', 'g1', orientation: Side.white);
 
       await tester.pump(const Duration(milliseconds: 500));
       // should have loaded next puzzle
@@ -170,8 +131,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 

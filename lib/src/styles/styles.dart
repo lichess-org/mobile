@@ -1,4 +1,4 @@
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +8,8 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 abstract class Styles {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
-  static const title = TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
-  );
-  static const subtitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
+  static const title = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
+  static const subtitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
   static final callout = TextStyle(
     fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
@@ -32,29 +26,17 @@ abstract class Styles {
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
     fontWeight: FontWeight.bold,
   );
-  static const boardPreviewTitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-  );
+  static const boardPreviewTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   static const subtitleOpacity = 0.7;
-  static const timeControl = TextStyle(
-    letterSpacing: 1.2,
-  );
-  static const formLabel = TextStyle(
-    fontWeight: FontWeight.bold,
-  );
-  static const formError = TextStyle(
-    color: LichessColors.red,
-  );
+  static const timeControl = TextStyle(letterSpacing: 1.2);
+  static const formLabel = TextStyle(fontWeight: FontWeight.bold);
+  static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
+  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
 
   // padding
-  static const cupertinoAppBarTrailingWidgetPadding =
-      EdgeInsetsDirectional.only(
-    end: 8.0,
-  );
-  static const bodyPadding =
-      EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
+  static const cupertinoAppBarTrailingWidgetPadding = EdgeInsetsDirectional.only(end: 8.0);
+  static const bodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const sectionBottomPadding = EdgeInsets.only(bottom: 16.0);
@@ -62,48 +44,53 @@ abstract class Styles {
   static const bodySectionPadding = EdgeInsets.all(16.0);
 
   /// Horizontal and bottom padding for the body section.
-  static const bodySectionBottomPadding = EdgeInsets.only(
-    bottom: 16.0,
-    left: 16.0,
-    right: 16.0,
-  );
+  static const bodySectionBottomPadding = EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0);
+
+  // cards
+  static const cardBorderRadius = BorderRadius.all(Radius.circular(12.0));
+
+  // boards
+  static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
 
   // colors
   static Color? expansionTileColor(BuildContext context) =>
       defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
-  static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xE6F9F9F9),
-    darkColor: Color.fromARGB(210, 36, 36, 38),
-  );
-  static const cupertinoTabletAppBarColor =
-      CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFF9F9F9),
-    darkColor: Color.fromARGB(255, 36, 36, 36),
-  );
-  static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 23, 23, 23),
-  );
+
+  /// Retrieve the background color for the screens where we display a list of items.
+  static Color listingsScreenBackgroundColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? ColorScheme.of(context).surfaceContainerLowest
+          : ColorScheme.of(context).surface;
+
+  static Color cupertinoListTileBackgroundActivated(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.light
+        ? ColorScheme.of(context).surfaceContainerLow
+        : ColorScheme.of(context).surfaceContainerHighest;
+  }
+
+  static Color chartColor(BuildContext context) {
+    return ColorScheme.of(context).tertiary;
+  }
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
-  static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFF000000),
-    darkColor: _cupertinoDarkLabelColor,
-  );
   static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFF5F5F5),
-  );
-  static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFFFFFFF),
-    darkColor: Color.fromARGB(255, 44, 44, 46),
   );
   static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
     debugLabel: 'separator',
     color: Color.fromARGB(73, 60, 60, 67),
     darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
+
+  static const cupertinoAnchorMenuTheme = MenuThemeData(
+    style: MenuStyle(
+      elevation: WidgetStatePropertyAll(0),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
+    ),
   );
 
   /// A Material Design text theme with light glyphs based on San Francisco.
@@ -202,14 +189,6 @@ abstract class Styles {
       color: _cupertinoDarkLabelColor,
       decoration: TextDecoration.none,
     ),
-  );
-
-  // from:
-  // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
-  static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
-      CupertinoDynamicColor.withBrightness(
-    color: Color(0x4D000000),
-    darkColor: Color(0x29000000),
   );
 }
 
@@ -313,6 +292,5 @@ const lichessCustomColors = CustomColors(
 );
 
 extension CustomColorsBuildContext on BuildContext {
-  CustomColors get lichessColors =>
-      Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
+  CustomColors get lichessColors => Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
 }

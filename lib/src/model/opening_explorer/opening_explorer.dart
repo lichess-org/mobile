@@ -9,11 +9,7 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
 
-enum OpeningDatabase {
-  master,
-  lichess,
-  player,
-}
+enum OpeningDatabase { master, lichess, player }
 
 @Freezed(fromJson: true)
 class OpeningExplorerEntry with _$OpeningExplorerEntry {
@@ -30,12 +26,8 @@ class OpeningExplorerEntry with _$OpeningExplorerEntry {
     int? queuePosition,
   }) = _OpeningExplorerEntry;
 
-  factory OpeningExplorerEntry.empty() => const OpeningExplorerEntry(
-        white: 0,
-        draws: 0,
-        black: 0,
-        moves: IList.empty(),
-      );
+  factory OpeningExplorerEntry.empty() =>
+      const OpeningExplorerEntry(white: 0, draws: 0, black: 0, moves: IList.empty());
 
   factory OpeningExplorerEntry.fromJson(Map<String, Object?> json) =>
       _$OpeningExplorerEntryFromJson(json);
@@ -57,8 +49,7 @@ class OpeningMove with _$OpeningMove {
     OpeningExplorerGame? game,
   }) = _OpeningMove;
 
-  factory OpeningMove.fromJson(Map<String, Object?> json) =>
-      _$OpeningMoveFromJson(json);
+  factory OpeningMove.fromJson(Map<String, Object?> json) => _$OpeningMoveFromJson(json);
 
   int get games {
     return white + draws + black;
@@ -86,16 +77,10 @@ class OpeningExplorerGame with _$OpeningExplorerGame {
     return OpeningExplorerGame(
       id: pick('id').asGameIdOrThrow(),
       white: pick('white').letOrThrow(
-        (pick) => (
-          name: pick('name').asStringOrThrow(),
-          rating: pick('rating').asIntOrThrow()
-        ),
+        (pick) => (name: pick('name').asStringOrThrow(), rating: pick('rating').asIntOrThrow()),
       ),
       black: pick('black').letOrThrow(
-        (pick) => (
-          name: pick('name').asStringOrThrow(),
-          rating: pick('rating').asIntOrThrow()
-        ),
+        (pick) => (name: pick('name').asStringOrThrow(), rating: pick('rating').asIntOrThrow()),
       ),
       uci: pick('uci').asStringOrNull(),
       winner: pick('winner').asStringOrNull(),
@@ -111,10 +96,7 @@ class OpeningExplorerGame with _$OpeningExplorerGame {
   }
 }
 
-enum GameMode {
-  casual,
-  rated,
-}
+enum GameMode { casual, rated }
 
 @freezed
 class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {

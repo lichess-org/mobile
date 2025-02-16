@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_game_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -18,21 +18,22 @@ class BroadcastGameBottomBar extends ConsumerWidget {
   const BroadcastGameBottomBar({
     required this.roundId,
     required this.gameId,
-    required this.broadcastTitle,
-    required this.roundTitle,
+    this.tournamentSlug,
+    this.roundSlug,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final String broadcastTitle;
-  final String roundTitle;
+  final String? tournamentSlug;
+  final String? roundSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastGameControllerProvider(roundId, gameId);
-    final broadcastGameState = ref.watch(ctrlProvider).requireValue;
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
-    return BottomBar(
+    return PlatformBottomBar(
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -40,30 +41,25 @@ class BroadcastGameBottomBar extends ConsumerWidget {
             showAdaptiveActionSheet<void>(
               context: context,
               actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                  onPressed: (context) async {
-                    launchShareDialog(
-                      context,
-                      uri: lichessUri(
-                        '/broadcast/${broadcastTitle.toLowerCase().replaceAll(' ', '-')}/${roundTitle.toLowerCase().replaceAll(' ', '-')}/$roundId/$gameId',
-                      ),
-                    );
-                  },
-                ),
+                if (tournamentSlug != null && roundSlug != null)
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+                    onPressed: () async {
+                      launchShareDialog(
+                        context,
+                        uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                      );
+                    },
+                  ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     try {
                       final pgn = await ref.withClient(
-                        (client) => BroadcastRepository(client)
-                            .getGamePgn(roundId, gameId),
+                        (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
                       );
                       if (context.mounted) {
-                        launchShareDialog(
-                          context,
-                          text: pgn,
-                        );
+                        launchShareDialog(context, text: pgn);
                       }
                     } catch (e) {
                       if (context.mounted) {
@@ -78,18 +74,13 @@ class BroadcastGameBottomBar extends ConsumerWidget {
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => const Text('GIF'),
-                  onPressed: (_) async {
+                  onPressed: () async {
                     try {
-                      final gif =
-                          await ref.read(gameShareServiceProvider).chapterGif(
-                                roundId,
-                                gameId,
-                              );
+                      final gif = await ref
+                          .read(gameShareServiceProvider)
+                          .chapterGif(roundId, gameId);
                       if (context.mounted) {
-                        launchShareDialog(
-                          context,
-                          files: [gif],
-                        );
+                        launchShareDialog(context, files: [gif]);
                       }
                     } catch (e) {
                       debugPrint(e.toString());
@@ -106,42 +97,33 @@ class BroadcastGameBottomBar extends ConsumerWidget {
               ],
             );
           },
-          icon: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoIcons.share
-              : Icons.share,
+          icon:
+              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
         ),
         BottomBarButton(
           label: context.l10n.flipBoard,
           onTap: () {
-            ref
-                .read(
-                  ctrlProvider.notifier,
-                )
-                .toggleBoard();
+            ref.read(ctrlProvider.notifier).toggleBoard();
           },
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         RepeatButton(
-          onLongPress:
-              broadcastGameState.canGoBack ? () => _moveBackward(ref) : null,
+          onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
-            onTap:
-                broadcastGameState.canGoBack ? () => _moveBackward(ref) : null,
+            onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
         ),
         RepeatButton(
-          onLongPress:
-              broadcastGameState.canGoNext ? () => _moveForward(ref) : null,
+          onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             label: context.l10n.next,
-            onTap:
-                broadcastGameState.canGoNext ? () => _moveForward(ref) : null,
+            onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,
           ),
         ),
@@ -149,10 +131,8 @@ class BroadcastGameBottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref) => ref
-      .read(broadcastGameControllerProvider(roundId, gameId).notifier)
-      .userNext();
-  void _moveBackward(WidgetRef ref) => ref
-      .read(broadcastGameControllerProvider(roundId, gameId).notifier)
-      .userPrevious();
+  void _moveForward(WidgetRef ref) =>
+      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userNext();
+  void _moveBackward(WidgetRef ref) =>
+      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userPrevious();
 }

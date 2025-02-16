@@ -21,11 +21,9 @@ FlutterAppAuth appAuth(Ref ref) {
 }
 
 class AuthRepository {
-  AuthRepository(
-    LichessClient client,
-    FlutterAppAuth appAuth,
-  )   : _client = client,
-        _appAuth = appAuth;
+  AuthRepository(LichessClient client, FlutterAppAuth appAuth)
+    : _client = client,
+      _appAuth = appAuth;
 
   final LichessClient _client;
   final Logger _log = Logger('AuthRepository');
@@ -61,25 +59,17 @@ class AuthRepository {
 
     final user = await _client.readJson(
       Uri(path: '/api/account'),
-      headers: {
-        'Authorization': 'Bearer ${signBearerToken(token)}',
-      },
+      headers: {'Authorization': 'Bearer ${signBearerToken(token)}'},
       mapper: User.fromServerJson,
     );
-    return AuthSessionState(
-      token: token,
-      user: user.lightUser,
-    );
+    return AuthSessionState(token: token, user: user.lightUser);
   }
 
   Future<void> signOut() async {
     final url = Uri(path: '/api/token');
     final response = await _client.delete(Uri(path: '/api/token'));
     if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to delete token: ${response.statusCode}',
-        url,
-      );
+      throw http.ClientException('Failed to delete token: ${response.statusCode}', url);
     }
   }
 }

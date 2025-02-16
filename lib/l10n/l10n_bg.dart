@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -130,7 +130,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSystemColors => 'Системни цветове';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Тема';
 
   @override
   String get mobileToolsTab => 'Анализ';
@@ -390,12 +390,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastUpcoming => 'Предстоящи';
 
   @override
-  String get broadcastCompleted => 'Завършени';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Име на рунда';
 
   @override
@@ -416,13 +410,13 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'URL на PGN източника';
 
   @override
   String get broadcastSourceUrlHelp => 'Уебадресът, който Lichess ще проверява, за да получи осъвременявания на PGN. Той трябва да е публично достъпен от интернет.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'До 64 идентификатора на игри в Lichess, разделени с празни места.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -484,7 +478,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastFederation => 'Федерация';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Възраст (тази година)';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -520,11 +514,11 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Започва след $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Излъчването ще започне след малко.';
 
   @override
   String get broadcastNotYetStarted => 'The broadcast has not yet started.';
@@ -572,16 +566,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastAllTeams => 'All teams';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Формат на състезанието';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Място на състезанието';
 
   @override
   String get broadcastTopPlayers => 'Top players';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Часова зона';
 
   @override
   String get broadcastFideRatingCategory => 'FIDE rating category';
@@ -590,10 +584,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Минали излъчвания';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Виж всички излъчвания по месец';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -865,6 +865,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesInGameOnly => 'Само по време на игра';
 
   @override
+  String get preferencesExceptInGame => 'Освен по време на игра';
+
+  @override
   String get preferencesChessClock => 'Шахматен часовник';
 
   @override
@@ -1006,7 +1009,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesBellNotificationSound => 'Мелодия за известия';
 
   @override
-  String get preferencesBlindfold => 'Blindfold';
+  String get preferencesBlindfold => 'Блинд';
 
   @override
   String get puzzlePuzzles => 'Задачи';
@@ -1462,6 +1465,18 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Вместо да се играе очаквания ход, първо се прави друг (междинен) ход, който представлява заплаха за опонента и трябва да бъде предотвратена.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Конски ендшпил';
 
   @override
@@ -1677,16 +1692,13 @@ class AppLocalizationsBg extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Вашият акаунт се управлява и не може да бъде закрит.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Затварянето е окончателно. Няма връщане назад. Сигурни ли сте?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Няма да Ви бъде позволено да направите нова регистрация със същото име, дори и с различна големина на буквите.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Промених намерението си, не закривайте моята регистрация';
+  String get settingsCancelKeepAccount => 'Откажи и запази акаунта';
 
   @override
-  String get settingsCloseAccountExplanation => 'Наистина ли искате да затворите регистрацията си? Затварянето на регистрация е необратимо. Профилът Ви няма да бъде достъпен НИКОГА ПОВЕЧЕ.';
+  String get settingsCloseAccountAreYouSure => 'Сигурни ли сте, че искате да затворите акаунта си?';
 
   @override
   String get settingsThisAccountIsClosed => 'Тази регистрация е закрита.';
@@ -1970,7 +1982,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get maxDepthReached => 'Максималната дълбочина е достигната!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Защо не включите повече игри в датабазата от менюто?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Защо не включите повече игри в базата данни от менюто?';
 
   @override
   String get openings => 'Дебюти';
@@ -1983,7 +1995,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String xOpeningExplorer(String param) {
-    return '$param датабаза';
+    return '$param база данни';
   }
 
   @override
@@ -2107,7 +2119,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get signUp => 'Регистрирайте се';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Не е позволено използването на компютърна помощ. Моля не си помагайте с шах програми, архиви или други играчи по време на игра. Също, създаването на множество регистрации е силно непрепоръчително и ще се накаже с бан.';
+  String get computersAreNotAllowedToPlay => 'Не е позволено използването на компютърна помощ. Моля, не си помагайте с програми за шах, архиви или други играчи по време на игра. Също, създаването на множество регистрации е силно непрепоръчително и ще се накаже с бан.';
 
   @override
   String get games => 'Игри';
@@ -2214,7 +2226,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get forgotPassword => 'Забравена парола?';
 
   @override
-  String get error_weakPassword => 'Тази парола е често срещана и несигурна';
+  String get error_weakPassword => 'Тази парола е често срещана и несигурна.';
 
   @override
   String get error_namePassword => 'Моля, не използвайте потребителското си име като парола.';
@@ -3024,10 +3036,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get other => 'Друго';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Поставете линкът към играта/игрите и обяснете какво не е наред с поведението на този потребител. Не казвайте само \"мами\", а ни кажете как стигнахте до това заключение.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Обяснете защо потребителското име е обидно. Не казвайте само \"обидно/неуместно е\", а ни кажете как стигнахте до това заключение - особено ако обидата е прикрита, не е на английски, или е историческа или културна препратка.';
 
   @override
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
@@ -3676,6 +3688,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get followAndChallengeFriends => 'Следвай и предизвикай приятели';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Анализ на партията';
 
   @override
@@ -4271,13 +4286,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get reopenYourAccount => 'Отворете отново акаунта Ви';
 
   @override
-  String get closedAccountChangedMind => 'Ако сте затворили акаунта Ви, но си промените решението, получавате един шанс да си върнете акаунта.';
-
-  @override
-  String get onlyWorksOnce => 'Това ще работи само един път.';
-
-  @override
-  String get cantDoThisTwice => 'Ако затворите акаунта Ви за втори път, няма как да го възстановите.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Имейл адресът асоцииран с този акаунт';
@@ -4344,7 +4353,7 @@ class AppLocalizationsBg extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Опонентът напусна играта. Можете да заявите победа след $count секунди.',
-      one: 'Опонентът напусна играта. Можете да заявите победа след $count секунди.',
+      one: 'Противникът напусна играта. Можете да заявите победа след $count секунди.',
     );
     return '$_temp0';
   }
@@ -4372,6 +4381,17 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Груби грешки',
+      one: '$count Груба грешка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4383,12 +4403,34 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Грешки',
+      one: '$count Грешка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count неточности',
       one: '$count неточност',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Неточности',
+      one: '$count Неточност',
     );
     return '$_temp0';
   }
@@ -5110,6 +5152,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get studyPlaying => 'Играе се';
 
   @override
+  String get studyShowResults => 'Results';
+
+  @override
   String get studyShowEvalBar => 'Evaluation bars';
 
   @override
@@ -5453,7 +5498,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param на страница';
   }
 
   @override
@@ -5496,6 +5541,180 @@ class AppLocalizationsBg extends AppLocalizations {
       locale: localeName,
       other: 'Постави твоя PGN текст тук, до $count партии',
       one: 'Постави твоя PGN текст тук, до $count партия',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'току що';
+
+  @override
+  String get timeagoRightNow => 'точно сега';
+
+  @override
+  String get timeagoCompleted => 'завършено';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count секунди',
+      one: 'след $count секунда',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count минути',
+      one: 'след $count минута',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count часа',
+      one: 'след $count час',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count дни',
+      one: 'след $count ден',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count седмици',
+      one: 'след $count седмица',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count месеца',
+      one: 'след $count месец',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'след $count години',
+      one: 'след $count година',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'преди $count минути',
+      one: 'преди $count минута',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Преди $count часа',
+      one: 'преди $count час',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Преди $count дни',
+      one: 'преди $count ден',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'преди $count седмици',
+      one: 'преди $count седмица',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'преди $count месеца',
+      one: 'преди $count месец',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'преди $count години',
+      one: 'преди $count година',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'остават $count минути',
+      one: 'остава $count минутa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'остават $count часа',
+      one: 'остава $count час',
     );
     return '$_temp0';
   }

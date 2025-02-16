@@ -15,8 +15,7 @@ class Challenges extends _$Challenges {
 
   @override
   Future<ChallengesList> build() async {
-    _subscription =
-        ChallengeService.stream.listen((list) => state = AsyncValue.data(list));
+    _subscription = ChallengeService.stream.listen((list) => state = AsyncValue.data(list));
 
     ref.onDispose(() {
       _subscription?.cancel();
@@ -24,12 +23,10 @@ class Challenges extends _$Challenges {
 
     final session = ref.watch(authSessionProvider);
     if (session == null) {
-      return Future.value(
-        (
-          inward: const IList<Challenge>.empty(),
-          outward: const IList<Challenge>.empty(),
-        ),
-      );
+      return Future.value((
+        inward: const IList<Challenge>.empty(),
+        outward: const IList<Challenge>.empty(),
+      ));
     }
 
     return ref.read(challengeRepositoryProvider).list();

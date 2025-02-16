@@ -16,8 +16,7 @@ void main() {
       expect(called, true);
     });
 
-    test('should not execute callback more than once if called multiple times',
-        () async {
+    test('should not execute callback more than once if called multiple times', () async {
       final debouncer = Debouncer(const Duration(milliseconds: 100));
       var called = 0;
       debouncer(() {
@@ -85,8 +84,7 @@ void main() {
       expect(called, 1);
     });
 
-    test('should call the callback multiple times if delay is passed',
-        () async {
+    test('should call the callback multiple times if delay is passed', () async {
       final throttler = Throttler(const Duration(milliseconds: 100));
       var called = 0;
       throttler(() {

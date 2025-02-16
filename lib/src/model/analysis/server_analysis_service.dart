@@ -33,8 +33,7 @@ class ServerAnalysisService {
   ValueListenable<GameId?> get currentAnalysis => _currentAnalysis;
 
   /// The last analysis progress event received from the server.
-  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent =>
-      _analysisProgress;
+  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent => _analysisProgress;
 
   /// Request server analysis for a game.
   ///
@@ -51,8 +50,7 @@ class ServerAnalysisService {
       socketClient.stream.listen(
         (event) {
           if (event.topic == 'analysisProgress') {
-            final data =
-                ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+            final data = ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
 
             _analysisProgress.value = (id, data);
 
@@ -69,13 +67,11 @@ class ServerAnalysisService {
           _socketSubscription = null;
         },
         cancelOnError: true,
-      )
+      ),
     );
 
     try {
-      await ref.withClient(
-        (client) => GameRepository(client).requestServerAnalysis(id.gameId),
-      );
+      await ref.withClient((client) => GameRepository(client).requestServerAnalysis(id.gameId));
       _currentAnalysis.value = id.gameId;
     } catch (e) {
       _socketSubscription?.$2.cancel();
@@ -100,8 +96,7 @@ class CurrentAnalysis extends _$CurrentAnalysis {
   }
 
   void _listener() {
-    final gameId =
-        ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
+    final gameId = ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
     if (state != gameId) {
       state = gameId;
     }

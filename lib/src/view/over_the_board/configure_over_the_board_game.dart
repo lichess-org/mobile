@@ -15,19 +15,14 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-void showConfigureGameSheet(
-  BuildContext context, {
-  required bool isDismissible,
-}) {
+void showConfigureGameSheet(BuildContext context, {required bool isDismissible}) {
   final double screenHeight = MediaQuery.sizeOf(context).height;
   showAdaptiveBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
     isDismissible: isDismissible,
-    constraints: BoxConstraints(
-      maxHeight: screenHeight - (screenHeight / 10),
-    ),
+    constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
     builder: (BuildContext context) {
       return const _ConfigureOverTheBoardGameSheet();
     },
@@ -42,8 +37,7 @@ class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
       _ConfigureOverTheBoardGameSheetState();
 }
 
-class _ConfigureOverTheBoardGameSheetState
-    extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
+class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
 
   late TimeIncrement timeIncrement;
@@ -59,19 +53,13 @@ class _ConfigureOverTheBoardGameSheetState
 
   void _setTotalTime(num seconds) {
     setState(() {
-      timeIncrement = TimeIncrement(
-        seconds.toInt(),
-        timeIncrement.increment,
-      );
+      timeIncrement = TimeIncrement(seconds.toInt(), timeIncrement.increment);
     });
   }
 
   void _setIncrement(num seconds) {
     setState(() {
-      timeIncrement = TimeIncrement(
-        timeIncrement.time,
-        seconds.toInt(),
-      );
+      timeIncrement = TimeIncrement(timeIncrement.time, seconds.toInt());
     });
   }
 
@@ -86,16 +74,16 @@ class _ConfigureOverTheBoardGameSheetState
           onTap: () {
             showChoicePicker<Variant>(
               context,
-              choices: playSupportedVariants
-                  .where(
-                    (variant) => variant != Variant.fromPosition,
-                  )
-                  .toList(),
+              choices:
+                  playSupportedVariants
+                      .where((variant) => variant != Variant.fromPosition)
+                      .toList(),
               selectedItem: chosenVariant,
               labelBuilder: (Variant variant) => Text(variant.label),
-              onSelectedItemChanged: (Variant variant) => setState(() {
-                chosenVariant = variant;
-              }),
+              onSelectedItemChanged:
+                  (Variant variant) => setState(() {
+                    chosenVariant = variant;
+                  }),
             );
           },
         ),
@@ -105,10 +93,7 @@ class _ConfigureOverTheBoardGameSheetState
               text: '${context.l10n.minutesPerSide}: ',
               children: [
                 TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   text: clockLabelInMinutes(timeIncrement.time),
                 ),
               ],
@@ -118,9 +103,7 @@ class _ConfigureOverTheBoardGameSheetState
             value: timeIncrement.time,
             values: kAvailableTimesInSeconds,
             labelBuilder: clockLabelInMinutes,
-            onChange: Theme.of(context).platform == TargetPlatform.iOS
-                ? _setTotalTime
-                : null,
+            onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setTotalTime : null,
             onChangeEnd: _setTotalTime,
           ),
         ),
@@ -130,10 +113,7 @@ class _ConfigureOverTheBoardGameSheetState
               text: '${context.l10n.incrementInSeconds}: ',
               children: [
                 TextSpan(
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   text: timeIncrement.increment.toString(),
                 ),
               ],
@@ -142,28 +122,20 @@ class _ConfigureOverTheBoardGameSheetState
           subtitle: NonLinearSlider(
             value: timeIncrement.increment,
             values: kAvailableIncrementsInSeconds,
-            onChange: Theme.of(context).platform == TargetPlatform.iOS
-                ? _setIncrement
-                : null,
+            onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setIncrement : null,
             onChangeEnd: _setIncrement,
           ),
         ),
         SecondaryButton(
           onPressed: () {
+            ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
             ref
-                .read(overTheBoardClockProvider.notifier)
-                .setupClock(timeIncrement);
-            ref.read(overTheBoardGameControllerProvider.notifier).startNewGame(
-                  chosenVariant,
-                  timeIncrement,
-                );
+                .read(overTheBoardGameControllerProvider.notifier)
+                .startNewGame(chosenVariant, timeIncrement);
             Navigator.pop(context);
           },
           semanticsLabel: context.l10n.play,
-          child: Text(
-            context.l10n.play,
-            style: Styles.bold,
-          ),
+          child: Text(context.l10n.play, style: Styles.bold),
         ),
       ],
     );
@@ -193,16 +165,14 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
         SwitchSettingTile(
           title: const Text('Use symmetric pieces'),
           value: prefs.symmetricPieces,
-          onChanged: (_) => ref
-              .read(overTheBoardPreferencesProvider.notifier)
-              .toggleSymmetricPieces(),
+          onChanged:
+              (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
-          title: const Text('Flip pieces and oponent info after move'),
+          title: const Text('Flip pieces and opponent info after move'),
           value: prefs.flipPiecesAfterMove,
-          onChanged: (_) => ref
-              .read(overTheBoardPreferencesProvider.notifier)
-              .toggleFlipPiecesAfterMove(),
+          onChanged:
+              (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
         ),
       ],
     );

@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,23 +8,18 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
-  const PuzzleSessionWidget({
-    required this.initialPuzzleContext,
-    required this.ctrlProvider,
-  });
+  const PuzzleSessionWidget({required this.initialPuzzleContext, required this.ctrlProvider});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleControllerProvider ctrlProvider;
 
   @override
-  ConsumerState<PuzzleSessionWidget> createState() =>
-      PuzzleSessionWidgetState();
+  ConsumerState<PuzzleSessionWidget> createState() => PuzzleSessionWidgetState();
 }
 
 class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
@@ -36,9 +31,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (lastAttemptKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          lastAttemptKey.currentContext!,
-        );
+        Scrollable.ensureVisible(lastAttemptKey.currentContext!);
       }
     });
   }
@@ -60,13 +53,10 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(
-      puzzleSessionProvider(
-        widget.initialPuzzleContext.userId,
-        widget.initialPuzzleContext.angle,
-      ),
+      puzzleSessionProvider(widget.initialPuzzleContext.userId, widget.initialPuzzleContext.angle),
     );
     final puzzleState = ref.watch(widget.ctrlProvider);
-    final brightness = ref.watch(currentBrightnessProvider);
+    final brightness = Theme.of(context).brightness;
     final currentAttempt = session.attempts.firstWhereOrNull(
       (a) => a.id == puzzleState.puzzle.puzzle.id,
     );
@@ -78,13 +68,13 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
           final remainingSpace = estimateRemainingHeightLeftBoard(context);
           final estimatedTableHeight = remainingSpace / 2;
           const estimatedRatingWidgetHeight = 33.0;
-          final estimatedWidgetHeight =
-              estimatedTableHeight - estimatedRatingWidgetHeight;
-          final maxHeight = orientation == Orientation.portrait
-              ? estimatedWidgetHeight >= 60
-                  ? 60.0
-                  : 26.0
-              : 60.0;
+          final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;
+          final maxHeight =
+              orientation == Orientation.portrait
+                  ? estimatedWidgetHeight >= 60
+                      ? 60.0
+                      : 26.0
+                  : 60.0;
 
           return ConstrainedBox(
             constraints: BoxConstraints(minHeight: 26.0, maxHeight: maxHeight),
@@ -101,36 +91,33 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                       isLoading: loadingPuzzleId == attempt.id,
                       brightness: brightness,
                       attempt: attempt,
-                      onTap: puzzleState.puzzle.puzzle.id != attempt.id &&
-                              loadingPuzzleId == null
-                          ? (id) async {
-                              final provider = puzzleProvider(id);
-                              setState(() {
-                                loadingPuzzleId = id;
-                              });
-                              try {
-                                final puzzle = await ref.read(provider.future);
-                                final nextContext = PuzzleContext(
-                                  userId: widget.initialPuzzleContext.userId,
-                                  angle: widget.initialPuzzleContext.angle,
-                                  puzzle: puzzle,
-                                );
+                      onTap:
+                          puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
+                              ? (id) async {
+                                final provider = puzzleProvider(id);
+                                setState(() {
+                                  loadingPuzzleId = id;
+                                });
+                                try {
+                                  final puzzle = await ref.read(provider.future);
+                                  final nextContext = PuzzleContext(
+                                    userId: widget.initialPuzzleContext.userId,
+                                    angle: widget.initialPuzzleContext.angle,
+                                    puzzle: puzzle,
+                                  );
 
-                                ref
-                                    .read(widget.ctrlProvider.notifier)
-                                    .loadPuzzle(nextContext);
-                              } finally {
-                                if (mounted) {
-                                  setState(() {
-                                    loadingPuzzleId = null;
-                                  });
+                                  ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                                } finally {
+                                  if (mounted) {
+                                    setState(() {
+                                      loadingPuzzleId = null;
+                                    });
+                                  }
                                 }
                               }
-                            }
-                          : null,
+                              : null,
                     ),
-                  if (puzzleState.mode == PuzzleMode.view ||
-                      currentAttempt == null)
+                  if (puzzleState.mode == PuzzleMode.view || currentAttempt == null)
                     _SessionItem(
                       isCurrent: currentAttempt == null,
                       isLoading: false,
@@ -163,15 +150,17 @@ class _SessionItem extends StatelessWidget {
   final Brightness brightness;
   final void Function(PuzzleId id)? onTap;
 
-  Color get good => brightness == Brightness.light
-      ? LichessColors.good.shade300
-      : defaultTargetPlatform == TargetPlatform.iOS
+  Color get good =>
+      brightness == Brightness.light
+          ? LichessColors.good.shade300
+          : defaultTargetPlatform == TargetPlatform.iOS
           ? LichessColors.good.shade600
           : LichessColors.good.shade400;
 
-  Color get error => brightness == Brightness.light
-      ? LichessColors.error.shade300
-      : defaultTargetPlatform == TargetPlatform.iOS
+  Color get error =>
+      brightness == Brightness.light
+          ? LichessColors.error.shade300
+          : defaultTargetPlatform == TargetPlatform.iOS
           ? LichessColors.error.shade600
           : LichessColors.error.shade400;
 
@@ -179,7 +168,7 @@ class _SessionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
 
     return GestureDetector(
       onTap: attempt != null ? () => onTap?.call(attempt!.id) : null,
@@ -188,55 +177,28 @@ class _SessionItem extends StatelessWidget {
         height: 26,
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
-          color: isCurrent
-              ? Colors.grey
-              : attempt != null
+          color:
+              isCurrent
+                  ? Colors.grey.harmonizeWith(colorScheme.primary)
+                  : attempt != null
                   ? attempt!.win
                       ? good.harmonizeWith(colorScheme.primary)
                       : error.harmonizeWith(colorScheme.primary)
-                  : next,
+                  : next.harmonizeWith(colorScheme.primary),
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        child: isLoading
-            ? const Padding(
-                padding: EdgeInsets.all(2.0),
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: Colors.white,
+        child:
+            isLoading
+                ? const Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white),
                   ),
-                ),
-              )
-            : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
+                )
+                : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
                 ? RatingPrefAware(
-                    orElse: Icon(
-                      attempt != null
-                          ? attempt!.win
-                              ? Icons.check
-                              : Icons.close
-                          : null,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text(
-                          attempt!.ratingDiffString!,
-                          maxLines: 1,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            height: 1,
-                            fontFeatures: [
-                              FontFeature.tabularFigures(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Icon(
+                  orElse: Icon(
                     attempt != null
                         ? attempt!.win
                             ? Icons.check
@@ -245,6 +207,31 @@ class _SessionItem extends StatelessWidget {
                     color: Colors.white,
                     size: 18,
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Text(
+                        attempt!.ratingDiffString!,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          height: 1,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                : Icon(
+                  attempt != null
+                      ? attempt!.win
+                          ? Icons.check
+                          : Icons.close
+                      : null,
+                  color: Colors.white,
+                  size: 18,
+                ),
       ),
     );
   }

@@ -3,11 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-
-import './tv_channel.dart';
-import './tv_game.dart';
 
 typedef TvChannels = IMap<TvChannel, TvGame>;
 
@@ -17,10 +16,7 @@ class TvRepository {
   final http.Client client;
 
   Future<TvChannels> channels() {
-    return client.readJson(
-      Uri(path: '/api/tv/channels'),
-      mapper: _tvGamesFromJson,
-    );
+    return client.readJson(Uri(path: '/api/tv/channels'), mapper: _tvGamesFromJson);
   }
 }
 
@@ -33,12 +29,11 @@ TvChannels _tvGamesFromJson(Map<String, dynamic> json) {
   });
 }
 
-TvGame _tvGameFromJson(Map<String, dynamic> json) =>
-    _tvGameFromPick(pick(json).required());
+TvGame _tvGameFromJson(Map<String, dynamic> json) => _tvGameFromPick(pick(json).required());
 
 TvGame _tvGameFromPick(RequiredPick pick) => TvGame(
-      user: pick('user').asLightUserOrThrow(),
-      rating: pick('rating').asIntOrNull(),
-      id: pick('gameId').asGameIdOrThrow(),
-      side: pick('color').asSideOrNull(),
-    );
+  user: pick('user').asLightUserOrThrow(),
+  rating: pick('rating').asIntOrNull(),
+  id: pick('gameId').asGameIdOrThrow(),
+  side: pick('color').asSideOrNull(),
+);

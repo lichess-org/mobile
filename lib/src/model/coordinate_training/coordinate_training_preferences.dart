@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'coordinate_training_preferences.freezed.dart';
 part 'coordinate_training_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CoordinateTrainingPreferences extends _$CoordinateTrainingPreferences
     with PreferencesStorage<CoordinateTrainingPrefs> {
   // ignore: avoid_public_notifier_properties
@@ -85,9 +85,7 @@ enum TrainingMode {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class CoordinateTrainingPrefs
-    with _$CoordinateTrainingPrefs
-    implements Serializable {
+class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements Serializable {
   const CoordinateTrainingPrefs._();
 
   const factory CoordinateTrainingPrefs({

@@ -47,10 +47,7 @@ class AndroidGesturesExclusionWidget extends StatelessWidget {
     return FocusDetector(
       onFocusGained: () {
         if (shouldExcludeGesturesOnFocusGained?.call() ?? true) {
-          setAndroidBoardGesturesExclusion(
-            boardKey,
-            withImmersiveMode: shouldSetImmersiveMode,
-          );
+          setAndroidBoardGesturesExclusion(boardKey, withImmersiveMode: shouldSetImmersiveMode);
         }
       },
       onFocusLost: () {
@@ -126,8 +123,7 @@ Future<void> clearAndroidBoardGesturesExclusion() async {
 }
 
 class GesturesExclusion {
-  static const _channel =
-      MethodChannel('mobile.lichess.org/gestures_exclusion');
+  static const _channel = MethodChannel('mobile.lichess.org/gestures_exclusion');
 
   const GesturesExclusion._();
 
@@ -138,24 +134,23 @@ class GesturesExclusion {
       return;
     }
 
-    final rectsAsMaps = rects
-        .map(
-          (r) => r.hasNaN || r.isInfinite
-              ? null
-              : {
-                  'left': r.left.floor(),
-                  'top': r.top.floor(),
-                  'right': r.right.floor(),
-                  'bottom': r.bottom.floor(),
-                },
-        )
-        .toList();
+    final rectsAsMaps =
+        rects
+            .map(
+              (r) =>
+                  r.hasNaN || r.isInfinite
+                      ? null
+                      : {
+                        'left': r.left.floor(),
+                        'top': r.top.floor(),
+                        'right': r.right.floor(),
+                        'bottom': r.bottom.floor(),
+                      },
+            )
+            .toList();
 
     try {
-      await _channel.invokeMethod<void>(
-        'setSystemGestureExclusionRects',
-        rectsAsMaps,
-      );
+      await _channel.invokeMethod<void>('setSystemGestureExclusionRects', rectsAsMaps);
     } on PlatformException catch (e) {
       debugPrint('Failed to set rects: ${e.message}');
     }
@@ -167,8 +162,7 @@ class GesturesExclusion {
     }
 
     try {
-      await _channel
-          .invokeMethod<void>('setSystemGestureExclusionRects', <Rect>[]);
+      await _channel.invokeMethod<void>('setSystemGestureExclusionRects', <Rect>[]);
     } on PlatformException catch (e) {
       debugPrint('Failed to clear rects: ${e.message}');
     }

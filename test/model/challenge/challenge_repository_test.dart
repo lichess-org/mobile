@@ -14,10 +14,7 @@ void main() {
     test('list', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/challenge') {
-          return mockResponse(
-            challengesList,
-            200,
-          );
+          return mockResponse(challengesList, 200);
         }
         return mockResponse('', 404);
       });
@@ -36,10 +33,7 @@ void main() {
     test('show', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/challenge/H9fIRZUk/show') {
-          return mockResponse(
-            challenge,
-            200,
-          );
+          return mockResponse(challenge, 200);
         }
         return mockResponse('', 404);
       });

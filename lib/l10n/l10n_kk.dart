@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -15,36 +15,36 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileAreYouSure => 'Растайсыз ба?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Жүріс қайтару сұрауын тоқтату';
 
   @override
   String get mobileClearButton => 'Өшіру';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Сақталған жүрісті жою';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Ойынға қосылу';
 
   @override
   String get mobileFeedbackButton => 'Пікір айту';
 
   @override
   String mobileGreeting(String param) {
-    return 'Ассаламу ғалейкүм, $param';
+    return 'Ассаламу алейкүм, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Ассаламу ғалейкүм';
+  String get mobileGreetingWithoutName => 'Ассаламу алейкүм';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Тармақты жасыру';
 
   @override
   String get mobileHomeTab => 'Үйге';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Эфирдегі стримерлер';
 
   @override
   String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
@@ -64,13 +64,13 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Тасты жылжытқанда үлкейту';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Осы кезеңді аяқтайсыз ба?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Сәйкестік жоқ, сүзгіні өзгертіп көріңіз';
 
   @override
   String get mobilePuzzleStormNothingToShow => 'Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.';
@@ -109,34 +109,34 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileShareGameURL => 'Ойын сілтемесін тарату';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'FEN күйінде тарату';
 
   @override
   String get mobileSharePuzzle => 'Бұл жұмбақты тарату';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Пікірлерді көрсету';
 
   @override
   String get mobileShowResult => 'Нәтижесін көру';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Тармақтарын көру';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Ақау туындады.';
 
   @override
   String get mobileSystemColors => 'Жүйе түстері';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Кескін';
 
   @override
   String get mobileToolsTab => 'Құрал';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Қарсыластың қосылуын күтудеміз...';
 
   @override
   String get mobileWatchTab => 'Бақылау';
@@ -390,12 +390,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastUpcoming => 'Келе жатқан';
 
   @override
-  String get broadcastCompleted => 'Аяқталған';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Айналым атауы';
 
   @override
@@ -478,7 +472,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastFidePlayerNotFound => 'FIDE player not found';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'FIDE төлқұжаты';
 
   @override
   String get broadcastFederation => 'Federation';
@@ -594,6 +588,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -865,6 +865,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesInGameOnly => 'Ойында ғана';
 
   @override
+  String get preferencesExceptInGame => 'Except in-game';
+
+  @override
   String get preferencesChessClock => 'Шахмат сағаты';
 
   @override
@@ -1057,10 +1060,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleYourPuzzleRatingWillNotChange => 'Сіздің жұмбақ шешу рейтингіңіз өзгермейді. Жұмбақтар жарыс емес екенін ескеріңіз. Мұндағы рейтингтің қызметі – сіздің деңгейіңізге сәйкес жұмбақты табуға көмекші болу.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Аққа ең табысты жүрісті табыңыз.';
+  String get puzzleFindTheBestMoveForWhite => 'Ақтың ең ұтымды жүрісін табыңыз.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Қараға ең табысты жүрісті табыңыз.';
+  String get puzzleFindTheBestMoveForBlack => 'Қараның ең ұтымды жүрісін табыңыз.';
 
   @override
   String get puzzleToGetPersonalizedPuzzles => 'Жекелендірген жұмбақ алу үшін:';
@@ -1462,6 +1465,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Болжамға сай жүрудің орнына алдымен басқаша, қарсыласқа қауіп келтіретін, жауап беруге мәжбүрлейтін жүріс жасау. Басқаша \"Intermezzo\" не \"Zwischenzug\" деп те аталады.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ат ойынсоңы';
 
   @override
@@ -1677,16 +1692,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Сіздің тіркелгіңіз біреудің басқаруында, сондықтан сіз оны жаба алмайсыз.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Жабу - түпкілікті! Кері жол жоқ. Сенімдісіз бе?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Кейін дәл сондай атпенен жаңа тіркелгі жасай алмайсыз (әріп үлкендігі басқаша болса да).';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Мен ойымды өзгерттім, тіркелгімді жаппаңызшы';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Сіз өз тіркелгіңіздің жабуын растайсыз ба? Тіркелгі жабу - қайтарымсыз әрекет. Тіркелгіге қайтадан ЕШҚАШАН КІРЕ АЛМАЙСЫЗ.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Бұл тіркелгі жабылды.';
@@ -2107,7 +2119,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get signUp => 'Тіркелу';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Компьютер көмегін пайдалану - тыйым. Ойын кезінде әр түрлі шахмат есептеуіштерін, дерекқорларын не басқа бір ойыншының көмегін қолданбаңыз. Сонымен қатар, бірнеше тіркелгі жасауды құптамаймыз, көп тіркелгі жасау - шектеуге әкеліп соқтырады.';
+  String get computersAreNotAllowedToPlay => 'Компьютер көмегін пайдалану - тыйым. Ойын кезінде әр түрлі шахмат есептеуіштерін, дерекқорларын не басқа бір ойыншының көмегін қолданбаңыз. Сонымен қатар, бірнеше тіркелгі жасауды құптамаймыз, көп тіркелгі жасаушыға бұғау салынады.';
 
   @override
   String get games => 'Ойындар';
@@ -2865,7 +2877,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String profileCompletion(String param) {
-    return 'Куәліктің толуы: $param';
+    return 'Төлқұжат толуы: $param';
   }
 
   @override
@@ -2877,10 +2889,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get ifNoneLeaveEmpty => 'Жоқ болса, бос қалдырыңыз';
 
   @override
-  String get profile => 'Куәлік';
+  String get profile => 'Төлқұжат';
 
   @override
-  String get editProfile => 'Куәлікті өзгерту';
+  String get editProfile => 'Төлқұжатты өзгерту';
 
   @override
   String get realName => 'Real name';
@@ -3611,7 +3623,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get kidMode => 'Балалық нұсқа';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Балалық нұсқа қосулы.';
 
   @override
   String get kidModeExplanation => 'Бұл сақтық үшін. Балалық нұсқада бүкіл әңгімелесу жолдары жабылған. Мақсатыңыз – бала мен мектеп оқушыларын басқа интернет қолданушыларынан қорғау болса, осы нұсқаны іске қосыңыз.';
@@ -3676,6 +3688,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get followAndChallengeFriends => 'Серік болып, достарды ойынға шақыру';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Ойынды талдау';
 
   @override
@@ -3729,22 +3744,22 @@ class AppLocalizationsKk extends AppLocalizations {
   String get backgroundImageUrl => 'Фон суретіне сілтеме:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Тақта';
 
   @override
-  String get size => 'Size';
+  String get size => 'Үлкендігі';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Айқындығы';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Ашықтығы';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Түс ауытқуы';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Бастапқы түстерді қайтару';
 
   @override
   String get pieceSet => 'Тастар келбеті';
@@ -3936,10 +3951,10 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Сізге Личестен жеке хат келді.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Осында басып оқыңыз';
 
   @override
   String get sorry => 'Өкінішті-ақ :(';
@@ -4007,7 +4022,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get edit => 'Өзгерту';
 
   @override
-  String get bullet => 'Bullet';
+  String get bullet => 'Буллит';
 
   @override
   String get blitz => 'Блиц';
@@ -4125,7 +4140,7 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Сіз шағым жіберегенсіз, ол ойыншы шектелді';
+  String get someoneYouReportedWasBanned => 'Сіздің шағымыңыздан кейін біреу бұғауланды';
 
   @override
   String get congratsYouWon => 'Құтты болсын, сіз жеңдіңіз!';
@@ -4271,13 +4286,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reopenYourAccount => 'Тіркелгіні қайта ашу';
 
   @override
-  String get closedAccountChangedMind => 'Егер сіз тіркелгіні жапқан соң, ойыңыздан қайтсаңыз, сізде тіркелгіні қайтаруға бір мүмкіндік бар.';
-
-  @override
-  String get onlyWorksOnce => 'Бұл амал бір рет қана жарамды.';
-
-  @override
-  String get cantDoThisTwice => 'Егер тіркелгіңізді екінші рет жапсаңыз, оны қайтару еш мүмкіндік болмайды.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Тіркелгіге байлаулы поштаңыз';
@@ -4324,19 +4333,19 @@ class AppLocalizationsKk extends AppLocalizations {
   String get ourEventTips => 'Шара ұйымдастыру туралы ақыл-кеңес';
 
   @override
-  String get instructions => 'Instructions';
+  String get instructions => 'Нұсқаулық';
 
   @override
-  String get showMeEverything => 'Show me everything';
+  String get showMeEverything => 'Бәрін көрсету';
 
   @override
   String get lichessPatronInfo => 'Личес – толығымен тегін/еркін, қайырымдылық негізінде жасалған програм.\nБүкіл жұмыс шығыны, әзірлеу, мазмұны пайдаланушылардың ақшалай демеуінен өтеледі.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Әзірге ештеңе жоқ.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Статистика';
 
   @override
   String opponentLeftCounter(int count) {
@@ -4372,6 +4381,17 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Өрескел қателік',
+      one: '$count Өрескел қателік',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4383,12 +4403,34 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Қателік',
+      one: '$count Қателік',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count ағаттық',
       one: '$count ағаттық',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ағаттық',
+      one: '$count Ағаттық',
     );
     return '$_temp0';
   }
@@ -5110,6 +5152,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyPlaying => 'Қазір ойында';
 
   @override
+  String get studyShowResults => 'Results';
+
+  @override
   String get studyShowEvalBar => 'Evaluation bars';
 
   @override
@@ -5496,6 +5541,180 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'PGN мәтінін осында қойыңыз, $count ойынға дейін',
       one: 'PGN мәтінін осында қойыңыз, $count ойын ғана',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'жаңа ғана';
+
+  @override
+  String get timeagoRightNow => 'дәл қазір';
+
+  @override
+  String get timeagoCompleted => 'аяқталған';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count секундта',
+      one: '$count секундта',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count минутта',
+      one: '$count минутта',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сағатта',
+      one: '$count сағатта',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count күннен кейін',
+      one: '$count күннен кейін',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count аптадан кейін',
+      one: '$count аптадан кейін',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count айдан кейін',
+      one: '$count айдан кейін',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count жылдан кейін',
+      one: '$count жылдан кейін',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count минут бұрын',
+      one: '$count минут бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сағат бұрын',
+      one: '$count сағат бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count күн бұрын',
+      one: '$count күн бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count апта бұрын',
+      one: '$count апта бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ай бұрын',
+      one: '$count ай бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count жыл бұрын',
+      one: '$count жыл бұрын',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count минут қалды',
+      one: '$count минут қалды',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сағат қалды',
+      one: '$count сағат қалды',
     );
     return '$_temp0';
   }

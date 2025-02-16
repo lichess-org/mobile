@@ -40,8 +40,7 @@ class AdaptiveTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final GestureTapCallback? onTap;
-  final Widget?
-      suffix; //used only for iOS, suffix should be put in InputDecoration for android
+  final Widget? suffix; //used only for iOS, suffix should be put in InputDecoration for android
 
   final BoxDecoration? cupertinoDecoration;
   final InputDecoration? materialDecoration;
@@ -75,10 +74,7 @@ class AdaptiveTextField extends StatelessWidget {
           maxLines: maxLines,
           maxLength: maxLength,
           expands: expands,
-          decoration: materialDecoration ??
-              InputDecoration(
-                hintText: placeholder,
-              ),
+          decoration: materialDecoration ?? InputDecoration(hintText: placeholder),
           controller: controller,
           focusNode: focusNode,
           textInputAction: textInputAction,

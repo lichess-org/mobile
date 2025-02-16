@@ -25,12 +25,7 @@ class GameShareService {
   Future<String> rawPgn(GameId id) async {
     final resp = await _ref.withClient(
       (client) => client
-          .get(
-            Uri(
-              path: '/game/export/$id',
-              queryParameters: {'evals': '0', 'clocks': '0'},
-            ),
-          )
+          .get(Uri(path: '/game/export/$id', queryParameters: {'evals': '0', 'clocks': '0'}))
           .timeout(const Duration(seconds: 1)),
     );
     if (resp.statusCode != 200) {
@@ -43,12 +38,7 @@ class GameShareService {
   Future<String> annotatedPgn(GameId id) async {
     final resp = await _ref.withClient(
       (client) => client
-          .get(
-            Uri(
-              path: '/game/export/$id',
-              queryParameters: {'literate': '1'},
-            ),
-          )
+          .get(Uri(path: '/game/export/$id', queryParameters: {'literate': '1'}))
           .timeout(const Duration(seconds: 1)),
     );
     if (resp.statusCode != 200) {
@@ -58,11 +48,7 @@ class GameShareService {
   }
 
   /// Fetches the GIF screenshot of a position and launches the share dialog.
-  Future<XFile> screenshotPosition(
-    Side orientation,
-    String fen,
-    Move? lastMove,
-  ) async {
+  Future<XFile> screenshotPosition(Side orientation, String fen, Move? lastMove) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
     final resp = await _ref
@@ -82,9 +68,10 @@ class GameShareService {
   /// Fetches the GIF animation of a game.
   Future<XFile> gameGif(GameId id, Side orientation) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
-    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
-        ? BoardTheme.brown
-        : boardPreferences.boardTheme;
+    final boardTheme =
+        boardPreferences.boardTheme == BoardTheme.system
+            ? BoardTheme.brown
+            : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
     final resp = await _ref
         .read(defaultClientProvider)
@@ -101,26 +88,21 @@ class GameShareService {
   }
 
   /// Fetches the GIF animation of a study chapter.
-  Future<XFile> chapterGif(
-    StringId id,
-    StringId chapterId,
-  ) async {
+  Future<XFile> chapterGif(StringId id, StringId chapterId) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
-    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
-        ? BoardTheme.brown
-        : boardPreferences.boardTheme;
+    final boardTheme =
+        boardPreferences.boardTheme == BoardTheme.system
+            ? BoardTheme.brown
+            : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
 
     final resp = await _ref
         .read(lichessClientProvider)
         .get(
-          lichessUri(
-            '/study/$id/$chapterId.gif',
-            {
-              'theme': boardTheme.gifApiName,
-              'piece': pieceTheme.name,
-            },
-          ),
+          lichessUri('/study/$id/$chapterId.gif', {
+            'theme': boardTheme.gifApiName,
+            'piece': pieceTheme.name,
+          }),
         )
         .timeout(const Duration(seconds: 1));
     if (resp.statusCode != 200) {

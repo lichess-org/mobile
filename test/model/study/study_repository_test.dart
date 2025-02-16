@@ -326,15 +326,9 @@ void main() {
       final mockClient = MockClient((request) {
         if (request.url.path == '/study/JbWtuaeK/7OJXp679') {
           expect(request.url.queryParameters['chapters'], '1');
-          return mockResponse(
-            response,
-            200,
-          );
+          return mockResponse(response, 200);
         } else if (request.url.path == '/api/study/JbWtuaeK/7OJXp679.pgn') {
-          return mockResponse(
-            'pgn',
-            200,
-          );
+          return mockResponse('pgn', 200);
         }
         return mockResponse('', 404);
       });
@@ -357,79 +351,61 @@ void main() {
           liked: false,
           likes: 29,
           ownerId: const UserId('kyle-and-jess'),
-          features: (
-            cloneable: false,
-            chat: true,
-            sticky: false,
-          ),
+          features: (cloneable: false, chat: true, sticky: false),
           topics: const IList.empty(),
-          chapters: IList(
-            const [
-              StudyChapterMeta(
-                id: StudyChapterId('EgqyeQIp'),
-                name: 'Introduction',
-                fen: null,
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('z6tGV47W'),
-                name: 'Practice Your Thought Process',
-                fen:
-                    '2k4r/p1p2p2/1p2b2p/1Pqn2r1/2B5/B1PP4/P4PPP/RN2Q1K1 b - - 6 20',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('dTfxbccx'),
-                name: 'Practice Strategic Thinking',
-                fen:
-                    'r3r1k1/1b2b2p/pq4pB/1p3pN1/2p5/2P5/PPn1QPPP/3RR1K1 w - - 0 23',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('B1U4pFdG'),
-                name: 'Calculate Fully',
-                fen:
-                    '3r3r/1Rpk1p2/2p2q1p/Q2pp3/P2PP1n1/2P1B1Pp/5P2/1N3RK1 b - - 2 26',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('NJLW7jil'),
-                name: 'Calculate Freely',
-                fen: '4k3/8/6p1/R1p1r1n1/P3Pp2/2N2r2/1PP1K1R1/8 b - - 2 39',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('7OJXp679'),
-                name: 'Use a Timer',
-                fen:
-                    'r5k1/ppp2ppp/7r/4Nb2/3P4/1QN1PPq1/PP2B1P1/R4RK1 b - - 1 20',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('Rgk6UlTP'),
-                name: 'Understand Your Mistakes',
-                fen:
-                    'r4rk1/1R3pb1/pR2N1p1/2q5/4p3/2P1P1Pp/Q2P1P1P/6K1 b - - 1 26',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('VsdxmjCf'),
-                name: 'Adjusting Difficulty',
-                fen:
-                    '3r4/k1pq1p1r/pp1p2p1/8/3P4/P1P2BP1/1P1N1Pp1/R3R1K1 b - - 0 1',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('FHU6xhYs'),
-                name: 'Using Themes',
-                fen:
-                    'r2k3N/pbpp1Bpp/1p6/2b1p3/3n3q/P7/1PPP1RPP/RNB2QK1 b - - 3 12',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('8FhO455h'),
-                name: 'Endurance Training',
-                fen: '8/1p5k/2qPQ2p/p5p1/5r1n/2B4P/5P2/4R1K1 w - - 3 41',
-              ),
-              StudyChapterMeta(
-                id: StudyChapterId('jWUEWsEf'),
-                name: 'Final Thoughts',
-                fen:
-                    '8/1PP2PP1/PppPPppP/Pp1pp1pP/Pp4pP/1Pp2pP1/2PppP2/3PP3 w - - 0 1',
-              ),
-            ],
-          ),
+          chapters: IList(const [
+            StudyChapterMeta(id: StudyChapterId('EgqyeQIp'), name: 'Introduction', fen: null),
+            StudyChapterMeta(
+              id: StudyChapterId('z6tGV47W'),
+              name: 'Practice Your Thought Process',
+              fen: '2k4r/p1p2p2/1p2b2p/1Pqn2r1/2B5/B1PP4/P4PPP/RN2Q1K1 b - - 6 20',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('dTfxbccx'),
+              name: 'Practice Strategic Thinking',
+              fen: 'r3r1k1/1b2b2p/pq4pB/1p3pN1/2p5/2P5/PPn1QPPP/3RR1K1 w - - 0 23',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('B1U4pFdG'),
+              name: 'Calculate Fully',
+              fen: '3r3r/1Rpk1p2/2p2q1p/Q2pp3/P2PP1n1/2P1B1Pp/5P2/1N3RK1 b - - 2 26',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('NJLW7jil'),
+              name: 'Calculate Freely',
+              fen: '4k3/8/6p1/R1p1r1n1/P3Pp2/2N2r2/1PP1K1R1/8 b - - 2 39',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('7OJXp679'),
+              name: 'Use a Timer',
+              fen: 'r5k1/ppp2ppp/7r/4Nb2/3P4/1QN1PPq1/PP2B1P1/R4RK1 b - - 1 20',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('Rgk6UlTP'),
+              name: 'Understand Your Mistakes',
+              fen: 'r4rk1/1R3pb1/pR2N1p1/2q5/4p3/2P1P1Pp/Q2P1P1P/6K1 b - - 1 26',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('VsdxmjCf'),
+              name: 'Adjusting Difficulty',
+              fen: '3r4/k1pq1p1r/pp1p2p1/8/3P4/P1P2BP1/1P1N1Pp1/R3R1K1 b - - 0 1',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('FHU6xhYs'),
+              name: 'Using Themes',
+              fen: 'r2k3N/pbpp1Bpp/1p6/2b1p3/3n3q/P7/1PPP1RPP/RNB2QK1 b - - 3 12',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('8FhO455h'),
+              name: 'Endurance Training',
+              fen: '8/1p5k/2qPQ2p/p5p1/5r1n/2B4P/5P2/4R1K1 w - - 3 41',
+            ),
+            StudyChapterMeta(
+              id: StudyChapterId('jWUEWsEf'),
+              name: 'Final Thoughts',
+              fen: '8/1PP2PP1/PppPPppP/Pp1pp1pP/Pp4pP/1Pp2pP1/2PppP2/3PP3 w - - 0 1',
+            ),
+          ]),
           chapter: const StudyChapter(
             id: StudyChapterId('7OJXp679'),
             setup: StudyChapterSetup(
@@ -441,31 +417,30 @@ void main() {
             practise: false,
             conceal: null,
             gamebook: true,
-            features: (
-              computer: false,
-              explorer: false,
-            ),
+            features: (computer: false, explorer: false),
           ),
-          hints: [
-            'The white king is not very safe. Can black increase the pressure on the king?',
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-          ].lock,
-          deviationComments: [
-            null,
-            "Black has to be quick to jump on the initiative of white's king being vulnerable.",
-            null,
-            null,
-            null,
-            'Keep the initiative going! Go for the king!',
-            null,
-            null,
-          ].lock,
+          hints:
+              [
+                'The white king is not very safe. Can black increase the pressure on the king?',
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ].lock,
+          deviationComments:
+              [
+                null,
+                "Black has to be quick to jump on the initiative of white's king being vulnerable.",
+                null,
+                null,
+                null,
+                'Keep the initiative going! Go for the king!',
+                null,
+                null,
+              ].lock,
         ),
       );
     });

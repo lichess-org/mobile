@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'challenge_preferences.freezed.dart';
 part 'challenge_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ChallengePreferences extends _$ChallengePreferences
     with SessionPreferencesStorage<ChallengePrefs> {
   // ignore: avoid_public_notifier_properties
@@ -22,8 +22,7 @@ class ChallengePreferences extends _$ChallengePreferences
   ChallengePrefs defaults({LightUser? user}) => ChallengePrefs.defaults;
 
   @override
-  ChallengePrefs fromJson(Map<String, dynamic> json) =>
-      ChallengePrefs.fromJson(json);
+  ChallengePrefs fromJson(Map<String, dynamic> json) => ChallengePrefs.fromJson(json);
 
   @override
   ChallengePrefs build() {
@@ -77,14 +76,10 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
     sideChoice: SideChoice.random,
   );
 
-  Speed get speed => timeControl == ChallengeTimeControlType.clock
-      ? Speed.fromTimeIncrement(
-          TimeIncrement(
-            clock.time.inSeconds,
-            clock.increment.inSeconds,
-          ),
-        )
-      : Speed.correspondence;
+  Speed get speed =>
+      timeControl == ChallengeTimeControlType.clock
+          ? Speed.fromTimeIncrement(TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds))
+          : Speed.correspondence;
 
   ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
     return ChallengeRequest(
@@ -92,8 +87,7 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
       variant: variant,
       timeControl: timeControl,
       clock: timeControl == ChallengeTimeControlType.clock ? clock : null,
-      days:
-          timeControl == ChallengeTimeControlType.correspondence ? days : null,
+      days: timeControl == ChallengeTimeControlType.correspondence ? days : null,
       rated: rated,
       sideChoice: sideChoice,
       initialFen: initialFen,

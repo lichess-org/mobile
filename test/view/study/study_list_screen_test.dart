@@ -55,13 +55,11 @@ void main() {
       final requestedUrls = <String>[];
       final mockClient = MockClient((request) {
         requestedUrls.add(request.url.toString());
-        if (request.url.path == '/study/all/hot' &&
-            request.url.queryParameters['page'] == '1') {
+        if (request.url.path == '/study/all/hot' && request.url.queryParameters['page'] == '1') {
           return mockResponse(kStudyAllHotPage1Response, 200);
         } else if (request.url.path == '/study/search') {
           if (request.url.queryParameters['q'] == 'Magnus') {
-            return mockResponse(
-              '''
+            return mockResponse('''
 {
   "paginator": {
     "currentPage": 1,
@@ -91,9 +89,7 @@ void main() {
     "nbPages": 1
   }
 }
-              ''',
-              200,
-            );
+              ''', 200);
           }
         }
         return mockResponse('', 404);

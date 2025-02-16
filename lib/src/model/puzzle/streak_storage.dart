@@ -26,24 +26,18 @@ class StreakStorage {
       return null;
     }
 
-    return PuzzleStreak.fromJson(
-      jsonDecode(stored) as Map<String, dynamic>,
-    );
+    return PuzzleStreak.fromJson(jsonDecode(stored) as Map<String, dynamic>);
   }
 
   Future<void> saveActiveStreak(PuzzleStreak streak) async {
-    await _store.setString(
-      _storageKey,
-      jsonEncode(streak),
-    );
+    await _store.setString(_storageKey, jsonEncode(streak));
   }
 
   Future<void> clearActiveStreak() async {
     await _store.remove(_storageKey);
   }
 
-  SharedPreferencesWithCache get _store =>
-      LichessBinding.instance.sharedPreferences;
+  SharedPreferencesWithCache get _store => LichessBinding.instance.sharedPreferences;
 
   String get _storageKey => 'puzzle_streak.${userId ?? '**anon**'}';
 }

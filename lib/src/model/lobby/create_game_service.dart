@@ -17,11 +17,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 
-typedef ChallengeResponse = ({
-  GameFullId? gameFullId,
-  Challenge? challenge,
-  ChallengeDeclineReason? declineReason,
-});
+typedef ChallengeResponse =
+    ({GameFullId? gameFullId, Challenge? challenge, ChallengeDeclineReason? declineReason});
 
 /// A provider for the [CreateGameService].
 @riverpod
@@ -50,7 +47,8 @@ class CreateGameService {
     ChallengeId,
     StreamSubscription<void>, // socket connects events
     StreamSubscription<SocketEvent>, // socket events
-  )? _challengeConnection;
+  )?
+  _challengeConnection;
 
   Timer? _challengePingTimer;
 
@@ -90,8 +88,7 @@ class CreateGameService {
     }
 
     try {
-      await LobbyRepository(lichessClient)
-          .createSeek(actualSeek, sri: socketClient.sri);
+      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: socketClient.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       // if the completer is not yet completed, complete it with an error
@@ -108,10 +105,9 @@ class CreateGameService {
     _log.info('Creating new correspondence game');
 
     await ref.withClient(
-      (client) => LobbyRepository(client).createSeek(
-        seek,
-        sri: ref.read(preloadedDataProvider).requireValue.sri,
-      ),
+      (client) => LobbyRepository(
+        client,
+      ).createSeek(seek, sri: ref.read(preloadedDataProvider).requireValue.sri),
     );
   }
 
@@ -120,9 +116,7 @@ class CreateGameService {
   /// Will listen to the challenge socket and await the response from the destinated user.
   /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
   /// or the [ChallengeDeclineReason] if the challenge was declined.
-  Future<ChallengeResponse> newRealTimeChallenge(
-    ChallengeRequest challengeReq,
-  ) async {
+  Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
     if (_challengeConnection != null) {
@@ -130,8 +124,7 @@ class CreateGameService {
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<ChallengeResponse>()
-      ..future.whenComplete(dispose);
+    final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
 
     try {
       _log.info('Creating new challenge game');
@@ -162,21 +155,17 @@ class CreateGameService {
             try {
               final updatedChallenge = await repo.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
-                completer.complete(
-                  (
-                    gameFullId: updatedChallenge.gameFullId,
-                    challenge: null,
-                    declineReason: null,
-                  ),
-                );
+                completer.complete((
+                  gameFullId: updatedChallenge.gameFullId,
+                  challenge: null,
+                  declineReason: null,
+                ));
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
-                completer.complete(
-                  (
-                    gameFullId: null,
-                    challenge: challenge,
-                    declineReason: updatedChallenge.declineReason,
-                  ),
-                );
+                completer.complete((
+                  gameFullId: null,
+                  challenge: challenge,
+                  declineReason: updatedChallenge.declineReason,
+                ));
               }
             } catch (e) {
               _log.warning('Failed to reload challenge', e);
@@ -199,16 +188,12 @@ class CreateGameService {
   ///
   /// Returns the created challenge immediately. If the challenge is accepted,
   /// a notification will be sent to the user when the game starts.
-  Future<Challenge> newCorrespondenceChallenge(
-    ChallengeRequest challenge,
-  ) async {
+  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) async {
     assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
 
     _log.info('Creating new correspondence challenge');
 
-    return ref.withClient(
-      (client) => ChallengeRepository(client).create(challenge),
-    );
+    return ref.withClient((client) => ChallengeRepository(client).create(challenge));
   }
 
   /// Cancel the current game creation.

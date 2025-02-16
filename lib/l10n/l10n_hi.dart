@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -12,33 +12,33 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileAllGames => 'सारे गेम्स';
 
   @override
-  String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
+  String get mobileAreYouSure => 'पक्का?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
+  String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'सब हटाएं';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'सेव की गई चाल हटाएं';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'गेम जॉइन करें';
 
   @override
   String get mobileFeedbackButton => 'फीडबैक';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'हैलो, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'हैलो';
 
   @override
-  String get mobileHideVariation => 'वेरिएशन छुपाए';
+  String get mobileHideVariation => 'वेरिएशन छुपाएं';
 
   @override
   String get mobileHomeTab => 'होम';
@@ -47,99 +47,99 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
 
   @override
-  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको login करना होगा';
+  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको लॉगिन करना होगा।';
 
   @override
-  String get mobileNoSearchResults => 'कोई परिणाम नहीं';
+  String get mobileNoSearchResults => 'कोई रिजल्ट नहीं मिला';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'आप किसी यूजर को फॉलो नहीं कर रहे।';
 
   @override
-  String get mobileOkButton => 'ओके';
+  String get mobileOkButton => 'ठीक है';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return '\"$param\" नाम वाले खिलाड़ी';
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'घसीटते वक्त पीस बड़ा दिखाएं';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'क्या आप इस रन को खत्म करना चाहते है?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'दिखाने के लिए कुछ नहीं है, प्लीज फिल्टर बदलें';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'दिखाने के लिए कुछ नहीं है। पजल स्टॉर्म के कुछ रन खेलें।';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => '3 मिनट में ज्यादा से ज्यादा पजल सॉल्व करें।';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'आप अपनी ये स्ट्रीक खो देंगे और आपका स्कोर सेव कर दिया जाएगा।';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'अपने मनपसंद ओपनिंग्स से पजल सॉल्व करें, या एक थीम चुनें।';
 
   @override
-  String get mobilePuzzlesTab => 'पज़ल';
+  String get mobilePuzzlesTab => 'पजल';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'हाल के सर्च';
 
   @override
-  String get mobileSettingsHapticFeedback => 'कंपन फीडबैक';
+  String get mobileSettingsHapticFeedback => 'हैप्टिक फीडबैक';
 
   @override
   String get mobileSettingsImmersiveMode => 'इमर्सिव मोड';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'खेलते वक्त सिस्टम यूआई छुपा दें। अगर आप स्क्रीन के किनारे के सिस्टम नेविगेशन जेस्चर्स से तंग होते है तो इसका इस्तेमाल करें। गेम और पजल स्टॉर्म के स्क्रीन्स पे अप्लाए होगा।';
 
   @override
   String get mobileSettingsTab => 'सेटिंग';
 
   @override
-  String get mobileShareGamePGN => 'PGN शेयर करें';
+  String get mobileShareGamePGN => 'पीजीएन शेयर करें';
 
   @override
-  String get mobileShareGameURL => 'गेम URL शेयर करें';
+  String get mobileShareGameURL => 'गेम यूआरएल शेयर करें';
 
   @override
-  String get mobileSharePositionAsFEN => 'पोजीशन FEN के रूप में शेयर करें';
+  String get mobileSharePositionAsFEN => 'पोजीशन एफईएन के तरह शेयर करें';
 
   @override
-  String get mobileSharePuzzle => 'पज़ल शरीर करें';
+  String get mobileSharePuzzle => 'ये पजल शेयर करें';
 
   @override
   String get mobileShowComments => 'कमेंट्स देखें';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'रिजल्ट दिखाएं';
 
   @override
   String get mobileShowVariations => 'वेरिएशन देखें';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'कुछ गड़बड़ हो गई।';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'सिस्टम कलर्स';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'थीम';
 
   @override
   String get mobileToolsTab => 'टूल्स';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'ऑप्पोनेंट का इंतजार कर रहे है...';
 
   @override
-  String get mobileWatchTab => 'देखें';
+  String get mobileWatchTab => 'टीवी';
 
   @override
   String get activityActivity => 'कार्यकलाप';
@@ -390,12 +390,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastUpcoming => 'आगामी';
 
   @override
-  String get broadcastCompleted => 'पूर्ण';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'दौर का नाम';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -863,6 +863,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'केवल खेल में';
+
+  @override
+  String get preferencesExceptInGame => 'Except in-game';
 
   @override
   String get preferencesChessClock => 'शतरंज की घड़ी';
@@ -1460,6 +1463,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'अपेक्षित चाल चलने के बजाय, पहले एक और कदम उठाएँ, जिससे तत्काल खतरे की आशंका पैदा हो जाए। इसे \"ज़्विसचेंज़ुग\" या \"इन बीच\" के रूप में भी जाना जाता है।';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'नाइट एंडगेम';
 
   @override
@@ -1675,16 +1690,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'आपका खाता प्रबंधित है, और बंद नहीं किया जा सकता|';
 
   @override
-  String get settingsClosingIsDefinitive => 'समापन निश्चित है। वहां से कोई वापसी नहीं है। क्या आपने सुनिश्चित कर लिया है?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'आपको इस नाम से कोई नया खाता खोलने की अनुमति नहीं दी जाएगी।';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'मैंने अपना मन बदल लिया, मेरे खाता को बंद न करें';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'क्या आप वाकई अपना खाता बंद करना चाहते हैं? अपना खाता बंद करना एक स्थायी निर्णय है। आप कभी भी लॉग इन नहीं कर पाएंगे।';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'यह ख़ाता बंद है|';
@@ -1892,7 +1904,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get deleteFromHere => 'यहां से हटाओ';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'विविधताओं को मिटाये';
 
   @override
   String get expandVariations => 'Expand variations';
@@ -3674,6 +3686,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get followAndChallengeFriends => 'अपने दोस्तों को चुनौती';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'खेल अध्ययन';
 
   @override
@@ -4269,13 +4284,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reopenYourAccount => 'अपना खाता पुनः खोलें।';
 
   @override
-  String get closedAccountChangedMind => 'अगर आपने अपना खाता बंद कर दिया था, लेकिन अब आपने मन बदल लिया है, तो आपको अपना खाता वापस पाने का एक अवसर मिलता है।';
-
-  @override
-  String get onlyWorksOnce => 'यह केवल एक बार काम करेगा।';
-
-  @override
-  String get cantDoThisTwice => 'अगर आपने दूसरी बार अपना खाता बंद किया, तो उसे वापस पाने का कोई रास्ता नहीं होगा।';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'खाते से संबंधित ईमेल पता';
@@ -4370,6 +4379,17 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count गंभीर गल्तियां',
+      one: '$count गंभीर गलती',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4381,7 +4401,29 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count गलतियाँ',
+      one: '$count ग़लती',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count अशुद्धियाँ',
+      one: '$count अशुद्धि',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5108,6 +5150,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyPlaying => 'वर्तमान खेल';
 
   @override
+  String get studyShowResults => 'Results';
+
+  @override
   String get studyShowEvalBar => 'Evaluation bars';
 
   @override
@@ -5494,6 +5539,180 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'यहां अपना PGN टेक्स्ट डाले,$count खेल तक',
       one: 'यहां अपना PGN टेक्स्ट डाले,$count खेल तक',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'अभी';
+
+  @override
+  String get timeagoRightNow => 'अभी';
+
+  @override
+  String get timeagoCompleted => 'पूर्ण';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सेकंड में',
+      one: '$count सेकेंड में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count मिनट में',
+      one: '$count मिनट में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count घंटों में',
+      one: '$count घंटों में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दिनो में',
+      one: '$count दिन में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count हफ़्तों में',
+      one: '$count हफ़्ते में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count महीनो में',
+      one: '$count महीने बाद​',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सालों में',
+      one: '$count साल में',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count मिनटों पहले',
+      one: '$count मिनट पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count घंटे पहले',
+      one: '$count घंटे पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दिनों पहले',
+      one: '$count दिन पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सप्ताह पहले',
+      one: '$count सप्ताह पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count महीने पहले',
+      one: '$count महीने पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count वर्षों पहले',
+      one: '$count वर्ष पहले',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count मिनट बचे हैं',
+      one: '$count मिनट बचा है',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count घंटे बचे हैं',
+      one: '$count घंटा बचा है',
     );
     return '$_temp0';
   }

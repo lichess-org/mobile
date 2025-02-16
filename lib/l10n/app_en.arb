@@ -250,8 +250,6 @@
   "broadcastAddRound": "Add a round",
   "broadcastOngoing": "Ongoing",
   "broadcastUpcoming": "Upcoming",
-  "broadcastCompleted": "Completed",
-  "broadcastCompletedHelp": "Lichess detects round completion, but can get it wrong. Use this to set it manually.",
   "broadcastRoundName": "Round name",
   "broadcastRoundNumber": "Round number",
   "broadcastTournamentName": "Tournament name",
@@ -366,6 +364,8 @@
   "broadcastOptionalDetails": "Optional details",
   "broadcastPastBroadcasts": "Past broadcasts",
   "broadcastAllBroadcastsByMonth": "View all broadcasts by month",
+  "broadcastBackToLiveMove": "Back to live move",
+  "broadcastSinceHideResults": "Since you chose to hide the results, all the preview boards are empty to avoid spoilers.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -567,6 +567,7 @@
   "preferencesDisplayBoardResizeHandle": "Show board resize handle",
   "preferencesOnlyOnInitialPosition": "Only on initial position",
   "preferencesInGameOnly": "In-game only",
+  "preferencesExceptInGame": "Except in-game",
   "preferencesChessClock": "Chess clock",
   "preferencesTenthsOfSeconds": "Tenths of seconds",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",
@@ -835,6 +836,10 @@
   "puzzleThemeInterferenceDescription": "Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.",
   "puzzleThemeIntermezzo": "Intermezzo",
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
+  "puzzleThemeKillBoxMate": "Kill box mate",
+  "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
+  "puzzleThemeVukovicMate": "Vukovic mate",
+  "puzzleThemeVukovicMateDescription": "A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king's escape squares.",
   "puzzleThemeKnightEndgame": "Knight endgame",
   "puzzleThemeKnightEndgameDescription": "An endgame with only knights and pawns.",
   "puzzleThemeLong": "Long puzzle",
@@ -913,10 +918,9 @@
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",
   "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",
-  "settingsClosingIsDefinitive": "Closing is definitive. There is no going back. Are you sure?",
-  "settingsCantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
-  "settingsChangedMindDoNotCloseAccount": "I changed my mind, don't close my account",
-  "settingsCloseAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
+  "settingsCantOpenSimilarAccount": "The username will NOT be available for registration again.",
+  "settingsCancelKeepAccount": "Cancel and keep my account",
+  "settingsCloseAccountAreYouSure": "Are you sure you want to close your account?",
   "settingsThisAccountIsClosed": "This account is closed.",
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
@@ -2047,6 +2051,7 @@
   "onlineAndOfflinePlay": "Online and offline play",
   "viewTheSolution": "View the solution",
   "followAndChallengeFriends": "Follow and challenge friends",
+  "noChallenges": "No challenges.",
   "gameAnalysis": "Game analysis",
   "xHostsY": "{param1} hosts {param2}",
   "@xHostsY": {
@@ -2450,9 +2455,7 @@
   "focusChat": "Focus chat",
   "showHelpDialog": "Show this help dialog",
   "reopenYourAccount": "Reopen your account",
-  "closedAccountChangedMind": "If you closed your account, but have since changed your mind, you get one chance of getting your account back.",
-  "onlyWorksOnce": "This will only work once.",
-  "cantDoThisTwice": "If you close your account a second time, there will be no way of recovering it.",
+  "reopenYourAccountDescription": "If you closed your account, but have since changed your mind, you get a chance of getting your account back.",
   "emailAssociatedToaccount": "Email address associated to the account",
   "sentEmailWithLink": "We've sent you an email with a link.",
   "tournamentEntryCode": "Tournament entry code",
@@ -2503,6 +2506,14 @@
       }
     }
   },
+  "numberBlunders": "{count, plural, =1{{count} Blunder} other{{count} Blunders}}",
+  "@numberBlunders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nbMistakes": "{count, plural, =1{{count} mistake} other{{count} mistakes}}",
   "@nbMistakes": {
     "placeholders": {
@@ -2511,8 +2522,24 @@
       }
     }
   },
+  "numberMistakes": "{count, plural, =1{{count} Mistake} other{{count} Mistakes}}",
+  "@numberMistakes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nbInaccuracies": "{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}",
   "@nbInaccuracies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "numberInaccuracies": "{count, plural, =1{{count} Inaccuracy} other{{count} Inaccuracies}}",
+  "@numberInaccuracies": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -2967,6 +2994,7 @@
   "studyAllSyncMembersRemainOnTheSamePosition": "All SYNC members remain on the same position",
   "studyShareChanges": "Share changes with spectators and save them on the server",
   "studyPlaying": "Playing",
+  "studyShowResults": "Results",
   "studyShowEvalBar": "Evaluation bars",
   "studyFirst": "First",
   "studyPrevious": "Previous",
@@ -3157,8 +3185,131 @@
       }
     }
   },
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoJustNow": "just now",
+  "timeagoRightNow": "right now",
+  "timeagoCompleted": "completed",
+  "timeagoInNbSeconds": "{count, plural, =1{in {count} second} other{in {count} seconds}}",
+  "@timeagoInNbSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMinutes": "{count, plural, =1{in {count} minute} other{in {count} minutes}}",
+  "@timeagoInNbMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbHours": "{count, plural, =1{in {count} hour} other{in {count} hours}}",
+  "@timeagoInNbHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbDays": "{count, plural, =1{in {count} day} other{in {count} days}}",
+  "@timeagoInNbDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbWeeks": "{count, plural, =1{in {count} week} other{in {count} weeks}}",
+  "@timeagoInNbWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbMonths": "{count, plural, =1{in {count} month} other{in {count} months}}",
+  "@timeagoInNbMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoInNbYears": "{count, plural, =1{in {count} year} other{in {count} years}}",
+  "@timeagoInNbYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesAgo": "{count, plural, =1{{count} minute ago} other{{count} minutes ago}}",
+  "@timeagoNbMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursAgo": "{count, plural, =1{{count} hour ago} other{{count} hours ago}}",
+  "@timeagoNbHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbDaysAgo": "{count, plural, =1{{count} day ago} other{{count} days ago}}",
+  "@timeagoNbDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbWeeksAgo": "{count, plural, =1{{count} week ago} other{{count} weeks ago}}",
+  "@timeagoNbWeeksAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMonthsAgo": "{count, plural, =1{{count} month ago} other{{count} months ago}}",
+  "@timeagoNbMonthsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} year ago} other{{count} years ago}}",
+  "@timeagoNbYearsAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}",
+  "@timeagoNbMinutesRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
+  "@timeagoNbHoursRemaining": {
     "placeholders": {
       "count": {
         "type": "int"

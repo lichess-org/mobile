@@ -38,3 +38,6 @@ doc/api/
 
 # FVM Version Cache
 .fvm/
+
+# VS Code
+.vscode/
