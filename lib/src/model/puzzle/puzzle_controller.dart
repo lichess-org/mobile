@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:async/async.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
