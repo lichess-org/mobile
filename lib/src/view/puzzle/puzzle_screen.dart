@@ -269,12 +269,12 @@ class _Body extends ConsumerWidget {
                           dest: evalBestMove.to,
                         ),
                       ])
-                      : puzzleState.showHint && puzzleState.hintMove != null
+                      : puzzleState.hintMove != null
                       ? ISet([
-                        Circle(color: const Color(0x40003088), orig: puzzleState.hintMove!.from),
+                        Circle(color: ShapeColor.green.color, orig: puzzleState.hintMove!.from),
                       ]).addAll(
                         puzzleState.hintPossibleMoves!
-                            .map((i) => Circle(color: const Color(0x40003088), orig: i))
+                            .map((i) => Circle(color: ShapeColor.blue.color, orig: i))
                             .toList(),
                       )
                       : null,
@@ -375,7 +375,7 @@ class _BottomBar extends ConsumerWidget {
             icon: Icons.info,
             label: context.l10n.getAHint,
             showLabel: true,
-            highlighted: puzzleState.showHint,
+            highlighted: puzzleState.hintMove != null,
             onTap:
                 puzzleState.canViewSolution
                     ? () => ref.read(ctrlProvider.notifier).toggleHint()
