@@ -50,17 +50,22 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
   ///
   /// If [puzzleId] is provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
-  const PuzzleScreen({required this.angle, this.puzzleId, super.key});
+  const PuzzleScreen({required this.angle, this.puzzleId, this.daysToReplay = 0, super.key});
 
   final PuzzleAngle angle;
   final PuzzleId? puzzleId;
+  final int daysToReplay;
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
+    int daysToReplay = 0,
   }) {
-    return buildScreenRoute(context, screen: PuzzleScreen(angle: angle, puzzleId: puzzleId));
+    return buildScreenRoute(
+      context,
+      screen: PuzzleScreen(angle: angle, puzzleId: puzzleId, daysToReplay: daysToReplay),
+    );
   }
 
   @override
@@ -100,6 +105,8 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
         body:
             widget.puzzleId != null
                 ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+                : widget.daysToReplay > 0
+                ? _LoadNextReplayPuzzle(daysToReplay: widget.daysToReplay)
                 : _LoadNextPuzzle(angle: widget.angle),
       ),
     );
@@ -155,6 +162,40 @@ class _LoadNextPuzzle extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
+        return Center(
+          child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+        );
+      },
+    );
+  }
+}
+
+class _LoadNextReplayPuzzle extends ConsumerWidget {
+  const _LoadNextReplayPuzzle({required this.daysToReplay});
+
+  final int daysToReplay;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nextPuzzle = ref.watch(nextReplayPuzzleProvider(daysToReplay));
+
+    return nextPuzzle.when(
+      data: (data) {
+        if (data == null) {
+          return const Center(
+            child: BoardTable(
+              fen: kEmptyFen,
+              orientation: Side.white,
+              errorMessage: 'No more puzzles to replay.',
+            ),
+          );
+        } else {
+          return _Body(initialPuzzleContext: data);
+        }
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (e, s) {
+        debugPrint('SEVERE: [PuzzleScreen] could not load next replay puzzle; $e\n$s');
         return Center(
           child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
         );
