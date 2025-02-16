@@ -396,7 +396,8 @@ class _BottomBar extends ConsumerWidget {
     return PlatformBottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        if (initialPuzzleContext.userId != null &&
+        if (!initialPuzzleContext.replaying &&
+            initialPuzzleContext.userId != null &&
             !isDailyPuzzle &&
             puzzleState.mode != PuzzleMode.view)
           _DifficultySelector(

@@ -61,6 +61,8 @@ class PuzzleContext with _$PuzzleContext {
 
     /// List of solved puzzle results if available.
     IList<PuzzleRound>? rounds,
+
+    @Default(false) bool replaying,
   }) = _PuzzleContext;
 }
 
@@ -140,6 +142,7 @@ class PuzzleService {
               userId: userId,
               glicko: null,
               rounds: null,
+              replaying: true,
             ),
           );
     } else {
