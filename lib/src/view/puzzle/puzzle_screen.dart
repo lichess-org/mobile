@@ -275,8 +275,8 @@ class _Body extends ConsumerWidget {
                       ? ISet([
                         Circle(color: ShapeColor.green.color, orig: puzzleState.hintMove!.from),
                       ]).addAll(
-                        puzzleState.hintPossibleMoves!
-                            .map((i) => Circle(color: ShapeColor.blue.color, orig: i))
+                        puzzleState.hintSquares!
+                            .map((square) => Circle(color: ShapeColor.blue.color, orig: square))
                             .toList(),
                       )
                       : null,
