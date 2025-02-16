@@ -1,6 +1,7 @@
 import 'dart:math' show max;
 
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -99,6 +100,51 @@ class PuzzleService {
                 : null,
       ),
     );
+  }
+
+  /// Loads the next puzzle to replay from history
+  Future<PuzzleContext?> nextReplayPuzzle({
+    required UserId? userId,
+    required int daysToReplay,
+  }) async {
+    final checkPuzzlesAfter = DateTime.now().subtract(Duration(days: daysToReplay));
+    PuzzleId? puzzleIdToReplay;
+    var lastPuzzleCheckedTime = DateTime.now();
+
+    while (puzzleIdToReplay == null && lastPuzzleCheckedTime.isAfter(checkPuzzlesAfter)) {
+      final puzzleHistory = await _ref.withClientCacheFor(
+        (client) => PuzzleRepository(client).puzzleActivity(20, before: lastPuzzleCheckedTime),
+        const Duration(hours: 3),
+      );
+      if (puzzleHistory.isEmpty) {
+        break;
+      }
+      puzzleIdToReplay =
+          puzzleHistory
+              .firstWhereOrNull(
+                (entry) =>
+                    !entry.win &&
+                    entry.date.isAfter(DateTime.now().subtract(Duration(days: daysToReplay))),
+              )
+              ?.id;
+      lastPuzzleCheckedTime = puzzleHistory.last.date;
+    }
+
+    if (puzzleIdToReplay != null) {
+      return _ref
+          .withClient((client) => PuzzleRepository(client).fetch(puzzleIdToReplay!))
+          .then(
+            (puzzle) => PuzzleContext(
+              puzzle: puzzle,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              userId: userId,
+              glicko: null,
+              rounds: null,
+            ),
+          );
+    } else {
+      return null;
+    }
   }
 
   /// Update puzzle queue with the solved puzzle, sync with server and returns
