@@ -34,6 +34,19 @@ Future<PuzzleContext?> nextPuzzle(Ref ref, PuzzleAngle angle) async {
   return puzzleService.nextPuzzle(userId: session?.user.id, angle: angle);
 }
 
+@riverpod
+Future<PuzzleContext?> nextReplayPuzzle(Ref ref, int daysToReplay) async {
+  final session = ref.watch(authSessionProvider);
+  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
+  // useful for for preview puzzle list in puzzle tab (providers in a list can
+  // be invalidated multiple times when the user scrolls the list)
+  // ref.cacheFor(const Duration(minutes: 1));
+
+  return puzzleService.nextReplayPuzzle(userId: session?.user.id, daysToReplay: daysToReplay);
+}
+
 typedef InitialStreak = ({PuzzleStreak streak, Puzzle puzzle});
 
 /// Fetches the active streak from the local storage if available, otherwise fetches it from the server.
