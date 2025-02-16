@@ -441,7 +441,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     return PlatformBottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        if (widget.initialPuzzleContext.userId != null &&
+        if (!widget.initialPuzzleContext.replaying &&
+            widget.initialPuzzleContext.userId != null &&
             !isDailyPuzzle &&
             puzzleState.mode != PuzzleMode.view)
           _DifficultySelector(initialPuzzleContext: widget.initialPuzzleContext),
