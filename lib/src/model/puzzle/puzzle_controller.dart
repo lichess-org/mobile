@@ -102,6 +102,7 @@ class PuzzleController extends _$PuzzleController {
       currentPath: UciPath.empty,
       node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
+      hintShown: false,
       showHint: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -211,7 +212,7 @@ class PuzzleController extends _$PuzzleController {
     if (state.showHint) {
       final NormalMove move = solutionMove();
       final ISet<Square>? possibleMoves = state.validMoves.get(move.from);
-      state = state.copyWith(hintMove: move, hintPossibleMoves: possibleMoves);
+      state = state.copyWith(hintShown: true, hintMove: move, hintPossibleMoves: possibleMoves);
     }
   }
 
@@ -329,7 +330,10 @@ class PuzzleController extends _$PuzzleController {
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null && ref.read(puzzlePreferencesProvider).rated,
+          rated:
+              initialContext.userId != null &&
+              !state.hintShown &&
+              ref.read(puzzlePreferencesProvider).rated,
         ),
       );
 
@@ -530,6 +534,7 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool showHint,
+    required bool hintShown,
     NormalMove? hintMove,
     ISet<Square>? hintPossibleMoves,
     required bool isLocalEvalEnabled,
