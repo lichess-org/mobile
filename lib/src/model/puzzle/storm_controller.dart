@@ -293,7 +293,7 @@ class StormState with _$StormState {
     required int moveIndex,
 
     /// Position of the current puzzle based on moveIndex
-    required Position<Chess> position,
+    required Position position,
 
     /// Number of puzzles solved
     required int numSolved,

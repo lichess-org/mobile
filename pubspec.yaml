@@ -5,16 +5,16 @@ publish_to: "none"
 version: 0.14.5+001405 # See README.md for details about versioning
 
 environment:
-  sdk: '^3.7.0-209.1.beta'
+  sdk: '^3.7.0-323.2'
   # We're using the beta channel for the flutter version
-  flutter: "3.28.0-0.1.pre"
+  flutter: "3.29.0-0.3"
 
 dependencies:
   app_settings: ^5.1.1
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^6.3.0
+  chessground: ^7.0.0-beta.1
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
@@ -22,11 +22,11 @@ dependencies:
   crypto: ^3.0.3
   cupertino_http: ^2.0.0
   cupertino_icons: ^1.0.2
-  dartchess: ^0.9.0
+  dartchess: ^0.10.0
   deep_pick: ^1.0.0
   device_info_plus: ^11.0.0
   dynamic_system_colors: ^1.8.0
-  fast_immutable_collections: ^10.0.0
+  fast_immutable_collections: ^11.0.0
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
