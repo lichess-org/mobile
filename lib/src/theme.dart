@@ -72,8 +72,8 @@ const kSliderTheme = SliderThemeData(
     primaryColor: themeLight.colorScheme.primary,
     primaryContrastingColor: themeLight.colorScheme.onPrimary,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: darken(themeLight.scaffoldBackgroundColor, 0.02),
-    barBackgroundColor: themeLight.colorScheme.surface.withValues(alpha: 0.9),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 242, 242, 247),
+    barBackgroundColor: const Color(0xE6F9F9F9),
     textTheme: cupertinoTextTheme(themeLight.colorScheme),
   );
 
