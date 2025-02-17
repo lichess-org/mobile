@@ -24,6 +24,7 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 daqiqada iloji boricha ko\'proq jumboqlarni yeching.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Siz joriy seriyangizni yo\'qotasiz va balingiz saqlanib qoladi.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Sevimli ochilishlaringizdan jumboqlarni o\'ynang yoki mavzuni tanlang.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Masalalar</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Oxirgi qidiruvlar</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptik mulohazalar</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiv rejim</string>
