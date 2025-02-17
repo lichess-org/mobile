@@ -259,11 +259,6 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          label: context.l10n.flipBoard,
-          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
-          icon: CupertinoIcons.arrow_2_squarepath,
-        ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
@@ -298,6 +293,10 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
+        ),
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
@@ -309,19 +308,23 @@ class _BottomBar extends ConsumerWidget {
               ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: () {
-            Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: () {
-            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-            launchShareDialog(context, text: analysisState.position.fen);
-          },
-        ),
+        // PGN share can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+            },
+          ),
+        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
+            onPressed: () {
+              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+              launchShareDialog(context, text: analysisState.position.fen);
+            },
+          ),
         if (options.gameId != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
