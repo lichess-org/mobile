@@ -69,7 +69,7 @@ Here is a list of practical tips when writing widgets. These are generally codin
 
 ### Avoid imperative style
 
-Check the [functional programming section](Coding-style#functional-programming).
+Check the [functional programming section](#functional-programming).
 
 ### Avoid writing functions to return widgets
 
