@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -20,6 +19,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -109,6 +109,14 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       enableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
+        EngineDepth(
+          eval: ref
+              .watch(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId))
+              .value
+              ?.currentNode
+              .currentClientEval(ref),
+        ),
+
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         AppBarIconButton(
           onPressed: () {
@@ -166,6 +174,8 @@ class _Body extends ConsumerWidget {
         final currentNode = state.currentNode;
         final pov = state.pov;
 
+        final eval = currentNode.currentEval(ref);
+
         return AnalysisLayout(
           pov: pov,
           tabController: tabController,
@@ -191,6 +201,7 @@ class _Body extends ConsumerWidget {
                         ? EngineGauge(
                           displayMode: EngineGaugeDisplayMode.horizontal,
                           params: engineGaugeParams,
+                          eval: eval,
                         )
                         : Container(
                           clipBehavior: Clip.hardEdge,
@@ -198,6 +209,7 @@ class _Body extends ConsumerWidget {
                           child: EngineGauge(
                             displayMode: EngineGaugeDisplayMode.vertical,
                             params: engineGaugeParams,
+                            eval: eval,
                           ),
                         );
                   }
@@ -205,7 +217,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && numEvalLines > 0
                   ? EngineLines(
-                    localEval: currentNode.eval,
+                    eval: currentNode.currentClientEval(ref),
                     isGameOver: currentNode.position.isGameOver,
                     onTapMove:
                         ref
@@ -295,12 +307,10 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    final evalBestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
-
     final currentNode = broadcastAnalysisState.currentNode;
     final annotation = makeAnnotation(currentNode.nags);
 
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+    final bestMoves = currentNode.currentClientEval(ref)?.bestMoves;
 
     final sanMove = currentNode.sanMove;
 

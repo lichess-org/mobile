@@ -190,6 +190,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   EngineGauge(
                     params: widget.engineGauge!,
                     displayMode: EngineGaugeDisplayMode.vertical,
+                    eval: null,
                   ),
                 ] else if (widget.showEngineGaugePlaceholder) ...[
                   const SizedBox(width: kEvalGaugeSize + 4.0),
@@ -261,6 +262,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   child: EngineGauge(
                     params: widget.engineGauge!,
                     displayMode: EngineGaugeDisplayMode.horizontal,
+                    eval: null,
                   ),
                 )
               else if (widget.showEngineGaugePlaceholder)
