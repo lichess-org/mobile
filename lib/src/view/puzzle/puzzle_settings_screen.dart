@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -12,7 +13,9 @@ class PuzzleSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signedIn = ref.watch(authSessionProvider)?.user.id != null;
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+    final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
@@ -22,6 +25,14 @@ class PuzzleSettingsScreen extends ConsumerWidget {
             ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
           },
         ),
+        if (signedIn)
+          SwitchSettingTile(
+            title: Text(context.l10n.rated),
+            value: rated,
+            onChanged: (value) {
+              ref.read(puzzlePreferencesProvider.notifier).setRated(value);
+            },
+          ),
         PlatformListTile(
           title: const Text('Board settings'),
           trailing: const Icon(CupertinoIcons.chevron_right),
