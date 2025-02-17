@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
@@ -20,6 +21,10 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
     case 'study':
       final id = appLinkUri.pathSegments[1];
       return StudyScreen.buildRoute(context, StudyId(id));
+    case 'broadcast':
+      final id = appLinkUri.pathSegments[3];
+      final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
+      return BroadcastRoundScreenLoading.buildRoute(context, BroadcastRoundId(id), initialTab: tab);
     case 'training':
       final id = appLinkUri.pathSegments[1];
       return PuzzleScreen.buildRoute(

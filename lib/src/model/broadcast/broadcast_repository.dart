@@ -27,7 +27,7 @@ class BroadcastRepository {
     );
   }
 
-  Future<BroadcastRoundWithGames> getRound(BroadcastRoundId broadcastRoundId) {
+  Future<BroadcastRoundResponse> getRound(BroadcastRoundId broadcastRoundId) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slugs
@@ -137,10 +137,20 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastRoundWithGames _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
+BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
+  final groupName = pick(json, 'group', 'name').asStringOrNull();
+  final group = pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList();
+  final tournament = pick(json, 'tour').required();
   final round = pick(json, 'round').required();
   final games = pick(json, 'games').required();
-  return (round: _roundFromPick(round), games: _gamesFromPick(games));
+
+  return (
+    groupName: groupName,
+    group: group,
+    tournament: _tournamentDataFromPick(tournament),
+    round: _roundFromPick(round),
+    games: _gamesFromPick(games),
+  );
 }
 
 BroadcastRoundGames _gamesFromPick(RequiredPick pick) =>
