@@ -108,6 +108,7 @@ class PuzzleController extends _$PuzzleController {
       node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
+      hintShown: false,
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
@@ -127,6 +128,7 @@ class PuzzleController extends _$PuzzleController {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
+      state = state.copyWith(hintMove: null, hintSquares: null);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
@@ -208,12 +210,26 @@ class PuzzleController extends _$PuzzleController {
     });
   }
 
+  NormalMove solutionMove() {
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    return NormalMove.fromUci(solution);
+  }
+
+  void toggleHint() {
+    if (state.hintMove == null) {
+      final NormalMove move = solutionMove();
+      final ISet<Square>? possibleMoves = state.validMoves.get(move.from);
+      state = state.copyWith(hintShown: true, hintMove: move, hintSquares: possibleMoves);
+    } else {
+      state = state.copyWith(hintMove: null, hintSquares: null);
+    }
+  }
+
   void skipMove() {
     if (state.streak != null) {
       state = state.copyWith.streak!(hasSkipped: true);
-      final moveIndex = state.currentPath.size - state.initialPath.size;
-      final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(NormalMove.fromUci(solution));
+      onUserMove(solutionMove());
     }
   }
 
@@ -324,7 +340,7 @@ class PuzzleController extends _$PuzzleController {
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null,
+          rated: initialContext.userId != null && !state.hintShown,
         ),
       );
 
@@ -524,6 +540,9 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,
+    required bool hintShown,
+    NormalMove? hintMove,
+    ISet<Square>? hintSquares,
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,

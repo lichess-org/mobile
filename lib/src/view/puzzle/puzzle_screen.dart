@@ -269,6 +269,14 @@ class _Body extends ConsumerWidget {
                           dest: evalBestMove.to,
                         ),
                       ])
+                      : puzzleState.hintMove != null
+                      ? ISet([
+                        Circle(color: ShapeColor.green.color, orig: puzzleState.hintMove!.from),
+                      ]).addAll(
+                        puzzleState.hintSquares!
+                            .map((square) => Circle(color: ShapeColor.blue.color, orig: square))
+                            .toList(),
+                      )
                       : null,
               engineGauge:
                   puzzleState.isEngineEnabled
@@ -361,6 +369,17 @@ class _BottomBar extends ConsumerWidget {
           _DifficultySelector(
             initialPuzzleContext: initialPuzzleContext,
             ctrlProvider: ctrlProvider,
+          ),
+        if (puzzleState.mode != PuzzleMode.view)
+          BottomBarButton(
+            icon: Icons.info,
+            label: context.l10n.getAHint,
+            showLabel: true,
+            highlighted: puzzleState.hintMove != null,
+            onTap:
+                puzzleState.canViewSolution
+                    ? () => ref.read(ctrlProvider.notifier).toggleHint()
+                    : null,
           ),
         if (puzzleState.mode != PuzzleMode.view)
           BottomBarButton(
