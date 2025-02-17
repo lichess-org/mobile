@@ -159,7 +159,7 @@ class BroadcastPreview extends ConsumerWidget {
           final playingSide = Setup.parseFen(game.fen).turn;
 
           return ObservedBoardThumbnail(
-            boardKey: Key('Board-$index'),
+            boardKey: ValueKey(game.id),
             roundId: roundId,
             game: game,
             title: title,
