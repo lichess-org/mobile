@@ -67,7 +67,7 @@ dependencies:
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.0.2
-  sqflite: ^2.2.5
+  sqflite: ^2.4.2
   stockfish:
     git:
       url: https://github.com/lichess-org/dart-stockfish.git
