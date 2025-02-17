@@ -53,6 +53,11 @@ Future<BroadcastTournament> broadcastTournament(
 }
 
 @riverpod
+Future<BroadcastRoundResponse> broadcastRound(Ref ref, BroadcastRoundId roundId) {
+  return ref.withClient((client) => BroadcastRepository(client).getRound(roundId));
+}
+
+@riverpod
 Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
   Ref ref,
   BroadcastTournamentId tournamentId,
