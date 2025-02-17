@@ -236,10 +236,8 @@ class _BodyState extends ConsumerState<_Body> {
                 AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
                   context,
                   ref,
-                  game: value.$1,
+                  gameId: widget.gameData!.id,
                   orientation: value.$1.youAre ?? Side.white,
-                  currentGamePosition: value.$1.positionAt(value.$2),
-                  lastMove: value.$1.moveAt(value.$2),
                 ),
                 _ => [],
               }),

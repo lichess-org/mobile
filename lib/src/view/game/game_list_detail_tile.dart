@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -39,7 +38,13 @@ class GameListDetailTile extends StatelessWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    final dateStyle = TextStyle(color: textShade(context, Styles.subtitleOpacity), fontSize: 13);
+    final dateStyle = TextStyle(
+      color: textShade(context, 0.5),
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.2,
+      height: 1,
+    );
 
     return AdaptiveInkWell(
       onLongPress: () {
@@ -101,24 +106,34 @@ class GameListDetailTile extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    WidgetSpan(
-                                      child: Icon(game.perf.icon, color: dateStyle.color, size: 15),
-                                    ),
-                                    TextSpan(
-                                      text: ' ${relativeDate(context.l10n, game.lastMoveAt)}',
-                                      style: dateStyle,
-                                    ),
-                                  ],
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    relativeDate(context.l10n, game.lastMoveAt).toUpperCase(),
+                                    style: dateStyle,
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (me.analysis != null) ...[
+                                        Icon(
+                                          CupertinoIcons.chart_bar_alt_fill,
+                                          size: 15,
+                                          color: dateStyle.color,
+                                        ),
+                                        const SizedBox(width: 2),
+                                      ],
+                                      Icon(game.perf.icon, size: 15, color: dateStyle.color),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 2),
                               UserFullNameWidget(
                                 user: opponent.user,
                                 rating: opponent.rating,
-                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
@@ -167,10 +182,7 @@ class GameListDetailTile extends StatelessWidget {
                             ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _Opening(opening: game.opening),
-                              _ComputerAnalysisResult(analysis: me.analysis),
-                            ],
+                            children: [_Opening(opening: game.opening)],
                           ),
                         ],
                       ),
@@ -198,37 +210,13 @@ class _Opening extends StatelessWidget {
     return opening != null
         ? Text(
           opening!.name,
-          maxLines: 2,
+          maxLines: 3,
           style: TextStyle(
             color: textShade(context, Styles.subtitleOpacity),
             fontSize: _kSubtitleFontSize,
+            height: 1.1,
           ),
           overflow: TextOverflow.ellipsis,
-        )
-        : const SizedBox.shrink();
-  }
-}
-
-class _ComputerAnalysisResult extends StatelessWidget {
-  const _ComputerAnalysisResult({required this.analysis});
-
-  final PlayerAnalysis? analysis;
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = TextStyle(color: textShade(context, 0.6), fontSize: _kSubtitleFontSize);
-
-    return analysis != null
-        ? Row(
-          children: [
-            Icon(CupertinoIcons.chart_bar_alt_fill, size: 14, color: textShade(context, 0.5)),
-            const SizedBox(width: 5),
-            Text(
-              context.l10n.computerAnalysisAvailable,
-              style: textStyle,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
         )
         : const SizedBox.shrink();
   }

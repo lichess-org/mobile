@@ -1,8 +1,7 @@
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart' show AppLocalizations;
 
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'player.freezed.dart';
 part 'player.g.dart';
@@ -40,18 +39,16 @@ class Player with _$Player {
   bool get isAI => aiLevel != null;
 
   /// Returns the name of the player, including title if available
-  String fullName(BuildContext context) {
-    final displayName = this.displayName(context);
+  String fullName(AppLocalizations l10n) {
+    final displayName = this.displayName(l10n);
     return user?.title != null ? '${user!.title} $displayName' : displayName;
   }
 
   /// Returns the name of the player, without title
-  String displayName(BuildContext context) =>
+  String displayName(AppLocalizations l10n) =>
       user?.name ??
       name ??
-      (aiLevel != null
-          ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
-          : context.l10n.anonymous);
+      (aiLevel != null ? l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString()) : l10n.anonymous);
 
   Player setOnGame(bool onGame) {
     final isOnGame = onGame || isAI;

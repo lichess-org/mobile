@@ -67,8 +67,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   ///
   /// Currently, those endpoints are supported:
   /// - GET /api/mobile/my-games
-  /// - player game socket (/play/<gameFullId>/v6) 'full' event
-  /// - watcher game socket (/watch/<gameId>/<side>/v6) 'full' event
+  /// - player game socket (/play/:gameFullId/v6) 'full' event
+  /// - watcher game socket (/watch/:gameId/:side/v6) 'full' event
   factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());
   }

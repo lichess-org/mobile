@@ -284,7 +284,6 @@ class _GameMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
-    final isGamePlayableAsync = ref.watch(isGamePlayableProvider(gameId));
 
     return MenuAnchor(
       crossAxisUnconstrained: false,
@@ -327,18 +326,18 @@ class _GameMenu extends ConsumerWidget {
               () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
           gameListContext: gameListContext,
         ),
-        if (isGamePlayableAsync.valueOrNull == false)
-          ...(switch (ref.watch(gameControllerProvider(gameId))) {
-            AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
-              context,
-              ref,
-              game: value.game,
-              orientation: value.game.youAre ?? Side.white,
-              currentGamePosition: value.game.positionAt(value.stepCursor),
-              lastMove: value.game.moveAt(value.stepCursor),
-            ),
-            _ => [],
-          }),
+        ...(switch (ref.watch(gameShareDataProvider(gameId))) {
+          AsyncData(:final value) =>
+            value.finished
+                ? makeFinishedGameShareMenuItemButtons(
+                  context,
+                  ref,
+                  gameId: gameId.gameId,
+                  orientation: value.pov ?? Side.white,
+                )
+                : [],
+          _ => [],
+        }),
       ],
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -13,10 +14,10 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
@@ -96,22 +97,47 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
-    final displayMode = ref.watch(
-      gameHistoryPreferencesProvider.select((value) => value.displayMode),
-    );
-    final displayModeButton = AppBarIconButton(
-      icon: const Icon(Icons.list_outlined),
-      semanticsLabel: 'Switch view',
-      onPressed:
-          () => showChoicePicker<GameHistoryDisplayMode>(
-            context,
-            choices: GameHistoryDisplayMode.values,
-            selectedItem: displayMode,
-            labelBuilder: (choice) => Text(displayModeL10n(context, choice)),
-            onSelectedItemChanged:
-                (choice) =>
-                    ref.read(gameHistoryPreferencesProvider.notifier).setDisplayMode(choice),
+    final displayModeButton = MenuAnchor(
+      crossAxisUnconstrained: false,
+      style: MenuStyle(
+        maximumSize: WidgetStatePropertyAll(
+          Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
+        ),
+      ),
+      builder:
+          (context, controller, _) => AppBarIconButton(
+            icon: const Icon(Icons.more_horiz),
+            semanticsLabel: context.l10n.menu,
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
           ),
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.ballot_outlined),
+          semanticsLabel: 'Detailed view',
+          child: const Text('Detailed view'),
+          onPressed: () {
+            ref
+                .read(gameHistoryPreferencesProvider.notifier)
+                .setDisplayMode(GameHistoryDisplayMode.detail);
+          },
+        ),
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.list_outlined),
+          semanticsLabel: 'Compact view',
+          child: const Text('Compact view'),
+          onPressed: () {
+            ref
+                .read(gameHistoryPreferencesProvider.notifier)
+                .setDisplayMode(GameHistoryDisplayMode.compact);
+          },
+        ),
+      ],
     );
 
     return PlatformScaffold(
@@ -196,6 +222,10 @@ class _BodyState extends ConsumerState<_Body> {
       data: (state) {
         final list = state.gameList;
 
+        final displayMode = ref.watch(
+          gameHistoryPreferencesProvider.select((value) => value.displayMode),
+        );
+
         return list.isEmpty
             ? const Padding(
               padding: EdgeInsets.symmetric(vertical: 32.0),
@@ -206,7 +236,11 @@ class _BodyState extends ConsumerState<_Body> {
               separatorBuilder:
                   (context, index) =>
                       Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                          ? PlatformDivider(
+                            height: 1,
+                            cupertinoHasLeading: true,
+                            indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
+                          )
                           : const SizedBox.shrink(),
               itemCount: list.length + (state.isLoading ? 1 : 0),
               itemBuilder: (context, index) {
@@ -224,6 +258,7 @@ class _BodyState extends ConsumerState<_Body> {
                 }
 
                 final game = list[index].game;
+                final pov = list[index].pov;
 
                 Future<void> onPressedBookmark(BuildContext context) async {
                   try {
@@ -241,10 +276,6 @@ class _BodyState extends ConsumerState<_Body> {
                     }
                   }
                 }
-
-                final displayMode = ref.watch(
-                  gameHistoryPreferencesProvider.select((value) => value.displayMode),
-                );
 
                 final item = list[index];
                 final gameTile = switch (displayMode) {
@@ -267,11 +298,41 @@ class _BodyState extends ConsumerState<_Body> {
 
                 return isLoggedIn
                     ? Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
+                      startActionPane: ActionPane(
+                        motion: const StretchMotion(),
                         children: [
                           SlidableAction(
-                            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                            backgroundColor: ColorScheme.of(context).surfaceContainer,
+                            onPressed:
+                                game.variant.isReadSupported
+                                    ? (_) {
+                                      Navigator.of(context).push(
+                                        AnalysisScreen.buildRoute(
+                                          context,
+                                          AnalysisOptions(orientation: pov, gameId: game.id),
+                                        ),
+                                      );
+                                    }
+                                    : (_) {
+                                      showPlatformSnackbar(
+                                        context,
+                                        'This variant is not supported yet.',
+                                        type: SnackBarType.info,
+                                      );
+                                    },
+                            icon: Icons.biotech,
+                            label: context.l10n.gameAnalysis,
+                          ),
+                        ],
+                      ),
+                      endActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            backgroundColor:
+                                game.isBookmarked
+                                    ? context.lichessColors.error
+                                    : context.lichessColors.good,
                             onPressed: onPressedBookmark,
                             icon:
                                 game.isBookmarked

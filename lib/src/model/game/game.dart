@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart' show AppLocalizations;
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -73,6 +74,9 @@ abstract mixin class BaseGame {
           : white;
 
   Position get lastPosition;
+
+  String shareTitle(AppLocalizations l10n) =>
+      '${meta.perf.title} • ${l10n.resVsX(white.fullName(l10n), black.fullName(l10n))}';
 
   Side? playerSideOf(UserId id) {
     if (white.user?.id == id) {

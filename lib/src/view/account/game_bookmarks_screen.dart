@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -110,6 +112,7 @@ class _BodyState extends ConsumerState<_Body> {
                 }
 
                 final game = list[index].game;
+                final pov = list[index].pov;
 
                 Future<void> onRemoveBookmark(BuildContext context) async {
                   try {
@@ -139,11 +142,38 @@ class _BodyState extends ConsumerState<_Body> {
                 );
 
                 return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        backgroundColor: ColorScheme.of(context).surfaceContainer,
+                        onPressed:
+                            game.variant.isReadSupported
+                                ? (_) {
+                                  Navigator.of(context).push(
+                                    AnalysisScreen.buildRoute(
+                                      context,
+                                      AnalysisOptions(orientation: pov, gameId: game.id),
+                                    ),
+                                  );
+                                }
+                                : (_) {
+                                  showPlatformSnackbar(
+                                    context,
+                                    'This variant is not supported yet.',
+                                    type: SnackBarType.info,
+                                  );
+                                },
+                        icon: Icons.biotech,
+                        label: context.l10n.gameAnalysis,
+                      ),
+                    ],
+                  ),
                   endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                        backgroundColor: context.lichessColors.error,
                         onPressed: onRemoveBookmark,
                         icon: Icons.bookmark_remove_outlined,
                         label: 'Unbookmark',

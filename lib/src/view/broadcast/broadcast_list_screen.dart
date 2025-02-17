@@ -436,8 +436,10 @@ class BroadcastListTile extends StatelessWidget {
                     Text(
                       relativeDate(context.l10n, broadcast.round.startsAt!).toUpperCase(),
                       style: TextStyle(
-                        color: textShade(context, 0.6),
-                        fontWeight: FontWeight.bold,
+                        color: textShade(context, 0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
                         height: 1,
                       ),
                     ),

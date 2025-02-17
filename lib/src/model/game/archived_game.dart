@@ -56,7 +56,7 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
   /// Create an archived game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
-  /// - GET /game/export/<id>
+  /// - GET /game/export/:id
   factory ArchivedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
@@ -72,7 +72,7 @@ typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
 ///
 /// This is commonly used to display a list of games.
 /// Lichess endpoints that return this data:
-/// - GET /api/games/user/<userId>
+/// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
 class LightArchivedGame with _$LightArchivedGame {

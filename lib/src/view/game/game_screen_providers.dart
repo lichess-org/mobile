@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -75,8 +76,12 @@ Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
 }
 
 @riverpod
-Future<bool> isGamePlayable(Ref ref, GameFullId gameId) {
-  return ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.playable));
+Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
+  return ref.watch(
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
+  );
 }
 
 @riverpod

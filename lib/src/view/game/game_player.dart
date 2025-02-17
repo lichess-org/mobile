@@ -109,7 +109,7 @@ class GamePlayer extends StatelessWidget {
               ],
               Flexible(
                 child: Text(
-                  player.displayName(context),
+                  player.displayName(context.l10n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
                 ),
