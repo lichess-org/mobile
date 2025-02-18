@@ -65,6 +65,7 @@
                 <data android:path="/streak" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
+                <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
                 <!-- Either game or challenge -->
                 <data android:pathPattern="/........" />

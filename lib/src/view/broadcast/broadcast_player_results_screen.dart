@@ -12,10 +12,65 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+
+class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final String playerId;
+  final String? playerTitle;
+  final String playerName;
+
+  const BroadcastPlayerResultsScreenLoading(
+    this.roundId,
+    this.playerId, {
+    required this.playerName,
+    this.playerTitle,
+  });
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastRoundId roundId,
+    String playerId, {
+    String? playerTitle,
+    required String playerName,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastPlayerResultsScreenLoading(
+        roundId,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournamentId = ref.watch(broadcastTournamentIdProvider(roundId));
+
+    return switch (tournamentId) {
+      AsyncData(:final value) => BroadcastPlayerResultsScreen(
+        value,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+      AsyncError(:final error) => PlatformScaffold(
+        appBarTitle: const Text(''),
+        body: Center(child: Text('Cannot load round data: $error')),
+      ),
+      _ => const PlatformScaffold(
+        appBarTitle: Text(''),
+        body: Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
+  }
+}
 
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
