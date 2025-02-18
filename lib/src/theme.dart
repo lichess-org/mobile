@@ -177,9 +177,9 @@ const kSliderTheme = SliderThemeData(
     listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
     cardTheme: isIOS ? const CardTheme(elevation: 0, margin: EdgeInsets.zero) : null,
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
+      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
-    dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
+    dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
     menuTheme:
         isIOS
             ? _makeCupertinoMenuThemeData(
