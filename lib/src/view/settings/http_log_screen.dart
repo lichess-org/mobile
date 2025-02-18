@@ -15,45 +15,31 @@ class HttpLogScreen extends ConsumerWidget {
     return buildScreenRoute(context, screen: const HttpLogScreen(), title: 'HTTP Logs');
   }
 
-  static const _pageSize = 20;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(httpLogsNotifierProvider);
     return PlatformScaffold(
       appBar: const PlatformAppBar(title: Text('HTTP Logs')),
-      body: ListView.builder(itemBuilder: (context, index) => itemBuilder(context, index, ref)),
+      body: switch (state) {
+        final InitialHttpLogsState _ => const Center(child: Text('Loading...')),
+        final ErrorHttpLogsState error => Center(child: Text('Error: ${error.error}')),
+        final DataHttpLogsState data => _HttpLogList(logs: data.httpLogs.toList()),
+        final LoadingHttpLogsState loading => _HttpLogList(logs: loading.httpLogs.toList()),
+      },
     );
   }
+}
 
-  /// Builds the item widget for the ListView.
-  ///
-  /// This method fetches the HTTP logs data asynchronously and builds the
-  /// corresponding widget based on the current index.
-  Widget? itemBuilder(BuildContext context, int index, WidgetRef ref) {
-    // Calculate the current page and the index within that page.
-    final page = index ~/ _pageSize + 1;
-    final indexInPage = index % _pageSize;
+class _HttpLogList extends StatelessWidget {
+  const _HttpLogList({super.key, required this.logs});
 
-    // Watch the HTTP logs provider for the current page.
-    final responseAsync = ref.watch(httpLogsProvider(page: page, limit: _pageSize));
+  final List<HttpLog> logs;
 
-    // Handle the different states of the asynchronous response.
-    return responseAsync.when(
-      // If there's an error, display the error message.
-      error: (err, stack) => Text(err.toString()),
-      // While loading, display a loading message.
-      loading: () => const Text('Loading...'),
-      // When data is available, build the corresponding widget.
-      data: (response) {
-        // If the index is out of bounds, return a message or null.
-        if (indexInPage >= response.length) {
-          return index == 0 ? const Center(child: Text('No logs')) : null;
-        }
-        // Get the HTTP log for the current index.
-        final httpLog = response[indexInPage];
-        // Display the HTTP log details.
-        return HttpLogTile(httpLog: httpLog);
-      },
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (context, index) => HttpLogTile(httpLog: logs[index]),
+      itemCount: logs.length,
     );
   }
 }

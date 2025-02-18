@@ -95,8 +95,7 @@ Client loggingClient(Ref ref) {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
       httpLogStorage.save(
         HttpLog(
-          // FIXME use hashCode??
-          httpLogId: request.hashCode.toString(),
+          requestHashCode: request.hashCode.toString(),
           lastModified: DateTime.now(),
           requestMethod: request.method,
           requestUrl: request.url.toString(),
@@ -107,8 +106,7 @@ Client loggingClient(Ref ref) {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
       httpLogStorage.save(
         HttpLog(
-          // FIXME use hashCode??
-          httpLogId: response.request!.hashCode.toString(),
+          requestHashCode: response.request!.hashCode.toString(),
           lastModified: DateTime.now(),
           requestMethod: response.request!.method,
           requestUrl: response.request!.url.toString(),

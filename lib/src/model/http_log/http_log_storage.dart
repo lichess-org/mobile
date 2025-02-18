@@ -1,10 +1,12 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 part 'http_log_storage.g.dart';
+part 'http_log_storage.freezed.dart';
 
 /// Provides an instance of [HttpLogStorage] using Riverpod.
 @Riverpod(keepAlive: true)
@@ -21,61 +23,56 @@ class HttpLogStorage {
   final Database _db;
 
   /// Retrieves a paginated list of [HttpLog] entries from the database.
-  Future<IList<HttpLog>> page({int offset = 0, int limit = 100}) async {
-    final list = await _db.query(kHttpLogStorageTable, limit: limit, offset: offset);
-    return list.map(HttpLog.fromMap).toIList();
+  Future<HttpLogs> page({int? cursor, int limit = 100}) async {
+    final res = await _db.query(
+      kHttpLogStorageTable,
+      limit: limit + 1,
+      orderBy: 'httpLogId DESC',
+      where: cursor != null ? 'httpLogId <= $cursor' : null,
+    );
+    final items = res.map(HttpLog.fromJson).toList();
+    final next = items.elementAtOrNull(limit);
+    items.remove(next);
+    return HttpLogs(items: items.toIList(), next: next?.httpLogId);
   }
 
   /// Saves an [HttpLog] entry to the database.
   Future<void> save(HttpLog httpLog) async {
     await _db.insert(
       kHttpLogStorageTable,
-      httpLog.toMap(),
+      httpLog.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }
 
 /// Represents an HTTP log entry.
-class HttpLog {
-  final String httpLogId;
-  final DateTime lastModified;
-  final String requestMethod;
-  final String requestUrl;
-  final int? responseCode;
-  final String? responseBody;
+@Freezed(fromJson: true, toJson: true)
+class HttpLog with _$HttpLog {
+  const factory HttpLog({
+   int? httpLogId,
+   required String requestHashCode,
+   required String requestMethod,
+   required String requestUrl,
+   int? responseCode,
+   String? responseBody,
+   required DateTime lastModified,
+  }) = _HttpLog;
 
-  /// Creates an instance of [HttpLog].
-  HttpLog({
-    required this.httpLogId,
-    required this.lastModified,
-    required this.requestMethod,
-    required this.requestUrl,
-    this.responseCode,
-    this.responseBody,
-  });
+  factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
+}
 
-  /// Creates an [HttpLog] from a map.
-  factory HttpLog.fromMap(Map<String, dynamic> map) {
-    return HttpLog(
-      httpLogId: map['httpLogId'].toString(),
-      requestMethod: map['requestMethod'] as String,
-      requestUrl: map['requestUrl'] as String,
-      responseCode: map['responseCode'] as int?,
-      responseBody: map['responseBody'] as String?,
-      lastModified: DateTime.parse(map['lastModified'] as String),
-    );
-  }
+/// A class representing a collection of HTTP logs.
+///
+/// The `HttpLogs` class contains the following properties:
+/// - `items`: A required list of `HttpLog` items.
+/// - `next`: An optional integer representing the next cursor.
+@Freezed(fromJson: true, toJson: true)
+class HttpLogs with _$HttpLogs {
+  const factory HttpLogs({
+    required IList<HttpLog> items,
+    required int? next,
+  }) = _HttpLogs;
 
-  /// Converts the [HttpLog] to a map.
-  Map<String, dynamic> toMap() {
-    return {
-      'httpLogId': httpLogId,
-      'requestMethod': requestMethod,
-      'requestUrl': requestUrl,
-      'responseCode': responseCode,
-      'responseBody': responseBody,
-      'lastModified': lastModified.toIso8601String(),
-    };
-  }
+  factory HttpLogs.fromJson(Map<String, dynamic> json) => _$HttpLogsFromJson(json);
 }
