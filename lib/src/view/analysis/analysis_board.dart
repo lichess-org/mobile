@@ -63,6 +63,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
               bestMoves,
               currentNode.position.turn,
               boardPrefs.pieceSet.assets,
+              boardPrefs.shapeColor.color,
             )
             : ISet();
 

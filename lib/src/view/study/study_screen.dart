@@ -529,6 +529,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
               bestMoves,
               currentNode.position!.turn,
               boardPrefs.pieceSet.assets,
+              boardPrefs.shapeColor.color,
             )
             : ISet();
 
