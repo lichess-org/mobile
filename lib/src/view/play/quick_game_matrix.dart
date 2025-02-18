@@ -150,7 +150,7 @@ class _ChoiceChip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: DefaultTextStyle.merge(
               style: TextStyle(
-                color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.6),
+                color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.8),
               ),
               child: Center(child: label),
             ),
