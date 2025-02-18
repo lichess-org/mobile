@@ -260,30 +260,23 @@ class _Body extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                 },
               ),
-              shapes: puzzleState.isEngineEnabled && evalBestMove != null
-                  ? ISet([
-                      Arrow(
-                        color: const Color(0x40003088),
-                        orig: evalBestMove.from,
-                        dest: evalBestMove.to,
-                      ),
-                    ])
-                  : puzzleState.showHint && puzzleState.hintMove != null
+              shapes:
+                  puzzleState.isEngineEnabled && evalBestMove != null
                       ? ISet([
-                          Circle(
-                            color: const Color(0x40003088),
-                            orig: puzzleState.hintMove!.from,
-                          ),
-                        ]).addAll(
-                          puzzleState.hintPossibleMoves!
-                              .map(
-                                (i) => Circle(
-                                  color: const Color(0x40003088),
-                                  orig: i,
-                                ),
-                              )
-                              .toList(),
-                        )
+                        Arrow(
+                          color: const Color(0x40003088),
+                          orig: evalBestMove.from,
+                          dest: evalBestMove.to,
+                        ),
+                      ])
+                      : puzzleState.showHint && puzzleState.hintMove != null
+                      ? ISet([
+                        Circle(color: const Color(0xFF3A5643), orig: puzzleState.hintMove!.from),
+                      ]).addAll(
+                        puzzleState.hintPossibleMoves!
+                            .map((i) => Circle(color: const Color(0x40003088), orig: i))
+                            .toList(),
+                      )
                       : null,
               engineGauge:
                   puzzleState.isEngineEnabled

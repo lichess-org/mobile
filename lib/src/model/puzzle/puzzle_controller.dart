@@ -218,8 +218,7 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void toggleHint() {
-    final hintShown = true;
-    state = state.copyWith(hintShown: hintShown);
+    state = state.copyWith(hintShown: true);
     final showHint = !state.showHint;
     state = state.copyWith(showHint: showHint);
     if (state.showHint) {
