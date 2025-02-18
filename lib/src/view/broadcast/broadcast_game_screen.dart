@@ -312,6 +312,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
               bestMoves,
               currentNode.position.turn,
               boardPrefs.pieceSet.assets,
+              boardPrefs.shapeColor.color,
             )
             : ISet();
 
