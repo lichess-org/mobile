@@ -148,11 +148,11 @@ const kSliderTheme = SliderThemeData(
     brightness: Brightness.dark,
     textTheme: cupertinoTextTheme(baseTheme.colorScheme),
     scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.5),
+    barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.6),
     applyThemeToAll: true,
   );
 
-  final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.25;
+  final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.3;
 
   final theme = baseTheme.copyWith(
     colorScheme: baseTheme.colorScheme.copyWith(
