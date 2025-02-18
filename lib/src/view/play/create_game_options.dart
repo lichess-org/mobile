@@ -17,7 +17,8 @@ class CreateGameOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return Column(
       children: [
@@ -66,23 +67,35 @@ class CreateGameOptions extends ConsumerWidget {
 }
 
 class _Section extends StatelessWidget {
-  const _Section({required this.children});
+  const _Section({
+    required this.children,
+  });
 
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? ListSection(hasLeading: true, children: children)
+        ? ListSection(
+            hasLeading: true,
+            children: children,
+          )
         : Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
-        );
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: children,
+            ),
+          );
   }
 }
 
 class _CreateGamePlatformButton extends StatelessWidget {
-  const _CreateGamePlatformButton({required this.icon, required this.label, required this.onTap});
+  const _CreateGamePlatformButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   final IconData icon;
 
