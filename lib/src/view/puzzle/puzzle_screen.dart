@@ -273,12 +273,8 @@ class _Body extends ConsumerWidget {
                       ])
                       : puzzleState.hintMove != null
                       ? ISet([
-                        Circle(color: ShapeColor.green.color, orig: puzzleState.hintMove!.from),
-                      ]).addAll(
-                        puzzleState.hintSquares!
-                            .map((square) => Circle(color: ShapeColor.blue.color, orig: square))
-                            .toList(),
-                      )
+                        Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!.from),
+                      ])
                       : null,
               engineGauge:
                   puzzleState.isEngineEnabled
