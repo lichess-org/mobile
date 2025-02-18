@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
-const _kMatrixSpacing = 4.0;
+const _kMatrixSpacing = 8.0;
 
 class QuickGameMatrix extends StatelessWidget {
   const QuickGameMatrix();
@@ -124,39 +124,36 @@ class _SectionChoices extends ConsumerWidget {
   }
 }
 
-class _ChoiceChip extends StatefulWidget {
+class _ChoiceChip extends StatelessWidget {
   const _ChoiceChip({required this.label, this.speed, required this.onTap, super.key});
 
   final Widget label;
   final Speed? speed;
   final void Function()? onTap;
 
-  @override
-  State<_ChoiceChip> createState() => _ChoiceChipState();
-}
-
-class _ChoiceChipState extends State<_ChoiceChip> {
   static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
   Widget build(BuildContext context) {
     final bgColor =
-        Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surfaceContainer;
+        Theme.of(context).brightness == Brightness.dark ? Colors.white10 : const Color(0xCCFFFFFF);
 
     return Opacity(
-      opacity: widget.onTap != null ? 1.0 : 0.5,
+      opacity: onTap != null ? 1.0 : 0.5,
       child: Container(
-        decoration: BoxDecoration(
-          color: bgColor.withValues(alpha: 0.7),
-          borderRadius: _kBorderRadius,
-        ),
+        decoration: BoxDecoration(color: bgColor, borderRadius: _kBorderRadius),
         child: AdaptiveInkWell(
           borderRadius: _kBorderRadius,
-          onTap: widget.onTap,
-          splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+          onTap: onTap,
+          splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Center(child: widget.label),
+            child: DefaultTextStyle.merge(
+              style: TextStyle(
+                color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.6),
+              ),
+              child: Center(child: label),
+            ),
           ),
         ),
       ),
