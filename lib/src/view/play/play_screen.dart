@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
+import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class PlayScreen extends StatelessWidget {
+class PlayScreen extends ConsumerWidget {
   const PlayScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -15,15 +18,19 @@ class PlayScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playban = ref.watch(accountProvider).valueOrNull?.playban;
+
     return PlatformScaffold(
       appBarTitle: Text(context.l10n.play),
-      body: const SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            Padding(padding: Styles.horizontalBodyPadding, child: QuickGameButton()),
-            CreateGameOptions(),
+            if (playban != null)
+              Padding(padding: Styles.bodySectionPadding, child: PlaybanMessage(playban: playban)),
+            const Padding(padding: Styles.horizontalBodyPadding, child: QuickGameButton()),
+            const CreateGameOptions(),
           ],
         ),
       ),

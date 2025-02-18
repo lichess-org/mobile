@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/localizations.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -183,6 +184,8 @@ class NotificationService {
         _ref.read(correspondenceServiceProvider).onNotificationResponse(gameFullId);
       case ChallengeNotification(challenge: final challenge):
         _ref.read(challengeServiceProvider).onNotificationResponse(response.actionId, challenge);
+      case PlaybanNotification(playban: final playban):
+        _ref.read(accountServiceProvider).onPlaybanNotificationResponse(playban);
     }
   }
 

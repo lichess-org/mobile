@@ -7,6 +7,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -78,6 +79,7 @@ class _AppState extends ConsumerState<Application> {
     // Start services
     ref.read(notificationServiceProvider).start();
     ref.read(challengeServiceProvider).start();
+    ref.read(accountServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {

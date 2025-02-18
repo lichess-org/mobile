@@ -86,6 +86,7 @@ class User with _$User {
     bool? following,
     bool? blocking,
     bool? canChallenge,
+    bool? kid,
     TemporaryBan? playban,
   }) = _User;
 
@@ -122,6 +123,7 @@ class User with _$User {
       following: pick('following').asBoolOrNull(),
       blocking: pick('blocking').asBoolOrNull(),
       canChallenge: pick('canChallenge').asBoolOrNull(),
+      kid: pick('kid').asBoolOrNull(),
       playban: pick('playban').letOrNull((p) {
         return TemporaryBan(
           date: p('date').asDateTimeFromMillisecondsOrThrow(),
