@@ -56,6 +56,37 @@ void main() {
       expect(find.text('Players'), findsOneWidget);
     });
 
+    testWidgets('Check that the screen can be loaded from round id', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastRoundScreenLoading(roundId: BroadcastRoundId('S5VCwuVn')),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the broadcast data
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the tournament data
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the round data
+      await tester.pump();
+
+      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Boards'), findsOneWidget);
+      expect(find.text('Players'), findsOneWidget);
+    });
+
     testWidgets('Test boards tab with a finished tournament', variant: kPlatformVariant, (
       tester,
     ) async {
