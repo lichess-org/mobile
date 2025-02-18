@@ -108,6 +108,7 @@ class PuzzleController extends _$PuzzleController {
       node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
+      hintShown: false,
       showHint: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -217,6 +218,8 @@ class PuzzleController extends _$PuzzleController {
   }
 
   void toggleHint() {
+    final hintShown = true;
+    state = state.copyWith(hintShown: hintShown);
     final showHint = !state.showHint;
     state = state.copyWith(showHint: showHint);
     if (state.showHint) {
@@ -342,7 +345,7 @@ class PuzzleController extends _$PuzzleController {
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null,
+          rated: initialContext.userId != null && !state.hintShown,
         ),
       );
 
@@ -542,6 +545,7 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,
+    required bool hintShown,
     required bool showHint,
     NormalMove? hintMove,
     ISet<Square>? hintPossibleMoves,
