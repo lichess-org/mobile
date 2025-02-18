@@ -60,12 +60,15 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
     ]).then((_) => {});
   }
 
-  Future<void> setBackground({BackgroundTheme? backgroundTheme, BackgroundImage? backgroundImage}) {
+  Future<void> setBackground({
+    (BackgroundColor, bool)? backgroundColor,
+    BackgroundImage? backgroundImage,
+  }) {
     assert(
-      !(backgroundTheme != null && backgroundImage != null),
-      'Only one of backgroundTheme or backgroundImage should be set',
+      !(backgroundColor != null && backgroundImage != null),
+      'Only one of backgroundColor or backgroundImage should be set',
     );
-    return save(state.copyWith(backgroundTheme: backgroundTheme, backgroundImage: backgroundImage));
+    return save(state.copyWith(backgroundColor: backgroundColor, backgroundImage: backgroundImage));
   }
 }
 
@@ -91,7 +94,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     /// Locale to use in the app, use system locale if null
     @LocaleConverter() Locale? locale,
 
-    BackgroundTheme? backgroundTheme,
+    (BackgroundColor, bool)? backgroundColor,
     @BackgroundImageConverter() BackgroundImage? backgroundImage,
   }) = _GeneralPrefs;
 
@@ -108,7 +111,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     return _$GeneralPrefsFromJson(json);
   }
 
-  bool get isForcedDarkMode => backgroundTheme != null || backgroundImage != null;
+  bool get isForcedDarkMode => backgroundColor != null || backgroundImage != null;
 }
 
 enum AppThemeSeed {
@@ -145,26 +148,29 @@ enum SoundTheme {
   const SoundTheme(this.label);
 }
 
-enum BackgroundTheme {
-  blue(Color(0xFF4A5F70), 'Blue'),
-  indigo(Color(0xFF494D66), 'Indigo'),
-  green(Color(0xFF3A5643), 'Green'),
-  brown(Color(0xFF524446), 'Brown purple'),
-  gold(Color(0xFF725A3F), 'Gold'),
-  red(Color(0xFF693B42), 'Red'),
-  purple(Color(0xFF6D5070), 'Purple'),
-  lime(Color(0xFF585E35), 'Lime'),
-  sepia(Color(0xFF6A6761), 'Sepia');
+enum BackgroundColor {
+  blue(Color(0xff435665), 'Blue'),
+  indigo(Color(0xff42455c), 'Indigo'),
+  green(Color(0xff344d3c), 'Green'),
+  brown(Color(0xff4a3d3f), 'Brown'),
+  gold(Color(0xff675139), 'Gold'),
+  red(Color(0xff5f353b), 'Red'),
+  purple(Color(0xff624865), 'Purple'),
+  lime(Color(0xff4f5530), 'Lime'),
+  sepia(Color(0xff5f5d57), 'Sepia');
 
   final Color color;
   final String _label;
 
-  const BackgroundTheme(this.color, this._label);
+  const BackgroundColor(this.color, this._label);
 
-  String label(AppLocalizations l10n) => _label;
+  String label(AppLocalizations l10n, bool isDark) => '$_label${isDark ? ' dark' : ''}';
 
   /// The base theme for the background color.
   ThemeData get baseTheme => BackgroundImage.getTheme(color);
+
+  /// Darker version of the color by 20%.
+  Color get darker => Color.lerp(color, Colors.black, 0.3)!;
 }
 
 @freezed

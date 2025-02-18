@@ -49,7 +49,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
   }
 }
 
-const colorChoices = BackgroundTheme.values;
+const colorChoices = BackgroundColor.values;
 const itemsByRow = 3;
 
 class _Body extends ConsumerWidget {
@@ -166,21 +166,23 @@ class _Body extends ConsumerWidget {
                   onTap:
                       () => Navigator.of(context, rootNavigator: true)
                           .push(
-                            MaterialPageRoute<bool?>(
+                            MaterialPageRoute<(int, bool)?>(
                               builder:
                                   (_) => ConfirmColorBackgroundScreen(
                                     boardPrefs: boardPrefs,
-                                    color: t.color,
+                                    initialIndex: index,
                                   ),
                               fullscreenDialog: true,
                             ),
                           )
                           .then((value) {
                             if (context.mounted) {
-                              if (value == true) {
+                              if (value != null) {
+                                final (index, darken) = value;
+                                final selected = colorChoices[index];
                                 ref
                                     .read(generalPreferencesProvider.notifier)
-                                    .setBackground(backgroundTheme: t);
+                                    .setBackground(backgroundColor: (selected, darken));
                                 Navigator.pop(context);
                               }
                             }
@@ -197,16 +199,49 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class ConfirmColorBackgroundScreen extends StatelessWidget {
-  const ConfirmColorBackgroundScreen({required this.color, required this.boardPrefs, super.key});
+class ConfirmColorBackgroundScreen extends StatefulWidget {
+  const ConfirmColorBackgroundScreen({
+    required this.initialIndex,
+    required this.boardPrefs,
+    super.key,
+  });
 
-  final Color color;
+  final int initialIndex;
   final BoardPrefs boardPrefs;
 
   @override
+  State<ConfirmColorBackgroundScreen> createState() => _ConfirmColorBackgroundScreenState();
+}
+
+class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
+  bool darken = false;
+
+  late PageController _controller;
+
+  @override
+  void initState() {
+    _controller = PageController(initialPage: widget.initialIndex);
+    _controller.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final color =
+        colorChoices[(_controller.hasClients
+                ? _controller.page ?? widget.initialIndex
+                : widget.initialIndex)
+            .toInt()];
     return _BackgroundTheme(
-      baseTheme: BackgroundImage.getTheme(color),
+      baseTheme: BackgroundImage.getTheme(color.color),
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -217,7 +252,17 @@ class ConfirmColorBackgroundScreen extends StatelessWidget {
             final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
             return Stack(
               children: [
-                ColoredBox(color: color, child: const SizedBox.expand()),
+                PageView.builder(
+                  controller: _controller,
+                  itemBuilder: (context, index) {
+                    final backgroundTheme = colorChoices[index];
+                    return ColoredBox(
+                      color: darken ? backgroundTheme.darker : backgroundTheme.color,
+                      child: const SizedBox.expand(),
+                    );
+                  },
+                  itemCount: colorChoices.length,
+                ),
                 Positioned.fill(
                   child: IgnorePointer(
                     child: Align(
@@ -236,10 +281,49 @@ class ConfirmColorBackgroundScreen extends StatelessWidget {
                                   : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
-                          settings: boardPrefs.toBoardSettings(),
+                          settings: widget.boardPrefs.toBoardSettings(),
                         ),
                       ),
                     ),
+                  ),
+                ),
+                Positioned(
+                  top: MediaQuery.paddingOf(context).top + 26.0,
+                  left: orientation == Orientation.portrait ? 0 : null,
+                  right: 0,
+                  child: Center(
+                    child: PlatformCard(
+                      margin: const EdgeInsets.all(16.0),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      child: AdaptiveInkWell(
+                        onTap: () {
+                          setState(() {
+                            darken = !darken;
+                          });
+                        },
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(darken ? Icons.check_circle : Icons.circle_outlined, size: 16),
+                              const SizedBox(width: 6.0),
+                              const Text('Dark color', textAlign: TextAlign.center),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+                  left: orientation == Orientation.portrait ? 0 : null,
+                  right: 0,
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
                   ),
                 ),
               ],
@@ -253,7 +337,11 @@ class ConfirmColorBackgroundScreen extends StatelessWidget {
           ),
           AdaptiveTextButton(
             child: Text(context.l10n.accept),
-            onPressed: () => Navigator.pop(context, true),
+            onPressed:
+                () => Navigator.pop(
+                  context,
+                  _controller.hasClients ? (_controller.page!.toInt(), darken) : null,
+                ),
           ),
         ],
       ),

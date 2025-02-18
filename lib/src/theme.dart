@@ -30,13 +30,14 @@ const kSliderTheme = SliderThemeData(
 ) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-  if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
+  if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
     return _makeDefaultTheme(context, generalPrefs, boardPrefs, isIOS);
   } else {
     return _makeBackgroundImageTheme(
       context,
-      baseTheme: generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundTheme!.baseTheme,
-      seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundTheme!.color,
+      baseTheme:
+          generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
+      seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundColor!.$1.color,
       isIOS: isIOS,
       isBackgroundImage: generalPrefs.backgroundImage != null,
     );

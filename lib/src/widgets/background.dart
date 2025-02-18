@@ -35,9 +35,9 @@ class FullScreenBackground extends ConsumerWidget {
         appDocumentsDirectory: appDocumentsDirectory,
         child: child,
       );
-    } else if (generalPrefs.backgroundTheme != null) {
+    } else if (generalPrefs.backgroundColor != null) {
       return _FullScreenBackgroundColorTheme(
-        backgroundTheme: generalPrefs.backgroundTheme!,
+        backgroundColor: generalPrefs.backgroundColor!,
         child: child,
       );
     } else {
@@ -188,16 +188,17 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
 }
 
 class _FullScreenBackgroundColorTheme extends StatelessWidget {
-  const _FullScreenBackgroundColorTheme({required this.backgroundTheme, required this.child});
+  const _FullScreenBackgroundColorTheme({required this.backgroundColor, required this.child});
 
-  final BackgroundTheme backgroundTheme;
+  final (BackgroundColor, bool) backgroundColor;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final (color, isDark) = backgroundColor;
     return Stack(
       children: [
-        ColoredBox(color: backgroundTheme.color, child: const SizedBox.expand()),
+        ColoredBox(color: isDark ? color.darker : color.color, child: const SizedBox.expand()),
         Positioned.fill(child: child),
       ],
     );
