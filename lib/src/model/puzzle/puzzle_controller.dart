@@ -108,6 +108,7 @@ class PuzzleController extends _$PuzzleController {
       node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       canViewSolution: false,
+      showHint: false,
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
@@ -127,6 +128,7 @@ class PuzzleController extends _$PuzzleController {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
+      state = state.copyWith(showHint: false);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
@@ -206,6 +208,22 @@ class PuzzleController extends _$PuzzleController {
         });
       }
     });
+  }
+
+  NormalMove solutionMove() {
+    final moveIndex = state.currentPath.size - state.initialPath.size;
+    final solution = state.puzzle.puzzle.solution[moveIndex];
+    return NormalMove.fromUci(solution);
+  }
+
+  void toggleHint() {
+    final showHint = !state.showHint;
+    state = state.copyWith(showHint: showHint);
+    if (state.showHint) {
+      final NormalMove move = solutionMove();
+      final ISet<Square>? possibleMoves = state.validMoves.get(move.from);
+      state = state.copyWith(hintMove: move, hintPossibleMoves: possibleMoves);
+    }
   }
 
   void skipMove() {
@@ -524,6 +542,9 @@ class PuzzleState with _$PuzzleState {
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,
+    required bool showHint,
+    NormalMove? hintMove,
+    ISet<Square>? hintPossibleMoves,
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,

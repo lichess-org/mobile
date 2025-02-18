@@ -260,15 +260,30 @@ class _Body extends ConsumerWidget {
                   ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                 },
               ),
-              shapes:
-                  puzzleState.isEngineEnabled && evalBestMove != null
+              shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                  ? ISet([
+                      Arrow(
+                        color: const Color(0x40003088),
+                        orig: evalBestMove.from,
+                        dest: evalBestMove.to,
+                      ),
+                    ])
+                  : puzzleState.showHint && puzzleState.hintMove != null
                       ? ISet([
-                        Arrow(
-                          color: const Color(0x66003088),
-                          orig: evalBestMove.from,
-                          dest: evalBestMove.to,
-                        ),
-                      ])
+                          Circle(
+                            color: const Color(0x40003088),
+                            orig: puzzleState.hintMove!.from,
+                          ),
+                        ]).addAll(
+                          puzzleState.hintPossibleMoves!
+                              .map(
+                                (i) => Circle(
+                                  color: const Color(0x40003088),
+                                  orig: i,
+                                ),
+                              )
+                              .toList(),
+                        )
                       : null,
               engineGauge:
                   puzzleState.isEngineEnabled
@@ -365,6 +380,17 @@ class _BottomBar extends ConsumerWidget {
         if (puzzleState.mode != PuzzleMode.view)
           BottomBarButton(
             icon: Icons.help,
+            label: context.l10n.getAHint,
+            showLabel: true,
+            highlighted: puzzleState.showHint,
+            onTap:
+                puzzleState.canViewSolution
+                    ? () => ref.read(ctrlProvider.notifier).toggleHint()
+                    : null,
+          ),
+        if (puzzleState.mode != PuzzleMode.view)
+          BottomBarButton(
+            icon: Icons.info,
             label: context.l10n.viewTheSolution,
             showLabel: true,
             onTap:
