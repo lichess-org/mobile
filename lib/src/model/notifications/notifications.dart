@@ -161,6 +161,7 @@ sealed class LocalNotification {
   }
 }
 
+/// A notification show to the user when they are banned temporarily from playing.
 class PlaybanNotification extends LocalNotification {
   const PlaybanNotification(this.playban);
 
@@ -197,10 +198,9 @@ class PlaybanNotification extends LocalNotification {
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
     android: AndroidNotificationDetails(
       channelId,
-      l10n.weHadToTimeYouOutForAWhile,
+      'playban',
       importance: Importance.max,
       priority: Priority.max,
-      autoCancel: false,
     ),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
