@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' show Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -27,25 +28,36 @@ class AccountService {
   AccountService(this._ref);
 
   ProviderSubscription<AsyncValue<User?>>? _subscription;
-  DateTime? _lastPlaybanNotificationDate;
   final Ref _ref;
 
+  static const _storageKey = 'account.playban_notification_date';
+
   void start() {
+    final prefs = LichessBinding.instance.sharedPreferences;
+
     _subscription = _ref.listen(accountProvider, (_, account) {
       final playban = account.valueOrNull?.playban;
+      final storedDate = prefs.getString(_storageKey);
+      final lastPlaybanNotificationDate = storedDate != null ? DateTime.parse(storedDate) : null;
 
-      // TODO save date in prefs
-
-      if (playban != null && _lastPlaybanNotificationDate != playban.date) {
-        _lastPlaybanNotificationDate = playban.date;
+      if (playban != null && lastPlaybanNotificationDate != playban.date) {
+        _savePlaybanNotificationDate(playban.date);
         _ref.read(notificationServiceProvider).show(PlaybanNotification(playban));
-      } else if (playban == null && _lastPlaybanNotificationDate != null) {
+      } else if (playban == null && lastPlaybanNotificationDate != null) {
         _ref
             .read(notificationServiceProvider)
-            .cancel(_lastPlaybanNotificationDate!.toIso8601String().hashCode);
-        _lastPlaybanNotificationDate = null;
+            .cancel(lastPlaybanNotificationDate.toIso8601String().hashCode);
+        _clearPlaybanNotificationDate();
       }
     });
+  }
+
+  void _savePlaybanNotificationDate(DateTime date) {
+    LichessBinding.instance.sharedPreferences.setString(_storageKey, date.toIso8601String());
+  }
+
+  void _clearPlaybanNotificationDate() {
+    LichessBinding.instance.sharedPreferences.remove(_storageKey);
   }
 
   void dispose() {
