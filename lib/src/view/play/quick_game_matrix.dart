@@ -143,7 +143,11 @@ class _ChoiceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor =
-        Theme.of(context).brightness == Brightness.dark ? Colors.white10 : const Color(0xCCFFFFFF);
+        Theme.of(context).brightness == Brightness.dark
+            ? Colors.white10
+            : Theme.of(context).platform == TargetPlatform.iOS
+            ? Colors.white70
+            : ColorScheme.of(context).onSurface.withValues(alpha: 0.08);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,
