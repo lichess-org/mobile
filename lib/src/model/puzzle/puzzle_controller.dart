@@ -34,7 +34,6 @@ part 'puzzle_controller.g.dart';
 class PuzzleController extends _$PuzzleController {
   late Branch _gameTree;
   Timer? _firstMoveTimer;
-  Timer? _enableSolutionButtonTimer;
   Timer? _viewSolutionTimer;
   // on streak, we pre-load the next puzzle to avoid a delay when the user
   // completes the current one
@@ -51,7 +50,6 @@ class PuzzleController extends _$PuzzleController {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
-      _enableSolutionButtonTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
     });
@@ -86,11 +84,6 @@ class PuzzleController extends _$PuzzleController {
       _setPath(state.initialPath, firstMove: true);
     });
 
-    // enable solution button after 4 seconds
-    _enableSolutionButtonTimer = Timer(const Duration(seconds: 4), () {
-      state = state.copyWith(canViewSolution: true);
-    });
-
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     // preload next streak puzzle
@@ -111,7 +104,7 @@ class PuzzleController extends _$PuzzleController {
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
-      viewedSolutionRecently: false,
+      shouldBlinkNextArrow: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
@@ -176,13 +169,11 @@ class PuzzleController extends _$PuzzleController {
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
-    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
-    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void viewSolution() {
@@ -196,14 +187,11 @@ class PuzzleController extends _$PuzzleController {
 
     state = state.copyWith(mode: PuzzleMode.view);
 
-    Timer(const Duration(milliseconds: 800), () {
+    _viewSolutionTimer = Timer(const Duration(milliseconds: 800), () {
       _goToNextNode();
 
       if (state.canGoNext) {
-        state = state.copyWith(viewedSolutionRecently: true);
-        Timer(const Duration(seconds: 5), () {
-          state = state.copyWith(viewedSolutionRecently: false);
-        });
+        state = state.copyWith(shouldBlinkNextArrow: true);
       }
     });
   }
@@ -416,6 +404,7 @@ class PuzzleController extends _$PuzzleController {
       node: newNode,
       lastMove: sanMove.move,
       promotionMove: null,
+      shouldBlinkNextArrow: false,
     );
 
     if (pathChange) {
@@ -527,7 +516,7 @@ class PuzzleState with _$PuzzleState {
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
-    required bool viewedSolutionRecently,
+    required bool shouldBlinkNextArrow,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails

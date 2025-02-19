@@ -224,9 +224,6 @@ void main() {
 
       expect(find.text('Success!'), findsNothing);
       expect(find.text('Your turn'), findsOneWidget);
-
-      // await for view solution timer
-      await tester.pump(const Duration(seconds: 4));
     });
 
     for (final showRatings in ShowRatings.values) {
@@ -383,17 +380,29 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.text('Your turn'), findsOneWidget);
 
-      // await for first move to be played and view solution button to appear
-      await tester.pump(const Duration(seconds: 5));
+      // await for first move to be played
+      await tester.pump(const Duration(milliseconds: 1500));
 
       expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
+      // Help button should still be disabled
       expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(
+        tester
+            .firstWidget<BottomBarButton>(
+              find.ancestor(of: find.byIcon(Icons.help), matching: find.byType(BottomBarButton)),
+            )
+            .enabled,
+        isFalse,
+      );
+
+      // wait for the solution button to be enabled
+      await tester.pump(const Duration(seconds: 5));
+
       await tester.tap(find.byIcon(Icons.help));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
-      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
       expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
@@ -406,6 +415,9 @@ void main() {
             widget.enabled,
       );
       expect(nextMoveBtnEnabled, findsOneWidget);
+
+      // advance to next move of solution
+      await tester.tap(nextMoveBtnEnabled);
 
       expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
 
