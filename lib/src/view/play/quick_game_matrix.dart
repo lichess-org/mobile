@@ -25,6 +25,7 @@ class QuickGameMatrix extends ConsumerWidget {
     final brightness = Theme.of(context).brightness;
     final logoColor =
         brightness == Brightness.light ? const Color(0x0F000000) : const Color(0x80FFFFFF);
+    final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
 
     if (playban != null) {
       return PlaybanMessage(playban: playban);
@@ -36,13 +37,16 @@ class QuickGameMatrix extends ConsumerWidget {
         Text(context.l10n.quickPairing, style: Styles.sectionTitle),
         const SizedBox(height: 6.0),
         Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
-              image: const AssetImage('assets/images/logo-transp.png'),
-              fit: BoxFit.contain,
-            ),
-          ),
+          decoration:
+              scaffoldOpacity != 0
+                  ? BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
+                      image: const AssetImage('assets/images/logo-transp.png'),
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                  : null,
           child: const Column(
             children: [
               _SectionChoices(
@@ -142,9 +146,12 @@ class _ChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
     final bgColor =
         Theme.of(context).brightness == Brightness.dark
-            ? Colors.white10
+            ? scaffoldOpacity > 0
+                ? Colors.white10
+                : ColorScheme.of(context).surfaceContainerLow
             : Theme.of(context).platform == TargetPlatform.iOS
             ? Colors.white70
             : ColorScheme.of(context).onSurface.withValues(alpha: 0.08);

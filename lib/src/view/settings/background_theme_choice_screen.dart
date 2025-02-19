@@ -296,12 +296,12 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                       margin: const EdgeInsets.all(16.0),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: AdaptiveInkWell(
+                        borderRadius: const BorderRadius.all(Radius.circular(20)),
                         onTap: () {
                           setState(() {
                             darken = !darken;
                           });
                         },
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                           child: Row(
@@ -504,12 +504,12 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                   margin: const EdgeInsets.all(16.0),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   child: AdaptiveInkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                     onTap: () {
                       setState(() {
                         blur = !blur;
                       });
                     },
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Row(
