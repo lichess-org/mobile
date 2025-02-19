@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
@@ -20,6 +21,7 @@ class QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isPlayban = ref.watch(accountProvider).valueOrNull?.playban != null;
 
     return Row(
       children: [
@@ -71,7 +73,7 @@ class QuickGameButton extends ConsumerWidget {
                   ? CupertinoButton.tinted(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
                     onPressed:
-                        isOnline
+                        isOnline && !isPlayban
                             ? () {
                               Navigator.of(context, rootNavigator: true).push(
                                 GameScreen.buildRoute(
@@ -88,7 +90,7 @@ class QuickGameButton extends ConsumerWidget {
                   )
                   : FilledButton(
                     onPressed:
-                        isOnline
+                        isOnline && !isPlayban
                             ? () {
                               Navigator.of(context, rootNavigator: true).push(
                                 GameScreen.buildRoute(

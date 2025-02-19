@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -10,18 +11,24 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 const _kMatrixSpacing = 8.0;
 
-class QuickGameMatrix extends StatelessWidget {
+class QuickGameMatrix extends ConsumerWidget {
   const QuickGameMatrix();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playban = ref.watch(accountProvider).valueOrNull?.playban;
     final brightness = Theme.of(context).brightness;
     final logoColor =
         brightness == Brightness.light ? const Color(0x0F000000) : const Color(0x80FFFFFF);
+
+    if (playban != null) {
+      return PlaybanMessage(playban: playban);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

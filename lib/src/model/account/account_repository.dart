@@ -54,26 +54,6 @@ Future<IList<OngoingGame>> ongoingGames(Ref ref) async {
   );
 }
 
-@Riverpod(keepAlive: true)
-AccountService accountService(Ref ref) {
-  return AccountService(ref);
-}
-
-class AccountService {
-  const AccountService(this._ref);
-
-  final Ref _ref;
-
-  Future<void> setGameBookmark(GameId id, {required bool bookmark}) async {
-    final session = _ref.read(authSessionProvider);
-    if (session == null) return;
-
-    await _ref.withClient((client) => AccountRepository(client).bookmark(id, bookmark: bookmark));
-
-    _ref.invalidate(accountProvider);
-  }
-}
-
 class AccountRepository {
   AccountRepository(this.client);
 
@@ -81,7 +61,10 @@ class AccountRepository {
   final Logger _log = Logger('AccountRepository');
 
   Future<User> getProfile() {
-    return client.readJson(Uri(path: '/api/account'), mapper: User.fromServerJson);
+    return client.readJson(
+      Uri(path: '/api/account', queryParameters: {'playban': '1'}),
+      mapper: User.fromServerJson,
+    );
   }
 
   Future<void> saveProfile(Map<String, String> profile) async {

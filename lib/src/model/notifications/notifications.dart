@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:deep_pick/deep_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan;
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:meta/meta.dart';
 
 /// FCM Messages
@@ -150,10 +153,57 @@ sealed class LocalNotification {
         return CorresGameUpdateNotification.fromJson(json);
       case 'challenge':
         return ChallengeNotification.fromJson(json);
+      case 'playban':
+        return PlaybanNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
   }
+}
+
+/// A notification show to the user when they are banned temporarily from playing.
+class PlaybanNotification extends LocalNotification {
+  const PlaybanNotification(this.playban);
+
+  final TemporaryBan playban;
+
+  factory PlaybanNotification.fromJson(Map<String, dynamic> json) {
+    final p = pick(json).required();
+    final playban = TemporaryBan(
+      date: p('date').asDateTimeFromMillisecondsOrThrow(),
+      duration: p('minutes').asDurationFromMinutesOrThrow(),
+    );
+    return PlaybanNotification(playban);
+  }
+
+  @override
+  String get channelId => 'playban';
+
+  @override
+  int get id => playban.date.toIso8601String().hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'minutes': playban.duration.inMinutes,
+    'date': playban.date.millisecondsSinceEpoch,
+  };
+
+  @override
+  String title(AppLocalizations l10n) => l10n.sorry;
+
+  @override
+  String body(AppLocalizations l10n) => l10n.weHadToTimeYouOutForAWhile;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      'playban',
+      importance: Importance.max,
+      priority: Priority.max,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
 }
 
 /// A notification for a correspondence game update.
@@ -178,6 +228,12 @@ class CorresGameUpdateNotification extends LocalNotification {
     final title = json['title'] as String;
     final body = json['body'] as String;
     return CorresGameUpdateNotification(gameId, title, body);
+  }
+
+  factory CorresGameUpdateNotification.fromFcmMessage(CorresGameUpdateFcmMessage message) {
+    final title = message.notification?.title ?? '';
+    final body = message.notification?.body ?? '';
+    return CorresGameUpdateNotification(message.fullId, title, body);
   }
 
   @override

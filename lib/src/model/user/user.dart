@@ -57,6 +57,11 @@ extension LightUserExtension on Pick {
 }
 
 @freezed
+class TemporaryBan with _$TemporaryBan {
+  const factory TemporaryBan({required DateTime date, required Duration duration}) = _TemporaryBan;
+}
+
+@freezed
 class User with _$User {
   const User._();
 
@@ -81,6 +86,8 @@ class User with _$User {
     bool? following,
     bool? blocking,
     bool? canChallenge,
+    bool? kid,
+    TemporaryBan? playban,
   }) = _User;
 
   LightUser get lightUser =>
@@ -116,6 +123,13 @@ class User with _$User {
       following: pick('following').asBoolOrNull(),
       blocking: pick('blocking').asBoolOrNull(),
       canChallenge: pick('canChallenge').asBoolOrNull(),
+      kid: pick('kid').asBoolOrNull(),
+      playban: pick('playban').letOrNull((p) {
+        return TemporaryBan(
+          date: p('date').asDateTimeFromMillisecondsOrThrow(),
+          duration: p('mins').asDurationFromMinutesOrThrow(),
+        );
+      }),
     );
   }
 }
