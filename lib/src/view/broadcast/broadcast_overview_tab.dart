@@ -84,7 +84,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
                   data: description,
                   onTapLink: (text, url, title) {
                     if (url == null) return;
-                    launchUrl(Uri.parse(url));
+                    launchUrl(Uri.https('lichess.org').resolve(url));
                   },
                 ),
               ],
