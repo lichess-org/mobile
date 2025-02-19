@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -38,6 +39,7 @@ class ChallengeService {
   ChallengesList? _previous;
 
   StreamSubscription<ChallengesList>? _socketSubscription;
+  StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
 
   /// The stream of challenge events that are received from the server.
   static Stream<ChallengesList> get stream =>
@@ -49,9 +51,19 @@ class ChallengeService {
         return (inward: inward.lock, outward: outward.lock);
       }).whereNotNull();
 
-  /// Start listening to challenge events from the server.
+  /// Start listening to events.
   void start() {
     _socketSubscription = stream.listen(_onSocketEvent);
+
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (response, notification) = data;
+      switch (notification) {
+        case ChallengeNotification(:final challenge):
+          _onNotificationResponse(response.actionId, challenge);
+        case _:
+          break;
+      }
+    });
   }
 
   void _onSocketEvent(ChallengesList current) {
@@ -90,10 +102,11 @@ class ChallengeService {
   /// Stop listening to challenge events from the server.
   void dispose() {
     _socketSubscription?.cancel();
+    _notificationResponseSubscription?.cancel();
   }
 
   /// Handle a local notification response when the app is in the foreground.
-  Future<void> onNotificationResponse(String? actionid, Challenge challenge) async {
+  Future<void> _onNotificationResponse(String? actionid, Challenge challenge) async {
     final challengeId = challenge.id;
 
     switch (actionid) {

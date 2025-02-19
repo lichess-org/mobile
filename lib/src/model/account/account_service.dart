@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' show Navigator, Text, showAdaptiveDialog;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notifications.dart' show PlaybanNotification;
+import 'package:lichess_mobile/src/model/notifications/notifications.dart'
+    show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
 import 'package:lichess_mobile/src/navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/network/http.dart';
@@ -27,7 +31,9 @@ AccountService accountService(Ref ref) {
 class AccountService {
   AccountService(this._ref);
 
-  ProviderSubscription<AsyncValue<User?>>? _subscription;
+  ProviderSubscription<AsyncValue<User?>>? _accountProviderSubscription;
+  StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
+
   final Ref _ref;
 
   static const _storageKey = 'account.playban_notification_date';
@@ -35,7 +41,7 @@ class AccountService {
   void start() {
     final prefs = LichessBinding.instance.sharedPreferences;
 
-    _subscription = _ref.listen(accountProvider, (_, account) {
+    _accountProviderSubscription = _ref.listen(accountProvider, (_, account) {
       final playban = account.valueOrNull?.playban;
       final storedDate = prefs.getString(_storageKey);
       final lastPlaybanNotificationDate = storedDate != null ? DateTime.parse(storedDate) : null;
@@ -50,6 +56,16 @@ class AccountService {
         _clearPlaybanNotificationDate();
       }
     });
+
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (_, notification) = data;
+      switch (notification) {
+        case PlaybanNotification(:final playban):
+          _onPlaybanNotificationResponse(playban);
+        case _:
+          break;
+      }
+    });
   }
 
   void _savePlaybanNotificationDate(DateTime date) {
@@ -61,10 +77,11 @@ class AccountService {
   }
 
   void dispose() {
-    _subscription?.close();
+    _accountProviderSubscription?.close();
+    _notificationResponseSubscription?.cancel();
   }
 
-  Future<void> onPlaybanNotificationResponse(TemporaryBan playban) async {
+  Future<void> _onPlaybanNotificationResponse(TemporaryBan playban) async {
     final context = _ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 

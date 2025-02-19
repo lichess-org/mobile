@@ -16,6 +16,8 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -27,7 +29,9 @@ part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
 CorrespondenceService correspondenceService(Ref ref) {
-  return CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
+  final service = CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
+  ref.onDispose(() => service.dispose());
+  return service;
 }
 
 /// Services that manages correspondence games.
@@ -37,8 +41,41 @@ class CorrespondenceService {
   final Ref ref;
   final Logger _log;
 
+  StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
+  StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
+
+  void start() {
+    _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
+      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      switch (fcmMessage) {
+        case CorresGameUpdateFcmMessage(fullId: final fullId, game: final game):
+          if (game != null) {
+            _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
+          }
+
+        case _:
+          break;
+      }
+    });
+
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (_, notification) = data;
+      switch (notification) {
+        case CorresGameUpdateNotification(:final fullId):
+          _onNotificationResponse(fullId);
+        case _:
+          break;
+      }
+    });
+  }
+
+  void dispose() {
+    _fcmSubscription?.cancel();
+    _notificationResponseSubscription?.cancel();
+  }
+
   /// Handles a notification response that caused the app to open.
-  Future<void> onNotificationResponse(GameFullId fullId) async {
+  Future<void> _onNotificationResponse(GameFullId fullId) async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
@@ -185,7 +222,7 @@ class CorrespondenceService {
   }
 
   /// Handles a game update event from the server.
-  Future<void> onServerUpdateEvent(
+  Future<void> _onServerUpdateEvent(
     GameFullId fullId,
     PlayableGame game, {
     required bool fromBackground,

@@ -80,6 +80,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(notificationServiceProvider).start();
     ref.read(challengeServiceProvider).start();
     ref.read(accountServiceProvider).start();
+    ref.read(correspondenceServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {

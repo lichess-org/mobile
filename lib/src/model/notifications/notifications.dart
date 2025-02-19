@@ -230,6 +230,12 @@ class CorresGameUpdateNotification extends LocalNotification {
     return CorresGameUpdateNotification(gameId, title, body);
   }
 
+  factory CorresGameUpdateNotification.fromFcmMessage(CorresGameUpdateFcmMessage message) {
+    final title = message.notification?.title ?? '';
+    final body = message.notification?.body ?? '';
+    return CorresGameUpdateNotification(message.fullId, title, body);
+  }
+
   @override
   String get channelId => 'corresGameUpdate';
 
