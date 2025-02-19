@@ -3,21 +3,26 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:riverpod/src/notifier.dart';
 
 import '../../model/auth/fake_session_storage.dart';
 import '../../test_helpers.dart';
@@ -28,7 +33,19 @@ class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
 
-class MockPuzzlePreferences extends PuzzlePreferences with Mock {}
+class MockPuzzlePreferences extends PuzzlePreferences with Mock {
+  MockPuzzlePreferences(this.rated);
+
+  final bool rated;
+
+  @override
+  PuzzlePrefs build() {
+    return PuzzlePrefs(id: fakeSession.user.id,
+        difficulty: PuzzleDifficulty.normal,
+        autoNext: false,
+        rated: rated);
+  }
+}
 
 void main() {
   setUpAll(() {
@@ -38,7 +55,6 @@ void main() {
 
   final mockBatchStorage = MockPuzzleBatchStorage();
   final mockHistoryStorage = MockPuzzleStorage();
-  final mockPuzzlePreferences = MockPuzzlePreferences();
 
   group('PuzzleScreen', () {
     testWidgets('meets accessibility guidelines', variant: kPlatformVariant, (
@@ -454,7 +470,7 @@ void main() {
                 }),
                 puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
                 puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-                puzzlePreferencesProvider.overrideWith(() => mockPuzzlePreferences),
+                puzzlePreferencesProvider.overrideWith(() => MockPuzzlePreferences(rated)),
               ],
               userSession: fakeSession
             );
@@ -474,12 +490,6 @@ void main() {
 
             when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
                 .thenAnswer((_) async {});
-
-            when(() => mockPuzzlePreferences.fromJson(any())).thenReturn(
-                PuzzlePrefs(id: fakeSession.user.id,
-                    difficulty: PuzzleDifficulty.normal,
-                    autoNext: false,
-                    rated: rated));
 
             await tester.pumpWidget(app);
 
