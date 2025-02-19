@@ -397,7 +397,7 @@ void main() {
       );
 
       // wait for the solution button to be enabled
-      await tester.pump(const Duration(seconds: 5));
+      await tester.pump(const Duration(seconds: 4));
 
       await tester.tap(find.byIcon(Icons.help));
 

@@ -357,7 +357,7 @@ class _BottomBar extends ConsumerStatefulWidget {
 }
 
 class _BottomBarState extends ConsumerState<_BottomBar> {
-  static const viewSolutionDelay = Duration(seconds: 5);
+  static const viewSolutionDelay = Duration(seconds: 4);
 
   Timer? _viewSolutionTimer;
   Completer<void> _viewSolutionCompleter = Completer<void>();
