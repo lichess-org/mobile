@@ -46,7 +46,6 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
       body: ListView(
         children: [
           StockfishSettingsWidget(
-            onToggleLocalEvaluation: () => ref.read(controller.notifier).toggleLocalEvaluation(),
             onSetEngineSearchTime:
                 (value) => ref.read(controller.notifier).setEngineSearchTime(value),
             onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),

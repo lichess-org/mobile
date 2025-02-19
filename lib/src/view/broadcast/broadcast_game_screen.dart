@@ -1,21 +1,25 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
@@ -23,8 +27,12 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -213,7 +221,7 @@ class _Body extends ConsumerWidget {
                             .onUserMove,
                   )
                   : null,
-          bottomBar: BroadcastGameBottomBar(
+          bottomBar: _BroadcastGameBottomBar(
             roundId: roundId,
             gameId: gameId,
             tournamentSlug: tournamentSlug,
@@ -513,4 +521,134 @@ class _Clock extends StatelessWidget {
       ),
     );
   }
+}
+
+class _BroadcastGameBottomBar extends ConsumerWidget {
+  const _BroadcastGameBottomBar({
+    required this.roundId,
+    required this.gameId,
+    this.tournamentSlug,
+    this.roundSlug,
+  });
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final String? tournamentSlug;
+  final String? roundSlug;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
+
+    return PlatformBottomBar(
+      transparentBackground: false,
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            showAdaptiveActionSheet<void>(
+              context: context,
+              actions: [
+                if (tournamentSlug != null && roundSlug != null)
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+                    onPressed: () async {
+                      launchShareDialog(
+                        context,
+                        uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                      );
+                    },
+                  ),
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
+                  onPressed: () async {
+                    try {
+                      final pgn = await ref.withClient(
+                        (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
+                      );
+                      if (context.mounted) {
+                        launchShareDialog(context, text: pgn);
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        showPlatformSnackbar(
+                          context,
+                          'Failed to get PGN',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+                ),
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.gameAsGIF),
+                  onPressed: () async {
+                    try {
+                      final gif = await ref
+                          .read(gameShareServiceProvider)
+                          .chapterGif(roundId, gameId);
+                      if (context.mounted) {
+                        launchShareDialog(context, files: [gif]);
+                      }
+                    } catch (e) {
+                      debugPrint(e.toString());
+                      if (context.mounted) {
+                        showPlatformSnackbar(
+                          context,
+                          'Failed to get GIF',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+          icon: Icons.menu,
+        ),
+        BottomBarButton(
+          label: context.l10n.toggleLocalEvaluation,
+          onTap: () {
+            ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+          },
+          icon: CupertinoIcons.gauge,
+          highlighted: broadcastAnalysisState.isLocalEvaluationEnabled,
+        ),
+        BottomBarButton(
+          label: context.l10n.flipBoard,
+          onTap: () {
+            ref.read(ctrlProvider.notifier).toggleBoard();
+          },
+          icon: CupertinoIcons.arrow_2_squarepath,
+        ),
+        RepeatButton(
+          onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-previous'),
+            onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
+          ),
+        ),
+        RepeatButton(
+          onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-next'),
+            icon: CupertinoIcons.chevron_forward,
+            label: context.l10n.next,
+            onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _moveForward(WidgetRef ref) =>
+      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userNext();
+  void _moveBackward(WidgetRef ref) =>
+      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userPrevious();
 }
