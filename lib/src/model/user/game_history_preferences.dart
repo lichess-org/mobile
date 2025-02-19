@@ -38,11 +38,11 @@ class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
   const GameHistoryPrefs._();
 
   const factory GameHistoryPrefs({
-    @JsonKey(defaultValue: GameHistoryDisplayMode.compact)
+    @JsonKey(defaultValue: GameHistoryDisplayMode.detail)
     required GameHistoryDisplayMode displayMode,
   }) = _GameHistoryPrefs;
 
-  static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.compact);
+  static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.detail);
 
   factory GameHistoryPrefs.fromJson(Map<String, dynamic> json) {
     return _$GameHistoryPrefsFromJson(json);

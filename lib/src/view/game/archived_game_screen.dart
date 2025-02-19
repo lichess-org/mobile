@@ -201,7 +201,7 @@ class _BodyState extends ConsumerState<_Body> {
               : const SizedBox.shrink(),
       appBarActions: [
         if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
-        if (widget.gameData != null && isLoggedIn)
+        if (widget.gameData != null)
           MenuAnchor(
             crossAxisUnconstrained: false,
             style: MenuStyle(
@@ -226,12 +226,13 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
             menuChildren: [
               const ToggleSoundMenuItemButton(),
-              GameBookmarkMenuItemButton(
-                id: widget.gameData!.id,
-                bookmarked: _bookmarked,
-                onToggleBookmark: _toggleBookmark,
-                gameListContext: widget.gameListContext,
-              ),
+              if (isLoggedIn)
+                GameBookmarkMenuItemButton(
+                  id: widget.gameData!.id,
+                  bookmarked: _bookmarked,
+                  onToggleBookmark: _toggleBookmark,
+                  gameListContext: widget.gameListContext,
+                ),
               ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
                 AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
                   context,
@@ -242,9 +243,7 @@ class _BodyState extends ConsumerState<_Body> {
                 _ => [],
               }),
             ],
-          )
-        else
-          const ToggleSoundButton(),
+          ),
       ],
       body: SafeArea(
         bottom: false,

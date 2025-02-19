@@ -296,55 +296,57 @@ class _BodyState extends ConsumerState<_Body> {
                   ),
                 };
 
-                return isLoggedIn
-                    ? Slidable(
-                      startActionPane: ActionPane(
-                        motion: const StretchMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor: ColorScheme.of(context).surfaceContainer,
-                            onPressed:
-                                game.variant.isReadSupported
-                                    ? (_) {
-                                      Navigator.of(context).push(
-                                        AnalysisScreen.buildRoute(
-                                          context,
-                                          AnalysisOptions(orientation: pov, gameId: game.id),
-                                        ),
-                                      );
-                                    }
-                                    : (_) {
-                                      showPlatformSnackbar(
-                                        context,
-                                        'This variant is not supported yet.',
-                                        type: SnackBarType.info,
-                                      );
-                                    },
-                            icon: Icons.biotech,
-                            label: context.l10n.gameAnalysis,
-                          ),
-                        ],
+                return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                        foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                        onPressed:
+                            game.variant.isReadSupported
+                                ? (_) {
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    AnalysisScreen.buildRoute(
+                                      context,
+                                      AnalysisOptions(orientation: pov, gameId: game.id),
+                                    ),
+                                  );
+                                }
+                                : (_) {
+                                  showPlatformSnackbar(
+                                    context,
+                                    'This variant is not supported yet.',
+                                    type: SnackBarType.info,
+                                  );
+                                },
+                        icon: Icons.biotech,
+                        label: context.l10n.gameAnalysis,
                       ),
-                      endActionPane: ActionPane(
-                        motion: const StretchMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor:
-                                game.isBookmarked
-                                    ? context.lichessColors.error
-                                    : context.lichessColors.good,
-                            onPressed: onPressedBookmark,
-                            icon:
-                                game.isBookmarked
-                                    ? Icons.bookmark_remove_outlined
-                                    : Icons.bookmark_add_outlined,
-                            label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
-                          ),
-                        ],
-                      ),
-                      child: gameTile,
-                    )
-                    : gameTile;
+                    ],
+                  ),
+                  endActionPane:
+                      isLoggedIn
+                          ? ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                backgroundColor:
+                                    game.isBookmarked
+                                        ? context.lichessColors.error
+                                        : context.lichessColors.brag,
+                                onPressed: onPressedBookmark,
+                                icon:
+                                    game.isBookmarked
+                                        ? Icons.bookmark_remove_outlined
+                                        : Icons.bookmark_add_outlined,
+                                label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
+                              ),
+                            ],
+                          )
+                          : null,
+                  child: gameTile,
+                );
               },
             );
       },
