@@ -40,7 +40,7 @@ enum BroadcastResult {
       canceled => '0',
       whiteHalfWins => side == Side.white ? '½' : '0',
       blackHalfWins => side == Side.white ? '0' : '½',
-      _ => throw FormatException('result $this is not a game that is over'),
+      _ => throw ArgumentError.value(this, 'result', 'Not a completed game'),
     };
   }
 
@@ -128,7 +128,14 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundWithGames = ({BroadcastRound round, BroadcastRoundGames games});
+typedef BroadcastRoundResponse =
+    ({
+      String? groupName,
+      IList<BroadcastTournamentGroup>? group,
+      BroadcastTournamentData tournament,
+      BroadcastRound round,
+      BroadcastRoundGames games,
+    });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 

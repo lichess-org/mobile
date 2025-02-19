@@ -22,9 +22,23 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-enum BroadcastRoundTab { overview, boards, players }
+enum BroadcastRoundTab {
+  overview,
+  boards,
+  players;
+
+  static BroadcastRoundTab? tabOrNullFromString(String tab) {
+    return switch (tab) {
+      'overview' => BroadcastRoundTab.overview,
+      'boards' => BroadcastRoundTab.boards,
+      'players' => BroadcastRoundTab.players,
+      _ => null,
+    };
+  }
+}
 
 enum _BroadcastGameFilter {
   all,
@@ -38,6 +52,49 @@ enum _BroadcastGameFilter {
         // TODO: translate
         return 'Ongoing games';
     }
+  }
+}
+
+class BroadcastRoundScreenLoading extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final BroadcastRoundTab? initialTab;
+
+  const BroadcastRoundScreenLoading({super.key, required this.roundId, this.initialTab});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastRoundId roundId, {
+    BroadcastRoundTab? initialTab,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastRoundScreenLoading(roundId: roundId, initialTab: initialTab),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final round = ref.watch(broadcastRoundProvider(roundId));
+
+    return switch (round) {
+      AsyncData(:final value) => BroadcastRoundScreen(
+        broadcast: Broadcast(
+          tour: value.tournament,
+          round: value.round,
+          group: value.groupName,
+          roundToLinkId: roundId,
+        ),
+        initialTab: initialTab,
+      ),
+      AsyncError(:final error) => PlatformScaffold(
+        appBarTitle: const Text(''),
+        body: Center(child: Text('Cannot load round data: $error')),
+      ),
+      _ => const PlatformScaffold(
+        appBarTitle: Text(''),
+        body: Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
   }
 }
 
