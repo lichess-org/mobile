@@ -45,7 +45,6 @@ class HttpLogStorage {
     );
   }
 
-
   Future<void> deleteAll() async {
     await _db.delete(kHttpLogStorageTable);
   }
@@ -55,13 +54,13 @@ class HttpLogStorage {
 @Freezed(fromJson: true, toJson: true)
 class HttpLog with _$HttpLog {
   const factory HttpLog({
-   int? httpLogId,
-   required String requestHashCode,
-   required String requestMethod,
-   required String requestUrl,
-   int? responseCode,
-   String? responseBody,
-   required DateTime lastModified,
+    int? httpLogId,
+    required String requestHashCode,
+    required String requestMethod,
+    required String requestUrl,
+    int? responseCode,
+    String? responseBody,
+    required DateTime lastModified,
   }) = _HttpLog;
 
   factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
@@ -74,10 +73,7 @@ class HttpLog with _$HttpLog {
 /// - `next`: An optional integer representing the next cursor.
 @Freezed(fromJson: true, toJson: true)
 class HttpLogs with _$HttpLogs {
-  const factory HttpLogs({
-    required IList<HttpLog> items,
-    required int? next,
-  }) = _HttpLogs;
+  const factory HttpLogs({required IList<HttpLog> items, required int? next}) = _HttpLogs;
 
   factory HttpLogs.fromJson(Map<String, dynamic> json) => _$HttpLogsFromJson(json);
 }

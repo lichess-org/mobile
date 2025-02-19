@@ -35,7 +35,10 @@ class HttpLogController extends _$HttpLogController {
       state = const AsyncValue.loading();
       state = await AsyncValue.guard(() async {
         final data = await storage.page(cursor: state.value?.next, limit: _pageSize);
-        return HttpLogs(items: state.value?.items.addAll(data.items) ?? data.items, next: data.next);
+        return HttpLogs(
+          items: state.value?.items.addAll(data.items) ?? data.items,
+          next: data.next,
+        );
       });
     });
   }
