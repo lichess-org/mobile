@@ -28,9 +28,9 @@ class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
 
 class MockPuzzlePreferences extends PuzzlePreferences with Mock {
-  MockPuzzlePreferences(this.rated);
+  MockPuzzlePreferences(this._rated);
 
-  final bool rated;
+  final bool _rated;
 
   @override
   PuzzlePrefs build() {
@@ -38,7 +38,7 @@ class MockPuzzlePreferences extends PuzzlePreferences with Mock {
       id: fakeSession.user.id,
       difficulty: PuzzleDifficulty.normal,
       autoNext: false,
-      rated: rated,
+      rated: _rated,
     );
   }
 }
