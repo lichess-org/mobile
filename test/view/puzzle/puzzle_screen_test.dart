@@ -40,10 +40,12 @@ class MockPuzzlePreferences extends PuzzlePreferences with Mock {
 
   @override
   PuzzlePrefs build() {
-    return PuzzlePrefs(id: fakeSession.user.id,
-        difficulty: PuzzleDifficulty.normal,
-        autoNext: false,
-        rated: rated);
+    return PuzzlePrefs(
+      id: fakeSession.user.id,
+      difficulty: PuzzleDifficulty.normal,
+      autoNext: false,
+      rated: rated,
+    );
   }
 }
 
@@ -449,70 +451,70 @@ void main() {
     });
 
     for (final rated in [true, false]) {
-      testWidgets('puzzle rating is saved correctly, (rated: $rated)',
-          variant: kPlatformVariant, (WidgetTester tester,) async {
-            final mockClient = MockClient((request) {
-              if (request.url.path == '/api/puzzle/batch/mix') {
-                return mockResponse(batchOf1, 200);
-              }
-              return mockResponse('', 404);
-            });
+      testWidgets('puzzle rating is saved correctly, (rated: $rated)', variant: kPlatformVariant, (
+        WidgetTester tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/puzzle/batch/mix') {
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
 
-            final app = await makeTestProviderScopeApp(
-              tester,
-              home: PuzzleScreen(
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzleId: puzzle2.puzzle.id,
-              ),
-              overrides: [
-                lichessClientProvider.overrideWith((ref) {
-                  return LichessClient(mockClient, ref);
-                }),
-                puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-                puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-                puzzlePreferencesProvider.overrideWith(() => MockPuzzlePreferences(rated)),
-              ],
-              userSession: fakeSession
-            );
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle2.puzzle.id,
+          ),
+          overrides: [
+            lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+            puzzlePreferencesProvider.overrideWith(() => MockPuzzlePreferences(rated)),
+          ],
+          userSession: fakeSession,
+        );
 
-            Future<void> saveDBReq() =>
-                mockBatchStorage.save(
-                  userId: fakeSession.user.id,
-                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                  data: captureAny(named: 'data'),
-                );
-            when(saveDBReq).thenAnswer((_) async {});
-            when(
-                  () =>
-                  mockBatchStorage.fetch(userId: fakeSession.user.id,
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-            ).thenAnswer((_) async => batch);
+        Future<void> saveDBReq() => mockBatchStorage.save(
+          userId: fakeSession.user.id,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          data: captureAny(named: 'data'),
+        );
+        when(saveDBReq).thenAnswer((_) async {});
+        when(
+          () => mockBatchStorage.fetch(
+            userId: fakeSession.user.id,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          ),
+        ).thenAnswer((_) async => batch);
 
-            when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
-                .thenAnswer((_) async {});
+        when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
-            await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-            // wait for the puzzle to load
-            await tester.pump(const Duration(milliseconds: 200));
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
-            // await for first move to be played and view solution button to appear
-            await tester.pump(const Duration(seconds: 5));
+        // await for first move to be played and view solution button to appear
+        await tester.pump(const Duration(seconds: 5));
 
-            expect(find.byIcon(Icons.help), findsOneWidget);
-            await tester.tap(find.byIcon(Icons.help));
+        expect(find.byIcon(Icons.help), findsOneWidget);
+        await tester.tap(find.byIcon(Icons.help));
 
-            // wait for solution replay animation to finish
-            await tester.pump(const Duration(seconds: 1));
-            await tester.pumpAndSettle();
+        // wait for solution replay animation to finish
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
 
-            // check puzzle was saved as rated
-            final captured = verify(saveDBReq).captured;
-            expect(captured.length, 2);
-            expect((captured[1] as PuzzleBatch).solved.length, 0);
-            expect((captured[0] as PuzzleBatch).solved.length, 1);
-            expect((captured[0] as PuzzleBatch).solved[0].rated, rated);
-          });
+        // check puzzle was saved as rated
+        final captured = verify(saveDBReq).captured;
+        expect(captured.length, 2);
+        expect((captured[1] as PuzzleBatch).solved.length, 0);
+        expect((captured[0] as PuzzleBatch).solved.length, 1);
+        expect((captured[0] as PuzzleBatch).solved[0].rated, rated);
+      });
     }
   });
 }
