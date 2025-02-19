@@ -9,14 +9,14 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class StockfishSettingsWidget extends ConsumerWidget {
   const StockfishSettingsWidget({
-    required this.onToggleLocalEvaluation,
+    this.onToggleLocalEvaluation,
     required this.onSetEngineSearchTime,
     required this.onSetNumEvalLines,
     required this.onSetEngineCores,
     super.key,
   });
 
-  final VoidCallback onToggleLocalEvaluation;
+  final VoidCallback? onToggleLocalEvaluation;
   final void Function(Duration) onSetEngineSearchTime;
   final void Function(int) onSetNumEvalLines;
   final void Function(int) onSetEngineCores;
@@ -28,13 +28,14 @@ class StockfishSettingsWidget extends ConsumerWidget {
     return ListSection(
       header: const SettingsSectionTitle('Stockfish 16'),
       children: [
-        SwitchSettingTile(
-          title: Text(context.l10n.toggleLocalEvaluation),
-          value: prefs.enableLocalEvaluation,
-          onChanged: (_) {
-            onToggleLocalEvaluation();
-          },
-        ),
+        if (onToggleLocalEvaluation != null)
+          SwitchSettingTile(
+            title: Text(context.l10n.toggleLocalEvaluation),
+            value: prefs.enableLocalEvaluation,
+            onChanged: (_) {
+              onToggleLocalEvaluation!.call();
+            },
+          ),
         PlatformListTile(
           title: Text.rich(
             TextSpan(

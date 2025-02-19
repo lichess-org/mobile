@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_settings.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -258,6 +258,17 @@ class _BottomBar extends ConsumerWidget {
             _showAnalysisMenu(context, ref);
           },
           icon: Icons.menu,
+        ),
+        BottomBarButton(
+          label: context.l10n.toggleLocalEvaluation,
+          onTap:
+              analysisState.isComputerAnalysisAllowedAndEnabled
+                  ? () {
+                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                  }
+                  : null,
+          icon: CupertinoIcons.gauge,
+          highlighted: analysisState.isEngineAvailable,
         ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,

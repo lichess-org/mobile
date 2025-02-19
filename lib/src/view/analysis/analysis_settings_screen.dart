@@ -113,9 +113,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                         : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
                 secondChild: StockfishSettingsWidget(
-                  onToggleLocalEvaluation: () {
-                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                  },
                   onSetEngineSearchTime: (value) {
                     ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
                   },
