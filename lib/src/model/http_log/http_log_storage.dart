@@ -44,6 +44,11 @@ class HttpLogStorage {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+
+  Future<void> deleteAll() async {
+    await _db.delete(kHttpLogStorageTable);
+  }
 }
 
 /// Represents an HTTP log entry.

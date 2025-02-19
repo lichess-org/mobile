@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_providers.dart';
+import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/http_log/http_log_controller.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 // TODO localize
-class HttpLogScreen extends ConsumerWidget {
+class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -16,30 +16,98 @@ class HttpLogScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(httpLogsNotifierProvider);
+  ConsumerState<HttpLogScreen> createState() => _HttpLogScreenState();
+}
+
+class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _scrollListener() async {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      ref.read(httpLogControllerProvider.notifier).next();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(httpLogControllerProvider);
+
+    Future<void> onRefresh() async {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      return ref.read(httpLogControllerProvider.notifier).refresh();
+    }
+
     return PlatformScaffold(
-      appBar: const PlatformAppBar(title: Text('HTTP Logs')),
+      appBarTitle: const Text('HTTP Logs'),
+      appBarActions: [
+        IconButton(
+          icon: const Icon(Icons.delete_sweep),
+          onPressed: () => ref.read(httpLogControllerProvider.notifier).deleteAll(),
+        ),
+      ],
       body: switch (state) {
-        final InitialHttpLogsState _ => const Center(child: Text('Loading...')),
-        final ErrorHttpLogsState error => Center(child: Text('Error: ${error.error}')),
-        final DataHttpLogsState data => _HttpLogList(logs: data.httpLogs.toList()),
-        final LoadingHttpLogsState loading => _HttpLogList(logs: loading.httpLogs.toList()),
+        AsyncError(:final error) => Center(child: Text('Error: $error')),
+        AsyncData(:final value) => _HttpLogList(
+          scrollController: _scrollController,
+          refreshIndicatorKey: _refreshIndicatorKey,
+          logs: value.items.toList(),
+          onRefresh: onRefresh,
+        ),
+        AsyncLoading(:final value) => _HttpLogList(
+          scrollController: _scrollController,
+          refreshIndicatorKey: _refreshIndicatorKey,
+          logs: value?.items.toList() ?? [],
+          onRefresh: onRefresh,
+        ),
+        _ => const CircularProgressIndicator(),
       },
     );
   }
 }
 
 class _HttpLogList extends StatelessWidget {
-  const _HttpLogList({super.key, required this.logs});
+  const _HttpLogList({
+    required this.logs,
+    required this.onRefresh,
+    required this.scrollController,
+    required this.refreshIndicatorKey,
+  });
 
   final List<HttpLog> logs;
+  final ScrollController scrollController;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) => HttpLogTile(httpLog: logs[index]),
-      itemCount: logs.length,
+    return RefreshIndicator.adaptive(
+      key: refreshIndicatorKey,
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + 16.0
+              : 0,
+      onRefresh: onRefresh,
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: scrollController,
+        itemBuilder: (context, index) => HttpLogTile(httpLog: logs[index]),
+        itemCount: logs.length,
+      ),
     );
   }
 }
@@ -52,8 +120,19 @@ class HttpLogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      title: Text('${httpLog.requestMethod} ${httpLog.requestUrl}'),
-      subtitle: Text(httpLog.responseCode != null ? 'Code: ${httpLog.responseCode}' : 'Pending...'),
+      backgroundColor: (httpLog.responseCode ?? 0) > 300 ? Colors.red.shade100 : Colors.white,
+      isThreeLine: true,
+      leading: Text(httpLog.responseCode?.toString() ?? '---'),
+      title: Text(httpLog.requestUrl),
+      subtitle: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '[${httpLog.requestMethod}]'),
+            const TextSpan(),
+            TextSpan(text: '[${DateFormat.yMd().add_Hms().format(httpLog.lastModified)}]'),
+          ],
+        ),
+      ),
     );
   }
 }
