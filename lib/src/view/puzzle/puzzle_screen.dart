@@ -407,15 +407,20 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             puzzleState.mode != PuzzleMode.view)
           _DifficultySelector(initialPuzzleContext: widget.initialPuzzleContext),
         if (puzzleState.mode != PuzzleMode.view)
-          BottomBarButton(
-            icon: Icons.info,
-            label: context.l10n.getAHint,
-            showLabel: true,
-            highlighted: puzzleState.hintSquare != null,
-            onTap:
-                puzzleState.canViewSolution
-                    ? () => ref.read(ctrlProvider.notifier).toggleHint()
-                    : null,
+          FutureBuilder(
+            future: _viewSolutionCompleter.future,
+            builder: (context, snapshot) {
+              return BottomBarButton(
+                icon: Icons.info,
+                label: context.l10n.getAHint,
+                showLabel: true,
+                highlighted: puzzleState.hintSquare != null,
+                onTap:
+                    snapshot.connectionState == ConnectionState.done
+                        ? () => ref.read(ctrlProvider.notifier).toggleHint()
+                        : null,
+              );
+            },
           ),
         if (puzzleState.mode != PuzzleMode.view)
           FutureBuilder(
