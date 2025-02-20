@@ -260,17 +260,18 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          label: context.l10n.toggleLocalEvaluation,
-          onTap:
-              analysisState.isComputerAnalysisAllowedAndEnabled
-                  ? () {
-                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                  }
-                  : null,
-          icon: CupertinoIcons.gauge,
-          highlighted: analysisState.isEngineAvailable,
-        ),
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomBarButton(
+            label: context.l10n.toggleLocalEvaluation,
+            onTap:
+                analysisState.isEngineAllowed
+                    ? () {
+                      ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                    }
+                    : null,
+            icon: CupertinoIcons.gauge,
+            highlighted: analysisState.isEngineAvailable,
+          ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
