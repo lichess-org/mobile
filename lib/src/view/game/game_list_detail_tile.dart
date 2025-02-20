@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
@@ -30,6 +30,14 @@ class GameListDetailTile extends StatelessWidget {
 
   Side get mySide => item.pov;
 
+  double titleFontSize(BuildContext context) {
+    return isTabletOrLarger(context) ? 24 : 16;
+  }
+
+  double subtitleFontSize(BuildContext context) {
+    return isTabletOrLarger(context) ? 18 : 12;
+  }
+
   @override
   Widget build(BuildContext context) {
     final (game: game, pov: youAre) = item;
@@ -40,7 +48,7 @@ class GameListDetailTile extends StatelessWidget {
 
     final dateStyle = TextStyle(
       color: textShade(context, 0.5),
-      fontSize: 12,
+      fontSize: subtitleFontSize(context),
       fontWeight: FontWeight.w600,
       letterSpacing: -0.2,
       height: 1,
@@ -119,12 +127,16 @@ class GameListDetailTile extends StatelessWidget {
                                       if (me.analysis != null) ...[
                                         Icon(
                                           CupertinoIcons.chart_bar_alt_fill,
-                                          size: 15,
+                                          size: subtitleFontSize(context) + 3,
                                           color: dateStyle.color,
                                         ),
                                         const SizedBox(width: 2),
                                       ],
-                                      Icon(game.perf.icon, size: 15, color: dateStyle.color),
+                                      Icon(
+                                        game.perf.icon,
+                                        size: subtitleFontSize(context) + 3,
+                                        color: dateStyle.color,
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -133,7 +145,10 @@ class GameListDetailTile extends StatelessWidget {
                               UserFullNameWidget(
                                 user: opponent.user,
                                 rating: opponent.rating,
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                  fontSize: titleFontSize(context),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
@@ -154,6 +169,7 @@ class GameListDetailTile extends StatelessWidget {
                                       winner: game.winner,
                                     ),
                                     style: TextStyle(
+                                      fontSize: subtitleFontSize(context),
                                       color:
                                           game.winner == null
                                               ? customColors?.brag
@@ -182,7 +198,19 @@ class GameListDetailTile extends StatelessWidget {
                             ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [_Opening(opening: game.opening)],
+                            children: [
+                              if (game.opening != null)
+                                Text(
+                                  game.opening!.name,
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                    color: textShade(context, Styles.subtitleOpacity),
+                                    fontSize: subtitleFontSize(context),
+                                    height: 1.1,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            ],
                           ),
                         ],
                       ),
@@ -195,29 +223,5 @@ class GameListDetailTile extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-const _kSubtitleFontSize = 12.0;
-
-class _Opening extends StatelessWidget {
-  const _Opening({required this.opening});
-
-  final LightOpening? opening;
-
-  @override
-  Widget build(BuildContext context) {
-    return opening != null
-        ? Text(
-          opening!.name,
-          maxLines: 3,
-          style: TextStyle(
-            color: textShade(context, Styles.subtitleOpacity),
-            fontSize: _kSubtitleFontSize,
-            height: 1.1,
-          ),
-          overflow: TextOverflow.ellipsis,
-        )
-        : const SizedBox.shrink();
   }
 }

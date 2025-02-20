@@ -8,12 +8,14 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
+import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
@@ -297,31 +299,82 @@ class GameContextMenu extends ConsumerWidget {
                   },
           child: Text(context.l10n.gameAnalysis),
         ),
-        BottomSheetContextMenuAction(
-          onPressed: () {
-            launchShareDialog(context, uri: lichessUri('/${game.id}'));
-          },
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
-          closeOnPressed: false,
-          child: Text(context.l10n.mobileShareGameURL),
-        ),
         if (isLoggedIn && onPressedBookmark != null)
-          Builder(
-            builder: (context) {
-              return BottomSheetContextMenuAction(
-                onPressed: () => onPressedBookmark?.call(context),
-                icon:
-                    game.isBookmarked
-                        ? Icons.bookmark_remove_outlined
-                        : Icons.bookmark_add_outlined,
-                closeOnPressed: true,
-                child: Text(
-                  game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame,
-                ),
-              );
+          BottomSheetContextMenuAction(
+            onPressed: () => onPressedBookmark?.call(context),
+            icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
+            closeOnPressed: true,
+            child: Text(game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
+          ),
+        if (!isTabletOrLarger(context)) ...[
+          BottomSheetContextMenuAction(
+            onPressed: () {
+              launchShareDialog(context, uri: lichessUri('/${game.id}'));
+            },
+            icon:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoIcons.share
+                    : Icons.share,
+            child: Text(context.l10n.mobileShareGameURL),
+          ),
+          BottomSheetContextMenuAction(
+            icon: Icons.gif,
+            child: Text(context.l10n.gameAsGIF),
+            onPressed: () async {
+              try {
+                final (gif, _) = await ref
+                    .read(gameShareServiceProvider)
+                    .gameGif(game.id, orientation);
+                if (context.mounted) {
+                  launchShareDialog(
+                    context,
+                    files: [gif],
+                    subject:
+                        '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
+                  );
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+                if (context.mounted) {
+                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+                }
+              }
             },
           ),
+          BottomSheetContextMenuAction(
+            icon: Icons.text_snippet,
+            child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+            onPressed: () async {
+              try {
+                final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+                if (context.mounted) {
+                  launchShareDialog(context, text: pgn);
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+          BottomSheetContextMenuAction(
+            icon: Icons.text_snippet,
+            // TODO improve translation
+            child: Text('PGN: ${context.l10n.downloadRaw}'),
+            onPressed: () async {
+              try {
+                final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
+                if (context.mounted) {
+                  launchShareDialog(context, text: pgn);
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+        ],
       ],
     );
   }
