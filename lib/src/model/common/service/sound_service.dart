@@ -17,7 +17,17 @@ final _soundEffectPlugin = SoundEffect();
 final _logger = Logger('SoundService');
 
 // Must match name of files in assets/sounds/standard
-enum Sound { move, capture, lowTime, dong, error, confirmation, puzzleStormEnd, clock, genericNotify }
+enum Sound {
+  move,
+  capture,
+  lowTime,
+  dong,
+  error,
+  confirmation,
+  puzzleStormEnd,
+  clock,
+  genericNotify,
+}
 
 @Riverpod(keepAlive: true)
 SoundService soundService(Ref ref) {

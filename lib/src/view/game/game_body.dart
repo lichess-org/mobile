@@ -97,13 +97,15 @@ class GameBody extends ConsumerWidget {
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final blindfoldMode = ref.watch(gamePreferencesProvider.select((prefs) => prefs.blindfoldMode));
-    final enableChat = ref.watch(gamePreferencesProvider.select((prefs) => prefs.enableChat ?? false));
+    final enableChat = ref.watch(
+      gamePreferencesProvider.select((prefs) => prefs.enableChat ?? false),
+    );
 
     final gameStateAsync = ref.watch(ctrlProvider);
 
     return gameStateAsync.when(
-      data: (gameState) { 
-        final isChatEnabled = enableChat && !gameState.isZenModeActive;  
+      data: (gameState) {
+        final isChatEnabled = enableChat && !gameState.isZenModeActive;
         if (isChatEnabled) {
           ref.listen(
             chatControllerProvider(id),
