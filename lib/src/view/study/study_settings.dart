@@ -62,6 +62,13 @@ class StudySettingsScreen extends ConsumerWidget {
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Small board'),
+                value: analysisPrefs.smallBoard,
+                onChanged:
+                    (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+              ),
+              SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
                 value: studyPrefs.showVariationArrows,
                 onChanged:

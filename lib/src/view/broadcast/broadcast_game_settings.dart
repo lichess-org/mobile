@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
@@ -37,14 +36,29 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
     final controller = broadcastAnalysisControllerProvider(roundId, gameId);
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
-    );
 
     return PlatformScaffold(
       appBarTitle: Text(context.l10n.settingsSettings),
       body: ListView(
         children: [
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: analysisPrefs.inlineNotation,
+                onChanged:
+                    (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Small board'),
+                value: analysisPrefs.smallBoard,
+                onChanged:
+                    (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+              ),
+            ],
+          ),
           StockfishSettingsWidget(
             onSetEngineSearchTime:
                 (value) => ref.read(controller.notifier).setEngineSearchTime(value),
@@ -79,13 +93,6 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                       isDismissible: true,
                       builder: (_) => const OpeningExplorerSettings(),
                     ),
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.sound),
-                value: isSoundEnabled,
-                onChanged: (value) {
-                  ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-                },
               ),
             ],
           ),
