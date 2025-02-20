@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:async/async.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
@@ -34,6 +35,7 @@ class PuzzleController extends _$PuzzleController {
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
+
   // on streak, we pre-load the next puzzle to avoid a delay when the user
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
@@ -42,6 +44,7 @@ class PuzzleController extends _$PuzzleController {
 
   Future<PuzzleService> get _service =>
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+
   @override
   PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
     final evaluationService = ref.read(evaluationServiceProvider);
@@ -549,8 +552,11 @@ class PuzzleState with _$PuzzleState {
       EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
 
   Position get position => node.position;
+
   String get fen => node.position.fen;
+
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
+
   bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
   IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);

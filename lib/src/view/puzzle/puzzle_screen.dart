@@ -273,20 +273,12 @@ class _Body extends ConsumerWidget {
                       ])
                       : puzzleState.showHint && puzzleState.hintMove != null
                       ? ISet([
-                          Circle(
-                            color: const Color(0x40003088),
-                            orig: puzzleState.hintMove!.from,
-                          ),
-                        ]).addAll(
-                          puzzleState.hintPossibleMoves!
-                              .map(
-                                (i) => Circle(
-                                  color: const Color(0x40003088),
-                                  orig: i,
-                                ),
-                              )
-                              .toList(),
-                        )
+                        Circle(color: const Color(0x40003088), orig: puzzleState.hintMove!.from),
+                      ]).addAll(
+                        puzzleState.hintPossibleMoves!
+                            .map((i) => Circle(color: const Color(0x40003088), orig: i))
+                            .toList(),
+                      )
                       : null,
               engineGauge:
                   puzzleState.isEngineEnabled
@@ -426,9 +418,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             label: context.l10n.getAHint,
             showLabel: true,
             highlighted: puzzleState.showHint,
-            onTap: puzzleState.canViewSolution
-                ? () => ref.read(ctrlProvider.notifier).toggleHint()
-                : null,
+            onTap:
+                puzzleState.canViewSolution
+                    ? () => ref.read(ctrlProvider.notifier).toggleHint()
+                    : null,
           ),
         if (puzzleState.mode != PuzzleMode.view)
           FutureBuilder(
