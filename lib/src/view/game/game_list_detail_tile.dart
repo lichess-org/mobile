@@ -96,7 +96,7 @@ class GameListDetailTile extends StatelessWidget {
                   child: SizedBox(
                     height: boardSize,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
