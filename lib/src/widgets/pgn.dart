@@ -720,7 +720,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
       children: [
         Container(
           margin: EdgeInsets.only(top: initialPath.isEmpty ? 0 : 8, bottom: 8),
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.only(top: 4, right: kViewHorizontalPadding, bottom: 4),
           decoration: BoxDecoration(
             color:
                 brightness == Brightness.dark ? const Color(0x0BFFFFFF) : const Color(0x05000000),
@@ -1105,7 +1105,10 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
     final padding = widget.nesting < 6 ? 12.0 : 0.0;
 
     return Padding(
-      padding: EdgeInsets.only(left: padding + kViewHorizontalPadding),
+      padding: EdgeInsets.only(
+        left: padding + kViewHorizontalPadding,
+        right: widget.nesting == 1 ? kViewHorizontalPadding : 0,
+      ),
       child: CustomPaint(
         painter: _IndentPainter(
           sideLineStartPositions: _sideLineStartPositions,
