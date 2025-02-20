@@ -199,15 +199,9 @@ class PuzzleController extends _$PuzzleController {
     });
   }
 
-  NormalMove solutionMove() {
-    final moveIndex = state.currentPath.size - state.initialPath.size;
-    final solution = state.puzzle.puzzle.solution[moveIndex];
-    return NormalMove.fromUci(solution);
-  }
-
   void toggleHint() {
     if (state.hintSquare == null) {
-      state = state.copyWith(hintShown: true, hintSquare: solutionMove().from);
+      state = state.copyWith(hintShown: true, hintSquare: state._nextSolutionMove.from);
     } else {
       state = state.copyWith(hintSquare: null);
     }
@@ -216,7 +210,7 @@ class PuzzleController extends _$PuzzleController {
   void skipMove() {
     if (state.streak != null) {
       state = state.copyWith.streak!(hasSkipped: true);
-      onUserMove(solutionMove());
+      onUserMove(state._nextSolutionMove);
     }
   }
 
@@ -558,6 +552,9 @@ class PuzzleState with _$PuzzleState {
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
 
   bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
+
+  NormalMove get _nextSolutionMove =>
+      NormalMove.fromUci(puzzle.puzzle.solution[currentPath.size - initialPath.size]);
 
   IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }
