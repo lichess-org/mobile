@@ -496,9 +496,7 @@ void main() {
           pgn: 'e4 e5',
           overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
-        fakeSocket.addIncomingMessages([
-          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
-        ]);
+        fakeSocket.addIncomingMessages(['{"t":"message","d":{"u":"Magnus","t":"Hello!"}}']);
         await tester.pump(const Duration(milliseconds: 100));
         verify(() => mockSoundService.play(Sound.genericNotify)).called(1);
       });
@@ -513,16 +511,10 @@ void main() {
           fakeSocket,
           tester,
           pgn: 'e4 e5',
-          defaultPreferences: {
-            PrefCategory.game.storageKey: '{"enableChat": false}',
-          },
-          overrides: [
-            soundServiceProvider.overrideWith((_) => mockSoundService),
-          ],
+          defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
+          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
-        fakeSocket.addIncomingMessages([
-          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
-        ]);
+        fakeSocket.addIncomingMessages(['{"t":"message","d":{"u":"Magnus","t":"Hello!"}}']);
         await tester.pump(const Duration(milliseconds: 100));
         verifyNever(() => mockSoundService.play(Sound.genericNotify));
       });
