@@ -500,7 +500,6 @@ void main() {
 
         // wait for solution replay animation to finish
         await tester.pump(const Duration(seconds: 1));
-        await tester.pumpAndSettle();
 
         // check puzzle was saved as rated
         final captured = verify(saveDBReq).captured;
