@@ -65,6 +65,10 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -87,6 +91,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     )
     required Duration engineSearchTime,
     @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
@@ -100,6 +105,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 10),
     inlineNotation: false,
+    smallBoard: false,
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {

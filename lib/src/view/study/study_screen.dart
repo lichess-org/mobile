@@ -62,6 +62,7 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -73,6 +74,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              smallBoard: analysisPrefs.smallBoard,
               pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
@@ -109,6 +111,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              smallBoard: analysisPrefs.smallBoard,
               pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
@@ -366,11 +369,14 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final variant = studyState.variant;
     if (!variant.isReadSupported) {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
+          smallBoard: analysisPrefs.smallBoard,
+
           pov: Side.white,
           boardBuilder:
               (context, boardSize, borderRadius) => SizedBox.square(
@@ -382,7 +388,6 @@ class _Body extends ConsumerWidget {
       );
     }
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
 
@@ -396,6 +401,7 @@ class _Body extends ConsumerWidget {
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
+      smallBoard: analysisPrefs.smallBoard,
       tabController: tabController,
       pov: pov,
       boardBuilder:

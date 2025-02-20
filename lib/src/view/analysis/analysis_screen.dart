@@ -183,6 +183,7 @@ class _Body extends ConsumerWidget {
     final pov = analysisState.pov;
 
     return AnalysisLayout(
+      smallBoard: analysisPrefs.smallBoard,
       tabController: controller,
       pov: pov,
       boardBuilder:

@@ -13,6 +13,9 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 
+/// Scale factor for the small board in portrait orientation.
+const kSmallBoardScale = 0.8;
+
 typedef BoardBuilder =
     Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
 
@@ -128,6 +131,7 @@ class AnalysisLayout extends StatelessWidget {
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
+    this.smallBoard = false,
     super.key,
   });
 
@@ -166,6 +170,11 @@ class AnalysisLayout extends StatelessWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
+
+  /// If true, the board is displayed in a small size on portrait orientation.
+  ///
+  /// This is `false` by default.
+  final bool smallBoard;
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +327,7 @@ class AnalysisLayout extends StatelessWidget {
                               ),
                             boardBuilder(
                               context,
-                              boardSize,
+                              boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
                               isTablet && boardHeader == null && boardFooter != null
                                   ? tabletBoardRadius
                                   : null,
