@@ -159,7 +159,12 @@ class NoPaddingTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoButton(padding: EdgeInsets.zero, onPressed: onPressed, minSize: 23, child: child)
+        ? CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: onPressed,
+          minimumSize: const Size(23, 23),
+          child: child,
+        )
         : TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
