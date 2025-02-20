@@ -56,6 +56,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
       appBarTitle: const Text('HTTP Logs'),
       appBarActions: [
         IconButton(
+          tooltip: 'Clear all logs',
           icon: const Icon(Icons.delete_sweep),
           onPressed: () => ref.read(httpLogControllerProvider.notifier).deleteAll(),
         ),
@@ -120,16 +121,28 @@ class HttpLogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      backgroundColor: (httpLog.responseCode ?? 0) > 300 ? Colors.red.shade100 : Colors.white,
-      isThreeLine: true,
-      leading: Text(httpLog.responseCode?.toString() ?? '---'),
-      title: Text(httpLog.requestUrl),
+      backgroundColor: switch (httpLog.responseCode) {
+        null => Colors.yellow.shade50,
+        final int code when code >= 400 => Colors.red.shade100,
+        _ => Colors.white,
+      },
+      title: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '[${httpLog.responseCode ?? '?'}]'),
+            const WidgetSpan(child: SizedBox(width: 4)),
+            TextSpan(text: '[${httpLog.requestMethod}]'),
+            const WidgetSpan(child: SizedBox(width: 4)),
+            TextSpan(text: httpLog.requestUrl),
+          ],
+        ),
+      ),
       subtitle: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: '[${httpLog.requestMethod}]'),
-            const TextSpan(),
-            TextSpan(text: '[${DateFormat.yMd().add_Hms().format(httpLog.lastModified)}]'),
+            TextSpan(text: '[${DateFormat.yMd().add_Hms().format(httpLog.requestDateTime)}]'),
+            const WidgetSpan(child: SizedBox(width: 4)),
+            if (httpLog.hasResponse) TextSpan(text: '[${httpLog.elapsed!.inMilliseconds} ms]'),
           ],
         ),
       ),

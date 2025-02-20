@@ -95,8 +95,8 @@ Client loggingClient(Ref ref) {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
       httpLogStorage.save(
         HttpLog(
-          requestHashCode: request.hashCode.toString(),
-          lastModified: DateTime.now(),
+          httpLogId: request.hashCode.toString(),
+          requestDateTime: DateTime.now(),
           requestMethod: request.method,
           requestUrl: request.url.toString(),
         ),
@@ -104,14 +104,10 @@ Client loggingClient(Ref ref) {
     },
     onResponse: (response) async {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-      httpLogStorage.save(
-        HttpLog(
-          requestHashCode: response.request!.hashCode.toString(),
-          lastModified: DateTime.now(),
-          requestMethod: response.request!.method,
-          requestUrl: response.request!.url.toString(),
-          responseCode: response.statusCode,
-        ),
+      httpLogStorage.update(
+        response.request!.hashCode.toString(),
+        responseCode: response.statusCode,
+        responseDateTime: DateTime.now(),
       );
     },
   );

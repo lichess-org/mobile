@@ -27,20 +27,36 @@ class HttpLogStorage {
     final res = await _db.query(
       kHttpLogStorageTable,
       limit: limit + 1,
-      orderBy: 'httpLogId DESC',
-      where: cursor != null ? 'httpLogId <= $cursor' : null,
+      orderBy: 'id DESC',
+      where: cursor != null ? 'id <= $cursor' : null,
     );
-    final items = res.map(HttpLog.fromJson).toList();
-    final next = items.elementAtOrNull(limit);
-    items.remove(next);
-    return HttpLogs(items: items.toIList(), next: next?.httpLogId);
+    final next = res.elementAtOrNull(limit);
+    res.remove(next);
+    return HttpLogs(items: res.map(HttpLog.fromJson).toIList(), next: next?['id'] as int?);
   }
 
   /// Saves an [HttpLog] entry to the database.
   Future<void> save(HttpLog httpLog) async {
-    await _db.insert(
+    await _db.insert(kHttpLogStorageTable, {
+      ...httpLog.toJson(),
+      'lastModified': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> update(
+    String httpLogId, {
+    required int responseCode,
+    required DateTime responseDateTime,
+  }) async {
+    await _db.update(
       kHttpLogStorageTable,
-      httpLog.toJson(),
+      {
+        'responseCode': responseCode,
+        'responseDateTime': responseDateTime.toIso8601String(),
+        'lastModified': DateTime.now().toIso8601String(),
+      },
+      where: 'httpLogId = ?',
+      whereArgs: [httpLogId],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -53,15 +69,23 @@ class HttpLogStorage {
 /// Represents an HTTP log entry.
 @Freezed(fromJson: true, toJson: true)
 class HttpLog with _$HttpLog {
+  const HttpLog._();
+
   const factory HttpLog({
-    int? httpLogId,
-    required String requestHashCode,
+    required String httpLogId,
     required String requestMethod,
     required String requestUrl,
+    required DateTime requestDateTime,
     int? responseCode,
-    String? responseBody,
-    required DateTime lastModified,
+    DateTime? responseDateTime,
   }) = _HttpLog;
+
+  bool get hasResponse => responseCode != null;
+
+  Duration? get elapsed {
+    if (responseDateTime == null) return null;
+    return responseDateTime!.difference(requestDateTime);
+  }
 
   factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
 }
