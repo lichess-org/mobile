@@ -541,27 +541,23 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
           PlatformListTile(
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
-            title: Text(round.name),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (round.startsAt != null || round.startsAfterPrevious) ...[
-                  Text(
-                    round.startsAt != null
-                        ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
-                            ? _dateFormatMonth.format(round.startsAt!)
-                            : _dateFormatYearMonth.format(round.startsAt!)
-                        : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
-                  ),
-                  const SizedBox(width: 5.0),
-                ],
-                switch (round.status) {
-                  RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
-                  RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
-                  RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
-                },
-              ],
-            ),
+            title: Text(round.name, overflow: TextOverflow.ellipsis, maxLines: 2),
+            subtitle:
+                (round.startsAt != null || round.startsAfterPrevious)
+                    ? Text(
+                      round.startsAt != null
+                          ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
+                              ? _dateFormatMonth.format(round.startsAt!)
+                              : _dateFormatYearMonth.format(round.startsAt!)
+                          : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                    : null,
+            trailing: switch (round.status) {
+              RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
+              RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
+              RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
+            },
             onTap: () {
               widget.setRoundId(round.id);
               Navigator.of(context).pop();
