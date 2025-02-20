@@ -43,6 +43,7 @@ class GameRepository {
     DateTime? until,
     GameFilterState filter = const GameFilterState(),
     bool withBookmarked = false,
+    bool withMoves = false,
   }) {
     assert(!filter.perfs.contains(Perf.fromPosition));
     assert(!filter.perfs.contains(Perf.puzzle));
@@ -55,7 +56,7 @@ class GameRepository {
             queryParameters: {
               'max': max.toString(),
               if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
-              'moves': 'false',
+              'moves': withMoves ? 'true' : 'false',
               'lastFen': 'true',
               'accuracy': 'true',
               'opening': 'true',

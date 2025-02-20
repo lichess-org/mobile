@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,25 +31,23 @@ class GameListDetailTile extends StatelessWidget {
 
   Side get mySide => item.pov;
 
-  double titleFontSize(BuildContext context) {
-    return isTabletOrLarger(context) ? 24 : 16;
-  }
-
-  double subtitleFontSize(BuildContext context) {
-    return isTabletOrLarger(context) ? 18 : 12;
-  }
-
   @override
   Widget build(BuildContext context) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
+    final isTablet = isTabletOrLarger(context);
+
+    final titleFontSize = isTablet ? 24.0 : 16.0;
+    final subtitleFontSize = isTablet ? 18.0 : 12.0;
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
+    final moveList = game.moves?.split(' ');
+
     final dateStyle = TextStyle(
       color: textShade(context, 0.5),
-      fontSize: subtitleFontSize(context),
+      fontSize: subtitleFontSize,
       fontWeight: FontWeight.w600,
       letterSpacing: -0.2,
       height: 1,
@@ -127,15 +126,15 @@ class GameListDetailTile extends StatelessWidget {
                                       if (me.analysis != null) ...[
                                         Icon(
                                           CupertinoIcons.chart_bar_alt_fill,
-                                          size: subtitleFontSize(context) + 3,
-                                          color: dateStyle.color,
+                                          size: subtitleFontSize + 3,
+                                          color: textShade(context, 0.7),
                                         ),
                                         const SizedBox(width: 2),
                                       ],
                                       Icon(
                                         game.perf.icon,
-                                        size: subtitleFontSize(context) + 3,
-                                        color: dateStyle.color,
+                                        size: subtitleFontSize + 3,
+                                        color: textShade(context, 0.7),
                                       ),
                                     ],
                                   ),
@@ -146,7 +145,7 @@ class GameListDetailTile extends StatelessWidget {
                                 user: opponent.user,
                                 rating: opponent.rating,
                                 style: TextStyle(
-                                  fontSize: titleFontSize(context),
+                                  fontSize: titleFontSize,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -169,7 +168,7 @@ class GameListDetailTile extends StatelessWidget {
                                       winner: game.winner,
                                     ),
                                     style: TextStyle(
-                                      fontSize: subtitleFontSize(context),
+                                      fontSize: subtitleFontSize,
                                       color:
                                           game.winner == null
                                               ? customColors?.brag
@@ -199,16 +198,42 @@ class GameListDetailTile extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (game.opening != null)
-                                Text(
-                                  game.opening!.name,
+                              if (game.opening != null || moveList?.isNotEmpty == true)
+                                Text.rich(
                                   maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: textShade(context, Styles.subtitleOpacity),
-                                    fontSize: subtitleFontSize(context),
-                                    height: 1.1,
+                                    fontSize: subtitleFontSize,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
+                                  TextSpan(
+                                    text: game.opening?.name,
+                                    style: const TextStyle(fontWeight: FontWeight.w600),
+                                    children: [
+                                      if (moveList != null && moveList.length > 1) ...[
+                                        const TextSpan(text: '\n'),
+                                        ...moveList
+                                            .take(isTablet ? 6 : 4)
+                                            .toList()
+                                            .asMap()
+                                            .entries
+                                            .slices(2)
+                                            .mapIndexed((index, moves) {
+                                              return TextSpan(
+                                                text:
+                                                    '${index + 1}. ${moves.map((e) => '${e.value} ').join()}',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                              );
+                                            }),
+                                        TextSpan(
+                                          text: '\u2026 ${moveList.length} moves',
+                                          style: const TextStyle(fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
                                 ),
                             ],
                           ),

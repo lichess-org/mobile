@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -107,6 +108,7 @@ class UserGameHistory extends _$UserGameHistory {
     });
 
     final session = ref.watch(authSessionProvider);
+    final prefs = ref.watch(gameHistoryPreferencesProvider);
     final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
     final storage = await ref.watch(gameStorageProvider.future);
 
@@ -114,8 +116,12 @@ class UserGameHistory extends _$UserGameHistory {
     final recentGames =
         id != null && online
             ? ref.withClient(
-              (client) =>
-                  GameRepository(client).getUserGames(id, filter: filter, withBookmarked: true),
+              (client) => GameRepository(client).getUserGames(
+                id,
+                filter: filter,
+                withBookmarked: true,
+                withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+              ),
             )
             : storage
                 .page(userId: id, filter: filter)
@@ -145,6 +151,7 @@ class UserGameHistory extends _$UserGameHistory {
   Future<void> getNext() async {
     if (!state.hasValue) return;
 
+    final prefs = ref.read(gameHistoryPreferencesProvider);
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
     Result.capture(
@@ -156,6 +163,7 @@ class UserGameHistory extends _$UserGameHistory {
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
               withBookmarked: true,
+              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             ),
           )
           : currentVal.online && currentVal.session != null
@@ -166,6 +174,7 @@ class UserGameHistory extends _$UserGameHistory {
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
               withBookmarked: true,
+              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             ),
           )
           : (await ref.watch(gameStorageProvider.future))
