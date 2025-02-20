@@ -8,8 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -481,6 +483,51 @@ void main() {
       expect(find.text('Computer analysis'), findsOneWidget); // computer analysis is available
     });
   });
+
+  group('Chat', () {
+    group('Enabled', () {
+      testWidgets('onNewMessage', (WidgetTester tester) async {
+        final mockSoundService = MockSoundService();
+        when(() => mockSoundService.play(Sound.genericNotify)).thenAnswer((_) async {});
+        final fakeSocket = FakeWebSocketChannel();
+        await createTestGame(
+          fakeSocket,
+          tester,
+          pgn: 'e4 e5',
+          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+        );
+        fakeSocket.addIncomingMessages([
+          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 100));
+        verify(() => mockSoundService.play(Sound.genericNotify)).called(1);
+      });
+    });
+
+    group('Disabled', () {
+      testWidgets('onNewMessage', (WidgetTester tester) async {
+        final mockSoundService = MockSoundService();
+        when(() => mockSoundService.play(Sound.genericNotify)).thenAnswer((_) async {});
+        final fakeSocket = FakeWebSocketChannel();
+        await createTestGame(
+          fakeSocket,
+          tester,
+          pgn: 'e4 e5',
+          defaultPreferences: {
+            PrefCategory.game.storageKey: '{"enableChat": false}',
+          },
+          overrides: [
+            soundServiceProvider.overrideWith((_) => mockSoundService),
+          ],
+        );
+        fakeSocket.addIncomingMessages([
+          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 100));
+        verifyNever(() => mockSoundService.play(Sound.genericNotify));
+      });
+    });
+  });
 }
 
 Finder findClockWithTime(String text, {bool skipOffstage = true}) {
@@ -530,11 +577,13 @@ Future<void> createTestGame(
     emerg: Duration(seconds: 30),
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
+  Map<String, Object>? defaultPreferences,
   List<Override>? overrides,
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
     home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+    defaultPreferences: defaultPreferences,
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
       webSocketChannelFactoryProvider.overrideWith((ref) {
