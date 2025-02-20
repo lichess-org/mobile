@@ -311,7 +311,7 @@ class PuzzleController extends _$PuzzleController {
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null,
+          rated: initialContext.userId != null && ref.read(puzzlePreferencesProvider).rated,
         ),
       );
 

@@ -32,6 +32,10 @@ class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStora
   Future<void> setAutoNext(bool autoNext) async {
     save(state.copyWith(autoNext: autoNext));
   }
+
+  Future<void> setRated(bool rated) async {
+    save(state.copyWith(rated: rated));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -44,10 +48,14 @@ class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     /// no effect on puzzle streaks, which always show next puzzle. Defaults to
     /// `false`.
     @Default(false) bool autoNext,
+
+    /// If `true`, the puzzle will be rated for logged in users.
+    /// Defaults to `true`.
+    @Default(true) bool rated,
   }) = _PuzzlePrefs;
 
   factory PuzzlePrefs.defaults({UserId? id}) =>
-      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false);
+      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false, rated: true);
 
   factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

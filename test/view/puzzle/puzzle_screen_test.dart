@@ -8,6 +8,8 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -16,6 +18,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../model/auth/fake_session_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
@@ -23,6 +26,22 @@ import 'example_data.dart';
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+
+class MockPuzzlePreferences extends PuzzlePreferences with Mock {
+  MockPuzzlePreferences(this._rated);
+
+  final bool _rated;
+
+  @override
+  PuzzlePrefs build() {
+    return PuzzlePrefs(
+      id: fakeSession.user.id,
+      difficulty: PuzzleDifficulty.normal,
+      autoNext: false,
+      rated: _rated,
+    );
+  }
+}
 
 void main() {
   setUpAll(() {
@@ -424,6 +443,78 @@ void main() {
       // called once to save solution and once after fetching a new puzzle
       verify(saveDBReq).called(2);
     });
+
+    for (final isRatedPreference in [true, false]) {
+      testWidgets(
+        'puzzle rating is saved correctly, (isRatedPreference: $isRatedPreference)',
+        variant: kPlatformVariant,
+        (WidgetTester tester) async {
+          final mockClient = MockClient((request) {
+            if (request.url.path == '/api/puzzle/batch/mix') {
+              return mockResponse(batchOf1, 200);
+            }
+            return mockResponse('', 404);
+          });
+
+          final app = await makeTestProviderScopeApp(
+            tester,
+            home: PuzzleScreen(
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              puzzleId: puzzle2.puzzle.id,
+            ),
+            overrides: [
+              lichessClientProvider.overrideWith((ref) {
+                return LichessClient(mockClient, ref);
+              }),
+              puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+              puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+              puzzlePreferencesProvider.overrideWith(
+                () => MockPuzzlePreferences(isRatedPreference),
+              ),
+            ],
+            userSession: fakeSession,
+          );
+
+          Future<void> saveDBReq() => mockBatchStorage.save(
+            userId: fakeSession.user.id,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            data: captureAny(named: 'data'),
+          );
+          when(saveDBReq).thenAnswer((_) async {});
+          when(
+            () => mockBatchStorage.fetch(
+              userId: fakeSession.user.id,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            ),
+          ).thenAnswer((_) async => batch);
+
+          when(
+            () => mockHistoryStorage.save(puzzle: any(named: 'puzzle')),
+          ).thenAnswer((_) async {});
+
+          await tester.pumpWidget(app);
+
+          // wait for the puzzle to load
+          await tester.pump(const Duration(milliseconds: 200));
+
+          // await for first move to be played and view solution button to appear
+          await tester.pump(const Duration(seconds: 5));
+
+          expect(find.byIcon(Icons.help), findsOneWidget);
+          await tester.tap(find.byIcon(Icons.help));
+
+          // wait for solution replay animation to finish
+          await tester.pump(const Duration(seconds: 1));
+
+          // check puzzle was saved as isRatedPreference
+          final captured = verify(saveDBReq).captured;
+          expect(captured.length, 2);
+          expect((captured[1] as PuzzleBatch).solved.length, 0);
+          expect((captured[0] as PuzzleBatch).solved.length, 1);
+          expect((captured[0] as PuzzleBatch).solved[0].rated, isRatedPreference);
+        },
+      );
+    }
   });
 }
 
