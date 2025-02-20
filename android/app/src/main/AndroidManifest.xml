@@ -64,8 +64,9 @@
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
-                <!-- Either game or challenge -->
-                <data android:pathPattern="/........" />
+                <!-- Game with pov -->
+                <data android:pathPattern="/......../black" />
+                <data android:pathPattern="/......../white" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

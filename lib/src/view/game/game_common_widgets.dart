@@ -135,7 +135,7 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
     MenuItemButton(
       leadingIcon: const PlatformShareIcon(),
       onPressed: () {
-        launchShareDialog(context, uri: lichessUri('/$gameId'));
+        launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));
       },
       child: Text(context.l10n.mobileShareGameURL),
     ),

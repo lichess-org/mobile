@@ -309,7 +309,7 @@ class GameContextMenu extends ConsumerWidget {
         if (!isTabletOrLarger(context)) ...[
           BottomSheetContextMenuAction(
             onPressed: () {
-              launchShareDialog(context, uri: lichessUri('/${game.id}'));
+              launchShareDialog(context, uri: lichessUri('/${game.id}/${orientation.name}'));
             },
             icon:
                 Theme.of(context).platform == TargetPlatform.iOS
