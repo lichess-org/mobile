@@ -807,9 +807,9 @@ class AnalysisState with _$AnalysisState {
 
   EngineGaugeParams get engineGaugeParams => (
     orientation: pov,
-    isLocalEngineAvailable: isEngineAvailable,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }
 

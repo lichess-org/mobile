@@ -18,7 +18,8 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(engineEvaluationProvider).eval ?? savedEval;
+    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     return eval != null
         ? AppBarTextButton(

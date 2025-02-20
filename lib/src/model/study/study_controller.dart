@@ -591,12 +591,7 @@ class StudyState with _$StudyState {
 
   EngineGaugeParams? get engineGaugeParams =>
       isEngineAvailable
-          ? (
-            orientation: pov,
-            isLocalEngineAvailable: isEngineAvailable,
-            position: position!,
-            savedEval: currentNode.eval,
-          )
+          ? (orientation: pov, position: position!, savedEval: currentNode.eval, serverEval: null)
           : null;
 
   Position? get position => currentNode.position;

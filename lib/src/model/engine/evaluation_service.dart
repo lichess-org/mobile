@@ -236,3 +236,33 @@ class EvaluationOptions with _$EvaluationOptions {
     required Duration searchTime,
   }) = _EvaluationOptions;
 }
+
+Eval? pickBestEval({
+  required LocalEval? localEval,
+  required ClientEval? savedEval,
+  required ExternalEval? serverEval,
+}) {
+  return switch (savedEval) {
+    CloudEval() => savedEval,
+    LocalEval() => localEval ?? savedEval,
+    null => localEval ?? serverEval,
+  };
+}
+
+ClientEval? pickBestClientEval({required LocalEval? localEval, required ClientEval? savedEval}) {
+  final eval =
+      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
+
+  return eval;
+}
+
+IList<MoveWithWinningChances>? pickBestMoves({
+  required IList<MoveWithWinningChances>? localBestMoves,
+  required ClientEval? savedEval,
+}) {
+  return switch (savedEval) {
+    CloudEval() => savedEval.bestMoves,
+    LocalEval() => localBestMoves ?? savedEval.bestMoves,
+    null => localBestMoves,
+  };
+}

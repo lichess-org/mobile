@@ -121,11 +121,12 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       clocks: _getClocks(currentPath),
     );
 
+    state = AsyncData(broadcastState);
+
     if (broadcastState.isLocalEvaluationEnabled) {
+      _sendEvalGetEvent();
       evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
+        _debouncedStartEngineEval();
       });
     }
 
@@ -264,11 +265,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _root.updateAt(path, (node) => node.eval = cloudEval);
 
     if (state.requireValue.currentPath != path) return;
-
+    _stopEngineEval();
     _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
-  // ignore: unused_element
   void _sendEvalGetEvent() {
     final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
 
@@ -558,6 +558,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     }
 
     if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
+      _sendEvalGetEvent();
       _debouncedStartEngineEval();
     }
   }
@@ -608,7 +609,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    _refreshCurrentNode(shouldRecomputeRootView: true);
+    _refreshCurrentNode();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -696,8 +697,8 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
 
   EngineGaugeParams get engineGaugeParams => (
     orientation: pov,
-    isLocalEngineAvailable: isLocalEvaluationEnabled,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }
