@@ -14,96 +14,98 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_menu.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class BoardEditorScreen extends StatelessWidget {
+class BoardEditorScreen extends ConsumerWidget {
   const BoardEditorScreen({super.key, this.initialFen});
 
   final String? initialFen;
 
-  @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.boardEditor),
-      ),
-      body: _Body(initialFen),
+  static Route<dynamic> buildRoute(BuildContext context, {String? initialFen}) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.boardEditor,
+      screen: BoardEditorScreen(initialFen: initialFen),
     );
   }
-}
-
-class _Body extends ConsumerWidget {
-  const _Body(this.initialFen);
-
-  final String? initialFen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardEditorState =
-        ref.watch(boardEditorControllerProvider(initialFen));
+    final boardEditorState = ref.watch(boardEditorControllerProvider(initialFen));
 
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final aspectRatio = constraints.biggest.aspectRatio;
+    return PlatformScaffold(
+      appBarTitle: Text(context.l10n.boardEditor),
+      appBarActions: [
+        AppBarIconButton(
+          semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+          onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
+          icon: const PlatformShareIcon(),
+        ),
+      ],
+      body: Column(
+        children: [
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
+                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final isTablet = isTabletOrLarger(context);
+                  final remainingHeight = constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final boardSize =
+                      isTablet || isSmallScreen
+                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                          : defaultBoardSize;
 
-                final direction =
-                    aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                  final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
-                return Flex(
-                  direction: direction,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _PieceMenu(
-                      boardSize,
-                      initialFen: initialFen,
-                      direction: flipAxis(direction),
-                      side: boardEditorState.orientation.opposite,
-                      isTablet: isTablet,
-                    ),
-                    _BoardEditor(
-                      boardSize,
-                      initialFen: initialFen,
-                      orientation: boardEditorState.orientation,
-                      isTablet: isTablet,
-                      // unlockView is safe because chessground will never modify the pieces
-                      pieces: boardEditorState.pieces.unlockView,
-                    ),
-                    _PieceMenu(
-                      boardSize,
-                      initialFen: initialFen,
-                      direction: flipAxis(direction),
-                      side: boardEditorState.orientation,
-                      isTablet: isTablet,
-                    ),
-                  ],
-                );
-              },
+                  return Flex(
+                    direction: direction,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _PieceMenu(
+                        boardSize,
+                        initialFen: initialFen,
+                        direction: flipAxis(direction),
+                        side: boardEditorState.orientation.opposite,
+                        isTablet: isTablet,
+                      ),
+                      _BoardEditor(
+                        boardSize,
+                        initialFen: initialFen,
+                        orientation: boardEditorState.orientation,
+                        isTablet: isTablet,
+                        // unlockView is safe because chessground will never modify the pieces
+                        pieces: boardEditorState.pieces.unlockView,
+                      ),
+                      _PieceMenu(
+                        boardSize,
+                        initialFen: initialFen,
+                        direction: flipAxis(direction),
+                        side: boardEditorState.orientation,
+                        isTablet: isTablet,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        _BottomBar(initialFen),
-      ],
+          _BottomBar(initialFen),
+        ],
+      ),
     );
   }
 }
@@ -133,21 +135,20 @@ class _BoardEditor extends ConsumerWidget {
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: isTablet
-                ? const BorderRadius.all(Radius.circular(4.0))
-                : BorderRadius.zero,
-            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-          ),
+        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+      ),
       pointerMode: editorState.editorPointerMode,
-      onDiscardedPiece: (Square square) => ref
-          .read(boardEditorControllerProvider(initialFen).notifier)
-          .discardPiece(square),
-      onDroppedPiece: (Square? origin, Square dest, Piece piece) => ref
-          .read(boardEditorControllerProvider(initialFen).notifier)
-          .movePiece(origin, dest, piece),
-      onEditedSquare: (Square square) => ref
-          .read(boardEditorControllerProvider(initialFen).notifier)
-          .editSquare(square),
+      onDiscardedPiece:
+          (Square square) =>
+              ref.read(boardEditorControllerProvider(initialFen).notifier).discardPiece(square),
+      onDroppedPiece:
+          (Square? origin, Square dest, Piece piece) => ref
+              .read(boardEditorControllerProvider(initialFen).notifier)
+              .movePiece(origin, dest, piece),
+      onEditedSquare:
+          (Square square) =>
+              ref.read(boardEditorControllerProvider(initialFen).notifier).editSquare(square),
     );
   }
 }
@@ -187,9 +188,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: widget.isTablet
-            ? const BorderRadius.all(Radius.circular(4.0))
-            : BorderRadius.zero,
+        borderRadius: widget.isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
       ),
       child: ColoredBox(
@@ -204,81 +203,69 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               height: squareSize,
               child: ColoredBox(
                 key: Key('drag-button-${widget.side.name}'),
-                color: editorState.editorPointerMode == EditorPointerMode.drag
-                    ? context.lichessColors.good
-                    : Colors.transparent,
+                color:
+                    editorState.editorPointerMode == EditorPointerMode.drag
+                        ? context.lichessColors.good
+                        : Colors.transparent,
                 child: GestureDetector(
-                  onTap: () => ref
-                      .read(editorController.notifier)
-                      .updateMode(EditorPointerMode.drag),
-                  child: Icon(
-                    CupertinoIcons.hand_draw,
-                    size: 0.9 * squareSize,
-                  ),
+                  onTap:
+                      () => ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
+                  child: Icon(CupertinoIcons.hand_draw, size: 0.9 * squareSize),
                 ),
               ),
             ),
-            ...Role.values.map(
-              (role) {
-                final piece = Piece(role: role, color: widget.side);
-                final pieceWidget = PieceWidget(
-                  piece: piece,
-                  size: squareSize,
-                  pieceAssets: boardPrefs.pieceSet.assets,
-                );
+            ...Role.values.map((role) {
+              final piece = Piece(role: role, color: widget.side);
+              final pieceWidget = PieceWidget(
+                piece: piece,
+                size: squareSize,
+                pieceAssets: boardPrefs.pieceSet.assets,
+              );
 
-                return ColoredBox(
-                  key: Key(
-                    'piece-button-${piece.color.name}-${piece.role.name}',
-                  ),
-                  color: ref
-                              .read(
-                                boardEditorControllerProvider(
-                                  widget.initialFen,
-                                ),
-                              )
-                              .activePieceOnEdit ==
-                          piece
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.transparent,
-                  child: GestureDetector(
-                    child: Draggable(
-                      data: Piece(role: role, color: widget.side),
-                      feedback: PieceDragFeedback(
-                        piece: piece,
-                        squareSize: squareSize,
-                        pieceAssets: boardPrefs.pieceSet.assets,
-                      ),
-                      child: pieceWidget,
-                      onDragEnd: (_) => ref
-                          .read(editorController.notifier)
-                          .updateMode(EditorPointerMode.drag),
+              return ColoredBox(
+                key: Key('piece-button-${piece.color.name}-${piece.role.name}'),
+                color:
+                    ref.read(boardEditorControllerProvider(widget.initialFen)).activePieceOnEdit ==
+                            piece
+                        ? ColorScheme.of(context).primary
+                        : Colors.transparent,
+                child: GestureDetector(
+                  child: Draggable(
+                    data: Piece(role: role, color: widget.side),
+                    feedback: PieceDragFeedback(
+                      piece: piece,
+                      squareSize: squareSize,
+                      pieceAssets: boardPrefs.pieceSet.assets,
                     ),
-                    onTap: () => ref
-                        .read(editorController.notifier)
-                        .updateMode(EditorPointerMode.edit, piece),
+                    child: pieceWidget,
+                    onDragEnd:
+                        (_) =>
+                            ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
                   ),
-                );
-              },
-            ),
+                  onTap:
+                      () => ref
+                          .read(editorController.notifier)
+                          .updateMode(EditorPointerMode.edit, piece),
+                ),
+              );
+            }),
             SizedBox(
               key: Key('delete-button-${widget.side.name}'),
               width: squareSize,
               height: squareSize,
               child: ColoredBox(
-                color: editorState.deletePiecesActive
-                    ? context.lichessColors.error
-                    : Colors.transparent,
+                color:
+                    editorState.deletePiecesActive
+                        ? context.lichessColors.error
+                        : Colors.transparent,
                 child: GestureDetector(
-                  onTap: () => {
-                    ref
-                        .read(editorController.notifier)
-                        .updateMode(EditorPointerMode.edit, null),
-                  },
-                  child: Icon(
-                    CupertinoIcons.delete,
-                    size: 0.8 * squareSize,
-                  ),
+                  onTap:
+                      () => {
+                        ref
+                            .read(editorController.notifier)
+                            .updateMode(EditorPointerMode.edit, null),
+                      },
+                  child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
                 ),
               ),
             ),
@@ -296,68 +283,86 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editorState = ref.watch(boardEditorControllerProvider(initialFen));
+    final editorController = boardEditorControllerProvider(initialFen);
+    final editorState = ref.watch(editorController);
     final pieceCount = editorState.pieces.length;
 
-    return BottomBar(
+    return PlatformBottomBar(
       children: [
         BottomBarButton(
+          icon: Icons.menu,
           label: context.l10n.menu,
-          onTap: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) => BoardEditorMenu(
-              initialFen: initialFen,
-            ),
-            showDragHandle: true,
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.sizeOf(context).height * 0.5,
-            ),
-          ),
-          icon: Icons.tune,
+          onTap:
+              () => showAdaptiveActionSheet<void>(
+                context: context,
+                actions: [
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.loadPosition),
+                    onPressed: () {
+                      final notifier = ref.read(editorController.notifier);
+                      Navigator.of(context).push(
+                        SearchPositionScreen.buildRoute(
+                          context,
+                          onPositionSelected:
+                              (position) => {
+                                notifier.loadFen(position.fen),
+                                Navigator.of(context).pop(),
+                              },
+                        ),
+                      );
+                    },
+                  ),
+                  BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.clearBoard),
+                    onPressed: () {
+                      ref.read(editorController.notifier).loadFen(kEmptyFen);
+                    },
+                  ),
+                ],
+              ),
         ),
         BottomBarButton(
           key: const Key('flip-button'),
           label: context.l10n.flipBoard,
-          onTap: ref
-              .read(boardEditorControllerProvider(initialFen).notifier)
-              .flipBoard,
+          onTap: ref.read(boardEditorControllerProvider(initialFen).notifier).flipBoard,
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         BottomBarButton(
-          label: context.l10n.analysis,
           key: const Key('analysis-board-button'),
-          onTap: editorState.pgn != null &&
-                  // 1 condition (of many) where stockfish segfaults
-                  pieceCount > 0 &&
-                  pieceCount <= 32
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => AnalysisScreen(
-                      options: AnalysisOptions(
-                        orientation: editorState.orientation,
-                        standalone: (
-                          pgn: editorState.pgn!,
-                          isComputerAnalysisAllowed: true,
-                          variant: Variant.fromPosition,
+          label: context.l10n.analysis,
+          onTap:
+              editorState.pgn != null &&
+                      // 1 condition (of many) where stockfish segfaults
+                      pieceCount > 0 &&
+                      pieceCount <= 32
+                  ? () {
+                    Navigator.of(context).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: editorState.orientation,
+                          standalone: (
+                            pgn: editorState.pgn!,
+                            isComputerAnalysisAllowed: true,
+                            variant: Variant.fromPosition,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }
-              : null,
+                    );
+                  }
+                  : null,
           icon: Icons.biotech,
         ),
         BottomBarButton(
-          label: context.l10n.mobileSharePositionAsFEN,
-          onTap: () => launchShareDialog(
-            context,
-            text: editorState.fen,
-          ),
-          icon: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoIcons.share
-              : Icons.share,
+          label: 'Filters',
+          onTap:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
+                showDragHandle: true,
+                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+              ),
+          icon: Icons.tune,
         ),
       ],
     );

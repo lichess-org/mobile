@@ -3,12 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-import 'leaderboard_screen.dart';
 
 /// Create a leaderboard list of the highest rated player for each perf.
 ///
@@ -22,27 +20,16 @@ class LeaderboardWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           hasLeading: true,
-          header: Text(
-            context.l10n.leaderboard,
-          ),
+          header: Text(context.l10n.leaderboard),
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.leaderboard,
-                builder: (context) => const LeaderboardScreen(),
-              );
+              Navigator.of(context).push(LeaderboardScreen.buildRoute(context));
             },
-            child: Text(
-              context.l10n.more,
-            ),
+            child: Text(context.l10n.more),
           ),
           children: [
             for (final entry in data.entries)
-              LeaderboardListTile(
-                user: entry.value,
-                perfIcon: entry.key.icon,
-              ),
+              LeaderboardListTile(user: entry.value, perfIcon: entry.key.icon),
           ],
         );
       },
@@ -55,15 +42,13 @@ class LeaderboardWidget extends ConsumerWidget {
           child: Text('Could not load leaderboard.'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 5,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

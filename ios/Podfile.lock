@@ -9,41 +9,40 @@ PODS:
     - AppAuth/Core
   - connectivity_plus (0.0.1):
     - Flutter
-    - FlutterMacOS
   - cupertino_http (0.0.1):
     - Flutter
     - FlutterMacOS
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (11.4.0):
-    - FirebaseCore (= 11.4.0)
-  - Firebase/Crashlytics (11.4.0):
+  - Firebase/CoreOnly (11.8.0):
+    - FirebaseCore (~> 11.8.0)
+  - Firebase/Crashlytics (11.8.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 11.4.0)
-  - Firebase/Messaging (11.4.0):
+    - FirebaseCrashlytics (~> 11.8.0)
+  - Firebase/Messaging (11.8.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 11.4.0)
-  - firebase_core (3.8.1):
-    - Firebase/CoreOnly (= 11.4.0)
+    - FirebaseMessaging (~> 11.8.0)
+  - firebase_core (3.12.0):
+    - Firebase/CoreOnly (= 11.8.0)
     - Flutter
-  - firebase_crashlytics (4.2.0):
-    - Firebase/Crashlytics (= 11.4.0)
+  - firebase_crashlytics (4.3.3):
+    - Firebase/Crashlytics (= 11.8.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (15.1.6):
-    - Firebase/Messaging (= 11.4.0)
+  - firebase_messaging (15.2.3):
+    - Firebase/Messaging (= 11.8.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (11.4.0):
-    - FirebaseCoreInternal (~> 11.0)
+  - FirebaseCore (11.8.1):
+    - FirebaseCoreInternal (~> 11.8.0)
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/Logger (~> 8.0)
-  - FirebaseCoreExtension (11.4.1):
-    - FirebaseCore (~> 11.0)
-  - FirebaseCoreInternal (11.6.0):
+  - FirebaseCoreExtension (11.8.0):
+    - FirebaseCore (~> 11.8.0)
+  - FirebaseCoreInternal (11.8.0):
     - "GoogleUtilities/NSData+zlib (~> 8.0)"
-  - FirebaseCrashlytics (11.4.0):
-    - FirebaseCore (~> 11.4)
+  - FirebaseCrashlytics (11.8.0):
+    - FirebaseCore (~> 11.8.0)
     - FirebaseInstallations (~> 11.0)
     - FirebaseRemoteConfigInterop (~> 11.0)
     - FirebaseSessions (~> 11.0)
@@ -51,13 +50,13 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - FirebaseInstallations (11.4.0):
-    - FirebaseCore (~> 11.0)
+  - FirebaseInstallations (11.8.0):
+    - FirebaseCore (~> 11.8.0)
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
-  - FirebaseMessaging (11.4.0):
-    - FirebaseCore (~> 11.0)
+  - FirebaseMessaging (11.8.0):
+    - FirebaseCore (~> 11.8.0)
     - FirebaseInstallations (~> 11.0)
     - GoogleDataTransport (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
@@ -65,10 +64,10 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (11.6.0)
-  - FirebaseSessions (11.4.0):
-    - FirebaseCore (~> 11.4)
-    - FirebaseCoreExtension (~> 11.4)
+  - FirebaseRemoteConfigInterop (11.8.0)
+  - FirebaseSessions (11.8.0):
+    - FirebaseCore (~> 11.8.0)
+    - FirebaseCoreExtension (~> 11.8.0)
     - FirebaseInstallations (~> 11.0)
     - GoogleDataTransport (~> 10.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -112,6 +111,8 @@ PODS:
   - GoogleUtilities/UserDefaults (8.0.2):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - image_picker_ios (0.0.1):
+    - Flutter
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -146,7 +147,7 @@ PODS:
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -157,6 +158,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -190,7 +192,7 @@ EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
   connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/darwin"
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   cupertino_http:
     :path: ".symlinks/plugins/cupertino_http/darwin"
   device_info_plus:
@@ -211,6 +213,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   objective_c:
     :path: ".symlinks/plugins/objective_c/ios"
   package_info_plus:
@@ -233,30 +237,31 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 3507c575c2b18a462c99948f61d5de21d4420999
+  app_settings: 5127ae0678de1dcc19f2293271c51d37c89428b2
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  connectivity_plus: b21496ab28d1324eb59885d888a4d83b98531f01
+  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
-  Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_core: 222ad1787f0b9c145a06af2fdaa265a366576c0d
-  firebase_crashlytics: 1c2e2091a0b06bf6e3d6535010469a98c44c4d67
-  firebase_messaging: a538130cb2bca3ea0ff0892b8c948bd7d20ecaed
-  FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
-  FirebaseCoreExtension: f1bc67a4702931a7caa097d8e4ac0a1b0d16720e
-  FirebaseCoreInternal: d98ab91e2d80a56d7b246856a8885443b302c0c2
-  FirebaseCrashlytics: 41bbdd2b514a8523cede0c217aee6ef7ecf38401
-  FirebaseInstallations: 6ef4a1c7eb2a61ee1f74727d7f6ce2e72acf1414
-  FirebaseMessaging: f8a160d99c2c2e5babbbcc90c4a3e15db036aee2
-  FirebaseRemoteConfigInterop: e75e348953352a000331eb77caf01e424248e176
-  FirebaseSessions: 3f56f177d9e53a85021d16b31f9a111849d1dd8b
+  Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
+  firebase_core: 6cbed78b4f298ed103a9fd034e6dbc846320480f
+  firebase_crashlytics: eb5eb0ef5e6910395adfe177b9ca4a62e8a2f1aa
+  firebase_messaging: 5e0adf2eb18b0ee59aa0c109314c091a0497ecac
+  FirebaseCore: 99fe0c4b44a39f37d99e6404e02009d2db5d718d
+  FirebaseCoreExtension: 3d3f2017a00d06e09ab4ebe065391b0bb642565e
+  FirebaseCoreInternal: df24ce5af28864660ecbd13596fc8dd3a8c34629
+  FirebaseCrashlytics: a1102c035f18d5dd94a5969ee439c526d0c9e313
+  FirebaseInstallations: 6c963bd2a86aca0481eef4f48f5a4df783ae5917
+  FirebaseMessaging: 487b634ccdf6f7b7ff180fdcb2a9935490f764e8
+  FirebaseRemoteConfigInterop: 98897a64aa372eac3c5b3fe2816594ccfaac55ef
+  FirebaseSessions: c4d40a97f88f9eaff2834d61b4fea0a522d62123
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: 240be31017bab05dc0ad10a863886d49eba477aa
+  flutter_appauth: 914057fda669db5073d3ca9d94ea932e7df3c964
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
-  flutter_native_splash: 576fbd69b830a63594ae678396fa17e43abbc5f8
+  flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
@@ -269,7 +274,7 @@ SPEC CHECKSUMS:
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   stockfish: 3125c5e5fdd6789c398bb2d1a29a58ba3c9e5577
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  wakelock_plus: fd58c82b1388f4afe3fe8aa2c856503a262a5b03
+  wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
 
 PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
 

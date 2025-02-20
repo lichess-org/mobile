@@ -41,179 +41,137 @@ void main() {
 
   const options = AnalysisOptions(
     orientation: Side.white,
-    standalone: (
-      pgn: '',
-      isComputerAnalysisAllowed: false,
-      variant: Variant.standard,
-    ),
+    standalone: (pgn: '', isComputerAnalysisAllowed: false, variant: Variant.standard),
   );
 
   const name = 'John';
 
-  final user = LightUser(
-    id: UserId.fromUserName(name),
-    name: name,
-  );
+  final user = LightUser(id: UserId.fromUserName(name), name: name);
 
-  final session = AuthSessionState(
-    user: user,
-    token: 'test-token',
-  );
+  final session = AuthSessionState(user: user, token: 'test-token');
 
   group('OpeningExplorerScreen', () {
-    testWidgets(
-      'master opening explorer loads',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const OpeningExplorerScreen(options: options),
-          overrides: [
-            defaultClientProvider.overrideWithValue(mockClient),
-          ],
-        );
-        await tester.pumpWidget(app);
-        // wait for analysis controller to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
+    testWidgets('master opening explorer loads', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OpeningExplorerScreen(options: options),
+        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+      );
+      await tester.pumpWidget(app);
+      // wait for analysis controller to load
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 10));
 
-        // wait for opening explorer data to load (taking debounce delay into account)
-        await tester.pump(const Duration(milliseconds: 350));
+      // wait for opening explorer data to load (taking debounce delay into account)
+      await tester.pump(const Duration(milliseconds: 350));
 
-        final moves = [
-          'e4',
-          'd4',
-        ];
-        expect(find.byType(Table), findsOneWidget);
-        for (final move in moves) {
-          expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
-        }
+      final moves = ['e4', 'd4'];
+      expect(find.byType(Table), findsOneWidget);
+      for (final move in moves) {
+        expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
+      }
 
-        expect(find.widgetWithText(Container, 'Top games'), findsOneWidget);
-        expect(find.widgetWithText(Container, 'Recent games'), findsNothing);
+      expect(find.widgetWithText(Container, 'Top games'), findsOneWidget);
+      expect(find.widgetWithText(Container, 'Recent games'), findsNothing);
 
-        // TODO: make a custom scrollUntilVisible that works with the non-scrollable
-        // board widget
+      // TODO: make a custom scrollUntilVisible that works with the non-scrollable
+      // board widget
 
-        // await tester.scrollUntilVisible(
-        //   find.text('Firouzja, A.'),
-        //   200,
-        //   scrollable: explorerViewFinder,
-        // );
+      // await tester.scrollUntilVisible(
+      //   find.text('Firouzja, A.'),
+      //   200,
+      //   scrollable: explorerViewFinder,
+      // );
 
-        // expect(
-        //   find.byType(OpeningExplorerGameTile),
-        //   findsNWidgets(2),
-        // );
-      },
-      variant: kPlatformVariant,
-    );
+      // expect(
+      //   find.byType(OpeningExplorerGameTile),
+      //   findsNWidgets(2),
+      // );
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'lichess opening explorer loads',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const OpeningExplorerScreen(options: options),
-          overrides: [
-            defaultClientProvider.overrideWithValue(mockClient),
-          ],
-          defaultPreferences: {
-            SessionPreferencesStorage.key(
-              PrefCategory.openingExplorer.storageKey,
-              null,
-            ): jsonEncode(
-              OpeningExplorerPrefs.defaults()
-                  .copyWith(db: OpeningDatabase.lichess)
-                  .toJson(),
-            ),
-          },
-        );
-        await tester.pumpWidget(app);
-        // wait for analysis controller to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
+    testWidgets('lichess opening explorer loads', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OpeningExplorerScreen(options: options),
+        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        defaultPreferences: {
+          SessionPreferencesStorage.key(PrefCategory.openingExplorer.storageKey, null): jsonEncode(
+            OpeningExplorerPrefs.defaults().copyWith(db: OpeningDatabase.lichess).toJson(),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      // wait for analysis controller to load
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 10));
 
-        // wait for opening explorer data to load (taking debounce delay into account)
-        await tester.pump(const Duration(milliseconds: 350));
+      // wait for opening explorer data to load (taking debounce delay into account)
+      await tester.pump(const Duration(milliseconds: 350));
 
-        final moves = [
-          'd4',
-        ];
-        expect(find.byType(Table), findsOneWidget);
-        for (final move in moves) {
-          expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
-        }
+      final moves = ['d4'];
+      expect(find.byType(Table), findsOneWidget);
+      for (final move in moves) {
+        expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
+      }
 
-        expect(find.widgetWithText(Container, 'Top games'), findsNothing);
-        expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
+      expect(find.widgetWithText(Container, 'Top games'), findsNothing);
+      expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
 
-        // await tester.scrollUntilVisible(
-        //   find.byType(OpeningExplorerGameTile),
-        //   200,
-        //   scrollable: explorerViewFinder,
-        // );
+      // await tester.scrollUntilVisible(
+      //   find.byType(OpeningExplorerGameTile),
+      //   200,
+      //   scrollable: explorerViewFinder,
+      // );
 
-        // expect(
-        //   find.byType(OpeningExplorerGameTile),
-        //   findsOneWidget,
-        // );
-      },
-      variant: kPlatformVariant,
-    );
+      // expect(
+      //   find.byType(OpeningExplorerGameTile),
+      //   findsOneWidget,
+      // );
+    }, variant: kPlatformVariant);
 
-    testWidgets(
-      'player opening explorer loads',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const OpeningExplorerScreen(options: options),
-          overrides: [
-            defaultClientProvider.overrideWithValue(mockClient),
-          ],
-          userSession: session,
-          defaultPreferences: {
-            SessionPreferencesStorage.key(
-              PrefCategory.openingExplorer.storageKey,
-              session,
-            ): jsonEncode(
-              OpeningExplorerPrefs.defaults(user: user)
-                  .copyWith(db: OpeningDatabase.player)
-                  .toJson(),
-            ),
-          },
-        );
-        await tester.pumpWidget(app);
-        // wait for analysis controller to load
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pump(const Duration(milliseconds: 10));
+    testWidgets('player opening explorer loads', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OpeningExplorerScreen(options: options),
+        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        userSession: session,
+        defaultPreferences: {
+          SessionPreferencesStorage.key(
+            PrefCategory.openingExplorer.storageKey,
+            session,
+          ): jsonEncode(
+            OpeningExplorerPrefs.defaults(user: user).copyWith(db: OpeningDatabase.player).toJson(),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      // wait for analysis controller to load
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 10));
 
-        // wait for opening explorer data to load (taking debounce delay into account)
-        await tester.pump(const Duration(milliseconds: 350));
+      // wait for opening explorer data to load (taking debounce delay into account)
+      await tester.pump(const Duration(milliseconds: 350));
 
-        final moves = [
-          'c4',
-        ];
-        expect(find.byType(Table), findsOneWidget);
-        for (final move in moves) {
-          expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
-        }
+      final moves = ['c4'];
+      expect(find.byType(Table), findsOneWidget);
+      for (final move in moves) {
+        expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
+      }
 
-        expect(find.widgetWithText(Container, 'Top games'), findsNothing);
-        expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
+      expect(find.widgetWithText(Container, 'Top games'), findsNothing);
+      expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
 
-        // await tester.scrollUntilVisible(
-        //   find.byType(OpeningExplorerGameTile),
-        //   200,
-        //   scrollable: explorerViewFinder,
-        // );
+      // await tester.scrollUntilVisible(
+      //   find.byType(OpeningExplorerGameTile),
+      //   200,
+      //   scrollable: explorerViewFinder,
+      // );
 
-        // expect(
-        //   find.byType(OpeningExplorerGameTile),
-        //   findsOneWidget,
-        // );
-      },
-      variant: kPlatformVariant,
-    );
+      // expect(
+      //   find.byType(OpeningExplorerGameTile),
+      //   findsOneWidget,
+      // );
+    }, variant: kPlatformVariant);
   });
 }
 

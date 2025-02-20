@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
@@ -34,6 +35,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -46,15 +48,12 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            seek.perf.icon,
-                            color: DefaultTextStyle.of(context).style.color,
-                          ),
+                          Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
                           const SizedBox(width: 8.0),
                           Text(
                             seek.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${seek.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -62,7 +61,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         const SizedBox(height: 8.0),
                         Text(
                           '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                       ],
                       const SizedBox(height: 16.0),
@@ -74,7 +73,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -114,6 +113,7 @@ class ChallengeLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -124,7 +124,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                       const SizedBox(height: 16.0),
                       UserFullNameWidget(
                         user: challenge.destUser,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: TextTheme.of(context).titleLarge,
                       ),
                       const SizedBox(height: 16.0),
                       Row(
@@ -139,7 +139,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                           Text(
                             challenge.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${challenge.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -150,7 +150,7 @@ class ChallengeLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -171,12 +171,7 @@ class ChallengeLoadingContent extends StatelessWidget {
 }
 
 class StandaloneGameLoadingBoard extends StatelessWidget {
-  const StandaloneGameLoadingBoard({
-    this.fen,
-    this.lastMove,
-    this.orientation,
-    super.key,
-  });
+  const StandaloneGameLoadingBoard({this.fen, this.lastMove, this.orientation, super.key});
 
   final String? fen;
   final Side? orientation;
@@ -184,13 +179,61 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoardTable(
-      orientation: orientation ?? Side.white,
-      fen: fen ?? kEmptyFen,
-      lastMove: lastMove as NormalMove?,
-      topTable: const SizedBox.shrink(),
-      bottomTable: const SizedBox.shrink(),
-      showMoveListPlaceholder: true,
+    return Shimmer(
+      child: BoardTable(
+        orientation: orientation ?? Side.white,
+        fen: fen ?? kEmptyFen,
+        lastMove: lastMove as NormalMove?,
+        topTable: const LoadingPlayerWidget(),
+        bottomTable: const LoadingPlayerWidget(),
+        showMoveListPlaceholder: true,
+      ),
+    );
+  }
+}
+
+/// A widget that shows a loading indicator for a player.
+///
+/// Must be wrapped in a [Shimmer] widget.
+class LoadingPlayerWidget extends StatelessWidget {
+  const LoadingPlayerWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerLoading(
+      isLoading: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 6,
+            child: SizedBox(
+              height: 24.0,
+              width: double.infinity,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ),
+          const Spacer(),
+          Flexible(
+            flex: 2,
+            child: SizedBox(
+              height: 38.0,
+              width: double.infinity,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -217,7 +260,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -234,10 +277,7 @@ class LoadGameError extends StatelessWidget {
 
 /// A board that shows a message that a challenge has been declined.
 class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({
-    required this.declineReason,
-    required this.challenge,
-  });
+  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
 
   final String declineReason;
   final Challenge challenge;
@@ -258,6 +298,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -268,14 +309,11 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                       children: [
                         Text(
                           context.l10n.challengeChallengeDeclined,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                         const SizedBox(height: 8.0),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
-                        Text(
-                          declineReason,
-                          style: const TextStyle(fontStyle: FontStyle.italic),
-                        ),
+                        Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
                         if (challenge.destUser != null)
                           Align(
@@ -284,9 +322,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Text(' — '),
-                                UserFullNameWidget(
-                                  user: challenge.destUser?.user,
-                                ),
+                                UserFullNameWidget(user: challenge.destUser?.user),
                                 if (challenge.destUser?.lagRating != null) ...[
                                   const SizedBox(width: 6.0),
                                   LagIndicator(
@@ -306,7 +342,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        BottomBar(
+        PlatformBottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -329,13 +365,9 @@ class _LobbyNumbers extends ConsumerWidget {
     if (lobbyNumbers == null) {
       return Column(
         children: [
-          Text(
-            context.l10n.nbPlayers(0).replaceAll('0', '...'),
-          ),
+          Text(context.l10n.nbPlayers(0).replaceAll('0', '...')),
           const SizedBox(height: 8.0),
-          Text(
-            context.l10n.nbGamesInPlay(0).replaceAll('0', '...'),
-          ),
+          Text(context.l10n.nbGamesInPlay(0).replaceAll('0', '...')),
         ],
       );
     } else {

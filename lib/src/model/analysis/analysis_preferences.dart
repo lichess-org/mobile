@@ -6,9 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-@riverpod
-class AnalysisPreferences extends _$AnalysisPreferences
-    with PreferencesStorage<AnalysisPrefs> {
+@Riverpod(keepAlive: true)
+class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.analysis;
@@ -18,8 +17,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
   AnalysisPrefs get defaults => AnalysisPrefs.defaults;
 
   @override
-  AnalysisPrefs fromJson(Map<String, dynamic> json) =>
-      AnalysisPrefs.fromJson(json);
+  AnalysisPrefs fromJson(Map<String, dynamic> json) => AnalysisPrefs.fromJson(json);
 
   @override
   AnalysisPrefs build() {
@@ -27,77 +25,49 @@ class AnalysisPreferences extends _$AnalysisPreferences
   }
 
   Future<void> toggleEnableComputerAnalysis() {
-    return save(
-      state.copyWith(
-        enableComputerAnalysis: !state.enableComputerAnalysis,
-      ),
-    );
+    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
   }
 
   Future<void> toggleEnableLocalEvaluation() {
-    return save(
-      state.copyWith(
-        enableLocalEvaluation: !state.enableLocalEvaluation,
-      ),
-    );
+    return save(state.copyWith(enableLocalEvaluation: !state.enableLocalEvaluation));
   }
 
   Future<void> toggleShowEvaluationGauge() {
-    return save(
-      state.copyWith(
-        showEvaluationGauge: !state.showEvaluationGauge,
-      ),
-    );
+    return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
   }
 
   Future<void> toggleAnnotations() {
-    return save(
-      state.copyWith(
-        showAnnotations: !state.showAnnotations,
-      ),
-    );
+    return save(state.copyWith(showAnnotations: !state.showAnnotations));
   }
 
   Future<void> togglePgnComments() {
-    return save(
-      state.copyWith(
-        showPgnComments: !state.showPgnComments,
-      ),
-    );
+    return save(state.copyWith(showPgnComments: !state.showPgnComments));
   }
 
   Future<void> toggleShowBestMoveArrow() {
-    return save(
-      state.copyWith(
-        showBestMoveArrow: !state.showBestMoveArrow,
-      ),
-    );
+    return save(state.copyWith(showBestMoveArrow: !state.showBestMoveArrow));
   }
 
   Future<void> setNumEvalLines(int numEvalLines) {
     assert(numEvalLines >= 0 && numEvalLines <= 3);
-    return save(
-      state.copyWith(
-        numEvalLines: numEvalLines,
-      ),
-    );
+    return save(state.copyWith(numEvalLines: numEvalLines));
   }
 
   Future<void> setEngineCores(int numEngineCores) {
     assert(numEngineCores >= 1 && numEngineCores <= maxEngineCores);
-    return save(
-      state.copyWith(
-        numEngineCores: numEngineCores,
-      ),
-    );
+    return save(state.copyWith(numEngineCores: numEngineCores));
   }
 
   Future<void> setEngineSearchTime(Duration engineSearchTime) {
-    return save(
-      state.copyWith(
-        engineSearchTime: engineSearchTime,
-      ),
-    );
+    return save(state.copyWith(engineSearchTime: engineSearchTime));
+  }
+
+  Future<void> toggleInlineNotation() {
+    return save(state.copyWith(inlineNotation: !state.inlineNotation));
+  }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
   }
 }
 
@@ -113,14 +83,15 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     required bool showAnnotations,
     required bool showPgnComments,
     @Assert('numEvalLines >= 0 && numEvalLines <= 3') required int numEvalLines,
-    @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
-    required int numEngineCores,
+    @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores') required int numEngineCores,
     @JsonKey(
       defaultValue: _searchTimeDefault,
       fromJson: _searchTimeFromJson,
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
@@ -133,11 +104,16 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 10),
+    inlineNotation: false,
+    smallBoard: false,
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
     return _$AnalysisPrefsFromJson(json);
   }
+
+  EvaluationOptions get evaluationOptions =>
+      EvaluationOptions(multiPv: numEvalLines, cores: numEngineCores, searchTime: engineSearchTime);
 }
 
 Duration _searchTimeDefault() {

@@ -40,6 +40,7 @@ const modules = [
   'storm',
   'streamer',
   'study',
+  'timeago',
 ]
 
 // list of keys (per module) to include in the ARB file
@@ -54,8 +55,65 @@ const whiteLists = {
 // Order of locales with variants matters: the fallback must always be first
 // eg: 'pt-PT' is before 'pt-BR'
 // Note that 'en-GB' is omitted here on purpose because it is the locale used in template ARB.
-// This list must be consistent with the `kSupportedLocales` constant defined in `lib/constants.dart`.
-const locales = ['af-ZA', 'ar-SA', 'az-AZ', 'be-BY', 'bg-BG', 'bn-BD', 'br-FR', 'bs-BA', 'ca-ES', 'cs-CZ', 'da-DK', 'de-DE', 'el-GR', 'en-US', 'eo-UY', 'es-ES', 'et-EE', 'eu-ES', 'fa-IR', 'fi-FI', 'fo-FO', 'fr-FR', 'ga-IE', 'gl-ES', 'gsw-CH', 'he-IL', 'hi-IN', 'hr-HR', 'hu-HU', 'hy-AM', 'id-ID', 'it-IT', 'ja-JP', 'kk-KZ', 'ko-KR', 'lb-LU', 'lt-LT', 'lv-LV', 'mk-MK', 'nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-PT', 'pt-BR', 'ro-RO', 'ru-RU', 'sk-SK', 'sl-SI', 'sq-AL', 'sr-SP', 'sv-SE', 'tr-TR', 'uk-UA', 'vi-VN', 'zh-CN', 'zh-TW']
+const locales = [
+  'af-ZA',
+  'ar-SA',
+  'az-AZ',
+  'be-BY',
+  'bg-BG',
+  'bn-BD',
+  'br-FR',
+  'bs-BA',
+  'ca-ES',
+  'cs-CZ',
+  'da-DK',
+  'de-DE',
+  'el-GR',
+  'en-US',
+  'eo-AA',
+  'es-ES',
+  'et-EE',
+  'eu-ES',
+  'fa-IR',
+  'fi-FI',
+  'fo-FO',
+  'fr-FR',
+  'ga-IE',
+  'gl-ES',
+  'gsw-CH',
+  'he-IL',
+  'hi-IN',
+  'hr-HR',
+  'hu-HU',
+  'hy-AM',
+  'id-ID',
+  'it-IT',
+  'ja-JP',
+  'kk-KZ',
+  'ko-KR',
+  'lb-LU',
+  'lt-LT',
+  'lv-LV',
+  'mk-MK',
+  'nb-NO',
+  'nl-NL',
+  'nn-NO',
+  'pl-PL',
+  'pt-PT',
+  'pt-BR',
+  'ro-RO',
+  'ru-RU',
+  'sk-SK',
+  'sl-SI',
+  'sq-AL',
+  'sr-SP',
+  'sv-SE',
+  'tr-TR',
+  'uk-UA',
+  'vi-VN',
+  'zh-CN',
+  'zh-TW',
+]
 
 async function main() {
   mkdirSync(`${tmpDir}`, {recursive: true})

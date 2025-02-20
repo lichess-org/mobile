@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -13,7 +14,6 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -39,21 +39,31 @@ class ChallengeService {
   ChallengesList? _previous;
 
   StreamSubscription<ChallengesList>? _socketSubscription;
+  StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
 
   /// The stream of challenge events that are received from the server.
-  static Stream<ChallengesList> get stream => socketGlobalStream.map(
-        (event) {
-          if (event.topic != 'challenges') return null;
-          final listPick = pick(event.data).required();
-          final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
-          final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
-          return (inward: inward.lock, outward: outward.lock);
-        },
-      ).whereNotNull();
+  static Stream<ChallengesList> get stream =>
+      socketGlobalStream.map((event) {
+        if (event.topic != 'challenges') return null;
+        final listPick = pick(event.data).required();
+        final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+        final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+        return (inward: inward.lock, outward: outward.lock);
+      }).whereNotNull();
 
-  /// Start listening to challenge events from the server.
+  /// Start listening to events.
   void start() {
     _socketSubscription = stream.listen(_onSocketEvent);
+
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (response, notification) = data;
+      switch (notification) {
+        case ChallengeNotification(:final challenge):
+          _onNotificationResponse(response.actionId, challenge);
+        case _:
+          break;
+      }
+    });
   }
 
   void _onSocketEvent(ChallengesList current) {
@@ -75,21 +85,16 @@ class ChallengeService {
     await Future.wait(
       prevInwardIds
           .whereNot((challengeId) => currentInwardIds.contains(challengeId))
-          .map(
-            (id) async => await notificationService.cancel(id.value.hashCode),
-          ),
+          .map((id) async => await notificationService.cancel(id.value.hashCode)),
     );
 
     // new incoming challenges
     await Future.wait(
-      _current?.inward
-              .whereNot((challenge) => prevInwardIds.contains(challenge.id))
-              .map(
-            (challenge) async {
-              return await notificationService
-                  .show(ChallengeNotification(challenge));
-            },
-          ) ??
+      _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
+            challenge,
+          ) async {
+            return await notificationService.show(ChallengeNotification(challenge));
+          }) ??
           <Future<int>>[],
     );
   }
@@ -97,13 +102,11 @@ class ChallengeService {
   /// Stop listening to challenge events from the server.
   void dispose() {
     _socketSubscription?.cancel();
+    _notificationResponseSubscription?.cancel();
   }
 
   /// Handle a local notification response when the app is in the foreground.
-  Future<void> onNotificationResponse(
-    String? actionid,
-    Challenge challenge,
-  ) async {
+  Future<void> _onNotificationResponse(String? actionid, Challenge challenge) async {
     final challengeId = challenge.id;
 
     switch (actionid) {
@@ -111,9 +114,7 @@ class ChallengeService {
         final repo = ref.read(challengeRepositoryProvider);
         await repo.accept(challengeId);
 
-        final fullId = await repo
-            .show(challengeId)
-            .then((challenge) => challenge.gameFullId);
+        final fullId = await repo.show(challengeId).then((challenge) => challenge.gameFullId);
 
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context == null || !context.mounted) break;
@@ -123,28 +124,28 @@ class ChallengeService {
           rootNavState.popUntil((route) => route.isFirst);
         }
 
-        pushPlatformRoute(
+        Navigator.of(
           context,
           rootNavigator: true,
-          builder: (BuildContext context) => GameScreen(initialGameId: fullId),
-        );
+        ).push(GameScreen.buildRoute(context, initialGameId: fullId));
 
       case 'decline':
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context == null || !context.mounted) break;
         showAdaptiveActionSheet<void>(
           context: context,
-          actions: ChallengeDeclineReason.values
-              .map(
-                (reason) => BottomSheetAction(
-                  makeLabel: (context) => Text(reason.label(context.l10n)),
-                  onPressed: (_) {
-                    final repo = ref.read(challengeRepositoryProvider);
-                    repo.decline(challengeId, reason: reason);
-                  },
-                ),
-              )
-              .toList(),
+          actions:
+              ChallengeDeclineReason.values
+                  .map(
+                    (reason) => BottomSheetAction(
+                      makeLabel: (context) => Text(reason.label(context.l10n)),
+                      onPressed: () {
+                        final repo = ref.read(challengeRepositoryProvider);
+                        repo.decline(challengeId, reason: reason);
+                      },
+                    ),
+                  )
+                  .toList(),
         );
 
       case null:
@@ -154,10 +155,7 @@ class ChallengeService {
         if (navState.canPop()) {
           navState.popUntil((route) => route.isFirst);
         }
-        pushPlatformRoute(
-          context,
-          builder: (BuildContext context) => const ChallengeRequestsScreen(),
-        );
+        Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
     }
   }
 }

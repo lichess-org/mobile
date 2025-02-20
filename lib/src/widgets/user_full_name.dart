@@ -18,6 +18,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
+    this.showPatron = true,
     this.style,
     super.key,
   });
@@ -29,6 +30,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
+    this.showPatron = true,
     this.style,
     super.key,
   });
@@ -49,22 +51,23 @@ class UserFullNameWidget extends ConsumerWidget {
   /// Whether to show the user's flair. Defaults to `true`.
   final bool showFlair;
 
+  /// If the user is a patron, show the patron icon in front of their name. Defaults to `true`.
+  final bool showPatron;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provisionalStr = provisional == true ? '?' : '';
     final ratingStr = rating != null ? '($rating$provisionalStr)' : null;
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
-    final shouldShowRating = showRatingAsync.maybeWhen(
-      data: (showRating) => showRating,
-      orElse: () => false,
-    );
+    final shouldShowRating = switch (showRatingAsync) {
+      AsyncData(:final value) => value != ShowRatings.no,
+      _ => true,
+    };
 
-    final displayName = user?.name ??
+    final displayName =
+        user?.name ??
         (aiLevel != null
-            ? context.l10n.aiNameLevelAiLevel(
-                'Stockfish',
-                aiLevel.toString(),
-              )
+            ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -74,18 +77,16 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
-              size: style?.fontSize ??
-                  DefaultTextStyle.of(context).style.fontSize,
+              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
               color: user?.isOnline == true ? context.lichessColors.good : null,
             ),
           ),
-        if (user?.isPatron == true)
+        if (showPatron && user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               LichessIcons.patron,
-              size: style?.fontSize ??
-                  DefaultTextStyle.of(context).style.fontSize,
+              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
               color: style?.color ?? DefaultTextStyle.of(context).style.color,
               semanticLabel: context.l10n.patronLichessPatron,
             ),
@@ -94,36 +95,28 @@ class UserFullNameWidget extends ConsumerWidget {
           Text(
             user!.title!,
             style: (style ?? const TextStyle()).copyWith(
-              color: user?.title == 'BOT'
-                  ? context.lichessColors.fancy
-                  : context.lichessColors.brag,
+              color:
+                  user?.title == 'BOT' ? context.lichessColors.fancy : context.lichessColors.brag,
               fontWeight: user?.title == 'BOT' ? null : FontWeight.bold,
             ),
           ),
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text(
-            displayName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
+          child: Text(displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: style),
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
             errorWidget: (_, __, ___) => kEmptyWidget,
-            width:
-                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
-            height:
-                style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),
         ],
         if (shouldShowRating && ratingStr != null) ...[
           const SizedBox(width: 5),
-          Text(ratingStr),
+          Text(ratingStr, style: style),
         ],
       ],
     );

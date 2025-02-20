@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -17,11 +18,7 @@ part 'game_screen_providers.g.dart';
 @riverpod
 class CurrentGame extends _$CurrentGame {
   @override
-  Future<ChallengeResponse> build(
-    GameSeek? seek,
-    ChallengeRequest? challenge,
-    GameFullId? gameId,
-  ) {
+  Future<ChallengeResponse> build(GameSeek? seek, ChallengeRequest? challenge, GameFullId? gameId) {
     assert(
       gameId != null || seek != null || challenge != null,
       'Either a seek, challenge or a game id must be provided.',
@@ -37,9 +34,7 @@ class CurrentGame extends _$CurrentGame {
       return service.newRealTimeChallenge(challenge);
     }
 
-    return Future.value(
-      (gameFullId: gameId!, challenge: null, declineReason: null),
-    );
+    return Future.value((gameFullId: gameId!, challenge: null, declineReason: null));
   }
 
   /// Search for a new opponent (lobby only).
@@ -48,17 +43,16 @@ class CurrentGame extends _$CurrentGame {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
       state = AsyncValue.data(
-        await service.newLobbyGame(seek!).then(
-              (id) => (gameFullId: id, challenge: null, declineReason: null),
-            ),
+        await service
+            .newLobbyGame(seek!)
+            .then((id) => (gameFullId: id, challenge: null, declineReason: null)),
       );
     }
   }
 
   /// Load a game from its id.
   void loadGame(GameFullId id) {
-    state =
-        AsyncValue.data((gameFullId: id, challenge: null, declineReason: null));
+    state = AsyncValue.data((gameFullId: id, challenge: null, declineReason: null));
   }
 }
 
@@ -75,47 +69,51 @@ class IsBoardTurned extends _$IsBoardTurned {
 }
 
 @riverpod
+Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
+  return ref.watch(
+    gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
+  );
+}
+
+@riverpod
+Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
+  return ref.watch(
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
+  );
+}
+
+@riverpod
 Future<bool> shouldPreventGoingBack(Ref ref, GameFullId gameId) {
   return ref.watch(
-    gameControllerProvider(gameId).selectAsync(
-      (state) =>
-          state.game.meta.speed != Speed.correspondence && state.game.playable,
-    ),
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => state.game.meta.speed != Speed.correspondence && state.game.playable),
   );
 }
 
 /// User game preferences, defined server-side.
 @riverpod
-Future<
-    ({
-      ServerGamePrefs? prefs,
-      bool shouldConfirmMove,
-      bool isZenModeEnabled,
-      bool canAutoQueen
-    })> userGamePrefs(Ref ref, GameFullId gameId) async {
+Future<({ServerGamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen})>
+userGamePrefs(Ref ref, GameFullId gameId) async {
   final prefs = await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.prefs),
   );
   final shouldConfirmMove = await ref.watch(
-    gameControllerProvider(gameId).selectAsync(
-      (state) => state.shouldConfirmMove,
-    ),
+    gameControllerProvider(gameId).selectAsync((state) => state.shouldConfirmMove),
   );
   final isZenModeEnabled = await ref.watch(
-    gameControllerProvider(gameId).selectAsync(
-      (state) => state.isZenModeEnabled,
-    ),
+    gameControllerProvider(gameId).selectAsync((state) => state.isZenModeEnabled),
   );
   final canAutoQueen = await ref.watch(
-    gameControllerProvider(gameId).selectAsync(
-      (state) => state.canAutoQueen,
-    ),
+    gameControllerProvider(gameId).selectAsync((state) => state.canAutoQueen),
   );
   return (
     prefs: prefs,
     shouldConfirmMove: shouldConfirmMove,
     isZenModeEnabled: isZenModeEnabled,
-    canAutoQueen: canAutoQueen
+    canAutoQueen: canAutoQueen,
   );
 }
 
@@ -124,7 +122,5 @@ Future<
 /// This is data that won't change during the game.
 @riverpod
 Future<GameMeta> gameMeta(Ref ref, GameFullId gameId) async {
-  return await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.meta),
-  );
+  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
 }

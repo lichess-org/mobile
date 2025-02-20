@@ -8,21 +8,17 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-
-import 'game.dart';
-import 'game_status.dart';
-import 'player.dart';
 
 part 'archived_game.freezed.dart';
 part 'archived_game.g.dart';
 
-typedef ClockData = ({
-  Duration initial,
-  Duration increment,
-});
+typedef ClockData = ({Duration initial, Duration increment});
 
 /// A lichess game exported from the API.
 ///
@@ -32,9 +28,7 @@ typedef ClockData = ({
 /// See also [PlayableGame] for a game owned by the current user and that can be
 /// played unless finished.
 @Freezed(fromJson: true, toJson: true)
-class ArchivedGame
-    with _$ArchivedGame, BaseGame, IndexableSteps
-    implements BaseGame {
+class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements BaseGame {
   const ArchivedGame._();
 
   @Assert('steps.isNotEmpty')
@@ -43,14 +37,10 @@ class ArchivedGame
     required GameMeta meta,
     // TODO refactor to not include this field
     required LightArchivedGame data,
-    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson)
-    required IList<GameStep> steps,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
-    @JsonKey(
-      defaultValue: GameSource.unknown,
-      unknownEnumValue: GameSource.unknown,
-    )
+    @JsonKey(defaultValue: GameSource.unknown, unknownEnumValue: GameSource.unknown)
     required GameSource source,
     Side? winner,
 
@@ -66,28 +56,13 @@ class ArchivedGame
   /// Create an archived game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
-  /// - GET /game/export/<id>
-  factory ArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _archivedGameFromPick(pick(json).required());
+  /// - GET /game/export/:id
+  factory ArchivedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+    return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an archived game from a local storage JSON.
-  factory ArchivedGame.fromJson(Map<String, dynamic> json) =>
-      _$ArchivedGameFromJson(json);
-
-  /// Player point of view. Null if spectating.
-  Player? get me => youAre == null
-      ? null
-      : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent point of view. Null if spectating.
-  Player? get opponent => youAre == null
-      ? null
-      : youAre == Side.white
-          ? black
-          : white;
+  factory ArchivedGame.fromJson(Map<String, dynamic> json) => _$ArchivedGameFromJson(json);
 }
 
 /// A [LightArchivedGame] associated with a point of view of a player.
@@ -97,7 +72,7 @@ typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
 ///
 /// This is commonly used to display a list of games.
 /// Lichess endpoints that return this data:
-/// - GET /api/games/user/<userId>
+/// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
 class LightArchivedGame with _$LightArchivedGame {
@@ -121,23 +96,36 @@ class LightArchivedGame with _$LightArchivedGame {
     GameSource? source,
     LightOpening? opening,
     String? lastFen,
+    String? moves,
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
+    bool? bookmarked,
   }) = _ArchivedGameData;
 
-  factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _lightArchivedGameFromPick(pick(json).required());
+  factory LightArchivedGame.fromServerJson(
+    Map<String, dynamic> json, {
+
+    /// Whether to ask the server if the game is bookmarked
+    bool withBookmarked = false,
+
+    /// Whether it is already known that the game is bookmarked
+    bool isBookmarked = false,
+  }) {
+    return _lightArchivedGameFromPick(
+      pick(json).required(),
+      withBookmarked: withBookmarked,
+      isBookmarked: isBookmarked,
+    );
   }
 
   factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
       _$LightArchivedGameFromJson(json);
 
+  bool get isBookmarked => bookmarked == true;
+
   String get clockDisplay {
-    return TimeIncrement(
-      clock?.initial.inSeconds ?? 0,
-      clock?.increment.inSeconds ?? 0,
-    ).display;
+    return TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
   }
 }
 
@@ -150,21 +138,18 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
           bestMove: p0('best').asStringOrNull(),
           variation: p0('variation').asStringOrNull(),
           judgment: p0('judgment').letOrNull(
-            (j) => (
-              name: j('name').asStringOrThrow(),
-              comment: j('comment').asStringOrThrow(),
-            ),
+            (j) => (name: j('name').asStringOrThrow(), comment: j('comment').asStringOrThrow()),
           ),
         ),
       )
       ?.lock;
 }
 
-ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _lightArchivedGameFromPick(pick);
-  final clocks = pick('clocks').asListOrNull<Duration>(
-    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
-  );
+ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
+  final data = _lightArchivedGameFromPick(pick, withBookmarked: withBookmarked);
+  final clocks = pick(
+    'clocks',
+  ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
@@ -177,21 +162,21 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       speed: data.speed,
       perf: data.perf,
       rated: data.rated,
-      clock: data.clock != null
-          ? (
-              initial: data.clock!.initial,
-              increment: data.clock!.increment,
-              emergency: null,
-              moreTime: null
-            )
-          : null,
+      clock:
+          data.clock != null
+              ? (
+                initial: data.clock!.initial,
+                increment: data.clock!.increment,
+                emergency: null,
+                moreTime: null,
+              )
+              : null,
       opening: data.opening,
       division: division,
     ),
-    source: pick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: pick(
+      'source',
+    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -202,10 +187,10 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
     steps: pick('moves').letOrThrow((it) {
       final moves = it.asStringOrThrow().split(' ');
       // assume lichess always send initialFen with fromPosition and chess960
-      Position position = (data.variant == Variant.fromPosition ||
-              data.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(initialFen!))
-          : data.variant.initialPosition;
+      Position position =
+          (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
+              ? Chess.fromSetup(Setup.parseFen(initialFen!))
+              : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
@@ -233,14 +218,17 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   );
 }
 
-LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
+LightArchivedGame _lightArchivedGameFromPick(
+  RequiredPick pick, {
+  bool withBookmarked = false,
+  bool isBookmarked = false,
+}) {
   return LightArchivedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
-    source: pick('source').letOrNull(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: pick(
+      'source',
+    ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
@@ -252,17 +240,21 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
     lastFen: pick('lastFen').asStringOrNull(),
+    moves: pick('moves').asStringOrNull(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
+    bookmarked:
+        isBookmarked
+            ? true
+            : withBookmarked
+            ? pick('bookmarked').asBoolOrFalse()
+            : null,
   );
 }
 
 LightOpening _openingFromPick(RequiredPick pick) {
-  return LightOpening(
-    eco: pick('eco').asStringOrThrow(),
-    name: pick('name').asStringOrThrow(),
-  );
+  return LightOpening(eco: pick('eco').asStringOrThrow(), name: pick('name').asStringOrThrow());
 }
 
 ClockData _clockDataFromPick(RequiredPick pick) {
@@ -277,8 +269,7 @@ Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
     user: pick('user').asLightUserOrNull(),
     name: _removeRatingFromName(originalName),
-    rating:
-        pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
+    rating: pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
     analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),

@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -51,8 +55,7 @@ Study makeStudy({
     ownerId: null,
     features: (cloneable: false, chat: false, sticky: false),
     topics: const IList.empty(),
-    chapters: chapters ??
-        IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
+    chapters: chapters ?? IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
     chapter: chapter,
     hints: hints,
     deviationComments: deviationComments,
@@ -64,19 +67,21 @@ void main() {
     testWidgets('Displays PGN moves and comments', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
 
-      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
-        (_) async =>
-            (makeStudy(), '{root comment} 1. e4 {wow} e5 {such chess}'),
-      );
+      when(
+        () => mockRepository.getStudy(id: testId),
+      ).thenAnswer((_) async => (makeStudy(), '{root comment} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [
-          studyRepositoryProvider.overrideWith(
-            (ref) => mockRepository,
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
           ),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -96,16 +101,8 @@ void main() {
       final studyChapter1 = makeStudy(
         chapter: makeChapter(id: const StudyChapterId('1')),
         chapters: IList(const [
-          StudyChapterMeta(
-            id: StudyChapterId('1'),
-            name: 'Chapter 1',
-            fen: null,
-          ),
-          StudyChapterMeta(
-            id: StudyChapterId('2'),
-            name: 'Chapter 2',
-            fen: null,
-          ),
+          StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
+          StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
         ]),
       );
 
@@ -113,41 +110,27 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('2')),
       );
 
-      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
-        (_) async => (studyChapter1, '{pgn 1}'),
-      );
       when(
-        () => mockRepository.getStudy(
-          id: testId,
-          chapterId: const StudyChapterId('1'),
-        ),
-      ).thenAnswer(
-        (_) async => (studyChapter1, '{pgn 1}'),
-      );
+        () => mockRepository.getStudy(id: testId),
+      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
       when(
-        () => mockRepository.getStudy(
-          id: testId,
-          chapterId: const StudyChapterId('2'),
-        ),
-      ).thenAnswer(
-        (_) async => (studyChapter2, '{pgn 2}'),
-      );
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
+      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
+      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [
-          studyRepositoryProvider.overrideWith(
-            (ref) => mockRepository,
-          ),
-        ],
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
       );
       await tester.pumpWidget(app);
       // Wait for study to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
@@ -160,8 +143,8 @@ void main() {
       // Wait for next chapter to load (even though it shouldn't)
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsNothing);
-      expect(find.text('Chapter 2'), findsOneWidget);
+      expect(find.text('1. Chapter 1'), findsNothing);
+      expect(find.text('2. Chapter 2'), findsOneWidget);
 
       expect(find.text('pgn 1'), findsNothing);
       expect(find.text('pgn 2'), findsOneWidget);
@@ -172,26 +155,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.descendant(
-          of: find.byType(Scrollable),
-          matching: find.text('Chapter 1'),
-        ),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('1. Chapter 1')),
         findsOneWidget,
       );
       expect(
-        find.descendant(
-          of: find.byType(Scrollable),
-          matching: find.text('Chapter 2'),
-        ),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('2. Chapter 2')),
         findsOneWidget,
       );
 
-      await tester.tap(find.text('Chapter 1'));
+      await tester.tap(find.text('1. Chapter 1'));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
@@ -201,24 +178,22 @@ void main() {
       final mockRepository = MockStudyRepository();
       when(() => mockRepository.getStudy(id: testId)).thenAnswer(
         (_) async => (
-          makeStudy(
-            chapter: makeChapter(
-              id: const StudyChapterId('1'),
-              orientation: Side.black,
-            ),
-          ),
-          ''
+          makeStudy(chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.black)),
+          '',
         ),
       );
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [
-          studyRepositoryProvider.overrideWith(
-            (ref) => mockRepository,
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
           ),
-        ],
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -265,18 +240,14 @@ void main() {
 
 { We begin our lecture with an 'easy but not easy' example. White to play and win. }
 1. Nd5!! { Brilliant! You noticed that the queen on c4 was kinda smothered. } (1. Ne2? { Not much to say after ...Qc7. }) 1... exd5 2. Rc3 Qa4 3. Rg3! { A fork, threatening Rg7 & b3. } { [%csl Gg7][%cal Gg3g7,Gd4g7,Gb2b3] } (3. Rxc8?? { Uh-oh! After Rc8, b3, there is the counter-sac Rxc2, which is winning for black!! } 3... Raxc8 4. b3 Rxc2!! 5. Qxc2 Qxd4 \$19) 3... g6 4. b3 \$18 { ...and the queen is trapped. GGs. If this was too hard for you, don't worry, there will be easier examples. } *
-          '''
+          ''',
         ),
       );
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [
-          studyRepositoryProvider.overrideWith(
-            (ref) => mockRepository,
-          ),
-        ],
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -288,9 +259,7 @@ void main() {
       expect(find.text(introText), findsOneWidget);
 
       expect(
-        find.text(
-          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
-        ),
+        find.text('Brilliant! You noticed that the queen on c4 was kinda smothered.'),
         findsNothing,
       );
 
@@ -323,9 +292,7 @@ void main() {
       await playMove(tester, 'c3', 'd5');
 
       expect(
-        find.text(
-          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
-        ),
+        find.text('Brilliant! You noticed that the queen on c4 was kinda smothered.'),
         findsOneWidget,
       );
 
@@ -333,19 +300,14 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
 
       expect(
-        find.text(
-          'Brilliant! You noticed that the queen on c4 was kinda smothered.',
-        ),
+        find.text('Brilliant! You noticed that the queen on c4 was kinda smothered.'),
         findsOneWidget,
       );
 
       await tester.tap(find.byTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
-      expect(
-        find.text('What would you play in this position?'),
-        findsOneWidget,
-      );
+      expect(find.text('What would you play in this position?'), findsOneWidget);
 
       await playMove(tester, 'f3', 'c3');
       expect(find.text('Good move'), findsOneWidget);
@@ -353,10 +315,7 @@ void main() {
       // No explicit feedback, so opponent move should be played automatically after delay
       await tester.pump(const Duration(seconds: 1));
 
-      expect(
-        find.text('What would you play in this position?'),
-        findsOneWidget,
-      );
+      expect(find.text('What would you play in this position?'), findsOneWidget);
 
       await playMove(tester, 'c3', 'g3');
       expect(find.text('A fork, threatening Rg7 & b3.'), findsOneWidget);
@@ -364,10 +323,7 @@ void main() {
       await tester.tap(find.byTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
-      expect(
-        find.text('What would you play in this position?'),
-        findsOneWidget,
-      );
+      expect(find.text('What would you play in this position?'), findsOneWidget);
 
       await playMove(tester, 'b2', 'b3');
 
@@ -383,8 +339,7 @@ void main() {
       expect(find.byTooltip('Analysis board'), findsOneWidget);
     });
 
-    testWidgets('Interactive study hints and deviation comments',
-        (WidgetTester tester) async {
+    testWidgets('Interactive study hints and deviation comments', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
       when(() => mockRepository.getStudy(id: testId)).thenAnswer(
         (_) async => (
@@ -394,31 +349,17 @@ void main() {
               orientation: Side.white,
               gamebook: true,
             ),
-            hints: [
-              'Hint 1',
-              null,
-              null,
-              null,
-            ].lock,
-            deviationComments: [
-              null,
-              'Shown if any move other than d4 is played',
-              null,
-              null,
-            ].lock,
+            hints: ['Hint 1', null, null, null].lock,
+            deviationComments: [null, 'Shown if any move other than d4 is played', null, null].lock,
           ),
-          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3'
+          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3',
         ),
       );
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [
-          studyRepositoryProvider.overrideWith(
-            (ref) => mockRepository,
-          ),
-        ],
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -433,10 +374,7 @@ void main() {
       expect(find.text('Get a hint'), findsNothing);
 
       await playMove(tester, 'e2', 'e3');
-      expect(
-        find.text('Shown if any move other than d4 is played'),
-        findsOneWidget,
-      );
+      expect(find.text('Shown if any move other than d4 is played'), findsOneWidget);
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
@@ -458,10 +396,7 @@ void main() {
       // Wait for wrong move to be taken back
       await tester.pump(const Duration(seconds: 1));
 
-      expect(
-        find.text('What would you play in this position?'),
-        findsOneWidget,
-      );
+      expect(find.text('What would you play in this position?'), findsOneWidget);
       expect(find.text("That's not the move!"), findsNothing);
     });
   });

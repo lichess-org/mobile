@@ -8,9 +8,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'puzzle_preferences.freezed.dart';
 part 'puzzle_preferences.g.dart';
 
-@riverpod
-class PuzzlePreferences extends _$PuzzlePreferences
-    with SessionPreferencesStorage<PuzzlePrefs> {
+@Riverpod(keepAlive: true)
+class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStorage<PuzzlePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.puzzle;
@@ -33,6 +32,10 @@ class PuzzlePreferences extends _$PuzzlePreferences
   Future<void> setAutoNext(bool autoNext) async {
     save(state.copyWith(autoNext: autoNext));
   }
+
+  Future<void> setRated(bool rated) async {
+    save(state.copyWith(rated: rated));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -45,14 +48,14 @@ class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     /// no effect on puzzle streaks, which always show next puzzle. Defaults to
     /// `false`.
     @Default(false) bool autoNext,
+
+    /// If `true`, the puzzle will be rated for logged in users.
+    /// Defaults to `true`.
+    @Default(true) bool rated,
   }) = _PuzzlePrefs;
 
-  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
-        id: id,
-        difficulty: PuzzleDifficulty.normal,
-        autoNext: false,
-      );
+  factory PuzzlePrefs.defaults({UserId? id}) =>
+      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false, rated: true);
 
-  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) =>
-      _$PuzzlePrefsFromJson(json);
+  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -130,7 +130,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'テーマ';
 
   @override
   String get mobileToolsTab => 'ツール';
@@ -372,12 +372,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastUpcoming => '予定';
 
   @override
-  String get broadcastCompleted => '終了';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess は元になる対局に基づいてラウンド終了を検出します。元になる対局がない時はこのトグルを使ってください。';
-
-  @override
   String get broadcastRoundName => 'ラウンド名';
 
   @override
@@ -408,7 +402,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'スタートデート$param';
   }
 
   @override
@@ -576,6 +570,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'すべての中継を月別に表示';
+
+  @override
+  String get broadcastBackToLiveMove => '実際の手に戻る';
+
+  @override
+  String get broadcastSinceHideResults => '結果を非表示にするよう選択したため、結果が見えないようプレビューボードはすべて空白です。';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -844,6 +844,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => '対局中のみ';
+
+  @override
+  String get preferencesExceptInGame => 'チェスゲームリクエストアクセプトする';
 
   @override
   String get preferencesChessClock => '時間表示';
@@ -1438,6 +1441,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '当然に見える手を指す代わりに、いったん相手が受けざるを得ない別の手をはさむ問題。';
 
   @override
+  String get puzzleThemeKillBoxMate => 'キルボックスのメイト';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
+
+  @override
+  String get puzzleThemeVukovicMate => 'ヴコヴィッチのメイト';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'ルークとナイトでのメイト。別の駒で守られた ルークがチェックをかけ、ナイトがキングの逃げ道を抑える。';
+
+  @override
   String get puzzleThemeKnightEndgame => 'ナイト・エンドゲーム';
 
   @override
@@ -1653,16 +1668,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'あなたのアカウントは別の人が管理しており、自分では停止できません。';
 
   @override
-  String get settingsClosingIsDefinitive => 'アカウント停止は不可逆で、元には戻せません。ほんとうに停止しますか？';
-
-  @override
   String get settingsCantOpenSimilarAccount => '同じ名前（大文字・小文字が違っていても）で別のアカウントを作ることもできません。';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => '気が変わったのでアカウントを停止しない';
+  String get settingsCancelKeepAccount => 'キャンセルしてアカウントを保持する';
 
   @override
-  String get settingsCloseAccountExplanation => 'ほんとうにアカウントを停止しますか？　これは永久的な決定です。このアカウントには二度とログインできなくなります。';
+  String get settingsCloseAccountAreYouSure => 'ほんとうにアカウントを閉鎖しますか？';
 
   @override
   String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
@@ -1671,7 +1683,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playWithAFriend => '友達と対局する';
 
   @override
-  String get playWithTheMachine => 'AI と対局する';
+  String get playWithTheMachine => 'コンピューターとチェスする';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
@@ -3446,7 +3458,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get toggleGlyphAnnotations => '記号での注釈を切り替え';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'わからん';
 
   @override
   String get variationArrowsInfo => '変化手順の矢印があれば棋譜記録を使わずにナビゲーションできます。';
@@ -3650,6 +3662,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get followAndChallengeFriends => '友達をフォローして対局しよう';
+
+  @override
+  String get noChallenges => 'チャレンジはありません。';
 
   @override
   String get gameAnalysis => '棋譜解析';
@@ -4247,13 +4262,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reopenYourAccount => 'アカウントを再開する';
 
   @override
-  String get closedAccountChangedMind => 'アカウントを閉鎖して、後で気が変わった場合、一度だけアカウントを再開することができます。';
-
-  @override
-  String get onlyWorksOnce => '再開は一回限りです。';
-
-  @override
-  String get cantDoThisTwice => '二度目にアカウントを閉鎖した場合、アカウントを復元する方法はありません。';
+  String get reopenYourAccountDescription => 'アカウントを閉鎖して、後で気が変わった場合、一度だけアカウントを再開することができます。';
 
   @override
   String get emailAssociatedToaccount => 'アカウントに登録されたメールアドレス';
@@ -4345,6 +4354,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 大悪手',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4355,7 +4374,27 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 悪手',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 緩手',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5042,6 +5081,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyPlaying => 'プレイ中';
 
   @override
+  String get studyShowResults => '結果';
+
+  @override
   String get studyShowEvalBar => '評価値バー';
 
   @override
@@ -5424,6 +5466,165 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'ここに PGN をペースト（$count 局まで）',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'たった今';
+
+  @override
+  String get timeagoRightNow => 'たった今';
+
+  @override
+  String get timeagoCompleted => '完了';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 秒後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 分後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 時間後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 日後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 週後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count か月後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 年後',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 分前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 時間前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 日前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 週前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count か月前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 年前',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '残り $count 分',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '残り $count 時間',
     );
     return '$_temp0';
   }

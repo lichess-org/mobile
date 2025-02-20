@@ -43,35 +43,29 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
-    final showBestMoveArrow =
-        enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
-    final showAnnotationsOnBoard =
-        enableComputerAnalysis && analysisPrefs.showAnnotations;
-    final evalBestMoves = enableComputerAnalysis
-        ? ref.watch(
-            engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-          )
-        : null;
+    final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
+    final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
+    final evalBestMoves =
+        enableComputerAnalysis
+            ? ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves))
+            : null;
 
     final currentNode = analysisState.currentNode;
-    final annotation =
-        showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
+    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
 
-    final bestMoves = enableComputerAnalysis
-        ? evalBestMoves ?? currentNode.eval?.bestMoves
-        : null;
+    final bestMoves = enableComputerAnalysis ? evalBestMoves ?? currentNode.eval?.bestMoves : null;
 
     final sanMove = currentNode.sanMove;
 
-    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
-            analysisState.isEngineAvailable &&
-            bestMoves != null
-        ? computeBestMoveShapes(
-            bestMoves,
-            currentNode.position.turn,
-            boardPrefs.pieceSet.assets,
-          )
-        : ISet();
+    final ISet<Shape> bestMoveShapes =
+        showBestMoveArrow && analysisState.isEngineAvailable && bestMoves != null
+            ? computeBestMoveShapes(
+              bestMoves,
+              currentNode.position.turn,
+              boardPrefs.pieceSet.assets,
+              boardPrefs.shapeColor.color,
+            )
+            : ISet();
 
     return Chessboard(
       size: widget.boardSize,
@@ -79,44 +73,39 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
       game: GameData(
-        playerSide: analysisState.position.isGameOver
-            ? PlayerSide.none
-            : analysisState.position.turn == Side.white
+        playerSide:
+            analysisState.position.isGameOver
+                ? PlayerSide.none
+                : analysisState.position.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
         isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
         sideToMove: analysisState.position.turn,
         validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
-        onMove: (move, {isDrop, captured}) =>
-            ref.read(ctrlProvider.notifier).onUserMove(
-                  move,
-                  shouldReplace: widget.shouldReplaceChildOnUserMove,
-                ),
-        onPromotionSelection: (role) =>
-            ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+        onMove:
+            (move, {isDrop, captured}) => ref
+                .read(ctrlProvider.notifier)
+                .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
+        onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
           showAnnotationsOnBoard && sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({
-                      Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                    })
+                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: widget.enableDrawingShapes,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
+        borderRadius: widget.borderRadius,
+        boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
+        drawShape: DrawShapeOptions(
+          enable: widget.enableDrawingShapes,
+          onCompleteShape: _onCompleteShape,
+          onClearShapes: _onClearShapes,
+          newShapeColor: boardPrefs.shapeColor.color,
+        ),
+      ),
     );
   }
 

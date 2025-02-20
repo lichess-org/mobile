@@ -10,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'opening_explorer_preferences.freezed.dart';
 part 'opening_explorer_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
   // ignore: avoid_public_notifier_properties
@@ -18,84 +18,76 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   final prefCategory = PrefCategory.openingExplorer;
 
   @override
-  OpeningExplorerPrefs defaults({LightUser? user}) =>
-      OpeningExplorerPrefs.defaults(user: user);
+  OpeningExplorerPrefs defaults({LightUser? user}) => OpeningExplorerPrefs.defaults(user: user);
 
   @override
-  OpeningExplorerPrefs fromJson(Map<String, dynamic> json) =>
-      OpeningExplorerPrefs.fromJson(json);
+  OpeningExplorerPrefs fromJson(Map<String, dynamic> json) => OpeningExplorerPrefs.fromJson(json);
 
   @override
   OpeningExplorerPrefs build() {
     return fetch();
   }
 
-  Future<void> setDatabase(OpeningDatabase db) => save(
-        state.copyWith(db: db),
-      );
+  Future<void> setDatabase(OpeningDatabase db) => save(state.copyWith(db: db));
 
   Future<void> setMasterDbSince(int year) =>
       save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
 
   Future<void> toggleLichessDbSpeed(Speed speed) => save(
-        state.copyWith(
-          lichessDb: state.lichessDb.copyWith(
-            speeds: state.lichessDb.speeds.contains(speed)
+    state.copyWith(
+      lichessDb: state.lichessDb.copyWith(
+        speeds:
+            state.lichessDb.speeds.contains(speed)
                 ? state.lichessDb.speeds.remove(speed)
                 : state.lichessDb.speeds.add(speed),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
   Future<void> toggleLichessDbRating(int rating) => save(
-        state.copyWith(
-          lichessDb: state.lichessDb.copyWith(
-            ratings: state.lichessDb.ratings.contains(rating)
+    state.copyWith(
+      lichessDb: state.lichessDb.copyWith(
+        ratings:
+            state.lichessDb.ratings.contains(rating)
                 ? state.lichessDb.ratings.remove(rating)
                 : state.lichessDb.ratings.add(rating),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
-  Future<void> setLichessDbSince(DateTime since) => save(
-        state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)),
-      );
+  Future<void> setLichessDbSince(DateTime since) =>
+      save(state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)));
 
-  Future<void> setPlayerDbUsernameOrId(String username) => save(
-        state.copyWith(
-          playerDb: state.playerDb.copyWith(
-            username: username,
-          ),
-        ),
-      );
+  Future<void> setPlayerDbUsernameOrId(String username) =>
+      save(state.copyWith(playerDb: state.playerDb.copyWith(username: username)));
 
-  Future<void> setPlayerDbSide(Side side) => save(
-        state.copyWith(playerDb: state.playerDb.copyWith(side: side)),
-      );
+  Future<void> setPlayerDbSide(Side side) =>
+      save(state.copyWith(playerDb: state.playerDb.copyWith(side: side)));
 
   Future<void> togglePlayerDbSpeed(Speed speed) => save(
-        state.copyWith(
-          playerDb: state.playerDb.copyWith(
-            speeds: state.playerDb.speeds.contains(speed)
+    state.copyWith(
+      playerDb: state.playerDb.copyWith(
+        speeds:
+            state.playerDb.speeds.contains(speed)
                 ? state.playerDb.speeds.remove(speed)
                 : state.playerDb.speeds.add(speed),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
   Future<void> togglePlayerDbGameMode(GameMode gameMode) => save(
-        state.copyWith(
-          playerDb: state.playerDb.copyWith(
-            gameModes: state.playerDb.gameModes.contains(gameMode)
+    state.copyWith(
+      playerDb: state.playerDb.copyWith(
+        gameModes:
+            state.playerDb.gameModes.contains(gameMode)
                 ? state.playerDb.gameModes.remove(gameMode)
                 : state.playerDb.gameModes.add(gameMode),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
-  Future<void> setPlayerDbSince(DateTime since) => save(
-        state.copyWith(playerDb: state.playerDb.copyWith(since: since)),
-      );
+  Future<void> setPlayerDbSince(DateTime since) =>
+      save(state.copyWith(playerDb: state.playerDb.copyWith(since: since)));
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -109,13 +101,12 @@ class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
     required PlayerDb playerDb,
   }) = _OpeningExplorerPrefs;
 
-  factory OpeningExplorerPrefs.defaults({LightUser? user}) =>
-      OpeningExplorerPrefs(
-        db: OpeningDatabase.master,
-        masterDb: MasterDb.defaults,
-        lichessDb: LichessDb.defaults,
-        playerDb: PlayerDb.defaults(user: user),
-      );
+  factory OpeningExplorerPrefs.defaults({LightUser? user}) => OpeningExplorerPrefs(
+    db: OpeningDatabase.master,
+    masterDb: MasterDb.defaults,
+    lichessDb: LichessDb.defaults,
+    playerDb: PlayerDb.defaults(user: user),
+  );
 
   factory OpeningExplorerPrefs.fromJson(Map<String, dynamic> json) {
     return _$OpeningExplorerPrefsFromJson(json);
@@ -126,9 +117,7 @@ class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
 class MasterDb with _$MasterDb {
   const MasterDb._();
 
-  const factory MasterDb({
-    required int sinceYear,
-  }) = _MasterDb;
+  const factory MasterDb({required int sinceYear}) = _MasterDb;
 
   static const kEarliestYear = 1952;
   static final now = DateTime.now();
@@ -163,17 +152,7 @@ class LichessDb with _$LichessDb {
     Speed.classical,
     Speed.correspondence,
   });
-  static const kAvailableRatings = ISetConst({
-    400,
-    1000,
-    1200,
-    1400,
-    1600,
-    1800,
-    2000,
-    2200,
-    2500,
-  });
+  static const kAvailableRatings = ISetConst({400, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500});
   static final earliestDate = DateTime.utc(2012, 12);
   static final now = DateTime.now();
   static const kDaysInAYear = 365;
@@ -223,12 +202,12 @@ class PlayerDb with _$PlayerDb {
     'All time': earliestDate,
   };
   factory PlayerDb.defaults({LightUser? user}) => PlayerDb(
-        username: user?.name,
-        side: Side.white,
-        speeds: kAvailableSpeeds,
-        gameModes: GameMode.values.toISet(),
-        since: earliestDate,
-      );
+    username: user?.name,
+    side: Side.white,
+    speeds: kAvailableSpeeds,
+    gameModes: GameMode.values.toISet(),
+    since: earliestDate,
+  );
 
   factory PlayerDb.fromJson(Map<String, dynamic> json) {
     return _$PlayerDbFromJson(json);

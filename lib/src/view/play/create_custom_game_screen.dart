@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
+import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -33,12 +33,18 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'common_play_widgets.dart';
-
 enum _ViewMode { create, challenges }
 
 class CreateCustomGameScreen extends StatelessWidget {
   const CreateCustomGameScreen();
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const CreateCustomGameScreen(),
+      title: context.l10n.custom,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +52,7 @@ class CreateCustomGameScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        automaticBackgroundVisibility: false,
-        backgroundColor: Styles.cupertinoAppBarColor
-            .resolveFrom(context)
-            .withValues(alpha: 0.0),
-        border: null,
-      ),
-      child: const _CupertinoBody(),
-    );
+    return const _CupertinoBody();
   }
 
   Widget _buildAndroid(BuildContext context) {
@@ -70,8 +67,7 @@ class _AndroidBody extends StatefulWidget {
   State<_AndroidBody> createState() => _AndroidBodyState();
 }
 
-class _AndroidBodyState extends State<_AndroidBody>
-    with TickerProviderStateMixin {
+class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -127,38 +123,11 @@ class _CupertinoBody extends StatefulWidget {
 
 class _CupertinoBodyState extends State<_CupertinoBody> {
   _ViewMode _selectedSegment = _ViewMode.create;
-  double headerOpacity = 0;
 
   void setViewMode(_ViewMode mode) {
     setState(() {
       _selectedSegment = mode;
-      headerOpacity = 0.0;
     });
-  }
-
-  bool handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      final ScrollMetrics metrics = notification.metrics;
-      double scrollExtent = 0.0;
-      switch (metrics.axisDirection) {
-        case AxisDirection.up:
-          scrollExtent = metrics.extentAfter;
-        case AxisDirection.down:
-          scrollExtent = metrics.extentBefore;
-        case AxisDirection.right:
-        case AxisDirection.left:
-          break;
-      }
-
-      final opacity = scrollExtent > 0.0 ? 1.0 : 0.0;
-
-      if (opacity != headerOpacity) {
-        setState(() {
-          headerOpacity = opacity;
-        });
-      }
-    }
-    return false;
   }
 
   @override
@@ -177,78 +146,30 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
         }
       },
     );
-    return NotificationListener<ScrollNotification>(
-      onNotification: handleScrollNotification,
-      child: _selectedSegment == _ViewMode.create
-          ? _TabView(
-              cupertinoTabSwitcher: tabSwitcher,
-              cupertinoHeaderOpacity: headerOpacity,
-              sliver: _CreateGameBody(setViewMode: setViewMode),
-            )
-          : _TabView(
-              cupertinoTabSwitcher: tabSwitcher,
-              cupertinoHeaderOpacity: headerOpacity,
-              sliver: _ChallengesBody(setViewMode: setViewMode),
-            ),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.custom),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(44.0), child: tabSwitcher),
+      ),
+      child: _TabView(
+        sliver:
+            _selectedSegment == _ViewMode.create
+                ? _CreateGameBody(setViewMode: setViewMode)
+                : _ChallengesBody(setViewMode: setViewMode),
+      ),
     );
   }
 }
 
 class _TabView extends StatelessWidget {
-  const _TabView({
-    required this.sliver,
-    this.cupertinoTabSwitcher,
-    this.cupertinoHeaderOpacity = 0.0,
-  });
+  const _TabView({required this.sliver});
 
   final Widget sliver;
-  final Widget? cupertinoTabSwitcher;
-  final double cupertinoHeaderOpacity;
 
   @override
   Widget build(BuildContext context) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
-        (cupertinoTabSwitcher != null
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.verticalBodyPadding;
-    final backgroundColor = Styles.cupertinoAppBarColor.resolveFrom(context);
-    return CustomScrollView(
-      slivers: [
-        if (cupertinoTabSwitcher != null)
-          PinnedHeaderSliver(
-            child: ClipRect(
-              child: BackdropFilter(
-                enabled: backgroundColor.alpha != 0xFF,
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: ShapeDecoration(
-                    color: cupertinoHeaderOpacity == 1.0
-                        ? backgroundColor
-                        : backgroundColor.withAlpha(0),
-                    shape: LinearBorder.bottom(
-                      side: BorderSide(
-                        color: cupertinoHeaderOpacity == 1.0
-                            ? const Color(0x4D000000)
-                            : Colors.transparent,
-                        width: 0.0,
-                      ),
-                    ),
-                  ),
-                  padding: Styles.bodyPadding +
-                      EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                  child: cupertinoTabSwitcher,
-                ),
-              ),
-            ),
-          ),
-        SliverPadding(
-          padding: edgeInsets,
-          sliver: sliver,
-        ),
-      ],
-    );
+    final edgeInsets = MediaQuery.paddingOf(context) + Styles.verticalBodyPadding;
+    return CustomScrollView(slivers: [SliverPadding(padding: edgeInsets, sliver: sliver)]);
   }
 }
 
@@ -270,8 +191,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   void initState() {
     super.initState();
 
-    socketClient =
-        ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
+    socketClient = ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
 
     _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
@@ -280,13 +200,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            pushPlatformRoute(
+            Navigator.of(
               context,
               rootNavigator: true,
-              builder: (BuildContext context) {
-                return GameScreen(initialGameId: gameFullId);
-              },
-            );
+            ).push(GameScreen.buildRoute(context, initialGameId: gameFullId));
           }
           widget.setViewMode(_ViewMode.create);
 
@@ -311,17 +228,18 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
 
     return challengesAsync.when(
       data: (challenges) {
-        final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isPlaySupported)
-            .toList();
+        final supportedChallenges =
+            challenges.where((challenge) => challenge.variant.isPlaySupported).toList();
         return SliverList.separated(
           itemCount: supportedChallenges.length,
-          separatorBuilder: (context, index) =>
-              const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          separatorBuilder:
+              (context, index) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final challenge = supportedChallenges[index];
-            final isMySeek =
-                UserId.fromUserName(challenge.username) == session?.user.id;
+            final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
 
             return CorrespondenceChallengeListItem(
               challenge: challenge,
@@ -330,36 +248,29 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                 name: challenge.username,
                 title: challenge.title,
               ),
-              onPressed: isMySeek
-                  ? null
-                  : session == null
+              onPressed:
+                  isMySeek
+                      ? null
+                      : session == null
                       ? () {
-                          showPlatformSnackbar(
-                            context,
-                            context.l10n.youNeedAnAccountToDoThat,
-                          );
-                        }
+                        showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+                      }
                       : () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: Text(context.l10n.accept),
-                            isDestructiveAction: true,
-                            onConfirm: (_) {
-                              socketClient.send(
-                                'joinSeek',
-                                challenge.id.toString(),
-                              );
-                            },
-                          );
-                        },
-              onCancel: isMySeek
-                  ? () {
-                      socketClient.send(
-                        'cancelSeek',
-                        challenge.id.toString(),
-                      );
-                    }
-                  : null,
+                        showConfirmDialog<void>(
+                          context,
+                          title: Text(context.l10n.accept),
+                          isDestructiveAction: true,
+                          onConfirm: () {
+                            socketClient.send('joinSeek', challenge.id.toString());
+                          },
+                        );
+                      },
+              onCancel:
+                  isMySeek
+                      ? () {
+                        socketClient.send('cancelSeek', challenge.id.toString());
+                      }
+                      : null,
             );
           },
         );
@@ -369,9 +280,10 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           child: Center(child: CircularProgressIndicator.adaptive()),
         );
       },
-      error: (error, stack) => SliverFillRemaining(
-        child: Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
-      ),
+      error:
+          (error, stack) => SliverFillRemaining(
+            child: Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
+          ),
     );
   }
 }
@@ -392,8 +304,8 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(gameSetupPreferencesProvider);
-    final isValidTimeControl = preferences.customTimeSeconds > 0 ||
-        preferences.customIncrementSeconds > 0;
+    final isValidTimeControl =
+        preferences.customTimeSeconds > 0 || preferences.customIncrementSeconds > 0;
 
     final realTimeSelector = [
       Builder(
@@ -408,10 +320,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.minutesPerSide}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: clockLabelInMinutes(customTimeSeconds),
                       ),
                     ],
@@ -421,13 +330,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
                   labelBuilder: clockLabelInMinutes,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            customTimeSeconds = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              customTimeSeconds = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       customTimeSeconds = value.toInt();
@@ -454,10 +364,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.incrementInSeconds}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: customIncrementSeconds.toString(),
                       ),
                     ],
@@ -466,13 +373,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customIncrementSeconds,
                   values: kAvailableIncrementsInSeconds,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            customIncrementSeconds = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              customIncrementSeconds = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       customIncrementSeconds = value.toInt();
@@ -502,10 +410,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     text: '${context.l10n.daysPerTurn}: ',
                     children: [
                       TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         text: _daysLabel(daysPerTurn),
                       ),
                     ],
@@ -515,13 +420,14 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: daysPerTurn,
                   values: kAvailableDaysPerTurn,
                   labelBuilder: _daysLabel,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            daysPerTurn = value.toInt();
-                          });
-                        }
-                      : null,
+                  onChange:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? (num value) {
+                            setState(() {
+                              daysPerTurn = value.toInt();
+                            });
+                          }
+                          : null,
                   onChangeEnd: (num value) {
                     setState(() {
                       daysPerTurn = value.toInt();
@@ -540,169 +446,147 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
     return accountAsync.when(
       data: (account) {
-        final timeControl = account == null
-            ? TimeControl.realTime
-            : preferences.customTimeControl;
+        final timeControl = account == null ? TimeControl.realTime : preferences.customTimeControl;
 
-        final userPerf = account?.perfs[timeControl == TimeControl.realTime
-            ? preferences.perfFromCustom
-            : Perf.correspondence];
+        final userPerf =
+            account?.perfs[timeControl == TimeControl.realTime
+                ? preferences.perfFromCustom
+                : Perf.correspondence];
         return SliverPadding(
           padding: Styles.sectionBottomPadding,
           sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                if (account != null)
-                  PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.timeControl),
-                    trailing: AdaptiveTextButton(
-                      onPressed: () {
-                        showChoicePicker(
-                          context,
-                          choices: [
-                            TimeControl.realTime,
-                            TimeControl.correspondence,
-                          ],
-                          selectedItem: preferences.customTimeControl,
-                          labelBuilder: (TimeControl timeControl) => Text(
-                            timeControl == TimeControl.realTime
-                                ? context.l10n.realTime
-                                : context.l10n.correspondence,
-                          ),
-                          onSelectedItemChanged: (TimeControl value) {
-                            ref
-                                .read(gameSetupPreferencesProvider.notifier)
-                                .setCustomTimeControl(value);
-                          },
-                        );
-                      },
-                      child: Text(
-                        preferences.customTimeControl == TimeControl.realTime
-                            ? context.l10n.realTime
-                            : context.l10n.correspondence,
-                      ),
-                    ),
-                  ),
-                if (timeControl == TimeControl.realTime)
-                  ...realTimeSelector
-                else
-                  ...correspondenceSelector,
+            delegate: SliverChildListDelegate([
+              if (account != null)
                 PlatformListTile(
                   harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.variant),
+                  title: Text(context.l10n.timeControl),
                   trailing: AdaptiveTextButton(
                     onPressed: () {
                       showChoicePicker(
                         context,
-                        choices: [Variant.standard, Variant.chess960],
-                        selectedItem: preferences.customVariant,
-                        labelBuilder: (Variant variant) => Text(variant.label),
-                        onSelectedItemChanged: (Variant variant) {
+                        choices: [TimeControl.realTime, TimeControl.correspondence],
+                        selectedItem: preferences.customTimeControl,
+                        labelBuilder:
+                            (TimeControl timeControl) => Text(
+                              timeControl == TimeControl.realTime
+                                  ? context.l10n.realTime
+                                  : context.l10n.correspondence,
+                            ),
+                        onSelectedItemChanged: (TimeControl value) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
-                              .setCustomVariant(variant);
+                              .setCustomTimeControl(value);
                         },
                       );
                     },
-                    child: Text(preferences.customVariant.label),
-                  ),
-                ),
-                ExpandedSection(
-                  expand: preferences.customRated == false,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.side),
-                    trailing: AdaptiveTextButton(
-                      onPressed: null,
-                      child: Text(SideChoice.random.label(context.l10n)),
+                    child: Text(
+                      preferences.customTimeControl == TimeControl.realTime
+                          ? context.l10n.realTime
+                          : context.l10n.correspondence,
                     ),
                   ),
                 ),
-                if (account != null)
-                  PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
-                    title: Text(context.l10n.rated),
-                    trailing: Switch.adaptive(
-                      applyCupertinoTheme: true,
-                      value: preferences.customRated,
-                      onChanged: (bool value) {
-                        ref
-                            .read(gameSetupPreferencesProvider.notifier)
-                            .setCustomRated(value);
+              if (timeControl == TimeControl.realTime)
+                ...realTimeSelector
+              else
+                ...correspondenceSelector,
+              PlatformListTile(
+                harmonizeCupertinoTitleStyle: true,
+                title: Text(context.l10n.variant),
+                trailing: AdaptiveTextButton(
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: [Variant.standard, Variant.chess960],
+                      selectedItem: preferences.customVariant,
+                      labelBuilder: (Variant variant) => Text(variant.label),
+                      onSelectedItemChanged: (Variant variant) {
+                        ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                       },
-                    ),
-                  ),
-                if (userPerf != null)
-                  PlayRatingRange(
-                    perf: userPerf,
-                    ratingDelta: preferences.customRatingDelta,
-                    onRatingDeltaChange: (int subtract, int add) {
-                      ref
-                          .read(gameSetupPreferencesProvider.notifier)
-                          .setCustomRatingRange(subtract, add);
-                    },
-                  ),
-                const SizedBox(height: 20),
-                FutureBuilder(
-                  future: _pendingCreateGame,
-                  builder: (context, snapshot) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: FatButton(
-                        semanticsLabel: context.l10n.createAGame,
-                        onPressed: timeControl == TimeControl.realTime
-                            ? isValidTimeControl
-                                ? () {
-                                    pushPlatformRoute(
-                                      context,
-                                      rootNavigator: true,
-                                      builder: (BuildContext context) {
-                                        return GameScreen(
-                                          seek: GameSeek.custom(
-                                            preferences,
-                                            account,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }
-                                : null
-                            : snapshot.connectionState ==
-                                    ConnectionState.waiting
-                                ? null
-                                : () async {
-                                    _pendingCreateGame = ref
-                                        .read(createGameServiceProvider)
-                                        .newCorrespondenceGame(
-                                          GameSeek.correspondence(
-                                            preferences,
-                                            account,
-                                          ),
-                                        );
-
-                                    await _pendingCreateGame;
-                                    widget.setViewMode(_ViewMode.challenges);
-                                  },
-                        child:
-                            Text(context.l10n.createAGame, style: Styles.bold),
-                      ),
                     );
                   },
+                  child: Text(preferences.customVariant.label),
                 ),
-              ],
-            ),
+              ),
+              ExpandedSection(
+                expand: preferences.customRated == false,
+                child: PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.side),
+                  trailing: AdaptiveTextButton(
+                    onPressed: null,
+                    child: Text(SideChoice.random.label(context.l10n)),
+                  ),
+                ),
+              ),
+              if (account != null)
+                PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.rated),
+                  trailing: Switch.adaptive(
+                    value: preferences.customRated,
+                    onChanged: (bool value) {
+                      ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
+                    },
+                  ),
+                ),
+              if (userPerf != null)
+                PlayRatingRange(
+                  perf: userPerf,
+                  ratingDelta: preferences.customRatingDelta,
+                  onRatingDeltaChange: (int subtract, int add) {
+                    ref
+                        .read(gameSetupPreferencesProvider.notifier)
+                        .setCustomRatingRange(subtract, add);
+                  },
+                ),
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: _pendingCreateGame,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: FatButton(
+                      semanticsLabel: context.l10n.createAGame,
+                      onPressed:
+                          timeControl == TimeControl.realTime
+                              ? isValidTimeControl
+                                  ? () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      GameScreen.buildRoute(
+                                        context,
+                                        seek: GameSeek.custom(preferences, account),
+                                      ),
+                                    );
+                                  }
+                                  : null
+                              : snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : () async {
+                                _pendingCreateGame = ref
+                                    .read(createGameServiceProvider)
+                                    .newCorrespondenceGame(
+                                      GameSeek.correspondence(preferences, account),
+                                    );
+
+                                await _pendingCreateGame;
+                                widget.setViewMode(_ViewMode.challenges);
+                              },
+                      child: Text(context.l10n.createAGame, style: Styles.bold),
+                    ),
+                  );
+                },
+              ),
+            ]),
           ),
         );
       },
-      loading: () => const SliverFillRemaining(
-        child: Center(child: CircularProgressIndicator.adaptive()),
-      ),
-      error: (error, stackTrace) => const SliverFillRemaining(
-        child: Center(
-          child: Text('Could not load account data'),
-        ),
-      ),
+      loading:
+          () =>
+              const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
+      error:
+          (error, stackTrace) =>
+              const SliverFillRemaining(child: Center(child: Text('Could not load account data'))),
     );
   }
 }

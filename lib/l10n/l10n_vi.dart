@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -372,12 +372,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastUpcoming => 'Sắp diễn ra';
 
   @override
-  String get broadcastCompleted => 'Đã hoàn thành';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess phát hiện việc hoàn thành vòng đấu dựa trên các ván đấu nguồn. Sử dụng nút chuyển đổi này nếu không có nguồn.';
-
-  @override
   String get broadcastRoundName => 'Tên vòng';
 
   @override
@@ -576,6 +570,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Xem tất cả phát sóng theo tháng';
+
+  @override
+  String get broadcastBackToLiveMove => 'Trở lại nước đi thực tế';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -844,6 +844,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Chỉ trong ván cờ';
+
+  @override
+  String get preferencesExceptInGame => 'Ngoại trừ trong khi đấu';
 
   @override
   String get preferencesChessClock => 'Đồng hồ cờ vua';
@@ -1420,7 +1423,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeHangingPieceDescription => 'Một chiến thuật liên quan đến quân cờ của đối phương không được phòng thủ hoặc phòng thủ không đủ dẫn tới việc có thể ăn quân cờ đấy.';
 
   @override
-  String get puzzleThemeHookMate => 'Chiếu kiểu móc';
+  String get puzzleThemeHookMate => 'Chiếu hết kiểu móc';
 
   @override
   String get puzzleThemeHookMateDescription => 'Chiếu hết bằng quân xe, mã và tốt cùng với một quân tốt đối phương làm chặn đường vua chạy.';
@@ -1436,6 +1439,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleThemeIntermezzoDescription => 'Thay vì chơi nước đi dự kiến, trước tiên hãy xen vào một nước đi khác gây ra mối đe dọa ngay lập tức mà đối thủ phải đáp trả. Còn được gọi là \"Zwischenzug\" hoặc \"Ở giữa\".';
+
+  @override
+  String get puzzleThemeKillBoxMate => 'Hộp chết chiếu hết';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Một quân xe ở cạnh vua địch và được hỗ trợ bởi quân hậu cũng chặn các ô trốn thoát của vua địch. Xe và hậu bắt vua địch trong ô \"kill box\" chết chóc 3 x 3.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Chiếu hết kiểu Vukovic';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Một quân xe và hiệp sĩ hợp tác với vua. Quân xe giao quân trong khi được hỗ trợ bởi quân thứ ba, và quân mã được sử dụng để chặn các ô thoát hiểm của vua.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Tàn cuộc Mã';
@@ -1582,7 +1597,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeSkewerDescription => 'Một mô típ liên quan tới việc một quân cờ có giá trị cao bị tấn công buộc phải di chuyển khỏi vị trí, dẫn tới một quân cờ giá trị thấp hơn ở phía sau bị tấn công hoặc ăn, ngược lại so với ghim.';
 
   @override
-  String get puzzleThemeSmotheredMate => 'Chiếu kiểu kẹt';
+  String get puzzleThemeSmotheredMate => 'Chiếu hết kiểu kẹt';
 
   @override
   String get puzzleThemeSmotheredMateDescription => 'Một nước chiếu hết với quân mã mà trong đó vua đối phương không thể di chuyển vì bị bao vây bởi chính các quân cờ khác của họ.';
@@ -1653,16 +1668,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Tài khoản của bạn đang bị quản lý, hiện không thể đóng.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Việc đóng tài khoản là vĩnh viễn. Không có cách nào để có thể lấy lại. Bạn vẫn chắc chắn muốn đóng chứ?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Bạn không được phép tạo tài khoản trùng tên, kể cả khác chữ hoa, thường.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Tôi đã đổi ý, đừng đóng tài khoản của tôi';
+  String get settingsCancelKeepAccount => 'Hủy và giữ lại tài khoản của tôi';
 
   @override
-  String get settingsCloseAccountExplanation => 'Bạn có chắc muốn đóng tài khoản? Việc đóng tài khoản là quyết định vĩnh viễn. Bạn sẽ KHÔNG BAO GIỜ có thể ĐĂNG NHẬP LẠI.';
+  String get settingsCloseAccountAreYouSure => 'Bạn chắc chắn là bạn muốn đóng tài khoản của mình?';
 
   @override
   String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';
@@ -1736,10 +1748,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createAGame => 'Tạo một ván cờ';
 
   @override
-  String get whiteIsVictorious => 'Bên trắng thắng';
+  String get whiteIsVictorious => 'Bên Trắng thắng';
 
   @override
-  String get blackIsVictorious => 'Bên đen thắng';
+  String get blackIsVictorious => 'Bên Đen thắng';
 
   @override
   String get youPlayTheWhitePieces => 'Bạn chơi quân trắng';
@@ -1751,7 +1763,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get itsYourTurn => 'Đến lượt bạn!';
 
   @override
-  String get cheatDetected => 'Phát hiện Gian lận';
+  String get cheatDetected => 'Phát hiện gian lận';
 
   @override
   String get kingInTheCenter => 'Vua ở trung tâm';
@@ -1933,7 +1945,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'Các ván đấu OTB của các kỳ thủ có hệ số Rating FIDE $param1+ từ năm $param2 đến $param3';
+    return 'Các ván đấu OTB của các kỳ thủ có hệ số FIDE $param1+ từ năm $param2 đến $param3';
   }
 
   @override
@@ -3652,6 +3664,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get followAndChallengeFriends => 'Theo dõi và thách đấu bạn bè';
 
   @override
+  String get noChallenges => 'Không có lời thách đấu nào.';
+
+  @override
   String get gameAnalysis => 'Phân tích ván cờ';
 
   @override
@@ -4247,13 +4262,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reopenYourAccount => 'Mở lại tài khoản';
 
   @override
-  String get closedAccountChangedMind => 'Nếu bạn đóng tài khoản, song thay đổi ý định, bạn có đúng một cơ hội để mở lại tài khoản.';
-
-  @override
-  String get onlyWorksOnce => 'Chỉ làm được một lần.';
-
-  @override
-  String get cantDoThisTwice => 'Nếu bạn đóng tài khoản lần thứ hai, tài khoản sẽ không thể lấy lại được nữa.';
+  String get reopenYourAccountDescription => 'Nếu bạn đã đóng tài khoản của mình nhưng sau đó thay đổi quyết định, bạn vẫn còn một cơ hội lấy lại được tài khoản của mình.';
 
   @override
   String get emailAssociatedToaccount => 'Địa chỉ email liên kết với tài khoản này';
@@ -4345,6 +4354,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Sai lầm nghiêm trọng',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4355,11 +4374,31 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Sai lầm',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count không chính xác',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Không chính xác',
     );
     return '$_temp0';
   }
@@ -5042,6 +5081,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyPlaying => 'Đang chơi';
 
   @override
+  String get studyShowResults => 'Kết quả';
+
+  @override
   String get studyShowEvalBar => 'Thanh lợi thế';
 
   @override
@@ -5424,6 +5466,165 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Dán PGN ở đây, tối đa $count ván',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'vừa mới đây';
+
+  @override
+  String get timeagoRightNow => 'ngay bây giờ';
+
+  @override
+  String get timeagoCompleted => 'đã hoàn thành';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count giây',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count phút',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count giờ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count ngày',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count tuần',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count tháng',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'trong $count năm',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count phút trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giờ trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ngày trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tuần trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tháng trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count năm trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'còn $count phút',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'còn $count giờ',
     );
     return '$_temp0';
   }

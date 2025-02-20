@@ -17,10 +17,7 @@ void main() {
 ''';
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/rel/following') {
-          return mockResponse(
-            testRelationResponseMinimal,
-            200,
-          );
+          return mockResponse(testRelationResponseMinimal, 200);
         }
         return mockResponse('', 404);
       });
@@ -39,10 +36,7 @@ void main() {
 ''';
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/rel/following') {
-          return mockResponse(
-            testRelationResponse,
-            200,
-          );
+          return mockResponse(testRelationResponse, 200);
         }
         return mockResponse('', 404);
       });

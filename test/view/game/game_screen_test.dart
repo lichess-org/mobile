@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/game/game_socket_example_data.dart';
@@ -35,18 +34,14 @@ class MockSoundService extends Mock implements SoundService {}
 
 void main() {
   group('Loading', () {
-    testWidgets('a game directly with initialGameId',
-        (WidgetTester tester) async {
+    testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
       final fakeSocket = FakeWebSocketChannel();
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(
-          initialGameId: GameFullId('qVChCOTcHSeW'),
-        ),
+        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
         overrides: [
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
           webSocketChannelFactoryProvider.overrideWith((ref) {
             return FakeWebSocketChannelFactory((_) => fakeSocket);
           }),
@@ -81,26 +76,20 @@ void main() {
       expect(find.text('Steven'), findsOneWidget);
     });
 
-    testWidgets('a game from the pool with a seek',
-        (WidgetTester tester) async {
+    testWidgets('a game from the pool with a seek', (WidgetTester tester) async {
       final fakeLobbySocket = FakeWebSocketChannel();
       final fakeGameSocket = FakeWebSocketChannel();
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(
-          seek: GameSeek(
-            clock: (Duration(minutes: 3), Duration(seconds: 2)),
-            rated: true,
-          ),
+          seek: GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
         ),
         overrides: [
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
           webSocketChannelFactoryProvider.overrideWith((ref) {
             return FakeWebSocketChannelFactory(
-              (String url) =>
-                  url.contains('lobby') ? fakeLobbySocket : fakeGameSocket,
+              (String url) => url.contains('lobby') ? fakeLobbySocket : fakeGameSocket,
             );
           }),
         ],
@@ -197,8 +186,7 @@ void main() {
       expect(findClockWithTime('2:58'), findsOneWidget);
     });
 
-    testWidgets('ticks immediately when resuming game',
-        (WidgetTester tester) async {
+    testWidgets('ticks immediately when resuming game', (WidgetTester tester) async {
       final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
         fakeSocket,
@@ -340,9 +328,7 @@ void main() {
           black: Duration(minutes: 3),
           emerg: Duration(seconds: 30),
         ),
-        overrides: [
-          soundServiceProvider.overrideWith((_) => mockSoundService),
-        ],
+        overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
       );
       expect(
         tester.widget<Clock>(findClockWithTime('0:40')).emergencyThreshold,
@@ -394,10 +380,7 @@ void main() {
       // flag messages are sent
       expectLater(
         fakeSocket.sentMessagesExceptPing,
-        emitsInOrder([
-          '{"t":"flag","d":"black"}',
-          '{"t":"flag","d":"black"}',
-        ]),
+        emitsInOrder(['{"t":"flag","d":"black"}', '{"t":"flag","d":"black"}']),
       );
       await tester.pump(const Duration(seconds: 1));
       fakeSocket.addIncomingMessages([
@@ -422,14 +405,12 @@ void main() {
   });
 
   group('Opening analysis', () {
-    testWidgets('is not possible for an unfinished real time game',
-        (WidgetTester tester) async {
+    testWidgets('is not possible for an unfinished real time game', (WidgetTester tester) async {
       final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
         fakeSocket,
         tester,
-        pgn:
-            'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
+        pgn: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
         socketVersion: 0,
       );
       expect(find.byType(Chessboard), findsOneWidget);
@@ -439,14 +420,12 @@ void main() {
       expect(find.text('Analysis board'), findsNothing);
     });
 
-    testWidgets('for an unfinished correspondence game',
-        (WidgetTester tester) async {
+    testWidgets('for an unfinished correspondence game', (WidgetTester tester) async {
       final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
         fakeSocket,
         tester,
-        pgn:
-            'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
+        pgn: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
         clock: null,
         correspondenceClock: (
           daysPerTurn: 3,
@@ -465,7 +444,7 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.widgetWithText(PlatformAppBar, 'Analysis board'),
+        find.widgetWithText(AppBar, 'Analysis board'),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byKey(const Key('f3-whitequeen')), findsOneWidget);
@@ -490,7 +469,7 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.widgetWithText(PlatformAppBar, 'Analysis board'),
+        find.widgetWithText(AppBar, 'Analysis board'),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
@@ -499,10 +478,7 @@ void main() {
       await tester.tap(find.byIcon(LichessIcons.flow_cascade));
       await tester.pumpAndSettle(); // wait for the moves tab menu to open
       expect(find.text('Moves played'), findsOneWidget);
-      expect(
-        find.text('Computer analysis'),
-        findsOneWidget,
-      ); // computer analysis is available
+      expect(find.text('Computer analysis'), findsOneWidget); // computer analysis is available
     });
   });
 }
@@ -529,9 +505,8 @@ Future<void> playMoveWithServerAck(
 }) async {
   await playMove(tester, from, to, orientation: orientation);
   final uci = '$from$to';
-  final lagStr = clockAck.lag != null
-      ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}'
-      : '';
+  final lagStr =
+      clockAck.lag != null ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}' : '';
   await tester.pump(elapsedTime - const Duration(milliseconds: 1));
   socket.addIncomingMessages([
     '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": ${(clockAck.white.inMilliseconds / 1000).toStringAsFixed(2)}, "black": ${(clockAck.black.inMilliseconds / 1000).toStringAsFixed(2)}$lagStr}}}',
@@ -559,9 +534,7 @@ Future<void> createTestGame(
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const GameScreen(
-      initialGameId: GameFullId('qVChCOTcHSeW'),
-    ),
+    home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
       webSocketChannelFactoryProvider.overrideWith((ref) {
@@ -596,13 +569,10 @@ Future<void> loadFinishedTestGame(
   List<Override>? overrides,
 }) async {
   final json = jsonDecode(serverFullEvent) as Map<String, dynamic>;
-  final gameId =
-      GameFullEvent.fromJson(json['d'] as Map<String, dynamic>).game.id;
+  final gameId = GameFullEvent.fromJson(json['d'] as Map<String, dynamic>).game.id;
   final app = await makeTestProviderScopeApp(
     tester,
-    home: GameScreen(
-      initialGameId: GameFullId('${gameId.value}test'),
-    ),
+    home: GameScreen(initialGameId: GameFullId('${gameId.value}test')),
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
       webSocketChannelFactoryProvider.overrideWith((ref) {

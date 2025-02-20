@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -130,7 +130,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Дошка';
 
   @override
   String get mobileToolsTab => 'Tools';
@@ -424,12 +424,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastUpcoming => 'Надыходзячыя';
 
   @override
-  String get broadcastCompleted => 'Завершаныя';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Назва туру';
 
   @override
@@ -628,6 +622,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -897,6 +897,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Выключна ў партыі';
+
+  @override
+  String get preferencesExceptInGame => 'Except in-game';
 
   @override
   String get preferencesChessClock => 'Шахматны гадзіннік';
@@ -1506,6 +1509,18 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замест чаканага хода, спачатку зрабіце іншы ход, ствараючы непасрэдную пагрозу, на якую супернік павінен адказаць. Таксама вядомы як \"Zwischenzug\" або \"Intermezzo\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Канёвы эндшпіль';
 
   @override
@@ -1721,16 +1736,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Зачыненне немагчыма будзе адмяніць. Не будзе шляху назад. Вы ўпэўнены?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Вам не будзе дазволена стварыць новы ўліковы запіс з тым жа імем, нават калі рэгістр сімвалаў адрозніваецца.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Я перадумаў, не выдаляйце мой уліковы запіс';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Вы сапраўды хочаце выдаліць свой уліковы запіс? Гэта неадваротнае дзеянне: увайсці ў яго будзе немагчыма.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
@@ -3720,6 +3732,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get followAndChallengeFriends => 'Падпісацца і выклікаць на гульню сяброў';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Аналіз гульні';
 
   @override
@@ -4315,13 +4330,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reopenYourAccount => 'Пераадкрыць уліковы запіс';
 
   @override
-  String get closedAccountChangedMind => 'Калі пасля закрыцця ўліковага запісу, вы перадумалі, у вас ёсць адзін шанец аднавіць яго.';
-
-  @override
-  String get onlyWorksOnce => 'Гэта спрацуе толькі адзін раз.';
-
-  @override
-  String get cantDoThisTwice => 'Калі вы зачыніце яго ў другі раз, то ўжо не будзе шляху назад.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Адрас электроннай пошты, звязаны з уліковым запісам';
@@ -4415,8 +4424,21 @@ class AppLocalizationsBe extends AppLocalizations {
       locale: localeName,
       other: '$count позехаў',
       many: '$count позехаў',
-      few: '$count позеха',
+      few: '$count зяўкоў',
       one: '$count позех',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Зяўкоў',
+      many: '$count Зяўкоў',
+      few: '$count Зяўкоў',
+      one: '$count Зявок',
     );
     return '$_temp0';
   }
@@ -4435,6 +4457,19 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Памылак',
+      many: '$count Памылак',
+      few: '$count Памылкі',
+      one: '$count Памылка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4443,6 +4478,19 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count недакладнасцяў',
       few: '$count недакладнасці',
       one: '$count недакладнасць',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Недакладнасцяў',
+      many: '$count Недакладнасцяў',
+      few: '$count Недакладнасці',
+      one: '$count Недакладнасць',
     );
     return '$_temp0';
   }
@@ -4708,7 +4756,7 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count рэйтынгавых гульняў ў рэжыме «$param2»',
+      other: '≥ $count рэйтынгавых гульняў у рэжыме «$param2»',
       many: '≥ $count рэйтынгавых гульняў ў рэжыме «$param2»',
       few: '≥ $count рэйтынгавыя гульні ў рэжыме «$param2»',
       one: '≥ $count рэйтынгавая гульня ў рэжыме «$param2»',
@@ -5238,6 +5286,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyPlaying => 'Гуляецца';
 
   @override
+  String get studyShowResults => 'Results';
+
+  @override
   String get studyShowEvalBar => 'Шкалы ацэнкі';
 
   @override
@@ -5632,6 +5683,210 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
       few: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульні',
       one: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульню',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'зараз';
+
+  @override
+  String get timeagoRightNow => 'прама зараз';
+
+  @override
+  String get timeagoCompleted => 'завершана';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count секунд',
+      many: 'праз $count секунд',
+      few: 'праз $count секунды',
+      one: 'праз $count секунду',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count хвілін',
+      many: 'праз $count хвілін',
+      few: 'праз $count хвіліны',
+      one: 'праз $count хвіліну',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count гадзін',
+      many: 'праз $count гадзін',
+      few: 'праз $count гадзіны',
+      one: 'праз $count гадзіну',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count дзён',
+      many: 'праз $count дзён',
+      few: 'праз $count дні',
+      one: 'праз $count дзень',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count тыдняў',
+      many: 'праз $count тыдняў',
+      few: 'праз $count тыдні',
+      one: 'праз $count тыдзень',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count месяцаў',
+      many: 'праз $count месяцаў',
+      few: 'праз $count месяцы',
+      one: 'праз $count месяц',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'праз $count гадоў',
+      many: 'праз $count гадоў',
+      few: 'праз $count гады',
+      one: 'праз $count год',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count хвілін таму',
+      many: '$count хвілін таму',
+      few: '$count хвіліны таму',
+      one: '$count хвіліну таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count гадзін таму',
+      many: '$count гадзін таму',
+      few: '$count гадзіны таму',
+      one: '$count гадзіну таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дзён таму',
+      many: '$count дзён таму',
+      few: '$count дні таму',
+      one: '$count дзень таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count тыдняў таму',
+      many: '$count тыдняў таму',
+      few: '$count тыдні таму',
+      one: '$count тыдзень таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count месяцаў таму',
+      many: '$count месяцаў таму',
+      few: '$count месяцы таму',
+      one: '$count месяц таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count гадоў таму',
+      many: '$count гадоў таму',
+      few: '$count гады таму',
+      one: '$count год таму',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Засталося $count хвіліны',
+      many: 'Засталося $count хвілін',
+      few: 'Засталося $count хвіліны',
+      one: 'Засталася $count хвіліна',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Засталося $count гадзіны',
+      many: 'Засталося $count гадзін',
+      few: 'Засталося $count гадзіны',
+      one: 'Засталася $count гадзіна',
     );
     return '$_temp0';
   }

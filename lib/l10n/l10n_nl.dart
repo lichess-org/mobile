@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -390,12 +390,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastUpcoming => 'Aankomend';
 
   @override
-  String get broadcastCompleted => 'Voltooid';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detecteert voltooiing van de ronde op basis van de bronpartijen. Gebruik deze schakelaar als er geen bron is.';
-
-  @override
   String get broadcastRoundName => 'Naam ronde';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Alle uitzendingen per maand weergeven';
+
+  @override
+  String get broadcastBackToLiveMove => 'Terug naar de actuele stelling';
+
+  @override
+  String get broadcastSinceHideResults => 'Omdat je ervoor kiest om de resultaten te verbergen, zijn alle borden leeg om spoilers te voorkomen.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -863,6 +863,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Alleen tijdens partij';
+
+  @override
+  String get preferencesExceptInGame => 'Uitgezonderd tijdens partijen';
 
   @override
   String get preferencesChessClock => 'Schaakklok';
@@ -1462,6 +1465,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'In plaats van de verwachte zet, eerst een andere zet doen met een directe dreiging die de tegenstander eerst moet beantwoorden. Ook wel bekend als \"Zwischenzug\" of \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Mat in dodelijk vierkant';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic-mat';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Een toren en een paard werken samen om de koning mat te zetten. De toren zet mat terwijl hij door een ander stuk wordt ondersteund; het paard wordt gebruikt om ontsnappingsvelden van de koning te blokkeren.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Paardeneindspel';
 
   @override
@@ -1677,16 +1692,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Je account wordt beheerd, en kan niet verwijderd worden.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Verwijderen is definitief. Er is geen weg terug. Weet je het zeker?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Het is niet toegestaan om een nieuw account met dezelfde naam aan te maken, ook al is het hoofdlettergebruik anders.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ik ben van gedachten veranderd; sluit mijn account niet';
+  String get settingsCancelKeepAccount => 'Annuleer en behoud mijn account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Weet je zeker dat je het account wilt verwijderen? Het verwijderen van je account is een permanente beslissing. Je kunt NOOIT meer op dit account inloggen.';
+  String get settingsCloseAccountAreYouSure => 'Weet je zeker dat je je account wilt verwijderen?';
 
   @override
   String get settingsThisAccountIsClosed => 'Dit account is gesloten.';
@@ -2151,7 +2163,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get variants => 'Varianten';
 
   @override
-  String get timeControl => 'Speelduur';
+  String get timeControl => 'Speeltempo';
 
   @override
   String get realTime => 'Live';
@@ -3676,6 +3688,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get followAndChallengeFriends => 'Volg vrienden en daag ze uit';
 
   @override
+  String get noChallenges => 'Geen uitdagingen.';
+
+  @override
   String get gameAnalysis => 'Partijanalyse';
 
   @override
@@ -4271,13 +4286,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get reopenYourAccount => 'Account heropenen';
 
   @override
-  String get closedAccountChangedMind => 'Als je je account had gesloten, maar sindsdien van gedachten veranderd bent, krijg je één kans om je account te herstellen.';
-
-  @override
-  String get onlyWorksOnce => 'Dit werkt maar eenmaal.';
-
-  @override
-  String get cantDoThisTwice => 'Als je je account voor de tweede keer sluit, is er geen manier om deze te herstellen.';
+  String get reopenYourAccountDescription => 'Als je je account had gesloten, maar sindsdien van gedachten veranderd bent, krijg je de kans om je account te herstellen.';
 
   @override
   String get emailAssociatedToaccount => 'E-mailadres gekoppeld aan het account';
@@ -4372,6 +4381,17 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Blunders',
+      one: '$count Blunder',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4383,12 +4403,34 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Fouten',
+      one: '$count Fout',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count imperfecties',
       one: '$count imperfectie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Onnauwkeurigheden',
+      one: '$count Onnauwkeurigheid',
     );
     return '$_temp0';
   }
@@ -5110,6 +5152,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyPlaying => 'Spelend';
 
   @override
+  String get studyShowResults => 'Resultaten';
+
+  @override
   String get studyShowEvalBar => 'Evaluatiebalk';
 
   @override
@@ -5496,6 +5541,180 @@ class AppLocalizationsNl extends AppLocalizations {
       locale: localeName,
       other: 'Plak je PGN tekst hier, tot $count spellen mogelijk',
       one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'zojuist';
+
+  @override
+  String get timeagoRightNow => 'op dit moment';
+
+  @override
+  String get timeagoCompleted => 'voltooid';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count seconden',
+      one: 'over $count seconde',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count minuten',
+      one: 'over $count minuut',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count uur',
+      one: 'over $count uur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count dagen',
+      one: 'over $count dag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count weken',
+      one: 'over $count week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count maanden',
+      one: 'over $count maand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'over $count jaren',
+      one: 'over $count jaar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuten geleden',
+      one: '$count minuut geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uur geleden',
+      one: '$count uur geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dagen geleden',
+      one: '$count dag geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weken geleden',
+      one: '$count week geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count maanden geleden',
+      one: '$count maand geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jaar geleden',
+      one: '$count jaar geleden',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuten resterend',
+      one: '$count minuut resterend',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uur resterend',
+      one: '$count uur resterend',
     );
     return '$_temp0';
   }

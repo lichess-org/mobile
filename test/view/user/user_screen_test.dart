@@ -15,8 +15,7 @@ final client = MockClient((request) {
   } else if (request.url.path == '/api/user/$testUserId') {
     return mockResponse(testUserResponse, 200);
   } else if (request.url.path == '/api/users/status') {
-    return mockResponse(
-      '''
+    return mockResponse('''
 [
   {
     "id": "$testUserId",
@@ -24,9 +23,7 @@ final client = MockClient((request) {
     "online": true
   }
 ]
-''',
-      200,
-    );
+''', 200);
   } else if (request.url.path == '/api/user/$testUserId/activity') {
     return mockResponse(userActivityResponse, 200);
   }
@@ -35,36 +32,26 @@ final client = MockClient((request) {
 
 void main() {
   group('UserScreen', () {
-    testWidgets(
-      'should see activity and recent games',
-      (WidgetTester tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const UserScreen(user: testUser),
-          overrides: [
-            lichessClientProvider
-                .overrideWith((ref) => LichessClient(client, ref)),
-          ],
-        );
+    testWidgets('should see activity and recent games', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const UserScreen(user: testUser),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        // wait for user request
-        await tester.pump(const Duration(milliseconds: 50));
+      // wait for user request
+      await tester.pump(const Duration(milliseconds: 50));
 
-        // full name at the top
-        expect(
-          find.text('John Doe'),
-          findsOneWidget,
-        );
+      // full name at the top
+      expect(find.text('John Doe'), findsOneWidget);
 
-        // wait for recent games and activity
-        await tester.pump(const Duration(milliseconds: 50));
+      // wait for recent games and activity
+      await tester.pump(const Duration(milliseconds: 50));
 
-        expect(find.text('Activity'), findsOneWidget);
-      },
-      variant: kPlatformVariant,
-    );
+      expect(find.text('Activity'), findsOneWidget);
+    }, variant: kPlatformVariant);
   });
 }
 

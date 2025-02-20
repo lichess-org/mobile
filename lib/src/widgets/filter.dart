@@ -58,17 +58,17 @@ class Filter<T extends Enum> extends StatelessWidget {
                 .map(
                   (choice) => switch (filterType) {
                     FilterType.singleChoice => ChoiceChip(
-                        label: choiceLabel(choice),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                        showCheckmark: showCheckmark,
-                      ),
+                      label: choiceLabel(choice),
+                      selected: choiceSelected(choice),
+                      onSelected: (value) => onSelected(choice, value),
+                      showCheckmark: showCheckmark,
+                    ),
                     FilterType.multipleChoice => FilterChip(
-                        label: choiceLabel(choice),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                        showCheckmark: showCheckmark,
-                      ),
+                      label: choiceLabel(choice),
+                      selected: choiceSelected(choice),
+                      onSelected: (value) => onSelected(choice, value),
+                      showCheckmark: showCheckmark,
+                    ),
                   },
                 )
                 .toList(growable: false),

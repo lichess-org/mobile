@@ -31,6 +31,6 @@ Fontawesome in assets/fonts | [davegandy](https://fontawesome.com) | [SIL OFL 1.
 External services
 -----------------
 
-Lichobile relies on these external services:
+Lichess Mobile relies on these external services:
 
 * [lichess.org](https://lichess.org)

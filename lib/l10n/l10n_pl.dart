@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -426,12 +426,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastUpcoming => 'Nadchodzące';
 
   @override
-  String get broadcastCompleted => 'Zakończone';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess wykrywa ukończenie rundy w oparciu o śledzone partie. Użyj tego przełącznika, jeśli nie ma takich partii.';
-
-  @override
   String get broadcastRoundName => 'Nazwa rundy';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Zobacz wszystkie transmisje w danym miesiącu';
+
+  @override
+  String get broadcastBackToLiveMove => 'Powrót do pozycji na żywo';
+
+  @override
+  String get broadcastSinceHideResults => 'Ponieważ zdecydowałeś się ukryć wyniki, wszystkie podglądy szachownic są puste, aby nie uprzedzać tego, co się stanie.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -901,6 +901,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Tylko w partii';
+
+  @override
+  String get preferencesExceptInGame => 'Z wyjątkiem trwania partii';
 
   @override
   String get preferencesChessClock => 'Zegar szachowy';
@@ -1510,6 +1513,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Zamiast zagrania spodziewanego posunięcia, wykonanie takiego, które stanowi bezpośrednią groźbę, na którą przeciwnik zmuszony jest odpowiedzieć. Znane również jako „zwischenzug”.';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Mat w klatce (Kill box mate)';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Wieża stoi obok wrogiego króla i broniona jest przez hetmana, który równocześnie blokuje wszystkie pola ucieczki tego króla. Wieża i hetman łapią króla przeciwnika w klatce 3 na 3 (tzw. \"kill box\").';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Mat Vukovic\'a';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Para wieża i skoczek matują króla przeciwnika. Wieża wspierana przez trzecią bierkę daje mata, podczas gdy skoczek blokuje królowi przeciwnika wszystkie pola ucieczki.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Końcówka skoczkowa';
 
   @override
@@ -1725,16 +1740,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Twoim kontem zarządza nauczyciel, nie możesz go zamknąć.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Zamknięcie konta jest nieodwracalne. Czy chcesz kontynuować?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Nie będzie można otworzyć nowego konta z tą samą nazwą, nawet jeśli wielkość liter będzie inna.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Zmieniłem zdanie, nie chcę zamykać swojego konta';
+  String get settingsCancelKeepAccount => 'Anuluj i zachowaj moje konto';
 
   @override
-  String get settingsCloseAccountExplanation => 'Jesteś pewien, że chcesz zamknąć swoje konto? Zamknięcie konta jest decyzją nieodwracalną. Już NIGDY nie będziesz mógł się na nie zalogować.';
+  String get settingsCloseAccountAreYouSure => 'Czy na pewno chcesz zamknąć swoje konto?';
 
   @override
   String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
@@ -1862,7 +1874,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get forceDraw => 'Ogłoś remis';
 
   @override
-  String get talkInChat => 'Bądź miły na czacie';
+  String get talkInChat => 'Zachowuj się miło na czacie!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Pierwsza osoba, która przejdzie pod ten adres, dołączy do Twojej partii.';
@@ -3724,6 +3736,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get followAndChallengeFriends => 'Obserwowanie i gra ze znajomymi';
 
   @override
+  String get noChallenges => 'Brak wyzwań.';
+
+  @override
   String get gameAnalysis => 'Analiza partii';
 
   @override
@@ -4319,13 +4334,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reopenYourAccount => 'Otwórz ponownie swoje konto';
 
   @override
-  String get closedAccountChangedMind => 'Jeśli zamknąłeś/aś swoje konto, ale zmieniłeś/aś zdanie, otrzymasz jedną szansę na jego odzyskanie.';
-
-  @override
-  String get onlyWorksOnce => 'To zadziała tylko raz.';
-
-  @override
-  String get cantDoThisTwice => 'Jeśli zamkniesz swoje konto po raz drugi, nie będzie możliwości jego odzyskania.';
+  String get reopenYourAccountDescription => 'Jeśli zamkniesz swoje konto, ale kiedyś zmienisz zdanie, będziesz miał szansę je odzyskać.';
 
   @override
   String get emailAssociatedToaccount => 'Adres e-mail powiązany z kontem';
@@ -4426,6 +4435,19 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Błędów',
+      many: '$count Błędów',
+      few: '$count Błędy',
+      one: '$count Błąd',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4439,7 +4461,33 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pomyłek',
+      many: '$count pomyłek',
+      few: '$count pomyłki',
+      one: '$count pomyłka',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count niedokładności',
+      many: '$count niedokładności',
+      few: '$count niedokładności',
+      one: '$count niedokładność',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5246,6 +5294,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyPlaying => 'W toku';
 
   @override
+  String get studyShowResults => 'Wyniki';
+
+  @override
   String get studyShowEvalBar => 'Paski ewaluacji';
 
   @override
@@ -5640,6 +5691,210 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Wklej tutaj swój PGN, max $count partii',
       few: 'Wklej tutaj swój PGN, max $count partie',
       one: 'Wklej tutaj swój PGN, max $count partię',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'właśnie teraz';
+
+  @override
+  String get timeagoRightNow => 'w tej chwili';
+
+  @override
+  String get timeagoCompleted => 'ukończone';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count sekund',
+      many: 'za $count sekund',
+      few: 'za $count sekundy',
+      one: 'za $count sekundę',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count minut',
+      many: 'za $count minuty',
+      few: 'za $count minuty',
+      one: 'za $count minutę',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count godzin',
+      many: 'za $count godzin',
+      few: 'za $count godziny',
+      one: 'za $count godzinę',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count dni',
+      many: 'za $count dni',
+      few: 'za $count dni',
+      one: 'za $count dzień',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count tygodni',
+      many: 'za $count tygodni',
+      few: 'za $count tygodnie',
+      one: 'za $count tydzień',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count miesięcy',
+      many: 'za $count miesięcy',
+      few: 'za $count miesiące',
+      one: 'za $count miesiąc',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'za $count lat',
+      many: 'za $count lat',
+      few: 'za $count lata',
+      one: 'za $count rok',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minut temu',
+      many: '$count minut temu',
+      few: '$count minuty temu',
+      one: '$count minutę temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count godzin temu',
+      many: '$count godzin temu',
+      few: '$count godziny temu',
+      one: '$count godzinę temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dni temu',
+      many: '$count dni temu',
+      few: '$count dni temu',
+      one: '$count dzień temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tygodni temu',
+      many: '$count tygodni temu',
+      few: '$count tygodnie temu',
+      one: '$count tydzień temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count miesięcy temu',
+      many: '$count miesięcy temu',
+      few: '$count miesiące temu',
+      one: '$count miesiąc temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lat temu',
+      many: '$count lat temu',
+      few: '$count lata temu',
+      one: '$count rok temu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Pozostało $count minut',
+      many: 'Pozostało $count minut',
+      few: 'Pozostały $count minuty',
+      one: 'Pozostała $count minuta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Pozostało $count godzin',
+      many: 'Pozostało $count godzin',
+      few: 'Pozostały $count godziny',
+      one: 'Pozostała $count godzina',
     );
     return '$_temp0';
   }

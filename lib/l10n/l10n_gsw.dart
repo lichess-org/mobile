@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -390,12 +390,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastUpcoming => 'Demnächscht';
 
   @override
-  String get broadcastCompleted => 'Beändet';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess erkännt de Rundeschluss oder au nöd! De Schalter setz das uf \"manuell\".';
-
-  @override
   String get broadcastRoundName => 'Runde Name';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Zeig alli Überträgige im Monet';
+
+  @override
+  String get broadcastBackToLiveMove => 'Zrugg zum \"Live-Zieh\"';
+
+  @override
+  String get broadcastSinceHideResults => 'Will du entschide häsch, dini Ergäbnis z\'verberge, sind - zum Spoiler verhindere - all Vorschau-Brätter leer.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -863,6 +863,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Nur im Schpiel';
+
+  @override
+  String get preferencesExceptInGame => 'Ussert im Schpiel';
 
   @override
   String get preferencesChessClock => 'Schachuhr';
@@ -1462,6 +1465,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Anstatt de erwarteti Zug, zerscht en Andere mache, wo diräkt droht, so dass de Gägner muess reagiere. Isch au bekannt als \"Zwüschezug\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill Box Matt';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vuković-Matt';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'En Turm und es Rössli schpanned zämme, zum de König matt setze: De Turm setzt de König mit Hilf vunere dritte Figur matt und s\'Rössli blockiert em König d\'Fluchtfälder.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Schpringer Ändschpil';
 
   @override
@@ -1677,16 +1692,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Dis Konto wird verwaltet, es chann nöd geschlosse werde.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Die Schlüssig isch ändgültig. Es git keis Z\'rugg! Bisch du sicher?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Es isch nöd erlaubt es neus Konto mit em gliche Name z\'eröffne, au wänn d\'Gross- und d\'Chlischribig andersch isch.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ich ha mini Meinig gändert, schlüssed mis Benutzerkonto nöd';
+  String get settingsCancelKeepAccount => 'Löschig abbräche und mis Konto b\'halte';
 
   @override
-  String get settingsCloseAccountExplanation => 'Bisch du sicher, dass du dis Benutzerkonto schlüsse wottsch? Dini Entscheidig zum Schlüsse isch ändgültigi. Du chasch nachher NIE MEH ilogge.';
+  String get settingsCloseAccountAreYouSure => 'Bisch sicher, dass du dis Konto schlüsse wottsch?';
 
   @override
   String get settingsThisAccountIsClosed => 'Das Benutzerkonto isch g\'schlosse.';
@@ -1793,7 +1805,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get newOpponent => 'En neue Gägner';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'Din Gägner wett es neus Schpil mit dir schpille';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Din Gägner wett es neus Schpiel mit dir schpille';
 
   @override
   String get joinTheGame => 'Gang is Schpiel';
@@ -3676,6 +3688,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get followAndChallengeFriends => 'Folg Fründe und forder sie zum Schpil';
 
   @override
+  String get noChallenges => 'Kei Useforderige.';
+
+  @override
   String get gameAnalysis => 'Schpil-Analyse';
 
   @override
@@ -4271,13 +4286,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reopenYourAccount => 'Konto wider eröffne';
 
   @override
-  String get closedAccountChangedMind => 'Wänn du s\'Konto gschlosse häsch und das bereusch, dänn gits no 1 Chance dis Konto wider zrugg z\'hole.';
-
-  @override
-  String get onlyWorksOnce => 'Das funktioniert aber nur eimal.';
-
-  @override
-  String get cantDoThisTwice => 'Wänn du dis Konto es 2. Mal schlüssisch, gits kei Möglichkeit meh das rückgängig z\'mache.';
+  String get reopenYourAccountDescription => 'Häsch dis Konto gschlosse und bereusch es, dänn chasch es jetzt wider aktiviere.';
 
   @override
   String get emailAssociatedToaccount => 'Mit dim Konto verbundeni E-Mail-Adrässe';
@@ -4372,6 +4381,17 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Patzer',
+      one: '$count Patzer',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4383,7 +4403,29 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Fähler',
+      one: '$count Fähler',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ungnauigkeite',
+      one: '$count Ungnauigkeit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -5110,6 +5152,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyPlaying => 'Laufend';
 
   @override
+  String get studyShowResults => 'Resultat';
+
+  @override
   String get studyShowEvalBar => 'Bewertigs-Skala';
 
   @override
@@ -5496,6 +5541,180 @@ class AppLocalizationsGsw extends AppLocalizations {
       locale: localeName,
       other: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
       one: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'grad jetzt';
+
+  @override
+  String get timeagoRightNow => 'genau jetzt';
+
+  @override
+  String get timeagoCompleted => 'beändet';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Sekunde',
+      one: 'i $count Sekunde',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'in $count Minute',
+      one: 'in $count Minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Schtunde',
+      one: 'i $count Schtund',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Täg',
+      one: 'i $count Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Wuche',
+      one: 'i $count Wuche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Mönet',
+      one: 'i $count Monet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i $count Jahr',
+      one: 'i $count Jahr',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Minute',
+      one: 'vor $count Minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Schtunde',
+      one: 'vor $count Schtund',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Täg',
+      one: 'vor $count Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Wuche',
+      one: 'vor $count Wuche',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Mönet',
+      one: 'vor $count Monet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Jahr',
+      one: 'vor $count Jahr',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Minute blibed',
+      one: '$count Minute blibt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Schtunde blibed',
+      one: '$count Schtund blibt',
     );
     return '$_temp0';
   }

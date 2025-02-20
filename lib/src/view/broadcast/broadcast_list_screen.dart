@@ -1,32 +1,65 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-const kBroadcastGridItemBorderRadius = BorderRadius.all(Radius.circular(16.0));
-const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 16.0);
+const _kHandsetThumbnailSize = 80.0;
+const _kTabletThumbnailSize = 250.0;
+
+enum _BroadcastFilter {
+  all,
+  live;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case live:
+        return 'Live broadcasts';
+      case all:
+        return 'All broadcasts';
+    }
+  }
+}
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastListScreen extends StatelessWidget {
+class BroadcastListScreen extends StatefulWidget {
   const BroadcastListScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.broadcastBroadcasts,
+      screen: const BroadcastListScreen(),
+    );
+  }
+
+  static double _thumbnailSize(BuildContext context) {
+    return isTabletOrLarger(context) ? _kTabletThumbnailSize : _kHandsetThumbnailSize;
+  }
+
+  @override
+  State<BroadcastListScreen> createState() => _BroadcastListScreenState();
+}
+
+class _BroadcastListScreenState extends State<BroadcastListScreen> {
+  _BroadcastFilter filter = _BroadcastFilter.all;
 
   @override
   Widget build(BuildContext context) {
@@ -36,28 +69,66 @@ class BroadcastListScreen extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
     );
+    final filterButton = AppBarIconButton(
+      icon: const Icon(Icons.filter_list),
+      // TODO: translate
+      semanticsLabel: 'Filter broadcasts',
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+            builder:
+                (_) => StatefulBuilder(
+                  builder: (context, setLocalState) {
+                    return BottomSheetScrollableContainer(
+                      padding: const EdgeInsets.all(16.0),
+                      children: [
+                        const SizedBox(height: 16.0),
+                        Filter<_BroadcastFilter>(
+                          filterType: FilterType.singleChoice,
+                          choices: _BroadcastFilter.values,
+                          choiceSelected: (choice) => filter == choice,
+                          choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                          onSelected: (value, selected) {
+                            setLocalState(() => filter = value);
+                            setState(() => filter = value);
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                      ],
+                    );
+                  },
+                ),
+          ),
+    );
     return PlatformWidget(
-      androidBuilder: (_) => Scaffold(
-        body: const _Body(),
-        appBar: AppBar(title: title),
-      ),
-      iosBuilder: (_) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: title,
-          automaticBackgroundVisibility: false,
-          backgroundColor: Styles.cupertinoAppBarColor
-              .resolveFrom(context)
-              .withValues(alpha: 0.0),
-          border: null,
-        ),
-        child: const _Body(),
-      ),
+      androidBuilder:
+          (_) => Scaffold(
+            backgroundColor: Styles.listingsScreenBackgroundColor(context),
+            body: _Body(filter),
+            appBar: AppBar(title: title, actions: [filterButton]),
+          ),
+      iosBuilder:
+          (_) => CupertinoPageScaffold(
+            backgroundColor: Styles.listingsScreenBackgroundColor(context),
+            navigationBar: CupertinoNavigationBar(
+              middle: title,
+              automaticBackgroundVisibility: false,
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
+              border: null,
+              trailing: filterButton,
+            ),
+            child: _Body(filter),
+          ),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body();
+  const _Body(this.filter);
+
+  final _BroadcastFilter filter;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _BodyState();
@@ -65,38 +136,24 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  ImageColorWorker? _worker;
-
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    _initWorker();
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    _worker?.close();
     super.dispose();
   }
 
-  Future<void> _initWorker() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
-    if (mounted) {
-      setState(() {
-        _worker = worker;
-      });
-    }
-  }
-
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (widget.filter == _BroadcastFilter.all &&
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
@@ -109,41 +166,30 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
-    if (_worker == null || (!broadcasts.hasValue && broadcasts.isLoading)) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    }
-
     if (!broadcasts.hasValue && broadcasts.isLoading) {
-      debugPrint(
-        'SEVERE: [BroadcastsListScreen] could not load broadcast tournaments',
-      );
-      return const Center(child: Text('Could not load broadcast tournaments'));
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
-
-    final isTablet = isTabletOrLarger(context);
-    final itemsByRow = isTablet ? 2 : 1;
-    const loadingItems = 12;
-    final itemsCount = broadcasts.requireValue.past.length +
-        (broadcasts.isLoading ? loadingItems : 0);
-
-    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: itemsByRow,
-      crossAxisSpacing: 16.0,
-      mainAxisSpacing: 16.0,
-      childAspectRatio: 1.45,
-    );
 
     final sections = [
-      (context.l10n.broadcastOngoing, broadcasts.value!.active),
-      (context.l10n.broadcastCompleted, broadcasts.value!.past),
+      (
+        'ongoing',
+        context.l10n.broadcastOngoing,
+        broadcasts.value!.active
+            .where((b) => b.isLive || widget.filter != _BroadcastFilter.live)
+            .toList(),
+      ),
+      (
+        'past',
+        context.l10n.broadcastPastBroadcasts,
+        broadcasts.value!.past.where((b) => widget.filter == _BroadcastFilter.all).toList(),
+      ),
     ];
 
     return RefreshIndicator.adaptive(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + 16.0
-          : 0,
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + 16.0
+              : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: CustomScrollView(
@@ -153,376 +199,264 @@ class _BodyState extends ConsumerState<_Body> {
             SliverMainAxisGroup(
               key: ValueKey(section),
               slivers: [
-                if (Theme.of(context).platform == TargetPlatform.iOS)
-                  CupertinoSliverNavigationBar(
-                    automaticallyImplyLeading: false,
-                    leading: null,
-                    largeTitle: AutoSizeText(
-                      section.$1,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      overflow: TextOverflow.ellipsis,
+                if (section.$3.isNotEmpty)
+                  if (Theme.of(context).platform == TargetPlatform.iOS)
+                    CupertinoSliverNavigationBar(
+                      automaticallyImplyLeading: false,
+                      leading: null,
+                      largeTitle: AutoSizeText(
+                        section.$2,
+                        maxLines: 1,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      transitionBetweenRoutes: false,
+                    )
+                  else
+                    SliverAppBar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).appBarTheme.backgroundColor?.withValues(alpha: 1),
+                      automaticallyImplyLeading: false,
+                      primary: false,
+                      title: AutoSizeText(
+                        section.$2,
+                        maxLines: 1,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      pinned: true,
                     ),
-                    transitionBetweenRoutes: false,
-                  )
-                else
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    title: AutoSizeText(
-                      section.$1,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    pinned: true,
-                  ),
                 SliverPadding(
-                  padding: Theme.of(context).platform == TargetPlatform.iOS
-                      ? Styles.horizontalBodyPadding
-                      : Styles.bodySectionPadding,
-                  sliver: SliverGrid.builder(
-                    gridDelegate: gridDelegate,
-                    itemBuilder: (context, index) => (broadcasts.isLoading &&
-                            index >= itemsCount - loadingItems)
-                        ? Shimmer(
-                            child: ShimmerLoading(
-                              isLoading: true,
-                              child: BroadcastGridItem.loading(_worker!),
-                            ),
-                          )
-                        : BroadcastGridItem(
-                            worker: _worker!,
-                            broadcast: section.$2[index],
-                          ),
-                    itemCount: section.$2.length,
+                  padding:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? EdgeInsets.zero
+                          : Styles.sectionBottomPadding,
+                  sliver: SliverList.separated(
+                    separatorBuilder:
+                        (context, index) => PlatformDivider(
+                          height: 1,
+                          indent: BroadcastListScreen._thumbnailSize(context) + 16.0 + 10.0,
+                        ),
+                    itemCount: section.$3.length,
+                    itemBuilder:
+                        (context, index) =>
+                            (section.$1 == 'past' &&
+                                    broadcasts.isLoading &&
+                                    index >= section.$3.length - 1)
+                                ? const Shimmer(
+                                  child: ShimmerLoading(
+                                    isLoading: true,
+                                    child: BroadcastListTile.loading(),
+                                  ),
+                                )
+                                : BroadcastListTile(broadcast: section.$3[index]),
                   ),
                 ),
               ],
             ),
+          const SliverSafeArea(
+            top: false,
+            sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+          ),
         ],
       ),
     );
   }
 }
 
-class BroadcastGridItem extends StatefulWidget {
-  const BroadcastGridItem({
-    required this.broadcast,
-    required this.worker,
-    super.key,
-  });
+class BroadcastListTile extends StatelessWidget {
+  const BroadcastListTile({required this.broadcast, this.maxSubtitleLines = 4})
+    : _isLoading = false;
+
+  const BroadcastListTile.loading({this.maxSubtitleLines = 4})
+    : broadcast = const Broadcast(
+        tour: BroadcastTournamentData(
+          id: BroadcastTournamentId(''),
+          name: '',
+          slug: '',
+          imageUrl: null,
+          description: '',
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            website: null,
+            location: null,
+            dates: null,
+            standings: null,
+          ),
+        ),
+        round: BroadcastRound(
+          id: BroadcastRoundId(''),
+          name: '',
+          slug: '',
+          status: RoundStatus.finished,
+          startsAt: null,
+          finishedAt: null,
+          startsAfterPrevious: false,
+        ),
+        group: null,
+        roundToLinkId: BroadcastRoundId(''),
+      ),
+      _isLoading = true;
 
   final Broadcast broadcast;
-  final ImageColorWorker worker;
+  final int maxSubtitleLines;
 
-  const BroadcastGridItem.loading(this.worker)
-      : broadcast = const Broadcast(
-          tour: BroadcastTournamentData(
-            id: BroadcastTournamentId(''),
-            name: '',
-            imageUrl: null,
-            description: '',
-            information: (
-              format: null,
-              timeControl: null,
-              players: null,
-              website: null,
-              location: null,
-              dates: null,
-            ),
-          ),
-          round: BroadcastRound(
-            id: BroadcastRoundId(''),
-            name: '',
-            status: RoundStatus.finished,
-            startsAt: null,
-            finishedAt: null,
-            startsAfterPrevious: false,
-          ),
-          group: null,
-          roundToLinkId: BroadcastRoundId(''),
-        );
+  final bool _isLoading;
 
-  @override
-  State<BroadcastGridItem> createState() => _BroadcastGridItemState();
-}
-
-typedef _CardColors = ({
-  Color primaryContainer,
-  Color onPrimaryContainer,
-  Color error,
-});
-final Map<ImageProvider, _CardColors> _colorsCache = {};
-
-Future<(_CardColors, Uint8List?)?> _computeImageColors(
-  ImageColorWorker worker,
-  String imageUrl, [
-  Uint8List? image,
-]) async {
-  final response = await worker.getImageColors(
-    imageUrl,
-    fileExtension: 'webp',
-  );
-  if (response != null) {
-    final (:image, :primaryContainer, :onPrimaryContainer, :error) = response;
-    final cardColors = (
-      primaryContainer: Color(primaryContainer),
-      onPrimaryContainer: Color(onPrimaryContainer),
-      error: Color(error),
-    );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
-    return (cardColors, image);
-  }
-  return null;
-}
-
-class _BroadcastGridItemState extends State<BroadcastGridItem> {
-  _CardColors? _cardColors;
-  ImageProvider? _imageProvider;
-  bool _tapDown = false;
-
-  String? get imageUrl => widget.broadcast.tour.imageUrl;
-
-  ImageProvider get imageProvider =>
-      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final cachedColors = _colorsCache[imageProvider];
-    if (cachedColors != null) {
-      _cardColors = cachedColors;
-      _imageProvider = imageProvider;
-    } else {
-      if (imageUrl != null) {
-        _fetchImageAndColors(NetworkImage(imageUrl!));
-      } else {
-        _imageProvider = kDefaultBroadcastImage;
-      }
-    }
-  }
-
-  Future<void> _fetchImageAndColors(NetworkImage provider) async {
-    if (!mounted) return;
-
-    if (Scrollable.recommendDeferredLoadingForContext(context)) {
-      SchedulerBinding.instance.scheduleFrameCallback((_) {
-        scheduleMicrotask(() => _fetchImageAndColors(provider));
-      });
-    } else if (widget.worker.closed == false) {
-      final response = await _computeImageColors(widget.worker, provider.url);
-      if (response != null) {
-        final (cardColors, image) = response;
-        if (mounted) {
-          setState(() {
-            _imageProvider = image != null ? MemoryImage(image) : imageProvider;
-            _cardColors = cardColors;
-          });
-        }
-      }
-    }
-  }
-
-  void _onTapDown() {
-    setState(() => _tapDown = true);
-  }
-
-  void _onTapCancel() {
-    setState(() => _tapDown = false);
-  }
+  static const _kPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0);
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
-    final backgroundColor =
-        _cardColors?.primaryContainer ?? defaultBackgroundColor;
-    final titleColor = _cardColors?.onPrimaryContainer;
-    final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.7) ??
-            textShade(context, 0.7);
-    final liveColor = _cardColors?.error ?? LichessColors.red;
+    final thumbnailSize = BroadcastListScreen._thumbnailSize(context);
 
-    return GestureDetector(
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          title: widget.broadcast.title,
-          rootNavigator: true,
-          builder: (context) =>
-              BroadcastRoundScreen(broadcast: widget.broadcast),
-        );
-      },
-      onTapDown: (_) => _onTapDown(),
-      onTapCancel: _onTapCancel,
-      onTapUp: (_) => _onTapCancel(),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: kBroadcastGridItemBorderRadius,
-          color: backgroundColor,
-          boxShadow: Theme.of(context).platform == TargetPlatform.iOS
-              ? null
-              : kElevationToShadow[1],
-        ),
-        child: Stack(
+    if (_isLoading) {
+      return Padding(
+        padding: _kPadding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ShaderMask(
-              blendMode: BlendMode.dstOut,
-              shaderCallback: (bounds) {
-                return LinearGradient(
-                  begin: const Alignment(0.0, 0.5),
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    backgroundColor.withValues(alpha: 0.0),
-                    backgroundColor.withValues(alpha: 1.0),
-                  ],
-                  stops: const [0.5, 1.10],
-                  tileMode: TileMode.clamp,
-                ).createShader(bounds);
-              },
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 100),
-                opacity: _tapDown ? 1.0 : 0.7,
-                child: AspectRatio(
-                  aspectRatio: 2.0,
-                  child: _imageProvider != null
-                      ? Image(
-                          image: _imageProvider!,
-                          frameBuilder:
-                              (context, child, frame, wasSynchronouslyLoaded) {
-                            if (wasSynchronouslyLoaded) {
-                              return child;
-                            }
-                            return AnimatedOpacity(
-                              duration: const Duration(milliseconds: 500),
-                              opacity: frame == null ? 0 : 1,
-                              child: child,
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Image(image: kDefaultBroadcastImage),
-                        )
-                      : const SizedBox.shrink(),
-                ),
+            Container(
+              width: thumbnailSize,
+              height: thumbnailSize / 2,
+              decoration: const BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 12.0,
+            const SizedBox(width: 10),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.broadcast.round.startsAt != null ||
-                      widget.broadcast.isLive)
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            widget.broadcast.round.name,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: subTitleColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          const SizedBox(width: 4.0),
-                          if (widget.broadcast.isLive)
-                            Text(
-                              'LIVE',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: liveColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          else
-                            Text(
-                              relativeDate(widget.broadcast.round.startsAt!),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: subTitleColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                        ],
-                      ),
-                    ),
                   Padding(
-                    padding: kBroadcastGridItemContentPadding.add(
-                      const EdgeInsets.symmetric(vertical: 3.0),
-                    ),
-                    child: Text(
-                      widget.broadcast.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.bold,
-                        height: 1.0,
-                        fontSize: 16,
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 20.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
                     ),
                   ),
-                  if (widget.broadcast.tour.information.players != null)
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding,
-                      child: Text(
-                        widget.broadcast.tour.information.players!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: subTitleColor,
-                          letterSpacing: -0.2,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 10.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 10.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+            const SizedBox(width: 10),
+            // trailing,
+          ],
+        ),
+      );
+    }
+
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    final leading =
+        broadcast.tour.imageUrl != null
+            ? Image.network(
+              broadcast.tour.imageUrl!,
+              width: thumbnailSize,
+              cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
+              fit: BoxFit.cover,
+              errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+            )
+            : Image(image: kDefaultBroadcastImage, width: thumbnailSize);
+
+    final title = Text(broadcast.title, maxLines: 2, overflow: TextOverflow.ellipsis);
+
+    final subtitle = Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: broadcast.round.name),
+          if (broadcast.tour.information.players != null)
+            TextSpan(
+              text: '\n${broadcast.tour.information.players}',
+              style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
+      ),
+      maxLines: maxSubtitleLines,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    return AdaptiveInkWell(
+      onTap: () {
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(BroadcastRoundScreen.buildRoute(context, broadcast));
+      },
+      child: Padding(
+        padding: _kPadding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            leading,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (broadcast.isLive)
+                    Text(
+                      'LIVE',
+                      style: TextStyle(
+                        color: context.lichessColors.error,
+                        fontSize: 16,
+                        height: 1,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  else if (broadcast.round.startsAt != null)
+                    Text(
+                      relativeDate(context.l10n, broadcast.round.startsAt!).toUpperCase(),
+                      style: TextStyle(
+                        color: textShade(context, 0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                        height: 1,
+                      ),
+                    ),
+                  const SizedBox(height: 4.0),
+                  DefaultTextStyle.merge(
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    child: title,
+                  ),
+                  subtitle,
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // trailing,
           ],
         ),
       ),
     );
-  }
-}
-
-Future<void> preCacheBroadcastImages(
-  BuildContext context, {
-  required Iterable<Broadcast> broadcasts,
-  required ImageColorWorker worker,
-}) async {
-  for (final broadcast in broadcasts) {
-    final imageUrl = broadcast.tour.imageUrl;
-    if (imageUrl != null) {
-      final provider = NetworkImage(imageUrl);
-      await precacheImage(provider, context);
-      final imageStream = provider.resolve(ImageConfiguration.empty);
-      final Completer<Uint8List?> completer = Completer<Uint8List?>();
-      final ImageStreamListener listener = ImageStreamListener(
-        (imageInfo, synchronousCall) async {
-          final bytes = await imageInfo.image.toByteData();
-          if (!completer.isCompleted) {
-            completer.complete(bytes?.buffer.asUint8List());
-          }
-        },
-      );
-      imageStream.addListener(listener);
-      final imageBytes = await completer.future;
-      imageStream.removeListener(listener);
-      if (imageBytes != null) {
-        await _computeImageColors(worker, imageUrl, imageBytes);
-      }
-    }
   }
 }

@@ -4,26 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   const OfflineCorrespondenceGamesScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const OfflineCorrespondenceGamesScreen());
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: offlineGames.maybeWhen(
-          data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
-          orElse: () => const SizedBox.shrink(),
-        ),
+      appBarTitle: offlineGames.maybeWhen(
+        data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
+        orElse: () => const SizedBox.shrink(),
       ),
       body: _Body(),
     );
@@ -35,17 +37,15 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineGames.maybeWhen(
-      data: (data) => ListView(
-        children: [
-          const SizedBox(height: 8.0),
-          ...data.map(
-            (game) => OfflineCorrespondenceGamePreview(
-              game: game.$2,
-              lastModified: game.$1,
-            ),
+      data:
+          (data) => ListView(
+            children: [
+              const SizedBox(height: 8.0),
+              ...data.map(
+                (game) => OfflineCorrespondenceGamePreview(game: game.$2, lastModified: game.$1),
+              ),
+            ],
           ),
-        ],
-      ),
       orElse: () => const SizedBox.shrink(),
     );
   }
@@ -69,31 +69,15 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          UserFullNameWidget(
-            user: game.opponent.user,
-            style: Styles.boardPreviewTitle,
-          ),
+          UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
-            Text(
-              timeago.format(
-                DateTime.now().add(game.myTimeLeft(lastModified)!),
-                allowFromNow: true,
-              ),
-            ),
-          Icon(
-            game.perf.icon,
-            size: 40,
-            color: DefaultTextStyle.of(context).style.color,
-          ),
+            Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
+          Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),
         ],
       ),
       onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (_) => OfflineCorrespondenceGameScreen(
-            initialGame: (lastModified, game),
-          ),
+        Navigator.of(context, rootNavigator: true).push(
+          OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (lastModified, game)),
         );
       },
     );

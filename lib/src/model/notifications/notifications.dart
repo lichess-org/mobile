@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:deep_pick/deep_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan;
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:meta/meta.dart';
 
 /// FCM Messages
@@ -48,11 +51,10 @@ sealed class FcmMessage {
           final round = message.data['lichess.round'] as String?;
           if (gameFullId != null) {
             final fullId = GameFullId(gameFullId);
-            final game = round != null
-                ? PlayableGame.fromServerJson(
-                    jsonDecode(round) as Map<String, dynamic>,
-                  )
-                : null;
+            final game =
+                round != null
+                    ? PlayableGame.fromServerJson(jsonDecode(round) as Map<String, dynamic>)
+                    : null;
             return CorresGameUpdateFcmMessage(
               fullId,
               game: game,
@@ -71,11 +73,7 @@ sealed class FcmMessage {
 /// An [FcmMessage] that represents a correspondence game update.
 @immutable
 class CorresGameUpdateFcmMessage extends FcmMessage {
-  const CorresGameUpdateFcmMessage(
-    this.fullId, {
-    required this.game,
-    required this.notification,
-  });
+  const CorresGameUpdateFcmMessage(this.fullId, {required this.game, required this.notification});
 
   final GameFullId fullId;
   final PlayableGame? game;
@@ -137,10 +135,7 @@ sealed class LocalNotification {
   ///
   /// See [LocalNotification.fromJson] where the [channelId] is used to determine the
   /// concrete type of the notification, to be able to deserialize it.
-  Map<String, dynamic> get payload => {
-        'channel': channelId,
-        ..._concretePayload,
-      };
+  Map<String, dynamic> get payload => {'channel': channelId, ..._concretePayload};
 
   /// The actual payload of the notification.
   ///
@@ -158,10 +153,57 @@ sealed class LocalNotification {
         return CorresGameUpdateNotification.fromJson(json);
       case 'challenge':
         return ChallengeNotification.fromJson(json);
+      case 'playban':
+        return PlaybanNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
   }
+}
+
+/// A notification show to the user when they are banned temporarily from playing.
+class PlaybanNotification extends LocalNotification {
+  const PlaybanNotification(this.playban);
+
+  final TemporaryBan playban;
+
+  factory PlaybanNotification.fromJson(Map<String, dynamic> json) {
+    final p = pick(json).required();
+    final playban = TemporaryBan(
+      date: p('date').asDateTimeFromMillisecondsOrThrow(),
+      duration: p('minutes').asDurationFromMinutesOrThrow(),
+    );
+    return PlaybanNotification(playban);
+  }
+
+  @override
+  String get channelId => 'playban';
+
+  @override
+  int get id => playban.date.toIso8601String().hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'minutes': playban.duration.inMinutes,
+    'date': playban.date.millisecondsSinceEpoch,
+  };
+
+  @override
+  String title(AppLocalizations l10n) => l10n.sorry;
+
+  @override
+  String body(AppLocalizations l10n) => l10n.weHadToTimeYouOutForAWhile;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      'playban',
+      importance: Importance.max,
+      priority: Priority.max,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
 }
 
 /// A notification for a correspondence game update.
@@ -173,8 +215,8 @@ sealed class LocalNotification {
 /// are generated server side and are included in the FCM message's [RemoteMessage.notification] field.
 class CorresGameUpdateNotification extends LocalNotification {
   const CorresGameUpdateNotification(this.fullId, String title, String body)
-      : _title = title,
-        _body = body;
+    : _title = title,
+      _body = body;
 
   final GameFullId fullId;
 
@@ -188,6 +230,12 @@ class CorresGameUpdateNotification extends LocalNotification {
     return CorresGameUpdateNotification(gameId, title, body);
   }
 
+  factory CorresGameUpdateNotification.fromFcmMessage(CorresGameUpdateFcmMessage message) {
+    final title = message.notification?.title ?? '';
+    final body = message.notification?.body ?? '';
+    return CorresGameUpdateNotification(message.fullId, title, body);
+  }
+
   @override
   String get channelId => 'corresGameUpdate';
 
@@ -196,10 +244,10 @@ class CorresGameUpdateNotification extends LocalNotification {
 
   @override
   Map<String, dynamic> get _concretePayload => {
-        'fullId': fullId.toJson(),
-        'title': _title,
-        'body': _body,
-      };
+    'fullId': fullId.toJson(),
+    'title': _title,
+    'body': _body,
+  };
 
   @override
   String title(_) => _title;
@@ -209,15 +257,15 @@ class CorresGameUpdateNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          l10n.preferencesNotifyGameEvent,
-          importance: Importance.high,
-          priority: Priority.defaultPriority,
-          autoCancel: true,
-        ),
-        iOS: DarwinNotificationDetails(threadIdentifier: channelId),
-      );
+    android: AndroidNotificationDetails(
+      channelId,
+      l10n.preferencesNotifyGameEvent,
+      importance: Importance.high,
+      priority: Priority.defaultPriority,
+      autoCancel: true,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
 }
 
 /// A notification for a received challenge.
@@ -230,8 +278,7 @@ class ChallengeNotification extends LocalNotification {
   final Challenge challenge;
 
   factory ChallengeNotification.fromJson(Map<String, dynamic> json) {
-    final challenge =
-        Challenge.fromJson(json['challenge'] as Map<String, dynamic>);
+    final challenge = Challenge.fromJson(json['challenge'] as Map<String, dynamic>);
     return ChallengeNotification(challenge);
   }
 
@@ -242,76 +289,66 @@ class ChallengeNotification extends LocalNotification {
   int get id => challenge.id.value.hashCode;
 
   @override
-  Map<String, dynamic> get _concretePayload => {
-        'challenge': challenge.toJson(),
-      };
+  Map<String, dynamic> get _concretePayload => {'challenge': challenge.toJson()};
 
   @override
-  String title(AppLocalizations _) =>
-      '${challenge.challenger!.user.name} challenges you!';
+  String title(AppLocalizations _) => '${challenge.challenger!.user.name} challenges you!';
 
   @override
   String body(AppLocalizations l10n) => challenge.description(l10n);
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          l10n.preferencesNotifyChallenge,
-          importance: Importance.max,
-          priority: Priority.high,
-          autoCancel: false,
-          actions: <AndroidNotificationAction>[
-            if (challenge.variant.isPlaySupported)
-              AndroidNotificationAction(
-                'accept',
-                l10n.accept,
-                icon: const DrawableResourceAndroidBitmap('tick'),
-                showsUserInterface: true,
-                contextual: true,
-              ),
-            AndroidNotificationAction(
-              'decline',
-              l10n.decline,
-              icon: const DrawableResourceAndroidBitmap('cross'),
-              showsUserInterface: true,
-              contextual: true,
-            ),
-          ],
+    android: AndroidNotificationDetails(
+      channelId,
+      l10n.preferencesNotifyChallenge,
+      importance: Importance.max,
+      priority: Priority.high,
+      autoCancel: false,
+      actions: <AndroidNotificationAction>[
+        if (challenge.variant.isPlaySupported)
+          AndroidNotificationAction(
+            'accept',
+            l10n.accept,
+            icon: const DrawableResourceAndroidBitmap('tick'),
+            showsUserInterface: true,
+            contextual: true,
+          ),
+        AndroidNotificationAction(
+          'decline',
+          l10n.decline,
+          icon: const DrawableResourceAndroidBitmap('cross'),
+          showsUserInterface: true,
+          contextual: true,
         ),
-        iOS: DarwinNotificationDetails(
-          threadIdentifier: channelId,
-          categoryIdentifier: challenge.variant.isPlaySupported
+      ],
+    ),
+    iOS: DarwinNotificationDetails(
+      threadIdentifier: channelId,
+      categoryIdentifier:
+          challenge.variant.isPlaySupported
               ? darwinPlayableVariantCategoryId
               : darwinUnplayableVariantCategoryId,
-        ),
-      );
+    ),
+  );
 
-  static const darwinPlayableVariantCategoryId =
-      'challenge-notification-playable-variant';
+  static const darwinPlayableVariantCategoryId = 'challenge-notification-playable-variant';
 
-  static const darwinUnplayableVariantCategoryId =
-      'challenge-notification-unplayable-variant';
+  static const darwinUnplayableVariantCategoryId = 'challenge-notification-unplayable-variant';
 
-  static DarwinNotificationCategory darwinPlayableVariantCategory(
-    AppLocalizations l10n,
-  ) =>
+  static DarwinNotificationCategory darwinPlayableVariantCategory(AppLocalizations l10n) =>
       DarwinNotificationCategory(
         darwinPlayableVariantCategoryId,
         actions: <DarwinNotificationAction>[
           DarwinNotificationAction.plain(
             'accept',
             l10n.accept,
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.foreground,
-            },
+            options: <DarwinNotificationActionOption>{DarwinNotificationActionOption.foreground},
           ),
           DarwinNotificationAction.plain(
             'decline',
             l10n.decline,
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.foreground,
-            },
+            options: <DarwinNotificationActionOption>{DarwinNotificationActionOption.foreground},
           ),
         ],
         options: <DarwinNotificationCategoryOption>{
@@ -319,18 +356,14 @@ class ChallengeNotification extends LocalNotification {
         },
       );
 
-  static DarwinNotificationCategory darwinUnplayableVariantCategory(
-    AppLocalizations l10n,
-  ) =>
+  static DarwinNotificationCategory darwinUnplayableVariantCategory(AppLocalizations l10n) =>
       DarwinNotificationCategory(
         darwinUnplayableVariantCategoryId,
         actions: <DarwinNotificationAction>[
           DarwinNotificationAction.plain(
             'decline',
             l10n.decline,
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.foreground,
-            },
+            options: <DarwinNotificationActionOption>{DarwinNotificationActionOption.foreground},
           ),
         ],
         options: <DarwinNotificationCategoryOption>{

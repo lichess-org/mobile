@@ -16,18 +16,15 @@ final _dateFormatter = DateFormat.MMMd();
 
 /// A tab that displays the overview of a broadcast.
 class BroadcastOverviewTab extends ConsumerWidget {
-  const BroadcastOverviewTab({
-    required this.broadcast,
-    required this.tournamentId,
-    super.key,
-  });
+  const BroadcastOverviewTab({required this.broadcast, required this.tournamentId, super.key});
 
   final Broadcast broadcast;
   final BroadcastTournamentId tournamentId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets = MediaQuery.paddingOf(context) -
+    final edgeInsets =
+        MediaQuery.paddingOf(context) -
         (Theme.of(context).platform == TargetPlatform.iOS
             ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
             : EdgeInsets.zero) +
@@ -41,62 +38,57 @@ class BroadcastOverviewTab extends ConsumerWidget {
         return SliverPadding(
           padding: edgeInsets,
           sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                if (tournament.data.imageUrl != null) ...[
-                  Image.network(tournament.data.imageUrl!),
-                  const SizedBox(height: 16.0),
-                ],
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: [
-                    if (information.dates != null)
-                      _BroadcastOverviewCard(
-                        CupertinoIcons.calendar,
-                        information.dates!.endsAt == null
-                            ? _dateFormatter.format(information.dates!.startsAt)
-                            : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
-                      ),
-                    if (information.format != null)
-                      _BroadcastOverviewCard(
-                        Icons.emoji_events,
-                        '${information.format}',
-                      ),
-                    if (information.timeControl != null)
-                      _BroadcastOverviewCard(
-                        CupertinoIcons.stopwatch_fill,
-                        '${information.timeControl}',
-                      ),
-                    if (information.location != null)
-                      _BroadcastOverviewCard(
-                        Icons.public,
-                        '${information.location}',
-                      ),
-                    if (information.players != null)
-                      _BroadcastOverviewCard(
-                        Icons.person,
-                        '${information.players}',
-                      ),
-                    if (information.website != null)
-                      _BroadcastOverviewCard(
-                        Icons.link,
-                        context.l10n.broadcastOfficialWebsite,
-                        information.website,
-                      ),
-                  ],
-                ),
-                if (description != null) ...[
-                  const SizedBox(height: 16),
-                  MarkdownBody(
-                    data: description,
-                    onTapLink: (text, url, title) {
-                      if (url == null) return;
-                      launchUrl(Uri.parse(url));
-                    },
-                  ),
-                ],
+            delegate: SliverChildListDelegate([
+              if (tournament.data.imageUrl != null) ...[
+                Image.network(tournament.data.imageUrl!),
+                const SizedBox(height: 16.0),
               ],
-            ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  if (information.dates != null)
+                    _BroadcastOverviewCard(
+                      CupertinoIcons.calendar,
+                      information.dates!.endsAt == null
+                          ? _dateFormatter.format(information.dates!.startsAt)
+                          : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
+                    ),
+                  if (information.format != null)
+                    _BroadcastOverviewCard(Icons.emoji_events, '${information.format}'),
+                  if (information.timeControl != null)
+                    _BroadcastOverviewCard(
+                      CupertinoIcons.stopwatch_fill,
+                      '${information.timeControl}',
+                    ),
+                  if (information.location != null)
+                    _BroadcastOverviewCard(Icons.public, '${information.location}'),
+                  if (information.players != null)
+                    _BroadcastOverviewCard(Icons.person, '${information.players}'),
+                  if (information.website != null)
+                    _BroadcastOverviewCard(
+                      Icons.link,
+                      context.l10n.broadcastOfficialWebsite,
+                      information.website,
+                    ),
+                  if (information.standings != null)
+                    _BroadcastOverviewCard(
+                      Icons.link,
+                      context.l10n.broadcastStandings,
+                      information.standings,
+                    ),
+                ],
+              ),
+              if (description != null) ...[
+                const SizedBox(height: 16),
+                MarkdownBody(
+                  data: description,
+                  onTapLink: (text, url, title) {
+                    if (url == null) return;
+                    launchUrl(Uri.https('lichess.org').resolve(url));
+                  },
+                ),
+              ],
+            ]),
           ),
         );
       case AsyncError(:final error):
@@ -137,21 +129,12 @@ class _BroadcastOverviewCard extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                iconData,
-                color: website != null
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
-              ),
+              Icon(iconData, color: website != null ? ColorScheme.of(context).primary : null),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
                   text,
-                  style: TextStyle(
-                    color: website != null
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                  ),
+                  style: TextStyle(color: website != null ? ColorScheme.of(context).primary : null),
                 ),
               ),
             ],

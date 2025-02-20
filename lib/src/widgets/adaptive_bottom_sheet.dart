@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -21,20 +20,13 @@ Future<T?> showAdaptiveBottomSheet<T>({
     isScrollControlled: isScrollControlled,
     useRootNavigator: useRootNavigator,
     useSafeArea: useSafeArea,
-    shape: Theme.of(context).platform == TargetPlatform.iOS
-        ? const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10.0),
-            ),
-          )
-        : null,
+    shape:
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
+            )
+            : null,
     constraints: constraints,
-    backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.tertiarySystemGroupedBackground,
-            context,
-          )
-        : null,
     elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : null,
     builder: builder,
   );
@@ -63,9 +55,7 @@ class BottomSheetScrollableContainer extends StatelessWidget {
       child: SingleChildScrollView(
         controller: scrollController,
         padding: padding,
-        child: ListBody(
-          children: children,
-        ),
+        child: ListBody(children: children),
       ),
     );
   }
@@ -87,8 +77,6 @@ class BottomSheetContextMenuAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
-      cupertinoBackgroundColor:
-          CupertinoColors.tertiarySystemGroupedBackground.resolveFrom(context),
       leading: Icon(icon),
       title: child,
       onTap: () {

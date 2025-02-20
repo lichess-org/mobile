@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,14 +13,11 @@ import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -31,37 +27,37 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
+const kThumbnailImageSize = 40.0;
+
 const _featuredChannelsSet = ISetConst({
   TvChannel.best,
   TvChannel.bullet,
   TvChannel.blitz,
   TvChannel.rapid,
+  TvChannel.classical,
 });
 
-final featuredChannelsProvider =
-    FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
-  return ref.withClientCacheFor(
-    (client) async {
-      final channels = await TvRepository(client).channels();
-      return channels.entries
-          .where((channel) => _featuredChannelsSet.contains(channel.key))
-          .map(
-            (entry) => TvGameSnapshot(
-              channel: entry.key,
-              id: entry.value.id,
-              orientation: entry.value.side ?? Side.white,
-              player: FeaturedPlayer(
-                name: entry.value.user.name,
-                title: entry.value.user.title,
-                side: entry.value.side ?? Side.white,
-                rating: entry.value.rating,
-              ),
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+  return ref.withClient((client) async {
+    final channels = await TvRepository(client).channels();
+    return _featuredChannelsSet
+        .map((channel) => MapEntry(channel, channels[channel]))
+        .where((entry) => entry.value != null)
+        .map(
+          (entry) => TvGameSnapshot(
+            channel: entry.key,
+            id: entry.value!.id,
+            orientation: entry.value!.side ?? Side.white,
+            player: FeaturedPlayer(
+              name: entry.value!.user.name,
+              title: entry.value!.user.title,
+              side: entry.value!.side ?? Side.white,
+              rating: entry.value!.rating,
             ),
-          )
-          .toIList();
-    },
-    const Duration(minutes: 5),
-  );
+          ),
+        )
+        .toIList();
+  });
 });
 
 class WatchTabScreen extends ConsumerStatefulWidget {
@@ -78,15 +74,12 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
-        refreshData();
+        ref.invalidate(featuredChannelsProvider);
+        ref.invalidate(liveStreamersProvider);
       }
     });
 
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
@@ -98,9 +91,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.watch),
-        ),
+        appBar: AppBar(title: Text(context.l10n.watch)),
         body: OrientationBuilder(
           builder: (context, orientation) {
             return RefreshIndicator(
@@ -122,18 +113,10 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
             controller: watchScrollController,
             slivers: [
               const CupertinoSliverNavigationBar(
-                padding: EdgeInsetsDirectional.only(
-                  start: 16.0,
-                  end: 8.0,
-                ),
+                padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
               ),
-              CupertinoSliverRefreshControl(
-                onRefresh: refreshData,
-              ),
-              SliverSafeArea(
-                top: false,
-                sliver: _Body(orientation),
-              ),
+              CupertinoSliverRefreshControl(onRefresh: refreshData),
+              SliverSafeArea(top: false, sliver: _Body(orientation)),
             ],
           );
         },
@@ -170,19 +153,16 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    _worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    if (mounted) {
+      setState(() {
+        _worker = worker;
+      });
+    }
     ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
       if (current.hasValue && !_imageAreCached) {
         _imageAreCached = true;
-        try {
-          await preCacheBroadcastImages(
-            context,
-            broadcasts: current.value!.active.take(10),
-            worker: _worker!,
-          );
-        } finally {
-          _worker?.close();
-        }
+        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
       }
     });
   }
@@ -193,31 +173,15 @@ class _BodyState extends ConsumerState<_Body> {
     final featuredChannels = ref.watch(featuredChannelsProvider);
     final streamers = ref.watch(liveStreamersProvider);
 
-    final content = widget.orientation == Orientation.portrait
-        ? [
-            _BroadcastWidget(broadcastList),
-            _WatchTvWidget(featuredChannels),
-            _StreamerWidget(streamers),
-          ]
-        : [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _BroadcastWidget(broadcastList)),
-                Expanded(child: _WatchTvWidget(featuredChannels)),
-              ],
-            ),
-            _StreamerWidget(streamers),
-          ];
+    final content = [
+      if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      _WatchTvWidget(featuredChannels),
+      _StreamerWidget(streamers),
+    ];
 
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? SliverList(
-            delegate: SliverChildListDelegate(content),
-          )
-        : ListView(
-            controller: watchScrollController,
-            children: content,
-          );
+        ? SliverList(delegate: SliverChildListDelegate(content))
+        : ListView(controller: watchScrollController, children: content);
   }
 }
 
@@ -230,102 +194,55 @@ Future<void> _refreshData(WidgetRef ref) {
 }
 
 class _BroadcastWidget extends ConsumerWidget {
+  const _BroadcastWidget(this.broadcastList, this.worker);
+
   final AsyncValue<BroadcastList> broadcastList;
-
-  const _BroadcastWidget(this.broadcastList);
-
-  static const int numberOfItems = 5;
+  final ImageColorWorker worker;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return broadcastList.when(
-      data: (data) {
-        return ListSection(
-          header: Text(context.l10n.broadcastBroadcasts),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => const BroadcastListScreen(),
-              );
-            },
-            child: Text(
-              context.l10n.more,
+    return Padding(
+      padding: Styles.verticalBodyPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8.0)),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    context.l10n.broadcastBroadcasts,
+                    style: Styles.sectionTitle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 6.0),
+                NoPaddingTextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
+                  },
+                  child: Text(context.l10n.more),
+                ),
+              ],
             ),
           ),
-          children: [
-            ...CombinedIterableView([data.active, data.past])
-                .take(numberOfItems)
-                .map((broadcast) => _BroadcastTile(broadcast: broadcast)),
-          ],
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace',
-        );
-        return const Padding(
-          padding: Styles.bodySectionPadding,
-          child: Text('Could not load broadcasts'),
-        );
-      },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: numberOfItems,
-            header: true,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BroadcastTile extends ConsumerWidget {
-  const _BroadcastTile({
-    required this.broadcast,
-  });
-
-  final Broadcast broadcast;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformListTile(
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          title: broadcast.title,
-          rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: broadcast),
-        );
-      },
-      leading: const Icon(LichessIcons.radio_tower_lichess),
-      subtitle: Row(
-        children: [
-          Text(broadcast.round.name),
-          if (broadcast.isLive) ...[
-            const SizedBox(width: 5.0),
-            Text(
-              'LIVE',
-              style: TextStyle(
-                color: context.lichessColors.error,
-                fontWeight: FontWeight.bold,
+          switch (broadcastList) {
+            AsyncData(:final value) => BroadcastCarousel(broadcasts: value, worker: worker),
+            AsyncError() => const Padding(
+              padding: Styles.bodySectionPadding,
+              child: Text('Could not load broadcasts'),
+            ),
+            _ => Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: BroadcastCarousel.loading(worker: worker),
               ),
             ),
-          ] else if (broadcast.round.startsAt != null) ...[
-            const SizedBox(width: 5.0),
-            Text(relativeDate(broadcast.round.startsAt!)),
-          ],
+          },
         ],
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(right: 5.0),
-        child: Text(
-          broadcast.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
       ),
     );
   }
@@ -347,50 +264,52 @@ class _WatchTvWidget extends ConsumerWidget {
           header: const Text('Lichess TV'),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => const LiveTvChannelsScreen(),
-            ).then((_) => _refreshData(ref)),
-            child: Text(
-              context.l10n.more,
-            ),
+            onPressed:
+                () => Navigator.of(
+                  context,
+                ).push(LiveTvChannelsScreen.buildRoute(context)).then((_) => _refreshData(ref)),
+            child: Text(context.l10n.more),
           ),
-          children: data.map((snapshot) {
-            return PlatformListTile(
-              leading: Icon(snapshot.channel.icon),
-              title: Text(snapshot.channel.label),
-              subtitle: UserFullNameWidget.player(
-                user: snapshot.player.asPlayer.user,
-                aiLevel: snapshot.player.asPlayer.aiLevel,
-                rating: snapshot.player.rating,
-              ),
-              onTap: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => TvScreen(channel: snapshot.channel),
-              ).then((_) => _refreshData(ref)),
-            );
-          }).toList(growable: false),
+          children: data
+              .map((snapshot) {
+                return PlatformListTile(
+                  leading: Icon(snapshot.channel.icon),
+                  title: Text(snapshot.channel.label),
+                  subtitle: UserFullNameWidget.player(
+                    user: snapshot.player.asPlayer.user,
+                    aiLevel: snapshot.player.asPlayer.aiLevel,
+                    rating: snapshot.player.rating,
+                  ),
+                  onTap:
+                      () => Navigator.of(context, rootNavigator: true)
+                          .push(
+                            TvScreen.buildRoute(
+                              context,
+                              snapshot.channel,
+                              gameId: snapshot.id,
+                              orientation: snapshot.player.side,
+                            ),
+                          )
+                          .then((_) => _refreshData(ref)),
+                );
+              })
+              .toList(growable: false),
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace',
-        );
+        debugPrint('SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load TV channels'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 4,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
@@ -400,7 +319,7 @@ class _StreamerWidget extends ConsumerWidget {
 
   const _StreamerWidget(this.streamers);
 
-  static const int numberOfItems = 10;
+  static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -410,42 +329,37 @@ class _StreamerWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
-          header: Text(context.l10n.streamerLichessStreamers),
+          header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => StreamerScreen(streamers: data),
-            ),
-            child: Text(
-              context.l10n.more,
-            ),
+            onPressed: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
+            child: Text(context.l10n.more),
           ),
           children: [
             ...data
                 .take(numberOfItems)
-                .map((e) => StreamerListTile(streamer: e, showSubtitle: true)),
+                .map((e) => StreamerListTile(streamer: e, thumbnailSize: kThumbnailImageSize)),
           ],
         );
       },
       error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
-        );
+        debugPrint('SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load live streamers'),
         );
       },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: numberOfItems,
-            header: true,
+      loading:
+          () => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: ListSection.loading(
+                itemsNumber: numberOfItems,
+                header: true,
+                hasLeading: true,
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

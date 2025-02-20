@@ -20,45 +20,36 @@ void main() {
   });
 
   MockClient makeClient(int totalNumberOfPuzzles) => MockClient((request) {
-        if (request.url.path == '/api/puzzle/activity') {
-          final query = request.url.queryParameters;
-          final max = int.parse(query['max']!);
-          final beforeDateParam = query['before'];
-          final beforeDate = beforeDateParam != null
+    if (request.url.path == '/api/puzzle/activity') {
+      final query = request.url.queryParameters;
+      final max = int.parse(query['max']!);
+      final beforeDateParam = query['before'];
+      final beforeDate =
+          beforeDateParam != null
               ? DateTime.fromMillisecondsSinceEpoch(int.parse(beforeDateParam))
               : null;
-          final totalAlreadyRequested =
-              mockActivityRequestsCount.values.fold(0, (p, e) => p + e);
+      final totalAlreadyRequested = mockActivityRequestsCount.values.fold(0, (p, e) => p + e);
 
-          if (totalAlreadyRequested >= totalNumberOfPuzzles) {
-            return mockResponse('', 200);
-          }
+      if (totalAlreadyRequested >= totalNumberOfPuzzles) {
+        return mockResponse('', 200);
+      }
 
-          final key =
-              beforeDate != null ? DateFormat.yMd().format(beforeDate) : null;
+      final key = beforeDate != null ? DateFormat.yMd().format(beforeDate) : null;
 
-          final nbPuzzles = math.min(max, totalNumberOfPuzzles);
-          mockActivityRequestsCount[key] =
-              (mockActivityRequestsCount[key] ?? 0) + nbPuzzles;
-          return mockResponse(
-            generateHistory(nbPuzzles, beforeDate),
-            200,
-          );
-        } else if (request.url.path == '/api/puzzle/batch/mix') {
-          return mockResponse(mockMixBatchResponse, 200);
-        } else if (request.url.path.startsWith('/api/puzzle')) {
-          return mockResponse(
-            '''
+      final nbPuzzles = math.min(max, totalNumberOfPuzzles);
+      mockActivityRequestsCount[key] = (mockActivityRequestsCount[key] ?? 0) + nbPuzzles;
+      return mockResponse(generateHistory(nbPuzzles, beforeDate), 200);
+    } else if (request.url.path == '/api/puzzle/batch/mix') {
+      return mockResponse(mockMixBatchResponse, 200);
+    } else if (request.url.path.startsWith('/api/puzzle')) {
+      return mockResponse('''
 {"game":{"id":"MNMYnEjm","perf":{"key":"classical","name":"Classical"},"rated":true,"players":[{"name":"Igor76","id":"igor76","color":"white","rating":2211},{"name":"dmitriy_duyun","id":"dmitriy_duyun","color":"black","rating":2180}],"pgn":"e4 c6 d4 d5 Nc3 g6 Nf3 Bg7 h3 dxe4 Nxe4 Nf6 Bd3 Nxe4 Bxe4 Nd7 O-O Nf6 Bd3 O-O Re1 Bf5 Bxf5 gxf5 c3 e6 Bg5 Qb6 Qc2 Rac8 Ne5 Qc7 Rad1 Nd7 Bf4 Nxe5 Bxe5 Bxe5 Rxe5 Rcd8 Qd2 Kh8 Rde1 Rg8 Qf4","clock":"20+15"},"puzzle":{"id":"0XqV2","rating":1929,"plays":93270,"solution":["f7f6","e5f5","c7g7","g2g3","e6f5"],"themes":["clearance","endgame","advantage","intermezzo","long"],"initialPly":44}}
-''',
-            200,
-          );
-        }
-        return mockResponse('', 404);
-      });
+''', 200);
+    }
+    return mockResponse('', 404);
+  });
 
-  testWidgets('Displays an initial list of puzzles',
-      (WidgetTester tester) async {
+  testWidgets('Displays an initial list of puzzles', (WidgetTester tester) async {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleHistoryScreen(),
@@ -111,46 +102,30 @@ void main() {
 
     await tester.scrollUntilVisible(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'Bnull20',
+        (widget) => widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'Bnull20',
         description: 'last item of 1st page',
       ),
       400,
     );
 
     // next pages have 50 puzzles
-    expect(
-      mockActivityRequestsCount,
-      equals({
-        null: 20,
-        '1/31/2024': 50,
-      }),
-    );
+    expect(mockActivityRequestsCount, equals({null: 20, '1/31/2024': 50}));
 
     // by the time we've scrolled to the end the next puzzles are already here
     await tester.scrollUntilVisible(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3150',
+        (widget) => widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3150',
         description: 'last item of 2nd page',
       ),
       1000,
     );
 
     // one more page
-    expect(
-      mockActivityRequestsCount,
-      equals({
-        null: 20,
-        '1/31/2024': 50,
-        '1/30/2024': 50,
-      }),
-    );
+    expect(mockActivityRequestsCount, equals({null: 20, '1/31/2024': 50, '1/30/2024': 50}));
 
     await tester.scrollUntilVisible(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
+        (widget) => widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
         description: 'last item of 3rd page',
       ),
       400,
@@ -164,8 +139,7 @@ void main() {
 
     await tester.tap(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
+        (widget) => widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
       ),
     );
 
@@ -179,8 +153,7 @@ void main() {
     expect(find.byType(PuzzleHistoryScreen), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (widget) =>
-            widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
+        (widget) => widget is PuzzleHistoryBoard && widget.puzzle.id.value == 'B3010',
       ),
       findsOneWidget,
     );

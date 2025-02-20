@@ -3,32 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AppBackgroundModeScreen extends StatelessWidget {
   const AppBackgroundModeScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const AppBackgroundModeScreen(),
+      title: context.l10n.background,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
-      body: _Body(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.background), body: _Body());
   }
 
   static String themeTitle(BuildContext context, BackgroundThemeMode theme) {
@@ -46,13 +38,11 @@ class AppBackgroundModeScreen extends StatelessWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select((state) => state.themeMode),
-    );
+    final themeMode = ref.watch(generalPreferencesProvider.select((state) => state.themeMode));
 
     void onChanged(BackgroundThemeMode? value) => ref
         .read(generalPreferencesProvider.notifier)
-        .setThemeMode(value ?? BackgroundThemeMode.system);
+        .setBackgroundThemeMode(value ?? BackgroundThemeMode.system);
 
     return SafeArea(
       child: ListView(
@@ -60,8 +50,7 @@ class _Body extends ConsumerWidget {
           ChoicePicker(
             choices: BackgroundThemeMode.values,
             selectedItem: themeMode,
-            titleBuilder: (t) =>
-                Text(AppBackgroundModeScreen.themeTitle(context, t)),
+            titleBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
             onSelectedItemChanged: onChanged,
           ),
         ],

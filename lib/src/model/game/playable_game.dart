@@ -9,13 +9,12 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-
-import 'game.dart';
-import 'game_status.dart';
-import 'player.dart';
 
 part 'playable_game.freezed.dart';
 
@@ -30,9 +29,7 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ArchivedGame] for a game that is finished and not owned by the current user.
 @freezed
-class PlayableGame
-    with _$PlayableGame, BaseGame, IndexableSteps
-    implements BaseGame {
+class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -54,6 +51,7 @@ class PlayableGame
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
+    bool? bookmarked,
     ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
@@ -69,25 +67,11 @@ class PlayableGame
   ///
   /// Currently, those endpoints are supported:
   /// - GET /api/mobile/my-games
-  /// - player game socket (/play/<gameFullId>/v6) 'full' event
-  /// - watcher game socket (/watch/<gameId>/<side>/v6) 'full' event
+  /// - player game socket (/play/:gameFullId/v6) 'full' event
+  /// - watcher game socket (/watch/:gameId/:side/v6) 'full' event
   factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());
   }
-
-  /// Player of the playing point of view. Null if spectating.
-  Player? get me => youAre == null
-      ? null
-      : youAre == Side.white
-          ? white
-          : black;
-
-  /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent => youAre == null
-      ? null
-      : youAre == Side.white
-          ? black
-          : white;
 
   Side get sideToMove => lastPosition.turn;
 
@@ -98,24 +82,14 @@ class PlayableGame
   /// Whether it is the current player's turn.
   bool get isMyTurn => lastPosition.turn == youAre;
 
-  /// Whether the game is properly finished (not aborted).
-  bool get finished => status.value >= GameStatus.mate.value;
-  bool get aborted => status == GameStatus.aborted;
-
-  /// Whether the game is still playable (not finished or aborted and not imported).
-  bool get playable => status.value < GameStatus.aborted.value && !imported;
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
   bool get resignable => playable && !abortable;
   bool get drawable =>
-      playable &&
-      lastPosition.fullmoves >= 2 &&
-      !(me?.offeringDraw == true) &&
-      !hasAI;
-  bool get rematchable =>
-      meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
+      playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
+  bool get rematchable => meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
   bool get canTakeback =>
       takebackable &&
       playable &&
@@ -131,8 +105,7 @@ class PlayableGame
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 
   bool get userAnalysable =>
-      finished && steps.length > 4 ||
-      (playable && (clock == null || youAre == null));
+      finished && steps.length > 4 || (playable && (clock == null || youAre == null));
 
   ArchivedGame toArchivedGame({required DateTime finishedAt}) {
     return ArchivedGame(
@@ -153,12 +126,10 @@ class PlayableGame
         status: status,
         white: white,
         black: black,
-        clock: meta.clock != null
-            ? (
-                initial: meta.clock!.initial,
-                increment: meta.clock!.increment,
-              )
-            : null,
+        clock:
+            meta.clock != null
+                ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
+                : null,
         opening: meta.opening,
       ),
       initialFen: initialFen,
@@ -224,17 +195,15 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
-    source: requiredGamePick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: requiredGamePick(
+      'source',
+    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
-    correspondenceClock:
-        pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
+    correspondenceClock: pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -243,16 +212,15 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
     prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
-    expiration: pick('expiration').letOrNull(
-      (it) {
-        final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
-        return (
-          idle: idle,
-          timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
-          movedAt: DateTime.now().subtract(idle),
-        );
-      },
-    ),
+    bookmarked: pick('bookmarked').asBoolOrNull(),
+    expiration: pick('expiration').letOrNull((it) {
+      final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
+      return (
+        idle: idle,
+        timeToMove: it('millisToMove').asDurationFromMilliSecondsOrThrow(),
+        movedAt: DateTime.now().subtract(idle),
+      );
+    }),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
   );
 }
@@ -272,14 +240,11 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
         moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
       ),
     ),
-    daysPerTurn: pick('correspondence')
-        .letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
+    daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
       (it) => ISet(
-        pick.asListOrThrow(
-          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
-        ),
+        pick.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown),
       ),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
@@ -317,9 +282,7 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
-    lag: pick('lag').letOrNull(
-      (it) => Duration(milliseconds: it.asIntOrThrow() * 10),
-    ),
+    lag: pick('lag').letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
     at: DateTime.now(),
   );
 }

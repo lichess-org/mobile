@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -363,13 +363,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Direktsända turneringar';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Sändningsschema';
 
   @override
   String get broadcastNewBroadcast => 'Ny direktsändning';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+  String get broadcastSubscribedBroadcasts => 'Bokade sändningar';
 
   @override
   String get broadcastAboutBroadcasts => 'Om sändningar';
@@ -388,12 +388,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastUpcoming => 'Kommande';
-
-  @override
-  String get broadcastCompleted => 'Slutförda';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess upptäcker slutförandet av rundor baserat på källspelen. Använd detta alternativ om det inte finns någon källa.';
 
   @override
   String get broadcastRoundName => 'Omgångens namn';
@@ -416,17 +410,17 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'PNG-källans URL';
 
   @override
   String get broadcastSourceUrlHelp => 'URL som Lichess kan använda för att få PGN-uppdateringar. Den måste vara publikt tillgänglig från Internet.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'Upp till 64 Lichess-partiers ID, separerade med mellanslag.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Startdatum i turneringens lokala tidszon: $param';
   }
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -863,6 +863,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Endast i parti';
+
+  @override
+  String get preferencesExceptInGame => 'Utom i pågående parti';
 
   @override
   String get preferencesChessClock => 'Schack-klocka';
@@ -1462,6 +1465,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Istället för att spela det förväntade draget, görs ett annat drag som utgör ett omedelbart hot som motståndaren måste svara på. Även känt som \"zwischenzug\" eller \"intermezzo\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Springareslutspel';
 
   @override
@@ -1677,16 +1692,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ditt konto hanteras och kan inte stängas.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Stängningen är definitiv, det finns ingen återvändo. Är du säker?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Du får inte öppna ett nytt konto med samma namn, även om du byter gemener till versaler eller tvärtom.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Jag ändrade mig, avsluta inte mitt konto';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Är du säker på att du vill avsluta ditt konto? Att avsluta ditt konto är ett permanent beslut. Du kommer ALDRIG kunna logga in NÅGONSIN IGEN.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Det här kontot är avslutat';
@@ -1727,7 +1739,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get strength => 'Styrka';
 
   @override
-  String get toggleTheChat => 'Dölj/visa chattrutan';
+  String get toggleTheChat => 'Dölj/visa chatten';
 
   @override
   String get chat => 'Chatta';
@@ -1894,10 +1906,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get deleteFromHere => 'Radera härifrån';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Dölj varianter';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Visa varianter';
 
   @override
   String get forceVariation => 'Visa som variant';
@@ -2130,7 +2142,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get friends => 'Vänner';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'andra spelare';
 
   @override
   String get discussions => 'Konversationer';
@@ -2262,7 +2274,7 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get emailCanTakeSomeTime => 'Det kan ta en stund för det att komma.';
+  String get emailCanTakeSomeTime => 'Det kan ta en stund för det att komma fram.';
 
   @override
   String get refreshInboxAfterFiveMinutes => 'Vänta 5 minuter och uppdatera din inkorg.';
@@ -2316,7 +2328,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get gamesPlayed => 'Partier spelade';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Ok';
 
   @override
   String get cancel => 'Avbryt';
@@ -2376,7 +2388,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get standard => 'Standard';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Från position';
 
   @override
   String get unlimited => 'Obegränsad';
@@ -2964,10 +2976,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get yes => 'Ja';
 
   @override
-  String get website => 'Website';
+  String get website => 'Webbplats';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobil';
 
   @override
   String get help => 'Hjälp:';
@@ -3024,13 +3036,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get other => 'Annat';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Klistra in länken till partiet/partierna och förklara vad som är fel med den här användarens beteende. Skriv inte bara \"de fuskar\", utan förklara hur du dragit denna slutsats. Din rapport kan komma att behandlas fortare om den är skriven på engelska.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Förklara hur det här användarnamnet är kränkande. Skriv inte bara \"det är stötande/olämpligt\", utan förklara hur du kom fram till denna slutsats. Detta är extra viktigt om förolämpningen är fördunklad, inte på engelska, är i slang, eller är en historisk/kulturell referens.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Din rapport kommer att behandlas snabbare om den skrivs på engelska.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Ange minst en länk till ett spel där användaren fuskade.';
@@ -3133,7 +3145,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get outsideTheBoard => 'Utanför brädet';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Alla rutor på brädet';
 
   @override
   String get onSlowGames => 'I långsamma partier';
@@ -3470,7 +3482,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get toggleGlyphAnnotations => 'Växla glyph-anteckningar';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Växla positionsanteckningar';
 
   @override
   String get variationArrowsInfo => 'Variationspilar låter dig navigera utan att använda draglistan.';
@@ -3676,6 +3688,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get followAndChallengeFriends => 'Följ och utmana vänner';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Partianalys';
 
   @override
@@ -3744,7 +3759,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get hue => 'Nyans';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Återställ färger till standard';
 
   @override
   String get pieceSet => 'Pjäsuppsättning';
@@ -4271,13 +4286,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get reopenYourAccount => 'Öppna ditt konto igen';
 
   @override
-  String get closedAccountChangedMind => 'Om du stängt ditt konto, men sedan dess har ändrat dig, får du en chans att få tillbaka ditt konto.';
-
-  @override
-  String get onlyWorksOnce => 'Detta fungerar bara en gång.';
-
-  @override
-  String get cantDoThisTwice => 'Om du stänger ditt konto en andra gång, kommer det inte att finnas något sätt att återställa det.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'E-postadress kopplad till kontot';
@@ -4333,10 +4342,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get lichessPatronInfo => 'Lichess är en välgörenhet och helt gratis/fri programvara med öppen källkod.\nAlla driftskostnader, utveckling och innehåll finansieras enbart av användardonationer.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Här finns ingenting att se för tillfället.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistik';
 
   @override
   String opponentLeftCounter(int count) {
@@ -4372,6 +4381,17 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Blundrar',
+      one: '$count Blunder',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4383,12 +4403,34 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Misstag',
+      one: '$count Misstag',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count felaktigheter',
       one: '$count felaktighet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Felaktigheter',
+      one: '$count Felaktighet',
     );
     return '$_temp0';
   }
@@ -5110,6 +5152,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyPlaying => 'Spelar';
 
   @override
+  String get studyShowResults => 'Resultat';
+
+  @override
   String get studyShowEvalBar => 'Värderingsfält';
 
   @override
@@ -5496,6 +5541,180 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Klistra in din PGN-kod här, upp till $count partier',
       one: 'Klistra in din PGN-kod här, upp till $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'just nu';
+
+  @override
+  String get timeagoRightNow => 'just nu';
+
+  @override
+  String get timeagoCompleted => 'slutfört';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count sekunder',
+      one: 'om $count sekund',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count minuter',
+      one: 'om $count minut',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count timmar',
+      one: 'om $count timme',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count dagar',
+      one: 'om $count dag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count veckor',
+      one: 'om $count vecka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count månader',
+      one: 'om $count månad',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'om $count år',
+      one: 'om $count år',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuter sedan',
+      one: '$count minut sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count timmar sedan',
+      one: '$count timme sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dagar sedan',
+      one: '$count dag sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count veckor sedan',
+      one: '$count vecka sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count månader sedan',
+      one: '$count månad sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count år sedan',
+      one: '$count år sedan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minuter återstår',
+      one: '$count minut återstår',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count timmar återstår',
+      one: '$count timme återstår',
     );
     return '$_temp0';
   }

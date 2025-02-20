@@ -1,23 +1,25 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -26,23 +28,20 @@ class AppInitializationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<PreloadedData>>(
-      preloadedDataProvider,
-      (_, state) {
-        if (state.hasValue || state.hasError) {
-          FlutterNativeSplash.remove();
-        }
-      },
-    );
+    ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
+      if (state.hasValue || state.hasError) {
+        FlutterNativeSplash.remove();
+      }
+    });
 
-    return ref.watch(preloadedDataProvider).when(
+    return ref
+        .watch(preloadedDataProvider)
+        .when(
           data: (_) => const Application(),
           // loading screen is handled by the native splash screen
           loading: () => const SizedBox.shrink(),
           error: (err, st) {
-            debugPrint(
-              'SEVERE: [App] could not initialize app; $err\n$st',
-            );
+            debugPrint('SEVERE: [App] could not initialize app; $err\n$st');
             return const SizedBox.shrink();
           },
         );
@@ -80,6 +79,8 @@ class _AppState extends ConsumerState<Application> {
     // Start services
     ref.read(notificationServiceProvider).start();
     ref.read(challengeServiceProvider).start();
+    ref.read(accountServiceProvider).start();
+    ref.read(correspondenceServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -88,8 +89,7 @@ class _AppState extends ConsumerState<Application> {
 
       // Play registered moves whenever the app comes back online.
       if (prevWasOffline && currentIsOnline) {
-        final nbMovesPlayed =
-            await ref.read(correspondenceServiceProvider).playRegisteredMoves();
+        final nbMovesPlayed = await ref.read(correspondenceServiceProvider).playRegisteredMoves();
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
@@ -123,161 +123,57 @@ class _AppState extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final (light: themeLight, dark: themeDark) = makeAppTheme(context, generalPrefs, boardPrefs);
 
-    final brightness = ref.watch(currentBrightnessProvider);
-    final boardTheme = ref.watch(
-      boardPreferencesProvider.select((state) => state.boardTheme),
-    );
-
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    return DynamicColorBuilder(
-      builder: (lightColorScheme, darkColorScheme) {
-        // TODO remove this workaround when the dynamic_color colorScheme bug is fixed
-        // See: https://github.com/material-foundation/flutter-packages/issues/574
-        final (
-          fixedLightScheme,
-          fixedDarkScheme
-        ) = lightColorScheme != null && darkColorScheme != null
-            ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
-            : (null, null);
-
-        final isTablet = isTabletOrLarger(context);
-
-        final dynamicColorScheme =
-            brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
-
-        final colorScheme =
-            generalPrefs.systemColors && dynamicColorScheme != null
-                ? dynamicColorScheme
-                : ColorScheme.fromSeed(
-                    seedColor: boardTheme.colors.darkSquare,
-                    brightness: brightness,
-                  );
-
-        final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: colorScheme.primary,
-          primaryContrastingColor: colorScheme.onPrimary,
-          brightness: brightness,
-          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                primaryColor: colorScheme.primary,
-                textStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .textStyle
-                    .copyWith(color: Styles.cupertinoLabelColor),
-                navTitleTextStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .navTitleTextStyle
-                    .copyWith(color: Styles.cupertinoTitleColor),
-                navLargeTitleTextStyle: CupertinoTheme.of(context)
-                    .textTheme
-                    .navLargeTitleTextStyle
-                    .copyWith(color: Styles.cupertinoTitleColor),
-              ),
-          scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
-          barBackgroundColor: isTablet
-              ? Styles.cupertinoTabletAppBarColor
-              : Styles.cupertinoAppBarColor,
-        );
-
-        return MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: kSupportedLocales,
-          onGenerateTitle: (BuildContext context) => 'lichess.org',
-          locale: generalPrefs.locale,
-          theme: ThemeData.from(
-            colorScheme: colorScheme,
-            textTheme: Theme.of(context).platform == TargetPlatform.iOS
-                ? brightness == Brightness.light
-                    ? Typography.blackCupertino
-                    : Styles.whiteCupertinoTextTheme
-                : null,
-          ).copyWith(
-            cupertinoOverrideTheme: cupertinoThemeData,
-            navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-              height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                  ? 60
-                  : null,
-            ),
-            extensions: [
-              lichessCustomColors.harmonized(colorScheme),
-            ],
-          ),
-          themeMode: switch (generalPrefs.themeMode) {
-            BackgroundThemeMode.light => ThemeMode.light,
-            BackgroundThemeMode.dark => ThemeMode.dark,
-            BackgroundThemeMode.system => ThemeMode.system,
-          },
-          builder: Theme.of(context).platform == TargetPlatform.iOS
-              ? (context, child) {
-                  return CupertinoTheme(
-                    data: cupertinoThemeData,
-                    child: IconTheme.merge(
-                      data: IconThemeData(
-                        color: CupertinoTheme.of(context)
-                            .textTheme
-                            .textStyle
-                            .color,
-                      ),
-                      child: Material(child: child),
-                    ),
-                  );
-                }
+    return MaterialApp(
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        MaterialLocalizationsEo.delegate,
+        CupertinoLocalizationsEo.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      locale: generalPrefs.locale,
+      theme: themeLight.copyWith(
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+      ),
+      darkTheme: themeDark.copyWith(
+        navigationBarTheme: NavigationBarTheme.of(
+          context,
+        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+      ),
+      themeMode:
+          generalPrefs.isForcedDarkMode
+              ? ThemeMode.dark
+              : switch (generalPrefs.themeMode) {
+                BackgroundThemeMode.light => ThemeMode.light,
+                BackgroundThemeMode.dark => ThemeMode.dark,
+                BackgroundThemeMode.system => ThemeMode.system,
+              },
+      builder:
+          isIOS
+              ? (context, child) => IconTheme.merge(
+                data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                child: Material(color: Colors.transparent, child: child),
+              )
               : null,
-          home: const BottomNavScaffold(),
-          navigatorObservers: [
-            rootNavPageRouteObserver,
-          ],
-        );
+      onGenerateRoute:
+          (settings) =>
+              settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
+      onGenerateInitialRoutes: (initialRoute) {
+        final homeRoute = buildScreenRoute<void>(context, screen: const BottomNavScaffold());
+        return <Route<dynamic>?>[
+          homeRoute,
+          resolveAppLinkUri(context, Uri.parse(initialRoute)),
+        ].nonNulls.toList(growable: false);
       },
+      navigatorObservers: [rootNavPageRouteObserver],
     );
   }
 }
-
-// --
-
-(ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
-  ColorScheme lightDynamic,
-  ColorScheme darkDynamic,
-) {
-  final lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
-  final darkBase = ColorScheme.fromSeed(
-    seedColor: darkDynamic.primary,
-    brightness: Brightness.dark,
-  );
-
-  final lightAdditionalColours = _extractAdditionalColours(lightBase);
-  final darkAdditionalColours = _extractAdditionalColours(darkBase);
-
-  final lightScheme =
-      _insertAdditionalColours(lightBase, lightAdditionalColours);
-  final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
-
-  return (lightScheme.harmonized(), darkScheme.harmonized());
-}
-
-List<Color> _extractAdditionalColours(ColorScheme scheme) => [
-      scheme.surface,
-      scheme.surfaceDim,
-      scheme.surfaceBright,
-      scheme.surfaceContainerLowest,
-      scheme.surfaceContainerLow,
-      scheme.surfaceContainer,
-      scheme.surfaceContainerHigh,
-      scheme.surfaceContainerHighest,
-    ];
-
-ColorScheme _insertAdditionalColours(
-  ColorScheme scheme,
-  List<Color> additionalColours,
-) =>
-    scheme.copyWith(
-      surface: additionalColours[0],
-      surfaceDim: additionalColours[1],
-      surfaceBright: additionalColours[2],
-      surfaceContainerLowest: additionalColours[3],
-      surfaceContainerLow: additionalColours[4],
-      surfaceContainer: additionalColours[5],
-      surfaceContainerHigh: additionalColours[6],
-      surfaceContainerHighest: additionalColours[7],
-    );

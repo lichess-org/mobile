@@ -1,5 +1,5 @@
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -426,12 +426,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastUpcoming => 'Предстоящие';
 
   @override
-  String get broadcastCompleted => 'Завершённые';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess определяет завершение тура на основе источника партий. Используйте этот переключатель, если нет источника.';
-
-  @override
   String get broadcastRoundName => 'Название тура';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Просмотр всех трансляций за месяц';
+
+  @override
+  String get broadcastBackToLiveMove => 'Вернуться к текущему ходу';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -901,6 +901,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get preferencesInGameOnly => 'Только в игре';
+
+  @override
+  String get preferencesExceptInGame => 'Да, но не во время игры';
 
   @override
   String get preferencesChessClock => 'Шахматные часы';
@@ -1510,6 +1513,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Вместо того, чтобы сделать ожидаемый ход, сначала делается другой ход, представляющий непосредственную угрозу, на которую противник должен ответить. Также известен как «Zwischenzug» или «Intermezzo».';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Мат «Смертельная коробка»';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Мат Вуковича';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Ладья и конь совместно матуют короля. Ладья, защищённая ещё одной фигурой, ставит мат, а конь отрезает поля отступления вражеского короля.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Коневой эндшпиль';
 
   @override
@@ -1725,16 +1740,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ваш аккаунт находится под управлением и не может быть закрыт.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Закрытие невозможно будет отменить. Вы уверены?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Вы не сможете создать новый аккаунт с таким же именем, даже если регистр символов отличается.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Я передумал, не закрывайте мой аккаунт';
+  String get settingsCancelKeepAccount => 'Отменить и оставить мою учётную запись';
 
   @override
-  String get settingsCloseAccountExplanation => 'Вы уверены, что хотите закрыть свой аккаунт? Закрытие аккаунта необратимо. Вы никогда больше не сможете в него войти.';
+  String get settingsCloseAccountAreYouSure => 'Вы уверены, что хотите удалить свою учётную запись?';
 
   @override
   String get settingsThisAccountIsClosed => 'Этот аккаунт закрыт.';
@@ -1912,7 +1924,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loadingEngine => 'Загрузка движка...';
 
   @override
-  String get calculatingMoves => 'Идёт расчёт ходов...';
+  String get calculatingMoves => 'Вычисление...';
 
   @override
   String get engineFailed => 'Ошибка загрузки движка';
@@ -2961,7 +2973,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inlineNotation => 'Строчная нотация';
 
   @override
-  String get makeAStudy => 'Чтобы сохранить и поделиться, рассмотрите возможность создания Студии.';
+  String get makeAStudy => 'Чтобы сохранить и поделиться, рассмотрите возможность создания студии.';
 
   @override
   String get clearSavedMoves => 'Очистить ходы';
@@ -3166,13 +3178,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get none => 'Нет';
 
   @override
-  String get fast => 'Быстро';
+  String get fast => 'Быстрая';
 
   @override
   String get normal => 'Нормальная';
 
   @override
-  String get slow => 'Медленно';
+  String get slow => 'Медленная';
 
   @override
   String get insideTheBoard => 'Внутри доски';
@@ -3488,7 +3500,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get keyEnterOrExitVariation => 'ввести/закрыть вариант';
 
   @override
-  String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь на своих ошибках';
+  String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь над своими ошибками';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Далее (Разобрать свои ошибки)';
@@ -3722,6 +3734,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get followAndChallengeFriends => 'Подписки и игра с друзьями';
+
+  @override
+  String get noChallenges => 'Нет вызовов.';
 
   @override
   String get gameAnalysis => 'Анализ игры';
@@ -4319,13 +4334,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reopenYourAccount => 'Переоткройте свой аккаунт';
 
   @override
-  String get closedAccountChangedMind => 'Если вы закрыли свой аккаунт, но с тех пор передумали, то у вас есть однократная возможность восстановить его.';
-
-  @override
-  String get onlyWorksOnce => 'Это сработает только один раз.';
-
-  @override
-  String get cantDoThisTwice => 'Если вы закроете свой аккаунт ещё раз, вы уже не сможете открыть его.';
+  String get reopenYourAccountDescription => 'Если вы закрыли свою учётную запись, но потом передумали, у вас есть шанс отменить своё решение.';
 
   @override
   String get emailAssociatedToaccount => 'Адрес электронной почты, привязанный в этому аккаунту';
@@ -4426,6 +4435,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String numberBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Зевков',
+      many: '$count Зевков',
+      few: '$count Зевка',
+      one: '$count Зевок',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4439,6 +4461,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String numberMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ошибок',
+      many: '$count Ошибок',
+      few: '$count Ошибки',
+      one: '$count Ошибка',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbInaccuracies(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4447,6 +4482,19 @@ class AppLocalizationsRu extends AppLocalizations {
       many: '$count неточностей',
       few: '$count неточности',
       one: '$count неточность',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String numberInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Неточностей',
+      many: '$count Неточностей',
+      few: '$count Неточности',
+      one: '$count Неточность',
     );
     return '$_temp0';
   }
@@ -4536,8 +4584,8 @@ class AppLocalizationsRu extends AppLocalizations {
       locale: localeName,
       other: '$count минут',
       many: '$count минут',
-      few: '$count Минуты',
-      one: '$count Одна минута',
+      few: '$count минуты',
+      one: '$count минута',
     );
     return '$_temp0';
   }
@@ -5246,6 +5294,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyPlaying => 'Активные';
 
   @override
+  String get studyShowResults => 'Результаты';
+
+  @override
   String get studyShowEvalBar => 'Шкалы оценки';
 
   @override
@@ -5640,6 +5691,210 @@ class AppLocalizationsRu extends AppLocalizations {
       many: 'Вставьте текст в формате PGN, не больше $count игр',
       few: 'Вставьте текст в формате PGN, не больше $count игр',
       one: 'Вставьте текст в формате PGN, не больше $count игры',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timeagoJustNow => 'только что';
+
+  @override
+  String get timeagoRightNow => 'прямо сейчас';
+
+  @override
+  String get timeagoCompleted => 'завершено';
+
+  @override
+  String timeagoInNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count секунд',
+      many: 'через $count секунд',
+      few: 'через $count секунды',
+      one: 'через $count секунду',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count минут',
+      many: 'через $count минут',
+      few: 'через $count минуты',
+      one: 'через $count минуту',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count часов',
+      many: 'через $count часов',
+      few: 'через $count часа',
+      one: 'через $count час',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count дней',
+      many: 'через $count дней',
+      few: 'через $count дня',
+      one: 'через $count день',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count недель',
+      many: 'через $count недель',
+      few: 'через $count недели',
+      one: 'через $count неделю',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count месяцев',
+      many: 'через $count месяцев',
+      few: 'через $count месяца',
+      one: 'через $count месяц',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoInNbYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'через $count лет',
+      many: 'через $count лет',
+      few: 'через $count года',
+      one: 'через $count год',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count минут назад',
+      many: '$count минут назад',
+      few: '$count минуты назад',
+      one: '$count минуту назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count часов назад',
+      many: '$count часов назад',
+      few: '$count часа назад',
+      one: '$count час назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дней назад',
+      many: '$count дней назад',
+      few: '$count дня назад',
+      one: '$count день назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbWeeksAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count недель назад',
+      many: '$count недель назад',
+      few: '$count недели назад',
+      one: '$count неделю назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMonthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count месяцев назад',
+      many: '$count месяцев назад',
+      few: '$count месяца назад',
+      one: '$count месяц назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbYearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лет назад',
+      many: '$count лет назад',
+      few: '$count года назад',
+      one: '$count год назад',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbMinutesRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'осталось $count минут',
+      many: 'осталось $count минут',
+      few: 'осталось $count минуты',
+      one: 'осталась $count минута',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeagoNbHoursRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'осталось $count часов',
+      many: 'осталось $count часов',
+      few: 'осталось $count часа',
+      one: 'остался $count час',
     );
     return '$_temp0';
   }
