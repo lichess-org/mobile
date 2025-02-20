@@ -14,6 +14,7 @@ part 'eval.g.dart';
 
 /// Base class for evals.
 sealed class Eval {
+  /// The string to display the eval
   String get evalString;
 
   /// The winning chances for the given [Side].
@@ -25,9 +26,17 @@ sealed class Eval {
 
 /// The eval from the client side, either from the cloud or the local engine.
 sealed class ClientEval extends Eval {
+  /// The position for which the eval is given
   Position get position;
 
+  /// The depth of the eval
+  int get depth;
+
+  /// The principal variations of the eval
   IList<PvData> get pvs;
+
+  /// The best moves to play with their winning chances
+  IList<MoveWithWinningChances> get bestMoves;
 }
 
 /// The eval coming from other Lichess clients, served from the network.
@@ -43,6 +52,16 @@ class CloudEval with _$CloudEval implements ClientEval {
 
   @override
   double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+
+  @override
+  IList<MoveWithWinningChances> get bestMoves {
+    return pvs
+        .where((e) => e.moves.isNotEmpty)
+        .map((e) => e._firstMoveWithWinningChances(position.turn))
+        .nonNulls
+        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
+        .toIList();
+  }
 
   int? get cp => pvs[0].cp;
 
@@ -73,6 +92,7 @@ class LocalEval with _$LocalEval implements ClientEval {
     return Move.parse(uci);
   }
 
+  @override
   IList<MoveWithWinningChances> get bestMoves {
     return pvs
         .where((e) => e.moves.isNotEmpty)

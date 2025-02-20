@@ -11,16 +11,16 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({required this.onTapMove, required this.localEval, required this.isGameOver});
+  const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
   final void Function(NormalMove move) onTapMove;
-  final LocalEval? localEval;
+  final ClientEval? savedEval;
   final bool isGameOver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
     final engineEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = engineEval ?? localEval;
+    final eval = engineEval ?? savedEval;
 
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
