@@ -259,6 +259,10 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         pgnRootComments: state.pgnRootComments,
         shouldShowAnnotations: analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
+        displayMode:
+            analysisPrefs.inlineNotation
+                ? PgnTreeDisplayMode.inlineNotation
+                : PgnTreeDisplayMode.twoColumn,
       ),
     );
   }
