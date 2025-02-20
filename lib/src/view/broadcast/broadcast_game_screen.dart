@@ -37,7 +37,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournamentId? tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String? tournamentSlug;
@@ -45,7 +45,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? title;
 
   const BroadcastGameScreen({
-    required this.tournamentId,
+    this.tournamentId,
     required this.roundId,
     required this.gameId,
     this.tournamentSlug,
@@ -55,7 +55,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
-    required BroadcastTournamentId tournamentId,
+    BroadcastTournamentId? tournamentId,
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     String? tournamentSlug,
@@ -154,7 +154,7 @@ class _Body extends ConsumerWidget {
     required this.tabController,
   });
 
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournamentId? tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String? tournamentSlug;
@@ -387,13 +387,13 @@ enum _PlayerWidgetPosition { bottom, top }
 
 class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
-    required this.tournamentId,
+    this.tournamentId,
     required this.roundId,
     required this.gameId,
     required this.widgetPosition,
   });
 
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournamentId? tournamentId;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final _PlayerWidgetPosition widgetPosition;
@@ -423,13 +423,21 @@ class _PlayerWidget extends ConsumerWidget {
         return GestureDetector(
           onTap: () {
             Navigator.of(context).push(
-              BroadcastPlayerResultsScreen.buildRoute(
-                context,
-                tournamentId,
-                (player.fideId != null) ? player.fideId!.toString() : player.name,
-                playerTitle: player.title,
-                playerName: player.name,
-              ),
+              (tournamentId != null)
+                  ? BroadcastPlayerResultsScreen.buildRoute(
+                    context,
+                    tournamentId!,
+                    (player.fideId != null) ? player.fideId!.toString() : player.name,
+                    playerTitle: player.title,
+                    playerName: player.name,
+                  )
+                  : BroadcastPlayerResultsScreenLoading.buildRoute(
+                    context,
+                    roundId,
+                    (player.fideId != null) ? player.fideId!.toString() : player.name,
+                    playerTitle: player.title,
+                    playerName: player.name,
+                  ),
             );
           },
           child: Container(

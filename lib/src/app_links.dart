@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -16,9 +17,15 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       final id = appLinkUri.pathSegments[1];
       return StudyScreen.buildRoute(context, StudyId(id));
     case 'broadcast':
-      final id = appLinkUri.pathSegments[3];
-      final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
-      return BroadcastRoundScreenLoading.buildRoute(context, BroadcastRoundId(id), initialTab: tab);
+      final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
+      if (appLinkUri.pathSegments.length > 4) {
+        final gameId = BroadcastGameId(appLinkUri.pathSegments[4]);
+        return BroadcastGameScreen.buildRoute(context, roundId: roundId, gameId: gameId);
+      } else {
+        final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
+        return BroadcastRoundScreenLoading.buildRoute(context, roundId, initialTab: tab);
+      }
+
     case 'training':
       final id = appLinkUri.pathSegments[1];
       return PuzzleScreen.buildRoute(
