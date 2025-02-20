@@ -569,14 +569,20 @@ void main() {
       // wait for first move to be played and hint/view solution buttons to appear
       await tester.pump(const Duration(seconds: 5));
 
-      // TODO: check hint is not set
+      // check possible hint widgets before hint is set
+      final customPaintWidgetsBefore = find.byType(CustomPaint).evaluate().toSet();
 
       // get hint and wait for it to show
       expect(find.byIcon(Icons.info), findsOneWidget);
       await tester.tap(find.byIcon(Icons.info));
       await tester.pump(const Duration(milliseconds: 100));
 
-      // TODO: check hint is set
+      // check hint is set
+      final customPaintWidgetsAfter = find.byType(CustomPaint).evaluate();
+      expect(customPaintWidgetsAfter.length, customPaintWidgetsBefore.length + 1);
+      final diff = customPaintWidgetsAfter.toSet().difference(customPaintWidgetsBefore);
+      expect(diff.length, 1);
+      expect((diff.first.widget as CustomPaint).painter.runtimeType.toString(), '_CirclePainter');
 
       // view solution
       expect(find.byIcon(Icons.help), findsOneWidget);
