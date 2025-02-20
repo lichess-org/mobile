@@ -6,18 +6,12 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 
 Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
 
   switch (appLinkUri.pathSegments[0]) {
-    case 'streak':
-      return StreakScreen.buildRoute(context);
-    case 'storm':
-      return StormScreen.buildRoute(context);
     case 'study':
       final id = appLinkUri.pathSegments[1];
       return StudyScreen.buildRoute(context, StudyId(id));
@@ -35,16 +29,15 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
     case _:
       final gameId = GameId(appLinkUri.pathSegments[0]);
       final orientation = appLinkUri.pathSegments.getOrNull(2);
+      // The game id can also be a challenge. Challenge by link is not supported yet so let's ignore it.
       if (gameId.isValid) {
         return ArchivedGameScreen.buildRoute(
           context,
           gameId: gameId,
           orientation: orientation == 'black' ? Side.black : Side.white,
         );
-      } else {
-        // TODO if it's not a game, it's a challenge.
-        // So we should show a accept/decline screen here.
-        return null;
       }
   }
+
+  return null;
 }
