@@ -43,6 +43,7 @@ class UCIProtocol {
     if (_work != null && _currentEval != null) {
       _evalController.sink.add((_work!, _currentEval!));
     }
+    print('Disposing');
     _work = null;
     _send = null;
     _evalController.close();

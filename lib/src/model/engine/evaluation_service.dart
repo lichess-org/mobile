@@ -26,13 +26,16 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
-  EvaluationService(this.ref, {required this.maxMemory});
-
-  final Ref ref;
+  EvaluationService({required this.maxMemory});
 
   final int maxMemory;
 
   Engine? _engine;
+
+  /// Whether the engine is being currently disposed.
+  ///
+  /// This is used to avoid disposing the engine twice.
+  bool _isDisposingEngine = false;
 
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
@@ -99,9 +102,14 @@ class EvaluationService {
   }
 
   Future<void> disposeEngine() {
+    if (_isDisposingEngine) return Future.value();
+
+    _isDisposingEngine = true;
+
     return _engine?.dispose().then((_) {
           _engine = null;
           _context = null;
+          _isDisposingEngine = false;
         }) ??
         Future.value();
   }
@@ -191,8 +199,9 @@ class EvaluationService {
 EvaluationService evaluationService(Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
-  final service = EvaluationService(ref, maxMemory: maxMemory);
+  final service = EvaluationService(maxMemory: maxMemory);
   ref.onDispose(() {
+    print('Dispose evaluation service provider');
     service.disposeEngine();
   });
   return service;

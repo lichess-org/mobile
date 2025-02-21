@@ -162,6 +162,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     final isEngineAllowed = engineSupportedVariants.contains(_variant);
 
     ref.onDispose(() {
+      print('Dispose provider');
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       if (isEngineAllowed) {
