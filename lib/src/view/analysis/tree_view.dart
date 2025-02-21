@@ -15,11 +15,7 @@ class AnalysisTreeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
 
-    final root = ref.watch(ctrlProvider.select((value) => value.requireValue.root));
-    final currentPath = ref.watch(ctrlProvider.select((value) => value.requireValue.currentPath));
-    final pgnRootComments = ref.watch(
-      ctrlProvider.select((value) => value.requireValue.pgnRootComments),
-    );
+    final analysisState = ref.watch(ctrlProvider).requireValue;
     final prefs = ref.watch(analysisPreferencesProvider);
     // enable computer analysis takes effect here only if it's a lichess game
     final enableComputerAnalysis = !options.isLichessGameAnalysis || prefs.enableComputerAnalysis;
@@ -27,9 +23,9 @@ class AnalysisTreeView extends ConsumerWidget {
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
       child: DebouncedPgnTreeView(
-        root: root,
-        currentPath: currentPath,
-        pgnRootComments: pgnRootComments,
+        root: analysisState.root,
+        currentPath: analysisState.currentPath,
+        pgnRootComments: analysisState.pgnRootComments,
         notifier: ref.read(ctrlProvider.notifier),
         shouldShowComputerVariations: enableComputerAnalysis,
         shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,

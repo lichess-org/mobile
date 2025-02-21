@@ -144,6 +144,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   /// Only applied to lichess game analysis.
   final bool shouldShowComputerVariations;
 
+  /// Display mode of the tree view.
+  ///
+  /// Either [PgnTreeDisplayMode.twoColumn] or [PgnTreeDisplayMode.inlineNotation].
   final PgnTreeDisplayMode displayMode;
 
   /// Whether to show NAG annotations like '!' and '??'.
@@ -703,6 +706,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
           path: path + mainlineNode.id,
           params: params,
           showIndex: false,
+          showEval: true,
         );
         path = path + mainlineNode.id;
         return move as Widget;
@@ -1162,6 +1166,7 @@ class InlineMove extends ConsumerWidget {
     required this.lineInfo,
     required this.params,
     this.showIndex = true,
+    this.showEval = false,
     super.key,
   });
 
@@ -1175,6 +1180,7 @@ class InlineMove extends ConsumerWidget {
   final _PgnTreeViewParams params;
 
   final bool showIndex;
+  final bool showEval;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
@@ -1199,14 +1205,12 @@ class InlineMove extends ConsumerWidget {
         .watch(pieceNotationProvider)
         .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
     final moveFontFamily = pieceNotation == PieceNotation.symbol ? 'ChessFont' : null;
-
     final moveTextStyle = textStyle.copyWith(
       fontFamily: moveFontFamily,
       fontWeight: lineInfo.type == _LineType.inlineSideline ? FontWeight.normal : FontWeight.w600,
     );
 
     final indexTextStyle = textStyle.copyWith(color: _textColor(context, kIndexOpacity));
-
     final indexText =
         showIndex
             ? branch.position.ply.isOdd
@@ -1223,8 +1227,11 @@ class InlineMove extends ConsumerWidget {
             : '');
 
     final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
-
     final ply = branch.position.ply;
+
+    final eval =
+        params.shouldShowComputerVariations && showEval ? branch.eval ?? branch.serverEval : null;
+
     return AdaptiveInkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
@@ -1251,18 +1258,32 @@ class InlineMove extends ConsumerWidget {
       child: Container(
         padding: kInlineMovePadding,
         decoration: _boxDecoration(context, isCurrentMove, isBroadcastLiveMove),
-        child: Text.rich(
-          TextSpan(
-            children: [
-              if (indexText != null) indexText,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text.rich(
               TextSpan(
-                text: moveWithNag,
+                children: [
+                  if (indexText != null) indexText,
+                  TextSpan(
+                    text: moveWithNag,
+                    style: moveTextStyle.copyWith(
+                      color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (eval != null)
+              Text(
+                eval.evalString,
                 style: moveTextStyle.copyWith(
-                  color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                  fontSize: moveTextStyle.fontSize != null ? moveTextStyle.fontSize! - 3.0 : null,
+                  color: _textColor(context, 0.4),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );

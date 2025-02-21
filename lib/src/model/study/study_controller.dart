@@ -478,9 +478,10 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     }
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -502,8 +503,11 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == state.requireValue.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
@@ -519,8 +523,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
     if (!state.hasValue) return;
 
-    // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 }
 

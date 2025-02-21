@@ -158,7 +158,7 @@ class EvaluationService {
 
     final evalStream = engine
         .start(work)
-        .throttle(const Duration(milliseconds: 200), trailing: true);
+        .throttle(const Duration(milliseconds: 300), trailing: true);
 
     evalStream.forEach((t) {
       final (work, eval) = t;

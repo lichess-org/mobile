@@ -96,7 +96,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    _root = Root.fromPgnGame(game);
+    _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
@@ -520,15 +520,19 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == state.requireValue.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -544,8 +548,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
