@@ -115,7 +115,6 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     _root = Root.fromPgnGame(
       game,
       isLichessAnalysis: options.isLichessGameAnalysis,
-      hideVariations: options.isLichessGameAnalysis,
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
