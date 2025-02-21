@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -200,7 +201,7 @@ void main() {
 
       const orientation = Side.black;
 
-      // await for first move to be played
+      // wait for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
       // in play mode we don't see the continue button
@@ -497,9 +498,10 @@ void main() {
           // wait for the puzzle to load
           await tester.pump(const Duration(milliseconds: 200));
 
-          // await for first move to be played and view solution button to appear
+          // wait for first move to be played and view solution button to appear
           await tester.pump(const Duration(seconds: 5));
 
+          // view solution
           expect(find.byIcon(Icons.help), findsOneWidget);
           await tester.tap(find.byIcon(Icons.help));
 
@@ -507,14 +509,114 @@ void main() {
           await tester.pump(const Duration(seconds: 1));
 
           // check puzzle was saved as isRatedPreference
-          final captured = verify(saveDBReq).captured;
+          final captured = verify(saveDBReq).captured.map((e) => e as PuzzleBatch).toList();
           expect(captured.length, 2);
-          expect((captured[1] as PuzzleBatch).solved.length, 0);
-          expect((captured[0] as PuzzleBatch).solved.length, 1);
-          expect((captured[0] as PuzzleBatch).solved[0].rated, isRatedPreference);
+          expect(captured[0].solved, [
+            PuzzleSolution(id: puzzle2.puzzle.id, win: false, rated: isRatedPreference),
+          ]);
+          expect(captured[1].solved.length, 0);
         },
       );
     }
+
+    testWidgets('puzzle rating is saved correctly when hint is used', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          puzzlePreferencesProvider.overrideWith(() => MockPuzzlePreferences(true)),
+        ],
+        userSession: fakeSession,
+      );
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: fakeSession.user.id,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: captureAny(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(
+          userId: fakeSession.user.id,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => batch);
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // wait for first move to be played and hint/view solution buttons to appear
+      await tester.pump(const Duration(seconds: 5));
+
+      // check possible hint widgets before hint is set
+      final customPaintWidgetsBefore = find.byType(CustomPaint).evaluate().toSet();
+
+      // get hint and wait for it to show
+      expect(find.byIcon(Icons.info), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.info));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // check hint is set
+      final customPaintWidgetsAfter = find.byType(CustomPaint).evaluate();
+      expect(customPaintWidgetsAfter.length, customPaintWidgetsBefore.length + 1);
+      final diff = customPaintWidgetsAfter.toSet().difference(customPaintWidgetsBefore);
+      expect(diff.length, 1);
+      expect((diff.first.widget as CustomPaint).painter.runtimeType.toString(), '_CirclePainter');
+
+      // view solution
+      expect(find.byIcon(Icons.help), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.help));
+
+      // wait for solution replay animation to finish
+      await tester.pump(const Duration(seconds: 1));
+
+      // go to next puzzle
+      expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
+      await tester.tap(find.byIcon(CupertinoIcons.play_arrow_solid));
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // wait for first move to be played and hint/view solution buttons to appear
+      await tester.pump(const Duration(seconds: 5));
+
+      // view solution
+      expect(find.byIcon(Icons.help), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.help));
+
+      // wait for solution replay animation to finish
+      await tester.pump(const Duration(seconds: 1));
+
+      // check first puzzle was unrated due to hint
+      // and following puzzles are still rated when not using the hint
+      final captured = verify(saveDBReq).captured.map((e) => e as PuzzleBatch).toList();
+      expect(captured.length, 4);
+      expect(captured[0].solved, [PuzzleSolution(id: puzzle2.puzzle.id, win: false, rated: false)]);
+      expect(captured[1].solved.length, 0);
+      expect(captured[2].solved, [PuzzleSolution(id: puzzle.puzzle.id, win: false, rated: true)]);
+      expect(captured[3].solved.length, 0);
+    });
   });
 }
 
