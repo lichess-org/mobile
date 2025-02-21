@@ -115,6 +115,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
+      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       clocks: _getClocks(currentPath),
     );
@@ -146,7 +147,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       final pgnHeaders = IMap(game.headers);
       final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-      final newRoot = Root.fromPgnGame(game);
+      final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
@@ -370,6 +371,25 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  /// Toggles the computer analysis on/off.
+  ///
+  /// Acts both on local evaluation and server analysis.
+  Future<void> toggleComputerAnalysis() async {
+    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+
+    final curState = state.requireValue;
+    final engineWasAvailable = curState.isLocalEvaluationEnabled;
+
+    state = AsyncData(
+      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
+    );
+
+    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
+    if (!computerAllowed && engineWasAvailable) {
+      toggleLocalEvaluation();
+    }
+  }
+
   Future<void> toggleLocalEvaluation() async {
     if (!state.hasValue) return;
 
@@ -591,6 +611,11 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
 
     /// The side to display the board from.
     required Side pov,
+
+    /// Whether the user has enabled computer analysis.
+    ///
+    /// This is a user preference and acts both on local and server analysis.
+    required bool isComputerAnalysisEnabled,
 
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,

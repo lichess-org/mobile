@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -257,6 +257,8 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         currentPath: state.currentPath,
         broadcastLivePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
+        shouldShowComputerVariations: analysisPrefs.enableComputerAnalysis,
+        shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,
         shouldShowAnnotations: analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
         displayMode:
@@ -550,6 +552,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
@@ -622,9 +625,12 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
         ),
         BottomBarButton(
           label: context.l10n.toggleLocalEvaluation,
-          onTap: () {
-            ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-          },
+          onTap:
+              analysisPrefs.enableComputerAnalysis
+                  ? () {
+                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                  }
+                  : null,
           icon: CupertinoIcons.gauge,
           highlighted: broadcastAnalysisState.isLocalEvaluationEnabled,
         ),

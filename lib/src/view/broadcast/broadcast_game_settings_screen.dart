@@ -59,27 +59,68 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+          ListSection(
+            header: SettingsSectionTitle(context.l10n.computerAnalysis),
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.enable),
+                value: analysisPrefs.enableComputerAnalysis,
+                onChanged: (_) {
+                  ref.read(controller.notifier).toggleComputerAnalysis();
+                },
+              ),
+              AnimatedCrossFade(
+                duration: const Duration(milliseconds: 300),
+                crossFadeState:
+                    analysisPrefs.enableComputerAnalysis
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                firstChild: const SizedBox.shrink(),
+                secondChild: ListSection(
+                  margin: EdgeInsets.zero,
+                  cupertinoBorderRadius: BorderRadius.zero,
+                  cupertinoClipBehavior: Clip.none,
+                  children: [
+                    SwitchSettingTile(
+                      title: Text(context.l10n.evaluationGauge),
+                      value: analysisPrefs.showEvaluationGauge,
+                      onChanged:
+                          (value) =>
+                              ref
+                                  .read(analysisPreferencesProvider.notifier)
+                                  .toggleShowEvaluationGauge(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.toggleGlyphAnnotations),
+                      value: analysisPrefs.showAnnotations,
+                      onChanged:
+                          (_) => ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.mobileShowComments),
+                      value: analysisPrefs.showPgnComments,
+                      onChanged:
+                          (_) => ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.bestMoveArrow),
+                      value: analysisPrefs.showBestMoveArrow,
+                      onChanged:
+                          (value) =>
+                              ref
+                                  .read(analysisPreferencesProvider.notifier)
+                                  .toggleShowBestMoveArrow(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           StockfishSettingsWidget(
             onSetEngineSearchTime:
                 (value) => ref.read(controller.notifier).setEngineSearchTime(value),
             onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
             onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
-          ),
-          ListSection(
-            children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.toggleGlyphAnnotations),
-                value: analysisPrefs.showAnnotations,
-                onChanged:
-                    (_) => ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.mobileShowComments),
-                value: analysisPrefs.showPgnComments,
-                onChanged:
-                    (_) => ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
-              ),
-            ],
           ),
           ListSection(
             children: [
