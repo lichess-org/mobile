@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
@@ -40,7 +41,9 @@ class StockfishEngine implements Engine {
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      stockfishAsync()
+      final stockfishFuture = LichessBinding.instance.stockfishFactory.create();
+
+      stockfishFuture
           .then((stockfish) {
             _state.value = EngineState.loading;
             _stockfish = stockfish;
@@ -109,4 +112,13 @@ class StockfishEngine implements Engine {
     _stockfish?.dispose();
     return completer.future;
   }
+}
+
+/// A factory to create a [Stockfish] asynchronously.
+///
+/// This is useful to be able to mock [Stockfish] in tests.
+class StockfishFactory {
+  const StockfishFactory();
+
+  Future<Stockfish> create() => stockfishAsync();
 }
