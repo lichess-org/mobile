@@ -652,7 +652,7 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
 
   EngineGaugeParams get engineGaugeParams => (
     orientation: pov,
-    isLocalEngineAvailable: isLocalEvaluationEnabled,
+    isLocalEngineAvailable: isComputerAnalysisEnabled,
     position: position,
     savedEval: currentNode.eval ?? currentNode.serverEval,
   );
