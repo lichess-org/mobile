@@ -27,7 +27,6 @@ class AnalysisTreeView extends ConsumerWidget {
         currentPath: analysisState.currentPath,
         pgnRootComments: analysisState.pgnRootComments,
         notifier: ref.read(ctrlProvider.notifier),
-        isEngineAvailable: analysisState.isEngineAvailable,
         shouldShowComputerVariations: enableComputerAnalysis,
         shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
         shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,

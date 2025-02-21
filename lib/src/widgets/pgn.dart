@@ -9,10 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -120,7 +118,6 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.broadcastLivePath,
     required this.pgnRootComments,
     required this.notifier,
-    this.isEngineAvailable = false,
     this.shouldShowComputerVariations = true,
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
@@ -142,17 +139,14 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
   final PgnTreeNotifier notifier;
 
-  /// Whether the local engine is available for analysis.
-  ///
-  /// If available and [displayMode] is [PgnTreeDisplayMode.twoColumn], the tree view will show the
-  /// current evaluation of the moves.
-  final bool isEngineAvailable;
-
   /// Whether to show analysis variations.
   ///
   /// Only applied to lichess game analysis.
   final bool shouldShowComputerVariations;
 
+  /// Display mode of the tree view.
+  ///
+  /// Either [PgnTreeDisplayMode.twoColumn] or [PgnTreeDisplayMode.inlineNotation].
   final PgnTreeDisplayMode displayMode;
 
   /// Whether to show NAG annotations like '!' and '??'.
@@ -250,7 +244,6 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
       root: widget.root,
       rootComments: widget.pgnRootComments,
       params: (
-        isEngineAvailable: widget.isEngineAvailable,
         shouldShowComputerVariations: widget.shouldShowComputerVariations,
         shouldShowAnnotations: widget.shouldShowAnnotations,
         shouldShowComments: widget.shouldShowComments,
@@ -275,9 +268,6 @@ typedef _PgnTreeViewParams =
 
       /// Path to the last live move in the tree if it is a broadcast game
       UciPath? pathToBroadcastLiveMove,
-
-      /// Whether the local engine is available for analysis.
-      bool isEngineAvailable,
 
       /// Whether to show analysis variations.
       bool shouldShowComputerVariations,
@@ -716,6 +706,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
           path: path + mainlineNode.id,
           params: params,
           showIndex: false,
+          showEval: true,
         );
         path = path + mainlineNode.id;
         return move as Widget;
@@ -1175,6 +1166,7 @@ class InlineMove extends ConsumerWidget {
     required this.lineInfo,
     required this.params,
     this.showIndex = true,
+    this.showEval = false,
     super.key,
   });
 
@@ -1188,6 +1180,7 @@ class InlineMove extends ConsumerWidget {
   final _PgnTreeViewParams params;
 
   final bool showIndex;
+  final bool showEval;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
@@ -1236,22 +1229,8 @@ class InlineMove extends ConsumerWidget {
     final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
     final ply = branch.position.ply;
 
-    Eval? eval;
-    // engine evaluation if available and the display mode is two column
-    if (params.shouldShowComputerVariations && params.displayMode == PgnTreeDisplayMode.twoColumn) {
-      final localEval =
-          params.isEngineAvailable
-              ? ref.watch(
-                engineEvaluationProvider.select(
-                  (state) =>
-                      state.eval != null && state.eval!.position == branch.position
-                          ? state.eval!
-                          : null,
-                ),
-              )
-              : null;
-      eval = localEval ?? branch.eval ?? branch.serverEval;
-    }
+    final eval =
+        params.shouldShowComputerVariations && showEval ? branch.eval ?? branch.serverEval : null;
 
     return AdaptiveInkWell(
       key: isCurrentMove ? params.currentMoveKey : null,

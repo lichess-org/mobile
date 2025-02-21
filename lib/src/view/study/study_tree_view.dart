@@ -17,19 +17,12 @@ class StudyTreeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final studyState = ref.watch(studyControllerProvider(id)).requireValue;
     final root =
-        ref.watch(studyControllerProvider(id).select((value) => value.requireValue.root)) ??
+        studyState.root ??
         // If root is null, the study chapter's position is illegal.
         // We still want to display the root comments though, so create a dummy root.
         const ViewRoot(position: Chess.initial, children: IList.empty());
-
-    final currentPath = ref.watch(
-      studyControllerProvider(id).select((value) => value.requireValue.currentPath),
-    );
-
-    final pgnRootComments = ref.watch(
-      studyControllerProvider(id).select((value) => value.requireValue.pgnRootComments),
-    );
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
@@ -43,8 +36,8 @@ class StudyTreeView extends ConsumerWidget {
               Expanded(
                 child: DebouncedPgnTreeView(
                   root: root,
-                  currentPath: currentPath,
-                  pgnRootComments: pgnRootComments,
+                  currentPath: studyState.currentPath,
+                  pgnRootComments: studyState.pgnRootComments,
                   notifier: ref.read(studyControllerProvider(id).notifier),
                   shouldShowAnnotations: analysisPrefs.showAnnotations,
                   displayMode:
