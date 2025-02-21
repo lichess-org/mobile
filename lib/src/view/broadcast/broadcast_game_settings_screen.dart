@@ -116,11 +116,19 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          StockfishSettingsWidget(
-            onSetEngineSearchTime:
-                (value) => ref.read(controller.notifier).setEngineSearchTime(value),
-            onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
-            onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 300),
+            crossFadeState:
+                analysisPrefs.enableComputerAnalysis
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+            firstChild: const SizedBox.shrink(),
+            secondChild: StockfishSettingsWidget(
+              onSetEngineSearchTime:
+                  (value) => ref.read(controller.notifier).setEngineSearchTime(value),
+              onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
+              onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
+            ),
           ),
           ListSection(
             children: [
