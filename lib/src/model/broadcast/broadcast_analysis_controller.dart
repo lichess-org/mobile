@@ -96,7 +96,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    _root = Root.fromPgnGame(game);
+    _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
