@@ -34,7 +34,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -43,8 +43,9 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
@@ -93,16 +94,9 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return WakelockWidget(
-      child: PlatformScaffold(
-        appBarActions: const [ToggleSoundButton(), _PuzzleSettingsButton()],
-        appBarTitle: _Title(angle: widget.angle),
-        body:
-            widget.puzzleId != null
-                ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-                : _LoadNextPuzzle(angle: widget.angle),
-      ),
-    );
+    return widget.puzzleId != null
+        ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+        : _LoadNextPuzzle(angle: widget.angle);
   }
 }
 
@@ -141,22 +135,39 @@ class _LoadNextPuzzle extends ConsumerWidget {
     return nextPuzzle.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: BoardTable(
-              fen: kEmptyFen,
-              orientation: Side.white,
-              errorMessage: 'No more puzzles. Go online to get more.',
+          return _PuzzleScaffold(
+            angle: angle,
+            initialPuzzleContext: null,
+            body: const Center(
+              child: BoardTable(
+                fen: kEmptyFen,
+                orientation: Side.white,
+                errorMessage: 'No more puzzles. Go online to get more.',
+              ),
             ),
           );
         } else {
-          return _Body(initialPuzzleContext: data);
+          return _PuzzleScaffold(
+            angle: angle,
+            initialPuzzleContext: data,
+            body: _Body(initialPuzzleContext: data),
+          );
         }
       },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      loading:
+          () => _PuzzleScaffold(
+            angle: angle,
+            initialPuzzleContext: null,
+            body: const Center(child: CircularProgressIndicator.adaptive()),
+          ),
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
-        return Center(
-          child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+        return _PuzzleScaffold(
+          angle: angle,
+          initialPuzzleContext: null,
+          body: Center(
+            child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+          ),
         );
       },
     );
@@ -176,44 +187,81 @@ class _LoadPuzzleFromId extends ConsumerWidget {
 
     return puzzle.when(
       data: (data) {
-        return _Body(
-          initialPuzzleContext: PuzzleContext(
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            puzzle: data,
-            userId: session?.user.id,
-          ),
+        final initialPuzzleContext = PuzzleContext(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzle: data,
+          userId: session?.user.id,
+        );
+        return _PuzzleScaffold(
+          angle: angle,
+          initialPuzzleContext: initialPuzzleContext,
+          body: _Body(initialPuzzleContext: initialPuzzleContext),
         );
       },
       loading:
-          () => const Column(
+          () => _PuzzleScaffold(
+            angle: angle,
+            initialPuzzleContext: null,
+            body: const Column(
+              children: [
+                Expanded(
+                  child: SafeArea(
+                    bottom: false,
+                    child: BoardTable.empty(showEngineGaugePlaceholder: true),
+                  ),
+                ),
+                PlatformBottomBar.empty(),
+              ],
+            ),
+          ),
+      error: (e, s) {
+        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
+        return _PuzzleScaffold(
+          angle: angle,
+          initialPuzzleContext: null,
+          body: Column(
             children: [
               Expanded(
                 child: SafeArea(
                   bottom: false,
-                  child: BoardTable.empty(showEngineGaugePlaceholder: true),
+                  child: BoardTable(
+                    fen: kEmptyFen,
+                    orientation: Side.white,
+                    errorMessage: e.toString(),
+                  ),
                 ),
               ),
-              PlatformBottomBar.empty(),
+              const SizedBox(height: kBottomBarHeight),
             ],
           ),
-      error: (e, s) {
-        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
-        return Column(
-          children: [
-            Expanded(
-              child: SafeArea(
-                bottom: false,
-                child: BoardTable(
-                  fen: kEmptyFen,
-                  orientation: Side.white,
-                  errorMessage: e.toString(),
-                ),
-              ),
-            ),
-            const SizedBox(height: kBottomBarHeight),
-          ],
         );
       },
+    );
+  }
+}
+
+class _PuzzleScaffold extends StatelessWidget {
+  const _PuzzleScaffold({
+    required this.angle,
+    required this.initialPuzzleContext,
+    required this.body,
+  });
+
+  final PuzzleAngle angle;
+  final PuzzleContext? initialPuzzleContext;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) {
+    return WakelockWidget(
+      child: PlatformScaffold(
+        appBarActions: [
+          const ToggleSoundButton(),
+          if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
+        ],
+        appBarTitle: _Title(angle: angle),
+        body: body,
+      ),
     );
   }
 }
@@ -397,15 +445,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   Widget build(BuildContext context) {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
     return PlatformBottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        if (widget.initialPuzzleContext.userId != null &&
-            !isDailyPuzzle &&
-            puzzleState.mode != PuzzleMode.view)
-          _DifficultySelector(initialPuzzleContext: widget.initialPuzzleContext),
         if (puzzleState.mode != PuzzleMode.view)
           FutureBuilder(
             future: _viewSolutionCompleter.future,
@@ -559,29 +602,58 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 }
 
-class _DifficultySelector extends ConsumerWidget {
-  const _DifficultySelector({required this.initialPuzzleContext});
+class _PuzzleSettingsButton extends StatelessWidget {
+  const _PuzzleSettingsButton(this.initialPuzzleContext);
+
+  final PuzzleContext initialPuzzleContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarIconButton(
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+            builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
+          ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
+  }
+}
+
+class _PuzzleSettingsBottomSheet extends ConsumerWidget {
+  const _PuzzleSettingsBottomSheet(this.initialPuzzleContext);
 
   final PuzzleContext initialPuzzleContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signedIn = ref.watch(authSessionProvider)?.user.id != null;
+    final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+    final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
+    final puzzleState = ref.watch(ctrlProvider);
+    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final state = ref.watch(ctrlProvider);
-    final connectivity = ref.watch(connectivityChangesProvider);
-    return connectivity.when(
-      data:
-          (data) => StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    return BottomSheetScrollableContainer(
+      children: [
+        if (initialPuzzleContext.userId != null &&
+            !isDailyPuzzle &&
+            puzzleState.mode != PuzzleMode.view &&
+            isOnline)
+          StatefulBuilder(
+            builder: (context, setState) {
               PuzzleDifficulty selectedDifficulty = difficulty;
-              return BottomBarButton(
-                icon: Icons.tune,
-                label: puzzleDifficultyL10n(context, difficulty),
-                tooltip: context.l10n.puzzleDifficultyLevel,
-                showLabel: true,
+              return SettingsListTile(
+                settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
+                settingsValue: puzzleDifficultyL10n(context, difficulty),
                 onTap:
-                    !data.isOnline || state.isChangingDifficulty
+                    puzzleState.isChangingDifficulty
                         ? null
                         : () {
                           showChoicePicker(
@@ -611,29 +683,31 @@ class _DifficultySelector extends ConsumerWidget {
               );
             },
           ),
-      loading: () => const ButtonLoadingIndicator(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
-  }
-}
-
-class _PuzzleSettingsButton extends StatelessWidget {
-  const _PuzzleSettingsButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      onPressed:
-          () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isDismissible: true,
-            isScrollControlled: true,
-            showDragHandle: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-            builder: (_) => const PuzzleSettingsScreen(),
+        SwitchSettingTile(
+          title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
+          value: autoNext,
+          onChanged: (value) {
+            ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+          },
+        ),
+        if (signedIn)
+          SwitchSettingTile(
+            title: Text(context.l10n.rated),
+            value: rated,
+            onChanged: (value) {
+              ref.read(puzzlePreferencesProvider.notifier).setRated(value);
+            },
           ),
-      semanticsLabel: context.l10n.settingsSettings,
-      icon: const Icon(Icons.settings),
+        PlatformListTile(
+          title: const Text('Board settings'),
+          trailing: const Icon(CupertinoIcons.chevron_right),
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+          },
+        ),
+      ],
     );
   }
 }
