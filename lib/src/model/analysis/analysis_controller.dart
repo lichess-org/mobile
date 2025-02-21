@@ -515,9 +515,10 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     }
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -564,7 +565,10 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
           if (work.path == curState.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  ref.read(analysisPreferencesProvider).inlineNotation == false,
+            );
           }
         });
   }
@@ -578,7 +582,9 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void _stopEngineEval() {
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(
+      shouldRecomputeRootView: ref.read(analysisPreferencesProvider).inlineNotation == false,
+    );
   }
 
   void _listenToServerAnalysisEvents() {

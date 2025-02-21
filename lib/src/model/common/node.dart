@@ -666,6 +666,20 @@ class ViewBranch extends ViewNode with _$ViewBranch {
     return clockComment?.emt;
   }
 
+  /// The evaluation from the PGN comments.
+  ///
+  /// For now we only trust the eval coming from lichess analysis.
+  ExternalEval? get serverEval {
+    final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    return pgnEval != null
+        ? ExternalEval(
+          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+          mate: pgnEval.mate,
+          depth: pgnEval.depth,
+        )
+        : null;
+  }
+
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
 }
