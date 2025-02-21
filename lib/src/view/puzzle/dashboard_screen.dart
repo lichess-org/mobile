@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -46,62 +49,16 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(children: [PuzzleDashboardWidget()]);
-  }
-}
-
-class PuzzleDashboardWidget extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
-    final cardColor = Theme.of(context).platform == TargetPlatform.iOS ? Colors.transparent : null;
+    final days = ref.watch(daysProvider).days;
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider(days));
 
     return puzzleDashboard.when(
       data: (dashboard) {
         if (dashboard == null) {
           return const SizedBox.shrink();
         }
-        final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
-        return ListSection(
-          header: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(context.l10n.puzzlePuzzleDashboard),
-              Text(
-                context.l10n.puzzlePuzzleDashboardDescription,
-                style: Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity)),
-              ),
-            ],
-          ),
-          // hack to make the divider take full length or row
-          cupertinoAdditionalDividerMargin: -14,
-          children: [
-            StatCardRow([
-              StatCard(
-                context.l10n.performance,
-                value: dashboard.global.performance.toString(),
-                backgroundColor: cardColor,
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n
-                    .puzzleNbPlayed(dashboard.global.nb)
-                    .replaceAll(RegExp(r'\d+'), '')
-                    .trim()
-                    .capitalize(),
-                value: dashboard.global.nb.toString().localizeNumbers(),
-                backgroundColor: cardColor,
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n.puzzleSolved.capitalize(),
-                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                backgroundColor: cardColor,
-                elevation: 0,
-              ),
-            ]),
-            if (chartData.length >= 3) PuzzleChart(chartData),
-          ],
+        return ListView(
+          children: [PuzzleDashboardWidget(dashboard), ReplayButton(dashboard, days)],
         );
       },
       error: (e, s) {
@@ -163,6 +120,59 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   }
 }
 
+class PuzzleDashboardWidget extends ConsumerWidget {
+  const PuzzleDashboardWidget(this.dashboard);
+  final PuzzleDashboard dashboard;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cardColor = Theme.of(context).platform == TargetPlatform.iOS ? Colors.transparent : null;
+
+    final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+    return ListSection(
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(context.l10n.puzzlePuzzleDashboard),
+          Text(
+            context.l10n.puzzlePuzzleDashboardDescription,
+            style: Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+          ),
+        ],
+      ),
+      // hack to make the divider take full length or row
+      cupertinoAdditionalDividerMargin: -14,
+      children: [
+        StatCardRow([
+          StatCard(
+            context.l10n.performance,
+            value: dashboard.global.performance.toString(),
+            backgroundColor: cardColor,
+            elevation: 0,
+          ),
+          StatCard(
+            context.l10n
+                .puzzleNbPlayed(dashboard.global.nb)
+                .replaceAll(RegExp(r'\d+'), '')
+                .trim()
+                .capitalize(),
+            value: dashboard.global.nb.toString().localizeNumbers(),
+            backgroundColor: cardColor,
+            elevation: 0,
+          ),
+          StatCard(
+            context.l10n.puzzleSolved.capitalize(),
+            value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+            backgroundColor: cardColor,
+            elevation: 0,
+          ),
+        ]),
+        if (chartData.length >= 3) PuzzleChart(chartData),
+      ],
+    );
+  }
+}
+
 class PuzzleChart extends StatelessWidget {
   const PuzzleChart(this.puzzleData);
 
@@ -202,6 +212,49 @@ class PuzzleChart extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ReplayButton extends ConsumerWidget {
+  const ReplayButton(this.dashboard, this.daysToReplay);
+
+  final PuzzleDashboard dashboard;
+  final int daysToReplay;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzlesToReplay =
+        dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
+    final onPressed =
+        (puzzlesToReplay <= 0)
+            ? null
+            : () {
+              Navigator.of(context, rootNavigator: true).push(
+                PuzzleScreen.buildRoute(
+                  context,
+                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                  puzzleId: null,
+                  daysToReplay: daysToReplay,
+                ),
+              );
+            };
+
+    return Row(
+      children: [
+        const Spacer(),
+        FatButton(
+          semanticsLabel: context.l10n.puzzleNbToReplay(puzzlesToReplay),
+          onPressed: onPressed,
+          child: Row(
+            children: [
+              const Icon(Icons.play_arrow),
+              Text(context.l10n.puzzleNbToReplay(puzzlesToReplay)),
+            ],
+          ),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }
