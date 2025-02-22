@@ -3,19 +3,26 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
 
   switch (appLinkUri.pathSegments[0]) {
+    case '@':
+      final username = appLinkUri.pathSegments[1];
+      return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
+
     case 'study':
       final id = appLinkUri.pathSegments[1];
       return StudyScreen.buildRoute(context, StudyId(id));
+
     case 'broadcast':
       final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
       if (appLinkUri.pathSegments.length > 4) {
@@ -33,6 +40,7 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
         angle: PuzzleAngle.fromKey('mix'),
         puzzleId: PuzzleId(id),
       );
+
     case _:
       final gameId = GameId(appLinkUri.pathSegments[0]);
       final orientation = appLinkUri.pathSegments.getOrNull(2);
