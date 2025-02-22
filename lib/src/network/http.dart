@@ -89,7 +89,7 @@ HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 /// - A `LoggingClient` instance.
 @Riverpod(keepAlive: true)
 Client loggingClient(Ref ref) {
-  final client = LoggingClient(
+  final client = _RegisterCallbackClient(
     ref.read(httpClientFactoryProvider)(),
     onRequest: (request) async {
       final httpLogStorage = await ref.read(httpLogStorageProvider.future);
@@ -122,7 +122,7 @@ Client loggingClient(Ref ref) {
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(Ref ref) {
-  final client = LoggingClient(
+  final client = _RegisterCallbackClient(
     ref.read(loggingClientProvider),
     onRequest: (request) => _logger.info('${request.method} ${request.url}'),
   );
@@ -177,9 +177,23 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
   return base;
 }
 
-/// A [Client] that logs all requests.
-class LoggingClient extends BaseClient {
-  LoggingClient(this._inner, {this.onRequest, this.onResponse, this.onError});
+/// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.
+///
+/// This client wraps around another [Client] and intercepts the requests, responses,
+/// and errors, allowing custom handling through the provided callback functions.
+///
+/// The [onRequest] callback is called before the request is sent.
+/// The [onResponse] callback is called after a response is received.
+/// The [onError] callback is called when an error occurs during the request.
+///
+///
+/// This class is intended for debugging and monitoring purposes.
+///
+/// See also:
+/// - [BaseClient] for the base class.
+/// - [Client] for the interface that this class implements.
+class _RegisterCallbackClient extends BaseClient {
+  _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
 
   final Client _inner;
 
@@ -198,11 +212,6 @@ class LoggingClient extends BaseClient {
       onError?.call(error, st);
       rethrow;
     }
-  }
-
-  @override
-  void close() {
-    _inner.close();
   }
 }
 
