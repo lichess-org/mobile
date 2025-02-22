@@ -4,8 +4,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
@@ -15,7 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// Shows player names, game result, accuracy, inaccuracies, mistakes, blunders, and ACPL
 /// in a formatted table layout.
-class GameSummaryTable extends StatelessWidget {
+class GameSummaryTable extends ConsumerWidget {
   const GameSummaryTable({
     required this.pgnHeaders,
     required this.playersAnalysis,
@@ -37,11 +40,17 @@ class GameSummaryTable extends StatelessWidget {
   final LightUser? blackUser;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final result = pgnHeaders.get('Result') ?? '';
 
     final whiteAnalysis = playersAnalysis.white;
     final blackAnalysis = playersAnalysis.black;
+
+    final bool usingCustomBackground = ref.watch(
+      generalPreferencesProvider.select(
+        (prefs) => prefs.backgroundImage != null || prefs.backgroundColor != null,
+      ),
+    );
 
     return Center(
       child: SizedBox(
@@ -103,47 +112,65 @@ class GameSummaryTable extends StatelessWidget {
                     _SummaryNumber('${blackAnalysis.accuracy}%'),
                   ],
                 ),
-              for (final item in [
-                (
-                  whiteAnalysis.inaccuracies.toString(),
-                  context.l10n.numberInaccuracies(2).replaceAll('2', '').trim(),
-                  blackAnalysis.inaccuracies.toString(),
-                ),
-                (
-                  whiteAnalysis.mistakes.toString(),
-                  context.l10n.numberMistakes(2).replaceAll('2', '').trim(),
-                  blackAnalysis.mistakes.toString(),
-                ),
-                (
-                  whiteAnalysis.blunders.toString(),
-                  context.l10n.numberBlunders(2).replaceAll('2', '').trim(),
-                  blackAnalysis.blunders.toString(),
-                ),
+              for (final (whiteText, whiteTextColor, label, blackText, blackTextColor) in [
                 if (whiteAnalysis.phases?.opening != null && blackAnalysis.phases?.opening != null)
                   (
                     '${whiteAnalysis.phases!.opening}%',
+                    _accuracyColor(whiteAnalysis.phases!.opening!, context),
                     context.l10n.opening,
                     '${blackAnalysis.phases!.opening}%',
+                    _accuracyColor(blackAnalysis.phases!.opening!, context),
                   ),
                 if (whiteAnalysis.phases?.middlegame != null &&
                     blackAnalysis.phases?.middlegame != null)
                   (
                     '${whiteAnalysis.phases!.middlegame}%',
+                    _accuracyColor(whiteAnalysis.phases!.middlegame!, context),
                     context.l10n.middlegame,
                     '${blackAnalysis.phases!.middlegame}%',
+                    _accuracyColor(blackAnalysis.phases!.middlegame!, context),
                   ),
                 if (whiteAnalysis.phases?.endgame != null && blackAnalysis.phases?.endgame != null)
                   (
                     '${whiteAnalysis.phases!.endgame}%',
+                    _accuracyColor(whiteAnalysis.phases!.endgame!, context),
                     context.l10n.endgame,
                     '${blackAnalysis.phases!.endgame}%',
+                    _accuracyColor(blackAnalysis.phases!.endgame!, context),
                   ),
               ])
                 TableRow(
                   children: [
-                    _SummaryNumber(item.$1),
-                    Center(heightFactor: 1.2, child: Text(item.$2, softWrap: true)),
-                    _SummaryNumber(item.$3),
+                    _SummaryNumber(whiteText, color: usingCustomBackground ? null : whiteTextColor),
+                    Center(heightFactor: 1.2, child: Text(label, softWrap: true)),
+                    _SummaryNumber(blackText, color: usingCustomBackground ? null : blackTextColor),
+                  ],
+                ),
+              for (final (whiteText, label, blackText, color) in [
+                (
+                  whiteAnalysis.inaccuracies.toString(),
+                  context.l10n.numberInaccuracies(2).replaceAll('2', '').trim(),
+                  blackAnalysis.inaccuracies.toString(),
+                  LichessColors.inaccuracy,
+                ),
+                (
+                  whiteAnalysis.mistakes.toString(),
+                  context.l10n.numberMistakes(2).replaceAll('2', '').trim(),
+                  blackAnalysis.mistakes.toString(),
+                  LichessColors.mistake,
+                ),
+                (
+                  whiteAnalysis.blunders.toString(),
+                  context.l10n.numberBlunders(2).replaceAll('2', '').trim(),
+                  blackAnalysis.blunders.toString(),
+                  LichessColors.blunder,
+                ),
+              ])
+                TableRow(
+                  children: [
+                    _SummaryNumber(whiteText, color: usingCustomBackground ? null : color),
+                    Center(heightFactor: 1.2, child: Text(label, softWrap: true)),
+                    _SummaryNumber(blackText, color: usingCustomBackground ? null : color),
                   ],
                 ),
               if (whiteAnalysis.acpl != null && blackAnalysis.acpl != null)
@@ -170,12 +197,15 @@ class GameSummaryTable extends StatelessWidget {
 }
 
 class _SummaryNumber extends StatelessWidget {
-  const _SummaryNumber(this.data);
+  const _SummaryNumber(this.data, {this.color});
   final String data;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(data, softWrap: true));
+    return Center(
+      child: Text(data, softWrap: true, style: TextStyle(color: color)),
+    );
   }
 }
 
@@ -249,4 +279,18 @@ class _SummaryPlayerName extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _accuracyColor(int accuracy, BuildContext context) {
+  if (accuracy >= 85) {
+    return LichessColors.good;
+  }
+  if (accuracy >= 70) {
+    return LichessColors.inaccuracy;
+  }
+
+  if (accuracy >= 55) {
+    return LichessColors.mistake;
+  }
+  return LichessColors.blunder;
 }

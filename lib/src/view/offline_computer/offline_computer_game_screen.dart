@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -35,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -51,9 +51,9 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => inaccuracyColor,
-    .mistake => mistakeColor,
-    .blunder => blunderColor,
+    .inaccuracy => LichessColors.inaccuracy,
+    .mistake => LichessColors.mistake,
+    .blunder => LichessColors.blunder,
   };
 }
 
