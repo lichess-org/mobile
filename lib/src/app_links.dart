@@ -19,16 +19,9 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
 
   switch (appLinkUri.pathSegments[0]) {
-    case 'player':
-      return LeaderboardScreen.buildRoute(context);
-
     case '@':
       final username = appLinkUri.pathSegments[1];
       return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
-
-    case 'editor':
-      final initialFen = appLinkUri.path.substring(8).replaceAll('_', ' ');
-      return BoardEditorScreen.buildRoute(context, initialFen: initialFen);
 
     case 'tv':
       return LiveTvChannelsScreen.buildRoute(context);
