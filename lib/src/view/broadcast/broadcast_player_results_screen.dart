@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -153,7 +152,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.standard != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.classical,
                                 value: fideData.ratings.standard.toString(),
                               ),
@@ -161,7 +160,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.rapid != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.rapid,
                                 value: fideData.ratings.rapid.toString(),
                               ),
@@ -169,7 +168,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.blitz != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.blitz,
                                 value: fideData.ratings.blitz.toString(),
                               ),
@@ -186,7 +185,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.birthYear != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.broadcastAgeThisYear,
                                 value: (DateTime.now().year - fideData.birthYear!).toString(),
                               ),
@@ -194,7 +193,7 @@ class _Body extends ConsumerWidget {
                           if (player.federation != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.broadcastFederation,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +217,7 @@ class _Body extends ConsumerWidget {
                           if (player.fideId != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard('FIDE ID', value: player.fideId!.toString()),
+                              child: _StatCard('FIDE ID', value: player.fideId!.toString()),
                             ),
                         ],
                       ),
@@ -229,7 +228,7 @@ class _Body extends ConsumerWidget {
                         if (player.score != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.broadcastScore,
                               value:
                                   '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
@@ -238,7 +237,7 @@ class _Body extends ConsumerWidget {
                         if (player.performance != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.performance,
                               value: player.performance.toString(),
                             ),
@@ -246,7 +245,7 @@ class _Body extends ConsumerWidget {
                         if (player.ratingDiff != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.broadcastRatingDiff,
                               child: ProgressionWidget(player.ratingDiff!, fontSize: 18.0),
                             ),
@@ -273,12 +272,8 @@ class _Body extends ConsumerWidget {
               },
               child: ColoredBox(
                 color:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? index.isEven
-                            ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                            : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
-                        : index.isEven
-                        ? ColorScheme.of(context).surfaceContainerLow
+                    index.isEven
+                        ? ColorScheme.of(context).surfaceContainer
                         : ColorScheme.of(context).surfaceContainerHigh,
                 child: Padding(
                   padding: _kTableRowPadding,
@@ -376,5 +371,23 @@ class _Body extends ConsumerWidget {
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  const _StatCard(this.stat, {this.value, this.child});
+
+  final String stat;
+  final String? value;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return StatCard(
+      contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      stat,
+      value: value,
+      child: child,
+    );
   }
 }

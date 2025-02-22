@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +20,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -170,161 +168,76 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
-  Widget _filterButtonBuilder(BuildContext context) => AppBarIconButton(
-    icon: const Icon(Icons.filter_list),
-    semanticsLabel: context.l10n.filterGames,
-    onPressed:
-        () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
-          builder:
-              (_) => StatefulBuilder(
-                builder: (context, setLocalState) {
-                  return BottomSheetScrollableContainer(
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                      const SizedBox(height: 16.0),
-                      Filter<_BroadcastGameFilter>(
-                        filterType: FilterType.singleChoice,
-                        choices: _BroadcastGameFilter.values,
-                        choiceSelected: (choice) => filter == choice,
-                        choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                        onSelected: (value, selected) {
-                          setLocalState(() => filter = value);
-                          setState(() => filter = value);
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-                    ],
-                  );
-                },
-              ),
-        ),
-  );
-
-  Widget _iosBuilder(
+  Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<BroadcastRoundTab>(
-      groupValue: selectedTab,
-      children: {
-        BroadcastRoundTab.overview: Text(context.l10n.broadcastOverview),
-        BroadcastRoundTab.boards: Text(context.l10n.broadcastBoards),
-        BroadcastRoundTab.players: Text(context.l10n.players),
-      },
-      onValueChanged: (BroadcastRoundTab? view) {
-        if (view != null) {
-          setCupertinoTab(view);
-        }
-      },
-    );
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
-        ),
+    return PlatformScaffold(
+      appBarTitle: AutoSizeText(
+        widget.broadcast.title,
+        minFontSize: 14.0,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: switch (asyncRound) {
-              AsyncData(value: final _) => switch (selectedTab) {
-                BroadcastRoundTab.overview => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastOverviewTab(
-                    broadcast: widget.broadcast,
-                    tournamentId: _selectedTournamentId,
-                  ),
-                ),
-                BroadcastRoundTab.boards => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastBoardsTab(
-                      tournamentId: _selectedTournamentId,
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
-                      tournamentSlug: widget.broadcast.tour.slug,
-                      showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                    ),
-                    _ => const SliverFillRemaining(child: SizedBox.shrink()),
-                  },
-                ),
-                BroadcastRoundTab.players => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                ),
-              },
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
-          ),
-          switch (asyncTournament) {
-            AsyncData(:final value) => _BottomBar(
-              tournament: value,
-              roundId: _selectedRoundId ?? value.defaultRoundId,
-              setTournamentId: setTournamentId,
-              setRoundId: setRoundId,
-            ),
-            _ => const PlatformBottomBar.empty(transparentBackground: false),
-          },
+      appBarBottom: TabBar(
+        controller: _tabController,
+        tabs: <Widget>[
+          Tab(text: context.l10n.broadcastOverview),
+          Tab(text: context.l10n.broadcastBoards),
+          Tab(text: context.l10n.players),
         ],
       ),
-    );
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-    AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundState> asyncRound,
-  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+      appBarActions: [
+        AppBarIconButton(
+          icon: const Icon(Icons.filter_list),
+          semanticsLabel: context.l10n.filterGames,
+          onPressed:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+                builder:
+                    (_) => StatefulBuilder(
+                      builder: (context, setLocalState) {
+                        return BottomSheetScrollableContainer(
+                          padding: const EdgeInsets.all(16.0),
+                          children: [
+                            const SizedBox(height: 16.0),
+                            Filter<_BroadcastGameFilter>(
+                              filterType: FilterType.singleChoice,
+                              choices: _BroadcastGameFilter.values,
+                              choiceSelected: (choice) => filter == choice,
+                              choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                              onSelected: (value, selected) {
+                                setLocalState(() => filter = value);
+                                setState(() => filter = value);
+                              },
+                            ),
+                            const SizedBox(height: 16.0),
+                          ],
+                        );
+                      },
+                    ),
+              ),
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.broadcastOverview),
-            Tab(text: context.l10n.broadcastBoards),
-            Tab(text: context.l10n.players),
-          ],
-        ),
-        actions: [_filterButtonBuilder(context), const _BroadcastSettingsButton()],
-      ),
+        const _BroadcastSettingsButton(),
+      ],
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _TabView(
-              sliver: BroadcastOverviewTab(
-                broadcast: widget.broadcast,
+            BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
+            switch (asyncTournament) {
+              AsyncData(:final value) => BroadcastBoardsTab(
                 tournamentId: _selectedTournamentId,
+                roundId: _selectedRoundId ?? value.defaultRoundId,
+                tournamentSlug: widget.broadcast.tour.slug,
+                showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
               ),
-            ),
-            _TabView(
-              sliver: switch (asyncTournament) {
-                AsyncData(:final value) => BroadcastBoardsTab(
-                  tournamentId: _selectedTournamentId,
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  tournamentSlug: widget.broadcast.tour.slug,
-                  showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                ),
-                _ => const SliverFillRemaining(child: SizedBox.shrink()),
-              },
-            ),
-            _TabView(sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId)),
+              _ => const SizedBox.shrink(),
+            },
+            BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
         _ => const Center(child: CircularProgressIndicator()),
@@ -371,38 +284,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           },
         );
 
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, roundState),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, roundState),
-        );
+        return _buildContent(context, asyncTour, roundState);
 
       case _:
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, loadingRound),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, loadingRound),
-        );
+        return _buildContent(context, asyncTour, loadingRound);
     }
-  }
-}
-
-class _TabView extends StatelessWidget {
-  const _TabView({required this.sliver, this.cupertinoTabSwitcher});
-
-  final Widget sliver;
-  final Widget? cupertinoTabSwitcher;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        if (cupertinoTabSwitcher != null)
-          SliverPadding(
-            padding: Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-            sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
-          ),
-        sliver,
-      ],
-    );
   }
 }
 

@@ -151,7 +151,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             decoration: BoxDecoration(
               color:
                   index.isEven
-                      ? ColorScheme.of(context).surfaceContainerLow
+                      ? ColorScheme.of(context).surfaceContainer
                       : ColorScheme.of(context).surfaceContainerHigh,
             ),
             children: [
