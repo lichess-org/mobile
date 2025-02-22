@@ -188,6 +188,7 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 /// - [BaseClient] for the base class.
 /// - [Client] for the interface that this class implements.
 class _RegisterCallbackClient extends BaseClient {
+  // ignore: unused_element_parameter
   _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
 
   final Client _inner;
