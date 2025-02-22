@@ -15,7 +15,7 @@ const _pageSize = 12;
 /// paginated HTTP log entries from the storage. It uses a throttler to limit
 /// the rate of fetching new pages.
 @riverpod
-class HttpLogController extends _$HttpLogController{
+class HttpLogController extends _$HttpLogController {
   @override
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
