@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +12,7 @@ part 'http_log_storage.freezed.dart';
 /// Provides an instance of [HttpLogStorage] using Riverpod.
 @Riverpod(keepAlive: true)
 Future<HttpLogStorage> httpLogStorage(Ref ref) async {
-  final db = await ref.read(databaseProvider.future);
+  final db = await ref.watch(databaseProvider.future);
   return HttpLogStorage(db);
 }
 
