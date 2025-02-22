@@ -20,6 +20,9 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
 
   switch (appLinkUri.pathSegments[0]) {
+    case 'player':
+      return PlayerScreen.buildRoute(context);
+
     case '@':
       final username = appLinkUri.pathSegments[1];
       return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
@@ -38,7 +41,7 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
         final channel = appLinkUri.pathSegments[1];
         return TvScreen.buildRoute(context, TvChannel.channelFromString(channel));
       } else {
-      return LiveTvChannelsScreen.buildRoute(context);
+        return LiveTvChannelsScreen.buildRoute(context);
       }
 
     case 'study':

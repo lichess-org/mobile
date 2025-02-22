@@ -24,7 +24,7 @@ class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PlayerScreen(), title: context.l10n.players);
+    return buildScreenRoute(context, screen: const PlayerScreen(), title: 'context.l10n.players');
   }
 
   @override
