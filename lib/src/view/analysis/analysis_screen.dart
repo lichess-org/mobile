@@ -178,7 +178,6 @@ class _Body extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     final isEngineAvailable = analysisState.isEngineAvailable;
-    final hasEval = analysisState.hasAvailableEval;
     final currentNode = analysisState.currentNode;
     final pov = analysisState.pov;
 
@@ -194,7 +193,7 @@ class _Body extends ConsumerWidget {
             enableDrawingShapes: enableDrawingShapes,
           ),
       engineGaugeBuilder:
-          hasEval && showEvaluationGauge
+          analysisState.hasAvailableEval && showEvaluationGauge
               ? (context, orientation) {
                 return orientation == Orientation.portrait
                     ? EngineGauge(

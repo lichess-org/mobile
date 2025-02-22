@@ -650,6 +650,10 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
   /// The path to the current broadcast live move
   UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
 
+  /// Whether an evaluation can be available
+  bool get hasAvailableEval =>
+      isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
+
   EngineGaugeParams get engineGaugeParams => (
     orientation: pov,
     isLocalEngineAvailable: isLocalEvaluationEnabled,

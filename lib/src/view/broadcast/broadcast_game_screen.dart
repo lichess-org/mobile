@@ -194,7 +194,7 @@ class _Body extends ConsumerWidget {
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
           engineGaugeBuilder:
-              isLocalEvaluationEnabled && showEvaluationGauge
+              state.hasAvailableEval && showEvaluationGauge
                   ? (context, orientation) {
                     return orientation == Orientation.portrait
                         ? EngineGauge(
