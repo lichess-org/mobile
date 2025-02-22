@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -65,13 +66,15 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     late final ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis;
     late final Division? division;
 
+    ArchivedGame? archivedGame;
+
     if (options.gameId != null) {
-      final game = await ref.watch(archivedGameProvider(id: options.gameId!).future);
-      _variant = game.meta.variant;
-      pgn = game.makePgn();
-      opening = game.data.opening;
-      serverAnalysis = game.serverAnalysis;
-      division = game.meta.division;
+      archivedGame = await ref.watch(archivedGameProvider(id: options.gameId!).future);
+      _variant = archivedGame!.meta.variant;
+      pgn = archivedGame.makePgn();
+      opening = archivedGame.data.opening;
+      serverAnalysis = archivedGame.serverAnalysis;
+      division = archivedGame.meta.division;
     } else {
       _variant = options.standalone!.variant;
       pgn = options.standalone!.pgn;
@@ -172,6 +175,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     final analysisState = AnalysisState(
       variant: _variant,
       gameId: options.gameId,
+      archivedGame: archivedGame,
       currentPath: currentPath,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
@@ -694,6 +698,9 @@ class AnalysisState with _$AnalysisState {
   const factory AnalysisState({
     /// The ID of the game if it's a lichess game.
     required GameId? gameId,
+
+    /// The archived game if it's a finished lichess game.
+    ArchivedGame? archivedGame,
 
     /// The variant of the analysis.
     required Variant variant,

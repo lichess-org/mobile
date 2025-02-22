@@ -30,6 +30,8 @@ const kIndexOpacity = 0.6;
 const kViewVerticalPadding = 10.0;
 const kViewHorizontalPadding = 10.0;
 
+const kCommentVerticalPadding = 8.0;
+
 Color? _nagColor(BuildContext context, int nag) {
   final colorScheme = ColorScheme.of(context);
   return switch (nag) {
@@ -356,7 +358,7 @@ typedef _CachedRenderedSubtree =
 class _PgnTreeViewState extends State<_PgnTreeView> {
   /// Caches the result of [_mainlineParts], it only needs to be recalculated when the root changes,
   /// but not when `params.pathToCurrentMove` changes.
-  List<List<ViewNode>> mainlineParts = [];
+  Iterable<List<ViewNode>> mainlineParts = [];
 
   /// Cache of the top-level subtrees obtained from the last `build()` method.
   ///
@@ -436,7 +438,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   void _updateLines({required bool fullRebuild}) {
     setState(() {
       if (fullRebuild) {
-        mainlineParts = _mainlineParts(widget.root, widget.params).toList(growable: false);
+        mainlineParts = _mainlineParts(widget.root, widget.params);
       }
 
       subtrees = _buildChangedSubtrees(fullRebuild: fullRebuild);
@@ -475,7 +477,10 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
         if (widget.params.shouldShowComments && rootComments.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: kViewHorizontalPadding),
+            padding: const EdgeInsets.symmetric(
+              vertical: kCommentVerticalPadding,
+              horizontal: kViewHorizontalPadding,
+            ),
             child: Text.rich(
               TextSpan(children: _comments(rootComments, textStyle: _baseTextStyle)),
             ),
@@ -648,7 +653,13 @@ class _SideLinePart extends ConsumerWidget {
       }).flattened,
     ];
 
-    return Text.rich(TextSpan(children: moves));
+    return Padding(
+      padding:
+          params.displayMode == PgnTreeDisplayMode.twoColumn
+              ? const EdgeInsets.symmetric(vertical: kCommentVerticalPadding)
+              : EdgeInsets.zero,
+      child: Text.rich(TextSpan(children: moves)),
+    );
   }
 }
 
@@ -723,7 +734,6 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.only(top: initialPath.isEmpty ? 0 : 8, bottom: 8),
           padding: const EdgeInsets.only(top: 4, right: kViewHorizontalPadding, bottom: 4),
           decoration: BoxDecoration(
             color:
@@ -780,7 +790,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
         ),
         if (params.shouldShowComments && lastBranch?.hasTextComment == true)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: kViewHorizontalPadding),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: kViewHorizontalPadding),
             child: Text.rich(
               TextSpan(children: _comments(lastBranch!.textComments, textStyle: textStyle)),
             ),
@@ -1116,7 +1126,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
       child: CustomPaint(
         painter: _IndentPainter(
           sideLineStartPositions: _sideLineStartPositions,
-          color: _textColor(context, 0.6)!,
+          color: _textColor(context, 0.3)!,
           padding: padding,
         ),
         child: Column(
@@ -1350,7 +1360,10 @@ class _MoveContextMenu extends ConsumerWidget {
         ),
         if (branch.hasTextComment)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: kCommentVerticalPadding,
+            ),
             child: Text(branch.textComments.join(' ')),
           ),
         const PlatformDivider(indent: 0),

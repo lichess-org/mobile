@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 const kOpeningHeaderHeight = 32.0;
@@ -22,16 +23,27 @@ class AnalysisTreeView extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
-      child: DebouncedPgnTreeView(
-        root: analysisState.root,
-        currentPath: analysisState.currentPath,
-        pgnRootComments: analysisState.pgnRootComments,
-        notifier: ref.read(ctrlProvider.notifier),
-        shouldShowComputerVariations: enableComputerAnalysis,
-        shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
-        shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
-        displayMode:
-            prefs.inlineNotation ? PgnTreeDisplayMode.inlineNotation : PgnTreeDisplayMode.twoColumn,
+      child: Column(
+        children: [
+          DebouncedPgnTreeView(
+            root: analysisState.root,
+            currentPath: analysisState.currentPath,
+            pgnRootComments: analysisState.pgnRootComments,
+            notifier: ref.read(ctrlProvider.notifier),
+            shouldShowComputerVariations: enableComputerAnalysis,
+            shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
+            shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
+            displayMode:
+                prefs.inlineNotation
+                    ? PgnTreeDisplayMode.inlineNotation
+                    : PgnTreeDisplayMode.twoColumn,
+          ),
+          if (analysisState.archivedGame != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GameResult(game: analysisState.archivedGame!),
+            ),
+        ],
       ),
     );
   }
