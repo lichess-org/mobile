@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 
 Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
@@ -18,6 +19,15 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
     case '@':
       final username = appLinkUri.pathSegments[1];
       return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
+
+    case 'tv':
+      if (appLinkUri.pathSegments.length > 1) {
+        // final channel = TvChannelExtension(appLinkUri.pathSegments[1]).asTvChannelOrNull();
+        // return TvScreen.buildRoute(context, channel);
+        return null;
+      } else {
+        return LiveTvChannelsScreen.buildRoute(context);
+      }
 
     case 'study':
       final id = appLinkUri.pathSegments[1];
