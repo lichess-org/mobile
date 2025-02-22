@@ -60,6 +60,7 @@
 
                 <data android:pathPattern="/@/.*" />
                 <data android:pathPattern="/tv" />
+                <data android:pathPattern="/tv/.*" />
 
                 <data android:pathPattern="/training/....." />
                 <data android:pathPattern="/study/........" />

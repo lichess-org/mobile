@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
@@ -13,7 +14,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
-import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 
 Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
@@ -24,7 +25,12 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
 
     case 'tv':
+      if (appLinkUri.pathSegments.length > 1) {
+        final channel = appLinkUri.pathSegments[1];
+        return TvScreen.buildRoute(context, TvChannel.channelFromString(channel));
+      } else {
       return LiveTvChannelsScreen.buildRoute(context);
+      }
 
     case 'study':
       final id = appLinkUri.pathSegments[1];
