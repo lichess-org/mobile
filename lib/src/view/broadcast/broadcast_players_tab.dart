@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
@@ -187,10 +188,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
               );
             },
             child: ColoredBox(
-              color:
-                  index.isEven
-                      ? ColorScheme.of(context).surfaceContainer
-                      : ColorScheme.of(context).surfaceContainerHigh,
+              color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

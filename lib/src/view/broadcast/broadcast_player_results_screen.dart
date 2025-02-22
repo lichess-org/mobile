@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
@@ -271,10 +272,7 @@ class _Body extends ConsumerWidget {
                 );
               },
               child: ColoredBox(
-                color:
-                    index.isEven
-                        ? ColorScheme.of(context).surfaceContainer
-                        : ColorScheme.of(context).surfaceContainerHigh,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 child: Padding(
                   padding: _kTableRowPadding,
                   child: Row(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -149,10 +150,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           final percentGames = ((move.games / games) * 100).round();
           return TableRow(
             decoration: BoxDecoration(
-              color:
-                  index.isEven
-                      ? ColorScheme.of(context).surfaceContainer
-                      : ColorScheme.of(context).surfaceContainerHigh,
+              color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
             ),
             children: [
               TableRowInkWell(
@@ -184,9 +182,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           TableRow(
             decoration: BoxDecoration(
               color:
-                  moves.length.isEven
-                      ? ColorScheme.of(context).surfaceContainerLow
-                      : ColorScheme.of(context).surfaceContainerHigh,
+                  moves.length.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
             ),
             children: [
               Container(

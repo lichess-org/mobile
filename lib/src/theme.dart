@@ -44,6 +44,43 @@ const kSliderTheme = SliderThemeData(
   }
 }
 
+/// A custom theme extension that adds lichess custom properties to the theme.
+@immutable
+class CustomTheme extends ThemeExtension<CustomTheme> {
+  const CustomTheme({required this.rowEven, required this.rowOdd});
+
+  final Color rowEven;
+  final Color rowOdd;
+
+  @override
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
+    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  }
+
+  @override
+  CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
+    if (other is! CustomTheme) {
+      return this;
+    }
+    return CustomTheme(
+      rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
+      rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+    );
+  }
+}
+
+/// A [BuildContext] extension that provides the [lichessTheme] property.
+extension CustomThemeBuildContext on BuildContext {
+  CustomTheme get _defaultLichessTheme => CustomTheme(
+    rowEven: ColorScheme.of(this).surfaceContainer,
+    rowOdd: ColorScheme.of(this).surfaceContainerHigh,
+  );
+
+  CustomTheme get lichessTheme => Theme.of(this).extension<CustomTheme>() ?? _defaultLichessTheme;
+}
+
+// --
+
 ({ThemeData light, ThemeData dark}) _makeDefaultTheme(
   BuildContext context,
   GeneralPrefs generalPrefs,
@@ -110,7 +147,11 @@ const kSliderTheme = SliderThemeData(
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
-      extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
+      extensions: [
+        lichessCustomColors.harmonized(themeLight.colorScheme),
+        if (isIOS)
+          const CustomTheme(rowEven: Colors.white, rowOdd: Color.fromARGB(255, 247, 246, 245)),
+      ],
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,

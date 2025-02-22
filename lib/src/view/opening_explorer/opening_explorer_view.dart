@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart'
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widgets.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -117,10 +118,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               return OpeningExplorerGameTile(
                 key: Key('top-game-${topGames.get(index).id}'),
                 game: topGames.get(index),
-                color:
-                    index.isEven
-                        ? ColorScheme.of(context).surfaceContainerLow
-                        : ColorScheme.of(context).surfaceContainerHigh,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 ply: ply,
               );
             }, growable: false),
@@ -134,10 +132,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               return OpeningExplorerGameTile(
                 key: Key('recent-game-${recentGames.get(index).id}'),
                 game: recentGames.get(index),
-                color:
-                    index.isEven
-                        ? ColorScheme.of(context).surfaceContainerLow
-                        : ColorScheme.of(context).surfaceContainerHigh,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 ply: ply,
               );
             }, growable: false),
