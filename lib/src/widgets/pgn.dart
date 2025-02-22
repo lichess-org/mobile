@@ -20,9 +20,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-const innacuracyColor = LichessColors.cyan;
-const mistakeColor = Color(0xFFe69f00);
-const blunderColor = Color(0xFFdf5353);
 const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);
 const kIndexOpacity = 0.6;
 
@@ -68,9 +65,9 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
     1 => const Annotation(symbol: '!', color: Colors.lightGreen),
     3 => const Annotation(symbol: '!!', color: Colors.teal),
     5 => const Annotation(symbol: '!?', color: Colors.purple),
-    6 => const Annotation(symbol: '?!', color: LichessColors.cyan),
-    2 => const Annotation(symbol: '?', color: mistakeColor),
-    4 => const Annotation(symbol: '??', color: blunderColor),
+    6 => const Annotation(symbol: '?!', color: LichessColors.inaccuracy),
+    2 => const Annotation(symbol: '?', color: LichessColors.mistake),
+    4 => const Annotation(symbol: '??', color: LichessColors.blunder),
     int() => null,
   };
 }
