@@ -24,6 +24,15 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       final username = appLinkUri.pathSegments[1];
       return UserScreen.buildRoute(context, LightUser(id: UserId(username), name: username));
 
+    case 'editor':
+      if (appLinkUri.pathSegments.length > 1) {
+        final initialFen = appLinkUri.path.substring(8).replaceAll('_', ' ');
+        return BoardEditorScreen.buildRoute(context, initialFen: initialFen);
+      } else {
+        const String? initialFen = null;
+        return BoardEditorScreen.buildRoute(context, initialFen: initialFen);
+      }
+
     case 'tv':
       if (appLinkUri.pathSegments.length > 1) {
         final channel = appLinkUri.pathSegments[1];

@@ -31,7 +31,7 @@ class BoardEditorScreen extends ConsumerWidget {
   static Route<dynamic> buildRoute(BuildContext context, {String? initialFen}) {
     return buildScreenRoute(
       context,
-      title: context.l10n.boardEditor,
+      title: 'context.l10n.boardEditor',
       screen: BoardEditorScreen(initialFen: initialFen),
     );
   }

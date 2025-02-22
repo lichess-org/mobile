@@ -59,6 +59,8 @@
                 <data android:scheme="https" android:host="lichess.org" />
 
                 <data android:pathPattern="/@/.*" />
+                <data android:pathPattern="/editor" />
+                <data android:pathPattern="/editor/.*" />
                 <data android:pathPattern="/tv" />
                 <data android:pathPattern="/tv/.*" />
 
