@@ -49,7 +49,11 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 ///
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
 class HttpClientFactory {
-  Client call() {
+  const HttpClientFactory({this.onCreate});
+
+  final Client Function(Client client)? onCreate;
+
+  Client _createClient() {
     const userAgent = 'Lichess Mobile';
     if (Platform.isAndroid) {
       final engine = CronetEngine.build(
@@ -58,61 +62,52 @@ class HttpClientFactory {
         userAgent: userAgent,
       );
       return CronetClient.fromCronetEngine(engine);
-    }
-
-    if (Platform.isIOS || Platform.isMacOS) {
+    } else if (Platform.isIOS || Platform.isMacOS) {
       final config =
           URLSessionConfiguration.ephemeralSessionConfiguration()
             ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
             ..httpAdditionalHeaders = {'User-Agent': userAgent};
       return CupertinoClient.fromSessionConfiguration(config);
+    } else {
+      return IOClient(HttpClient()..userAgent = userAgent);
     }
+  }
 
-    return IOClient(HttpClient()..userAgent = userAgent);
+  Client call() {
+    final client = _createClient();
+    return onCreate?.call(client) ?? client;
   }
 }
 
 @Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
-
-/// Creates a `LoggingClient` that logs HTTP requests and responses.
-///
-/// The `LoggingClient` is created using the `httpClientFactoryProvider` and logs
-/// the details of each HTTP response using the `httpLogStorageProvider`.
-///
-/// The client is kept alive and disposed of when no longer needed.
-///
-/// Parameters:
-/// - `ref`: A reference to the Riverpod provider.
-///
-/// Returns:
-/// - A `LoggingClient` instance.
-@Riverpod(keepAlive: true)
-Client loggingClient(Ref ref) {
-  final client = _RegisterCallbackClient(
-    ref.read(httpClientFactoryProvider)(),
-    onRequest: (request) async {
-      final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-      httpLogStorage.save(
-        HttpLog(
-          httpLogId: request.hashCode.toString(),
-          requestDateTime: DateTime.now(),
-          requestMethod: request.method,
-          requestUrl: request.url.toString(),
+HttpClientFactory httpClientFactory(Ref ref) {
+  return HttpClientFactory(
+    onCreate:
+        (client) => _RegisterCallbackClient(
+          client,
+          onRequest: (request) async {
+            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+            httpLogStorage.save(
+              HttpLog(
+                httpLogId: request.hashCode.toString(),
+                requestDateTime: DateTime.now(),
+                requestMethod: request.method,
+                requestUrl: request.url.toString(),
+              ),
+            );
+          },
+          onResponse: (response) async {
+            if (response.request != null) {
+              final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+              httpLogStorage.update(
+                response.request!.hashCode.toString(),
+                responseCode: response.statusCode,
+                responseDateTime: DateTime.now(),
+              );
+            }
+          },
         ),
-      );
-    },
-    onResponse: (response) async {
-      final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-      httpLogStorage.update(
-        response.request!.hashCode.toString(),
-        responseCode: response.statusCode,
-        responseDateTime: DateTime.now(),
-      );
-    },
   );
-  ref.onDispose(() => client.close());
-  return client;
 }
 
 /// The default http client.
@@ -123,7 +118,7 @@ Client loggingClient(Ref ref) {
 @Riverpod(keepAlive: true)
 Client defaultClient(Ref ref) {
   final client = _RegisterCallbackClient(
-    ref.read(loggingClientProvider),
+    ref.read(httpClientFactoryProvider)(),
     onRequest: (request) => _logger.info('${request.method} ${request.url}'),
   );
   ref.onDispose(() => client.close());
@@ -138,7 +133,7 @@ LichessClient lichessClient(Ref ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
-      ref.read(loggingClientProvider),
+      ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
