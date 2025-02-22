@@ -1,10 +1,12 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'http_log_controller.freezed.dart';
 part 'http_log_controller.g.dart';
 
+/// The number of HTTP logs to fetch per page.
 const _pageSize = 12;
 
 /// A Riverpod controller for managing HTTP logs.
@@ -13,14 +15,13 @@ const _pageSize = 12;
 /// paginated HTTP log entries from the storage. It uses a throttler to limit
 /// the rate of fetching new pages.
 @riverpod
-class HttpLogController extends _$HttpLogController {
-  final Throttler _throttler = Throttler(const Duration(milliseconds: 300));
-
-  /// Builds the initial state of the controller by fetching the first page of HTTP logs.
+class HttpLogController extends _$HttpLogController{
   @override
-  Future<HttpLogs> build() async {
+  Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
-    return storage.page(limit: _pageSize);
+    return HttpLogState(
+      data: IList.new([await AsyncValue.guard(() async => storage.page(limit: _pageSize))]),
+    );
   }
 
   /// Fetches the next page of HTTP logs.
@@ -28,19 +29,15 @@ class HttpLogController extends _$HttpLogController {
   /// This method uses a throttler to limit the rate of fetching new pages.
   /// It updates the state with the new page of HTTP logs.
   Future<void> next() async {
-    _throttler(() async {
-      if (state.isLoading) return;
-      if (state.hasValue && state.value?.next == null) return;
+    if (state.hasValue && state.requireValue.hasMore) {
       final storage = await ref.read(httpLogStorageProvider.future);
-      state = const AsyncValue.loading();
-      state = await AsyncValue.guard(() async {
-        final data = await storage.page(cursor: state.value?.next, limit: _pageSize);
-        return HttpLogs(
-          items: state.value?.items.addAll(data.items) ?? data.items,
-          next: data.next,
-        );
-      });
-    });
+      final asyncPage = await AsyncValue.guard(
+        () async => storage.page(limit: _pageSize, cursor: state.requireValue.nextPage),
+      );
+      state = AsyncValue.data(
+        state.requireValue.copyWith(data: state.requireValue.data.add(asyncPage)),
+      );
+    }
   }
 
   /// Deletes all HTTP logs from the storage.
@@ -52,18 +49,28 @@ class HttpLogController extends _$HttpLogController {
   /// Returns a [Future] that completes when the deletion is done.
   Future<void> deleteAll() async {
     final storage = await ref.read(httpLogStorageProvider.future);
-    state = await AsyncValue.guard(() async {
-      await storage.deleteAll();
-      return const HttpLogs(items: IList.empty(), next: null);
-    });
+    await storage.deleteAll();
+    ref.invalidateSelf();
   }
 
   /// Refreshes the HTTP logs by fetching the first page again.
   ///
   /// This method updates the state with the first page of HTTP logs.
   Future<void> refresh() async {
-    final storage = await ref.read(httpLogStorageProvider.future);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async => storage.page(limit: _pageSize));
+    ref.invalidateSelf();
   }
+}
+
+@freezed
+class HttpLogState with _$HttpLogState {
+  const HttpLogState._();
+
+  const factory HttpLogState({required IList<AsyncValue<HttpLogs>> data}) = _HttpLogState;
+
+  bool get initialized => data.isNotEmpty;
+  List<HttpLog> get logs => data.expand((e) => e.valueOrNull?.items ?? <HttpLog>[]).toList();
+  int? get nextPage => data.lastOrNull?.valueOrNull?.next;
+  bool get hasMore => initialized && nextPage != null;
+  bool get isLoading => data.lastOrNull?.isLoading == true;
+  bool get isDeleteButtonVisible => logs.isNotEmpty;
 }

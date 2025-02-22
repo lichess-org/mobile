@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_controller.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -36,52 +38,52 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
     super.dispose();
   }
 
-  Future<void> _scrollListener() async {
+  void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-      ref.read(httpLogControllerProvider.notifier).next();
+      final currentState = ref.read(httpLogControllerProvider);
+      if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
+        ref.read(httpLogControllerProvider.notifier).next();
+      }
     }
+  }
+
+  Future<void> _onRefresh() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    return ref.read(httpLogControllerProvider.notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(httpLogControllerProvider);
-
-    Future<void> onRefresh() async {
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-      return ref.read(httpLogControllerProvider.notifier).refresh();
-    }
-
+    final asyncState = ref.watch(httpLogControllerProvider);
     return PlatformScaffold(
       appBarTitle: const Text('HTTP Logs'),
       appBarActions: [
-        IconButton(
-          tooltip: 'Clear all logs',
-          icon: const Icon(Icons.delete_sweep),
-          onPressed: () => ref.read(httpLogControllerProvider.notifier).deleteAll(),
-        ),
+        if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
+          IconButton(
+            // TODO localize
+            tooltip: 'Clear all logs',
+            icon: const Icon(Icons.delete_sweep),
+            onPressed: () {
+              showConfirmDialog<dynamic>(
+                context,
+                // TODO localize
+                title: const Text('Delete all logs'),
+                onConfirm: () => ref.read(httpLogControllerProvider.notifier).deleteAll(),
+              );
+            },
+          ),
       ],
-      body: switch (state) {
-        AsyncError(:final error) => Center(child: Text('Error: $error')),
-        AsyncData(:final value) => _HttpLogList(
-          scrollController: _scrollController,
-          refreshIndicatorKey: _refreshIndicatorKey,
-          logs: value.items.toList(),
-          onRefresh: onRefresh,
-        ),
-        AsyncLoading(:final value) => _HttpLogList(
-          scrollController: _scrollController,
-          refreshIndicatorKey: _refreshIndicatorKey,
-          logs: value?.items.toList() ?? [],
-          onRefresh: onRefresh,
-        ),
-        _ => const CircularProgressIndicator(),
-      },
+      body: _HttpLogList(
+        scrollController: _scrollController,
+        refreshIndicatorKey: _refreshIndicatorKey,
+        logs: asyncState.valueOrNull?.logs.toList() ?? [],
+        onRefresh: _onRefresh,
+      ),
     );
   }
 }
 
-class _HttpLogList extends StatelessWidget {
+class _HttpLogList extends ConsumerStatefulWidget {
   const _HttpLogList({
     required this.logs,
     required this.onRefresh,
@@ -95,19 +97,35 @@ class _HttpLogList extends StatelessWidget {
   final RefreshCallback onRefresh;
 
   @override
+  ConsumerState<_HttpLogList> createState() => _HttpLogListState();
+}
+
+class _HttpLogListState extends ConsumerState<_HttpLogList> {
+  @override
   Widget build(BuildContext context) {
+    if (widget.logs.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('No logs to show'),
+            AdaptiveTextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
+          ],
+        ),
+      );
+    }
     return RefreshIndicator.adaptive(
-      key: refreshIndicatorKey,
+      key: widget.refreshIndicatorKey,
       edgeOffset:
           Theme.of(context).platform == TargetPlatform.iOS
               ? MediaQuery.paddingOf(context).top + 16.0
               : 0,
-      onRefresh: onRefresh,
+      onRefresh: widget.onRefresh,
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        controller: scrollController,
-        itemBuilder: (context, index) => HttpLogTile(httpLog: logs[index]),
-        itemCount: logs.length,
+        controller: widget.scrollController,
+        itemCount: widget.logs.length,
+        itemBuilder: (context, index) => HttpLogTile(httpLog: widget.logs[index]),
       ),
     );
   }

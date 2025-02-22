@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -30,9 +33,10 @@ class HttpLogStorage {
       orderBy: 'id DESC',
       where: cursor != null ? 'id <= $cursor' : null,
     );
-    final next = res.elementAtOrNull(limit);
-    res.remove(next);
-    return HttpLogs(items: res.map(HttpLog.fromJson).toIList(), next: next?['id'] as int?);
+    return HttpLogs(
+      items: res.take(limit).map(HttpLog.fromJson).toIList(),
+      next: res.elementAtOrNull(limit)?['id'] as int?,
+    );
   }
 
   /// Saves an [HttpLog] entry to the database.
