@@ -84,19 +84,9 @@ class BroadcastOverviewTab extends ConsumerWidget {
           ],
         );
       case AsyncError(:final error):
-        return Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: [Center(child: Text('Cannot load broadcast data: $error'))],
-          ),
-        );
+        return Center(child: Text('Cannot load broadcast data: $error'));
       case _:
-        return Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: const [Center(child: CircularProgressIndicator.adaptive())],
-          ),
-        );
+        return const Center(child: CircularProgressIndicator.adaptive());
     }
   }
 }

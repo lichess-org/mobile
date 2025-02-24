@@ -44,12 +44,15 @@ class BroadcastBoardsTab extends ConsumerWidget {
     return switch (round) {
       AsyncData(:final value) =>
         value.games.isEmpty
-            ? Center(
-              child: ListView(
-                shrinkWrap: true,
+            ? Padding(
+              padding: Styles.bodyPadding,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Icon(Icons.info, size: 30),
-                  Text(context.l10n.broadcastNoBoardsYet),
+                  const SizedBox(height: 8.0),
+                  Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
                 ],
               ),
             )
@@ -65,10 +68,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
               roundSlug: value.round.slug,
             ),
       AsyncError(:final error) => Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: [Center(child: Text('Could not load broadcast: $error'))],
-        ),
+        child: Center(child: Text('Could not load broadcast: $error')),
       ),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
