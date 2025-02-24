@@ -46,6 +46,7 @@ class CoordinateTrainingScreen extends StatelessWidget {
               onPressed:
                   () => showAdaptiveBottomSheet<void>(
                     context: context,
+                    showDragHandle: true,
                     builder: (BuildContext context) => const _CoordinateTrainingMenu(),
                   ),
             );
@@ -249,16 +250,11 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
     return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+        ListSection(
+          materialFilledCard: true,
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(context.l10n.preferencesDisplay, style: Styles.sectionTitle),
-            ),
             SwitchSettingTile(
               title: const Text('Show Coordinates'),
               value: trainingPrefs.showCoordinates,

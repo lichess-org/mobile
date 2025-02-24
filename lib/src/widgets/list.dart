@@ -16,6 +16,7 @@ class ListSection extends StatelessWidget {
     this.hasLeading = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
+    this.materialFilledCard = false,
     this.cupertinoAdditionalDividerMargin,
     this.backgroundColor,
     this.cupertinoBorderRadius,
@@ -32,6 +33,7 @@ class ListSection extends StatelessWidget {
        header = header ? const SizedBox.shrink() : null,
        showDividerBetweenTiles = false,
        dense = false,
+       materialFilledCard = false,
        cupertinoAdditionalDividerMargin = null,
        backgroundColor = null,
        cupertinoBorderRadius = null,
@@ -54,6 +56,9 @@ class ListSection extends StatelessWidget {
 
   /// Only on android.
   final bool showDividerBetweenTiles;
+
+  /// Whether the card should have a filled background. (Only on Android).
+  final bool materialFilledCard;
 
   /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
@@ -80,6 +85,7 @@ class ListSection extends StatelessWidget {
             ? Column(
               children: [
                 PlatformCard(
+                  filled: materialFilledCard,
                   clipBehavior: Clip.hardEdge,
                   margin: margin ?? Styles.bodySectionPadding,
                   color: backgroundColor,
@@ -117,6 +123,7 @@ class ListSection extends StatelessWidget {
               ],
             )
             : PlatformCard(
+              filled: materialFilledCard,
               clipBehavior: Clip.hardEdge,
               margin: margin ?? Styles.bodySectionPadding,
               color: backgroundColor,

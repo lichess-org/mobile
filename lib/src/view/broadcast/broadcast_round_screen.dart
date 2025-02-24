@@ -47,8 +47,7 @@ enum _BroadcastGameFilter {
       case all:
         return l10n.mobileAllGames;
       case ongoing:
-        // TODO: translate
-        return 'Ongoing games';
+        return l10n.broadcastOngoing;
     }
   }
 }
@@ -120,7 +119,6 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
 
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  BroadcastRoundTab selectedTab = BroadcastRoundTab.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
@@ -132,7 +130,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab ?? BroadcastRoundTab.overview;
     _tabController = TabController(
       initialIndex: widget.initialTab?.index ?? 0,
       length: 3,
@@ -148,16 +145,17 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setCupertinoTab(BroadcastRoundTab mode) {
-    setState(() {
-      selectedTab = mode;
-    });
-  }
-
   void setTournamentId(BroadcastTournamentId tournamentId) {
     setState(() {
       _selectedTournamentId = tournamentId;
       _selectedRoundId = null;
+    });
+  }
+
+  void setGameFilter(_BroadcastGameFilter filter) {
+    _tabController.index = 1;
+    setState(() {
+      this.filter = filter;
     });
   }
 
@@ -190,38 +188,18 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       ),
       appBarActions: [
         AppBarIconButton(
-          icon: const Icon(Icons.filter_list),
-          semanticsLabel: context.l10n.filterGames,
+          icon: const Icon(Icons.settings),
           onPressed:
               () => showAdaptiveBottomSheet<void>(
                 context: context,
+                isDismissible: true,
                 isScrollControlled: true,
-                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+                showDragHandle: true,
                 builder:
-                    (_) => StatefulBuilder(
-                      builder: (context, setLocalState) {
-                        return BottomSheetScrollableContainer(
-                          padding: const EdgeInsets.all(16.0),
-                          children: [
-                            const SizedBox(height: 16.0),
-                            Filter<_BroadcastGameFilter>(
-                              filterType: FilterType.singleChoice,
-                              choices: _BroadcastGameFilter.values,
-                              choiceSelected: (choice) => filter == choice,
-                              choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                              onSelected: (value, selected) {
-                                setLocalState(() => filter = value);
-                                setState(() => filter = value);
-                              },
-                            ),
-                            const SizedBox(height: 16.0),
-                          ],
-                        );
-                      },
-                    ),
+                    (_) => _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
               ),
+          semanticsLabel: context.l10n.settingsSettings,
         ),
-        const _BroadcastSettingsButton(),
       ],
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
@@ -275,10 +253,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.index = 1;
-
-                if (Theme.of(context).platform == TargetPlatform.iOS) {
-                  setCupertinoTab(BroadcastRoundTab.boards);
-                }
               }
             }
           },
@@ -501,29 +475,34 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
   }
 }
 
-class _BroadcastSettingsButton extends StatelessWidget {
-  const _BroadcastSettingsButton();
+class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
+  const _BroadcastSettingsBottomSheet(this.selectedFilter, {required this.onGameFilterChange});
+
+  final _BroadcastGameFilter selectedFilter;
+  final void Function(_BroadcastGameFilter filter) onGameFilterChange;
 
   @override
-  Widget build(BuildContext context) => AppBarIconButton(
-    icon: const Icon(Icons.settings),
-    onPressed:
-        () => showAdaptiveBottomSheet<void>(
-          context: context,
-          isDismissible: true,
-          isScrollControlled: true,
-          showDragHandle: true,
-          builder: (_) => const _BroadcastSettingsBottomSheet(),
-        ),
-    semanticsLabel: context.l10n.settingsSettings,
-  );
+  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
+      _BroadcastSettingsBottomSheetState();
 }
 
-class _BroadcastSettingsBottomSheet extends ConsumerWidget {
-  const _BroadcastSettingsBottomSheet();
+class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+  late _BroadcastGameFilter filter;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    filter = widget.selectedFilter;
+  }
+
+  @override
+  void didUpdateWidget(covariant _BroadcastSettingsBottomSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    filter = widget.selectedFilter;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
     return DraggableScrollableSheet(
@@ -533,12 +512,39 @@ class _BroadcastSettingsBottomSheet extends ConsumerWidget {
           (context, scrollController) => ListView(
             controller: scrollController,
             children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.evaluationGauge),
-                value: broadcastPreferences.showEvaluationBar,
-                onChanged: (value) {
-                  ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SettingsSectionTitle(context.l10n.filterGames),
+                    const SizedBox(height: 6),
+                    Filter<_BroadcastGameFilter>(
+                      filterType: FilterType.singleChoice,
+                      choices: _BroadcastGameFilter.values,
+                      choiceSelected: (choice) => filter == choice,
+                      choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                      onSelected: (value, selected) {
+                        setState(() => filter = value);
+                        widget.onGameFilterChange.call(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              ListSection(
+                header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+                materialFilledCard: true,
+                children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.evaluationGauge),
+                    value: broadcastPreferences.showEvaluationBar,
+                    onChanged: (value) {
+                      ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+                    },
+                  ),
+                ],
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -179,10 +180,7 @@ void main() {
 Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
   final app = await makeTestProviderScopeApp(tester, home: const OverTheBoardScreen());
   await tester.pumpWidget(app);
-
-  await tester.pumpAndSettle();
-  await tester.tap(find.text('Play'));
-  await tester.pumpAndSettle();
+  await tester.tap(find.byIcon(CupertinoIcons.play));
 
   final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
   container.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);

@@ -642,70 +642,75 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     return BottomSheetScrollableContainer(
       children: [
-        if (initialPuzzleContext.userId != null &&
-            !isDailyPuzzle &&
-            puzzleState.mode != PuzzleMode.view &&
-            isOnline)
-          StatefulBuilder(
-            builder: (context, setState) {
-              PuzzleDifficulty selectedDifficulty = difficulty;
-              return SettingsListTile(
-                settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
-                settingsValue: puzzleDifficultyL10n(context, difficulty),
-                onTap:
-                    puzzleState.isChangingDifficulty
-                        ? null
-                        : () {
-                          showChoicePicker(
-                            context,
-                            choices: PuzzleDifficulty.values,
-                            selectedItem: difficulty,
-                            labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
-                            onSelectedItemChanged: (PuzzleDifficulty? d) {
-                              if (d != null) {
-                                setState(() {
-                                  selectedDifficulty = d;
-                                });
-                              }
+        ListSection(
+          materialFilledCard: true,
+          children: [
+            if (initialPuzzleContext.userId != null &&
+                !isDailyPuzzle &&
+                puzzleState.mode != PuzzleMode.view &&
+                isOnline)
+              StatefulBuilder(
+                builder: (context, setState) {
+                  PuzzleDifficulty selectedDifficulty = difficulty;
+                  return SettingsListTile(
+                    settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
+                    settingsValue: puzzleDifficultyL10n(context, difficulty),
+                    onTap:
+                        puzzleState.isChangingDifficulty
+                            ? null
+                            : () {
+                              showChoicePicker(
+                                context,
+                                choices: PuzzleDifficulty.values,
+                                selectedItem: difficulty,
+                                labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
+                                onSelectedItemChanged: (PuzzleDifficulty? d) {
+                                  if (d != null) {
+                                    setState(() {
+                                      selectedDifficulty = d;
+                                    });
+                                  }
+                                },
+                              ).then((_) async {
+                                if (selectedDifficulty == difficulty) {
+                                  return;
+                                }
+                                final nextContext = await ref
+                                    .read(ctrlProvider.notifier)
+                                    .changeDifficulty(selectedDifficulty);
+                                if (context.mounted && nextContext != null) {
+                                  ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                                }
+                              });
                             },
-                          ).then((_) async {
-                            if (selectedDifficulty == difficulty) {
-                              return;
-                            }
-                            final nextContext = await ref
-                                .read(ctrlProvider.notifier)
-                                .changeDifficulty(selectedDifficulty);
-                            if (context.mounted && nextContext != null) {
-                              ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
-                            }
-                          });
-                        },
-              );
-            },
-          ),
-        SwitchSettingTile(
-          title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
-          value: autoNext,
-          onChanged: (value) {
-            ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
-          },
-        ),
-        if (signedIn)
-          SwitchSettingTile(
-            title: Text(context.l10n.rated),
-            value: rated,
-            onChanged: (value) {
-              ref.read(puzzlePreferencesProvider.notifier).setRated(value);
-            },
-          ),
-        PlatformListTile(
-          title: const Text('Board settings'),
-          trailing: const Icon(CupertinoIcons.chevron_right),
-          onTap: () {
-            Navigator.of(
-              context,
-            ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
-          },
+                  );
+                },
+              ),
+            SwitchSettingTile(
+              title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
+              value: autoNext,
+              onChanged: (value) {
+                ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+              },
+            ),
+            if (signedIn)
+              SwitchSettingTile(
+                title: Text(context.l10n.rated),
+                value: rated,
+                onChanged: (value) {
+                  ref.read(puzzlePreferencesProvider.notifier).setRated(value);
+                },
+              ),
+            PlatformListTile(
+              title: const Text('Board settings'),
+              trailing: const Icon(CupertinoIcons.chevron_right),
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+              },
+            ),
+          ],
         ),
       ],
     );

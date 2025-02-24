@@ -158,12 +158,12 @@ class SettingsSectionTitle extends StatelessWidget {
       title,
       style:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? TextStyle(
+              ? TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5))
+              : TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: CupertinoColors.secondaryLabel.resolveFrom(context),
-              )
-              : null,
+                color: textShade(context, 0.6),
+              ),
     );
   }
 }

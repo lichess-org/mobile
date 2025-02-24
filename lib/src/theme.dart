@@ -37,7 +37,11 @@ const kSliderTheme = SliderThemeData(
       context,
       baseTheme:
           generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
-      seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundColor!.$1.color,
+      seedColor:
+          generalPrefs.backgroundImage?.seedColor ??
+          (generalPrefs.backgroundColor!.$2
+              ? generalPrefs.backgroundColor!.$1.darker
+              : generalPrefs.backgroundColor!.$1.color),
       isIOS: isIOS,
       isBackgroundImage: generalPrefs.backgroundImage != null,
     );
@@ -140,7 +144,7 @@ extension CustomThemeBuildContext on BuildContext {
       listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
       bottomSheetTheme:
           isIOS
-              ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
+              ? BottomSheetThemeData(backgroundColor: lightCupertino.scaffoldBackgroundColor)
               : null,
       menuTheme:
           isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
@@ -165,6 +169,10 @@ extension CustomThemeBuildContext on BuildContext {
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
+      bottomSheetTheme:
+          isIOS
+              ? BottomSheetThemeData(backgroundColor: darkCupertino.scaffoldBackgroundColor)
+              : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
@@ -218,7 +226,10 @@ extension CustomThemeBuildContext on BuildContext {
     listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
     cardTheme: isIOS ? const CardTheme(elevation: 0, margin: EdgeInsets.zero) : null,
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+      backgroundColor:
+          isIOS
+              ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
+              : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
     menuTheme:
