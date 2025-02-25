@@ -25,9 +25,26 @@ sealed class Eval {
 
 /// The eval from the client side, either from the cloud or the local engine.
 sealed class ClientEval extends Eval {
+  /// The position for which the eval was computed.
   Position get position;
 
+  /// The depth of the search.
+  int get depth;
+
+  /// The principal variations.
   IList<PvData> get pvs;
+
+  /// The centipawn score.
+  int? get cp;
+
+  /// The mate score.
+  int? get mate;
+
+  /// The best move.
+  Move? get bestMove;
+
+  /// The best moves with their winning chances.
+  IList<MoveWithWinningChances> get bestMoves;
 }
 
 /// The eval coming from other Lichess clients, served from the network.
@@ -44,9 +61,17 @@ class CloudEval with _$CloudEval implements ClientEval {
   @override
   double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
 
+  @override
   int? get cp => pvs[0].cp;
 
+  @override
   int? get mate => pvs[0].mate;
+
+  @override
+  Move? get bestMove => _bestMove(pvs);
+
+  @override
+  IList<MoveWithWinningChances> get bestMoves => _bestMoves(pvs, position);
 }
 
 /// The eval from the local engine.
@@ -67,20 +92,11 @@ class LocalEval with _$LocalEval implements ClientEval {
 
   double get knps => nodes / millis;
 
-  Move? get bestMove {
-    final uci = pvs.firstOrNull?.moves.firstOrNull;
-    if (uci == null) return null;
-    return Move.parse(uci);
-  }
+  @override
+  Move? get bestMove => _bestMove(pvs);
 
-  IList<MoveWithWinningChances> get bestMoves {
-    return pvs
-        .where((e) => e.moves.isNotEmpty)
-        .map((e) => e._firstMoveWithWinningChances(position.turn))
-        .nonNulls
-        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
-        .toIList();
-  }
+  @override
+  IList<MoveWithWinningChances> get bestMoves => _bestMoves(pvs, position);
 
   @override
   String get evalString => _evalString(cp, mate);
@@ -142,6 +158,21 @@ double _toWhiteWinningChances(int? cp, int? mate) {
   } else {
     return 0;
   }
+}
+
+Move? _bestMove(IList<PvData> pvs) {
+  final uci = pvs.firstOrNull?.moves.firstOrNull;
+  if (uci == null) return null;
+  return Move.parse(uci);
+}
+
+IList<MoveWithWinningChances> _bestMoves(IList<PvData> pvs, Position position) {
+  return pvs
+      .where((e) => e.moves.isNotEmpty)
+      .map((e) => e._firstMoveWithWinningChances(position.turn))
+      .nonNulls
+      .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
+      .toIList();
 }
 
 @freezed
