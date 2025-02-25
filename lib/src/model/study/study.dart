@@ -55,6 +55,16 @@ class Study with _$Study {
     return '${index + 1}. ${chapters[index].name}';
   }
 
+  /// Returns the index of the chapter with the given [chapterId] in the [chapters] list.
+  ///
+  /// The index is 1-based, meaning it starts from 1 instead of 0.
+  ///
+  /// - Parameter chapterId: The ID of the chapter to find.
+  /// - Returns: The 1-based index of the chapter if found, otherwise 0.
+  int getChapterIndex(StudyChapterId chapterId) {
+    return chapters.indexWhere((c) => c.id == chapterId) + 1;
+  }
+
   StudyChapterMeta get currentChapterMeta => chapters.firstWhere((c) => c.id == chapter.id);
 
   factory Study.fromServerJson(Map<String, Object?> json) {
