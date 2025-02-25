@@ -247,8 +247,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
   void _handleEvalHitEvent(SocketEvent event) {
     final path = pick(event.data, 'path').asUciPathOrThrow();
 
-    if (state.requireValue.currentPath != path) return;
-
     final depth = pick(event.data, 'depth').asIntOrThrow();
     final pvs =
         pick(event.data, 'pvs')
@@ -261,13 +259,13 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
             )
             .toIList();
 
-    state = AsyncData(
-      state.requireValue.copyWith(
-        currentNode: state.requireValue.currentNode.copyWith(
-          eval: CloudEval(depth: depth, position: state.requireValue.position, pvs: pvs),
-        ),
-      ),
-    );
+    final cloudEval = CloudEval(depth: depth, position: state.requireValue.position, pvs: pvs);
+
+    _root.updateAt(path, (node) => node.eval = cloudEval);
+
+    if (state.requireValue.currentPath != path) return;
+
+    _refreshCurrentNode();
   }
 
   // ignore: unused_element
