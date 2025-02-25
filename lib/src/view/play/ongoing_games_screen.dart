@@ -84,21 +84,15 @@ class OngoingGamePreview extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        Navigator.of(context, rootNavigator: true)
-            .push(
-              GameScreen.buildRoute(
-                context,
-                initialGameId: game.fullId,
-                loadingFen: game.fen,
-                loadingOrientation: game.orientation,
-                loadingLastMove: game.lastMove,
-              ),
-            )
-            .then((_) {
-              if (context.mounted) {
-                ref.invalidate(ongoingGamesProvider);
-              }
-            });
+        Navigator.of(context, rootNavigator: true).push(
+          GameScreen.buildRoute(
+            context,
+            initialGameId: game.fullId,
+            loadingFen: game.fen,
+            loadingOrientation: game.orientation,
+            loadingLastMove: game.lastMove,
+          ),
+        );
       },
     );
   }

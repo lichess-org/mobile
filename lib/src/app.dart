@@ -65,12 +65,23 @@ class _AppState extends ConsumerState<Application> {
 
   AppLifecycleListener? _appLifecycleListener;
 
+  DateTime? _pausedAt;
+
   @override
   void initState() {
     _appLifecycleListener = AppLifecycleListener(
-      onResume: () async {
+      onPause: () {
+        _pausedAt = DateTime.now();
+      },
+      onRestart: () async {
+        // Invalidate ongoing games if the app was paused for more than an hour.
+        // In theory we shouldn't need to do this, because correspondence games are updated by
+        // fcm messages, but in practice it's not always reliable.
+        // See also: [CorrespondenceService].
         final online = await isOnline(ref.read(defaultClientProvider));
-        if (online) {
+        if (online &&
+            _pausedAt != null &&
+            DateTime.now().difference(_pausedAt!) >= const Duration(hours: 1)) {
           ref.invalidate(ongoingGamesProvider);
         }
       },

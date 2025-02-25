@@ -34,7 +34,7 @@ CorrespondenceService correspondenceService(Ref ref) {
   return service;
 }
 
-/// Services that manages correspondence games.
+/// Service that manages correspondence games.
 class CorrespondenceService {
   CorrespondenceService(this._log, {required this.ref});
 
@@ -227,18 +227,14 @@ class CorrespondenceService {
     PlayableGame game, {
     required bool fromBackground,
   }) async {
-    if (!fromBackground) {
-      // opponent just played, invalidate ongoing games
-      if (game.sideToMove == game.youAre) {
-        ref.invalidate(ongoingGamesProvider);
-      }
-    }
-
     await updateGame(fullId, game);
   }
 
-  /// Updates a stored correspondence game.
+  /// Updates a correspondence game.
+  ///
+  /// Will update the game in the ongoing games provider and save it to the storage.
   Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
+    ref.read(ongoingGamesProvider.notifier).updateGame(fullId, game);
     return (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(
         id: game.id,

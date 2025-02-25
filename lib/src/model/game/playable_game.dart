@@ -148,6 +148,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
 
 @freezed
 class PlayableClockData with _$PlayableClockData {
+  const PlayableClockData._();
+
   const factory PlayableClockData({
     required bool running,
     required Duration white,
@@ -161,6 +163,8 @@ class PlayableClockData with _$PlayableClockData {
     /// The time when the clock event was received.
     required DateTime at,
   }) = _PlayableClockData;
+
+  Duration forSide(Side side) => side == Side.white ? white : black;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
