@@ -24,7 +24,7 @@ abstract class Node {
   final Position position;
 
   /// The local evaluation of the position.
-  LocalEval? eval;
+  ClientEval? eval;
 
   /// The opening associated with this node.
   Opening? opening;
@@ -569,7 +569,7 @@ abstract class ViewNode {
   SanMove? get sanMove;
   Position get position;
   IList<ViewBranch> get children;
-  LocalEval? get eval;
+  ClientEval? get eval;
   Opening? get opening;
   IList<PgnComment>? get startingComments;
   IList<PgnComment>? get comments;
@@ -593,7 +593,7 @@ class ViewRoot extends ViewNode with _$ViewRoot {
   const factory ViewRoot({
     required Position position,
     required IList<ViewBranch> children,
-    LocalEval? eval,
+    ClientEval? eval,
   }) = _ViewRoot;
 
   @override
@@ -630,7 +630,7 @@ class ViewBranch extends ViewNode with _$ViewBranch {
     required IList<ViewBranch> children,
     @Default(false) bool isCollapsed,
     required bool isComputerVariation,
-    LocalEval? eval,
+    ClientEval? eval,
     IList<PgnComment>? lichessAnalysisComments,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,

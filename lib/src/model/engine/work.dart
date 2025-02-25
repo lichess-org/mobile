@@ -33,14 +33,14 @@ class Work with _$Work {
   int get ply => steps.lastOrNull?.position.ply ?? initialPosition.ply;
 
   /// Cached eval for the work position.
-  LocalEval? get evalCache => steps.lastOrNull?.eval;
+  ClientEval? get evalCache => steps.lastOrNull?.eval;
 }
 
 @freezed
 class Step with _$Step {
   const Step._();
 
-  const factory Step({required Position position, required SanMove sanMove, LocalEval? eval}) =
+  const factory Step({required Position position, required SanMove sanMove, ClientEval? eval}) =
       _Step;
 
   factory Step.fromNode(Branch node) {

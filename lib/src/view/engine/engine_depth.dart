@@ -100,7 +100,7 @@ class _AppBarButtonChild extends StatelessWidget {
 class _StockfishInfo extends ConsumerWidget {
   const _StockfishInfo(this.defaultEval);
 
-  final LocalEval? defaultEval;
+  final ClientEval? defaultEval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
