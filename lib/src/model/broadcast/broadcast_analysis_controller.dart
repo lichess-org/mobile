@@ -267,7 +267,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _root.updateAt(path, (node) => node.eval = cloudEval);
 
     if (state.requireValue.currentPath != path) return;
-    _stopEngineEval();
+
     _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
