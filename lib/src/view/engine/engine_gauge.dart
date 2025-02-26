@@ -14,6 +14,8 @@ enum EngineGaugeDisplayMode { vertical, horizontal }
 
 typedef EngineGaugeParams =
     ({
+      bool isLocalEngineAvailable,
+
       /// Only used for vertical display mode.
       Side orientation,
 
@@ -46,7 +48,8 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final localEval =
+        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : null;
     final eval = pickBestEval(
       localEval: localEval,
       savedEval: params.savedEval,

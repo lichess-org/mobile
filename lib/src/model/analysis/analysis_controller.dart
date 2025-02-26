@@ -806,6 +806,7 @@ class AnalysisState with _$AnalysisState {
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
   EngineGaugeParams get engineGaugeParams => (
+    isLocalEngineAvailable: isEngineAvailable,
     orientation: pov,
     position: position,
     savedEval: currentNode.eval,
