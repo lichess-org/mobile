@@ -22,8 +22,11 @@ typedef EngineGaugeParams =
       /// Position to evaluate.
       Position position,
 
-      /// Saved evaluation to display when the current evaluation is not available.
-      Eval? savedEval,
+      /// Cached evaluation to display when the current evaluation is not available.
+      ClientEval? savedEval,
+
+      /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
+      ExternalEval? serverEval,
     });
 
 class EngineGauge extends ConsumerWidget {
@@ -45,8 +48,13 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval =
-        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : params.savedEval;
+    final localEval =
+        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : null;
+    final eval = pickBestEval(
+      localEval: localEval,
+      savedEval: params.savedEval,
+      serverEval: params.serverEval,
+    );
 
     return _EvalGauge(
       displayMode: displayMode,

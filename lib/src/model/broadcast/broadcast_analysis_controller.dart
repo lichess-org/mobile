@@ -121,11 +121,14 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       clocks: _getClocks(currentPath),
     );
 
+    // We need to define the state value in the build method because `sendEvalGetEvent` and
+    // `debouncedStartEngineEval` require the state to have a value.
+    state = AsyncData(broadcastState);
+
     if (broadcastState.isLocalEvaluationEnabled) {
+      _sendEvalGetEvent();
       evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
+        _debouncedStartEngineEval();
       });
     }
 
@@ -268,7 +271,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
-  // ignore: unused_element
   void _sendEvalGetEvent() {
     final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
 
@@ -558,6 +560,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     }
 
     if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
+      _sendEvalGetEvent();
       _debouncedStartEngineEval();
     }
   }
@@ -608,7 +611,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    _refreshCurrentNode(shouldRecomputeRootView: true);
+    _refreshCurrentNode();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -695,9 +698,10 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
       isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
 
   EngineGaugeParams get engineGaugeParams => (
-    orientation: pov,
     isLocalEngineAvailable: isLocalEvaluationEnabled,
+    orientation: pov,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }

@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -112,11 +113,13 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               ),
               _ => const SizedBox.shrink(),
             };
+    final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
 
     return PlatformScaffold(
       enableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
+        EngineDepth(savedEval: asyncEval.valueOrNull),
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         AppBarIconButton(
           onPressed: () {
@@ -310,12 +313,13 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    final evalBestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
-
     final currentNode = broadcastAnalysisState.currentNode;
     final annotation = makeAnnotation(currentNode.nags);
 
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+    final localBestMoves = ref.watch(
+      engineEvaluationProvider.select((value) => value.eval?.bestMoves),
+    );
+    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
 
     final sanMove = currentNode.sanMove;
 

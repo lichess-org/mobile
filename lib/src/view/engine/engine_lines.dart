@@ -20,8 +20,8 @@ class EngineLines extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
-    final engineEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = engineEval ?? savedEval;
+    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
