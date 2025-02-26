@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -18,9 +17,8 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -469,44 +467,7 @@ class _BroadcastCardContent extends StatelessWidget {
                             : Icons.share,
                     label: context.l10n.studyShareAndExport,
                     onPressed: () {
-                      showAdaptiveActionSheet<void>(
-                        context: context,
-                        actions: [
-                          BottomSheetAction(
-                            makeLabel: (context) => Text(broadcast.title),
-                            onPressed: () async {
-                              launchShareDialog(
-                                context,
-                                uri: lichessUri(
-                                  '/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}',
-                                ),
-                              );
-                            },
-                          ),
-                          BottomSheetAction(
-                            makeLabel: (context) => Text(broadcast.round.name),
-                            onPressed: () async {
-                              launchShareDialog(
-                                context,
-                                uri: lichessUri(
-                                  '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}',
-                                ),
-                              );
-                            },
-                          ),
-                          BottomSheetAction(
-                            makeLabel: (context) => Text('${broadcast.round.name} PGN'),
-                            onPressed: () async {
-                              launchShareDialog(
-                                context,
-                                uri: lichessUri(
-                                  '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}.pgn',
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
+                      showBroadcastShareMenu(context, broadcast);
                     },
                   ),
                 ],
