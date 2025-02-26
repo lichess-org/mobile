@@ -16,6 +16,7 @@ class ListSection extends StatelessWidget {
     this.hasLeading = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
+    this.materialFilledCard = false,
     this.cupertinoAdditionalDividerMargin,
     this.backgroundColor,
     this.cupertinoBorderRadius,
@@ -32,6 +33,7 @@ class ListSection extends StatelessWidget {
        header = header ? const SizedBox.shrink() : null,
        showDividerBetweenTiles = false,
        dense = false,
+       materialFilledCard = false,
        cupertinoAdditionalDividerMargin = null,
        backgroundColor = null,
        cupertinoBorderRadius = null,
@@ -54,6 +56,9 @@ class ListSection extends StatelessWidget {
 
   /// Only on android.
   final bool showDividerBetweenTiles;
+
+  /// Whether the card should have a filled background. (Only on Android).
+  final bool materialFilledCard;
 
   /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
@@ -79,25 +84,26 @@ class ListSection extends StatelessWidget {
         return _isLoading
             ? Column(
               children: [
-                if (header != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 25,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                    ),
-                  ),
                 PlatformCard(
+                  filled: materialFilledCard,
                   clipBehavior: Clip.hardEdge,
                   margin: margin ?? Styles.bodySectionPadding,
                   color: backgroundColor,
                   child: Column(
                     children: [
                       const SizedBox(height: materialVerticalPadding),
+                      if (header != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
+                        ),
                       for (int i = 0; i < children.length; i++)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
@@ -117,6 +123,7 @@ class ListSection extends StatelessWidget {
               ],
             )
             : PlatformCard(
+              filled: materialFilledCard,
               clipBehavior: Clip.hardEdge,
               margin: margin ?? Styles.bodySectionPadding,
               color: backgroundColor,
@@ -271,7 +278,7 @@ class PlatformDivider extends StatelessWidget {
           // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
           indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
           endIndent: endIndent,
-          color: color ?? CupertinoColors.separator.resolveFrom(context),
+          color: color,
         );
   }
 }
@@ -350,6 +357,7 @@ class PlatformListTile extends StatelessWidget {
           visualDensity: visualDensity,
           onTap: onTap,
           onLongPress: onLongPress,
+          tileColor: backgroundColor,
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,

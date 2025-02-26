@@ -66,6 +66,7 @@ class PlatformCard extends StatelessWidget {
     this.color,
     this.shadowColor,
     this.clipBehavior,
+    this.filled = false,
   });
 
   final Widget child;
@@ -75,6 +76,9 @@ class PlatformCard extends StatelessWidget {
   final Color? color;
   final Color? shadowColor;
   final Clip? clipBehavior;
+
+  /// Whether the card should be filled. Only on android.
+  final bool filled;
 
   /// The empty space that surrounds the card.
   ///
@@ -88,7 +92,7 @@ class PlatformCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child: Card(
+      child: (filled ? Card.filled : Card.new)(
         shape:
             borderRadius != null
                 ? RoundedRectangleBorder(borderRadius: borderRadius!)

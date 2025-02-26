@@ -18,6 +18,7 @@ class CreateGameOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isPlayban = ref.watch(accountProvider).valueOrNull?.playban != null;
 
     return Column(
       children: [
@@ -25,7 +26,7 @@ class CreateGameOptions extends ConsumerWidget {
           children: [
             _CreateGamePlatformButton(
               onTap:
-                  isOnline
+                  isOnline && !isPlayban
                       ? () {
                         ref.invalidate(accountProvider);
                         Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
@@ -93,11 +94,14 @@ class _CreateGamePlatformButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? PlatformListTile(
-          leading: Icon(icon, size: 28),
-          trailing: const CupertinoListTileChevron(),
-          title: Text(label, style: Styles.mainListTileTitle),
-          onTap: onTap,
+        ? Opacity(
+          opacity: onTap == null ? 0.5 : 1.0,
+          child: PlatformListTile(
+            leading: Icon(icon, size: 28),
+            trailing: const CupertinoListTileChevron(),
+            title: Text(label, style: Styles.mainListTileTitle),
+            onTap: onTap,
+          ),
         )
         : FilledButton.tonalIcon(onPressed: onTap, icon: Icon(icon), label: Text(label));
   }

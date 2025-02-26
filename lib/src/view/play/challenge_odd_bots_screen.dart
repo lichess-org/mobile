@@ -125,10 +125,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
     return Center(
       child: ListView(
         shrinkWrap: true,
-        padding:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? Styles.sectionBottomPadding
-                : Styles.verticalBodyPadding,
         children: [
           Builder(
             builder: (context) {

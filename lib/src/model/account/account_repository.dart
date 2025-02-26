@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -43,34 +45,44 @@ Future<IList<UserActivity>> accountActivity(Ref ref) async {
   );
 }
 
+/// A provider that fetches the ongoing games for the current user.
 @riverpod
-Future<IList<OngoingGame>> ongoingGames(Ref ref) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return IList();
+class OngoingGames extends _$OngoingGames {
+  @override
+  Future<IList<OngoingGame>> build() {
+    final session = ref.watch(authSessionProvider);
+    if (session == null) return Future.value(IList());
 
-  return ref.withClientCacheFor(
-    (client) => AccountRepository(client).getOngoingGames(nb: 20),
-    const Duration(hours: 1),
-  );
-}
+    return ref.withClientCacheFor(
+      (client) => AccountRepository(client).getOngoingGames(nb: 50),
+      // cache is useful to reduce the number of requests to the server because this is used by
+      // both the correspondence service to sync games and the home screen to display ongoing games
+      const Duration(hours: 1),
+    );
+  }
 
-@Riverpod(keepAlive: true)
-AccountService accountService(Ref ref) {
-  return AccountService(ref);
-}
-
-class AccountService {
-  const AccountService(this._ref);
-
-  final Ref _ref;
-
-  Future<void> setGameBookmark(GameId id, {required bool bookmark}) async {
-    final session = _ref.read(authSessionProvider);
-    if (session == null) return;
-
-    await _ref.withClient((client) => AccountRepository(client).bookmark(id, bookmark: bookmark));
-
-    _ref.invalidate(accountProvider);
+  /// Update the game with the given `id` with the new `game` data.
+  void updateGame(GameFullId id, PlayableGame game) {
+    if (!state.hasValue) return;
+    final index = state.requireValue.indexWhere((e) => e.fullId == id);
+    if (index == -1) return;
+    final me = game.youAre ?? Side.white;
+    final newGame = OngoingGame(
+      id: game.id,
+      fullId: id,
+      orientation: me,
+      fen: game.lastPosition.fen,
+      perf: game.meta.perf,
+      speed: game.meta.speed,
+      variant: game.meta.variant,
+      opponent: game.opponent?.user,
+      isMyTurn: game.isMyTurn,
+      opponentRating: game.opponent?.rating,
+      opponentAiLevel: game.opponent?.aiLevel,
+      lastMove: game.lastMove,
+      secondsLeft: game.clock?.forSide(me).inSeconds,
+    );
+    state = AsyncData(state.requireValue.replace(index, newGame));
   }
 }
 
@@ -81,7 +93,10 @@ class AccountRepository {
   final Logger _log = Logger('AccountRepository');
 
   Future<User> getProfile() {
-    return client.readJson(Uri(path: '/api/account'), mapper: User.fromServerJson);
+    return client.readJson(
+      Uri(path: '/api/account', queryParameters: {'playban': '1'}),
+      mapper: User.fromServerJson,
+    );
   }
 
   Future<void> saveProfile(Map<String, String> profile) async {

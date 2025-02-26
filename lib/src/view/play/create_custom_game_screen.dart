@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -32,11 +30,11 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 enum _ViewMode { create, challenges }
 
-class CreateCustomGameScreen extends StatelessWidget {
+class CreateCustomGameScreen extends StatefulWidget {
   const CreateCustomGameScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -48,34 +46,11 @@ class CreateCustomGameScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
-  Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        automaticBackgroundVisibility: false,
-        backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-        border: null,
-      ),
-      child: const _CupertinoBody(),
-    );
-  }
-
-  Widget _buildAndroid(BuildContext context) {
-    return const _AndroidBody();
-  }
+  State<CreateCustomGameScreen> createState() => _CreateCustomGameScreenState();
 }
 
-class _AndroidBody extends StatefulWidget {
-  const _AndroidBody();
-
-  @override
-  State<_AndroidBody> createState() => _AndroidBodyState();
-}
-
-class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixin {
+class _CreateCustomGameScreenState extends State<CreateCustomGameScreen>
+    with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -100,159 +75,22 @@ class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.custom),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.createAGame),
-            Tab(text: context.l10n.mobileCustomGameJoinAGame),
-          ],
-        ),
+    return PlatformScaffold(
+      appBarTitle: Text(context.l10n.custom),
+      appBarBottom: TabBar(
+        controller: _tabController,
+        tabs: <Widget>[
+          Tab(text: context.l10n.createAGame),
+          Tab(text: context.l10n.mobileCustomGameJoinAGame),
+        ],
       ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          _TabView(sliver: _CreateGameBody(setViewMode: setViewMode)),
-          _TabView(sliver: _ChallengesBody(setViewMode: setViewMode)),
+          _CreateGameBody(setViewMode: setViewMode),
+          _ChallengesBody(setViewMode: setViewMode),
         ],
       ),
-    );
-  }
-}
-
-class _CupertinoBody extends StatefulWidget {
-  const _CupertinoBody();
-
-  @override
-  _CupertinoBodyState createState() => _CupertinoBodyState();
-}
-
-class _CupertinoBodyState extends State<_CupertinoBody> {
-  _ViewMode _selectedSegment = _ViewMode.create;
-  double headerOpacity = 0;
-
-  void setViewMode(_ViewMode mode) {
-    setState(() {
-      _selectedSegment = mode;
-      headerOpacity = 0.0;
-    });
-  }
-
-  bool handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      final ScrollMetrics metrics = notification.metrics;
-      double scrollExtent = 0.0;
-      switch (metrics.axisDirection) {
-        case AxisDirection.up:
-          scrollExtent = metrics.extentAfter;
-        case AxisDirection.down:
-          scrollExtent = metrics.extentBefore;
-        case AxisDirection.right:
-        case AxisDirection.left:
-          break;
-      }
-
-      final opacity = scrollExtent > 0.0 ? 1.0 : 0.0;
-
-      if (opacity != headerOpacity) {
-        setState(() {
-          headerOpacity = opacity;
-        });
-      }
-    }
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<_ViewMode>(
-      groupValue: _selectedSegment,
-      children: {
-        _ViewMode.create: Text(context.l10n.createAGame),
-        _ViewMode.challenges: Text(context.l10n.mobileCustomGameJoinAGame),
-      },
-      onValueChanged: (_ViewMode? view) {
-        if (view != null) {
-          setState(() {
-            _selectedSegment = view;
-          });
-        }
-      },
-    );
-    return NotificationListener<ScrollNotification>(
-      onNotification: handleScrollNotification,
-      child:
-          _selectedSegment == _ViewMode.create
-              ? _TabView(
-                cupertinoTabSwitcher: tabSwitcher,
-                cupertinoHeaderOpacity: headerOpacity,
-                sliver: _CreateGameBody(setViewMode: setViewMode),
-              )
-              : _TabView(
-                cupertinoTabSwitcher: tabSwitcher,
-                cupertinoHeaderOpacity: headerOpacity,
-                sliver: _ChallengesBody(setViewMode: setViewMode),
-              ),
-    );
-  }
-}
-
-class _TabView extends StatelessWidget {
-  const _TabView({
-    required this.sliver,
-    this.cupertinoTabSwitcher,
-    this.cupertinoHeaderOpacity = 0.0,
-  });
-
-  final Widget sliver;
-  final Widget? cupertinoTabSwitcher;
-  final double cupertinoHeaderOpacity;
-
-  @override
-  Widget build(BuildContext context) {
-    final edgeInsets =
-        MediaQuery.paddingOf(context) -
-        (cupertinoTabSwitcher != null
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.verticalBodyPadding;
-    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-    return CustomScrollView(
-      slivers: [
-        if (cupertinoTabSwitcher != null)
-          PinnedHeaderSliver(
-            child: ClipRect(
-              child: BackdropFilter(
-                enabled: backgroundColor.a != 1,
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: ShapeDecoration(
-                    color:
-                        cupertinoHeaderOpacity == 1.0
-                            ? backgroundColor
-                            : backgroundColor.withAlpha(0),
-                    shape: LinearBorder.bottom(
-                      side: BorderSide(
-                        color:
-                            cupertinoHeaderOpacity == 1.0
-                                ? const Color(0x4D000000)
-                                : Colors.transparent,
-                        width: 0.0,
-                      ),
-                    ),
-                  ),
-                  padding:
-                      Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                  child: cupertinoTabSwitcher,
-                ),
-              ),
-            ),
-          ),
-        SliverPadding(padding: edgeInsets, sliver: sliver),
-      ],
     );
   }
 }
@@ -314,7 +152,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
       data: (challenges) {
         final supportedChallenges =
             challenges.where((challenge) => challenge.variant.isPlaySupported).toList();
-        return SliverList.separated(
+        return ListView.separated(
           itemCount: supportedChallenges.length,
           separatorBuilder:
               (context, index) =>
@@ -344,7 +182,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                           context,
                           title: Text(context.l10n.accept),
                           isDestructiveAction: true,
-                          onConfirm: (_) {
+                          onConfirm: () {
                             socketClient.send('joinSeek', challenge.id.toString());
                           },
                         );
@@ -360,14 +198,9 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
         );
       },
       loading: () {
-        return const SliverFillRemaining(
-          child: Center(child: CircularProgressIndicator.adaptive()),
-        );
+        return const Center(child: CircularProgressIndicator.adaptive());
       },
-      error:
-          (error, stack) => SliverFillRemaining(
-            child: Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
-          ),
+      error: (error, stack) => Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
     );
   }
 }
@@ -536,10 +369,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
             account?.perfs[timeControl == TimeControl.realTime
                 ? preferences.perfFromCustom
                 : Perf.correspondence];
-        return SliverPadding(
-          padding: Styles.sectionBottomPadding,
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
+        return Center(
+          child: ListView(
+            padding: MediaQuery.paddingOf(context) + Styles.verticalBodyPadding,
+            shrinkWrap: true,
+            children: [
               if (account != null)
                 PlatformListTile(
                   harmonizeCupertinoTitleStyle: true,
@@ -661,16 +495,12 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   );
                 },
               ),
-            ]),
+            ],
           ),
         );
       },
-      loading:
-          () =>
-              const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
-      error:
-          (error, stackTrace) =>
-              const SliverFillRemaining(child: Center(child: Text('Could not load account data'))),
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, stackTrace) => const Center(child: Text('Could not load account data')),
     );
   }
 }

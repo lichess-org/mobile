@@ -5,7 +5,6 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
@@ -58,14 +57,6 @@ class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
 
   Side orientation = Side.white;
-
-  @override
-  void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      showConfigureGameSheet(context, isDismissible: false);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

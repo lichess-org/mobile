@@ -341,30 +341,30 @@ class _Body extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
-            // if (Theme.of(context).platform == TargetPlatform.iOS)
-            //   PlatformListTile(
-            //     leading: Icon(Icons.report_outlined, color: context.lichessColors.error),
-            //     title: Text(
-            //       'Delete your account',
-            //       style: TextStyle(color: context.lichessColors.error),
-            //     ),
-            //     trailing: const _OpenInNewIcon(),
-            //     onTap: () {
-            //       launchUrl(lichessUri('/account/delete'));
-            //     },
-            //   )
-            // else
-            PlatformListTile(
-              leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
-              title: Text(
-                context.l10n.settingsCloseAccount,
-                style: TextStyle(color: context.lichessColors.error),
+            if (Theme.of(context).platform == TargetPlatform.iOS)
+              PlatformListTile(
+                leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
+                title: Text(
+                  'Delete your account',
+                  style: TextStyle(color: context.lichessColors.error),
+                ),
+                trailing: const _OpenInNewIcon(),
+                onTap: () {
+                  launchUrl(lichessUri('/account/delete'));
+                },
+              )
+            else
+              PlatformListTile(
+                leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
+                title: Text(
+                  context.l10n.settingsCloseAccount,
+                  style: TextStyle(color: context.lichessColors.error),
+                ),
+                trailing: const _OpenInNewIcon(),
+                onTap: () {
+                  launchUrl(lichessUri('/account/close'));
+                },
               ),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(lichessUri('/account/close'));
-              },
-            ),
           ],
         ),
       Padding(
@@ -393,7 +393,7 @@ class _Body extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
-            onPressed: (context) async {
+            onPressed: () async {
               await ref.read(authControllerProvider.notifier).signOut();
             },
           ),

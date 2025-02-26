@@ -26,6 +26,12 @@ const blunderColor = Color(0xFFdf5353);
 const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);
 const kIndexOpacity = 0.6;
 
+/// Padding of the Pgn view
+const kViewVerticalPadding = 10.0;
+const kViewHorizontalPadding = 10.0;
+
+const kCommentVerticalPadding = 8.0;
+
 Color? _nagColor(BuildContext context, int nag) {
   final colorScheme = ColorScheme.of(context);
   return switch (nag) {
@@ -140,6 +146,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   /// Only applied to lichess game analysis.
   final bool shouldShowComputerVariations;
 
+  /// Display mode of the tree view.
+  ///
+  /// Either [PgnTreeDisplayMode.twoColumn] or [PgnTreeDisplayMode.inlineNotation].
   final PgnTreeDisplayMode displayMode;
 
   /// Whether to show NAG annotations like '!' and '??'.
@@ -349,7 +358,7 @@ typedef _CachedRenderedSubtree =
 class _PgnTreeViewState extends State<_PgnTreeView> {
   /// Caches the result of [_mainlineParts], it only needs to be recalculated when the root changes,
   /// but not when `params.pathToCurrentMove` changes.
-  List<List<ViewNode>> mainlineParts = [];
+  Iterable<List<ViewNode>> mainlineParts = [];
 
   /// Cache of the top-level subtrees obtained from the last `build()` method.
   ///
@@ -429,7 +438,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   void _updateLines({required bool fullRebuild}) {
     setState(() {
       if (fullRebuild) {
-        mainlineParts = _mainlineParts(widget.root, widget.params).toList(growable: false);
+        mainlineParts = _mainlineParts(widget.root, widget.params);
       }
 
       subtrees = _buildChangedSubtrees(fullRebuild: fullRebuild);
@@ -459,22 +468,27 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   @override
   Widget build(BuildContext context) {
     final rootComments = widget.rootComments?.map((c) => c.text).nonNulls ?? [];
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // trick to make auto-scroll work when returning to the root position
-          if (widget.params.pathToCurrentMove.isEmpty)
-            SizedBox.shrink(key: widget.params.currentMoveKey),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // trick to make auto-scroll work when returning to the root position
+        if (widget.params.pathToCurrentMove.isEmpty)
+          SizedBox.shrink(key: widget.params.currentMoveKey),
 
-          if (widget.params.shouldShowComments && rootComments.isNotEmpty)
-            Text.rich(TextSpan(children: _comments(rootComments, textStyle: _baseTextStyle))),
-          ...subtrees
-              .map((part) => [part.mainLinePart, if (part.sidelines != null) part.sidelines!])
-              .flattened,
-        ],
-      ),
+        if (widget.params.shouldShowComments && rootComments.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: kCommentVerticalPadding,
+              horizontal: kViewHorizontalPadding,
+            ),
+            child: Text.rich(
+              TextSpan(children: _comments(rootComments, textStyle: _baseTextStyle)),
+            ),
+          ),
+        ...subtrees
+            .map((part) => [part.mainLinePart, if (part.sidelines != null) part.sidelines!])
+            .flattened,
+      ],
     );
   }
 }
@@ -639,7 +653,13 @@ class _SideLinePart extends ConsumerWidget {
       }).flattened,
     ];
 
-    return Text.rich(TextSpan(children: moves));
+    return Padding(
+      padding:
+          params.displayMode == PgnTreeDisplayMode.twoColumn
+              ? const EdgeInsets.symmetric(vertical: kCommentVerticalPadding)
+              : EdgeInsets.zero,
+      child: Text.rich(TextSpan(children: moves)),
+    );
   }
 }
 
@@ -668,6 +688,9 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final dividerColor = theme.dividerColor;
+    final brightness = theme.brightness;
     final textStyle = _baseTextStyle.copyWith(color: _textColor(context, 0.9));
 
     final threeDots = Container(padding: kInlineMovePadding, child: const Text('...'));
@@ -694,6 +717,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
           path: path + mainlineNode.id,
           params: params,
           showIndex: false,
+          showEval: true,
         );
         path = path + mainlineNode.id;
         return move as Widget;
@@ -709,60 +733,68 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!initialPath.isEmpty) const Divider(),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...List.generate(
-                  (moves.length / 2).ceil(),
-                  (i) => Container(
-                    width: 40,
-                    padding: kInlineMovePadding,
-                    child: Text(
-                      '${initialFullmoves + i}',
-                      textAlign: TextAlign.center,
-                      style: _baseTextStyle.copyWith(
-                        color: _textColor(context, kIndexOpacity),
-                        fontFeatures: [const FontFeature.tabularFigures()],
+        Container(
+          padding: const EdgeInsets.only(top: 4, right: kViewHorizontalPadding, bottom: 4),
+          decoration: BoxDecoration(
+            color:
+                brightness == Brightness.dark ? const Color(0x0BFFFFFF) : const Color(0x05000000),
+            border: Border(
+              top: BorderSide(color: dividerColor),
+              bottom: BorderSide(color: dividerColor),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...List.generate(
+                    (moves.length / 2).ceil(),
+                    (i) => Container(
+                      width: 50,
+                      padding: kInlineMovePadding.copyWith(left: 0, right: 0),
+                      child: Text(
+                        '${initialFullmoves + i}',
+                        textAlign: TextAlign.center,
+                        style: _baseTextStyle.copyWith(
+                          color: _textColor(context, kIndexOpacity),
+                          fontFeatures: [const FontFeature.tabularFigures()],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: InlineMove.borderRadius,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...moves
-                        .slices(2)
-                        .mapIndexed(
-                          (i, moves) =>
-                              Row(children: [...moves.map((move) => Expanded(child: move))]),
-                        ),
-                  ],
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: InlineMove.borderRadius,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...moves
+                          .slices(2)
+                          .mapIndexed(
+                            (i, moves) =>
+                                Row(children: [...moves.map((move) => Expanded(child: move))]),
+                          ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        if (params.shouldShowComments && lastBranch?.hasTextComment == true) ...[
-          const Divider(),
+        if (params.shouldShowComments && lastBranch?.hasTextComment == true)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: kViewHorizontalPadding),
             child: Text.rich(
               TextSpan(children: _comments(lastBranch!.textComments, textStyle: textStyle)),
             ),
           ),
-        ],
       ],
     );
   }
@@ -796,45 +828,51 @@ class _InlineNotationMainlinePart extends ConsumerWidget {
 
     var path = initialPath;
 
-    return Text.rich(
-      TextSpan(
-        children: nodes
-            .takeWhile(
-              (node) => _filteredChildren(node, params.shouldShowComputerVariations).isNotEmpty,
-            )
-            .mapIndexed((i, node) {
-              final children = _filteredChildren(node, params.shouldShowComputerVariations);
-              final mainlineNode = children.first;
-              final moves = [
-                _moveWithComment(
-                  mainlineNode,
-                  lineInfo: (
-                    type: _LineType.mainline,
-                    startLine:
-                        i == 0 ||
-                        (params.shouldShowComments && (node as ViewBranch).hasTextComment),
-                    pathToLine: initialPath,
-                  ),
-                  pathToNode: path,
-                  textStyle: textStyle,
-                  params: params,
-                ),
-                if (children.length == 2 && _displaySideLineAsInline(children[1])) ...[
-                  _buildInlineSideLine(
-                    followsComment: mainlineNode.hasTextComment,
-                    firstNode: children[1],
-                    parent: node,
-                    initialPath: path,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: kViewVerticalPadding,
+        horizontal: kViewHorizontalPadding,
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: nodes
+              .takeWhile(
+                (node) => _filteredChildren(node, params.shouldShowComputerVariations).isNotEmpty,
+              )
+              .mapIndexed((i, node) {
+                final children = _filteredChildren(node, params.shouldShowComputerVariations);
+                final mainlineNode = children.first;
+                final moves = [
+                  _moveWithComment(
+                    mainlineNode,
+                    lineInfo: (
+                      type: _LineType.mainline,
+                      startLine:
+                          i == 0 ||
+                          (params.shouldShowComments && (node as ViewBranch).hasTextComment),
+                      pathToLine: initialPath,
+                    ),
+                    pathToNode: path,
                     textStyle: textStyle,
                     params: params,
                   ),
-                ],
-              ];
-              path = path + mainlineNode.id;
-              return moves.flattened;
-            })
-            .flattened
-            .toList(growable: false),
+                  if (children.length == 2 && _displaySideLineAsInline(children[1])) ...[
+                    _buildInlineSideLine(
+                      followsComment: mainlineNode.hasTextComment,
+                      firstNode: children[1],
+                      parent: node,
+                      initialPath: path,
+                      textStyle: textStyle,
+                      params: params,
+                    ),
+                  ],
+                ];
+                path = path + mainlineNode.id;
+                return moves.flattened;
+              })
+              .flattened
+              .toList(growable: false),
+        ),
       ),
     );
   }
@@ -1081,11 +1119,14 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
     final padding = widget.nesting < 6 ? 12.0 : 0.0;
 
     return Padding(
-      padding: EdgeInsets.only(left: padding),
+      padding: EdgeInsets.only(
+        left: padding + kViewHorizontalPadding,
+        right: widget.nesting == 1 ? kViewHorizontalPadding : 0,
+      ),
       child: CustomPaint(
         painter: _IndentPainter(
           sideLineStartPositions: _sideLineStartPositions,
-          color: _textColor(context, 0.6)!,
+          color: _textColor(context, 0.3)!,
           padding: padding,
         ),
         child: Column(
@@ -1135,6 +1176,7 @@ class InlineMove extends ConsumerWidget {
     required this.lineInfo,
     required this.params,
     this.showIndex = true,
+    this.showEval = false,
     super.key,
   });
 
@@ -1148,6 +1190,7 @@ class InlineMove extends ConsumerWidget {
   final _PgnTreeViewParams params;
 
   final bool showIndex;
+  final bool showEval;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
@@ -1172,14 +1215,12 @@ class InlineMove extends ConsumerWidget {
         .watch(pieceNotationProvider)
         .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
     final moveFontFamily = pieceNotation == PieceNotation.symbol ? 'ChessFont' : null;
-
     final moveTextStyle = textStyle.copyWith(
       fontFamily: moveFontFamily,
       fontWeight: lineInfo.type == _LineType.inlineSideline ? FontWeight.normal : FontWeight.w600,
     );
 
     final indexTextStyle = textStyle.copyWith(color: _textColor(context, kIndexOpacity));
-
     final indexText =
         showIndex
             ? branch.position.ply.isOdd
@@ -1196,8 +1237,11 @@ class InlineMove extends ConsumerWidget {
             : '');
 
     final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
-
     final ply = branch.position.ply;
+
+    final eval =
+        params.shouldShowComputerVariations && showEval ? branch.eval ?? branch.serverEval : null;
+
     return AdaptiveInkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
@@ -1224,18 +1268,32 @@ class InlineMove extends ConsumerWidget {
       child: Container(
         padding: kInlineMovePadding,
         decoration: _boxDecoration(context, isCurrentMove, isBroadcastLiveMove),
-        child: Text.rich(
-          TextSpan(
-            children: [
-              if (indexText != null) indexText,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text.rich(
               TextSpan(
-                text: moveWithNag,
+                children: [
+                  if (indexText != null) indexText,
+                  TextSpan(
+                    text: moveWithNag,
+                    style: moveTextStyle.copyWith(
+                      color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (eval != null)
+              Text(
+                eval.evalString,
                 style: moveTextStyle.copyWith(
-                  color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                  fontSize: moveTextStyle.fontSize != null ? moveTextStyle.fontSize! - 3.0 : null,
+                  color: _textColor(context, 0.4),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -1302,7 +1360,10 @@ class _MoveContextMenu extends ConsumerWidget {
         ),
         if (branch.hasTextComment)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: kCommentVerticalPadding,
+            ),
             child: Text(branch.textComments.join(' ')),
           ),
         const PlatformDivider(indent: 0),

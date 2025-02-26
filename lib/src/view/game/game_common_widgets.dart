@@ -2,16 +2,56 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
-/// A [MenuItemButton] that toggles the bookmark status of a game.
+/// Opens a game screen for the given [LightArchivedGame].
+///
+/// Will open [GameScreen] if the game Id is a [GameFullId], otherwise [ArchivedGameScreen].
+///
+/// If the game is not read supported, a snackbar is shown.
+void openGameScreen(
+  BuildContext context, {
+  required LightArchivedGame game,
+  required Side orientation,
+  String? loadingFen,
+  Move? loadingLastMove,
+  DateTime? lastMoveAt,
+  (UserId?, GameFilterState)? gameListContext,
+}) {
+  if (game.variant.isReadSupported) {
+    Navigator.of(context, rootNavigator: true).push(
+      game.fullId != null
+          ? GameScreen.buildRoute(
+            context,
+            initialGameId: game.fullId,
+            loadingOrientation: orientation,
+            loadingFen: loadingFen,
+            loadingLastMove: loadingLastMove,
+            lastMoveAt: lastMoveAt,
+            gameListContext: gameListContext,
+          )
+          : ArchivedGameScreen.buildRoute(
+            context,
+            gameData: game,
+            orientation: orientation,
+            gameListContext: gameListContext,
+          ),
+    );
+  } else {
+    showPlatformSnackbar(context, 'This variant is not supported yet.', type: SnackBarType.info);
+  }
+}
+
 class GameBookmarkMenuItemButton extends ConsumerStatefulWidget {
   const GameBookmarkMenuItemButton({
     required this.id,
@@ -88,97 +128,65 @@ class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuIte
 List<Widget> makeFinishedGameShareMenuItemButtons(
   BuildContext context,
   WidgetRef ref, {
-  required BaseGame game,
-  required Position currentGamePosition,
+  required GameId gameId,
   required Side orientation,
-  Move? lastMove,
 }) {
-  return game.finished
-      ? [
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.link_outlined),
-          onPressed: () {
-            launchShareDialog(context, uri: lichessUri('/${game.id}'));
-          },
-          child: Text(context.l10n.mobileShareGameURL),
-        ),
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.gif_outlined),
-          onPressed: () async {
-            try {
-              final gif = await ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
-              if (context.mounted) {
-                launchShareDialog(
-                  context,
-                  files: [gif],
-                  subject:
-                      '${game.meta.perf.title} • ${context.l10n.resVsX(game.white.fullName(context), game.black.fullName(context))}',
-                );
-              }
-            } catch (e) {
-              debugPrint(e.toString());
-              if (context.mounted) {
-                showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
-              }
-            }
-          },
-          child: Text(context.l10n.gameAsGIF),
-        ),
-        if (lastMove != null)
-          MenuItemButton(
-            leadingIcon: const Icon(Icons.image_outlined),
-            onPressed: () async {
-              try {
-                final image = await ref
-                    .read(gameShareServiceProvider)
-                    .screenshotPosition(orientation, currentGamePosition.fen, lastMove);
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    files: [image],
-                    subject: context.l10n.puzzleFromGameLink(lichessUri('/${game.id}').toString()),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
-                }
-              }
-            },
-            child: Text(context.l10n.screenshotCurrentPosition),
-          ),
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.text_snippet_outlined),
-          onPressed: () async {
-            try {
-              final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
-              if (context.mounted) {
-                launchShareDialog(context, text: pgn);
-              }
-            } catch (e) {
-              if (context.mounted) {
-                showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
-              }
-            }
-          },
-          child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-        ),
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.description_outlined),
-          onPressed: () async {
-            try {
-              final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
-              if (context.mounted) {
-                launchShareDialog(context, text: pgn);
-              }
-            } catch (e) {
-              if (context.mounted) {
-                showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
-              }
-            }
-          },
-          child: Text('PGN: ${context.l10n.downloadRaw}'),
-        ),
-      ]
-      : [];
+  return [
+    MenuItemButton(
+      leadingIcon: const PlatformShareIcon(),
+      onPressed: () {
+        launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));
+      },
+      child: Text(context.l10n.mobileShareGameURL),
+    ),
+    MenuItemButton(
+      leadingIcon: const Icon(Icons.gif_outlined),
+      onPressed: () async {
+        try {
+          final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
+          if (context.mounted) {
+            launchShareDialog(context, files: [gif], subject: game.shareTitle(context.l10n));
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+          if (context.mounted) {
+            showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+          }
+        }
+      },
+      child: Text(context.l10n.gameAsGIF),
+    ),
+    MenuItemButton(
+      leadingIcon: const Icon(Icons.text_snippet_outlined),
+      onPressed: () async {
+        try {
+          final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
+          if (context.mounted) {
+            launchShareDialog(context, text: pgn);
+          }
+        } catch (e) {
+          if (context.mounted) {
+            showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+          }
+        }
+      },
+      child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+    ),
+    MenuItemButton(
+      leadingIcon: const Icon(Icons.description_outlined),
+      onPressed: () async {
+        try {
+          final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
+          if (context.mounted) {
+            launchShareDialog(context, text: pgn);
+          }
+        } catch (e) {
+          if (context.mounted) {
+            showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+          }
+        }
+      },
+      child: Text('PGN: ${context.l10n.downloadRaw}'),
+    ),
+  ];
 }

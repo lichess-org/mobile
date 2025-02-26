@@ -239,7 +239,7 @@ class GameResult extends StatelessWidget {
                 : game.winner == Side.white
                 ? '1-0'
                 : '0-1',
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         const SizedBox(height: 6.0),

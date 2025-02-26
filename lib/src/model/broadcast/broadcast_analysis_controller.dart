@@ -96,7 +96,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    _root = Root.fromPgnGame(game);
+    _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
@@ -115,6 +115,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
+      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       clocks: _getClocks(currentPath),
     );
@@ -146,7 +147,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       final pgnHeaders = IMap(game.headers);
       final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-      final newRoot = Root.fromPgnGame(game);
+      final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
@@ -370,6 +371,25 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  /// Toggles the computer analysis on/off.
+  ///
+  /// Acts both on local evaluation and server analysis.
+  Future<void> toggleComputerAnalysis() async {
+    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+
+    final curState = state.requireValue;
+    final engineWasAvailable = curState.isLocalEvaluationEnabled;
+
+    state = AsyncData(
+      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
+    );
+
+    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
+    if (!computerAllowed && engineWasAvailable) {
+      toggleLocalEvaluation();
+    }
+  }
+
   Future<void> toggleLocalEvaluation() async {
     if (!state.hasValue) return;
 
@@ -520,15 +540,19 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == state.requireValue.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -544,8 +568,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -589,6 +612,11 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
     /// The side to display the board from.
     required Side pov,
 
+    /// Whether the user has enabled computer analysis.
+    ///
+    /// This is a user preference and acts both on local and server analysis.
+    required bool isComputerAnalysisEnabled,
+
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
@@ -621,6 +649,10 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
 
   /// The path to the current broadcast live move
   UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
+
+  /// Whether an evaluation can be available
+  bool get hasAvailableEval =>
+      isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
 
   EngineGaugeParams get engineGaugeParams => (
     orientation: pov,

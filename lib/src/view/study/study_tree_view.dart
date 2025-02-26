@@ -17,49 +17,39 @@ class StudyTreeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final studyState = ref.watch(studyControllerProvider(id)).requireValue;
     final root =
-        ref.watch(studyControllerProvider(id).select((value) => value.requireValue.root)) ??
+        studyState.root ??
         // If root is null, the study chapter's position is illegal.
         // We still want to display the root comments though, so create a dummy root.
         const ViewRoot(position: Chess.initial, children: IList.empty());
 
-    final currentPath = ref.watch(
-      studyControllerProvider(id).select((value) => value.requireValue.currentPath),
-    );
-
-    final pgnRootComments = ref.watch(
-      studyControllerProvider(id).select((value) => value.requireValue.pgnRootComments),
-    );
-
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return ColoredBox(
-      color: ColorScheme.of(context).surfaceContainer,
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: DebouncedPgnTreeView(
-                    root: root,
-                    currentPath: currentPath,
-                    pgnRootComments: pgnRootComments,
-                    notifier: ref.read(studyControllerProvider(id).notifier),
-                    shouldShowAnnotations: analysisPrefs.showAnnotations,
-                    displayMode:
-                        analysisPrefs.inlineNotation
-                            ? PgnTreeDisplayMode.inlineNotation
-                            : PgnTreeDisplayMode.twoColumn,
-                  ),
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: DebouncedPgnTreeView(
+                  root: root,
+                  currentPath: studyState.currentPath,
+                  pgnRootComments: studyState.pgnRootComments,
+                  notifier: ref.read(studyControllerProvider(id).notifier),
+                  shouldShowAnnotations: analysisPrefs.showAnnotations,
+                  displayMode:
+                      analysisPrefs.inlineNotation
+                          ? PgnTreeDisplayMode.inlineNotation
+                          : PgnTreeDisplayMode.twoColumn,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

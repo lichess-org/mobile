@@ -35,6 +35,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -112,6 +113,7 @@ class ChallengeLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -296,6 +298,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

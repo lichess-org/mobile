@@ -25,6 +25,7 @@ enum PrefCategory {
   game('preferences.game'),
   coordinateTraining('preferences.coordinateTraining'),
   openingExplorer('preferences.opening_explorer'),
+  gameHistory('preferences.gameHistory'),
   puzzle('preferences.puzzle'),
   broadcast('preferences.broadcast');
 

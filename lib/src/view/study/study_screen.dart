@@ -63,6 +63,7 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -74,6 +75,8 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              smallBoard: analysisPrefs.smallBoard,
+              pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
                     size: boardSize,
@@ -109,6 +112,8 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
+              smallBoard: analysisPrefs.smallBoard,
+              pov: Side.white,
               boardBuilder:
                   (context, boardSize, borderRadius) => Chessboard.fixed(
                     size: boardSize,
@@ -248,13 +253,13 @@ class _StudyMenu extends ConsumerWidget {
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
                   },
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: (context) async {
+                  onPressed: () async {
                     launchShareDialog(
                       context,
                       uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
@@ -264,7 +269,7 @@ class _StudyMenu extends ConsumerWidget {
                 if (!state.gamebookActive) ...[
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: (context) async {
+                    onPressed: () async {
                       try {
                         final pgn = await ref
                             .read(studyRepositoryProvider)
@@ -285,14 +290,14 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: (context) async {
+                    onPressed: () async {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),
                   if (state.position != null)
                     BottomSheetAction(
                       makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-                      onPressed: (_) async {
+                      onPressed: () async {
                         try {
                           final image = await ref
                               .read(gameShareServiceProvider)
@@ -319,7 +324,7 @@ class _StudyMenu extends ConsumerWidget {
                     ),
                   BottomSheetAction(
                     makeLabel: (context) => const Text('GIF'),
-                    onPressed: (_) async {
+                    onPressed: () async {
                       try {
                         final gif = await ref
                             .read(gameShareServiceProvider)
@@ -365,11 +370,15 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final variant = studyState.variant;
     if (!variant.isReadSupported) {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
+          smallBoard: analysisPrefs.smallBoard,
+
+          pov: Side.white,
           boardBuilder:
               (context, boardSize, borderRadius) => SizedBox.square(
                 dimension: boardSize,
@@ -380,7 +389,6 @@ class _Body extends ConsumerWidget {
       );
     }
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
     final numEvalLines = analysisPrefs.numEvalLines;
 
@@ -389,11 +397,14 @@ class _Body extends ConsumerWidget {
     final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
     final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
     final currentNode = studyState.currentNode;
+    final pov = studyState.pov;
 
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
+      smallBoard: analysisPrefs.smallBoard,
       tabController: tabController,
+      pov: pov,
       boardBuilder:
           (context, boardSize, borderRadius) =>
               _StudyBoard(id: id, boardSize: boardSize, borderRadius: borderRadius),

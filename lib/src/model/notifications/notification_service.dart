@@ -9,9 +9,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -37,13 +35,20 @@ NotificationService notificationService(Ref ref) {
   return service;
 }
 
+/// Received FCM message and whether it was from the background.
+typedef ReceivedFcmMessage = ({FcmMessage message, bool fromBackground});
+
+/// A [NotificationResponse] and the associated [LocalNotification].
+typedef ParsedLocalNotification = (NotificationResponse response, LocalNotification notification);
+
 /// A service that manages notifications.
 ///
 /// This service is responsible for handling incoming messages from the Firebase
 /// Cloud Messaging service and showing notifications.
 ///
-/// It also listens for notification interaction responses and dispatches them to the
-/// appropriate services.
+/// It broadcasts the parsed incoming FCM messages to the [fcmMessageStream].
+///
+/// It also listens for notification interaction responses and dispatches them to the [responseStream].
 class NotificationService {
   NotificationService(this._ref);
 
@@ -56,8 +61,22 @@ class NotificationService {
   ProviderSubscription<AsyncValue<ConnectivityStatus>>? _connectivitySubscription;
 
   /// The stream controller for notification responses.
-  static final StreamController<NotificationResponse> _responseStreamController =
+  static final StreamController<ParsedLocalNotification> _responseStreamController =
       StreamController.broadcast();
+
+  /// The stream of notification responses.
+  ///
+  /// A notification response is dispatched when a notification has been interacted with.
+  static Stream<ParsedLocalNotification> get responseStream => _responseStreamController.stream;
+
+  /// The stream controller for FCM messages.
+  static final StreamController<ReceivedFcmMessage> _fcmMessageStreamController =
+      StreamController.broadcast();
+
+  /// The stream of FCM messages.
+  ///
+  /// A FCM message is dispatched when a message is received from the Firebase Cloud Messaging service.
+  static Stream<ReceivedFcmMessage> get fcmMessageStream => _fcmMessageStreamController.stream;
 
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
@@ -131,11 +150,6 @@ class NotificationService {
 
     // Handle any other interaction that caused the app to open when in background.
     LichessBinding.instance.firebaseMessagingOnMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
-
-    // start listening for notification responses
-    _responseStreamSubscription = _responseStreamController.stream.listen(
-      _dispatchNotificationResponse,
-    );
   }
 
   /// Shows a notification.
@@ -169,28 +183,21 @@ class NotificationService {
     _responseStreamSubscription?.cancel();
   }
 
-  /// Dispatch a notification response to the appropriate service according to the notification type.
-  void _dispatchNotificationResponse(NotificationResponse response) {
-    final rawPayload = response.payload;
-
-    if (rawPayload == null) return;
-
-    final json = jsonDecode(rawPayload) as Map<String, dynamic>;
-    final notification = LocalNotification.fromJson(json);
-
-    switch (notification) {
-      case CorresGameUpdateNotification(fullId: final gameFullId):
-        _ref.read(correspondenceServiceProvider).onNotificationResponse(gameFullId);
-      case ChallengeNotification(challenge: final challenge):
-        _ref.read(challengeServiceProvider).onNotificationResponse(response.actionId, challenge);
-    }
-  }
-
   /// Function called by the notification plugin when a notification has been tapped on.
   static void onDidReceiveNotificationResponse(NotificationResponse response) {
     _logger.fine('received local notification ${response.id} response in foreground.');
 
-    _responseStreamController.add(response);
+    final rawPayload = response.payload;
+
+    if (rawPayload == null) {
+      _logger.warning('Received a notification response with no payload.');
+      return;
+    }
+
+    final json = jsonDecode(rawPayload) as Map<String, dynamic>;
+    final notification = LocalNotification.fromJson(json);
+
+    _responseStreamController.add((response, notification));
   }
 
   /// Handle an FCM message that caused the application to open
@@ -198,8 +205,16 @@ class NotificationService {
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
     switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(fullId: final fullId):
-        _ref.read(correspondenceServiceProvider).onNotificationResponse(fullId);
+      case final CorresGameUpdateFcmMessage corresMessage:
+        final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
 
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
@@ -235,18 +250,10 @@ class NotificationService {
 
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
-    switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(
-        fullId: final fullId,
-        game: final game,
-        notification: final notification,
-      ):
-        if (game != null) {
-          await _ref
-              .read(correspondenceServiceProvider)
-              .onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
-        }
+    _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
 
+    switch (parsedMessage) {
+      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
         if (fromBackground == false && notification != null) {
           await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
         }

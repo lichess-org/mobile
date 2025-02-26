@@ -37,6 +37,25 @@ class AnalysisSettingsScreen extends ConsumerWidget {
           appBarTitle: Text(context.l10n.settingsSettings),
           body: ListView(
             children: [
+              ListSection(
+                children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.inlineNotation),
+                    value: prefs.inlineNotation,
+                    onChanged:
+                        (value) =>
+                            ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
+                  SwitchSettingTile(
+                    // TODO: translate
+                    title: const Text('Small board'),
+                    value: prefs.smallBoard,
+                    onChanged:
+                        (value) =>
+                            ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                  ),
+                ],
+              ),
               if (value.isComputerAnalysisAllowed)
                 ListSection(
                   header: SettingsSectionTitle(context.l10n.computerAnalysis),
@@ -109,9 +128,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                         : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
                 secondChild: StockfishSettingsWidget(
-                  onToggleLocalEvaluation: () {
-                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                  },
                   onSetEngineSearchTime: (value) {
                     ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
                   },
@@ -125,13 +141,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
               ),
               ListSection(
                 children: [
-                  SwitchSettingTile(
-                    title: Text(context.l10n.inlineNotation),
-                    value: prefs.inlineNotation,
-                    onChanged:
-                        (value) =>
-                            ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
-                  ),
                   PlatformListTile(
                     title: Text(context.l10n.openingExplorer),
                     onTap:

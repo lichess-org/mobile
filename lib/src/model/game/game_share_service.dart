@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' show Response;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -66,25 +69,31 @@ class GameShareService {
   }
 
   /// Fetches the GIF animation of a game.
-  Future<XFile> gameGif(GameId id, Side orientation) async {
+  Future<(XFile, ArchivedGame)> gameGif(GameId id, Side orientation) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
     final boardTheme =
         boardPreferences.boardTheme == BoardTheme.system
             ? BoardTheme.brown
             : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
-    final resp = await _ref
-        .read(defaultClientProvider)
-        .get(
-          Uri.parse(
-            '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
+    final resp = await Future.wait([
+      _ref
+          .read(defaultClientProvider)
+          .get(
+            Uri.parse(
+              '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
+            ),
           ),
-        )
-        .timeout(const Duration(seconds: 1));
-    if (resp.statusCode != 200) {
+      _ref.withClient((client) => GameRepository(client).getGame(id)),
+    ]).timeout(const Duration(seconds: 1));
+
+    final gifResp = resp[0] as Response;
+    final game = resp[1] as ArchivedGame;
+
+    if (gifResp.statusCode != 200) {
       throw Exception('Failed to get GIF');
     }
-    return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
+    return (XFile.fromData(gifResp.bodyBytes, mimeType: 'image/gif'), game);
   }
 
   /// Fetches the GIF animation of a study chapter.

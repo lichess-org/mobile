@@ -2,16 +2,20 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -19,6 +23,16 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+
+// TODO l10n
+String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
+  switch (mode) {
+    case GameHistoryDisplayMode.compact:
+      return 'Compact';
+    case GameHistoryDisplayMode.detail:
+      return 'Detailed';
+  }
+}
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -83,10 +97,53 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
+    final displayModeButton = MenuAnchor(
+      crossAxisUnconstrained: false,
+      style: MenuStyle(
+        maximumSize: WidgetStatePropertyAll(
+          Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
+        ),
+      ),
+      builder:
+          (context, controller, _) => AppBarIconButton(
+            icon: const Icon(Icons.more_horiz),
+            semanticsLabel: context.l10n.menu,
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+          ),
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.ballot_outlined),
+          semanticsLabel: 'Detailed view',
+          child: const Text('Detailed view'),
+          onPressed: () {
+            ref
+                .read(gameHistoryPreferencesProvider.notifier)
+                .setDisplayMode(GameHistoryDisplayMode.detail);
+          },
+        ),
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.list_outlined),
+          semanticsLabel: 'Compact view',
+          child: const Text('Compact view'),
+          onPressed: () {
+            ref
+                .read(gameHistoryPreferencesProvider.notifier)
+                .setDisplayMode(GameHistoryDisplayMode.compact);
+          },
+        ),
+      ],
+    );
+
     return PlatformScaffold(
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: title,
-      appBarActions: [filterBtn],
+      appBarActions: [filterBtn, displayModeButton],
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -165,6 +222,10 @@ class _BodyState extends ConsumerState<_Body> {
       data: (state) {
         final list = state.gameList;
 
+        final displayMode = ref.watch(
+          gameHistoryPreferencesProvider.select((value) => value.displayMode),
+        );
+
         return list.isEmpty
             ? const Padding(
               padding: EdgeInsets.symmetric(vertical: 32.0),
@@ -175,7 +236,11 @@ class _BodyState extends ConsumerState<_Body> {
               separatorBuilder:
                   (context, index) =>
                       Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                          ? PlatformDivider(
+                            height: 1,
+                            cupertinoHasLeading: true,
+                            indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
+                          )
                           : const SizedBox.shrink(),
               itemCount: list.length + (state.isLoading ? 1 : 0),
               itemBuilder: (context, index) {
@@ -193,6 +258,7 @@ class _BodyState extends ConsumerState<_Body> {
                 }
 
                 final game = list[index].game;
+                final pov = list[index].pov;
 
                 Future<void> onPressedBookmark(BuildContext context) async {
                   try {
@@ -211,36 +277,76 @@ class _BodyState extends ConsumerState<_Body> {
                   }
                 }
 
-                final gameTile = GameListTile(
-                  item: list[index],
-                  // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                  padding:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-                          : null,
-                  onPressedBookmark: onPressedBookmark,
-                  gameListContext: (widget.user?.id, gameFilterState),
-                );
+                final item = list[index];
+                final gameTile = switch (displayMode) {
+                  GameHistoryDisplayMode.compact => GameListTile(
+                    item: item,
+                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                    padding:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                            : null,
+                    onPressedBookmark: onPressedBookmark,
+                    gameListContext: (widget.user?.id, gameFilterState),
+                  ),
+                  GameHistoryDisplayMode.detail => GameListDetailTile(
+                    item: item,
+                    onPressedBookmark: onPressedBookmark,
+                    gameListContext: (widget.user?.id, gameFilterState),
+                  ),
+                };
 
-                return isLoggedIn
-                    ? Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                            onPressed: onPressedBookmark,
-                            icon:
-                                game.isBookmarked
-                                    ? Icons.bookmark_remove_outlined
-                                    : Icons.bookmark_add_outlined,
-                            label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
-                          ),
-                        ],
+                return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                        foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                        onPressed:
+                            game.variant.isReadSupported
+                                ? (_) {
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    AnalysisScreen.buildRoute(
+                                      context,
+                                      AnalysisOptions(orientation: pov, gameId: game.id),
+                                    ),
+                                  );
+                                }
+                                : (_) {
+                                  showPlatformSnackbar(
+                                    context,
+                                    'This variant is not supported yet.',
+                                    type: SnackBarType.info,
+                                  );
+                                },
+                        icon: Icons.biotech,
+                        label: context.l10n.gameAnalysis,
                       ),
-                      child: gameTile,
-                    )
-                    : gameTile;
+                    ],
+                  ),
+                  endActionPane:
+                      isLoggedIn
+                          ? ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                backgroundColor:
+                                    game.isBookmarked
+                                        ? context.lichessColors.error
+                                        : context.lichessColors.brag,
+                                onPressed: onPressedBookmark,
+                                icon:
+                                    game.isBookmarked
+                                        ? Icons.bookmark_remove_outlined
+                                        : Icons.bookmark_add_outlined,
+                                label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
+                              ),
+                            ],
+                          )
+                          : null,
+                  child: gameTile,
+                );
               },
             );
       },

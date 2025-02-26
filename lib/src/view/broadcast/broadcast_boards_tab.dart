@@ -39,48 +39,39 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets =
-        MediaQuery.paddingOf(context) -
-        (Theme.of(context).platform == TargetPlatform.iOS
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.bodyPadding;
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
-    return SliverPadding(
-      padding: edgeInsets,
-      sliver: switch (round) {
-        AsyncData(:final value) =>
-          value.games.isEmpty
-              ? SliverPadding(
-                padding: const EdgeInsets.only(top: 16.0),
-                sliver: SliverToBoxAdapter(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.info, size: 30),
-                      Text(context.l10n.broadcastNoBoardsYet),
-                    ],
-                  ),
-                ),
-              )
-              : BroadcastPreview(
-                games:
-                    showOnlyOngoingGames
-                        ? value.games.values.where((game) => game.isOngoing).toIList()
-                        : value.games.values.toIList(),
-                tournamentId: tournamentId,
-                roundId: roundId,
-                title: value.round.name,
-                tournamentSlug: tournamentSlug,
-                roundSlug: value.round.slug,
+    return switch (round) {
+      AsyncData(:final value) =>
+        value.games.isEmpty
+            ? Padding(
+              padding: Styles.bodyPadding,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(Icons.info, size: 30),
+                  const SizedBox(height: 8.0),
+                  Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                ],
               ),
-        AsyncError(:final error) => SliverFillRemaining(
-          child: Center(child: Text('Could not load broadcast: $error')),
-        ),
-        _ => const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
-      },
-    );
+            )
+            : BroadcastPreview(
+              games:
+                  showOnlyOngoingGames
+                      ? value.games.values.where((game) => game.isOngoing).toIList()
+                      : value.games.values.toIList(),
+              tournamentId: tournamentId,
+              roundId: roundId,
+              title: value.round.name,
+              tournamentSlug: tournamentSlug,
+              roundSlug: value.round.slug,
+            ),
+      AsyncError(:final error) => Center(
+        child: Center(child: Text('Could not load broadcast: $error')),
+      ),
+      _ => const Center(child: CircularProgressIndicator.adaptive()),
+    };
   }
 }
 
@@ -130,7 +121,8 @@ class BroadcastPreview extends ConsumerWidget {
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
 
-    return SliverGrid(
+    return GridView.builder(
+      padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
@@ -138,41 +130,39 @@ class BroadcastPreview extends ConsumerWidget {
         mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
         childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
       ),
-      delegate: SliverChildBuilderDelegate(
-        childCount: games == null ? numberLoadingBoards : games!.length,
-        (context, index) {
-          final boardSize =
-              boardWithMaybeEvalBarWidth -
-              (showEvaluationBar
-                  ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
-                  : 0);
+      itemCount: games == null ? numberLoadingBoards : games!.length,
+      itemBuilder: (context, index) {
+        final boardSize =
+            boardWithMaybeEvalBarWidth -
+            (showEvaluationBar
+                ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                : 0);
 
-          if (games == null) {
-            return BoardThumbnail.loading(
-              size: boardSize,
-              header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-              footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-            );
-          }
-
-          final game = games![index];
-          final playingSide = Setup.parseFen(game.fen).turn;
-
-          return ObservedBoardThumbnail(
-            boardKey: Key('Board-$index'),
-            roundId: roundId,
-            game: game,
-            title: title,
-            tournamentId: tournamentId,
-            tournamentSlug: tournamentSlug,
-            roundSlug: roundSlug,
-            showEvaluationBar: showEvaluationBar,
-            boardSize: boardSize,
-            boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-            playingSide: playingSide,
+        if (games == null) {
+          return BoardThumbnail.loading(
+            size: boardSize,
+            header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+            footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
           );
-        },
-      ),
+        }
+
+        final game = games![index];
+        final playingSide = Setup.parseFen(game.fen).turn;
+
+        return ObservedBoardThumbnail(
+          boardKey: ValueKey(game.id),
+          roundId: roundId,
+          game: game,
+          title: title,
+          tournamentId: tournamentId,
+          tournamentSlug: tournamentSlug,
+          roundSlug: roundSlug,
+          showEvaluationBar: showEvaluationBar,
+          boardSize: boardSize,
+          boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+          playingSide: playingSide,
+        );
+      },
     );
   }
 }

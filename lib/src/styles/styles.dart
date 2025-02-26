@@ -60,12 +60,14 @@ abstract class Styles {
 
   /// Retrieve the background color for the screens where we display a list of items.
   static Color listingsScreenBackgroundColor(BuildContext context) =>
-      ColorScheme.of(context).surfaceContainerLowest;
+      Theme.of(context).brightness == Brightness.light
+          ? ColorScheme.of(context).surfaceContainerLowest
+          : ColorScheme.of(context).surface;
 
   static Color cupertinoListTileBackgroundActivated(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     return brightness == Brightness.light
-        ? ColorScheme.of(context).surfaceContainer
+        ? ColorScheme.of(context).surfaceContainerLow
         : ColorScheme.of(context).surfaceContainerHighest;
   }
 

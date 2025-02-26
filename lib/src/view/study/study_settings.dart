@@ -42,16 +42,6 @@ class StudySettingsScreen extends ConsumerWidget {
       appBarTitle: Text(context.l10n.settingsSettings),
       body: ListView(
         children: [
-          if (isComputerAnalysisAllowed)
-            StockfishSettingsWidget(
-              onToggleLocalEvaluation:
-                  () => ref.read(studyController.notifier).toggleLocalEvaluation(),
-              onSetEngineSearchTime:
-                  (value) => ref.read(studyController.notifier).setEngineSearchTime(value),
-              onSetNumEvalLines:
-                  (value) => ref.read(studyController.notifier).setNumEvalLines(value),
-              onSetEngineCores: (value) => ref.read(studyController.notifier).setEngineCores(value),
-            ),
           ListSection(
             children: [
               SwitchSettingTile(
@@ -60,6 +50,13 @@ class StudySettingsScreen extends ConsumerWidget {
                 onChanged:
                     (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Small board'),
+                value: analysisPrefs.smallBoard,
+                onChanged:
+                    (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
@@ -76,6 +73,16 @@ class StudySettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+          if (isComputerAnalysisAllowed)
+            StockfishSettingsWidget(
+              onToggleLocalEvaluation:
+                  () => ref.read(studyController.notifier).toggleLocalEvaluation(),
+              onSetEngineSearchTime:
+                  (value) => ref.read(studyController.notifier).setEngineSearchTime(value),
+              onSetNumEvalLines:
+                  (value) => ref.read(studyController.notifier).setNumEvalLines(value),
+              onSetEngineCores: (value) => ref.read(studyController.notifier).setEngineCores(value),
+            ),
           ListSection(
             children: [
               PlatformListTile(

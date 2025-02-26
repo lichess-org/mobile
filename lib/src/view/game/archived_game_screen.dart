@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -201,7 +201,7 @@ class _BodyState extends ConsumerState<_Body> {
               : const SizedBox.shrink(),
       appBarActions: [
         if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
-        if (widget.gameData != null && isLoggedIn)
+        if (widget.gameData != null)
           MenuAnchor(
             crossAxisUnconstrained: false,
             style: MenuStyle(
@@ -226,27 +226,24 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
             menuChildren: [
               const ToggleSoundMenuItemButton(),
-              GameBookmarkMenuItemButton(
-                id: widget.gameData!.id,
-                bookmarked: _bookmarked,
-                onToggleBookmark: _toggleBookmark,
-                gameListContext: widget.gameListContext,
-              ),
+              if (isLoggedIn)
+                GameBookmarkMenuItemButton(
+                  id: widget.gameData!.id,
+                  bookmarked: _bookmarked,
+                  onToggleBookmark: _toggleBookmark,
+                  gameListContext: widget.gameListContext,
+                ),
               ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
                 AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
                   context,
                   ref,
-                  game: value.$1,
+                  gameId: widget.gameData!.id,
                   orientation: value.$1.youAre ?? Side.white,
-                  currentGamePosition: value.$1.positionAt(value.$2),
-                  lastMove: value.$1.moveAt(value.$2),
                 ),
                 _ => [],
               }),
             ],
-          )
-        else
-          const ToggleSoundButton(),
+          ),
       ],
       body: SafeArea(
         bottom: false,
@@ -405,7 +402,7 @@ class _BottomBar extends ConsumerWidget {
         actions: [
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.flipBoard),
-            onPressed: (context) {
+            onPressed: () {
               ref.read(isBoardTurnedProvider.notifier).toggle();
             },
           ),

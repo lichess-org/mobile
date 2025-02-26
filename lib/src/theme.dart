@@ -30,17 +30,60 @@ const kSliderTheme = SliderThemeData(
 ) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-  if (generalPrefs.backgroundTheme == null && generalPrefs.backgroundImage == null) {
+  if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
     return _makeDefaultTheme(context, generalPrefs, boardPrefs, isIOS);
   } else {
     return _makeBackgroundImageTheme(
       context,
-      baseTheme: generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundTheme!.baseTheme,
-      seedColor: generalPrefs.backgroundImage?.seedColor ?? generalPrefs.backgroundTheme!.color,
+      baseTheme:
+          generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
+      seedColor:
+          generalPrefs.backgroundImage?.seedColor ??
+          (generalPrefs.backgroundColor!.$2
+              ? generalPrefs.backgroundColor!.$1.darker
+              : generalPrefs.backgroundColor!.$1.color),
       isIOS: isIOS,
+      isBackgroundImage: generalPrefs.backgroundImage != null,
     );
   }
 }
+
+/// A custom theme extension that adds lichess custom properties to the theme.
+@immutable
+class CustomTheme extends ThemeExtension<CustomTheme> {
+  const CustomTheme({required this.rowEven, required this.rowOdd});
+
+  final Color rowEven;
+  final Color rowOdd;
+
+  @override
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
+    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  }
+
+  @override
+  CustomTheme lerp(ThemeExtension<CustomTheme>? other, double t) {
+    if (other is! CustomTheme) {
+      return this;
+    }
+    return CustomTheme(
+      rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
+      rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+    );
+  }
+}
+
+/// A [BuildContext] extension that provides the [lichessTheme] property.
+extension CustomThemeBuildContext on BuildContext {
+  CustomTheme get _defaultLichessTheme => CustomTheme(
+    rowEven: ColorScheme.of(this).surfaceContainer,
+    rowOdd: ColorScheme.of(this).surfaceContainerHigh,
+  );
+
+  CustomTheme get lichessTheme => Theme.of(this).extension<CustomTheme>() ?? _defaultLichessTheme;
+}
+
+// --
 
 ({ThemeData light, ThemeData dark}) _makeDefaultTheme(
   BuildContext context,
@@ -51,13 +94,9 @@ const kSliderTheme = SliderThemeData(
   final boardTheme = boardPrefs.boardTheme;
   final systemScheme = getDynamicColorSchemes();
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
-  final defaultLight = ColorScheme.fromSeed(
-    seedColor: boardTheme.colors.darkSquare,
-    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
-  );
+  final defaultLight = ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare);
   final defaultDark = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
-    dynamicSchemeVariant: isIOS ? DynamicSchemeVariant.fidelity : DynamicSchemeVariant.tonalSpot,
     brightness: Brightness.dark,
   );
 
@@ -75,8 +114,8 @@ const kSliderTheme = SliderThemeData(
     primaryColor: themeLight.colorScheme.primary,
     primaryContrastingColor: themeLight.colorScheme.onPrimary,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: darken(themeLight.scaffoldBackgroundColor, 0.05),
-    barBackgroundColor: themeLight.colorScheme.surface.withValues(alpha: 0.9),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 237, 235, 233),
+    barBackgroundColor: const Color(0xE6F9F9F9),
     textTheme: cupertinoTextTheme(themeLight.colorScheme),
   );
 
@@ -105,13 +144,18 @@ const kSliderTheme = SliderThemeData(
       listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
       bottomSheetTheme:
           isIOS
-              ? BottomSheetThemeData(backgroundColor: themeLight.colorScheme.surfaceContainerLowest)
+              ? BottomSheetThemeData(backgroundColor: lightCupertino.scaffoldBackgroundColor)
               : null,
-      menuTheme: _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLow),
+      menuTheme:
+          isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
-      extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
+      extensions: [
+        lichessCustomColors.harmonized(themeLight.colorScheme),
+        if (isIOS)
+          const CustomTheme(rowEven: Colors.white, rowOdd: Color.fromARGB(255, 247, 246, 245)),
+      ],
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
@@ -125,7 +169,11 @@ const kSliderTheme = SliderThemeData(
               )
               : null,
       listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      menuTheme: _makeCupertinoMenuThemeData(themeDark.colorScheme.surface),
+      bottomSheetTheme:
+          isIOS
+              ? BottomSheetThemeData(backgroundColor: darkCupertino.scaffoldBackgroundColor)
+              : null,
+      menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
@@ -139,6 +187,7 @@ const kSliderTheme = SliderThemeData(
   required ThemeData baseTheme,
   required Color seedColor,
   required bool isIOS,
+  required bool isBackgroundImage,
 }) {
   final primary = baseTheme.colorScheme.primary;
   final onPrimary = baseTheme.colorScheme.onPrimary;
@@ -148,11 +197,11 @@ const kSliderTheme = SliderThemeData(
     brightness: Brightness.dark,
     textTheme: cupertinoTextTheme(baseTheme.colorScheme),
     scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.5),
+    barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.6),
     applyThemeToAll: true,
   );
 
-  const baseSurfaceAlpha = 0.7;
+  final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.3;
 
   final theme = baseTheme.copyWith(
     colorScheme: baseTheme.colorScheme.copyWith(
@@ -177,16 +226,36 @@ const kSliderTheme = SliderThemeData(
     listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
     cardTheme: isIOS ? const CardTheme(elevation: 0, margin: EdgeInsets.zero) : null,
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8),
+      backgroundColor:
+          isIOS
+              ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
+              : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
-    dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.8)),
-    menuTheme: _makeCupertinoMenuThemeData(
-      baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-    ),
+    dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
+    menuTheme:
+        isIOS
+            ? _makeCupertinoMenuThemeData(
+              baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+            )
+            : MenuThemeData(
+              style: MenuStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: kPageTransitionsTheme,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+          backgroundColor: seedColor.withValues(alpha: 0),
+        ),
+        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+      },
+    ),
+
     progressIndicatorTheme: kProgressIndicatorTheme,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],

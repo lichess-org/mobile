@@ -478,9 +478,10 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
     }
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -502,8 +503,11 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == state.requireValue.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
@@ -519,8 +523,7 @@ class StudyController extends _$StudyController implements PgnTreeNotifier {
 
     if (!state.hasValue) return;
 
-    // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 }
 
@@ -601,8 +604,7 @@ class StudyState with _$StudyState {
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  String get currentChapterTitle =>
-      study.chapters.firstWhere((chapter) => chapter.id == currentChapter.id).name;
+  String get currentChapterTitle => study.getChapterIndexedName(study.chapter.id);
   bool get hasNextChapter => study.chapter.id != study.chapters.last.id;
 
   bool get isAtEndOfChapter => isOnMainline && currentNode.children.isEmpty;
@@ -663,7 +665,7 @@ class StudyCurrentNode with _$StudyCurrentNode {
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
-    LocalEval? eval,
+    ClientEval? eval,
   }) = _StudyCurrentNode;
 
   factory StudyCurrentNode.illegalPosition() {

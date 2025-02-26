@@ -489,7 +489,7 @@ class _BroadcastCardContent extends StatelessWidget {
                         actions: [
                           BottomSheetAction(
                             makeLabel: (context) => Text(broadcast.title),
-                            onPressed: (context) async {
+                            onPressed: () async {
                               launchShareDialog(
                                 context,
                                 uri: lichessUri(
@@ -500,7 +500,7 @@ class _BroadcastCardContent extends StatelessWidget {
                           ),
                           BottomSheetAction(
                             makeLabel: (context) => Text(broadcast.round.name),
-                            onPressed: (context) async {
+                            onPressed: () async {
                               launchShareDialog(
                                 context,
                                 uri: lichessUri(
@@ -511,7 +511,7 @@ class _BroadcastCardContent extends StatelessWidget {
                           ),
                           BottomSheetAction(
                             makeLabel: (context) => Text('${broadcast.round.name} PGN'),
-                            onPressed: (context) async {
+                            onPressed: () async {
                               launchShareDialog(
                                 context,
                                 uri: lichessUri(

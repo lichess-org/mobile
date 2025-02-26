@@ -1,6 +1,4 @@
-import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +8,10 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -28,6 +24,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
+import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -39,14 +36,10 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
-
-const kGameCarouselFlexWeights = [6, 2];
-const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -86,18 +79,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final session = ref.watch(authSessionProvider);
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-        final emptyRecent = ref
-            .watch(myRecentGamesProvider)
-            .maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
-
         final recentGames = ref.watch(myRecentGamesProvider);
         final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
 
-        // Show the welcome screen if there are no recent games and no stored games
+        // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
+        final shouldShowWelcomeScreen =
+            session == null &&
+            recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
+
         final widgets =
-            emptyRecent
+            shouldShowWelcomeScreen
                 ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
                 : isTablet
                 ? _tabletWidgets(
@@ -581,7 +574,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
-        return _GamesCarousel<OngoingGame>(
+        return GamesCarousel<OngoingGame>(
           list: data,
           onTap: (index) {
             final game = data[index];
@@ -595,7 +588,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               ),
             );
           },
-          builder: (game) => _GamePreviewCarouselItem(game: game),
+          builder: (game) => OngoingGameCarouselItem(game: game),
           moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
@@ -619,7 +612,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
-        return _GamesCarousel(
+        return GamesCarousel(
           list: data,
           onTap: (index) {
             final el = data[index];
@@ -628,7 +621,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
             );
           },
           builder:
-              (el) => _GamePreviewCarouselItem(
+              (el) => OngoingGameCarouselItem(
                 game: OngoingGame(
                   id: el.$2.id,
                   fullId: el.$2.fullId,
@@ -650,265 +643,6 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         );
       },
       orElse: () => const SizedBox.shrink(),
-    );
-  }
-}
-
-class _GamesCarousel<T> extends StatefulWidget {
-  const _GamesCarousel({
-    required this.list,
-    required this.builder,
-    required this.onTap,
-    required this.moreScreenRouteBuilder,
-    required this.maxGamesToShow,
-  });
-  final IList<T> list;
-  final Widget Function(T data) builder;
-  final void Function(int index)? onTap;
-  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
-  final int maxGamesToShow;
-
-  @override
-  State<_GamesCarousel<T>> createState() => _GamesCarouselState<T>();
-}
-
-class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
-  final _controller = CarouselController();
-
-  @override
-  void initState() {
-    super.initState();
-    homeTabInteraction.addListener(_onTabInteraction);
-  }
-
-  @override
-  void dispose() {
-    homeTabInteraction.removeListener(_onTabInteraction);
-    super.dispose();
-  }
-
-  void _onTabInteraction() {
-    if (_controller.hasClients) {
-      _controller.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.verticalBodyPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    context.l10n.nbGamesInPlay(widget.list.length),
-                    style: Styles.sectionTitle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (widget.list.length > 2) ...[
-                  const SizedBox(width: 6.0),
-                  NoPaddingTextButton(
-                    onPressed: () {
-                      // pushPlatformRoute(
-                      //   context,
-                      //   title: context.l10n.nbGamesInPlay(widget.list.length),
-                      //   builder: widget.moreScreenRouteBuilder,
-                      // );
-                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
-                    },
-                    child: Text(context.l10n.more),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: AspectRatio(
-              aspectRatio: 1.2,
-              child: CarouselView.weighted(
-                controller: _controller,
-                padding: kGameCarouselPadding,
-                shape: const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
-                elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
-                flexWeights: kGameCarouselFlexWeights,
-                itemSnapping: true,
-                onTap: (index) {
-                  widget.onTap?.call(index);
-                },
-                children: [for (final game in widget.list) widget.builder(game)],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GamePreviewCarouselItem extends StatelessWidget {
-  const _GamePreviewCarouselItem({required this.game});
-
-  final OngoingGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
-      child: _BoardCarouselItem(
-        fen: game.fen,
-        orientation: game.orientation,
-        lastMove: game.lastMove,
-        description: Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    if (game.isMyTurn) ...const [
-                      Icon(Icons.timer, size: 16.0, color: Colors.white),
-                      SizedBox(width: 4.0),
-                    ],
-                    Text(
-                      game.secondsLeft != null && game.isMyTurn
-                          ? relativeDate(
-                            context.l10n,
-                            DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                          )
-                          : game.isMyTurn
-                          ? context.l10n.yourTurn
-                          : context.l10n.waitingForOpponent,
-                      style:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
-                              : TextStyle(
-                                fontSize: TextTheme.of(context).labelMedium?.fontSize,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4.0),
-                UserFullNameWidget.player(
-                  user: game.opponent,
-                  rating: game.opponentRating,
-                  aiLevel: game.opponentAiLevel,
-                  style: Styles.boardPreviewTitle,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BoardCarouselItem extends ConsumerWidget {
-  const _BoardCarouselItem({
-    required this.orientation,
-    required this.fen,
-    required this.description,
-    this.lastMove,
-  });
-
-  /// Side by which the board is oriented.
-  final Side orientation;
-
-  /// FEN string describing the position of the board.
-  final String fen;
-
-  /// Last move played, used to highlight corresponding squares.
-  final Move? lastMove;
-
-  final Widget description;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final brightness = ColorScheme.of(context).brightness;
-
-    final backgroundColor = lighten(
-      boardPrefs.boardTheme.colors.darkSquare,
-      brightness == Brightness.light ? 0.25 : 0.0,
-    );
-
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
-    final double width = screenWidth - 16.0;
-    final boardSize =
-        width * kGameCarouselFlexWeights[0] / totalFlex - kGameCarouselPadding.horizontal;
-
-    return BrightnessHueFilter(
-      hue: boardPrefs.hue,
-      brightness: boardPrefs.brightness,
-      child: PlatformCard(
-        clipBehavior: Clip.hardEdge,
-        color: backgroundColor,
-        child: OverflowBox(
-          maxWidth: boardSize,
-          minWidth: boardSize,
-          child: Stack(
-            children: [
-              ShaderMask(
-                blendMode: BlendMode.dstOut,
-                shaderCallback: (bounds) {
-                  return LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      backgroundColor.withValues(alpha: 0.25),
-                      backgroundColor.withValues(alpha: 1.0),
-                    ],
-                    stops: const [0.3, 1.00],
-                    tileMode: TileMode.clamp,
-                  ).createShader(bounds);
-                },
-                child: SizedBox(
-                  height: boardSize,
-                  child: StaticChessboard(
-                    size: boardSize,
-                    fen: fen,
-                    orientation: orientation,
-                    lastMove: lastMove,
-                    enableCoordinates: false,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                    pieceAssets: boardPrefs.pieceSet.assets,
-                    colorScheme: boardPrefs.boardTheme.colors,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                bottom: 8,
-                child: DefaultTextStyle.merge(
-                  style: const TextStyle(color: Colors.white),
-                  child: description,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -16,6 +16,8 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -27,18 +29,53 @@ part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
 CorrespondenceService correspondenceService(Ref ref) {
-  return CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
+  final service = CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
+  ref.onDispose(() => service.dispose());
+  return service;
 }
 
-/// Services that manages correspondence games.
+/// Service that manages correspondence games.
 class CorrespondenceService {
   CorrespondenceService(this._log, {required this.ref});
 
   final Ref ref;
   final Logger _log;
 
+  StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
+  StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
+
+  void start() {
+    _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
+      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      switch (fcmMessage) {
+        case CorresGameUpdateFcmMessage(fullId: final fullId, game: final game):
+          if (game != null) {
+            _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
+          }
+
+        case _:
+          break;
+      }
+    });
+
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (_, notification) = data;
+      switch (notification) {
+        case CorresGameUpdateNotification(:final fullId):
+          _onNotificationResponse(fullId);
+        case _:
+          break;
+      }
+    });
+  }
+
+  void dispose() {
+    _fcmSubscription?.cancel();
+    _notificationResponseSubscription?.cancel();
+  }
+
   /// Handles a notification response that caused the app to open.
-  Future<void> onNotificationResponse(GameFullId fullId) async {
+  Future<void> _onNotificationResponse(GameFullId fullId) async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
@@ -67,11 +104,8 @@ class CorrespondenceService {
 
     ref.withClient((client) async {
       try {
-        final accountRepository = AccountRepository(client);
         final gameRepository = GameRepository(client);
-        // user can have more than 50 ongoing games, but we only sync the 50 most
-        // recent ones
-        final ongoingGames = await accountRepository.getOngoingGames(nb: 50);
+        final ongoingGames = await ref.read(ongoingGamesProvider.future);
         for (final sg in storedOngoingGames) {
           final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);
           if (game == null) {
@@ -185,23 +219,19 @@ class CorrespondenceService {
   }
 
   /// Handles a game update event from the server.
-  Future<void> onServerUpdateEvent(
+  Future<void> _onServerUpdateEvent(
     GameFullId fullId,
     PlayableGame game, {
     required bool fromBackground,
   }) async {
-    if (!fromBackground) {
-      // opponent just played, invalidate ongoing games
-      if (game.sideToMove == game.youAre) {
-        ref.invalidate(ongoingGamesProvider);
-      }
-    }
-
     await updateGame(fullId, game);
   }
 
-  /// Updates a stored correspondence game.
+  /// Updates a correspondence game.
+  ///
+  /// Will update the game in the ongoing games provider and save it to the storage.
   Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
+    ref.read(ongoingGamesProvider.notifier).updateGame(fullId, game);
     return (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(
         id: game.id,

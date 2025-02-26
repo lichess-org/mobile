@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
@@ -20,21 +20,12 @@ class BroadcastPlayersTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final edgeInsets =
-        MediaQuery.paddingOf(context) -
-        (Theme.of(context).platform == TargetPlatform.iOS
-            ? EdgeInsets.only(top: MediaQuery.paddingOf(context).top)
-            : EdgeInsets.zero) +
-        Styles.bodyPadding;
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
       AsyncData(value: final players) => PlayersList(players, tournamentId),
-      AsyncError(:final error) => SliverPadding(
-        padding: edgeInsets,
-        sliver: SliverFillRemaining(child: Center(child: Text('Cannot load players data: $error'))),
-      ),
-      _ => const SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
+      AsyncError(:final error) => Center(child: Text('Cannot load players data: $error')),
+      _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -122,59 +113,64 @@ class _PlayersListState extends ConsumerState<PlayersList> {
 
     final firstPlayer = players.firstOrNull;
 
-    return SliverList.builder(
+    return ListView.builder(
       itemCount: players.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _TableTitleCell(
-                  title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                  onTap:
-                      () => sort(
-                        _SortingTypes.player,
-                        toggleReverse: currentSort == _SortingTypes.player,
-                      ),
-                  sortIcon:
-                      (currentSort == _SortingTypes.player)
-                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                          : null,
-                ),
-              ),
-              SizedBox(
-                width: eloWidth,
-                child: _TableTitleCell(
-                  title: const Text('Elo', style: _kHeaderTextStyle),
-                  onTap:
-                      () =>
-                          sort(_SortingTypes.elo, toggleReverse: currentSort == _SortingTypes.elo),
-                  sortIcon:
-                      (currentSort == _SortingTypes.elo)
-                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                          : null,
-                ),
-              ),
-              SizedBox(
-                width: scoreWidth,
-                child: _TableTitleCell(
-                  title: Text(
-                    firstPlayer?.score != null ? context.l10n.broadcastScore : context.l10n.games,
-                    style: _kHeaderTextStyle,
+          return ColoredBox(
+            color: ColorScheme.of(context).surfaceDim,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: _TableTitleCell(
+                    title: Text(context.l10n.player, style: _kHeaderTextStyle),
+                    onTap:
+                        () => sort(
+                          _SortingTypes.player,
+                          toggleReverse: currentSort == _SortingTypes.player,
+                        ),
+                    sortIcon:
+                        (currentSort == _SortingTypes.player)
+                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                            : null,
                   ),
-                  onTap:
-                      () => sort(
-                        _SortingTypes.score,
-                        toggleReverse: currentSort == _SortingTypes.score,
-                      ),
-                  sortIcon:
-                      (currentSort == _SortingTypes.score)
-                          ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                          : null,
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: eloWidth,
+                  child: _TableTitleCell(
+                    title: const Text('Elo', style: _kHeaderTextStyle),
+                    onTap:
+                        () => sort(
+                          _SortingTypes.elo,
+                          toggleReverse: currentSort == _SortingTypes.elo,
+                        ),
+                    sortIcon:
+                        (currentSort == _SortingTypes.elo)
+                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                            : null,
+                  ),
+                ),
+                SizedBox(
+                  width: scoreWidth,
+                  child: _TableTitleCell(
+                    title: Text(
+                      firstPlayer?.score != null ? context.l10n.broadcastScore : context.l10n.games,
+                      style: _kHeaderTextStyle,
+                    ),
+                    onTap:
+                        () => sort(
+                          _SortingTypes.score,
+                          toggleReverse: currentSort == _SortingTypes.score,
+                        ),
+                    sortIcon:
+                        (currentSort == _SortingTypes.score)
+                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
+                            : null,
+                  ),
+                ),
+              ],
+            ),
           );
         } else {
           final player = players[index - 1];
@@ -192,10 +188,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
               );
             },
             child: ColoredBox(
-              color:
-                  index.isEven
-                      ? ColorScheme.of(context).surfaceContainerLow
-                      : ColorScheme.of(context).surfaceContainerHigh,
+              color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

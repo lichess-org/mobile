@@ -18,8 +18,10 @@ class PlatformScaffold extends StatelessWidget {
     required this.appBarTitle,
     this.appBarCenterTitle = false,
     this.appBarActions = const [],
+    this.appBarBottom,
     this.appBarAndroidTitleSpacing,
     required this.body,
+    this.bottomNavigationBar,
     this.resizeToAvoidBottomInset = true,
     this.backgroundColor,
     this.enableBackgroundFilterBlur = true,
@@ -37,6 +39,9 @@ class PlatformScaffold extends StatelessWidget {
 
   /// On Android, this is passed directly to [AppBar.centerTitle]. Has no effect on iOS.
   final bool appBarCenterTitle;
+
+  /// A widget to place at the bottom of the navigation bar.
+  final PreferredSizeWidget? appBarBottom;
 
   /// Action widgets to place at the end of the navigation bar.
   ///
@@ -56,6 +61,11 @@ class PlatformScaffold extends StatelessWidget {
   /// The background color of the screen. If null, the default background color of the theme is used.
   final Color? backgroundColor;
 
+  /// A widget to place at the bottom of the screen, below the body.
+  ///
+  /// Typically used for a [BottomNavigationBar].
+  final Widget? bottomNavigationBar;
+
   /// {@macro flutter.cupertino.CupertinoNavigationBar.enableBackgroundFilterBlur}
   ///
   /// Has no effect on Android.
@@ -71,8 +81,10 @@ class PlatformScaffold extends StatelessWidget {
         title: appBarTitle,
         centerTitle: appBarCenterTitle,
         actions: appBarActions,
+        bottom: appBarBottom,
       ),
       body: body,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 
@@ -83,11 +95,20 @@ class PlatformScaffold extends StatelessWidget {
         padding: appBarActions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
         middle: appBarTitle,
         leading: appBarLeading,
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: appBarActions),
+        bottom: appBarBottom,
+        trailing:
+            appBarActions.isNotEmpty
+                ? Row(mainAxisSize: MainAxisSize.min, children: appBarActions)
+                : null,
         enableBackgroundFilterBlur: enableBackgroundFilterBlur,
       ),
       backgroundColor: backgroundColor,
-      child: body,
+      child: Column(
+        children: <Widget>[
+          Expanded(child: body),
+          if (bottomNavigationBar != null) bottomNavigationBar!,
+        ],
+      ),
     );
   }
 

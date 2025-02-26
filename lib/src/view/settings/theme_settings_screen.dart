@@ -192,20 +192,24 @@ class _BodyState extends ConsumerState<_Body> {
                     icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
                     settingsValue:
-                        generalPrefs.backgroundTheme?.label(context.l10n) ??
-                        (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                        generalPrefs.backgroundColor != null
+                            ? generalPrefs.backgroundColor!.$1.label(
+                              context.l10n,
+                              generalPrefs.backgroundColor!.$2,
+                            )
+                            : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
                       Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
                     },
                   ),
-                  if (generalPrefs.backgroundTheme != null || generalPrefs.backgroundImage != null)
+                  if (generalPrefs.backgroundColor != null || generalPrefs.backgroundImage != null)
                     PlatformListTile(
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
                         ref
                             .read(generalPreferencesProvider.notifier)
-                            .setBackground(backgroundTheme: null, backgroundImage: null);
+                            .setBackground(backgroundColor: null, backgroundImage: null);
                       },
                     ),
                   SettingsListTile(

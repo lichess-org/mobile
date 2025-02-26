@@ -136,9 +136,11 @@ class ClockStyle {
     backgroundColor: colorScheme.surface,
     textColor: colorScheme.outline,
     activeBackgroundColor:
-        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.secondary,
+        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.tertiaryContainer,
     activeTextColor:
-        brightness == Brightness.dark ? colorScheme.onInverseSurface : colorScheme.onSecondary,
+        brightness == Brightness.dark
+            ? colorScheme.onInverseSurface
+            : colorScheme.onTertiaryContainer,
     emergencyBackgroundColor: colorScheme.errorContainer,
     emergencyTextColor: colorScheme.onErrorContainer,
   );
