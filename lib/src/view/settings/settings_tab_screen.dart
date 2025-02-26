@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/patron/donate_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -85,28 +86,6 @@ class _Body extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
-    final Widget? donateButton =
-        userSession == null || userSession.user.isPatron != true
-            ? PlatformListTile(
-              leading: Icon(
-                LichessIcons.patron,
-                semanticLabel: context.l10n.patronLichessPatron,
-                color: context.lichessColors.brag,
-              ),
-              title: Text(
-                context.l10n.patronDonate,
-                style: TextStyle(color: context.lichessColors.brag),
-              ),
-              trailing:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/patron'));
-              },
-            )
-            : null;
-
     final List<Widget> content = [
       ListSection(
         header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
@@ -164,8 +143,44 @@ class _Body extends ConsumerWidget {
                 },
               ),
           ],
-          if (Theme.of(context).platform == TargetPlatform.android && donateButton != null)
-            donateButton,
+          if (userSession == null || userSession.user.isPatron != true)
+            PlatformListTile(
+              leading: Icon(
+                LichessIcons.patron,
+                semanticLabel: context.l10n.patronLichessPatron,
+                color: context.lichessColors.brag,
+              ),
+              title: Text(
+                context.l10n.patronDonate,
+                style: TextStyle(color: context.lichessColors.brag),
+              ),
+              trailing:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+              onTap: () {
+                Navigator.of(context).push(DonateScreen.buildRoute(context));
+              },
+            )
+          else
+            PlatformListTile(
+              leading: Icon(
+                LichessIcons.patron,
+                semanticLabel: context.l10n.patronLichessPatron,
+                color: context.lichessColors.brag,
+              ),
+              title: Text(
+                context.l10n.patronLichessPatron,
+                style: TextStyle(color: context.lichessColors.brag),
+              ),
+              trailing:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+              onTap: () {
+                Navigator.of(context).push(DonateScreen.buildRoute(context));
+              },
+            ),
         ],
       ),
       ListSection(

@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_ga
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/patron/donate_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
@@ -284,13 +285,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       const SizedBox(height: 24.0),
       if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
-      if (Theme.of(context).platform != TargetPlatform.iOS &&
-          (session == null || session.user.isPatron != true)) ...[
+      if (session == null || session.user.isPatron != true) ...[
         Center(
           child: SecondaryButton(
             semanticsLabel: context.l10n.patronDonate,
             onPressed: () {
-              launchUrl(Uri.parse('https://lichess.org/patron'));
+              Navigator.of(context).push(DonateScreen.buildRoute(context));
             },
             child: Text(context.l10n.patronDonate),
           ),

@@ -23,10 +23,17 @@ const kLichessOpeningExplorerHost = String.fromEnvironment(
   defaultValue: 'explorer.lichess.ovh',
 );
 
+const kLichessStripePublishableKey = String.fromEnvironment(
+  'LICHESS_STRIPE_PUBLISHABLE_KEY',
+  defaultValue:
+      'pk_test_518J612Fj1uHKxNqMlgPzeC9fpYhkke8rtoNrNVuubIEx5WEhik5LV4gKYUxk3jhITTgFHZMQ8lUaeIVMdUutYkdJ00E384IEpJ',
+);
+
 const kLichessDevUser = String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
 const kLichessClientId = 'lichess_mobile';
+const kLichessAppleMerchantIdentifier = 'merchant.org.lichess.mobile';
 
 const kSRIStorageKey = 'socket_random_identifier';
 
