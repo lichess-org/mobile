@@ -85,16 +85,13 @@ class _DonateScreenState extends ConsumerState<DonateScreen> {
       // 1. create payment intent on the server
       final stripeSession = await ref
           .read(patronRepositoryProvider)
-          .stripeCheckoutSession(amount: 500, frequency: Frequency.onetime);
+          .stripeCheckoutSession(amount: 5, frequency: Frequency.onetime);
 
       // 2. initialize the payment sheet
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           customFlow: false,
-          // merchantDisplayName: 'Flutter Stripe Store Demo',
           paymentIntentClientSecret: stripeSession.clientSecret,
-          // customerEphemeralKeySecret: data['ephemeralKey'],
-          // customerId: data['customer'],
           applePay: const PaymentSheetApplePay(merchantCountryCode: 'US'),
           googlePay: const PaymentSheetGooglePay(merchantCountryCode: 'US', testEnv: true),
           style: themeMode,
