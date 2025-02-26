@@ -1,3 +1,4 @@
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -31,6 +32,8 @@ class PlatformContextMenuButton extends StatelessWidget {
         onPressed: () {
           showPopover(
             context: context,
+            barrierColor: Colors.transparent,
+            shadow: const [],
             bodyBuilder: (context) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -41,7 +44,9 @@ class PlatformContextMenuButton extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(13.0)),
                       child: ColoredBox(
                         color: CupertinoDynamicColor.resolve(
-                          CupertinoContextMenu.kBackgroundColor,
+                          CupertinoContextMenu.kBackgroundColor.harmonizeWith(
+                            ColorScheme.of(context).primary,
+                          ),
                           context,
                         ),
                         child: ScrollConfiguration(
