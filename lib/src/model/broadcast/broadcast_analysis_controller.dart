@@ -121,6 +121,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       clocks: _getClocks(currentPath),
     );
 
+    // We need to define the state value in the build method because `sendEvalGetEvent` and
+    // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
 
     if (broadcastState.isLocalEvaluationEnabled) {

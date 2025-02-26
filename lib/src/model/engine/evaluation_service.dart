@@ -237,9 +237,15 @@ class EvaluationOptions with _$EvaluationOptions {
   }) = _EvaluationOptions;
 }
 
+/// A function to choose the eval that should be displayed.
 Eval? pickBestEval({
+  /// The eval from the local engine
   required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
   required ClientEval? savedEval,
+
+  /// The eval from the server analysis
   required ExternalEval? serverEval,
 }) {
   return switch (savedEval) {
@@ -249,15 +255,26 @@ Eval? pickBestEval({
   };
 }
 
-ClientEval? pickBestClientEval({required LocalEval? localEval, required ClientEval? savedEval}) {
+/// A function to choose the client eval that should be displayed.
+ClientEval? pickBestClientEval({
+  /// The eval from the local engine
+  required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+}) {
   final eval =
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
 }
 
+/// A function to choose the best moves that should be displayed.
 IList<MoveWithWinningChances>? pickBestMoves({
+  /// The best moves from the local engine
   required IList<MoveWithWinningChances>? localBestMoves,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
   required ClientEval? savedEval,
 }) {
   return switch (savedEval) {
