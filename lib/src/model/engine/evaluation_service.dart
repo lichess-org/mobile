@@ -32,6 +32,11 @@ class EvaluationService {
 
   Engine? _engine;
 
+  /// Whether the engine is being currently disposed.
+  ///
+  /// This is used to avoid disposing the engine twice.
+  bool _isDisposingEngine = false;
+
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
     multiPv: 1,
@@ -97,9 +102,14 @@ class EvaluationService {
   }
 
   Future<void> disposeEngine() {
+    if (_isDisposingEngine) return Future.value();
+
+    _isDisposingEngine = true;
+
     return _engine?.dispose().then((_) {
           _engine = null;
           _context = null;
+          _isDisposingEngine = false;
         }) ??
         Future.value();
   }
@@ -191,6 +201,7 @@ EvaluationService evaluationService(Ref ref) {
 
   final service = EvaluationService(maxMemory: maxMemory);
   ref.onDispose(() {
+    print('Dispose evaluation service provider');
     service.disposeEngine();
   });
   return service;

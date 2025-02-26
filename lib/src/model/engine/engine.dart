@@ -40,7 +40,9 @@ class StockfishEngine implements Engine {
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      stockfishAsync()
+      final stockfishFuture = stockfishFactory.create();
+
+      stockfishFuture
           .then((stockfish) {
             _state.value = EngineState.loading;
             _stockfish = stockfish;
@@ -109,4 +111,22 @@ class StockfishEngine implements Engine {
     _stockfish?.dispose();
     return completer.future;
   }
+}
+
+StockfishFactory _stockfishFactory = const StockfishFactory();
+
+StockfishFactory get stockfishFactory => _stockfishFactory;
+
+set stockfishFactory(StockfishFactory stockfishFactory) {
+  _stockfishFactory = stockfishFactory;
+}
+
+/// A factory to create a [Stockfish].
+///
+/// This is useful to be able to mock [Stockfish] in tests.
+class StockfishFactory {
+  const StockfishFactory();
+
+  /// Creates a [WebSocketChannel] from the given [url].
+  Future<Stockfish> create() async => stockfishAsync();
 }

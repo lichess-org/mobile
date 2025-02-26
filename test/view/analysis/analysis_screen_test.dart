@@ -7,11 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
+import '../../model/engine/fake_stockfish.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
@@ -461,6 +464,41 @@ void main() {
 
         expect(find.text('...'), findsNWidgets(2));
       });
+    });
+  });
+
+  group('Test engine widgets', () {
+    testWidgets('Test engine lines are displayed', (tester) async {
+      stockfishFactory = const FakeStockfishFactory();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults.copyWith(numEvalLines: 1).toJson(),
+          ),
+        },
+        home: const AnalysisScreen(
+          options: AnalysisOptions(
+            orientation: Side.white,
+            standalone: (pgn: '', isComputerAnalysisAllowed: true, variant: Variant.standard),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      await tester.pump();
+
+      expect(find.byType(Engineline), findsOne);
+
+      expect(find.text('1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6'), findsOne);
+
+      await tester.pump(const Duration(seconds: 3));
+
+      stockfishFactory = const StockfishFactory();
     });
   });
 }
