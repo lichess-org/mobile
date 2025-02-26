@@ -21,6 +21,27 @@ enum TvChannel {
   bot('Bot', LichessIcons.cogs),
   computer('Computer', LichessIcons.cogs);
 
+  static TvChannel channelFromString(String? channel) {
+    return (channel == null)
+        ? TvChannel.best
+        : switch (channel) {
+          'best' => TvChannel.best,
+          'bullet' => TvChannel.bullet,
+          'blitz' => TvChannel.blitz,
+          'rapid' => TvChannel.rapid,
+          'classical' => TvChannel.classical,
+          'chess960' => TvChannel.chess960,
+          'kingOfTheHill' => TvChannel.kingOfTheHill,
+          'antichess' => TvChannel.antichess,
+          'horde' => TvChannel.horde,
+          'racingKings' => TvChannel.racingKings,
+          'ultraBullet' => TvChannel.ultraBullet,
+          'bot' => TvChannel.bot,
+          'computer' => TvChannel.computer,
+          _ => throw FormatException("value $channel can't be interpreted as a tv channel"),
+        };
+  }
+
   const TvChannel(this.label, this.icon);
 
   final String label;
