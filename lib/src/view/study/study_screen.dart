@@ -30,9 +30,9 @@ import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
@@ -209,43 +209,29 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return MenuAnchor(
-      builder:
-          (context, controller, _) => AppBarIconButton(
-            onPressed: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-            semanticsLabel: 'Study menu',
-            icon: const Icon(Icons.more_horiz),
-          ),
-      menuChildren: [
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.settings),
-          semanticsLabel: context.l10n.settingsSettings,
-          child: Text(context.l10n.settingsSettings),
+    return PlatformContextMenuButton(
+      semanticsLabel: 'Study menu',
+      icon: const Icon(Icons.more_horiz),
+      actions: [
+        PlatformContextMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
           onPressed: () {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        MenuItemButton(
-          closeOnActivate: false,
-          leadingIcon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
-          semanticsLabel: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
-          child: Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
+        PlatformContextMenuAction(
+          dismissOnPress: false,
+          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
           onPressed: () {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },
         ),
-        MenuItemButton(
-          leadingIcon: Icon(
-            Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
-          ),
-          semanticsLabel: context.l10n.studyShareAndExport,
-          child: Text(context.l10n.studyShareAndExport),
+        PlatformContextMenuAction(
+          icon:
+              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+          label: context.l10n.studyShareAndExport,
           onPressed: () {
             showAdaptiveActionSheet<void>(
               context: context,

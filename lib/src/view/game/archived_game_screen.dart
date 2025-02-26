@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 /// Screen for viewing an archived game.
@@ -202,32 +203,13 @@ class _BodyState extends ConsumerState<_Body> {
       appBarActions: [
         if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
         if (widget.gameData != null)
-          MenuAnchor(
-            crossAxisUnconstrained: false,
-            style: MenuStyle(
-              maximumSize: WidgetStatePropertyAll(
-                Size(
-                  MediaQuery.sizeOf(context).width * 0.6,
-                  MediaQuery.sizeOf(context).height * 0.8,
-                ),
-              ),
-            ),
-            builder:
-                (context, controller, _) => AppBarIconButton(
-                  icon: const Icon(Icons.more_horiz),
-                  semanticsLabel: context.l10n.menu,
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
-                ),
-            menuChildren: [
-              const ToggleSoundMenuItemButton(),
+          PlatformContextMenuButton(
+            icon: const Icon(Icons.more_horiz),
+            semanticsLabel: context.l10n.menu,
+            actions: [
+              const ToggleSoundContextMenuAction(),
               if (isLoggedIn)
-                GameBookmarkMenuItemButton(
+                GameBookmarkContextMenuAction(
                   id: widget.gameData!.id,
                   bookmarked: _bookmarked,
                   onToggleBookmark: _toggleBookmark,

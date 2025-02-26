@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
@@ -419,24 +419,13 @@ class _BroadcastCardContent extends StatelessWidget {
                 ),
                 const Spacer(),
               ],
-              MenuAnchor(
-                builder:
-                    (context, controller, _) => AppBarIconButton(
-                      onPressed: () {
-                        if (controller.isOpen) {
-                          controller.close();
-                        } else {
-                          controller.open();
-                        }
-                      },
-                      semanticsLabel: context.l10n.menu,
-                      icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
-                    ),
-                menuChildren: [
-                  MenuItemButton(
-                    leadingIcon: const Icon(Icons.info),
-                    semanticsLabel: context.l10n.broadcastOverview,
-                    child: Text(context.l10n.broadcastOverview),
+              PlatformContextMenuButton(
+                semanticsLabel: context.l10n.menu,
+                icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
+                actions: [
+                  PlatformContextMenuAction(
+                    icon: Icons.info,
+                    label: context.l10n.broadcastOverview,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
@@ -447,10 +436,9 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  MenuItemButton(
-                    leadingIcon: const Icon(LichessIcons.chess_board),
-                    semanticsLabel: context.l10n.broadcastBoards,
-                    child: Text(context.l10n.broadcastBoards),
+                  PlatformContextMenuAction(
+                    icon: LichessIcons.chess_board,
+                    label: context.l10n.broadcastBoards,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
@@ -461,10 +449,9 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  MenuItemButton(
-                    leadingIcon: const Icon(Icons.people),
-                    semanticsLabel: context.l10n.players,
-                    child: Text(context.l10n.players),
+                  PlatformContextMenuAction(
+                    icon: Icons.people,
+                    label: context.l10n.players,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
@@ -475,14 +462,12 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  MenuItemButton(
-                    leadingIcon: Icon(
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? CupertinoIcons.share
-                          : Icons.share,
-                    ),
-                    semanticsLabel: context.l10n.studyShareAndExport,
-                    child: Text(context.l10n.studyShareAndExport),
+                  PlatformContextMenuAction(
+                    icon:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? CupertinoIcons.share
+                            : Icons.share,
+                    label: context.l10n.studyShareAndExport,
                     onPressed: () {
                       showAdaptiveActionSheet<void>(
                         context: context,
