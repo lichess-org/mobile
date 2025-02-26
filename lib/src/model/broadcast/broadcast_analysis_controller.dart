@@ -265,7 +265,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 
     if (state.requireValue.currentPath != path) return;
 
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
   // ignore: unused_element
