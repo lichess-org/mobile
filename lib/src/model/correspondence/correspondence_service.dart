@@ -104,11 +104,8 @@ class CorrespondenceService {
 
     ref.withClient((client) async {
       try {
-        final accountRepository = AccountRepository(client);
         final gameRepository = GameRepository(client);
-        // user can have more than 50 ongoing games, but we only sync the 50 most
-        // recent ones
-        final ongoingGames = await accountRepository.getOngoingGames(nb: 50);
+        final ongoingGames = await ref.read(ongoingGamesProvider.future);
         for (final sg in storedOngoingGames) {
           final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);
           if (game == null) {

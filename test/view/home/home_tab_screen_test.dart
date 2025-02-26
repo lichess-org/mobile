@@ -183,8 +183,7 @@ void main() {
     testWidgets('shows ongoing games if any', (tester) async {
       int nbOngoingGamesRequests = 0;
       final mockClient = MockClient((request) async {
-        if (request.url.path == '/api/account/playing' &&
-            request.url.queryParameters['nb'] == '20') {
+        if (request.url.path == '/api/account/playing') {
           nbOngoingGamesRequests++;
           return mockResponse(mockAccountOngoingGamesResponse(), 200);
         }

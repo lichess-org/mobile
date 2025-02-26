@@ -45,6 +45,7 @@ Future<IList<UserActivity>> accountActivity(Ref ref) async {
   );
 }
 
+/// A provider that fetches the ongoing games for the current user.
 @riverpod
 class OngoingGames extends _$OngoingGames {
   @override
@@ -53,7 +54,9 @@ class OngoingGames extends _$OngoingGames {
     if (session == null) return Future.value(IList());
 
     return ref.withClientCacheFor(
-      (client) => AccountRepository(client).getOngoingGames(nb: 20),
+      (client) => AccountRepository(client).getOngoingGames(nb: 50),
+      // cache is useful to reduce the number of requests to the server because this is used by
+      // both the correspondence service to sync games and the home screen to display ongoing games
       const Duration(hours: 1),
     );
   }
