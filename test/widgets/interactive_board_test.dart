@@ -10,7 +10,7 @@ import '../test_provider_scope.dart';
 
 void main() {
   final setup = Setup.parseFen('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1');
-  Position<Chess> pos = Chess.fromSetup(setup);
+  Position pos = Chess.fromSetup(setup);
 
   final gameData = GameData(
     playerSide: PlayerSide.white,
