@@ -45,28 +45,15 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval =
-        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : null;
+    final eval =
+        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : params.savedEval;
 
-    return localEval != null
-        ? _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-          eval: localEval,
-        )
-        : params.savedEval != null
-        ? _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-          eval: params.savedEval,
-        )
-        : _EvalGauge(
-          displayMode: displayMode,
-          position: params.position,
-          orientation: params.orientation,
-        );
+    return _EvalGauge(
+      displayMode: displayMode,
+      position: params.position,
+      orientation: params.orientation,
+      eval: eval,
+    );
   }
 }
 

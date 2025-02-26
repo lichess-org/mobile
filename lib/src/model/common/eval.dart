@@ -14,6 +14,7 @@ part 'eval.g.dart';
 
 /// Base class for evals.
 sealed class Eval {
+  /// The string to display the eval
   String get evalString;
 
   /// The winning chances for the given [Side].
