@@ -160,6 +160,7 @@ class EvaluationService {
         }
       // we have a cloud eval, no need to evaluate
       case CloudEval _:
+        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
         return null;
       // no eval, continue
       case null:
