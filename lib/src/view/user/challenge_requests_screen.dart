@@ -18,10 +18,19 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ChallengeRequestsScreen(),
+      title: context.l10n.preferencesNotifyChallenge,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
+      appBarTitle: Text(context.l10n.preferencesNotifyChallenge),
       body: _Body(),
     );
   }
@@ -51,20 +60,17 @@ class _Body extends ConsumerWidget {
 
             if (user == null) return null;
 
-            Future<void> acceptChallenge(BuildContext context) async {
+            Future<void> acceptChallenge() async {
               final challengeRepo = ref.read(challengeRepositoryProvider);
               await challengeRepo.accept(challenge.id);
               final fullId = await challengeRepo
                   .show(challenge.id)
                   .then((challenge) => challenge.gameFullId);
               if (!context.mounted) return;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
                 rootNavigator: true,
-                builder: (BuildContext context) {
-                  return GameScreen(initialGameId: fullId);
-                },
-              );
+              ).push(GameScreen.buildRoute(context, initialGameId: fullId));
             }
 
             Future<void> declineChallenge(ChallengeDeclineReason? reason) async {
@@ -85,14 +91,14 @@ class _Body extends ConsumerWidget {
                       makeLabel: (context) => Text(context.l10n.accept),
                       leading: Icon(Icons.check, color: context.lichessColors.good),
                       isDefaultAction: true,
-                      onPressed: (context) => acceptChallenge(context),
+                      onPressed: acceptChallenge,
                     ),
                   ...ChallengeDeclineReason.values.map(
                     (reason) => BottomSheetAction(
                       makeLabel: (context) => Text(reason.label(context.l10n)),
                       leading: Icon(Icons.close, color: context.lichessColors.error),
                       isDestructiveAction: true,
-                      onPressed: (_) {
+                      onPressed: () {
                         declineChallenge(reason);
                       },
                     ),
@@ -120,7 +126,7 @@ class _Body extends ConsumerWidget {
                       ? null
                       : session == null
                       ? showMissingAccountMessage
-                      : () => acceptChallenge(context),
+                      : acceptChallenge,
               onCancel:
                   challenge.direction == ChallengeDirection.outward
                       ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)

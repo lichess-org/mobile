@@ -39,12 +39,12 @@ class PuzzleHistoryPreview extends ConsumerWidget {
           return BoardThumbnail(
             size: boardWidth,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder:
-                    (_) =>
-                        PuzzleScreen(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzleId: e.id),
+              Navigator.of(context, rootNavigator: true).push(
+                PuzzleScreen.buildRoute(
+                  context,
+                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                  puzzleId: e.id,
+                ),
               );
             },
             orientation: side,
@@ -65,12 +65,17 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen();
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const PuzzleHistoryScreen(),
+      title: context.l10n.puzzleHistory,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
-      body: _Body(),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.puzzleHistory), body: _Body());
   }
 }
 
@@ -196,12 +201,12 @@ class PuzzleHistoryBoard extends ConsumerWidget {
       child: BoardThumbnail(
         size: boardWidth,
         onTap: () {
-          pushPlatformRoute(
-            context,
-            rootNavigator: true,
-            builder:
-                (ctx) =>
-                    PuzzleScreen(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzleId: puzzle.id),
+          Navigator.of(context, rootNavigator: true).push(
+            PuzzleScreen.buildRoute(
+              context,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              puzzleId: puzzle.id,
+            ),
           );
         },
         orientation: turn,

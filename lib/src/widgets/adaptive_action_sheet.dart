@@ -40,7 +40,7 @@ Future<T?> showAdaptiveActionSheet<T>({
 Future<T?> showConfirmDialog<T>(
   BuildContext context, {
   required Widget title,
-  required void Function(BuildContext context) onConfirm,
+  required VoidCallback onConfirm,
 
   /// Only for iOS
   bool isDestructiveAction = false,
@@ -64,18 +64,18 @@ Future<T?> showConfirmDialog<T>(
           title: title,
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
               child: Text(context.l10n.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
               child: Text(context.l10n.mobileOkButton),
               onPressed: () {
                 Navigator.of(context).pop();
-                onConfirm(context);
+                onConfirm();
               },
             ),
           ],
@@ -110,7 +110,7 @@ Future<T?> showCupertinoActionSheet<T>({
                           if (action.dismissOnPress) {
                             Navigator.of(context).pop();
                           }
-                          action.onPressed(context);
+                          action.onPressed();
                         },
                         isDestructiveAction: action.isDestructiveAction,
                         isDefaultAction: action.isDefaultAction,
@@ -138,7 +138,7 @@ Future<T?> showMaterialActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
-  final actionTextStyle = Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18);
+  final actionTextStyle = TextTheme.of(context).titleMedium ?? const TextStyle(fontSize: 18);
 
   final screenWidth = MediaQuery.of(context).size.width;
   return showDialog<T>(
@@ -166,7 +166,7 @@ Future<T?> showMaterialActionSheet<T>({
                       if (action.dismissOnPress) {
                         Navigator.of(context).pop();
                       }
-                      action.onPressed(context);
+                      action.onPressed();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -213,7 +213,7 @@ class BottomSheetAction {
   final Widget Function(BuildContext context) makeLabel;
 
   /// The callback that is called when the action item is tapped. (required)
-  final void Function(BuildContext context) onPressed;
+  final VoidCallback onPressed;
 
   /// Whether the modal should be dismissed when an action is pressed.
   ///

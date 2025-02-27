@@ -97,6 +97,7 @@ Future<ProviderContainer> makeContainer({
           }),
           userSession: userSession,
           engineMaxMemoryInMb: 256,
+          appDocumentsDirectory: null,
         );
       }),
       ...overrides ?? [],

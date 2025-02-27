@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,7 +38,7 @@ class OpeningNameHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
         onTap:
             opening.name == context.l10n.startPosition
@@ -47,17 +47,14 @@ class OpeningNameHeader extends StatelessWidget {
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
-              Icon(
-                Icons.open_in_browser_outlined,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
+              Icon(Icons.open_in_browser_outlined, color: ColorScheme.of(context).onSurface),
               const SizedBox(width: 6.0),
             ],
             Expanded(
               child: Text(
                 opening.name,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  color: ColorScheme.of(context).onSurface,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 1,
@@ -119,7 +116,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       columnWidths: columnWidths,
       children: [
         TableRow(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+          decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
           children: [
             Padding(
               padding: _kTableRowPadding,
@@ -153,10 +150,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           final percentGames = ((move.games / games) * 100).round();
           return TableRow(
             decoration: BoxDecoration(
-              color:
-                  index.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+              color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
             ),
             children: [
               TableRowInkWell(
@@ -188,9 +182,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           TableRow(
             decoration: BoxDecoration(
               color:
-                  moves.length.isEven
-                      ? Theme.of(context).colorScheme.surfaceContainerLow
-                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  moves.length.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
             ),
             children: [
               Container(
@@ -211,7 +203,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           )
         else
           TableRow(
-            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerLow),
+            decoration: BoxDecoration(color: ColorScheme.of(context).surfaceContainerLow),
             children: [
               Padding(
                 padding: _kTableRowPadding,
@@ -324,7 +316,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: _kTableRowPadding,
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondaryContainer),
+      decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: child,
     );
   }
@@ -358,14 +350,13 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
       color: widget.color,
       child: AdaptiveInkWell(
         onTap: () {
-          pushPlatformRoute(
-            context,
-            builder:
-                (_) => ArchivedGameScreen(
-                  gameId: widget.game.id,
-                  orientation: Side.white,
-                  initialCursor: widget.ply,
-                ),
+          Navigator.of(context).push(
+            ArchivedGameScreen.buildRoute(
+              context,
+              gameId: widget.game.id,
+              orientation: Side.white,
+              initialCursor: widget.ply,
+            ),
           );
         },
         child: Row(

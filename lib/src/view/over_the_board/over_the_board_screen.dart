@@ -5,15 +5,14 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
@@ -27,19 +26,21 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({super.key});
 
+  static Route<void> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: 'Over the board', screen: const OverTheBoardScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: const Text('Over the board'), // TODO: l10n
-        actions: [
-          AppBarIconButton(
-            onPressed: () => showConfigureDisplaySettings(context),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
+      appBarTitle: const Text('Over the board'), // TODO: l10n
+      appBarActions: [
+        AppBarIconButton(
+          onPressed: () => showConfigureDisplaySettings(context),
+          semanticsLabel: context.l10n.settingsSettings,
+          icon: const Icon(Icons.settings),
+        ),
+      ],
       body: const _Body(),
     );
   }
@@ -56,14 +57,6 @@ class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
 
   Side orientation = Side.white;
-
-  @override
-  void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      showConfigureGameSheet(context, isDismissible: false);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -265,10 +258,6 @@ class _Player extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle =
-        brightness == Brightness.dark ? ClockStyle.darkThemeStyle : ClockStyle.lightThemeStyle;
-
     return RotatedBox(
       quarterTurns: upsideDown ? 2 : 0,
       child: GamePlayer(
@@ -287,7 +276,6 @@ class _Player extends ConsumerWidget {
                   timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
                   key: clockKey,
                   active: clock.activeClock == side,
-                  clockStyle: clockStyle,
                   // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
                   emergencyThreshold: Duration(
                     seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),

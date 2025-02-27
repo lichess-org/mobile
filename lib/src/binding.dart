@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/src/log.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
@@ -78,6 +79,9 @@ abstract class LichessBinding {
 
   /// Wraps [FirebaseMessaging.onBackgroundMessage].
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
+
+  /// The factory to create Stockfish
+  StockfishFactory get stockfishFactory;
 }
 
 /// A concrete implementation of [LichessBinding] for the app.
@@ -156,4 +160,7 @@ class AppLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       FirebaseMessaging.onMessageOpenedApp;
+
+  @override
+  StockfishFactory get stockfishFactory => const StockfishFactory();
 }

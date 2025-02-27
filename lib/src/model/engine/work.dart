@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = (Work, ClientEval);
+typedef EvalResult = (Work, LocalEval);
 
 /// A work item for the engine.
 @freezed

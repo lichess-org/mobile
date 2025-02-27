@@ -13,6 +13,14 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const AccountPreferencesScreen(),
+      title: context.l10n.preferencesPreferences,
+    );
+  }
+
   @override
   ConsumerState<AccountPreferencesScreen> createState() => _AccountPreferencesScreenState();
 }
@@ -72,11 +80,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesZenMode,
-                        builder: (context) => const ZenSettingsScreen(),
-                      );
+                      Navigator.of(context).push(ZenSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -103,11 +107,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesPgnPieceNotation,
-                        builder: (context) => const PieceNotationSettingsScreen(),
-                      );
+                      Navigator.of(context).push(PieceNotationSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -134,11 +134,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesShowPlayerRatings,
-                        builder: (context) => const ShowRatingsSettingsScreen(),
-                      );
+                      Navigator.of(context).push(ShowRatingsSettingsScreen.buildRoute(context));
                     }
                   },
                   explanation: context.l10n.preferencesExplainShowPlayerRatings,
@@ -200,11 +196,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesTakebacksWithOpponentApproval,
-                        builder: (context) => const TakebackSettingsScreen(),
-                      );
+                      Navigator.of(context).push(TakebackSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -231,11 +223,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesPromoteToQueenAutomatically,
-                        builder: (context) => const AutoQueenSettingsScreen(),
-                      );
+                      Navigator.of(context).push(AutoQueenSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -264,11 +252,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-                        builder: (context) => const AutoThreefoldSettingsScreen(),
-                      );
+                      Navigator.of(context).push(AutoThreefoldSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -323,11 +307,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.preferencesGiveMoreTime,
-                        builder: (context) => const MoretimeSettingsScreen(),
-                      );
+                      Navigator.of(context).push(MoretimeSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -388,11 +368,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                                 },
                       );
                     } else {
-                      pushPlatformRoute(
-                        context,
-                        title: context.l10n.letOtherPlayersChallengeYou,
-                        builder: (context) => const _ChallengeSettingsScreen(),
-                      );
+                      Navigator.of(context).push(_ChallengeSettingsScreen.buildRoute(context));
                     }
                   },
                 ),
@@ -408,10 +384,8 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.preferencesPreferences),
-        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
-      ),
+      appBarTitle: Text(context.l10n.preferencesPreferences),
+      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       body: content,
     );
   }
@@ -419,6 +393,14 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
 class ZenSettingsScreen extends ConsumerStatefulWidget {
   const ZenSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ZenSettingsScreen(),
+      title: context.l10n.preferencesZenMode,
+    );
+  }
 
   @override
   ConsumerState<ZenSettingsScreen> createState() => _ZenSettingsScreenState();
@@ -476,6 +458,14 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
 
 class PieceNotationSettingsScreen extends ConsumerStatefulWidget {
   const PieceNotationSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const PieceNotationSettingsScreen(),
+      title: context.l10n.preferencesPgnPieceNotation,
+    );
+  }
 
   @override
   ConsumerState<PieceNotationSettingsScreen> createState() => _PieceNotationSettingsScreenState();
@@ -536,6 +526,14 @@ class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSetti
 class ShowRatingsSettingsScreen extends ConsumerStatefulWidget {
   const ShowRatingsSettingsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const ShowRatingsSettingsScreen(),
+      title: context.l10n.preferencesShowPlayerRatings,
+    );
+  }
+
   @override
   ConsumerState<ShowRatingsSettingsScreen> createState() => _ShowRatingsSettingsScreenState();
 }
@@ -595,6 +593,14 @@ class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsS
 class TakebackSettingsScreen extends ConsumerStatefulWidget {
   const TakebackSettingsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const TakebackSettingsScreen(),
+      title: context.l10n.preferencesTakebacksWithOpponentApproval,
+    );
+  }
+
   @override
   ConsumerState<TakebackSettingsScreen> createState() => _TakebackSettingsScreenState();
 }
@@ -651,6 +657,14 @@ class _TakebackSettingsScreenState extends ConsumerState<TakebackSettingsScreen>
 
 class AutoQueenSettingsScreen extends ConsumerStatefulWidget {
   const AutoQueenSettingsScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const AutoQueenSettingsScreen(),
+      title: context.l10n.preferencesPromoteToQueenAutomatically,
+    );
+  }
 
   @override
   ConsumerState<AutoQueenSettingsScreen> createState() => _AutoQueenSettingsScreenState();
@@ -711,6 +725,14 @@ class _AutoQueenSettingsScreenState extends ConsumerState<AutoQueenSettingsScree
 class AutoThreefoldSettingsScreen extends ConsumerStatefulWidget {
   const AutoThreefoldSettingsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const AutoThreefoldSettingsScreen(),
+      title: context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+    );
+  }
+
   @override
   ConsumerState<AutoThreefoldSettingsScreen> createState() => _AutoThreefoldSettingsScreenState();
 }
@@ -770,6 +792,14 @@ class _AutoThreefoldSettingsScreenState extends ConsumerState<AutoThreefoldSetti
 class MoretimeSettingsScreen extends ConsumerStatefulWidget {
   const MoretimeSettingsScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const MoretimeSettingsScreen(),
+      title: context.l10n.preferencesGiveMoreTime,
+    );
+  }
+
   @override
   ConsumerState<MoretimeSettingsScreen> createState() => _MoretimeSettingsScreenState();
 }
@@ -827,6 +857,14 @@ class _MoretimeSettingsScreenState extends ConsumerState<MoretimeSettingsScreen>
 
 class _ChallengeSettingsScreen extends ConsumerStatefulWidget {
   const _ChallengeSettingsScreen();
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const _ChallengeSettingsScreen(),
+      title: context.l10n.letOtherPlayersChallengeYou,
+    );
+  }
 
   @override
   ConsumerState<_ChallengeSettingsScreen> createState() => _ChallengeSettingsScreenState();

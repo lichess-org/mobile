@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -51,7 +52,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   late Root _root;
   late Variant _variant;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
   Timer? _startEngineEvalTimer;
 
@@ -65,13 +66,15 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     late final ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis;
     late final Division? division;
 
+    ArchivedGame? archivedGame;
+
     if (options.gameId != null) {
-      final game = await ref.watch(archivedGameProvider(id: options.gameId!).future);
-      _variant = game.meta.variant;
-      pgn = game.makePgn();
-      opening = game.data.opening;
-      serverAnalysis = game.serverAnalysis;
-      division = game.meta.division;
+      archivedGame = await ref.watch(archivedGameProvider(id: options.gameId!).future);
+      _variant = archivedGame!.meta.variant;
+      pgn = archivedGame.makePgn();
+      opening = archivedGame.data.opening;
+      serverAnalysis = archivedGame.serverAnalysis;
+      division = archivedGame.meta.division;
     } else {
       _variant = options.standalone!.variant;
       pgn = options.standalone!.pgn;
@@ -115,7 +118,6 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     _root = Root.fromPgnGame(
       game,
       isLichessAnalysis: options.isLichessGameAnalysis,
-      hideVariations: options.isLichessGameAnalysis,
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
@@ -173,6 +175,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     final analysisState = AnalysisState(
       variant: _variant,
       gameId: options.gameId,
+      archivedGame: archivedGame,
       currentPath: currentPath,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
@@ -515,9 +518,10 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
     }
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -563,8 +567,11 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == curState.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == curState.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
@@ -578,7 +585,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   void _stopEngineEval() {
     ref.read(evaluationServiceProvider).stop();
     // update the current node with last cached eval
-    _refreshCurrentNode();
+    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
   void _listenToServerAnalysisEvents() {
@@ -692,6 +699,9 @@ class AnalysisState with _$AnalysisState {
     /// The ID of the game if it's a lichess game.
     required GameId? gameId,
 
+    /// The archived game if it's a finished lichess game.
+    ArchivedGame? archivedGame,
+
     /// The variant of the analysis.
     required Variant variant,
 
@@ -796,10 +806,11 @@ class AnalysisState with _$AnalysisState {
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
   EngineGaugeParams get engineGaugeParams => (
-    orientation: pov,
     isLocalEngineAvailable: isEngineAvailable,
+    orientation: pov,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }
 

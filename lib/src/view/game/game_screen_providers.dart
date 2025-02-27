@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -65,6 +66,22 @@ class IsBoardTurned extends _$IsBoardTurned {
   void toggle() {
     state = !state;
   }
+}
+
+@riverpod
+Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
+  return ref.watch(
+    gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
+  );
+}
+
+@riverpod
+Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
+  return ref.watch(
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
+  );
 }
 
 @riverpod

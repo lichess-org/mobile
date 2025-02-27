@@ -35,10 +35,18 @@ class CreateChallengeScreen extends StatelessWidget {
 
   final LightUser user;
 
+  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
+    return buildScreenRoute(
+      context,
+      screen: CreateChallengeScreen(user),
+      title: context.l10n.challengeChallengesX(user.name),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
+      appBarTitle: Text(context.l10n.challengeChallengesX(user.name)),
       body: _ChallengeBody(user),
     );
   }
@@ -331,7 +339,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     harmonizeCupertinoTitleStyle: true,
                     title: Text(context.l10n.rated),
                     trailing: Switch.adaptive(
-                      applyCupertinoTheme: true,
                       value: preferences.rated,
                       onChanged: (bool value) {
                         ref.read(challengePreferencesProvider.notifier).setRated(value);
@@ -351,19 +358,16 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           timeControl == ChallengeTimeControlType.clock
                               ? isValidTimeControl && isValidPosition
                                   ? () {
-                                    pushPlatformRoute(
-                                      context,
-                                      rootNavigator: true,
-                                      builder: (BuildContext context) {
-                                        return GameScreen(
-                                          challenge: preferences.makeRequest(
-                                            widget.user,
-                                            preferences.variant != Variant.fromPosition
-                                                ? null
-                                                : fromPositionFenInput,
-                                          ),
-                                        );
-                                      },
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      GameScreen.buildRoute(
+                                        context,
+                                        challenge: preferences.makeRequest(
+                                          widget.user,
+                                          preferences.variant != Variant.fromPosition
+                                              ? null
+                                              : fromPositionFenInput,
+                                        ),
+                                      ),
                                     );
                                   }
                                   : null
@@ -393,7 +397,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                 // Navigate to the challenges screen where
                                 // the new correspondence challenge will be
                                 // displayed
-                                pushPlatformRoute(context, screen: const ChallengeRequestsScreen());
+                                Navigator.of(
+                                  context,
+                                ).push(ChallengeRequestsScreen.buildRoute(context));
                               }
                               : null,
                       child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),

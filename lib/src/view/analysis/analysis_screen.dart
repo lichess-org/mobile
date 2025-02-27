@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_settings.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -32,18 +32,34 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerStatefulWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+class AnalysisScreen extends StatelessWidget {
+  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+
+  final AnalysisOptions options;
+  final bool enableDrawingShapes;
+
+  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
+    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
+  }
+}
+
+class _AnalysisScreen extends ConsumerStatefulWidget {
+  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
 
   final AnalysisOptions options;
 
   final bool enableDrawingShapes;
 
   @override
-  ConsumerState<AnalysisScreen> createState() => _AnalysisScreenState();
+  ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -75,15 +91,13 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
 
     final appBarActions = [
       if (prefs.enableComputerAnalysis)
-        EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
+        EngineDepth(savedEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
-          pushPlatformRoute(
+          Navigator.of(
             context,
-            title: context.l10n.settingsSettings,
-            builder: (_) => AnalysisSettings(widget.options),
-          );
+          ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
         },
         semanticsLabel: context.l10n.settingsSettings,
         icon: const Icon(Icons.settings),
@@ -94,7 +108,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       case AsyncData(:final value):
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBar: PlatformAppBar(title: _Title(variant: value.variant), actions: appBarActions),
+          enableBackgroundFilterBlur: false,
+          appBarTitle: _Title(variant: value.variant),
+          appBarActions: appBarActions,
           body: _Body(
             options: widget.options,
             controller: _tabController,
@@ -111,10 +127,9 @@ class _AnalysisScreenState extends ConsumerState<AnalysisScreen>
       case _:
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBar: PlatformAppBar(
-            title: const _Title(variant: Variant.standard),
-            actions: appBarActions,
-          ),
+          enableBackgroundFilterBlur: false,
+          appBarTitle: const _Title(variant: Variant.standard),
+          appBarActions: appBarActions,
           body: const Center(child: CircularProgressIndicator()),
         );
     }
@@ -163,11 +178,13 @@ class _Body extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     final isEngineAvailable = analysisState.isEngineAvailable;
-    final hasEval = analysisState.hasAvailableEval;
     final currentNode = analysisState.currentNode;
+    final pov = analysisState.pov;
 
     return AnalysisLayout(
+      smallBoard: analysisPrefs.smallBoard,
       tabController: controller,
+      pov: pov,
       boardBuilder:
           (context, boardSize, borderRadius) => AnalysisBoard(
             options,
@@ -176,7 +193,7 @@ class _Body extends ConsumerWidget {
             enableDrawingShapes: enableDrawingShapes,
           ),
       engineGaugeBuilder:
-          hasEval && showEvaluationGauge
+          analysisState.hasAvailableEval && showEvaluationGauge
               ? (context, orientation) {
                 return orientation == Orientation.portrait
                     ? EngineGauge(
@@ -197,7 +214,7 @@ class _Body extends ConsumerWidget {
           isEngineAvailable && numEvalLines > 0
               ? EngineLines(
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                clientEval: currentNode.eval,
+                savedEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
               )
               : null,
@@ -233,7 +250,7 @@ class _BottomBar extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -242,11 +259,18 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          label: context.l10n.flipBoard,
-          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
-          icon: CupertinoIcons.arrow_2_squarepath,
-        ),
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomBarButton(
+            label: context.l10n.toggleLocalEvaluation,
+            onTap:
+                analysisState.isEngineAllowed
+                    ? () {
+                      ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                    }
+                    : null,
+            icon: CupertinoIcons.gauge,
+            highlighted: analysisState.isEngineAvailable,
+          ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
@@ -281,40 +305,42 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
+        ),
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
-            onPressed: (context) {
+            onPressed: () {
               final boardFen = analysisState.position.fen;
-              pushPlatformRoute(
+              Navigator.of(
                 context,
-                title: context.l10n.boardEditor,
-                builder: (_) => BoardEditorScreen(initialFen: boardFen),
-              );
+              ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(options: options),
-            );
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: (_) {
-            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-            launchShareDialog(context, text: analysisState.position.fen);
-          },
-        ),
+        // PGN share can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+            },
+          ),
+        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
+            onPressed: () {
+              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+              launchShareDialog(context, text: analysisState.position.fen);
+            },
+          ),
         if (options.gameId != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-            onPressed: (_) async {
+            onPressed: () async {
               final gameId = options.gameId!;
               final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
               try {

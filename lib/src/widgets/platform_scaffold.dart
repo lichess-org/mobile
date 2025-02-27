@@ -4,56 +4,111 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
 
-/// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
+/// A screen with a navigation bar and a body that adapts to the platform.
 ///
-/// Intended to be passed to [PlatformScaffold].
-class PlatformAppBar extends StatelessWidget {
-  const PlatformAppBar({
+/// On Android, this is a [Scaffold] with an [AppBar],
+/// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
+///
+/// This widget is voluntary limited to the most common use cases. For more advanced use cases,
+/// consider using [Scaffold] and [CupertinoPageScaffold] directly.
+class PlatformScaffold extends StatelessWidget {
+  const PlatformScaffold({
     super.key,
-    required this.title,
-    this.centerTitle = false,
-    this.leading,
-    this.actions = const [],
-    this.androidTitleSpacing,
+    this.appBarLeading,
+    required this.appBarTitle,
+    this.appBarCenterTitle = false,
+    this.appBarActions = const [],
+    this.appBarBottom,
+    this.appBarAndroidTitleSpacing,
+    required this.body,
+    this.bottomNavigationBar,
+    this.resizeToAvoidBottomInset = true,
+    this.backgroundColor,
+    this.enableBackgroundFilterBlur = true,
   });
 
   /// Widget to place at the start of the navigation bar
   ///
   /// See [AppBar.leading] and [CupertinoNavigationBar.leading] for details
-  final Widget? leading;
+  final Widget? appBarLeading;
 
   /// The title displayed in the middle of the bar.
   ///
   /// On Android, this is [AppBar.title], on iOS [CupertinoNavigationBar.middle]
-  final Widget title;
+  final Widget appBarTitle;
 
   /// On Android, this is passed directly to [AppBar.centerTitle]. Has no effect on iOS.
-  final bool centerTitle;
+  final bool appBarCenterTitle;
+
+  /// A widget to place at the bottom of the navigation bar.
+  final PreferredSizeWidget? appBarBottom;
 
   /// Action widgets to place at the end of the navigation bar.
   ///
   /// On Android, this is passed directlty to [AppBar.actions].
   /// On iOS, this is wrapped in a [Row] and passed to [CupertinoNavigationBar.trailing]
-  final List<Widget> actions;
+  final List<Widget> appBarActions;
 
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
-  final double? androidTitleSpacing;
+  final double? appBarAndroidTitleSpacing;
 
-  AppBar _androidBuilder(BuildContext context) {
-    return AppBar(
-      titleSpacing: androidTitleSpacing,
-      leading: leading,
-      title: title,
-      centerTitle: centerTitle,
-      actions: actions,
+  /// The main content of the screen, displayed below the navigation bar.
+  final Widget body;
+
+  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
+  final bool resizeToAvoidBottomInset;
+
+  /// The background color of the screen. If null, the default background color of the theme is used.
+  final Color? backgroundColor;
+
+  /// A widget to place at the bottom of the screen, below the body.
+  ///
+  /// Typically used for a [BottomNavigationBar].
+  final Widget? bottomNavigationBar;
+
+  /// {@macro flutter.cupertino.CupertinoNavigationBar.enableBackgroundFilterBlur}
+  ///
+  /// Has no effect on Android.
+  final bool enableBackgroundFilterBlur;
+
+  Widget _androidBuilder(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        titleSpacing: appBarAndroidTitleSpacing,
+        leading: appBarLeading,
+        title: appBarTitle,
+        centerTitle: appBarCenterTitle,
+        actions: appBarActions,
+        bottom: appBarBottom,
+      ),
+      body: body,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 
-  CupertinoNavigationBar _iosBuilder(BuildContext context) {
-    return CupertinoNavigationBar(
-      padding: actions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
-      middle: title,
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: actions),
+  Widget _iosBuilder(BuildContext context) {
+    return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      navigationBar: CupertinoNavigationBar(
+        padding: appBarActions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
+        middle: appBarTitle,
+        leading: appBarLeading,
+        bottom: appBarBottom,
+        trailing:
+            appBarActions.isNotEmpty
+                ? Row(mainAxisSize: MainAxisSize.min, children: appBarActions)
+                : null,
+        enableBackgroundFilterBlur: enableBackgroundFilterBlur,
+      ),
+      backgroundColor: backgroundColor,
+      child: Column(
+        children: <Widget>[
+          Expanded(child: body),
+          if (bottomNavigationBar != null) bottomNavigationBar!,
+        ],
+      ),
     );
   }
 
@@ -81,74 +136,5 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
             ),
           ),
     );
-  }
-}
-
-class _CupertinoNavBarWrapper extends StatelessWidget implements ObstructingPreferredSizeWidget {
-  const _CupertinoNavBarWrapper({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => child;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kMinInteractiveDimensionCupertino);
-
-  /// True if the navigation bar's background color has no transparency.
-  @override
-  bool shouldFullyObstruct(BuildContext context) {
-    final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-    return backgroundColor.a == 0xFF;
-  }
-}
-
-/// A screen with a navigation bar and a body that adapts to the platform.
-///
-/// On Android, this is a [Scaffold] with an [AppBar],
-/// on iOS a [CupertinoPageScaffold] with a [CupertinoNavigationBar].
-///
-/// See [PlatformAppBar] for an app bar that adapts to the platform and needs to be passed to this widget.
-class PlatformScaffold extends StatelessWidget {
-  const PlatformScaffold({
-    super.key,
-    this.appBar,
-    required this.body,
-    this.resizeToAvoidBottomInset = true,
-  });
-
-  /// Acts as the [AppBar] for Android and as the [CupertinoNavigationBar] for iOS.
-  ///
-  /// Usually an instance of [PlatformAppBar].
-  final Widget? appBar;
-
-  /// The main content of the screen, displayed below the navigation bar.
-  final Widget body;
-
-  /// See [Scaffold.resizeToAvoidBottomInset] and [CupertinoPageScaffold.resizeToAvoidBottomInset]
-  final bool resizeToAvoidBottomInset;
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar:
-          appBar != null
-              ? PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight), child: appBar!)
-              : null,
-      body: body,
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: appBar != null ? _CupertinoNavBarWrapper(child: appBar!) : null,
-      child: body,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
   }
 }

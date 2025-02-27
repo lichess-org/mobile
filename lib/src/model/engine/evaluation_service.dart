@@ -26,13 +26,16 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
-  EvaluationService(this.ref, {required this.maxMemory});
-
-  final Ref ref;
+  EvaluationService({required this.maxMemory});
 
   final int maxMemory;
 
   Engine? _engine;
+
+  /// A future that completes once the engine is disposed.
+  ///
+  /// This is used to avoid disposing the engine twice.
+  Future<void>? _engineDisposingFuture;
 
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
@@ -64,6 +67,7 @@ class EvaluationService {
       await disposeEngine();
     }
     _context = context;
+    _engineDisposingFuture = null;
     if (options != null) _options = options;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
@@ -98,12 +102,16 @@ class EvaluationService {
     _options = options;
   }
 
+  /// Dispose the engine.
+  ///
+  /// Returns a future that completes once the engine is disposed.
   Future<void> disposeEngine() {
-    return _engine?.dispose().then((_) {
-          _engine = null;
-          _context = null;
-        }) ??
-        Future.value();
+    if (_engine == null) return Future.value();
+
+    return _engineDisposingFuture ??= _engine!.dispose().then((_) {
+      _engine = null;
+      _context = null;
+    });
   }
 
   /// Start the engine evaluation with the given [path] and [steps].
@@ -145,20 +153,33 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    // cancel evaluation if we already have a cached eval at max search time
+    // cancel evaluation if we already have an interesting eval
     final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
-    if (cachedEval != null && cachedEval.searchTime >= _options.searchTime) {
-      _state.value = (
-        engineName: _state.value.engineName,
-        state: _state.value.state,
-        eval: cachedEval,
-      );
-      return null;
+    switch (cachedEval) {
+      // we have a local eval
+      case final LocalEval localEval:
+        // if the search time is greater than the current search time, don't evaluate again but
+        // update the engine state with the local eval
+        if (localEval.searchTime >= _options.searchTime) {
+          _state.value = (
+            engineName: _state.value.engineName,
+            state: _state.value.state,
+            eval: localEval,
+          );
+          return null;
+        }
+      // we have a cloud eval, no need to evaluate
+      case CloudEval _:
+        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
+        return null;
+      // no eval, continue
+      case null:
+        break;
     }
 
     final evalStream = engine
         .start(work)
-        .throttle(const Duration(milliseconds: 200), trailing: true);
+        .throttle(const Duration(milliseconds: 300), trailing: true);
 
     evalStream.forEach((t) {
       final (work, eval) = t;
@@ -179,14 +200,14 @@ class EvaluationService {
 EvaluationService evaluationService(Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
-  final service = EvaluationService(ref, maxMemory: maxMemory);
+  final service = EvaluationService(maxMemory: maxMemory);
   ref.onDispose(() {
     service.disposeEngine();
   });
   return service;
 }
 
-typedef EngineEvaluationState = ({String engineName, EngineState state, ClientEval? eval});
+typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEval? eval});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod
@@ -225,4 +246,51 @@ class EvaluationOptions with _$EvaluationOptions {
     required int cores,
     required Duration searchTime,
   }) = _EvaluationOptions;
+}
+
+/// A function to choose the eval that should be displayed.
+Eval? pickBestEval({
+  /// The eval from the local engine
+  required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+
+  /// The eval from the server analysis
+  required ExternalEval? serverEval,
+}) {
+  return switch (savedEval) {
+    CloudEval() => savedEval,
+    LocalEval() => localEval ?? savedEval,
+    null => localEval ?? serverEval,
+  };
+}
+
+/// A function to choose the client eval that should be displayed.
+ClientEval? pickBestClientEval({
+  /// The eval from the local engine
+  required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+}) {
+  final eval =
+      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
+
+  return eval;
+}
+
+/// A function to choose the best moves that should be displayed.
+IList<MoveWithWinningChances>? pickBestMoves({
+  /// The best moves from the local engine
+  required IList<MoveWithWinningChances>? localBestMoves,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+}) {
+  return switch (savedEval) {
+    CloudEval() => savedEval.bestMoves,
+    LocalEval() => localBestMoves ?? savedEval.bestMoves,
+    null => localBestMoves,
+  };
 }

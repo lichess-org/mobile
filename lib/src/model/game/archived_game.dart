@@ -56,9 +56,9 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
   /// Create an archived game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
-  /// - GET /game/export/<id>
-  factory ArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _archivedGameFromPick(pick(json).required());
+  /// - GET /game/export/:id
+  factory ArchivedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+    return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an archived game from a local storage JSON.
@@ -72,7 +72,7 @@ typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
 ///
 /// This is commonly used to display a list of games.
 /// Lichess endpoints that return this data:
-/// - GET /api/games/user/<userId>
+/// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
 class LightArchivedGame with _$LightArchivedGame {
@@ -96,17 +96,33 @@ class LightArchivedGame with _$LightArchivedGame {
     GameSource? source,
     LightOpening? opening,
     String? lastFen,
+    String? moves,
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
+    bool? bookmarked,
   }) = _ArchivedGameData;
 
-  factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
-    return _lightArchivedGameFromPick(pick(json).required());
+  factory LightArchivedGame.fromServerJson(
+    Map<String, dynamic> json, {
+
+    /// Whether to ask the server if the game is bookmarked
+    bool withBookmarked = false,
+
+    /// Whether it is already known that the game is bookmarked
+    bool isBookmarked = false,
+  }) {
+    return _lightArchivedGameFromPick(
+      pick(json).required(),
+      withBookmarked: withBookmarked,
+      isBookmarked: isBookmarked,
+    );
   }
 
   factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
       _$LightArchivedGameFromJson(json);
+
+  bool get isBookmarked => bookmarked == true;
 
   String get clockDisplay {
     return TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
@@ -129,8 +145,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
       ?.lock;
 }
 
-ArchivedGame _archivedGameFromPick(RequiredPick pick) {
-  final data = _lightArchivedGameFromPick(pick);
+ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
+  final data = _lightArchivedGameFromPick(pick, withBookmarked: withBookmarked);
   final clocks = pick(
     'clocks',
   ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
@@ -202,7 +218,11 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   );
 }
 
-LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
+LightArchivedGame _lightArchivedGameFromPick(
+  RequiredPick pick, {
+  bool withBookmarked = false,
+  bool isBookmarked = false,
+}) {
   return LightArchivedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
@@ -220,9 +240,16 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
     lastFen: pick('lastFen').asStringOrNull(),
+    moves: pick('moves').asStringOrNull(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
+    bookmarked:
+        isBookmarked
+            ? true
+            : withBookmarked
+            ? pick('bookmarked').asBoolOrFalse()
+            : null,
   );
 }
 

@@ -7,7 +7,54 @@ part 'broadcast.freezed.dart';
 
 typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? nextPage});
 
-enum BroadcastResult { whiteWins, blackWins, draw, ongoing, noResultPgnTag }
+enum BroadcastResult {
+  whiteWins,
+  blackWins,
+  draw,
+  canceled,
+  whiteHalfWins,
+  blackHalfWins,
+  ongoing,
+  noResultPgnTag;
+
+  static BroadcastResult resultFromString(String? result) {
+    return (result == null)
+        ? BroadcastResult.noResultPgnTag
+        : switch (result) {
+          '½-½' => BroadcastResult.draw,
+          '1-0' => BroadcastResult.whiteWins,
+          '0-1' => BroadcastResult.blackWins,
+          '0-0' => BroadcastResult.canceled,
+          '½-0' => BroadcastResult.whiteHalfWins,
+          '0-½' => BroadcastResult.blackHalfWins,
+          '*' => BroadcastResult.ongoing,
+          _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
+        };
+  }
+
+  String resultToString(Side side) {
+    return switch (this) {
+      whiteWins => side == Side.white ? '1' : '0',
+      blackWins => side == Side.white ? '0' : '1',
+      draw => '½',
+      canceled => '0',
+      whiteHalfWins => side == Side.white ? '½' : '0',
+      blackHalfWins => side == Side.white ? '0' : '½',
+      _ => throw ArgumentError.value(this, 'result', 'Not a completed game'),
+    };
+  }
+
+  bool get isOngoing => switch (this) {
+    ongoing => true,
+    _ => false,
+  };
+
+  bool get isOver => switch (this) {
+    ongoing => false,
+    noResultPgnTag => false,
+    _ => true,
+  };
+}
 
 @freezed
 class Broadcast with _$Broadcast {
@@ -81,7 +128,14 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundWithGames = ({BroadcastRound round, BroadcastRoundGames games});
+typedef BroadcastRoundResponse =
+    ({
+      String? groupName,
+      IList<BroadcastTournamentGroup>? group,
+      BroadcastTournamentData tournament,
+      BroadcastRound round,
+      BroadcastRoundGames games,
+    });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
@@ -96,13 +150,12 @@ class BroadcastGame with _$BroadcastGame {
     required Move? lastMove,
     required BroadcastResult status,
     required DateTime updatedClockAt,
+    int? cp,
+    int? mate,
   }) = _BroadcastGame;
 
-  bool get isOngoing => status == BroadcastResult.ongoing;
-  bool get isOver =>
-      status == BroadcastResult.draw ||
-      status == BroadcastResult.whiteWins ||
-      status == BroadcastResult.blackWins;
+  bool get isOngoing => status.isOngoing;
+  bool get isOver => status.isOver;
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
 

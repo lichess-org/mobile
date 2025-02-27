@@ -1,10 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -23,8 +23,40 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const PlayerScreen(), title: context.l10n.players);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    void onUserTap(LightUser user) =>
+        Navigator.of(context).push(UserScreen.buildRoute(context, user));
+
+    final searchButton = PreferredSize(
+      preferredSize: Size.fromHeight(
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? kMinInteractiveDimensionCupertino
+            : kToolbarHeight,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: PlatformSearchBar(
+          hintText: context.l10n.searchSearch,
+          focusNode: AlwaysDisabledFocusNode(),
+          onTap:
+              () => Navigator.of(
+                context,
+              ).push(SearchScreen.buildRoute(context, onUserTap: onUserTap)),
+        ),
+      ),
+    );
+
+    final listContent = [
+      if (session != null) _OnlineFriendsWidget(),
+      RatingPrefAware(child: LeaderboardWidget()),
+    ];
+
     return FocusDetector(
       onFocusRegained: () {
         ref.read(onlineFriendsProvider.notifier).startWatchingFriends();
@@ -34,9 +66,24 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(title: Text(context.l10n.players)),
-        body: _Body(),
+      child: PlatformWidget(
+        androidBuilder:
+            (context) => Scaffold(
+              appBar: AppBar(title: Text(context.l10n.players), bottom: searchButton),
+              body: _Body(),
+            ),
+        iosBuilder:
+            (context) => CupertinoPageScaffold(
+              child: CustomScrollView(
+                slivers: [
+                  CupertinoSliverNavigationBar(
+                    largeTitle: Text(context.l10n.players),
+                    bottom: searchButton,
+                  ),
+                  SliverList(delegate: SliverChildListDelegate(listContent)),
+                ],
+              ),
+            ),
       ),
     );
   }
@@ -49,7 +96,6 @@ class _Body extends ConsumerWidget {
 
     return ListView(
       children: [
-        const Padding(padding: Styles.bodySectionPadding, child: _SearchButton()),
         if (session != null) _OnlineFriendsWidget(),
         RatingPrefAware(child: LeaderboardWidget()),
       ],
@@ -60,27 +106,6 @@ class _Body extends ConsumerWidget {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
-}
-
-class _SearchButton extends StatelessWidget {
-  const _SearchButton();
-
-  @override
-  Widget build(BuildContext context) {
-    void onUserTap(LightUser user) =>
-        pushPlatformRoute(context, builder: (ctx) => UserScreen(user: user));
-
-    return PlatformSearchBar(
-      hintText: context.l10n.searchSearch,
-      focusNode: AlwaysDisabledFocusNode(),
-      onTap:
-          () => pushPlatformRoute(
-            context,
-            fullscreenDialog: true,
-            builder: (_) => SearchScreen(onUserTap: onUserTap),
-          ),
-    );
-  }
 }
 
 class _OnlineFriendsWidget extends ConsumerWidget {
@@ -112,12 +137,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),
                 ),
-                onTap:
-                    () => pushPlatformRoute(
-                      context,
-                      title: user.name,
-                      builder: (_) => UserScreen(user: user),
-                    ),
+                onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
               ),
           ],
         );
@@ -139,10 +159,6 @@ class _OnlineFriendsWidget extends ConsumerWidget {
   }
 
   void _handleTap(BuildContext context, IList<LightUser> followingOnlines) {
-    pushPlatformRoute(
-      context,
-      title: context.l10n.friends,
-      builder: (_) => const FollowingScreen(),
-    );
+    Navigator.of(context).push(FollowingScreen.buildRoute(context));
   }
 }

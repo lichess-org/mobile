@@ -390,12 +390,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastUpcoming => 'Próximamente';
 
   @override
-  String get broadcastCompleted => 'Completadas';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detecta la terminación de la ronda, pero puede fallar. Usa esto para configurarla manualmente.';
-
-  @override
   String get broadcastRoundName => 'Nombre de la ronda';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Ver todas las transmisiones por mes';
+
+  @override
+  String get broadcastBackToLiveMove => 'Volver al movimiento en directo';
+
+  @override
+  String get broadcastSinceHideResults => 'Como elegiste ocultar los resultados, todos los tableros de vista previa están vacíos.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Mate de Vukovic';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Una torre y un caballo se unen para dar mate al rey. La torre da mate apoyada por una tercera pieza y el caballo se utiliza para bloquear las casillas de escape del rey.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Final de caballos';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Tu cuenta está administrada y no se puede cerrar.';
 
   @override
-  String get settingsClosingIsDefinitive => 'El cierre de la cuenta será definitivo. No hay vuelta atrás. ¿Estás seguro?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'No se te permitirá abrir una nueva cuenta con el mismo nombre, ni cambiando letras mayúsculas y minúsculas.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'He cambiado de opinión, no cierren mi cuenta';
+  String get settingsCancelKeepAccount => 'Cancelar y mantener mi cuenta';
 
   @override
-  String get settingsCloseAccountExplanation => '¿Estás seguro de que quieres cerrar tu cuenta? El cierre de tu cuenta es una decisión permanente. NUNCA MÁS podrás iniciar sesión desde la misma.';
+  String get settingsCloseAccountAreYouSure => '¿Estás seguro de que quieres cerrar tu cuenta?';
 
   @override
   String get settingsThisAccountIsClosed => 'Esta cuenta fue cerrada.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get followAndChallengeFriends => 'Sigue y reta a amigos';
 
   @override
+  String get noChallenges => 'Sin desafíos.';
+
+  @override
   String get gameAnalysis => 'Análisis de la partida';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reopenYourAccount => 'Reactivar tu cuenta';
 
   @override
-  String get closedAccountChangedMind => 'Si cerraste tu cuenta y has cambiado de opinión, aún tienes una oportunidad de recuperarla.';
-
-  @override
-  String get onlyWorksOnce => 'Esto solo se puede hacer una vez.';
-
-  @override
-  String get cantDoThisTwice => 'Si vuelves a cerrar tu cuenta, no podrás recuperarla.';
+  String get reopenYourAccountDescription => 'Si cerraste tu cuenta y has cambiado de opinión, aún tienes una oportunidad de recuperarla.';
 
   @override
   String get emailAssociatedToaccount => 'Dirección de correo electrónico asociada a la cuenta';

@@ -426,12 +426,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastUpcoming => 'Предстоящие';
 
   @override
-  String get broadcastCompleted => 'Завершённые';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess определяет завершение тура на основе источника партий. Используйте этот переключатель, если нет источника.';
-
-  @override
   String get broadcastRoundName => 'Название тура';
 
   @override
@@ -630,6 +624,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Просмотр всех трансляций за месяц';
+
+  @override
+  String get broadcastBackToLiveMove => 'Вернуться к текущему ходу';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -903,7 +903,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesInGameOnly => 'Только в игре';
 
   @override
-  String get preferencesExceptInGame => 'Кроме как во время игры';
+  String get preferencesExceptInGame => 'Да, но не во время игры';
 
   @override
   String get preferencesChessClock => 'Шахматные часы';
@@ -1519,6 +1519,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Мат Вуковича';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Ладья и конь совместно матуют короля. Ладья, защищённая ещё одной фигурой, ставит мат, а конь отрезает поля отступления вражеского короля.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Коневой эндшпиль';
 
   @override
@@ -1734,16 +1740,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ваш аккаунт находится под управлением и не может быть закрыт.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Закрытие невозможно будет отменить. Вы уверены?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Вы не сможете создать новый аккаунт с таким же именем, даже если регистр символов отличается.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Я передумал, не закрывайте мой аккаунт';
+  String get settingsCancelKeepAccount => 'Отменить и оставить мою учётную запись';
 
   @override
-  String get settingsCloseAccountExplanation => 'Вы уверены, что хотите закрыть свой аккаунт? Закрытие аккаунта необратимо. Вы никогда больше не сможете в него войти.';
+  String get settingsCloseAccountAreYouSure => 'Вы уверены, что хотите удалить свою учётную запись?';
 
   @override
   String get settingsThisAccountIsClosed => 'Этот аккаунт закрыт.';
@@ -3175,13 +3178,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get none => 'Нет';
 
   @override
-  String get fast => 'Быстро';
+  String get fast => 'Быстрая';
 
   @override
   String get normal => 'Нормальная';
 
   @override
-  String get slow => 'Медленно';
+  String get slow => 'Медленная';
 
   @override
   String get insideTheBoard => 'Внутри доски';
@@ -3731,6 +3734,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get followAndChallengeFriends => 'Подписки и игра с друзьями';
+
+  @override
+  String get noChallenges => 'Нет вызовов.';
 
   @override
   String get gameAnalysis => 'Анализ игры';
@@ -4328,13 +4334,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reopenYourAccount => 'Переоткройте свой аккаунт';
 
   @override
-  String get closedAccountChangedMind => 'Если вы закрыли свой аккаунт, но с тех пор передумали, то у вас есть однократная возможность восстановить его.';
-
-  @override
-  String get onlyWorksOnce => 'Это сработает только один раз.';
-
-  @override
-  String get cantDoThisTwice => 'Если вы закроете свой аккаунт ещё раз, вы уже не сможете открыть его.';
+  String get reopenYourAccountDescription => 'Если вы закрыли свою учётную запись, но потом передумали, у вас есть шанс отменить своё решение.';
 
   @override
   String get emailAssociatedToaccount => 'Адрес электронной почты, привязанный в этому аккаунту';

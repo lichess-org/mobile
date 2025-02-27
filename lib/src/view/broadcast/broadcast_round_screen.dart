@@ -1,48 +1,142 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
+
+enum BroadcastRoundTab {
+  overview,
+  boards,
+  players;
+
+  static BroadcastRoundTab? tabOrNullFromString(String tab) {
+    return switch (tab) {
+      'overview' => BroadcastRoundTab.overview,
+      'boards' => BroadcastRoundTab.boards,
+      'players' => BroadcastRoundTab.players,
+      _ => null,
+    };
+  }
+}
+
+enum _BroadcastGameFilter {
+  all,
+  ongoing;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case all:
+        return l10n.mobileAllGames;
+      case ongoing:
+        return l10n.broadcastOngoing;
+    }
+  }
+}
+
+class BroadcastRoundScreenLoading extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final BroadcastRoundTab? initialTab;
+
+  const BroadcastRoundScreenLoading({super.key, required this.roundId, this.initialTab});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastRoundId roundId, {
+    BroadcastRoundTab? initialTab,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastRoundScreenLoading(roundId: roundId, initialTab: initialTab),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final round = ref.watch(broadcastRoundProvider(roundId));
+
+    return switch (round) {
+      AsyncData(:final value) => BroadcastRoundScreen(
+        broadcast: Broadcast(
+          tour: value.tournament,
+          round: value.round,
+          group: value.groupName,
+          roundToLinkId: roundId,
+        ),
+        initialTab: initialTab,
+      ),
+      AsyncError(:final error) => PlatformScaffold(
+        appBarTitle: const Text(''),
+        body: Center(child: Text('Cannot load round data: $error')),
+      ),
+      _ => const PlatformScaffold(
+        appBarTitle: Text(''),
+        body: Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
+  }
+}
 
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
+  final BroadcastRoundTab? initialTab;
 
-  const BroadcastRoundScreen({required this.broadcast});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    Broadcast broadcast, {
+    BroadcastRoundTab? initialTab,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
+      title: broadcast.title,
+    );
+  }
 
   @override
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-enum _CupertinoView { overview, boards, players }
-
 class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
-  _CupertinoView selectedTab = _CupertinoView.overview;
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
 
   bool roundLoaded = false;
 
+  _BroadcastGameFilter filter = _BroadcastGameFilter.all;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    _tabController = TabController(
+      initialIndex: widget.initialTab?.index ?? 0,
+      length: 3,
+      vsync: this,
+    );
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
@@ -53,16 +147,17 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     super.dispose();
   }
 
-  void setCupertinoTab(_CupertinoView mode) {
-    setState(() {
-      selectedTab = mode;
-    });
-  }
-
   void setTournamentId(BroadcastTournamentId tournamentId) {
     setState(() {
       _selectedTournamentId = tournamentId;
       _selectedRoundId = null;
+    });
+  }
+
+  void setGameFilter(_BroadcastGameFilter filter) {
+    _tabController.index = 1;
+    setState(() {
+      this.filter = filter;
     });
   }
 
@@ -73,121 +168,61 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
-  Widget _iosBuilder(
+  Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
+    AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    final tabSwitcher = CupertinoSlidingSegmentedControl<_CupertinoView>(
-      groupValue: selectedTab,
-      children: {
-        _CupertinoView.overview: Text(context.l10n.broadcastOverview),
-        _CupertinoView.boards: Text(context.l10n.broadcastBoards),
-        _CupertinoView.players: Text(context.l10n.players),
-      },
-      onValueChanged: (_CupertinoView? view) {
-        if (view != null) {
-          setCupertinoTab(view);
-        }
-      },
-    );
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
+    return PlatformScaffold(
+      appBarTitle: AutoSizeText(
+        widget.broadcast.title,
+        minFontSize: 14.0,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: switch (asyncRound) {
-              AsyncData(value: final _) => switch (selectedTab) {
-                _CupertinoView.overview => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastOverviewTab(
-                    broadcast: widget.broadcast,
-                    tournamentId: _selectedTournamentId,
-                  ),
-                ),
-                _CupertinoView.boards => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastBoardsTab(
-                      tournamentId: _selectedTournamentId,
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
-                      tournamentSlug: widget.broadcast.tour.slug,
-                    ),
-                    _ => const SliverFillRemaining(child: SizedBox.shrink()),
-                  },
-                ),
-                _CupertinoView.players => _TabView(
-                  cupertinoTabSwitcher: tabSwitcher,
-                  sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                ),
-              },
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
-          ),
-          switch (asyncTournament) {
-            AsyncData(:final value) => _BottomBar(
-              tournament: value,
-              roundId: _selectedRoundId ?? value.defaultRoundId,
-              setTournamentId: setTournamentId,
-              setRoundId: setRoundId,
-            ),
-            _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
-          },
+      appBarBottom: TabBar(
+        controller: _tabController,
+        tabs: <Widget>[
+          Tab(text: context.l10n.broadcastOverview),
+          Tab(text: context.l10n.broadcastBoards),
+          Tab(text: context.l10n.players),
         ],
       ),
-    );
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-    AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundWithGames> asyncRound,
-  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+      appBarActions: [
+        AppBarIconButton(
+          icon: const Icon(Icons.settings),
+          onPressed:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder:
+                    (_) => _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
+              ),
+          semanticsLabel: context.l10n.settingsSettings,
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.broadcastOverview),
-            Tab(text: context.l10n.broadcastBoards),
-            Tab(text: context.l10n.players),
-          ],
+        AppBarIconButton(
+          icon: const PlatformShareIcon(),
+          semanticsLabel: context.l10n.studyShareAndExport,
+          onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
         ),
-      ),
+      ],
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _TabView(
-              sliver: BroadcastOverviewTab(
-                broadcast: widget.broadcast,
+            BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
+            switch (asyncTournament) {
+              AsyncData(:final value) => BroadcastBoardsTab(
                 tournamentId: _selectedTournamentId,
+                roundId: _selectedRoundId ?? value.defaultRoundId,
+                tournamentSlug: widget.broadcast.tour.slug,
+                showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
               ),
-            ),
-            _TabView(
-              sliver: switch (asyncTournament) {
-                AsyncData(:final value) => BroadcastBoardsTab(
-                  tournamentId: _selectedTournamentId,
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  tournamentSlug: widget.broadcast.tour.slug,
-                ),
-                _ => const SliverFillRemaining(child: SizedBox.shrink()),
-              },
-            ),
-            _TabView(sliver: BroadcastPlayersTab(tournamentId: _selectedTournamentId)),
+              _ => const SizedBox.shrink(),
+            },
+            BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
         _ => const Center(child: CircularProgressIndicator()),
@@ -199,7 +234,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const PlatformBottomBar.empty(transparentCupertinoBar: false),
+        _ => const PlatformBottomBar.empty(transparentBackground: false),
       },
     );
   }
@@ -208,64 +243,33 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundWithGames>.loading();
+    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
 
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         // Eagerly initalize the round controller so it stays alive when switching tabs
         // and to know if the round has games to show
-        final round = ref.watch(
+        final roundState = ref.watch(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
         );
 
         ref.listen(
           broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
           (_, round) {
-            if (round.hasValue && !roundLoaded) {
+            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
               roundLoaded = true;
               if (round.value!.games.isNotEmpty) {
                 _tabController.index = 1;
-
-                if (Theme.of(context).platform == TargetPlatform.iOS) {
-                  setCupertinoTab(_CupertinoView.boards);
-                }
               }
             }
           },
         );
 
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, round),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, round),
-        );
+        return _buildContent(context, asyncTour, roundState);
 
       case _:
-        return PlatformWidget(
-          androidBuilder: (context) => _androidBuilder(context, asyncTour, loadingRound),
-          iosBuilder: (context) => _iosBuilder(context, asyncTour, loadingRound),
-        );
+        return _buildContent(context, asyncTour, loadingRound);
     }
-  }
-}
-
-class _TabView extends StatelessWidget {
-  const _TabView({required this.sliver, this.cupertinoTabSwitcher});
-
-  final Widget sliver;
-  final Widget? cupertinoTabSwitcher;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        if (cupertinoTabSwitcher != null)
-          SliverPadding(
-            padding: Styles.bodyPadding + EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-            sliver: SliverToBoxAdapter(child: cupertinoTabSwitcher),
-          ),
-        sliver,
-      ],
-    );
   }
 }
 
@@ -285,7 +289,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         if (tournament.group != null)
           AdaptiveTextButton(
@@ -404,27 +408,23 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
           PlatformListTile(
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
-            title: Text(round.name),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (round.startsAt != null || round.startsAfterPrevious) ...[
-                  Text(
-                    round.startsAt != null
-                        ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
-                            ? _dateFormatMonth.format(round.startsAt!)
-                            : _dateFormatYearMonth.format(round.startsAt!)
-                        : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
-                  ),
-                  const SizedBox(width: 5.0),
-                ],
-                switch (round.status) {
-                  RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
-                  RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
-                  RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
-                },
-              ],
-            ),
+            title: Text(round.name, overflow: TextOverflow.ellipsis, maxLines: 2),
+            subtitle:
+                (round.startsAt != null || round.startsAfterPrevious)
+                    ? Text(
+                      round.startsAt != null
+                          ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
+                              ? _dateFormatMonth.format(round.startsAt!)
+                              : _dateFormatYearMonth.format(round.startsAt!)
+                          : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                    : null,
+            trailing: switch (round.status) {
+              RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
+              RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
+              RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
+            },
             onTap: () {
               widget.setRoundId(round.id);
               Navigator.of(context).pop();
@@ -478,6 +478,83 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
             },
           ),
       ],
+    );
+  }
+}
+
+class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
+  const _BroadcastSettingsBottomSheet(this.selectedFilter, {required this.onGameFilterChange});
+
+  final _BroadcastGameFilter selectedFilter;
+  final void Function(_BroadcastGameFilter filter) onGameFilterChange;
+
+  @override
+  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
+      _BroadcastSettingsBottomSheetState();
+}
+
+class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+  late _BroadcastGameFilter filter;
+
+  @override
+  void initState() {
+    super.initState();
+    filter = widget.selectedFilter;
+  }
+
+  @override
+  void didUpdateWidget(covariant _BroadcastSettingsBottomSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    filter = widget.selectedFilter;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
+
+    return DraggableScrollableSheet(
+      initialChildSize: .6,
+      expand: false,
+      builder:
+          (context, scrollController) => ListView(
+            controller: scrollController,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SettingsSectionTitle(context.l10n.filterGames),
+                    const SizedBox(height: 6),
+                    Filter<_BroadcastGameFilter>(
+                      filterType: FilterType.singleChoice,
+                      choices: _BroadcastGameFilter.values,
+                      choiceSelected: (choice) => filter == choice,
+                      choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                      onSelected: (value, selected) {
+                        setState(() => filter = value);
+                        widget.onGameFilterChange.call(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              ListSection(
+                header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+                materialFilledCard: true,
+                children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.evaluationGauge),
+                    value: broadcastPreferences.showEvaluationBar,
+                    onChanged: (value) {
+                      ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
     );
   }
 }

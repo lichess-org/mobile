@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -71,6 +75,13 @@ void main() {
         tester,
         home: const StudyScreen(id: testId),
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -118,8 +129,8 @@ void main() {
       // Wait for study to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
@@ -132,8 +143,8 @@ void main() {
       // Wait for next chapter to load (even though it shouldn't)
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsNothing);
-      expect(find.text('Chapter 2'), findsOneWidget);
+      expect(find.text('1. Chapter 1'), findsNothing);
+      expect(find.text('2. Chapter 2'), findsOneWidget);
 
       expect(find.text('pgn 1'), findsNothing);
       expect(find.text('pgn 2'), findsOneWidget);
@@ -144,20 +155,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('Chapter 1')),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('1. Chapter 1')),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('Chapter 2')),
+        find.descendant(of: find.byType(Scrollable), matching: find.text('2. Chapter 2')),
         findsOneWidget,
       );
 
-      await tester.tap(find.text('Chapter 1'));
+      await tester.tap(find.text('1. Chapter 1'));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 
-      expect(find.text('Chapter 1'), findsOneWidget);
-      expect(find.text('Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsOneWidget);
+      expect(find.text('2. Chapter 2'), findsNothing);
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
@@ -176,6 +187,13 @@ void main() {
         tester,
         home: const StudyScreen(id: testId),
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
+                .toJson(),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load

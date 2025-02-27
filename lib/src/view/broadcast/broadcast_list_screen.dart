@@ -1,33 +1,65 @@
-import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
-const kBroadcastGridItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0);
+const _kHandsetThumbnailSize = 80.0;
+const _kTabletThumbnailSize = 250.0;
+
+enum _BroadcastFilter {
+  all,
+  live;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case live:
+        return 'Live broadcasts';
+      case all:
+        return 'All broadcasts';
+    }
+  }
+}
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastListScreen extends StatelessWidget {
+class BroadcastListScreen extends StatefulWidget {
   const BroadcastListScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      title: context.l10n.broadcastBroadcasts,
+      screen: const BroadcastListScreen(),
+    );
+  }
+
+  static double _thumbnailSize(BuildContext context) {
+    return isTabletOrLarger(context) ? _kTabletThumbnailSize : _kHandsetThumbnailSize;
+  }
+
+  @override
+  State<BroadcastListScreen> createState() => _BroadcastListScreenState();
+}
+
+class _BroadcastListScreenState extends State<BroadcastListScreen> {
+  _BroadcastFilter filter = _BroadcastFilter.all;
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +69,66 @@ class BroadcastListScreen extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
     );
+    final filterButton = AppBarIconButton(
+      icon: const Icon(Icons.filter_list),
+      // TODO: translate
+      semanticsLabel: 'Filter broadcasts',
+      onPressed:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+            builder:
+                (_) => StatefulBuilder(
+                  builder: (context, setLocalState) {
+                    return BottomSheetScrollableContainer(
+                      padding: const EdgeInsets.all(16.0),
+                      children: [
+                        const SizedBox(height: 16.0),
+                        Filter<_BroadcastFilter>(
+                          filterType: FilterType.singleChoice,
+                          choices: _BroadcastFilter.values,
+                          choiceSelected: (choice) => filter == choice,
+                          choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                          onSelected: (value, selected) {
+                            setLocalState(() => filter = value);
+                            setState(() => filter = value);
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                      ],
+                    );
+                  },
+                ),
+          ),
+    );
     return PlatformWidget(
-      androidBuilder: (_) => Scaffold(body: const _Body(), appBar: AppBar(title: title)),
+      androidBuilder:
+          (_) => Scaffold(
+            backgroundColor: Styles.listingsScreenBackgroundColor(context),
+            body: _Body(filter),
+            appBar: AppBar(title: title, actions: [filterButton]),
+          ),
       iosBuilder:
           (_) => CupertinoPageScaffold(
+            backgroundColor: Styles.listingsScreenBackgroundColor(context),
             navigationBar: CupertinoNavigationBar(
               middle: title,
               automaticBackgroundVisibility: false,
-              backgroundColor: Styles.cupertinoAppBarColor
-                  .resolveFrom(context)
-                  .withValues(alpha: 0.0),
+              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
               border: null,
+              trailing: filterButton,
             ),
-            child: const _Body(),
+            child: _Body(filter),
           ),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body();
+  const _Body(this.filter);
+
+  final _BroadcastFilter filter;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _BodyState();
@@ -64,36 +136,24 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  ImageColorWorker? _worker;
-
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    _initWorker();
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    _worker?.close();
     super.dispose();
   }
 
-  Future<void> _initWorker() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
-    if (mounted) {
-      setState(() {
-        _worker = worker;
-      });
-    }
-  }
-
   void _scrollListener() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+    if (widget.filter == _BroadcastFilter.all &&
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
@@ -106,59 +166,24 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
-    if (_worker == null || (!broadcasts.hasValue && broadcasts.isLoading)) {
+    if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
 
-    if (!broadcasts.hasValue && broadcasts.isLoading) {
-      debugPrint('SEVERE: [BroadcastsListScreen] could not load broadcast tournaments');
-      return const Center(child: Text('Could not load broadcast tournaments'));
-    }
-
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final itemsByRow =
-        screenWidth >= 1200
-            ? 3
-            : screenWidth >= 700
-            ? 2
-            : 1;
-    const loadingItems = 12;
-    final pastItemsCount =
-        broadcasts.requireValue.past.length + (broadcasts.isLoading ? loadingItems : 0);
-
-    final highTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: itemsByRow,
-      crossAxisSpacing: 12.0,
-      mainAxisSpacing: 16.0,
-      childAspectRatio: 1.45,
-    );
-
-    final lowTierGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: itemsByRow + 1,
-      crossAxisSpacing: 12.0,
-      mainAxisSpacing: 16.0,
-      childAspectRatio:
-          screenWidth >= 1200
-              ? 1.4
-              : screenWidth >= 700
-              ? 1.3
-              : 1.0,
-    );
-
     final sections = [
-      ('ongoing', context.l10n.broadcastOngoing, broadcasts.value!.active),
-      ('past', context.l10n.broadcastCompleted, broadcasts.value!.past),
+      (
+        'ongoing',
+        context.l10n.broadcastOngoing,
+        broadcasts.value!.active
+            .where((b) => b.isLive || widget.filter != _BroadcastFilter.live)
+            .toList(),
+      ),
+      (
+        'past',
+        context.l10n.broadcastPastBroadcasts,
+        broadcasts.value!.past.where((b) => widget.filter == _BroadcastFilter.all).toList(),
+      ),
     ];
-
-    final activeHighTier =
-        broadcasts.value!.active
-            .where((broadcast) => broadcast.tour.tier != null && broadcast.tour.tier! >= 4)
-            .toList();
-
-    final activeLowTier =
-        broadcasts.value!.active
-            .where((broadcast) => broadcast.tour.tier == null || broadcast.tour.tier! < 4)
-            .toList();
 
     return RefreshIndicator.adaptive(
       edgeOffset:
@@ -167,14 +192,14 @@ class _BodyState extends ConsumerState<_Body> {
               : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
-      child: Shimmer(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            for (final section in sections)
-              SliverMainAxisGroup(
-                key: ValueKey(section),
-                slivers: [
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          for (final section in sections)
+            SliverMainAxisGroup(
+              key: ValueKey(section),
+              slivers: [
+                if (section.$3.isNotEmpty)
                   if (Theme.of(context).platform == TargetPlatform.iOS)
                     CupertinoSliverNavigationBar(
                       automaticallyImplyLeading: false,
@@ -189,7 +214,11 @@ class _BodyState extends ConsumerState<_Body> {
                     )
                   else
                     SliverAppBar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).appBarTheme.backgroundColor?.withValues(alpha: 1),
                       automaticallyImplyLeading: false,
+                      primary: false,
                       title: AutoSizeText(
                         section.$2,
                         maxLines: 1,
@@ -198,90 +227,49 @@ class _BodyState extends ConsumerState<_Body> {
                       ),
                       pinned: true,
                     ),
-                  if (section.$1 == 'ongoing') ...[
-                    if (activeHighTier.isNotEmpty)
-                      SliverPadding(
-                        padding:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? Styles.horizontalBodyPadding
-                                : Styles.bodySectionPadding,
-                        sliver: SliverGrid.builder(
-                          gridDelegate: highTierGridDelegate,
-                          itemBuilder:
-                              (context, index) => BroadcastCard(
-                                worker: _worker!,
-                                broadcast: activeHighTier[index],
-                                aspectRatio: highTierGridDelegate.childAspectRatio,
-                              ),
-                          itemCount: activeHighTier.length,
+                SliverPadding(
+                  padding:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? EdgeInsets.zero
+                          : Styles.sectionBottomPadding,
+                  sliver: SliverList.separated(
+                    separatorBuilder:
+                        (context, index) => PlatformDivider(
+                          height: 1,
+                          indent: BroadcastListScreen._thumbnailSize(context) + 16.0 + 10.0,
                         ),
-                      ),
-                    if (activeLowTier.isNotEmpty)
-                      SliverPadding(
-                        padding: Styles.bodySectionPadding,
-                        sliver: SliverGrid.builder(
-                          gridDelegate: lowTierGridDelegate,
-                          itemBuilder:
-                              (context, index) => BroadcastCard(
-                                worker: _worker!,
-                                broadcast: activeLowTier[index],
-                                aspectRatio: lowTierGridDelegate.childAspectRatio,
-                              ),
-                          itemCount: activeLowTier.length,
-                        ),
-                      ),
-                  ] else
-                    SliverPadding(
-                      padding:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? Styles.horizontalBodyPadding
-                              : Styles.bodySectionPadding,
-                      sliver: SliverGrid.builder(
-                        gridDelegate: lowTierGridDelegate,
-                        itemBuilder:
-                            (context, index) =>
-                                (broadcasts.isLoading && index >= pastItemsCount - loadingItems)
-                                    ? ShimmerLoading(
-                                      isLoading: true,
-                                      child: BroadcastCard.loading(
-                                        worker: _worker!,
-                                        aspectRatio: lowTierGridDelegate.childAspectRatio,
-                                      ),
-                                    )
-                                    : BroadcastCard(
-                                      worker: _worker!,
-                                      broadcast: section.$3[index],
-                                      aspectRatio: lowTierGridDelegate.childAspectRatio,
-                                    ),
-                        itemCount: section.$3.length,
-                      ),
-                    ),
-                ],
-              ),
-            const SliverSafeArea(
-              top: false,
-              sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+                    itemCount: section.$3.length,
+                    itemBuilder:
+                        (context, index) =>
+                            (section.$1 == 'past' &&
+                                    broadcasts.isLoading &&
+                                    index >= section.$3.length - 1)
+                                ? const Shimmer(
+                                  child: ShimmerLoading(
+                                    isLoading: true,
+                                    child: BroadcastListTile.loading(),
+                                  ),
+                                )
+                                : BroadcastListTile(broadcast: section.$3[index]),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          const SliverSafeArea(
+            top: false,
+            sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+          ),
+        ],
       ),
     );
   }
 }
 
-class BroadcastCard extends StatefulWidget {
-  const BroadcastCard({
-    required this.broadcast,
-    required this.worker,
-    required this.aspectRatio,
-    super.key,
-  });
+class BroadcastListTile extends StatelessWidget {
+  const BroadcastListTile({required this.broadcast, this.maxSubtitleLines = 4})
+    : _isLoading = false;
 
-  final Broadcast broadcast;
-  final ImageColorWorker worker;
-  final double aspectRatio;
-
-  const BroadcastCard.loading({required this.worker, required this.aspectRatio})
+  const BroadcastListTile.loading({this.maxSubtitleLines = 4})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -294,9 +282,9 @@ class BroadcastCard extends StatefulWidget {
             timeControl: null,
             players: null,
             website: null,
-            standings: null,
             location: null,
             dates: null,
+            standings: null,
           ),
         ),
         round: BroadcastRound(
@@ -310,350 +298,165 @@ class BroadcastCard extends StatefulWidget {
         ),
         group: null,
         roundToLinkId: BroadcastRoundId(''),
-      );
+      ),
+      _isLoading = true;
 
-  @override
-  State<BroadcastCard> createState() => _BroadcastCartState();
-}
+  final Broadcast broadcast;
+  final int maxSubtitleLines;
 
-typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
+  final bool _isLoading;
 
-final _dateFormat = DateFormat.MMMd().add_jm();
-
-class _BroadcastCartState extends State<BroadcastCard> {
-  _CardColors? _cardColors;
-  bool _tapDown = false;
-
-  String? get imageUrl => widget.broadcast.tour.imageUrl;
-
-  ImageProvider get imageProvider =>
-      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final cachedColors = _colorsCache[imageProvider];
-    if (_colorsCache.containsKey(imageProvider)) {
-      _cardColors = cachedColors;
-    } else if (imageUrl != null) {
-      _getImageColors(NetworkImage(imageUrl!));
-    }
-  }
-
-  Future<void> _getImageColors(NetworkImage provider) async {
-    if (!mounted) return;
-
-    if (Scrollable.recommendDeferredLoadingForContext(context)) {
-      SchedulerBinding.instance.scheduleFrameCallback((_) {
-        scheduleMicrotask(() => _getImageColors(provider));
-      });
-    } else if (widget.worker.closed == false) {
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
-      if (response != null) {
-        if (mounted) {
-          setState(() {
-            _cardColors = response;
-          });
-        }
-      }
-    }
-  }
-
-  void _onTapDown() {
-    setState(() => _tapDown = true);
-  }
-
-  void _onTapCancel() {
-    setState(() => _tapDown = false);
-  }
+  static const _kPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0);
 
   @override
   Widget build(BuildContext context) {
-    final defaultBackgroundColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.cupertinoCardColor.resolveFrom(context)
-            : Theme.of(context).colorScheme.surfaceContainer;
-    final backgroundColor = _cardColors?.primaryContainer ?? defaultBackgroundColor;
-    final titleColor = _cardColors?.onPrimaryContainer;
-    final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
-    final bgHsl = HSLColor.fromColor(backgroundColor);
-    final liveHsl = HSLColor.fromColor(LichessColors.red);
-    final liveColor = (bgHsl.lightness <= 0.6 ? liveHsl.withLightness(0.9) : liveHsl).toColor();
+    final thumbnailSize = BroadcastListScreen._thumbnailSize(context);
 
-    String? eventDate;
-    if (widget.broadcast.round.startsAt != null) {
-      final diff = widget.broadcast.round.startsAt!.difference(DateTime.now());
-      if (!diff.isNegative && diff.inDays >= 1) {
-        eventDate = _dateFormat.format(widget.broadcast.round.startsAt!);
-      } else {
-        eventDate = relativeDate(context.l10n, widget.broadcast.round.startsAt!);
-      }
+    if (_isLoading) {
+      return Padding(
+        padding: _kPadding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: thumbnailSize,
+              height: thumbnailSize / 2,
+              decoration: const BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 20.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 10.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 10.0,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // trailing,
+          ],
+        ),
+      );
     }
 
-    return GestureDetector(
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    final leading =
+        broadcast.tour.imageUrl != null
+            ? Image.network(
+              broadcast.tour.imageUrl!,
+              width: thumbnailSize,
+              cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
+              fit: BoxFit.cover,
+              errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+            )
+            : Image(image: kDefaultBroadcastImage, width: thumbnailSize);
+
+    final title = Text(broadcast.title, maxLines: 2, overflow: TextOverflow.ellipsis);
+
+    final subtitle = Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: broadcast.round.name),
+          if (broadcast.tour.information.players != null)
+            TextSpan(
+              text: '\n${broadcast.tour.information.players}',
+              style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
+      ),
+      maxLines: maxSubtitleLines,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    return AdaptiveInkWell(
       onTap: () {
-        pushPlatformRoute(
+        Navigator.of(
           context,
-          title: widget.broadcast.title,
           rootNavigator: true,
-          builder: (context) => BroadcastRoundScreen(broadcast: widget.broadcast),
-        );
+        ).push(BroadcastRoundScreen.buildRoute(context, broadcast));
       },
-      onTapDown: (_) => _onTapDown(),
-      onTapCancel: _onTapCancel,
-      onTapUp: (_) => _onTapCancel(),
-      child: AnimatedOpacity(
-        opacity: _tapDown ? 1.0 : 0.85,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: kCardBorderRadius,
-            color: backgroundColor,
-            boxShadow:
-                Theme.of(context).platform == TargetPlatform.iOS ? null : kElevationToShadow[1],
-          ),
-          child: Stack(
-            children: [
-              ShaderMask(
-                blendMode: BlendMode.dstOut,
-                shaderCallback: (bounds) {
-                  return LinearGradient(
-                    begin: const Alignment(0.0, 0.5),
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      backgroundColor.withValues(alpha: 0.0),
-                      backgroundColor.withValues(alpha: 1.0),
-                    ],
-                    stops: const [0.5, 1.10],
-                    tileMode: TileMode.clamp,
-                  ).createShader(bounds);
-                },
-                child: AspectRatio(
-                  aspectRatio: 2.0,
-                  child: Image(
-                    image: imageProvider,
-                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                      if (wasSynchronouslyLoaded) {
-                        return child;
-                      }
-                      return AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: frame == null ? 0 : 1,
-                        child: child,
-                      );
-                    },
-                    errorBuilder:
-                        (context, error, stackTrace) => const Image(image: kDefaultBroadcastImage),
+      child: Padding(
+        padding: _kPadding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            leading,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (broadcast.isLive)
+                    Text(
+                      'LIVE',
+                      style: TextStyle(
+                        color: context.lichessColors.error,
+                        fontSize: 16,
+                        height: 1,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  else if (broadcast.round.startsAt != null)
+                    Text(
+                      relativeDate(context.l10n, broadcast.round.startsAt!).toUpperCase(),
+                      style: TextStyle(
+                        color: textShade(context, 0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                        height: 1,
+                      ),
+                    ),
+                  const SizedBox(height: 4.0),
+                  DefaultTextStyle.merge(
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    child: title,
                   ),
-                ),
+                  subtitle,
+                ],
               ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 8.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding,
-                      child: Row(
-                        mainAxisAlignment:
-                            widget.broadcast.isLive
-                                ? MainAxisAlignment.spaceBetween
-                                : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          if (!widget.broadcast.isFinished) ...[
-                            Flexible(
-                              flex: widget.broadcast.isLive ? 1 : 0,
-                              child: Text(
-                                widget.broadcast.round.name,
-                                style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            const SizedBox(width: 5.0),
-                          ],
-                          if (widget.broadcast.isLive) ...[
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  size: 16,
-                                  color: liveColor,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black54,
-                                      offset: Offset(0, 1),
-                                      blurRadius: 2,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 4.0),
-                                Text(
-                                  'LIVE',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: liveColor,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black54,
-                                        offset: Offset(0, 1),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ] else if (eventDate != null)
-                            Flexible(
-                              child: Text(
-                                eventDate,
-                                style: TextStyle(fontSize: 12, color: subTitleColor),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: kBroadcastGridItemContentPadding.add(
-                        const EdgeInsets.symmetric(vertical: 3.0),
-                      ),
-                      child: Text(
-                        widget.broadcast.title,
-                        maxLines: widget.aspectRatio == 1.0 ? 3 : 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: titleColor,
-                          fontWeight: FontWeight.bold,
-                          height: 1.0,
-                        ),
-                      ),
-                    ),
-                    if (widget.broadcast.tour.information.players != null)
-                      Padding(
-                        padding: kBroadcastGridItemContentPadding,
-                        child: Text(
-                          widget.broadcast.tour.information.players!,
-                          style: TextStyle(fontSize: 12, color: subTitleColor, letterSpacing: -0.2),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 10),
+            // trailing,
+          ],
         ),
       ),
     );
   }
-}
-
-Future<_CardColors?> _computeImageColors(
-  ImageColorWorker worker,
-  String imageUrl,
-  ByteData imageBytes,
-) async {
-  final response = await worker.getImageColors(imageBytes.buffer.asUint32List());
-  if (response != null) {
-    final (:primaryContainer, :onPrimaryContainer) = response;
-    final cardColors = (
-      primaryContainer: Color(primaryContainer),
-      onPrimaryContainer: Color(onPrimaryContainer),
-    );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
-    return cardColors;
-  }
-  return null;
-}
-
-/// Pre-cache images and extract colors for broadcasts.
-Future<void> preCacheBroadcastImages(
-  BuildContext context, {
-  required Iterable<Broadcast> broadcasts,
-  required ImageColorWorker worker,
-}) async {
-  for (final broadcast in broadcasts) {
-    final imageUrl = broadcast.tour.imageUrl;
-    if (imageUrl != null) {
-      final provider = NetworkImage(imageUrl);
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      await _computeImageColors(worker, imageUrl, imageBytes!);
-    }
-  }
-}
-
-// Scale image size down to reduce computation time of color extraction.
-Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
-  const double maxDimension = 112.0;
-  final ImageStream stream = imageProvider.resolve(
-    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
-  );
-  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
-  late ImageStreamListener listener;
-  late ui.Image scaledImage;
-  Timer? loadFailureTimeout;
-
-  listener = ImageStreamListener(
-    (ImageInfo info, bool sync) async {
-      loadFailureTimeout?.cancel();
-      stream.removeListener(listener);
-      final ui.Image image = info.image;
-      final int width = image.width;
-      final int height = image.height;
-      double paintWidth = width.toDouble();
-      double paintHeight = height.toDouble();
-      assert(width > 0 && height > 0);
-
-      final bool rescale = width > maxDimension || height > maxDimension;
-      if (rescale) {
-        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
-      }
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder);
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
-        image: image,
-        filterQuality: FilterQuality.none,
-      );
-
-      final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
-    },
-    onError: (Object exception, StackTrace? stackTrace) {
-      stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
-    },
-  );
-
-  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
-    stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
-  });
-
-  stream.addListener(listener);
-  await imageCompleter.future;
-  return scaledImage;
 }

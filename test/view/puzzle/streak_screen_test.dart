@@ -228,16 +228,15 @@ void main() {
         home: Builder(
           builder:
               (context) => PlatformScaffold(
-                appBar: const PlatformAppBar(title: Text('Test Streak Screen')),
+                appBarTitle: const Text('Test Streak Screen'),
                 body: FatButton(
                   semanticsLabel: 'Start Streak',
                   child: const Text('Start Streak'),
                   onPressed:
-                      () => pushPlatformRoute(
+                      () => Navigator.of(
                         context,
                         rootNavigator: true,
-                        builder: (context) => const StreakScreen(),
-                      ),
+                      ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
                 ),
               ),
         ),

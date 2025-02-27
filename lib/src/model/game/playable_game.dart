@@ -51,6 +51,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
+    bool? bookmarked,
     ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
@@ -66,8 +67,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   ///
   /// Currently, those endpoints are supported:
   /// - GET /api/mobile/my-games
-  /// - player game socket (/play/<gameFullId>/v6) 'full' event
-  /// - watcher game socket (/watch/<gameId>/<side>/v6) 'full' event
+  /// - player game socket (/play/:gameFullId/v6) 'full' event
+  /// - watcher game socket (/watch/:gameId/:side/v6) 'full' event
   factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());
   }
@@ -147,6 +148,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
 
 @freezed
 class PlayableClockData with _$PlayableClockData {
+  const PlayableClockData._();
+
   const factory PlayableClockData({
     required bool running,
     required Duration white,
@@ -160,6 +163,8 @@ class PlayableClockData with _$PlayableClockData {
     /// The time when the clock event was received.
     required DateTime at,
   }) = _PlayableClockData;
+
+  Duration forSide(Side side) => side == Side.white ? white : black;
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
@@ -211,6 +216,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     takebackable: pick('takebackable').asBoolOrFalse(),
     youAre: pick('youAre').asSideOrNull(),
     prefs: pick('prefs').letOrNull(_gamePrefsFromPick),
+    bookmarked: pick('bookmarked').asBoolOrNull(),
     expiration: pick('expiration').letOrNull((it) {
       final idle = it('idleMillis').asDurationFromMilliSecondsOrThrow();
       return (

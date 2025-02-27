@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -46,7 +45,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
     return PlatformBottomBar(
-      transparentCupertinoBar: false,
+      transparentBackground: false,
       children: [
         _ChapterButton(state: state),
         _NextChapterButton(
@@ -145,20 +144,18 @@ class _GamebookBottomBar extends ConsumerWidget {
             if (!state.isIntroductoryChapter)
               BottomBarButton(
                 onTap:
-                    () => pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder:
-                          (context) => AnalysisScreen(
-                            options: AnalysisOptions(
-                              orientation: state.pov,
-                              standalone: (
-                                pgn: state.pgn,
-                                isComputerAnalysisAllowed: true,
-                                variant: state.variant,
-                              ),
-                            ),
+                    () => Navigator.of(context, rootNavigator: true).push(
+                      AnalysisScreen.buildRoute(
+                        context,
+                        AnalysisOptions(
+                          orientation: state.pov,
+                          standalone: (
+                            pgn: state.pgn,
+                            isComputerAnalysisAllowed: true,
+                            variant: state.variant,
                           ),
+                        ),
+                      ),
                     ),
                 icon: Icons.biotech,
                 label: context.l10n.analysis,
@@ -292,7 +289,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
         for (final chapter in state.study.chapters)
           PlatformListTile(
             key: chapter.id == state.currentChapter.id ? currentChapterKey : null,
-            title: Text(chapter.name, maxLines: 2),
+            title: Text(state.study.getChapterIndexedName(chapter.id), maxLines: 2),
             onTap: () {
               ref.read(studyControllerProvider(widget.id).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();

@@ -1,9 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_filter.freezed.dart';
@@ -28,7 +27,7 @@ class GameFilterState with _$GameFilterState {
       _GameFilterState;
 
   /// Returns a translated label of the selected filters.
-  String selectionLabel(BuildContext context) {
+  String selectionLabel(AppLocalizations l10n) {
     final fields = [side, perfs];
     final labels =
         fields
@@ -38,8 +37,8 @@ class GameFilterState with _$GameFilterState {
                       ? field.map((e) => e.shortTitle).join(', ')
                       : (field as Side?) != null
                       ? field == Side.white
-                          ? context.l10n.white
-                          : context.l10n.black
+                          ? l10n.white
+                          : l10n.black
                       : null,
             )
             .where((label) => label != null && label.isNotEmpty)

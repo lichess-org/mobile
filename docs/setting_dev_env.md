@@ -160,7 +160,7 @@ Use the `flutter run` command to run the app on an emulator or a real device. If
 
 ```bash
 flutter run \
-  --dart-define=LICHESS_HOST=lichess.dev \
+  --dart-define=LICHESS_HOST=lichess.org \
   --dart-define=LICHESS_WS_HOST=socket.lichess.org
 ```
 
@@ -168,7 +168,7 @@ flutter run \
 > Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper method
 
 > [!NOTE]
-> You can also use the production server but note that you will not be able to log in.
+> If you use the production server, note that you will not be able to log in.
 
 ### Android
 

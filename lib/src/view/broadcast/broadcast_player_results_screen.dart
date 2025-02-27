@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -9,13 +8,69 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+
+class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final String playerId;
+  final String? playerTitle;
+  final String playerName;
+
+  const BroadcastPlayerResultsScreenLoading(
+    this.roundId,
+    this.playerId, {
+    required this.playerName,
+    this.playerTitle,
+  });
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastRoundId roundId,
+    String playerId, {
+    String? playerTitle,
+    required String playerName,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastPlayerResultsScreenLoading(
+        roundId,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournamentId = ref.watch(broadcastTournamentIdProvider(roundId));
+
+    return switch (tournamentId) {
+      AsyncData(:final value) => BroadcastPlayerResultsScreen(
+        value,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+      AsyncError(:final error) => PlatformScaffold(
+        appBarTitle: const Text(''),
+        body: Center(child: Text('Cannot load round data: $error')),
+      ),
+      _ => const PlatformScaffold(
+        appBarTitle: Text(''),
+        body: Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
+  }
+}
 
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
@@ -25,15 +80,33 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
 
   const BroadcastPlayerResultsScreen(
     this.tournamentId,
-    this.playerId,
+    this.playerId, {
+    required this.playerName,
     this.playerTitle,
-    this.playerName,
-  );
+  });
+
+  static Route<dynamic> buildRoute(
+    BuildContext context,
+    BroadcastTournamentId tournamentId,
+    String playerId, {
+    String? playerTitle,
+    required String playerName,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: BroadcastPlayerResultsScreen(
+        tournamentId,
+        playerId,
+        playerTitle: playerTitle,
+        playerName: playerName,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: BroadcastPlayerWidget(title: playerTitle, name: playerName)),
+      appBarTitle: BroadcastPlayerWidget(title: playerTitle, name: playerName),
       body: _Body(tournamentId, playerId),
     );
   }
@@ -80,7 +153,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.standard != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.classical,
                                 value: fideData.ratings.standard.toString(),
                               ),
@@ -88,7 +161,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.rapid != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.rapid,
                                 value: fideData.ratings.rapid.toString(),
                               ),
@@ -96,7 +169,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.ratings.blitz != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.blitz,
                                 value: fideData.ratings.blitz.toString(),
                               ),
@@ -113,7 +186,7 @@ class _Body extends ConsumerWidget {
                           if (fideData.birthYear != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.broadcastAgeThisYear,
                                 value: (DateTime.now().year - fideData.birthYear!).toString(),
                               ),
@@ -121,7 +194,7 @@ class _Body extends ConsumerWidget {
                           if (player.federation != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard(
+                              child: _StatCard(
                                 context.l10n.broadcastFederation,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -145,7 +218,7 @@ class _Body extends ConsumerWidget {
                           if (player.fideId != null)
                             SizedBox(
                               width: statWidth,
-                              child: StatCard('FIDE ID', value: player.fideId!.toString()),
+                              child: _StatCard('FIDE ID', value: player.fideId!.toString()),
                             ),
                         ],
                       ),
@@ -156,7 +229,7 @@ class _Body extends ConsumerWidget {
                         if (player.score != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.broadcastScore,
                               value:
                                   '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
@@ -165,7 +238,7 @@ class _Body extends ConsumerWidget {
                         if (player.performance != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.performance,
                               value: player.performance.toString(),
                             ),
@@ -173,7 +246,7 @@ class _Body extends ConsumerWidget {
                         if (player.ratingDiff != null)
                           SizedBox(
                             width: statWidth,
-                            child: StatCard(
+                            child: _StatCard(
                               context.l10n.broadcastRatingDiff,
                               child: ProgressionWidget(player.ratingDiff!, fontSize: 18.0),
                             ),
@@ -189,25 +262,17 @@ class _Body extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  builder:
-                      (context) => BroadcastGameScreen(
-                        tournamentId: tournamentId,
-                        roundId: playerResult.roundId,
-                        gameId: playerResult.gameId,
-                      ),
+                Navigator.of(context).push(
+                  BroadcastGameScreen.buildRoute(
+                    context,
+                    tournamentId: tournamentId,
+                    roundId: playerResult.roundId,
+                    gameId: playerResult.gameId,
+                  ),
                 );
               },
               child: ColoredBox(
-                color:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? index.isEven
-                            ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                            : CupertinoColors.tertiarySystemBackground.resolveFrom(context)
-                        : index.isEven
-                        ? Theme.of(context).colorScheme.surfaceContainerLow
-                        : Theme.of(context).colorScheme.surfaceContainerHigh,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 child: Padding(
                   padding: _kTableRowPadding,
                   child: Row(
@@ -250,7 +315,7 @@ class _Body extends ConsumerWidget {
                                               playerResult.color == Side.black)
                                       ? Border.all(
                                         width: 2.0,
-                                        color: Theme.of(context).colorScheme.outline,
+                                        color: ColorScheme.of(context).outline,
                                       )
                                       : null,
                               shape: BoxShape.circle,
@@ -304,5 +369,23 @@ class _Body extends ConsumerWidget {
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  const _StatCard(this.stat, {this.value, this.child});
+
+  final String stat;
+  final String? value;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return StatCard(
+      contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      stat,
+      value: value,
+      child: child,
+    );
   }
 }

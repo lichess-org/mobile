@@ -22,7 +22,8 @@ class SettingsListTile extends StatelessWidget {
   final Text settingsLabel;
 
   final String settingsValue;
-  final void Function() onTap;
+
+  final void Function()? onTap;
 
   /// The optional explanation of the settings.
   final String? explanation;
@@ -89,7 +90,7 @@ class SwitchSettingTile extends StatelessWidget {
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle: subtitle,
-      trailing: Switch.adaptive(value: value, onChanged: onChanged, applyCupertinoTheme: true),
+      trailing: Switch.adaptive(value: value, onChanged: onChanged),
     );
   }
 }
@@ -157,12 +158,12 @@ class SettingsSectionTitle extends StatelessWidget {
       title,
       style:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? TextStyle(
+              ? TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5))
+              : TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: CupertinoColors.secondaryLabel.resolveFrom(context),
-              )
-              : null,
+                color: textShade(context, 0.6),
+              ),
     );
   }
 }
@@ -221,7 +222,6 @@ class ChoicePicker<T> extends StatelessWidget {
     this.tileContentPadding,
     this.margin,
     this.notchedTile = true,
-    this.showDividerBetweenTiles = false,
   });
 
   final List<T> choices;
@@ -230,9 +230,6 @@ class ChoicePicker<T> extends StatelessWidget {
   final Widget Function(T choice)? subtitleBuilder;
   final Widget Function(T choice)? leadingBuilder;
   final void Function(T choice)? onSelectedItemChanged;
-
-  /// Only on android.
-  final bool showDividerBetweenTiles;
 
   /// Android tiles content padding.
   final EdgeInsetsGeometry? tileContentPadding;
@@ -247,25 +244,20 @@ class ChoicePicker<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        final tiles = choices.map((value) {
-          return ListTile(
-            selected: selectedItem == value,
-            trailing: selectedItem == value ? const Icon(Icons.check) : null,
-            contentPadding: tileContentPadding,
-            title: titleBuilder(value),
-            subtitle: subtitleBuilder?.call(value),
-            leading: leadingBuilder?.call(value),
-            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
-          );
-        });
         return Opacity(
           opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-          child: Column(
+          child: ListSection(
             children: [
-              if (showDividerBetweenTiles)
-                ...ListTile.divideTiles(context: context, tiles: tiles)
-              else
-                ...tiles,
+              for (final value in choices)
+                ListTile(
+                  selected: selectedItem == value,
+                  trailing: selectedItem == value ? const Icon(Icons.check) : null,
+                  contentPadding: tileContentPadding,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  leading: leadingBuilder?.call(value),
+                  onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
+                ),
             ],
           ),
         );
@@ -278,7 +270,9 @@ class ChoicePicker<T> extends StatelessWidget {
             child: CupertinoListSection.insetGrouped(
               backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
               decoration: BoxDecoration(
-                color: Styles.cupertinoCardColor.resolveFrom(context),
+                color:
+                    Theme.of(context).cardTheme.color ??
+                    Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),
@@ -295,6 +289,9 @@ class ChoicePicker<T> extends StatelessWidget {
                       title: titleBuilder(value),
                       subtitle: subtitleBuilder?.call(value),
                       leading: leadingBuilder?.call(value),
+                      backgroundColorActivated: Styles.cupertinoListTileBackgroundActivated(
+                        context,
+                      ),
                       onTap:
                           onSelectedItemChanged != null
                               ? () => onSelectedItemChanged!(value)

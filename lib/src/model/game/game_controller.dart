@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -92,7 +92,6 @@ class GameController extends _$GameController {
 
       if (fullEvent.game.finished) {
         if (fullEvent.game.meta.speed == Speed.correspondence) {
-          ref.invalidate(ongoingGamesProvider);
           ref.read(correspondenceServiceProvider).updateGame(gameFullId, fullEvent.game);
         }
 
@@ -285,6 +284,20 @@ class GameController extends _$GameController {
           _playReplayMoveSound(san);
         }
       }
+    }
+  }
+
+  Future<void> toggleBookmark() async {
+    if (state.hasValue) {
+      final toggledBookmark = !(state.requireValue.game.bookmarked ?? false);
+      await ref
+          .read(accountServiceProvider)
+          .setGameBookmark(gameFullId.gameId, bookmark: toggledBookmark);
+      state = AsyncValue.data(
+        state.requireValue.copyWith(
+          game: state.requireValue.game.copyWith(bookmarked: toggledBookmark),
+        ),
+      );
     }
   }
 
@@ -632,7 +645,6 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.invalidate(ongoingGamesProvider);
           ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
         }
 
@@ -684,7 +696,6 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.invalidate(ongoingGamesProvider);
           ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
         }
 

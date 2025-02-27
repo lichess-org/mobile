@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:popover/popover.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
@@ -38,13 +36,12 @@ class FatButton extends StatelessWidget {
 }
 
 /// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatefulWidget {
+class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     required this.semanticsLabel,
     required this.child,
     required this.onPressed,
     this.textStyle,
-    this.glowing = false,
     super.key,
   });
 
@@ -52,49 +49,6 @@ class SecondaryButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final Widget child;
   final TextStyle? textStyle;
-  final bool glowing;
-
-  @override
-  State<SecondaryButton> createState() => _SecondaryButtonState();
-}
-
-class _SecondaryButtonState extends State<SecondaryButton> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    _animation = (defaultTargetPlatform == TargetPlatform.iOS
-          ? Tween<double>(begin: 0.5, end: 1.0)
-          : Tween<double>(begin: 0.0, end: 0.3))
-      .animate(_controller)..addListener(() {
-      setState(() {});
-    });
-
-    if (widget.glowing) {
-      _controller.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(SecondaryButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.glowing != oldWidget.glowing) {
-      if (widget.glowing) {
-        _controller.repeat(reverse: true);
-      } else {
-        _controller.stop();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,33 +56,12 @@ class _SecondaryButtonState extends State<SecondaryButton> with SingleTickerProv
       container: true,
       enabled: true,
       button: true,
-      label: widget.semanticsLabel,
+      label: semanticsLabel,
       excludeSemantics: true,
       child:
           Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton(
-                color:
-                    widget.glowing
-                        ? CupertinoTheme.of(
-                          context,
-                        ).primaryColor.withValues(alpha: _animation.value)
-                        : null,
-                onPressed: widget.onPressed,
-                child: widget.child,
-              )
-              : OutlinedButton(
-                onPressed: widget.onPressed,
-                style: OutlinedButton.styleFrom(
-                  textStyle: widget.textStyle,
-                  backgroundColor:
-                      widget.glowing
-                          ? Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: _animation.value)
-                          : null,
-                ),
-                child: widget.child,
-              ),
+              ? CupertinoButton(onPressed: onPressed, child: child)
+              : FilledButton.tonal(onPressed: onPressed, child: child),
     );
   }
 }
@@ -194,16 +127,7 @@ class AppBarNotificationIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarIconButton(
-      icon: Badge.count(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        textStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onTertiary,
-          fontWeight: FontWeight.bold,
-        ),
-        count: count,
-        isLabelVisible: count > 0,
-        child: icon,
-      ),
+      icon: Badge.count(count: count, isLabelVisible: count > 0, child: icon),
       onPressed: onPressed,
       semanticsLabel: semanticsLabel,
     );
@@ -235,7 +159,12 @@ class NoPaddingTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoButton(padding: EdgeInsets.zero, onPressed: onPressed, minSize: 23, child: child)
+        ? CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: onPressed,
+          minimumSize: const Size(23, 23),
+          child: child,
+        )
         : TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
@@ -345,10 +274,10 @@ class RepeatButton extends StatefulWidget {
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
-      Duration(milliseconds: 500),
-      Duration(milliseconds: 300),
       Duration(milliseconds: 250),
       Duration(milliseconds: 150),
+      Duration(milliseconds: 100),
+      Duration(milliseconds: 50),
     ],
     this.holdDelay = const Duration(milliseconds: 30),
   });
@@ -471,149 +400,4 @@ class PlatformIconButton extends StatelessWidget {
         return const SizedBox.shrink();
     }
   }
-}
-
-const _kMenuWidth = 250.0;
-const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xFFA9A9AF),
-  darkColor: Color(0xFF57585A),
-);
-
-/// A platform agnostic menu button for the app bar.
-class PlatformAppBarMenuButton extends StatelessWidget {
-  const PlatformAppBarMenuButton({
-    required this.icon,
-    required this.semanticsLabel,
-    required this.actions,
-    super.key,
-  });
-
-  final Widget icon;
-  final String semanticsLabel;
-  final List<AppBarMenuAction> actions;
-
-  @override
-  Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      final menuActions =
-          actions.map((action) {
-            return CupertinoContextMenuAction(
-              onPressed: () {
-                if (action.dismissOnPress) {
-                  Navigator.of(context).pop();
-                }
-                action.onPressed();
-              },
-              trailingIcon: action.icon,
-              child: Text(action.label),
-            );
-          }).toList();
-      return AppBarIconButton(
-        onPressed: () {
-          showPopover(
-            context: context,
-            bodyBuilder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: _kMenuWidth,
-                  child: IntrinsicHeight(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                      child: ColoredBox(
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoContextMenu.kBackgroundColor,
-                          context,
-                        ),
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: CupertinoScrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  menuActions.first,
-                                  for (final Widget action in menuActions.skip(1))
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: CupertinoDynamicColor.resolve(
-                                              _kBorderColor,
-                                              context,
-                                            ),
-                                            width: 0.4,
-                                          ),
-                                        ),
-                                      ),
-                                      position: DecorationPosition.foreground,
-                                      child: action,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            arrowWidth: 0.0,
-            arrowHeight: 0.0,
-            direction: PopoverDirection.top,
-            width: _kMenuWidth,
-            backgroundColor: Colors.transparent,
-          );
-        },
-        semanticsLabel: semanticsLabel,
-        icon: icon,
-      );
-    }
-
-    return MenuAnchor(
-      menuChildren:
-          actions.map((action) {
-            return MenuItemButton(
-              leadingIcon: Icon(action.icon),
-              semanticsLabel: action.label,
-              closeOnActivate: action.dismissOnPress,
-              onPressed: action.onPressed,
-              child: Text(action.label),
-            );
-          }).toList(),
-      builder: (BuildContext context, MenuController controller, Widget? child) {
-        return AppBarIconButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          semanticsLabel: semanticsLabel,
-          icon: icon,
-        );
-      },
-    );
-  }
-}
-
-class AppBarMenuAction {
-  const AppBarMenuAction({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    this.dismissOnPress = true,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onPressed;
-
-  /// Whether the modal should be dismissed when an action is pressed.
-  ///
-  /// Default to true.
-  final bool dismissOnPress;
 }

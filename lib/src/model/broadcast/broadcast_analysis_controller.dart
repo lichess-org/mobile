@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -40,7 +41,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
   late SocketClient _socketClient;
   late Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _cloudEvalGetDebounce = Debouncer(const Duration(milliseconds: 400));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
@@ -82,6 +84,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
+      _cloudEvalGetDebounce.dispose();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
       _appLifecycleListener?.dispose();
@@ -96,7 +99,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    _root = Root.fromPgnGame(game);
+    _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
@@ -115,15 +118,18 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
+      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       clocks: _getClocks(currentPath),
     );
 
+    // We need to define the state value in the build method because `sendEvalGetEvent` and
+    // `debouncedStartEngineEval` require the state to have a value.
+    state = AsyncData(broadcastState);
+
     if (broadcastState.isLocalEvaluationEnabled) {
       evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
+        _startEngineEval();
       });
     }
 
@@ -146,7 +152,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       final pgnHeaders = IMap(game.headers);
       final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-      final newRoot = Root.fromPgnGame(game);
+      final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
@@ -180,6 +186,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       // Sent when a pgn tag changes
       case 'setTags':
         _handleSetTagsEvent(event);
+      // Sent when a new eval is received
+      case 'evalHit':
+        _handleEvalHitEvent(event);
     }
   }
 
@@ -237,6 +246,41 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 
     final pgnHeaders = state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
+  }
+
+  void _handleEvalHitEvent(SocketEvent event) {
+    final path = pick(event.data, 'path').asUciPathOrThrow();
+
+    final depth = pick(event.data, 'depth').asIntOrThrow();
+    final pvs =
+        pick(event.data, 'pvs')
+            .asListOrThrow(
+              (pv) => PvData(
+                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+                cp: pv('cp').asIntOrNull(),
+                mate: pv('mate').asIntOrNull(),
+              ),
+            )
+            .toIList();
+
+    final cloudEval = CloudEval(depth: depth, position: state.requireValue.position, pvs: pvs);
+
+    _root.updateAt(path, (node) => node.eval = cloudEval);
+
+    if (state.requireValue.currentPath != path) return;
+
+    _refreshCurrentNode(shouldRecomputeRootView: true);
+  }
+
+  void _sendEvalGetEvent() {
+    final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
+
+    _socketClient.send('evalGet', {
+      'fen': state.requireValue.currentNode.position.fen,
+      'path': state.requireValue.currentPath.value,
+      'mpv': numEvalLines,
+      'up': true,
+    });
   }
 
   EvaluationContext get _evaluationContext =>
@@ -370,6 +414,25 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  /// Toggles the computer analysis on/off.
+  ///
+  /// Acts both on local evaluation and server analysis.
+  Future<void> toggleComputerAnalysis() async {
+    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+
+    final curState = state.requireValue;
+    final engineWasAvailable = curState.isLocalEvaluationEnabled;
+
+    state = AsyncData(
+      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
+    );
+
+    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
+    if (!computerAllowed && engineWasAvailable) {
+      toggleLocalEvaluation();
+    }
+  }
+
   Future<void> toggleLocalEvaluation() async {
     if (!state.hasValue) return;
 
@@ -498,11 +561,12 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     }
 
     if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
-      _debouncedStartEngineEval();
+      _startEngineEval();
     }
   }
 
-  Future<void> _startEngineEval() async {
+  /// Do not call this method directly, use [_startEngineEval] instead.
+  Future<void> _doStartEngineEval() async {
     if (!state.hasValue) return;
 
     if (!state.requireValue.isLocalEvaluationEnabled) return;
@@ -520,23 +584,40 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
         ?.forEach((t) {
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-            _refreshCurrentNode();
+          if (work.path == state.requireValue.currentPath) {
+            _refreshCurrentNode(
+              shouldRecomputeRootView:
+                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            );
           }
         });
   }
 
-  void _refreshCurrentNode() {
+  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
   }
 
-  void _debouncedStartEngineEval() {
+  /// Start the engine evaluation.
+  ///
+  /// This method sends an `evalGet` event to the server to get the cloud evaluation and starts the
+  /// local engine evaluation.
+  ///
+  /// This method is debounced to avoid sending too many `evalGet` events to the server.
+  ///
+  /// It also tries not to start the local engine evaluation if a cloud evaluation is available. So
+  /// the delay to start the engine evaluation is longer than the delay to get the cloud evaluation.
+  /// It respectivelly waits 100ms and 400ms to start the cloud evaluation and the local engine.
+  void _startEngineEval() {
+    _cloudEvalGetDebounce(() {
+      _sendEvalGetEvent();
+    });
     _engineEvalDebounce(() {
-      _startEngineEval();
+      _doStartEngineEval();
     });
   }
 
@@ -544,7 +625,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    // update the current node with last cached eval
     _refreshCurrentNode();
   }
 
@@ -589,6 +669,11 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
     /// The side to display the board from.
     required Side pov,
 
+    /// Whether the user has enabled computer analysis.
+    ///
+    /// This is a user preference and acts both on local and server analysis.
+    required bool isComputerAnalysisEnabled,
+
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
@@ -622,10 +707,15 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
   /// The path to the current broadcast live move
   UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
 
+  /// Whether an evaluation can be available
+  bool get hasAvailableEval =>
+      isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
+
   EngineGaugeParams get engineGaugeParams => (
-    orientation: pov,
     isLocalEngineAvailable: isLocalEvaluationEnabled,
+    orientation: pov,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }

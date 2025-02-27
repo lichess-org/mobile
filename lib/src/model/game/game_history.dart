@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -37,13 +39,11 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
-    return ref.withClientCacheFor(
+    return ref.withClient(
       (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
-      const Duration(hours: 1),
     );
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
-    ref.cacheFor(const Duration(hours: 1));
     return storage
         .page(userId: session?.user.id, max: kNumberOfRecentGames)
         .then(
@@ -60,14 +60,8 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId),
-    // cache is important because the associated widget is in a [ListView] and
-    // the provider may be instanciated multiple times in a short period of time
-    // (e.g. when scrolling)
-    // TODO: consider debouncing the request instead of caching it, or make the
-    // request in the parent widget and pass the result to the child
-    const Duration(minutes: 1),
+  return ref.withClient(
+    (client) => GameRepository(client).getUserGames(userId, withBookmarked: true),
   );
 }
 
@@ -77,11 +71,12 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserI
 /// If the user is not logged in, or there is no connectivity, the number of games
 /// stored locally are fetched instead.
 @riverpod
-Future<int> userNumberOfGames(Ref ref, LightUser? user, {required bool isOnline}) async {
+Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
   final session = ref.watch(authSessionProvider);
+  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   return user != null
       ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
-      : session != null && isOnline
+      : session != null && online
       ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }
@@ -113,13 +108,21 @@ class UserGameHistory extends _$UserGameHistory {
     });
 
     final session = ref.watch(authSessionProvider);
+    final prefs = ref.watch(gameHistoryPreferencesProvider);
     final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = userId ?? session?.user.id;
     final recentGames =
         id != null && online
-            ? ref.withClient((client) => GameRepository(client).getUserGames(id, filter: filter))
+            ? ref.withClient(
+              (client) => GameRepository(client).getUserGames(
+                id,
+                filter: filter,
+                withBookmarked: true,
+                withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+              ),
+            )
             : storage
                 .page(userId: id, filter: filter)
                 .then(
@@ -148,6 +151,7 @@ class UserGameHistory extends _$UserGameHistory {
   Future<void> getNext() async {
     if (!state.hasValue) return;
 
+    final prefs = ref.read(gameHistoryPreferencesProvider);
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
     Result.capture(
@@ -158,6 +162,8 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
+              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             ),
           )
           : currentVal.online && currentVal.session != null
@@ -167,6 +173,8 @@ class UserGameHistory extends _$UserGameHistory {
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
+              withBookmarked: true,
+              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             ),
           )
           : (await ref.watch(gameStorageProvider.future))
@@ -199,6 +207,26 @@ class UserGameHistory extends _$UserGameHistory {
       (error, stackTrace) {
         state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
       },
+    );
+  }
+
+  void toggleBookmark(GameId id) {
+    if (!state.hasValue) return;
+
+    final gameList = state.requireValue.gameList;
+    final entry = gameList.firstWhereOrNull((e) => e.game.id == id);
+    if (entry == null) return;
+
+    final (game: game, pov: pov) = entry;
+    final index = gameList.indexOf(entry);
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        gameList: gameList.replace(index, (
+          game: game.copyWith(bookmarked: !game.isBookmarked),
+          pov: pov,
+        )),
+      ),
     );
   }
 }

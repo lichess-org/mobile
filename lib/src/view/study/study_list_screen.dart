@@ -27,6 +27,10 @@ final _logger = Logger('StudyListScreen');
 class StudyListScreen extends ConsumerWidget {
   const StudyListScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const StudyListScreen());
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
@@ -35,23 +39,22 @@ class StudyListScreen extends ConsumerWidget {
     final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.tune),
-            // TODO: translate
-            semanticsLabel: 'Filter studies',
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-                ),
-          ),
-        ],
-      ),
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
+      appBarTitle: title,
+      appBarActions: [
+        AppBarIconButton(
+          icon: const Icon(Icons.filter_list),
+          // TODO: translate
+          semanticsLabel: 'Filter studies',
+          onPressed:
+              () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
+              ),
+        ),
+      ],
       body: SafeArea(top: false, child: _Body(filter: filter)),
     );
   }
@@ -233,11 +236,10 @@ class _StudyListItem extends StatelessWidget {
       ),
       subtitle: _StudySubtitle(study: study),
       onTap:
-          () => pushPlatformRoute(
+          () => Navigator.of(
             context,
             rootNavigator: true,
-            builder: (context) => StudyScreen(id: study.id),
-          ),
+          ).push(StudyScreen.buildRoute(context, study.id)),
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
           context: context,

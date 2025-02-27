@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
@@ -61,6 +61,14 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
   Future<void> setEngineSearchTime(Duration engineSearchTime) {
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
+
+  Future<void> toggleInlineNotation() {
+    return save(state.copyWith(inlineNotation: !state.inlineNotation));
+  }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -82,6 +90,8 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
@@ -94,6 +104,8 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 10),
+    inlineNotation: false,
+    smallBoard: false,
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {

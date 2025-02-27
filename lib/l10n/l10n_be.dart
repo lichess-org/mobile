@@ -424,12 +424,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastUpcoming => 'Надыходзячыя';
 
   @override
-  String get broadcastCompleted => 'Завершаныя';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Назва туру';
 
   @override
@@ -628,6 +622,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1515,6 +1515,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Канёвы эндшпіль';
 
   @override
@@ -1730,16 +1736,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Зачыненне немагчыма будзе адмяніць. Не будзе шляху назад. Вы ўпэўнены?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Вам не будзе дазволена стварыць новы ўліковы запіс з тым жа імем, нават калі рэгістр сімвалаў адрозніваецца.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Я перадумаў, не выдаляйце мой уліковы запіс';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Вы сапраўды хочаце выдаліць свой уліковы запіс? Гэта неадваротнае дзеянне: увайсці ў яго будзе немагчыма.';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
@@ -3729,6 +3732,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get followAndChallengeFriends => 'Падпісацца і выклікаць на гульню сяброў';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Аналіз гульні';
 
   @override
@@ -4324,13 +4330,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reopenYourAccount => 'Пераадкрыць уліковы запіс';
 
   @override
-  String get closedAccountChangedMind => 'Калі пасля закрыцця ўліковага запісу, вы перадумалі, у вас ёсць адзін шанец аднавіць яго.';
-
-  @override
-  String get onlyWorksOnce => 'Гэта спрацуе толькі адзін раз.';
-
-  @override
-  String get cantDoThisTwice => 'Калі вы зачыніце яго ў другі раз, то ўжо не будзе шляху назад.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Адрас электроннай пошты, звязаны з уліковым запісам';
@@ -4424,7 +4424,7 @@ class AppLocalizationsBe extends AppLocalizations {
       locale: localeName,
       other: '$count позехаў',
       many: '$count позехаў',
-      few: '$count позеха',
+      few: '$count зяўкоў',
       one: '$count позех',
     );
     return '$_temp0';
@@ -4435,10 +4435,10 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Позехаў',
-      many: '$count Позехаў',
-      few: '$count Позеха',
-      one: '$count Позех',
+      other: '$count Зяўкоў',
+      many: '$count Зяўкоў',
+      few: '$count Зяўкоў',
+      one: '$count Зявок',
     );
     return '$_temp0';
   }

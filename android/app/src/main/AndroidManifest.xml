@@ -20,10 +20,6 @@
         android:fullBackupContent="@xml/backup_rules">
 
     <meta-data
-      android:name="io.flutter.embedding.android.EnableImpeller"
-      android:value="false" />
-
-    <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
       android:resource="@drawable/ic_stat_lichess_notification" />
     <meta-data
@@ -53,6 +49,24 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" android:host="lichess.org" />
+
+                <data android:pathPattern="/training/....." />
+                <data android:pathPattern="/study/........" />
+
+                <data android:pathPattern="/broadcast/.*/.*/........" />
+                <data android:pathPattern="/broadcast/.*/.*/......../........" />
+
+                <!-- Game with pov -->
+                <data android:pathPattern="/......../black" />
+                <data android:pathPattern="/......../white" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

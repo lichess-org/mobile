@@ -2,19 +2,19 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.13.13+001313 # See README.md for details about versioning
+version: 0.14.8+001408 # See README.md for details about versioning
 
 environment:
-  sdk: '^3.7.0-209.1.beta'
+  sdk: '^3.8.0-70.0'
   # We're using the beta channel for the flutter version
-  flutter: "3.28.0-0.1.pre"
+  flutter: "3.30.0-0.1"
 
 dependencies:
   app_settings: ^5.1.1
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^6.3.0
+  chessground: ^7.0.0-beta.1
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
@@ -22,11 +22,11 @@ dependencies:
   crypto: ^3.0.3
   cupertino_http: ^2.0.0
   cupertino_icons: ^1.0.2
-  dartchess: ^0.9.0
+  dartchess: ^0.10.0
   deep_pick: ^1.0.0
   device_info_plus: ^11.0.0
-  dynamic_color: ^1.6.9
-  fast_immutable_collections: ^10.0.0
+  dynamic_system_colors: ^1.8.0
+  fast_immutable_collections: ^11.0.0
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
@@ -44,21 +44,24 @@ dependencies:
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
   flutter_secure_storage: ^9.2.0
-  flutter_slidable:
-    git:
-      url: https://github.com/veloce/flutter_slidable.git
-      ref: 89b8384667d3b6c1c2967a8ff10846bcf0a170c7
+  flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
   http: ^1.1.0
-  intl: ^0.19.0
+  image_picker: ^1.1.2
+  intl: ^0.20.2
   json_annotation: ^4.7.0
+  l10n_esperanto:
+    git:
+      url: https://github.com/veloce/l10n_esperanto.git
+      ref: 40abcece5be4610620a8dcc506901d9be84bab1b
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
   meta: ^1.8.0
   package_info_plus: ^8.0.0
   path: ^1.8.2
+  path_provider: ^2.1.5
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0
@@ -71,7 +74,7 @@ dependencies:
   stockfish:
     git:
       url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 0b4d8f20f72beb43c853230dd18063bee242487d
+      ref: 47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0
@@ -112,6 +115,8 @@ flutter:
     - assets/sounds/standard/
     - assets/sounds/sfx/
     - assets/board-thumbnails/
+    - assets/positions.json
+    - assets/endgames.json
 
   fonts:
     - family: LichessIcons

@@ -35,6 +35,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -52,7 +53,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                           Text(
                             seek.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${seek.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -60,7 +61,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         const SizedBox(height: 8.0),
                         Text(
                           '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                       ],
                       const SizedBox(height: 16.0),
@@ -112,6 +113,7 @@ class ChallengeLoadingContent extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
                   child: Column(
@@ -122,7 +124,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                       const SizedBox(height: 16.0),
                       UserFullNameWidget(
                         user: challenge.destUser,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: TextTheme.of(context).titleLarge,
                       ),
                       const SizedBox(height: 16.0),
                       Row(
@@ -137,7 +139,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                           Text(
                             challenge.timeIncrement?.display ??
                                 '${context.l10n.daysPerTurn}: ${challenge.days}',
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
@@ -296,6 +298,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               boardOverlay: PlatformCard(
+                color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -306,7 +309,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                       children: [
                         Text(
                           context.l10n.challengeChallengeDeclined,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextTheme.of(context).titleMedium,
                         ),
                         const SizedBox(height: 8.0),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),

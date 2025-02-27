@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,10 +27,16 @@ final _getFollowingAndOnlinesProvider = FutureProvider.autoDispose<(IList<User>,
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, title: context.l10n.friends, screen: const FollowingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.friends)),
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
+      appBarTitle: Text(context.l10n.friends),
       body: const _Body(),
     );
   }
@@ -53,62 +58,57 @@ class _Body extends ConsumerWidget {
               return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
             }
             return SafeArea(
-              child: ColoredBox(
-                color:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoColors.systemBackground.resolveFrom(context)
-                        : Colors.transparent,
-                child: ListView.separated(
-                  itemCount: following.length,
-                  separatorBuilder:
-                      (context, index) =>
-                          const PlatformDivider(height: 1, cupertinoHasLeading: true),
-                  itemBuilder: (context, index) {
-                    final user = following[index];
-                    return Slidable(
-                      dragStartBehavior: DragStartBehavior.start,
-                      endActionPane: ActionPane(
-                        motion: const StretchMotion(),
-                        extentRatio: 0.3,
-                        children: [
-                          SlidableAction(
-                            onPressed: (BuildContext context) async {
-                              final oldState = following;
+              child: ListView.separated(
+                itemCount: following.length,
+                separatorBuilder:
+                    (context, index) =>
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                            : const SizedBox.shrink(),
+                itemBuilder: (context, index) {
+                  final user = following[index];
+                  return Slidable(
+                    dragStartBehavior: DragStartBehavior.start,
+                    endActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      extentRatio: 0.3,
+                      children: [
+                        SlidableAction(
+                          onPressed: (BuildContext context) async {
+                            final oldState = following;
+                            setState(() {
+                              following = following.removeWhere((v) => v.id == user.id);
+                            });
+                            try {
+                              await ref.withClient(
+                                (client) => RelationRepository(client).unfollow(user.id),
+                              );
+                            } catch (_) {
                               setState(() {
-                                following = following.removeWhere((v) => v.id == user.id);
+                                following = oldState;
                               });
-                              try {
-                                await ref.withClient(
-                                  (client) => RelationRepository(client).unfollow(user.id),
-                                );
-                              } catch (_) {
-                                setState(() {
-                                  following = oldState;
-                                });
-                              }
-                            },
-                            backgroundColor: context.lichessColors.error,
-                            foregroundColor: Colors.white,
-                            icon: Icons.person_remove,
-                            // TODO translate
-                            label: 'Unfollow',
-                          ),
-                        ],
-                      ),
-                      child: UserListTile.fromUser(
-                        user,
-                        _isOnline(user, data.$2),
-                        onTap:
-                            () => {
-                              pushPlatformRoute(
-                                context,
-                                builder: (context) => UserScreen(user: user.lightUser),
-                              ),
-                            },
-                      ),
-                    );
-                  },
-                ),
+                            }
+                          },
+                          backgroundColor: context.lichessColors.error,
+                          foregroundColor: Colors.white,
+                          icon: Icons.person_remove,
+                          // TODO translate
+                          label: 'Unfollow',
+                        ),
+                      ],
+                    ),
+                    child: UserListTile.fromUser(
+                      user,
+                      _isOnline(user, data.$2),
+                      onTap:
+                          () => {
+                            Navigator.of(
+                              context,
+                            ).push(UserScreen.buildRoute(context, user.lightUser)),
+                          },
+                    ),
+                  );
+                },
               ),
             );
           },

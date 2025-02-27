@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show PlatformCard;
 
 /// A platform agnostic list section.
 ///
@@ -13,28 +14,31 @@ class ListSection extends StatelessWidget {
     this.headerTrailing,
     this.margin,
     this.hasLeading = false,
-    this.showDivider = false,
     this.showDividerBetweenTiles = false,
     this.dense = false,
+    this.materialFilledCard = false,
     this.cupertinoAdditionalDividerMargin,
-    this.cupertinoBackgroundColor,
+    this.backgroundColor,
     this.cupertinoBorderRadius,
     this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
-  ListSection.loading({required int itemsNumber, bool header = false, this.margin})
-    : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
-      headerTrailing = null,
-      header = header ? const SizedBox.shrink() : null,
-      hasLeading = false,
-      showDivider = false,
-      showDividerBetweenTiles = false,
-      dense = false,
-      cupertinoAdditionalDividerMargin = null,
-      cupertinoBackgroundColor = null,
-      cupertinoBorderRadius = null,
-      cupertinoClipBehavior = Clip.hardEdge,
-      _isLoading = true;
+  ListSection.loading({
+    required int itemsNumber,
+    bool header = false,
+    this.margin,
+    this.hasLeading = false,
+  }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+       headerTrailing = null,
+       header = header ? const SizedBox.shrink() : null,
+       showDividerBetweenTiles = false,
+       dense = false,
+       materialFilledCard = false,
+       cupertinoAdditionalDividerMargin = null,
+       backgroundColor = null,
+       cupertinoBorderRadius = null,
+       cupertinoClipBehavior = Clip.hardEdge,
+       _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
   final List<Widget> children;
@@ -53,8 +57,8 @@ class ListSection extends StatelessWidget {
   /// Only on android.
   final bool showDividerBetweenTiles;
 
-  /// Show a [Divider] at the bottom of the section. Only on android.
-  final bool showDivider;
+  /// Whether the card should have a filled background. (Only on Android).
+  final bool materialFilledCard;
 
   /// Use it to set [ListTileTheme.dense] property. Only on Android.
   final bool dense;
@@ -62,7 +66,7 @@ class ListSection extends StatelessWidget {
   /// See [CupertinoListSection.additionalDividerMargin].
   final double? cupertinoAdditionalDividerMargin;
 
-  final Color? cupertinoBackgroundColor;
+  final Color? backgroundColor;
 
   final BorderRadiusGeometry? cupertinoBorderRadius;
 
@@ -70,47 +74,63 @@ class ListSection extends StatelessWidget {
 
   final bool _isLoading;
 
+  static const double materialVerticalPadding = 8.0;
+
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
+    final theme = Theme.of(context);
+    switch (theme.platform) {
       case TargetPlatform.android:
         return _isLoading
-            ? Padding(
-              padding: margin ?? Styles.sectionBottomPadding,
-              child: Column(
-                children: [
-                  if (header != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
+            ? Column(
+              children: [
+                PlatformCard(
+                  filled: materialFilledCard,
+                  clipBehavior: Clip.hardEdge,
+                  margin: margin ?? Styles.bodySectionPadding,
+                  color: backgroundColor,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: materialVerticalPadding),
+                      if (header != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  for (int i = 0; i < children.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                      for (int i = 0; i < children.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-              ),
+                      const SizedBox(height: materialVerticalPadding),
+                    ],
+                  ),
+                ),
+              ],
             )
-            : Padding(
-              padding: margin ?? Styles.sectionBottomPadding,
+            : PlatformCard(
+              filled: materialFilledCard,
+              clipBehavior: Clip.hardEdge,
+              margin: margin ?? Styles.bodySectionPadding,
+              color: backgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: materialVerticalPadding),
                   if (header != null)
                     ListTile(
                       dense: true,
@@ -121,11 +141,7 @@ class ListSection extends StatelessWidget {
                     ...ListTile.divideTiles(context: context, tiles: children)
                   else
                     ...children,
-                  if (showDivider)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Divider(thickness: 0),
-                    ),
+                  const SizedBox(height: materialVerticalPadding),
                 ],
               ),
             );
@@ -138,7 +154,7 @@ class ListSection extends StatelessWidget {
                   if (header != null)
                     // ignore: avoid-wrapping-in-padding
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 16.0),
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                       child: Container(
                         width: double.infinity,
                         height: 24,
@@ -148,14 +164,34 @@ class ListSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Container(
-                    width: double.infinity,
-                    height: children.length * 54,
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                  for (int i = 0; i < children.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        children: [
+                          if (hasLeading) ...[
+                            Container(
+                              width: 46,
+                              height: 46,
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                          Expanded(
+                            child: Container(
+                              height: 46,
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             )
@@ -176,13 +212,12 @@ class ListSection extends StatelessWidget {
                     ),
                   CupertinoListSection.insetGrouped(
                     clipBehavior: cupertinoClipBehavior,
-                    backgroundColor:
-                        cupertinoBackgroundColor ??
-                        CupertinoTheme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
                     decoration: BoxDecoration(
                       color:
-                          cupertinoBackgroundColor ??
-                          Styles.cupertinoCardColor.resolveFrom(context),
+                          backgroundColor ??
+                          theme.cardTheme.color ??
+                          theme.colorScheme.surfaceContainerLow,
                       borderRadius:
                           cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
                     ),
@@ -196,7 +231,7 @@ class ListSection extends StatelessWidget {
               ),
             );
       default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
+        assert(false, 'Unexpected platform ${theme.platform}');
         return const SizedBox.shrink();
     }
   }
@@ -243,7 +278,7 @@ class PlatformDivider extends StatelessWidget {
           // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
           indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
           endIndent: endIndent,
-          color: color ?? CupertinoColors.separator.resolveFrom(context),
+          color: color,
         );
   }
 }
@@ -264,7 +299,7 @@ class PlatformListTile extends StatelessWidget {
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
-    this.cupertinoBackgroundColor,
+    this.backgroundColor,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
     super.key,
@@ -277,7 +312,7 @@ class PlatformListTile extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  final Color? cupertinoBackgroundColor;
+  final Color? backgroundColor;
 
   /// only on iOS
   final Widget? additionalInfo;
@@ -303,12 +338,13 @@ class PlatformListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = ColorScheme.of(context);
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return ListTile(
           leading: leading,
           title: title,
-          iconColor: Theme.of(context).colorScheme.outline,
+          iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
           subtitle:
               subtitle != null
                   ? DefaultTextStyle.merge(
@@ -321,20 +357,20 @@ class PlatformListTile extends StatelessWidget {
           visualDensity: visualDensity,
           onTap: onTap,
           onLongPress: onLongPress,
+          tileColor: backgroundColor,
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,
         );
       case TargetPlatform.iOS:
+        final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
         return IconTheme(
-          data: CupertinoIconThemeData(color: CupertinoColors.systemGrey.resolveFrom(context)),
+          data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor:
-                  selected == true
-                      ? CupertinoColors.systemGrey4.resolveFrom(context)
-                      : cupertinoBackgroundColor,
+              backgroundColor: selected == true ? activatedColor : backgroundColor,
+              backgroundColorActivated: activatedColor,
               leading: leading,
               title:
                   harmonizeCupertinoTitleStyle
@@ -378,6 +414,7 @@ class AdaptiveListTile extends StatelessWidget {
     this.onTap,
     this.isThreeLine = false,
     this.contentPadding,
+    this.selected = false,
     super.key,
   });
 
@@ -387,6 +424,7 @@ class AdaptiveListTile extends StatelessWidget {
   final Widget? trailing;
   final GestureTapCallback? onTap;
   final bool isThreeLine;
+  final bool selected;
   final EdgeInsetsGeometry? contentPadding;
 
   @override
@@ -399,6 +437,7 @@ class AdaptiveListTile extends StatelessWidget {
         subtitle: subtitle,
         trailing: trailing,
         onTap: onTap,
+        selected: selected,
         isThreeLine: isThreeLine,
         contentPadding: contentPadding,
       ),

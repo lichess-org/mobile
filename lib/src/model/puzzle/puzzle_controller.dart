@@ -34,8 +34,8 @@ part 'puzzle_controller.g.dart';
 class PuzzleController extends _$PuzzleController {
   late Branch _gameTree;
   Timer? _firstMoveTimer;
-  Timer? _enableSolutionButtonTimer;
   Timer? _viewSolutionTimer;
+
   // on streak, we pre-load the next puzzle to avoid a delay when the user
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
@@ -44,6 +44,7 @@ class PuzzleController extends _$PuzzleController {
 
   Future<PuzzleService> get _service =>
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+
   @override
   PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
     final evaluationService = ref.read(evaluationServiceProvider);
@@ -51,7 +52,6 @@ class PuzzleController extends _$PuzzleController {
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
-      _enableSolutionButtonTimer?.cancel();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
     });
@@ -86,11 +86,6 @@ class PuzzleController extends _$PuzzleController {
       _setPath(state.initialPath, firstMove: true);
     });
 
-    // enable solution button after 4 seconds
-    _enableSolutionButtonTimer = Timer(const Duration(seconds: 4), () {
-      state = state.copyWith(canViewSolution: true);
-    });
-
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     // preload next streak puzzle
@@ -107,11 +102,11 @@ class PuzzleController extends _$PuzzleController {
       currentPath: UciPath.empty,
       node: _gameTree.view,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
-      canViewSolution: false,
+      hintShown: false,
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
-      viewedSolutionRecently: false,
+      shouldBlinkNextArrow: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
@@ -127,6 +122,7 @@ class PuzzleController extends _$PuzzleController {
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
+      state = state.copyWith(hintSquare: null);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
@@ -176,13 +172,11 @@ class PuzzleController extends _$PuzzleController {
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
-    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
-    state = state.copyWith(viewedSolutionRecently: false);
   }
 
   void viewSolution() {
@@ -196,24 +190,27 @@ class PuzzleController extends _$PuzzleController {
 
     state = state.copyWith(mode: PuzzleMode.view);
 
-    Timer(const Duration(milliseconds: 800), () {
+    _viewSolutionTimer = Timer(const Duration(milliseconds: 800), () {
       _goToNextNode();
 
       if (state.canGoNext) {
-        state = state.copyWith(viewedSolutionRecently: true);
-        Timer(const Duration(seconds: 5), () {
-          state = state.copyWith(viewedSolutionRecently: false);
-        });
+        state = state.copyWith(shouldBlinkNextArrow: true);
       }
     });
+  }
+
+  void toggleHint() {
+    if (state.hintSquare == null) {
+      state = state.copyWith(hintShown: true, hintSquare: state._nextSolutionMove.from);
+    } else {
+      state = state.copyWith(hintSquare: null);
+    }
   }
 
   void skipMove() {
     if (state.streak != null) {
       state = state.copyWith.streak!(hasSkipped: true);
-      final moveIndex = state.currentPath.size - state.initialPath.size;
-      final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(NormalMove.fromUci(solution));
+      onUserMove(state._nextSolutionMove);
     }
   }
 
@@ -324,7 +321,10 @@ class PuzzleController extends _$PuzzleController {
         solution: PuzzleSolution(
           id: state.puzzle.puzzle.id,
           win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null,
+          rated:
+              initialContext.userId != null &&
+              !state.hintShown &&
+              ref.read(puzzlePreferencesProvider).rated,
         ),
       );
 
@@ -416,6 +416,7 @@ class PuzzleController extends _$PuzzleController {
       node: newNode,
       lastMove: sanMove.move,
       promotionMove: null,
+      shouldBlinkNextArrow: false,
     );
 
     if (pathChange) {
@@ -523,11 +524,12 @@ class PuzzleState with _$PuzzleState {
     NormalMove? promotionMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
-    required bool canViewSolution,
+    required bool hintShown,
+    Square? hintSquare,
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
-    required bool viewedSolutionRecently,
+    required bool shouldBlinkNextArrow,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails
@@ -544,9 +546,15 @@ class PuzzleState with _$PuzzleState {
       EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
 
   Position get position => node.position;
+
   String get fen => node.position.fen;
+
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
+
   bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
+
+  NormalMove get _nextSolutionMove =>
+      NormalMove.fromUci(puzzle.puzzle.solution[currentPath.size - initialPath.size]);
 
   IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }

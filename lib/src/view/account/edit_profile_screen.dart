@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_autocomplete.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
@@ -25,6 +26,14 @@ final _cupertinoTextFieldDecoration = BoxDecoration(
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(
+      context,
+      screen: const EditProfileScreen(),
+      title: context.l10n.editProfile,
+    );
+  }
 
   Future<bool?> _showBackDialog(BuildContext context) async {
     return showAdaptiveDialog<bool>(
@@ -51,7 +60,7 @@ class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
+      appBarTitle: Text(context.l10n.editProfile),
       body: PopScope(
         canPop: false,
         onPopInvokedWithResult: (bool didPop, _) async {

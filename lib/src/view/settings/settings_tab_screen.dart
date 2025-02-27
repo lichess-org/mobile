@@ -2,7 +2,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -10,17 +10,17 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/theme_screen.dart';
+import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -111,7 +111,6 @@ class _Body extends ConsumerWidget {
       ListSection(
         header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
         hasLeading: true,
-        showDivider: true,
         children: [
           if (userSession != null) ...[
             PlatformListTile(
@@ -123,11 +122,7 @@ class _Body extends ConsumerWidget {
                       : null,
               onTap: () {
                 ref.invalidate(accountActivityProvider);
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.profile,
-                  builder: (context) => const ProfileScreen(),
-                );
+                Navigator.of(context).push(ProfileScreen.buildRoute(context));
               },
             ),
             PlatformListTile(
@@ -138,11 +133,7 @@ class _Body extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
               onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.preferencesPreferences,
-                  builder: (context) => const AccountPreferencesScreen(),
-                );
+                Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
               },
             ),
             if (authController.isLoading)
@@ -179,7 +170,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           SettingsListTile(
             icon: const Icon(Icons.music_note_outlined),
@@ -187,37 +177,39 @@ class _Body extends ConsumerWidget {
             settingsValue:
                 '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.sound,
-                builder: (context) => const SoundSettingsScreen(),
-              );
+              Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
             },
           ),
-          SettingsListTile(
-            icon: const Icon(Icons.brightness_medium_outlined),
-            settingsLabel: Text(context.l10n.background),
-            settingsValue: AppBackgroundModeScreen.themeTitle(context, generalPrefs.themeMode),
-            onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker(
-                  context,
-                  choices: BackgroundThemeMode.values,
-                  selectedItem: generalPrefs.themeMode,
-                  labelBuilder: (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged:
-                      (BackgroundThemeMode? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                );
-              } else {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.background,
-                  builder: (context) => const AppBackgroundModeScreen(),
-                );
-              }
-            },
+          Opacity(
+            opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
+            child: SettingsListTile(
+              icon: const Icon(Icons.brightness_medium_outlined),
+              settingsLabel: Text(context.l10n.background),
+              settingsValue: AppBackgroundModeScreen.themeTitle(
+                context,
+                generalPrefs.isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
+              ),
+              onTap:
+                  generalPrefs.isForcedDarkMode
+                      ? null
+                      : () {
+                        if (Theme.of(context).platform == TargetPlatform.android) {
+                          showChoicePicker(
+                            context,
+                            choices: BackgroundThemeMode.values,
+                            selectedItem: generalPrefs.themeMode,
+                            labelBuilder:
+                                (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
+                            onSelectedItemChanged:
+                                (BackgroundThemeMode? value) => ref
+                                    .read(generalPreferencesProvider.notifier)
+                                    .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                          );
+                        } else {
+                          Navigator.of(context).push(AppBackgroundModeScreen.buildRoute(context));
+                        }
+                      },
+            ),
           ),
           PlatformListTile(
             leading: const Icon(Icons.palette_outlined),
@@ -227,7 +219,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(context, title: 'Theme', builder: (context) => const ThemeScreen());
+              Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
             },
           ),
           PlatformListTile(
@@ -238,11 +230,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
             onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardSettingsScreen(),
-              );
+              Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
             },
           ),
           SettingsListTile(
@@ -255,7 +243,7 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker<Locale>(
                   context,
-                  choices: kSupportedLocales,
+                  choices: AppLocalizations.supportedLocales,
                   selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                   labelBuilder: (t) => Text(localeToLocalizedName(t)),
                   onSelectedItemChanged:
@@ -271,7 +259,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.info_outlined),
@@ -309,7 +296,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.code_outlined),
@@ -339,7 +325,6 @@ class _Body extends ConsumerWidget {
       ),
       ListSection(
         hasLeading: true,
-        showDivider: true,
         children: [
           PlatformListTile(
             leading: const Icon(Icons.storage_outlined),
@@ -352,14 +337,44 @@ class _Body extends ConsumerWidget {
           ),
         ],
       ),
+      if (userSession != null)
+        ListSection(
+          hasLeading: true,
+          children: [
+            if (Theme.of(context).platform == TargetPlatform.iOS)
+              PlatformListTile(
+                leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
+                title: Text(
+                  'Delete your account',
+                  style: TextStyle(color: context.lichessColors.error),
+                ),
+                trailing: const _OpenInNewIcon(),
+                onTap: () {
+                  launchUrl(lichessUri('/account/delete'));
+                },
+              )
+            else
+              PlatformListTile(
+                leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
+                title: Text(
+                  context.l10n.settingsCloseAccount,
+                  style: TextStyle(color: context.lichessColors.error),
+                ),
+                trailing: const _OpenInNewIcon(),
+                onTap: () {
+                  launchUrl(lichessUri('/account/close'));
+                },
+              ),
+          ],
+        ),
       Padding(
         padding: Styles.bodySectionPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LichessMessage(style: Theme.of(context).textTheme.bodyMedium),
+            LichessMessage(style: TextTheme.of(context).bodyMedium),
             const SizedBox(height: 10),
-            Text('v${packageInfo.version}', style: Theme.of(context).textTheme.bodySmall),
+            Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ],
         ),
       ),
@@ -378,7 +393,7 @@ class _Body extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
-            onPressed: (context) async {
+            onPressed: () async {
               await ref.read(authControllerProvider.notifier).signOut();
             },
           ),
@@ -392,14 +407,14 @@ class _Body extends ConsumerWidget {
             title: Text(context.l10n.logOut),
             actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();

@@ -6,11 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class PieceSetScreen extends ConsumerStatefulWidget {
   const PieceSetScreen({super.key});
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const PieceSetScreen(), title: context.l10n.pieceSet);
+  }
 
   @override
   ConsumerState<PieceSetScreen> createState() => _PieceSetScreenState();
@@ -51,10 +56,8 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.pieceSet),
-        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
-      ),
+      appBarTitle: Text(context.l10n.pieceSet),
+      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       body: SafeArea(
         child: ListView.separated(
           itemCount: PieceSet.values.length,

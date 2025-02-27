@@ -11,16 +11,17 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerWidget {
-  const EngineLines({required this.onTapMove, required this.clientEval, required this.isGameOver});
+  const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
+
   final void Function(NormalMove move) onTapMove;
-  final ClientEval? clientEval;
+  final ClientEval? savedEval;
   final bool isGameOver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
-    final engineEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = engineEval ?? clientEval;
+    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
@@ -83,8 +84,6 @@ class Engineline extends ConsumerWidget {
       ply += 1;
     });
 
-    final brightness = Theme.of(context).brightness;
-
     final evalString = pvData.evalString;
     return AdaptiveInkWell(
       onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
@@ -101,8 +100,8 @@ class Engineline extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color:
                       pvData.winningSide == Side.black
-                          ? EngineGauge.backgroundColor(context, brightness)
-                          : EngineGauge.valueColor(context, brightness),
+                          ? EngineGauge.backgroundColor(context)
+                          : EngineGauge.valueColor(context),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),

@@ -17,10 +17,8 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
-import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
@@ -516,10 +514,9 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.gameAnalysis,
                 icon: Icons.biotech,
                 onTap: () {
-                  pushPlatformRoute(
+                  Navigator.of(
                     context,
-                    builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-                  );
+                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
                 },
               )
             else if (gameState.game.meta.speed == Speed.bullet ||
@@ -569,15 +566,13 @@ class _GameBottomBar extends ConsumerWidget {
               onTap:
                   isChatEnabled
                       ? () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (BuildContext context) {
-                            return MessageScreen(
-                              title: UserFullNameWidget(user: gameState.game.opponent?.user),
-                              me: gameState.game.me?.user,
-                              id: id,
-                            );
-                          },
+                        Navigator.of(context).push(
+                          MessageScreen.buildRoute(
+                            context,
+                            title: UserFullNameWidget(user: gameState.game.opponent?.user),
+                            me: gameState.game.me?.user,
+                            id: id,
+                          ),
                         );
                       }
                       : null,
@@ -603,6 +598,10 @@ class _GameBottomBar extends ConsumerWidget {
                 label: context.l10n.next,
                 icon: CupertinoIcons.chevron_forward,
                 showTooltip: false,
+                blink:
+                    gameState.game.playable &&
+                    gameState.stepCursor != gameState.game.steps.length - 1 &&
+                    gameState.game.sideToMove == gameState.game.youAre,
               ),
             ),
           ];
@@ -628,24 +627,23 @@ class _GameBottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
+          onPressed: () {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
         if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: (context) {
-              pushPlatformRoute(
+            onPressed: () {
+              Navigator.of(
                 context,
-                builder: (_) => AnalysisScreen(options: gameState.analysisOptions),
-              );
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
           ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).abortGame();
             },
           ),
@@ -655,14 +653,14 @@ class _GameBottomBar extends ConsumerWidget {
                 (context) => Text(
                   context.l10n.giveNbSeconds(gameState.game.meta.clock!.moreTime?.inSeconds ?? 15),
                 ),
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).moreTime();
             },
           ),
         if (gameState.game.canTakeback)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.takeback),
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).offerTakeback();
             },
           ),
@@ -670,7 +668,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.mobileCancelTakebackOffer),
             isDestructiveAction: true,
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).cancelOrDeclineTakeback();
             },
           ),
@@ -679,14 +677,14 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.offerDraw),
             onPressed:
                 gameState.shouldConfirmResignAndDrawOffer
-                    ? (context) => _showConfirmDialog(
+                    ? () => _showConfirmDialog(
                       context,
                       description: Text(context.l10n.offerDraw),
                       onConfirm: () {
                         ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
                       },
                     )
-                    : (context) {
+                    : () {
                       ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
                     },
           ),
@@ -695,14 +693,14 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.resign),
             onPressed:
                 gameState.shouldConfirmResignAndDrawOffer
-                    ? (context) => _showConfirmDialog(
+                    ? () => _showConfirmDialog(
                       context,
                       description: Text(context.l10n.resignTheGame),
                       onConfirm: () {
                         ref.read(gameControllerProvider(id).notifier).resignGame();
                       },
                     )
-                    : (context) {
+                    : () {
                       ref.read(gameControllerProvider(id).notifier).resignGame();
                     },
           ),
@@ -710,14 +708,14 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.forceDraw),
             dismissOnPress: true,
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).forceDraw();
             },
           ),
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.forceResignation),
             dismissOnPress: true,
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).forceResign();
             },
           ),
@@ -727,7 +725,7 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
             dismissOnPress: true,
             isDestructiveAction: true,
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
@@ -735,23 +733,14 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
-            onPressed: (context) {
+            onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
             },
           ),
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
-            onPressed: (_) => onNewOpponentCallback(gameState.game),
-          ),
-        if (gameState.game.finished)
-          ...makeFinishedGameShareActions(
-            gameState.game,
-            currentGamePosition: gameState.game.positionAt(gameState.stepCursor),
-            lastMove: gameState.game.moveAt(gameState.stepCursor),
-            orientation: gameState.game.youAre ?? Side.white,
-            context: context,
-            ref: ref,
+            onPressed: () => onNewOpponentCallback(gameState.game),
           ),
       ],
     );

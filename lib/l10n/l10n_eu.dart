@@ -390,12 +390,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastUpcoming => 'Hurrengo emanaldiak';
 
   @override
-  String get broadcastCompleted => 'Amaitutako emanaldiak';
-
-  @override
-  String get broadcastCompletedHelp => 'Txanda amaitu dela jatorrizko partidekin detektatzen du Lichessek. Erabili aukera hau jatorririk ez badago.';
-
-  @override
   String get broadcastRoundName => 'Txandaren izena';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'Ikusi zuzeneko guztiak hilabeteka';
+
+  @override
+  String get broadcastBackToLiveMove => 'Zuzeneko jokaldi-modura itzuli';
+
+  @override
+  String get broadcastSinceHideResults => 'Emaitzak ezkutatzea erabaki duzunez, taulen aurreikuspenak hutsik daude.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Gaztelua aurkariaren erregearen ondoan dago damaren laguntzarekin, honek gainera erregearen ihes-laukiak babesten ditu. Gazteluak eta damak erregea 3x3ko \"hilkutxa\" baten harrapatu dezakete.';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovicen matea';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'Gaztelu eta zaldunak batera lan egiten dute matea emateko. Gazteluak mate ematen du hirugaren piezak lagundurik, zaldunak erregearen ihes-laukiak babesten dituen artean.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Zaldunen finala';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Zure kontua beste norbaitek kudeatzen du eta ezin da itxi.';
 
   @override
-  String get settingsClosingIsDefinitive => 'Ixteak ez du atzera egiterik. Ziur zaude?';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Ezingo duzu beste kontu bat ireki izen berdinarekin, naiz eta hizki larriak eta xeheak aldatu.';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ez dut nire kontua itxi nahi';
+  String get settingsCancelKeepAccount => 'Utzi eta mantendu nire kontua';
 
   @override
-  String get settingsCloseAccountExplanation => 'Benetan zure kontua itxi egin nahi duzu? Erabaki hau betiko hartuko duzu eta ezingo zara berriz inoiz webgunera sartu.';
+  String get settingsCloseAccountAreYouSure => 'Ziur zure kontua ezabatu nahi duzula?';
 
   @override
   String get settingsThisAccountIsClosed => 'Kontu hau itxita dago.';
@@ -3685,6 +3688,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get followAndChallengeFriends => 'Jarraitu eta desafio egin lagunei';
 
   @override
+  String get noChallenges => 'Erronkarik ez.';
+
+  @override
   String get gameAnalysis => 'Partidaren analisia';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get reopenYourAccount => 'Berreskuratu zure kontua';
 
   @override
-  String get closedAccountChangedMind => 'Zure kontua itxi bazenuen baina berreskuratu nahi baduzu, aukera bakarra duzu hori egiteko.';
-
-  @override
-  String get onlyWorksOnce => 'Honek behin bakarrik funtzionatuko du.';
-
-  @override
-  String get cantDoThisTwice => 'Zure kontua bigarren aldiz ixten baduzu ezingo duzu berriz berreskuratu.';
+  String get reopenYourAccountDescription => 'Zure kontua itxi bazenuen baina berreskuratu nahi baduzu, hori egiteko aukera duzu.';
 
   @override
   String get emailAssociatedToaccount => 'Posta elektronikoa ondo lotu da zure kontura';

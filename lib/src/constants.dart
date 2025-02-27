@@ -52,7 +52,6 @@ final List<BoxShadow> boardShadows =
     defaultTargetPlatform == TargetPlatform.iOS ? <BoxShadow>[] : kElevationToShadow[1]!;
 
 const kCardTextScaleFactor = 1.64;
-const kCardBorderRadius = BorderRadius.all(Radius.circular(10.0));
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
@@ -70,71 +69,3 @@ class _AllowedWidgetReturn {
 
 /// Use to annotate a function that is allowed to return a Widget
 const allowedWidgetReturn = _AllowedWidgetReturn();
-
-/// Supported locales for the app.
-///
-/// This is passed to the [MaterialApp] widget.
-/// The first locale in the list will be used as the default locale.
-///
-/// See: https://api.flutter.dev/flutter/material/MaterialApp/supportedLocales.html
-const kSupportedLocales = [
-  // English is the default locale.
-  Locale('en', 'GB'),
-  Locale('af', 'ZA'),
-  Locale('ar', 'SA'),
-  Locale('az', 'AZ'),
-  Locale('be', 'BY'),
-  Locale('bg', 'BG'),
-  Locale('bn', 'BD'),
-  Locale('br', 'FR'),
-  Locale('bs', 'BA'),
-  Locale('ca', 'ES'),
-  Locale('cs', 'CZ'),
-  Locale('da', 'DK'),
-  Locale('de', 'DE'),
-  Locale('el', 'GR'),
-  Locale('en', 'US'),
-  Locale('eo', 'UY'),
-  Locale('es', 'ES'),
-  Locale('et', 'EE'),
-  Locale('eu', 'ES'),
-  Locale('fa', 'IR'),
-  Locale('fi', 'FI'),
-  Locale('fo', 'FO'),
-  Locale('fr', 'FR'),
-  Locale('ga', 'IE'),
-  Locale('gl', 'ES'),
-  Locale('gsw', 'CH'),
-  Locale('he', 'IL'),
-  Locale('hi', 'IN'),
-  Locale('hr', 'HR'),
-  Locale('hu', 'HU'),
-  Locale('hy', 'AM'),
-  Locale('id', 'ID'),
-  Locale('it', 'IT'),
-  Locale('ja', 'JP'),
-  Locale('kk', 'KZ'),
-  Locale('ko', 'KR'),
-  Locale('lb', 'LU'),
-  Locale('lt', 'LT'),
-  Locale('lv', 'LV'),
-  Locale('mk', 'MK'),
-  Locale('nb', 'NO'),
-  Locale('nl', 'NL'),
-  Locale('nn', 'NO'),
-  Locale('pl', 'PL'),
-  Locale('pt', 'PT'),
-  Locale('pt', 'BR'),
-  Locale('ro', 'RO'),
-  Locale('ru', 'RU'),
-  Locale('sk', 'SK'),
-  Locale('sl', 'SI'),
-  Locale('sq', 'AL'),
-  Locale('sr', 'SP'),
-  Locale('sv', 'SE'),
-  Locale('tr', 'TR'),
-  Locale('uk', 'UA'),
-  Locale('vi', 'VN'),
-  Locale('zh', 'CN'),
-  Locale('zh', 'TW'),
-];

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_display.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -27,23 +28,31 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class CoordinateTrainingScreen extends StatelessWidget {
   const CoordinateTrainingScreen({super.key});
 
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, screen: const CoordinateTrainingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: const Text('Coordinate Training'), // TODO l10n once script works
-        actions: [
-          AppBarIconButton(
-            icon: const Icon(Icons.settings),
-            semanticsLabel: context.l10n.settingsSettings,
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
-          ),
-        ],
-      ),
+      enableBackgroundFilterBlur: false,
+      appBarTitle: const Text('Coordinate Training'), // TODO l10n once script works
+      appBarActions: [
+        Builder(
+          builder: (context) {
+            return AppBarIconButton(
+              icon: const Icon(Icons.settings),
+              semanticsLabel: context.l10n.settingsSettings,
+              onPressed:
+                  () => showAdaptiveBottomSheet<void>(
+                    context: context,
+                    showDragHandle: true,
+                    builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                  ),
+            );
+          },
+        ),
+      ],
       body: const _Body(),
     );
   }
@@ -241,16 +250,11 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
     return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+        ListSection(
+          materialFilledCard: true,
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(context.l10n.preferencesDisplay, style: Styles.sectionTitle),
-            ),
             SwitchSettingTile(
               title: const Text('Show Coordinates'),
               value: trainingPrefs.showCoordinates,

@@ -1,7 +1,9 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -10,6 +12,9 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
+
+/// Scale factor for the small board in portrait orientation.
+const kSmallBoardScale = 0.8;
 
 typedef BoardBuilder =
     Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
@@ -95,7 +100,7 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
                 return BottomSheetAction(
                   leading: Icon(tab.icon),
                   makeLabel: (context) => Text(tab.l10n(context.l10n)),
-                  onPressed: (_) {
+                  onPressed: () {
                     widget.controller.animateTo(widget.tabs.indexOf(tab));
                   },
                 );
@@ -120,11 +125,13 @@ class AnalysisLayout extends StatelessWidget {
     this.tabController,
     required this.boardBuilder,
     required this.children,
+    required this.pov,
     this.boardHeader,
     this.boardFooter,
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
+    this.smallBoard = false,
     super.key,
   });
 
@@ -133,6 +140,9 @@ class AnalysisLayout extends StatelessWidget {
 
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;
+
+  /// The side the board is displayed from.
+  final Side pov;
 
   /// A widget to show above the board.
   ///
@@ -161,6 +171,11 @@ class AnalysisLayout extends StatelessWidget {
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
 
+  /// If true, the board is displayed in a small size on portrait orientation.
+  ///
+  /// This is `false` by default.
+  final bool smallBoard;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -175,7 +190,7 @@ class AnalysisLayout extends StatelessWidget {
                         ? Orientation.landscape
                         : Orientation.portrait;
                 final isTablet = isTabletOrLarger(context);
-                const tabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
+                const tabletBoardRadius = Styles.boardBorderRadius;
 
                 if (orientation == Orientation.landscape) {
                   final headerAndFooterHeight =
@@ -200,6 +215,8 @@ class AnalysisLayout extends StatelessWidget {
                           children: [
                             if (boardHeader != null)
                               Container(
+                                // This key is used to preserve the state of the board header when the pov changes
+                                key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -225,6 +242,8 @@ class AnalysisLayout extends StatelessWidget {
                             ),
                             if (boardFooter != null)
                               Container(
+                                // This key is used to preserve the state of the board footer when the pov changes
+                                key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -255,7 +274,6 @@ class AnalysisLayout extends StatelessWidget {
                               Expanded(
                                 child: PlatformCard(
                                   clipBehavior: Clip.hardEdge,
-                                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                                   semanticContainer: false,
                                   child: TabBarView(controller: tabController, children: children),
                                 ),
@@ -291,7 +309,9 @@ class AnalysisLayout extends StatelessWidget {
                         child: Column(
                           children: [
                             if (boardHeader != null)
+                              // This key is used to preserve the state of the board header when the pov changes
                               Container(
+                                key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -307,13 +327,15 @@ class AnalysisLayout extends StatelessWidget {
                               ),
                             boardBuilder(
                               context,
-                              boardSize,
+                              boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
                               isTablet && boardHeader == null && boardFooter != null
                                   ? tabletBoardRadius
                                   : null,
                             ),
                             if (boardFooter != null)
                               Container(
+                                // This key is used to preserve the state of the board footer when the pov changes
+                                key: ValueKey(pov),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       isTablet
@@ -338,7 +360,12 @@ class AnalysisLayout extends StatelessWidget {
                                     horizontal: kTabletBoardTableSidePadding,
                                   )
                                   : EdgeInsets.zero,
-                          child: TabBarView(controller: tabController, children: children),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorScheme.of(context).surfaceContainerLowest,
+                            ),
+                            child: TabBarView(controller: tabController, children: children),
+                          ),
                         ),
                       ),
                     ],

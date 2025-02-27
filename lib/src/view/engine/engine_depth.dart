@@ -12,30 +12,37 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
 class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.defaultEval});
+  const EngineDepth({this.savedEval});
 
-  final ClientEval? defaultEval;
+  final ClientEval? savedEval;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final depth =
-        ref.watch(engineEvaluationProvider.select((value) => value.eval?.depth)) ??
-        defaultEval?.depth;
+    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    return depth != null
+    return eval != null
         ? AppBarTextButton(
           onPressed: () {
             showPopover(
               context: context,
               bodyBuilder: (context) {
-                return _StockfishInfo(defaultEval);
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    switch (eval) {
+                      LocalEval() => _StockfishInfo(eval),
+                      CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
+                    },
+                  ],
+                );
               },
               direction: PopoverDirection.top,
               width: 240,
               backgroundColor:
                   Theme.of(context).platform == TargetPlatform.android
                       ? DialogTheme.of(context).backgroundColor ??
-                          Theme.of(context).colorScheme.surfaceContainerHigh
+                          ColorScheme.of(context).surfaceContainerHigh
                       : CupertinoDynamicColor.resolve(
                         CupertinoColors.tertiarySystemBackground,
                         context,
@@ -44,35 +51,56 @@ class EngineDepth extends ConsumerWidget {
               popoverTransitionBuilder: (_, child) => child,
             );
           },
-          child: RepaintBoundary(
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? Theme.of(context).colorScheme.secondary
-                        : CupertinoTheme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  '${math.min(99, depth)}',
-                  style: TextStyle(
-                    color:
-                        Theme.of(context).platform == TargetPlatform.android
-                            ? Theme.of(context).colorScheme.onSecondary
-                            : CupertinoTheme.of(context).primaryContrastingColor,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
+          child: _AppBarButtonChild(eval),
+        )
+        : const SizedBox.shrink();
+  }
+}
+
+class _AppBarButtonChild extends StatelessWidget {
+  final ClientEval eval;
+
+  const _AppBarButtonChild(this.eval);
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (eval) {
+      LocalEval(:final depth) => RepaintBoundary(
+        child: Container(
+          width: 20.0,
+          height: 20.0,
+          padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+            color: ColorScheme.of(context).secondary,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              '${math.min(99, depth)}',
+              style: TextStyle(
+                color: ColorScheme.of(context).onSecondary,
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ),
-        )
-        : const SizedBox.shrink();
+        ),
+      ),
+      CloudEval(:final depth) => Stack(
+        alignment: const AlignmentDirectional(-0.05, 0.15),
+        children: [
+          Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary),
+          Text(
+            '${math.min(99, depth)}',
+            style: TextStyle(
+              color: ColorScheme.of(context).onSecondary,
+              fontFeatures: const [FontFeature.tabularFigures()],
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    };
   }
 }
 
@@ -92,15 +120,10 @@ class _StockfishInfo extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlatformListTile(
-          leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-          title: Text(engineName),
-          subtitle: Text(context.l10n.depthX('$depth$knps')),
-        ),
-      ],
+    return PlatformListTile(
+      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+      title: Text(engineName),
+      subtitle: Text(context.l10n.depthX('$depth$knps')),
     );
   }
 }

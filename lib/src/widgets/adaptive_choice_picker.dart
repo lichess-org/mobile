@@ -21,7 +21,8 @@ Future<void> showChoicePicker<T>(
         context: context,
         builder: (context) {
           return AlertDialog(
-            contentPadding: const EdgeInsets.only(top: 12),
+            clipBehavior: Clip.hardEdge,
+            contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0, left: 0, right: 0),
             scrollable: true,
             content: Builder(
               builder: (context) {
@@ -46,7 +47,7 @@ Future<void> showChoicePicker<T>(
                       height: deviceHeight * 0.6,
                       child: ListView(shrinkWrap: true, children: choiceWidgets),
                     )
-                    : Column(mainAxisSize: MainAxisSize.min, children: choiceWidgets);
+                    : ListBody(children: choiceWidgets);
               },
             ),
             actions: [

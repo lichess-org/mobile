@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -110,7 +109,7 @@ class GamePlayer extends StatelessWidget {
               ],
               Flexible(
                 child: Text(
-                  player.displayName(context),
+                  player.displayName(context.l10n),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
                 ),
@@ -190,13 +189,10 @@ class GamePlayer extends StatelessWidget {
                         onTap:
                             player.user != null
                                 ? () {
-                                  pushPlatformRoute(
-                                    context,
-                                    builder:
-                                        (context) =>
-                                            mePlaying
-                                                ? const ProfileScreen()
-                                                : UserScreen(user: player.user!),
+                                  Navigator.of(context).push(
+                                    mePlaying
+                                        ? ProfileScreen.buildRoute(context)
+                                        : UserScreen.buildRoute(context, player.user!),
                                   );
                                 }
                                 : null,
@@ -341,10 +337,10 @@ class MaterialDifferenceDisplay extends StatelessWidget {
           children: [
             for (final role in Role.values)
               for (int i = 0; i < piecesToRender[role]!; i++)
-                Icon(_iconByRole[role], size: 13, color: Colors.grey),
+                Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
             const SizedBox(width: 3),
             Text(
-              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
               materialDiff.score > 0 ? '+${materialDiff.score}' : '',
             ),
           ],

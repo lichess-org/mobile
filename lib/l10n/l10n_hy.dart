@@ -390,12 +390,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastUpcoming => 'Առաջիկայում սպասվող';
 
   @override
-  String get broadcastCompleted => 'Ավարտված';
-
-  @override
-  String get broadcastCompletedHelp => 'Lichess detects round completion, but can get it wrong. Use this to set it manually.';
-
-  @override
   String get broadcastRoundName => 'Խաղափուլի անվանում';
 
   @override
@@ -594,6 +588,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+
+  @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1471,6 +1471,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
 
   @override
@@ -1686,16 +1692,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ձեր հաշիվը կառավարվում է և չի կարող փակվել։';
 
   @override
-  String get settingsClosingIsDefinitive => 'Փակումը հնարավոր չի լինի չեղարկել։ Համոզվա՞ծ եք։';
-
-  @override
   String get settingsCantOpenSimilarAccount => 'Դուք չեք կարողանա ստեղծել նույն անունով մասնակցային հաշիվ, նույնիսկ եթե տառաշարերը (մեծատառ-փոքրատառ) տարբերվեն։';
 
   @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ես մտափոխվել եմ, մի փակեք իմ հաշիվը';
+  String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountExplanation => 'Դուք համոզվա՞ծ եք, որ ցանկանում եք փակել Ձեր մասնակցային հաշիվը։ Փակումն անդառնալի է։ Դուք այլևս երբեք չեք կարողանա մուտք գործել Ձեր հաշիվ։';
+  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
 
   @override
   String get settingsThisAccountIsClosed => 'Այս հաշիվը փակված է:';
@@ -3685,6 +3688,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get followAndChallengeFriends => 'Բաժանորդագրություններ և խաղ ընկերների հետ';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String get gameAnalysis => 'Խաղի վերլուծություն';
 
   @override
@@ -4280,13 +4286,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get reopenYourAccount => 'Վերաբացեք Ձեր մասնակցային հաշիվը';
 
   @override
-  String get closedAccountChangedMind => 'Եթե Դուք փակել եք Ձեր մասնակցային հաշիվը, բայց մտափոխվել եք, մեկ անգամ այն վերականգնելու հնարավորություն ունեք։';
-
-  @override
-  String get onlyWorksOnce => 'Սա կաշխատի միայն մեկ անգամ։';
-
-  @override
-  String get cantDoThisTwice => 'Եթե Դուք ևս մեկ անգամ փակեք Ձեր մասնակցային հաշիվը, այն վերաբացելու հնարավորություն այլևս չեք ունենա։';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Այս մասնակցային հաշվին կցված էլ. փոստի հասցեն։';

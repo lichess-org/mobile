@@ -23,7 +23,7 @@ abstract class Node {
 
   final Position position;
 
-  /// The client evaluation of the position.
+  /// The local evaluation of the position.
   ClientEval? eval;
 
   /// The opening associated with this node.
@@ -664,6 +664,20 @@ class ViewBranch extends ViewNode with _$ViewBranch {
       (c) => c.emt != null,
     );
     return clockComment?.emt;
+  }
+
+  /// The evaluation from the PGN comments.
+  ///
+  /// For now we only trust the eval coming from lichess analysis.
+  ExternalEval? get serverEval {
+    final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    return pgnEval != null
+        ? ExternalEval(
+          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+          mate: pgnEval.mate,
+          depth: pgnEval.depth,
+        )
+        : null;
   }
 
   @override
