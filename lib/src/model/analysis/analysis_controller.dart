@@ -52,7 +52,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   late Root _root;
   late Variant _variant;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
   Timer? _startEngineEvalTimer;
 
