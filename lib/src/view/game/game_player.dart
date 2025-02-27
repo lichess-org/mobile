@@ -135,9 +135,10 @@ class GamePlayer extends StatelessWidget {
                           TextSpan(
                             text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
-                              color: player.ratingDiff! > 0
-                                  ? context.lichessColors.good
-                                  : player.ratingDiff! == 0
+                              color:
+                                  player.ratingDiff! > 0
+                                      ? context.lichessColors.good
+                                      : player.ratingDiff! == 0
                                       ? context.lichessColors.brag
                                       : context.lichessColors.error,
                             ),
