@@ -52,7 +52,7 @@ class AnalysisController extends _$AnalysisController implements PgnTreeNotifier
   late Root _root;
   late Variant _variant;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
   Timer? _startEngineEvalTimer;
 
@@ -806,10 +806,11 @@ class AnalysisState with _$AnalysisState {
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
   EngineGaugeParams get engineGaugeParams => (
-    orientation: pov,
     isLocalEngineAvailable: isEngineAvailable,
+    orientation: pov,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }
 

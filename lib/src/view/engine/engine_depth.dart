@@ -18,31 +18,38 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval = ref.watch(engineEvaluationProvider).eval ?? savedEval;
+    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     return eval != null
         ? AppBarTextButton(
           onPressed: () {
-            if (eval is LocalEval) {
-              showPopover(
-                context: context,
-                bodyBuilder: (context) {
-                  return _StockfishInfo(eval);
-                },
-                direction: PopoverDirection.top,
-                width: 240,
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.android
-                        ? DialogTheme.of(context).backgroundColor ??
-                            ColorScheme.of(context).surfaceContainerHigh
-                        : CupertinoDynamicColor.resolve(
-                          CupertinoColors.tertiarySystemBackground,
-                          context,
-                        ),
-                transitionDuration: Duration.zero,
-                popoverTransitionBuilder: (_, child) => child,
-              );
-            }
+            showPopover(
+              context: context,
+              bodyBuilder: (context) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    switch (eval) {
+                      LocalEval() => _StockfishInfo(eval),
+                      CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
+                    },
+                  ],
+                );
+              },
+              direction: PopoverDirection.top,
+              width: 240,
+              backgroundColor:
+                  Theme.of(context).platform == TargetPlatform.android
+                      ? DialogTheme.of(context).backgroundColor ??
+                          ColorScheme.of(context).surfaceContainerHigh
+                      : CupertinoDynamicColor.resolve(
+                        CupertinoColors.tertiarySystemBackground,
+                        context,
+                      ),
+              transitionDuration: Duration.zero,
+              popoverTransitionBuilder: (_, child) => child,
+            );
           },
           child: _AppBarButtonChild(eval),
         )

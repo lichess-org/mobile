@@ -41,7 +41,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
   late SocketClient _socketClient;
   late Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
+  final _cloudEvalGetDebounce = Debouncer(const Duration(milliseconds: 400));
+  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
@@ -83,6 +84,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
+      _cloudEvalGetDebounce.dispose();
       _engineEvalDebounce.dispose();
       evaluationService.disposeEngine();
       _appLifecycleListener?.dispose();
@@ -121,11 +123,13 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       clocks: _getClocks(currentPath),
     );
 
+    // We need to define the state value in the build method because `sendEvalGetEvent` and
+    // `debouncedStartEngineEval` require the state to have a value.
+    state = AsyncData(broadcastState);
+
     if (broadcastState.isLocalEvaluationEnabled) {
       evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
+        _startEngineEval();
       });
     }
 
@@ -268,7 +272,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
-  // ignore: unused_element
   void _sendEvalGetEvent() {
     final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
 
@@ -558,11 +561,12 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     }
 
     if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
-      _debouncedStartEngineEval();
+      _startEngineEval();
     }
   }
 
-  Future<void> _startEngineEval() async {
+  /// Do not call this method directly, use [_startEngineEval] instead.
+  Future<void> _doStartEngineEval() async {
     if (!state.hasValue) return;
 
     if (!state.requireValue.isLocalEvaluationEnabled) return;
@@ -598,9 +602,22 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     );
   }
 
-  void _debouncedStartEngineEval() {
+  /// Start the engine evaluation.
+  ///
+  /// This method sends an `evalGet` event to the server to get the cloud evaluation and starts the
+  /// local engine evaluation.
+  ///
+  /// This method is debounced to avoid sending too many `evalGet` events to the server.
+  ///
+  /// It also tries not to start the local engine evaluation if a cloud evaluation is available. So
+  /// the delay to start the engine evaluation is longer than the delay to get the cloud evaluation.
+  /// It respectivelly waits 100ms and 400ms to start the cloud evaluation and the local engine.
+  void _startEngineEval() {
+    _cloudEvalGetDebounce(() {
+      _sendEvalGetEvent();
+    });
     _engineEvalDebounce(() {
-      _startEngineEval();
+      _doStartEngineEval();
     });
   }
 
@@ -608,7 +625,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     if (!state.hasValue) return;
 
     ref.read(evaluationServiceProvider).stop();
-    _refreshCurrentNode(shouldRecomputeRootView: true);
+    _refreshCurrentNode();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -695,9 +712,10 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
       isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
 
   EngineGaugeParams get engineGaugeParams => (
-    orientation: pov,
     isLocalEngineAvailable: isLocalEvaluationEnabled,
+    orientation: pov,
     position: position,
-    savedEval: currentNode.eval ?? currentNode.serverEval,
+    savedEval: currentNode.eval,
+    serverEval: currentNode.serverEval,
   );
 }
