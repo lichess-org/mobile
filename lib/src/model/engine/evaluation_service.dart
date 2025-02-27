@@ -102,6 +102,9 @@ class EvaluationService {
     _options = options;
   }
 
+  /// Dispose the engine.
+  ///
+  /// Returns a future that completes once the engine is disposed.
   Future<void> disposeEngine() {
     if (_engine == null) return Future.value();
 

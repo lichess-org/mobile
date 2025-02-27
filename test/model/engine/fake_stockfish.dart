@@ -8,7 +8,7 @@ class FakeStockfishFactory extends StockfishFactory {
   const FakeStockfishFactory();
 
   @override
-  Future<Stockfish> create() async => Future.value(FakeStockfish());
+  Future<Stockfish> call() async => Future.value(FakeStockfish());
 }
 
 /// A fake implementation of [Stockfish].

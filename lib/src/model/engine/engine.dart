@@ -41,7 +41,7 @@ class StockfishEngine implements Engine {
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      final stockfishFuture = LichessBinding.instance.stockfishFactory.create();
+      final stockfishFuture = LichessBinding.instance.stockfishFactory();
 
       stockfishFuture
           .then((stockfish) {
@@ -120,5 +120,5 @@ class StockfishEngine implements Engine {
 class StockfishFactory {
   const StockfishFactory();
 
-  Future<Stockfish> create() => stockfishAsync();
+  Future<Stockfish> call() => stockfishAsync();
 }
