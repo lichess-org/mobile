@@ -9,6 +9,9 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
@@ -461,6 +464,62 @@ void main() {
 
         expect(find.text('...'), findsNWidgets(2));
       });
+    });
+  });
+
+  group('Test engine widgets', () {
+    Future<void> buildApp(WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        defaultPreferences: {
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults.copyWith(numEvalLines: 1).toJson(),
+          ),
+        },
+        home: const AnalysisScreen(
+          options: AnalysisOptions(
+            orientation: Side.white,
+            standalone: (pgn: '', isComputerAnalysisAllowed: true, variant: Variant.standard),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // The time the controller waits before launching the evaluation
+      await tester.pump(const Duration(milliseconds: 250));
+    }
+
+    testWidgets('Test engine lines are displayed', (tester) async {
+      await buildApp(tester);
+
+      expect(find.byType(Engineline), findsOne);
+      expect(find.widgetWithText(Engineline, '1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 '), findsOne);
+
+      // Required to stop the timer of the throttle in the eval stream of the evaluation service
+      await tester.pump(const Duration(milliseconds: 300));
+    });
+
+    testWidgets('Test engine depth is displayed', (tester) async {
+      await buildApp(tester);
+
+      expect(find.byType(EngineDepth), findsOne);
+      expect(find.widgetWithText(EngineDepth, '6'), findsOne);
+
+      // Required to stop the timer of the throttle in the eval stream of the evaluation service
+      await tester.pump(const Duration(milliseconds: 300));
+    });
+
+    testWidgets('Test engine gauge is displayed', (tester) async {
+      await buildApp(tester);
+
+      expect(find.byType(EngineGauge), findsOne);
+      expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
+
+      // Required to stop the timer of the throttle in the eval stream of the evaluation service
+      await tester.pump(const Duration(milliseconds: 300));
     });
   });
 }
