@@ -4,8 +4,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'model/engine/fake_stockfish.dart';
 
 /// The binding instance used in tests.
 TestLichessBinding get testBinding => TestLichessBinding.instance;
@@ -104,6 +107,9 @@ class TestLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
+
+  @override
+  StockfishFactory get stockfishFactory => const FakeStockfishFactory();
 }
 
 class FakeSharedPreferences implements SharedPreferencesWithCache {
