@@ -489,7 +489,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
       // The time the controller waits before launching the evaluation
-      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pump(const Duration(milliseconds: 800));
     }
 
     testWidgets('Test engine lines are displayed', (tester) async {
