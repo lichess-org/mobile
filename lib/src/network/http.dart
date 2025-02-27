@@ -88,7 +88,7 @@ HttpClientFactory httpClientFactory(Ref ref) {
           onRequest: (request) async {
             final httpLogStorage = await ref.read(httpLogStorageProvider.future);
             httpLogStorage.save(
-              HttpLog(
+              HttpLogEntry(
                 httpLogId: request.hashCode.toString(),
                 requestDateTime: DateTime.now(),
                 requestMethod: request.method,

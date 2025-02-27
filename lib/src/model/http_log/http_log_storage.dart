@@ -23,22 +23,22 @@ class HttpLogStorage {
   const HttpLogStorage(this._db);
   final Database _db;
 
-  /// Retrieves a paginated list of [HttpLog] entries from the database.
-  Future<HttpLogs> page({int? cursor, int limit = 100}) async {
+  /// Retrieves a paginated list of [HttpLogEntry] entries from the database.
+  Future<HttpLog> page({int? cursor, int limit = 100}) async {
     final res = await _db.query(
       kHttpLogStorageTable,
       limit: limit + 1,
       orderBy: 'id DESC',
       where: cursor != null ? 'id <= $cursor' : null,
     );
-    return HttpLogs(
-      items: res.take(limit).map(HttpLog.fromJson).toIList(),
+    return HttpLog(
+      items: res.take(limit).map(HttpLogEntry.fromJson).toIList(),
       next: res.elementAtOrNull(limit)?['id'] as int?,
     );
   }
 
-  /// Saves an [HttpLog] entry to the database.
-  Future<void> save(HttpLog httpLog) async {
+  /// Saves an [HttpLogEntry] entry to the database.
+  Future<void> save(HttpLogEntry httpLog) async {
     await _db.insert(kHttpLogStorageTable, {
       ...httpLog.toJson(),
       'lastModified': DateTime.now().toIso8601String(),
@@ -70,17 +70,17 @@ class HttpLogStorage {
 
 /// Represents an HTTP log entry.
 @Freezed(fromJson: true, toJson: true)
-class HttpLog with _$HttpLog {
-  const HttpLog._();
+class HttpLogEntry with _$HttpLogEntry {
+  const HttpLogEntry._();
 
-  const factory HttpLog({
+  const factory HttpLogEntry({
     required String httpLogId,
     required String requestMethod,
     required String requestUrl,
     required DateTime requestDateTime,
     int? responseCode,
     DateTime? responseDateTime,
-  }) = _HttpLog;
+  }) = _HttpLogEntry;
 
   bool get hasResponse => responseCode != null;
 
@@ -89,17 +89,17 @@ class HttpLog with _$HttpLog {
     return responseDateTime!.difference(requestDateTime);
   }
 
-  factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
+  factory HttpLogEntry.fromJson(Map<String, dynamic> json) => _$HttpLogEntryFromJson(json);
 }
 
 /// A class representing a collection of HTTP logs.
 ///
-/// The `HttpLogs` class contains the following properties:
+/// The `HttpLog` class contains the following properties:
 /// - `items`: A required list of `HttpLog` items.
 /// - `next`: An optional integer representing the next cursor.
 @Freezed(fromJson: true, toJson: true)
-class HttpLogs with _$HttpLogs {
-  const factory HttpLogs({required IList<HttpLog> items, required int? next}) = _HttpLogs;
+class HttpLog with _$HttpLog {
+  const factory HttpLog({required IList<HttpLogEntry> items, required int? next}) = _HttpLog;
 
-  factory HttpLogs.fromJson(Map<String, dynamic> json) => _$HttpLogsFromJson(json);
+  factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
 }

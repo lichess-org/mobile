@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_controller.dart';
+import 'package:lichess_mobile/src/model/http_log/http_log_paginator.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -40,21 +40,21 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final currentState = ref.read(httpLogControllerProvider);
+      final currentState = ref.read(httpLogPaginatorProvider);
       if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
-        ref.read(httpLogControllerProvider.notifier).next();
+        ref.read(httpLogPaginatorProvider.notifier).next();
       }
     }
   }
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(httpLogControllerProvider.notifier).refresh();
+    return ref.read(httpLogPaginatorProvider.notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    final asyncState = ref.watch(httpLogControllerProvider);
+    final asyncState = ref.watch(httpLogPaginatorProvider);
     return PlatformScaffold(
       appBarTitle: const Text('HTTP Logs'),
       appBarActions: [
@@ -68,7 +68,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
                 context,
                 // TODO localize
                 title: const Text('Delete all logs'),
-                onConfirm: () => ref.read(httpLogControllerProvider.notifier).deleteAll(),
+                onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
               );
             },
           ),
@@ -91,7 +91,7 @@ class _HttpLogList extends ConsumerStatefulWidget {
     required this.refreshIndicatorKey,
   });
 
-  final List<HttpLog> logs;
+  final List<HttpLogEntry> logs;
   final ScrollController scrollController;
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
   final RefreshCallback onRefresh;
@@ -134,7 +134,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
 class HttpLogTile extends StatelessWidget {
   const HttpLogTile({super.key, required this.httpLog});
 
-  final HttpLog httpLog;
+  final HttpLogEntry httpLog;
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'http_log_controller.freezed.dart';
-part 'http_log_controller.g.dart';
+part 'http_log_paginator.freezed.dart';
+part 'http_log_paginator.g.dart';
 
 /// The number of HTTP logs to fetch per page.
 const _pageSize = 12;
@@ -15,7 +15,7 @@ const _pageSize = 12;
 /// paginated HTTP log entries from the storage. It uses a throttler to limit
 /// the rate of fetching new pages.
 @riverpod
-class HttpLogController extends _$HttpLogController {
+class HttpLogPaginator extends _$HttpLogPaginator {
   @override
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
@@ -65,10 +65,10 @@ class HttpLogController extends _$HttpLogController {
 class HttpLogState with _$HttpLogState {
   const HttpLogState._();
 
-  const factory HttpLogState({required IList<AsyncValue<HttpLogs>> data}) = _HttpLogState;
+  const factory HttpLogState({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;
 
   bool get initialized => data.isNotEmpty;
-  List<HttpLog> get logs => data.expand((e) => e.valueOrNull?.items ?? <HttpLog>[]).toList();
+  List<HttpLogEntry> get logs => data.expand((e) => e.valueOrNull?.items ?? <HttpLogEntry>[]).toList();
   int? get nextPage => data.lastOrNull?.valueOrNull?.next;
   bool get hasMore => initialized && nextPage != null;
   bool get isLoading => data.lastOrNull?.isLoading == true;
