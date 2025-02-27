@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -106,6 +105,7 @@ class EvaluationService {
   /// Dispose the engine.
   ///
   /// Returns a future that completes once the engine is disposed.
+  /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
     if (_engine == null) return Future.value();
 
@@ -294,103 +294,4 @@ IList<MoveWithWinningChances>? pickBestMoves({
     LocalEval() => localBestMoves ?? savedEval.bestMoves,
     null => localBestMoves,
   };
-}
-
-abstract class EvaluationAware<T> {
-  bool get isEngineAvailable;
-  bool get isLocalEvaluationEnabled;
-  EvaluationContext get evaluationContext;
-  UciPath get currentPath;
-  Iterable<Step> get currentPathSteps;
-  ClientEval? get initialPositionEval;
-
-  T copyWith({
-    bool? isEngineAvailable,
-    bool? isLocalEvaluationEnabled,
-    EvaluationContext? evaluationContext,
-  });
-}
-
-mixin EvaluationNotifier<T extends EvaluationAware<T>> on AutoDisposeAsyncNotifier<T> {
-  EvaluationOptions get _evaluationOptions =>
-      ref.read(analysisPreferencesProvider).evaluationOptions;
-
-  void onEngineEmit((Work, ClientEval) eval);
-
-  void refreshCurrentNode();
-
-  // final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
-
-  // void dispose() {
-  //   _engineEvalDebounce.dispose();
-  // }
-
-  /// Toggles the local evaluation on/off.
-  Future<void> toggleLocalEvaluation() async {
-    if (!state.hasValue) return;
-
-    await ref.read(analysisPreferencesProvider.notifier).toggleEnableLocalEvaluation();
-
-    state = AsyncData(
-      state.requireValue.copyWith(
-        isLocalEvaluationEnabled: !state.requireValue.isLocalEvaluationEnabled,
-      ),
-    );
-
-    if (state.requireValue.isEngineAvailable) {
-      await ref
-          .read(evaluationServiceProvider)
-          .initEngine(state.requireValue.evaluationContext, options: _evaluationOptions);
-      _startEngineEval();
-    } else {
-      _stopEngineEval();
-      ref.read(evaluationServiceProvider).disposeEngine();
-    }
-  }
-
-  void setNumEvalLines(int numEvalLines) {
-    ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
-  }
-
-  void setEngineCores(int numEngineCores) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
-  }
-
-  void setEngineSearchTime(Duration searchTime) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
-  }
-
-  Future<void> _startEngineEval() async {
-    final curState = state.requireValue;
-    if (!curState.isEngineAvailable) return;
-    await ref
-        .read(evaluationServiceProvider)
-        .ensureEngineInitialized(state.requireValue.evaluationContext, options: _evaluationOptions);
-    ref
-        .read(evaluationServiceProvider)
-        .start(
-          curState.currentPath,
-          curState.currentPathSteps,
-          initialPositionEval: curState.initialPositionEval,
-          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
-        )
-        ?.forEach(onEngineEmit);
-  }
-
-  void _stopEngineEval() {
-    ref.read(evaluationServiceProvider).stop();
-    refreshCurrentNode();
-  }
 }

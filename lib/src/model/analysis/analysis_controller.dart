@@ -15,11 +15,13 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_notifier.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -51,6 +53,10 @@ class AnalysisOptions with _$AnalysisOptions {
 class AnalysisController extends _$AnalysisController
     with EvaluationNotifier<AnalysisState>
     implements PgnTreeNotifier {
+  static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
+  static final Uri socketUri = Uri(path: '/analysis/socket/v5');
+
+  late SocketClient _socketClient;
   late Root _root;
   late Variant _variant;
 
@@ -59,27 +65,13 @@ class AnalysisController extends _$AnalysisController
   Timer? _startEngineEvalTimer;
 
   @override
-  void onEngineEmit((Work, ClientEval) tuple) {
-    final (work, eval) = tuple;
-    _root.updateAt(work.path, (node) => node.eval = eval);
-    if (work.path == state.requireValue.currentPath && eval.searchTime >= work.searchTime) {
-      _refreshCurrentNode();
-    }
-  }
-
-  @override
-  void refreshCurrentNode() {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
+  SocketClient get socketClient => _socketClient;
 
   @override
   Future<AnalysisState> build(AnalysisOptions options) async {
-    final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
+
+    _socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
     late final String pgn;
     late final LightOpening? opening;
@@ -179,12 +171,12 @@ class AnalysisController extends _$AnalysisController
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
+    initEngineEvaluation();
+
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      if (engineSupportedVariants.contains(_variant)) {
-        evaluationService.disposeEngine();
-      }
+      disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -214,14 +206,30 @@ class AnalysisController extends _$AnalysisController
     );
 
     if (analysisState.isEngineAvailable) {
-      evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEvalTimer = Timer(const Duration(milliseconds: 250), () {
-          _startEngineEval();
-        });
-      });
+      requestEval();
     }
 
     return analysisState;
+  }
+
+  @override
+  void onEvalHit(UciPath path, CloudEval eval) {
+    _root.updateAt(path, (node) => node.eval = eval);
+  }
+
+  @override
+  void onEngineEmit(UciPath path, LocalEval eval) {
+    _root.updateAt(path, (node) => node.eval = eval);
+  }
+
+  @override
+  void refreshCurrentNode({bool recomputeRootView = false}) {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        root: recomputeRootView ? _root.view : state.requireValue.root,
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
   }
 
   EvaluationContext get _evaluationContext =>
@@ -366,32 +374,8 @@ class AnalysisController extends _$AnalysisController
     }
   }
 
-  /// Toggles the local evaluation on/off.
-  Future<void> toggleLocalEvaluation() async {
-    await ref.read(analysisPreferencesProvider.notifier).toggleEnableLocalEvaluation();
-
-    state = AsyncData(
-      state.requireValue.copyWith(
-        isLocalEvaluationEnabled: !state.requireValue.isLocalEvaluationEnabled,
-      ),
-    );
-
-    if (state.requireValue.isEngineAvailable) {
-      await ref
-          .read(evaluationServiceProvider)
-          .initEngine(_evaluationContext, options: _evaluationOptions);
-      _startEngineEval();
-    } else {
-      _stopEngineEval();
-      ref.read(evaluationServiceProvider).disposeEngine();
-    }
-  }
-
+  @override
   void setNumEvalLines(int numEvalLines) {
-    ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
     _root.updateAll((node) => node.eval = null);
 
     final curState = state.requireValue;
@@ -401,23 +385,7 @@ class AnalysisController extends _$AnalysisController
       ),
     );
 
-    _startEngineEval();
-  }
-
-  void setEngineCores(int numEngineCores) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
-  }
-
-  void setEngineSearchTime(Duration searchTime) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
+    super.setNumEvalLines(numEvalLines);
   }
 
   void updatePgnHeader(String key, String value) {
@@ -540,15 +508,6 @@ class AnalysisController extends _$AnalysisController
     }
   }
 
-  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
-
   Future<(UciPath, FullOpening)?> _fetchOpening(Node fromNode, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(_variant)) return null;
 
@@ -568,7 +527,7 @@ class AnalysisController extends _$AnalysisController
 
     final curState = state.requireValue;
     if (curState.currentPath == path) {
-      _refreshCurrentNode();
+      refreshCurrentNode();
     }
   }
 
@@ -590,9 +549,8 @@ class AnalysisController extends _$AnalysisController
           final (work, eval) = t;
           _root.updateAt(work.path, (node) => node.eval = eval);
           if (work.path == curState.currentPath) {
-            _refreshCurrentNode(
-              shouldRecomputeRootView:
-                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
+            refreshCurrentNode(
+              recomputeRootView: eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
             );
           }
         });
@@ -602,12 +560,6 @@ class AnalysisController extends _$AnalysisController
     _engineEvalDebounce(() {
       _startEngineEval();
     });
-  }
-
-  void _stopEngineEval() {
-    ref.read(evaluationServiceProvider).stop();
-    // update the current node with last cached eval
-    _refreshCurrentNode(shouldRecomputeRootView: true);
   }
 
   void _listenToServerAnalysisEvents() {
@@ -714,7 +666,7 @@ class AnalysisController extends _$AnalysisController
 }
 
 @freezed
-class AnalysisState with _$AnalysisState {
+class AnalysisState with _$AnalysisState implements EvaluationNotifierState {
   const AnalysisState._();
 
   const factory AnalysisState({
@@ -825,9 +777,18 @@ class AnalysisState with _$AnalysisState {
       isComputerAnalysisAllowedAndEnabled && engineSupportedVariants.contains(variant);
 
   /// Whether the engine is available for evaluation
+  @override
   bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
 
+  @override
+  ClientEval? get initialPositionEval => root.eval;
+
+  @override
+  ClientEval? get currentPathEval => currentNode.eval;
+
+  @override
   Position get position => currentNode.position;
+
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
