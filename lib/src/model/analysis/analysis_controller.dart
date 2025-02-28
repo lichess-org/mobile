@@ -225,7 +225,11 @@ class AnalysisController extends _$AnalysisController
   }
 
   @override
-  void refreshCurrentNode({bool recomputeRootView = false}) {
+  void onCurrentPathEvalChanged(bool isSameEvalString) {
+    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
+  }
+
+  void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
@@ -509,7 +513,7 @@ class AnalysisController extends _$AnalysisController
 
     final curState = state.requireValue;
     if (curState.currentPath == path) {
-      refreshCurrentNode();
+      _refreshCurrentNode();
     }
   }
 

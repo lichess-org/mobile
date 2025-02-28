@@ -189,7 +189,11 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   }
 
   @override
-  void refreshCurrentNode({bool recomputeRootView = false}) {
+  void onCurrentPathEvalChanged(bool isSameEvalString) {
+    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
+  }
+
+  void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,

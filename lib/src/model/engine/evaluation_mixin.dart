@@ -51,10 +51,9 @@ abstract class EvaluationMixinState {
 /// by calling [disposeEngineEvaluation].
 ///
 /// The parent must implement the following methods:
-/// - [onEngineEmit] to handle local engine evaluations.
-/// - [onEvalHit] to handle cloud evaluations.
-/// - [refreshCurrentNode] to refresh the current node after an evaluation.
+/// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation.
 /// - [socketClient] to provide the [SocketClient] to use for cloud evaluations.o
+/// - [positionTree] to provide the tree where the evaluations are stored.
 mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   AsyncValue<T> get state;
   // doesn't compile with `Ref<T>` right now; should not be a problem in next Riverpod version
@@ -74,7 +73,11 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   EvaluationService? _evaluationService;
 
   /// Called when a received evaluation is for the current path.
-  void refreshCurrentNode({bool recomputeRootView = false});
+  ///
+  /// If the evaluation string is the same for both the received and the current evaluation, the
+  /// [isSameEvalString] parameter will be `true`. It can be used to avoid refreshing the UI if the
+  /// evaluation string is the same.
+  void onCurrentPathEvalChanged(bool isSameEvalString);
 
   /// The [SocketClient] to use for the cloud evaluation.
   SocketClient get socketClient;
@@ -125,7 +128,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   void setNumEvalLines(int numEvalLines) {
     // clear all saved evals since the number of eval lines has changed
     positionTree.updateAll((node) => node.eval = null);
-    refreshCurrentNode();
+    onCurrentPathEvalChanged(false);
 
     ref.read(engineEvaluationPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
@@ -197,9 +200,9 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
     final eval = CloudEval(depth: depth, pvs: pvs, position: positionTree.nodeAt(path).position);
     positionTree.updateAt(path, (node) => node.eval = eval);
 
-    if (state.requireValue.currentPath != path) return;
-
-    refreshCurrentNode(recomputeRootView: true);
+    if (state.requireValue.currentPath == path) {
+      onCurrentPathEvalChanged(eval.evalString == state.valueOrNull?.currentPathEval?.evalString);
+    }
   }
 
   void _sendEvalGetEvent() {
@@ -236,8 +239,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
           final (work, eval) = tuple;
           positionTree.updateAt(work.path, (node) => node.eval = eval);
           if (work.path == state.requireValue.currentPath) {
-            refreshCurrentNode(
-              recomputeRootView: eval.evalString != state.valueOrNull?.currentPathEval?.evalString,
+            onCurrentPathEvalChanged(
+              eval.evalString == state.valueOrNull?.currentPathEval?.evalString,
             );
           }
         });
@@ -245,6 +248,5 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
 
   void _stopEngineEval() {
     ref.read(evaluationServiceProvider).stop();
-    refreshCurrentNode();
   }
 }

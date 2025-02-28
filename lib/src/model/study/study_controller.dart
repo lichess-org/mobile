@@ -73,7 +73,11 @@ class StudyController extends _$StudyController
   }
 
   @override
-  void refreshCurrentNode({bool recomputeRootView = false}) {
+  void onCurrentPathEvalChanged(bool isSameEvalString) {
+    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
+  }
+
+  void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
@@ -352,15 +356,6 @@ class StudyController extends _$StudyController
 
     _root.deleteAt(path);
     _setPath(path.penultimate, shouldRecomputeRootView: true);
-  }
-
-  @override
-  void setNumEvalLines(int numEvalLines) {
-    // clear all saved evals since the number of eval lines has changed
-    _root.updateAll((node) => node.eval = null);
-    refreshCurrentNode();
-
-    super.setNumEvalLines(numEvalLines);
   }
 
   void _setPath(
