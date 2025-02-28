@@ -175,12 +175,17 @@ class AnalysisController extends _$AnalysisController
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    initEngineEvaluation();
+    final isEngineAllowed = isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
+    if (isEngineAllowed) {
+      initEngineEvaluation();
+    }
 
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      disposeEngineEvaluation();
+      if (isEngineAllowed) {
+        disposeEngineEvaluation();
+      }
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -201,7 +206,6 @@ class AnalysisController extends _$AnalysisController
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
-      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
       currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       playersAnalysis: serverAnalysis,
@@ -669,11 +673,6 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
     ///
     /// This is a user preference and acts both on local and server analysis.
     required bool isComputerAnalysisEnabled,
-
-    /// Whether the user has enabled local evaluation.
-    ///
-    /// This is a user preference and acts only on local analysis.
-    required bool isLocalEvaluationEnabled,
 
     required EvaluationContext evaluationContext,
 
