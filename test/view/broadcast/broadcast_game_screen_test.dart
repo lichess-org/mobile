@@ -95,6 +95,7 @@ const _gameId = BroadcastGameId('G2LUflKg');
 
 const _roundResponse = '''
 {
+  "socketVersion":10,
   "round": {
     "id": "6VuqTjes",
     "name": "Round 4.1",
