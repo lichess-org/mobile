@@ -221,6 +221,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
+        AsyncError(:final error) => Center(child: Text('Cannot load round data: $error')),
         _ => const Center(child: CircularProgressIndicator.adaptive()),
       },
       bottomNavigationBar: switch (asyncTournament) {
