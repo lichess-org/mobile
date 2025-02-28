@@ -80,7 +80,9 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   void onCurrentPathEvalChanged(bool isSameEvalString);
 
   /// The [SocketClient] to use for the cloud evaluation.
-  SocketClient get socketClient;
+  ///
+  /// If `null`, the cloud evaluation will not be available.
+  SocketClient? get socketClient;
 
   /// The tree where the evaluations are stored.
   Node get positionTree;
@@ -92,7 +94,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   /// The local engine is not started here, but only when [requestEval] is called.
   @nonVirtual
   void initEngineEvaluation() {
-    _subscription = socketClient.stream.listen(_handleSocketEvent);
+    _subscription = socketClient?.stream.listen(_handleSocketEvent);
     _evaluationService = ref.read(evaluationServiceProvider);
   }
 
@@ -212,7 +214,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
 
     final numEvalLines = ref.read(engineEvaluationPreferencesProvider).numEvalLines;
 
-    socketClient.send('evalGet', {
+    socketClient?.send('evalGet', {
       'fen': curPosition.fen,
       'path': state.requireValue.currentPath.value,
       'mpv': numEvalLines,

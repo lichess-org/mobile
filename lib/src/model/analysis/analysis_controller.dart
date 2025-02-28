@@ -22,6 +22,8 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -57,7 +59,7 @@ class AnalysisController extends _$AnalysisController
   static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
-  late SocketClient _socketClient;
+  SocketClient? _socketClient;
   late Root _root;
   late Variant _variant;
 
@@ -69,7 +71,7 @@ class AnalysisController extends _$AnalysisController
 
   // ignore: avoid_public_notifier_properties
   @override
-  SocketClient get socketClient => _socketClient;
+  SocketClient? get socketClient => _socketClient;
 
   // ignore: avoid_public_notifier_properties
   @override
@@ -79,7 +81,11 @@ class AnalysisController extends _$AnalysisController
   Future<AnalysisState> build(AnalysisOptions options) async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
-    _socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    isOnline(ref.read(defaultClientProvider)).then((isOnline) {
+      if (isOnline) {
+        _socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+      }
+    });
 
     late final String pgn;
     late final LightOpening? opening;
