@@ -15,7 +15,8 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_notifier.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -51,7 +52,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
 @riverpod
 class AnalysisController extends _$AnalysisController
-    with EvaluationNotifier<AnalysisState>
+    with EngineEvaluationMixin<AnalysisState>
     implements PgnTreeNotifier {
   static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
@@ -64,6 +65,9 @@ class AnalysisController extends _$AnalysisController
 
   Timer? _startEngineEvalTimer;
 
+  EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  // ignore: avoid_public_notifier_properties
   @override
   SocketClient get socketClient => _socketClient;
 
@@ -198,14 +202,14 @@ class AnalysisController extends _$AnalysisController
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
-      evaluationContext: _evaluationContext,
+      evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
       currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
     );
 
-    if (analysisState.isEngineAvailable) {
+    if (analysisState.isEngineAvailable(_evaluationPrefs)) {
       requestEval();
     }
 
@@ -232,16 +236,10 @@ class AnalysisController extends _$AnalysisController
     );
   }
 
-  EvaluationContext get _evaluationContext =>
-      EvaluationContext(variant: _variant, initialPosition: _root.position);
-
-  EvaluationOptions get _evaluationOptions =>
-      ref.read(analysisPreferencesProvider).evaluationOptions;
-
   void onUserMove(NormalMove move, {bool shouldReplace = false}) {
-    if (!state.requireValue.position.isLegal(move)) return;
+    if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.position, move)) {
+    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -357,12 +355,12 @@ class AnalysisController extends _$AnalysisController
 
   /// Toggles the computer analysis on/off.
   ///
-  /// Acts both on local evaluation and server analysis.
+  /// Acts both on engine evaluation and server analysis.
   Future<void> toggleComputerAnalysis() async {
     await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable;
+    final engineWasAvailable = curState.isEngineAvailable(_evaluationPrefs);
 
     state = AsyncData(
       curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
@@ -370,20 +368,15 @@ class AnalysisController extends _$AnalysisController
 
     final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
     if (!computerAllowed && engineWasAvailable) {
-      toggleLocalEvaluation();
+      toggleEngine();
     }
   }
 
   @override
   void setNumEvalLines(int numEvalLines) {
+    // clear all saved evals since the number of eval lines has changed
     _root.updateAll((node) => node.eval = null);
-
-    final curState = state.requireValue;
-    state = AsyncData(
-      curState.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
-      ),
-    );
+    refreshCurrentNode();
 
     super.setNumEvalLines(numEvalLines);
   }
@@ -503,8 +496,8 @@ class AnalysisController extends _$AnalysisController
       );
     }
 
-    if (pathChange && curState.isEngineAvailable) {
-      _debouncedStartEngineEval();
+    if (pathChange && curState.isEngineAvailable(_evaluationPrefs)) {
+      requestEval();
     }
   }
 
@@ -529,37 +522,6 @@ class AnalysisController extends _$AnalysisController
     if (curState.currentPath == path) {
       refreshCurrentNode();
     }
-  }
-
-  Future<void> _startEngineEval() async {
-    final curState = state.requireValue;
-    if (!curState.isEngineAvailable) return;
-    await ref
-        .read(evaluationServiceProvider)
-        .ensureEngineInitialized(_evaluationContext, options: _evaluationOptions);
-    ref
-        .read(evaluationServiceProvider)
-        .start(
-          curState.currentPath,
-          _root.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: _root.eval,
-          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
-        )
-        ?.forEach((t) {
-          final (work, eval) = t;
-          _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == curState.currentPath) {
-            refreshCurrentNode(
-              recomputeRootView: eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
-            );
-          }
-        });
-  }
-
-  void _debouncedStartEngineEval() {
-    _engineEvalDebounce(() {
-      _startEngineEval();
-    });
   }
 
   void _listenToServerAnalysisEvents() {
@@ -666,7 +628,7 @@ class AnalysisController extends _$AnalysisController
 }
 
 @freezed
-class AnalysisState with _$AnalysisState implements EvaluationNotifierState {
+class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   const AnalysisState._();
 
   const factory AnalysisState({
@@ -765,8 +727,8 @@ class AnalysisState with _$AnalysisState implements EvaluationNotifierState {
   bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
 
   /// Whether an evaluation can be available
-  bool get hasAvailableEval =>
-      isEngineAvailable ||
+  bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
+      isEngineAvailable(prefs) ||
       (isComputerAnalysisAllowedAndEnabled && acplChartData != null && acplChartData!.isNotEmpty);
 
   bool get isComputerAnalysisAllowedAndEnabled =>
@@ -776,9 +738,8 @@ class AnalysisState with _$AnalysisState implements EvaluationNotifierState {
   bool get isEngineAllowed =>
       isComputerAnalysisAllowedAndEnabled && engineSupportedVariants.contains(variant);
 
-  /// Whether the engine is available for evaluation
   @override
-  bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
 
   @override
   ClientEval? get initialPositionEval => root.eval;
@@ -787,15 +748,15 @@ class AnalysisState with _$AnalysisState implements EvaluationNotifierState {
   ClientEval? get currentPathEval => currentNode.eval;
 
   @override
-  Position get position => currentNode.position;
+  Position get currentPosition => currentNode.position;
 
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  EngineGaugeParams get engineGaugeParams => (
-    isLocalEngineAvailable: isEngineAvailable,
+  EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
+    isLocalEngineAvailable: isEngineAvailable(prefs),
     orientation: pov,
-    position: position,
+    position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
   );
