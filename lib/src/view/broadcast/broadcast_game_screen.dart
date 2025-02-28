@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -169,11 +170,12 @@ class _Body extends ConsumerWidget {
     switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
       case AsyncValue(value: final state?, hasValue: true):
         final analysisPrefs = ref.watch(analysisPreferencesProvider);
+        final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
         final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-        final numEvalLines = analysisPrefs.numEvalLines;
+        final numEvalLines = enginePrefs.numEvalLines;
 
-        final engineGaugeParams = state.engineGaugeParams;
-        final isLocalEvaluationEnabled = state.isLocalEvaluationEnabled;
+        final engineGaugeParams = state.engineGaugeParams(enginePrefs);
+        final isLocalEvaluationEnabled = state.isEngineAvailable(enginePrefs);
         final currentNode = state.currentNode;
         final pov = state.pov;
 
@@ -197,7 +199,7 @@ class _Body extends ConsumerWidget {
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
           engineGaugeBuilder:
-              state.hasAvailableEval && showEvaluationGauge
+              state.hasAvailableEval(enginePrefs) && showEvaluationGauge
                   ? (context, orientation) {
                     return orientation == Orientation.portrait
                         ? EngineGauge(
@@ -312,6 +314,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final currentNode = broadcastAnalysisState.currentNode;
     final annotation = makeAnnotation(currentNode.nags);
@@ -325,7 +328,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
     final ISet<Shape> bestMoveShapes =
         analysisPrefs.showBestMoveArrow &&
-                broadcastAnalysisState.isLocalEvaluationEnabled &&
+                broadcastAnalysisState.isEngineAvailable(enginePrefs) &&
                 bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
@@ -557,6 +560,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
@@ -632,11 +636,11 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
           onTap:
               analysisPrefs.enableComputerAnalysis
                   ? () {
-                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                    ref.read(ctrlProvider.notifier).toggleEngine();
                   }
                   : null,
           icon: CupertinoIcons.gauge,
-          highlighted: broadcastAnalysisState.isLocalEvaluationEnabled,
+          highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
         ),
         BottomBarButton(
           label: context.l10n.flipBoard,

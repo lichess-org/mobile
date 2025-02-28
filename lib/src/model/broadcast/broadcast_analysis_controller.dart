@@ -16,6 +16,8 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -30,7 +32,9 @@ part 'broadcast_analysis_controller.freezed.dart';
 part 'broadcast_analysis_controller.g.dart';
 
 @riverpod
-class BroadcastAnalysisController extends _$BroadcastAnalysisController implements PgnTreeNotifier {
+class BroadcastAnalysisController extends _$BroadcastAnalysisController
+    with EngineEvaluationMixin<BroadcastAnalysisState>
+    implements PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -41,13 +45,17 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
   late SocketClient _socketClient;
   late Root _root;
 
-  final _cloudEvalGetDebounce = Debouncer(const Duration(milliseconds: 400));
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
   Timer? _startEngineEvalTimer;
 
   Object? _key = Object();
+
+  EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  SocketClient get socketClient => _socketClient;
 
   @override
   Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
@@ -67,8 +75,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       }
     });
 
-    final evaluationService = ref.watch(evaluationServiceProvider);
-
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
         if (state.valueOrNull?.isOngoing == true) {
@@ -79,16 +85,16 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       },
     );
 
+    initEngineEvaluation();
+
     ref.onDispose(() {
       _key = null;
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
-      _cloudEvalGetDebounce.dispose();
-      _engineEvalDebounce.dispose();
-      evaluationService.disposeEngine();
       _appLifecycleListener?.dispose();
       _syncDebouncer.dispose();
+      disposeEngineEvaluation();
     });
 
     final pgn = await ref.withClient(
@@ -118,8 +124,12 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
+      currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
+      evaluationContext: EvaluationContext(
+        variant: Variant.standard,
+        initialPosition: _root.position,
+      ),
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
-      isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       clocks: _getClocks(currentPath),
     );
 
@@ -127,10 +137,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
 
-    if (broadcastState.isLocalEvaluationEnabled) {
-      evaluationService.initEngine(_evaluationContext, options: _evaluationOptions).then((_) {
-        _startEngineEval();
-      });
+    if (broadcastState.isEngineAvailable(_evaluationPrefs)) {
+      requestEval();
     }
 
     return broadcastState;
@@ -176,6 +184,27 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     }
   }
 
+  @override
+  void onEvalHit(UciPath path, int depth, IList<PvData> pvs) {
+    final eval = CloudEval(depth: depth, pvs: pvs, position: _root.nodeAt(path).position);
+    _root.updateAt(path, (node) => node.eval = eval);
+  }
+
+  @override
+  void onEngineEmit(UciPath path, LocalEval eval) {
+    _root.updateAt(path, (node) => node.eval = eval);
+  }
+
+  @override
+  void refreshCurrentNode({bool recomputeRootView = false}) {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        root: recomputeRootView ? _root.view : state.requireValue.root,
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
+
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
@@ -186,9 +215,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       // Sent when a pgn tag changes
       case 'setTags':
         _handleSetTagsEvent(event);
-      // Sent when a new eval is received
-      case 'evalHit':
-        _handleEvalHitEvent(event);
     }
   }
 
@@ -247,47 +273,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
     final pgnHeaders = state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
-
-  void _handleEvalHitEvent(SocketEvent event) {
-    final path = pick(event.data, 'path').asUciPathOrThrow();
-
-    final depth = pick(event.data, 'depth').asIntOrThrow();
-    final pvs =
-        pick(event.data, 'pvs')
-            .asListOrThrow(
-              (pv) => PvData(
-                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
-                cp: pv('cp').asIntOrNull(),
-                mate: pv('mate').asIntOrNull(),
-              ),
-            )
-            .toIList();
-
-    final cloudEval = CloudEval(depth: depth, position: state.requireValue.position, pvs: pvs);
-
-    _root.updateAt(path, (node) => node.eval = cloudEval);
-
-    if (state.requireValue.currentPath != path) return;
-
-    _refreshCurrentNode(shouldRecomputeRootView: true);
-  }
-
-  void _sendEvalGetEvent() {
-    final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
-
-    _socketClient.send('evalGet', {
-      'fen': state.requireValue.currentNode.position.fen,
-      'path': state.requireValue.currentPath.value,
-      'mpv': numEvalLines,
-      'up': true,
-    });
-  }
-
-  EvaluationContext get _evaluationContext =>
-      EvaluationContext(variant: Variant.standard, initialPosition: _root.position);
-
-  EvaluationOptions get _evaluationOptions =>
-      ref.read(analysisPreferencesProvider).evaluationOptions;
 
   void onUserMove(NormalMove move) {
     if (!state.hasValue) return;
@@ -416,12 +401,12 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 
   /// Toggles the computer analysis on/off.
   ///
-  /// Acts both on local evaluation and server analysis.
+  /// Acts both on engine evaluation and server analysis.
   Future<void> toggleComputerAnalysis() async {
     await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
-    final engineWasAvailable = curState.isLocalEvaluationEnabled;
+    final engineWasAvailable = curState.isEngineAvailable(_evaluationPrefs);
 
     state = AsyncData(
       curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
@@ -429,64 +414,17 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 
     final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
     if (!computerAllowed && engineWasAvailable) {
-      toggleLocalEvaluation();
+      toggleEngine();
     }
   }
 
-  Future<void> toggleLocalEvaluation() async {
-    if (!state.hasValue) return;
-
-    ref.read(analysisPreferencesProvider.notifier).toggleEnableLocalEvaluation();
-
-    state = AsyncData(
-      state.requireValue.copyWith(
-        isLocalEvaluationEnabled: !state.requireValue.isLocalEvaluationEnabled,
-      ),
-    );
-
-    if (state.requireValue.isLocalEvaluationEnabled) {
-      await ref
-          .read(evaluationServiceProvider)
-          .initEngine(_evaluationContext, options: _evaluationOptions);
-      _startEngineEval();
-    } else {
-      _stopEngineEval();
-      ref.read(evaluationServiceProvider).disposeEngine();
-    }
-  }
-
+  @override
   void setNumEvalLines(int numEvalLines) {
-    if (!state.hasValue) return;
-
-    ref.read(analysisPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
+    // clear all saved evals since the number of eval lines has changed
     _root.updateAll((node) => node.eval = null);
+    refreshCurrentNode();
 
-    state = AsyncData(
-      state.requireValue.copyWith(
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-
-    _startEngineEval();
-  }
-
-  void setEngineCores(int numEngineCores) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineCores(numEngineCores);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
-  }
-
-  void setEngineSearchTime(Duration searchTime) {
-    ref.read(analysisPreferencesProvider.notifier).setEngineSearchTime(searchTime);
-
-    ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
-
-    _startEngineEval();
+    super.setNumEvalLines(numEvalLines);
   }
 
   void _setPath(
@@ -560,72 +498,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       );
     }
 
-    if (pathChange && state.requireValue.isLocalEvaluationEnabled) {
-      _startEngineEval();
+    if (pathChange && state.requireValue.isEngineAvailable(_evaluationPrefs)) {
+      requestEval();
     }
-  }
-
-  /// Do not call this method directly, use [_startEngineEval] instead.
-  Future<void> _doStartEngineEval() async {
-    if (!state.hasValue) return;
-
-    if (!state.requireValue.isLocalEvaluationEnabled) return;
-    await ref
-        .read(evaluationServiceProvider)
-        .ensureEngineInitialized(_evaluationContext, options: _evaluationOptions);
-    ref
-        .read(evaluationServiceProvider)
-        .start(
-          state.requireValue.currentPath,
-          _root.branchesOn(state.requireValue.currentPath).map(Step.fromNode),
-          initialPositionEval: _root.eval,
-          shouldEmit: (work) => work.path == state.valueOrNull?.currentPath,
-        )
-        ?.forEach((t) {
-          final (work, eval) = t;
-          _root.updateAt(work.path, (node) => node.eval = eval);
-          if (work.path == state.requireValue.currentPath) {
-            _refreshCurrentNode(
-              shouldRecomputeRootView:
-                  eval.evalString != state.valueOrNull?.currentNode.eval?.evalString,
-            );
-          }
-        });
-  }
-
-  void _refreshCurrentNode({bool shouldRecomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: shouldRecomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
-
-  /// Start the engine evaluation.
-  ///
-  /// This method sends an `evalGet` event to the server to get the cloud evaluation and starts the
-  /// local engine evaluation.
-  ///
-  /// This method is debounced to avoid sending too many `evalGet` events to the server.
-  ///
-  /// It also tries not to start the local engine evaluation if a cloud evaluation is available. So
-  /// the delay to start the engine evaluation is longer than the delay to get the cloud evaluation.
-  /// It respectivelly waits 100ms and 400ms to start the cloud evaluation and the local engine.
-  void _startEngineEval() {
-    _cloudEvalGetDebounce(() {
-      _sendEvalGetEvent();
-    });
-    _engineEvalDebounce(() {
-      _doStartEngineEval();
-    });
-  }
-
-  void _stopEngineEval() {
-    if (!state.hasValue) return;
-
-    ref.read(evaluationServiceProvider).stop();
-    _refreshCurrentNode();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -640,7 +515,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 }
 
 @freezed
-class BroadcastAnalysisState with _$BroadcastAnalysisState {
+class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({
@@ -674,11 +549,12 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
     /// This is a user preference and acts both on local and server analysis.
     required bool isComputerAnalysisEnabled,
 
-    /// Whether the user has enabled local evaluation.
-    required bool isLocalEvaluationEnabled,
+    required EvaluationContext evaluationContext,
 
     /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
+
+    required Iterable<Step> currentPathSteps,
 
     /// The last move played.
     Move? lastMove,
@@ -708,11 +584,24 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState {
   UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
 
   /// Whether an evaluation can be available
-  bool get hasAvailableEval =>
-      isComputerAnalysisEnabled && isLocalEvaluationEnabled || currentNode.serverEval != null;
+  bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
+      isEngineAvailable(prefs) || currentNode.serverEval != null;
 
-  EngineGaugeParams get engineGaugeParams => (
-    isLocalEngineAvailable: isLocalEvaluationEnabled,
+  @override
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
+      isComputerAnalysisEnabled && prefs.isEnabled;
+
+  @override
+  ClientEval? get initialPositionEval => root.eval;
+
+  @override
+  ClientEval? get currentPathEval => currentNode.eval;
+
+  @override
+  Position get currentPosition => currentNode.position;
+
+  EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
+    isLocalEngineAvailable: isEngineAvailable(prefs),
     orientation: pov,
     position: position,
     savedEval: currentNode.eval,

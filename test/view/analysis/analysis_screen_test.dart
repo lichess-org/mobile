@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
@@ -103,11 +104,11 @@ void main() {
         defaultPreferences: {
           PrefCategory.analysis.storageKey: jsonEncode(
             AnalysisPrefs.defaults
-                .copyWith(
-                  enableLocalEvaluation: false,
-                  inlineNotation: displayMode == PgnTreeDisplayMode.inlineNotation,
-                )
+                .copyWith(inlineNotation: displayMode == PgnTreeDisplayMode.inlineNotation)
                 .toJson(),
+          ),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
           ),
         },
         home: AnalysisScreen(
@@ -472,8 +473,8 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         defaultPreferences: {
-          PrefCategory.analysis.storageKey: jsonEncode(
-            AnalysisPrefs.defaults.copyWith(numEvalLines: 1).toJson(),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(numEvalLines: 1).toJson(),
           ),
         },
         home: const AnalysisScreen(

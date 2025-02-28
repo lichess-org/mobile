@@ -174,7 +174,7 @@ class _Body extends ConsumerWidget {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-    final numEvalLines = analysisPrefs.numEvalLines;
+    final numEvalLines = enginePrefs.numEvalLines;
 
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;

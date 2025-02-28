@@ -40,7 +40,7 @@ abstract class EvaluationMixinState {
   UciPath get currentPath;
   ClientEval? get currentPathEval;
   Iterable<Step> get currentPathSteps;
-  Position get currentPosition;
+  Position? get currentPosition;
   ClientEval? get initialPositionEval;
 }
 
@@ -73,7 +73,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   void onEngineEmit(UciPath path, LocalEval eval);
 
   /// Called when a cloud evaluation is received.
-  void onEvalHit(UciPath path, CloudEval eval);
+  void onEvalHit(UciPath path, int depth, IList<PvData> pvs);
 
   /// Called when an received evaluation is for the current path.
   void refreshCurrentNode({bool recomputeRootView = false});
@@ -183,13 +183,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
             )
             .toIList();
 
-    final cloudEval = CloudEval(
-      depth: depth,
-      position: state.requireValue.currentPosition,
-      pvs: pvs,
-    );
-
-    onEvalHit(path, cloudEval);
+    onEvalHit(path, depth, pvs);
 
     if (state.requireValue.currentPath != path) return;
 
@@ -198,11 +192,13 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
 
   void _sendEvalGetEvent() {
     if (!state.requireValue.isEngineAvailable(_prefs)) return;
+    final curPosition = state.requireValue.currentPosition;
+    if (curPosition == null) return;
 
     final numEvalLines = ref.read(engineEvaluationPreferencesProvider).numEvalLines;
 
     socketClient.send('evalGet', {
-      'fen': state.requireValue.currentPosition.fen,
+      'fen': curPosition.fen,
       'path': state.requireValue.currentPath.value,
       'mpv': numEvalLines,
       'up': true,

@@ -221,7 +221,8 @@ class AnalysisController extends _$AnalysisController
   }
 
   @override
-  void onEvalHit(UciPath path, CloudEval eval) {
+  void onEvalHit(UciPath path, int depth, IList<PvData> pvs) {
+    final eval = CloudEval(depth: depth, pvs: pvs, position: _root.nodeAt(path).position);
     _root.updateAt(path, (node) => node.eval = eval);
   }
 
@@ -674,8 +675,10 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
     /// This is a user preference and acts both on local and server analysis.
     required bool isComputerAnalysisEnabled,
 
+    /// The context that the local engine is initialized with.
     required EvaluationContext evaluationContext,
 
+    /// List of steps of the current path.
     required Iterable<Step> currentPathSteps,
 
     /// The last move played.
