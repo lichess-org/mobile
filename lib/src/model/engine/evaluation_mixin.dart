@@ -60,14 +60,17 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   // ignore: deprecated_member_use
   AutoDisposeAsyncNotifierProviderRef<T> get ref;
 
+  final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
+  final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
+
   EvaluationOptions get _evaluationOptions =>
       ref.read(engineEvaluationPreferencesProvider).evaluationOptions;
 
   EngineEvaluationPrefState get _prefs => ref.read(engineEvaluationPreferencesProvider);
 
   StreamSubscription<SocketEvent>? _subscription;
-  final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
+
+  EvaluationService? _evaluationService;
 
   /// Called when the local engine emits a new evaluation.
   void onEngineEmit(UciPath path, LocalEval eval);
@@ -84,9 +87,11 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   /// Initializes the engine evaluation.
   ///
   /// Will start listening to the [SocketClient] for cloud evaluations.
-  /// The local engine is not initialized here, but only when [requestEval] is called.
+  ///
+  /// The local engine is not started here, but only when [requestEval] is called.
   void initEngineEvaluation() {
     _subscription = socketClient.stream.listen(_handleSocketEvent);
+    _evaluationService = ref.read(evaluationServiceProvider);
   }
 
   /// Disposes the engine evaluation.
@@ -94,7 +99,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
     _cloudEvalGetDebounce.dispose();
     _engineEvalDebounce.dispose();
     _subscription?.cancel();
-    ref.read(evaluationServiceProvider).disposeEngine();
+    _evaluationService?.disposeEngine();
+    _evaluationService = null;
   }
 
   /// Toggles the engine evaluation on/off.

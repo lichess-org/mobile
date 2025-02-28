@@ -34,9 +34,6 @@ class StudyController extends _$StudyController
     implements PgnTreeNotifier {
   late Root _root;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
-
-  Timer? _startEngineEvalTimer;
   Timer? _opponentFirstMoveTimer;
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
@@ -52,16 +49,17 @@ class StudyController extends _$StudyController
   @override
   Future<StudyState> build(StudyId id) async {
     final socketPool = ref.watch(socketPoolProvider);
-    final evaluationService = ref.watch(evaluationServiceProvider);
     _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
+
+    initEngineEvaluation();
+
     ref.onDispose(() {
-      _startEngineEvalTimer?.cancel();
       _opponentFirstMoveTimer?.cancel();
-      _engineEvalDebounce.dispose();
       _socketSubscription?.cancel();
       _likeDebouncer.dispose();
-      evaluationService.disposeEngine();
+      disposeEngineEvaluation();
     });
+
     final chapter = await _fetchChapter(id);
 
     _socketSubscription?.cancel();
