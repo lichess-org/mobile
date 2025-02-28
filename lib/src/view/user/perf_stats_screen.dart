@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -233,7 +234,7 @@ class _Body extends ConsumerWidget {
                         child: _RatingWidget(
                           data.highestRating,
                           data.highestRatingGame,
-                          context.lichessColors.good,
+                          LichessColors.good,
                         ),
                       ),
                       StatCard(
@@ -241,7 +242,7 @@ class _Body extends ConsumerWidget {
                         child: _RatingWidget(
                           data.lowestRating,
                           data.lowestRatingGame,
-                          context.lichessColors.error,
+                          LichessColors.error,
                         ),
                       ),
                     ]),
@@ -301,7 +302,7 @@ class _Body extends ConsumerWidget {
                         child: _PercentageValueWidget(
                           data.wonGames,
                           data.totalGames,
-                          color: context.lichessColors.good,
+                          color: LichessColors.good,
                         ),
                       ),
                       StatCard(
@@ -318,7 +319,7 @@ class _Body extends ConsumerWidget {
                         child: _PercentageValueWidget(
                           data.lostGames,
                           data.totalGames,
-                          color: context.lichessColors.error,
+                          color: LichessColors.error,
                         ),
                       ),
                     ]),
@@ -359,7 +360,7 @@ class _Body extends ConsumerWidget {
                         _StreakWidget(
                           data.maxWinStreak,
                           data.curWinStreak,
-                          color: context.lichessColors.good,
+                          color: LichessColors.good,
                         ),
                       ],
                     ),
@@ -369,7 +370,7 @@ class _Body extends ConsumerWidget {
                         _StreakWidget(
                           data.maxLossStreak,
                           data.curLossStreak,
-                          color: context.lichessColors.error,
+                          color: LichessColors.error,
                         ),
                       ],
                     ),
@@ -489,16 +490,20 @@ class _PercentageValueWidget extends StatelessWidget {
       children: [
         Text(
           value.toString().localizeNumbers(),
-          style: const TextStyle(fontSize: _defaultValueFontSize),
+          style: TextStyle(fontSize: _defaultValueFontSize, color: color),
         ),
         Text(
           _getPercentageString(value, denominator),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
             color:
-                isShaded
-                    ? textShade(context, _customOpacity / 2)
-                    : textShade(context, _customOpacity),
+                color == null
+                    ? isShaded
+                        ? textShade(context, _customOpacity / 2)
+                        : textShade(context, _customOpacity)
+                    : isShaded
+                    ? color!.withValues(alpha: _customOpacity / 2)
+                    : color!.withValues(alpha: _customOpacity),
           ),
         ),
       ],
@@ -515,7 +520,7 @@ class _StreakWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const valueStyle = TextStyle(fontSize: _defaultValueFontSize);
+    final valueStyle = TextStyle(fontSize: _defaultValueFontSize, color: color);
 
     final streakTitleStyle = TextStyle(
       fontSize: _defaultStatFontSize,
