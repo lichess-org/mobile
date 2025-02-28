@@ -197,6 +197,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   }
 
   void _sendEvalGetEvent() {
+    if (!state.requireValue.isEngineAvailable(_prefs)) return;
+
     final numEvalLines = ref.read(engineEvaluationPreferencesProvider).numEvalLines;
 
     socketClient.send('evalGet', {
