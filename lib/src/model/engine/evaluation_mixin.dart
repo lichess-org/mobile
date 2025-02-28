@@ -5,6 +5,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -72,29 +73,28 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
 
   EvaluationService? _evaluationService;
 
-  /// Called when the local engine emits a new evaluation.
-  void onEngineEmit(UciPath path, LocalEval eval);
-
-  /// Called when a cloud evaluation is received.
-  void onEvalHit(UciPath path, int depth, IList<PvData> pvs);
-
-  /// Called when an received evaluation is for the current path.
+  /// Called when a received evaluation is for the current path.
   void refreshCurrentNode({bool recomputeRootView = false});
 
   /// The [SocketClient] to use for the cloud evaluation.
   SocketClient get socketClient;
+
+  /// The tree where the evaluations are stored.
+  Node get positionTree;
 
   /// Initializes the engine evaluation.
   ///
   /// Will start listening to the [SocketClient] for cloud evaluations.
   ///
   /// The local engine is not started here, but only when [requestEval] is called.
+  @nonVirtual
   void initEngineEvaluation() {
     _subscription = socketClient.stream.listen(_handleSocketEvent);
     _evaluationService = ref.read(evaluationServiceProvider);
   }
 
   /// Disposes the engine evaluation.
+  @nonVirtual
   void disposeEngineEvaluation() {
     _cloudEvalGetDebounce.dispose();
     _engineEvalDebounce.dispose();
@@ -123,6 +123,10 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
 
   @mustCallSuper
   void setNumEvalLines(int numEvalLines) {
+    // clear all saved evals since the number of eval lines has changed
+    positionTree.updateAll((node) => node.eval = null);
+    refreshCurrentNode();
+
     ref.read(engineEvaluationPreferencesProvider.notifier).setNumEvalLines(numEvalLines);
 
     ref.read(evaluationServiceProvider).setOptions(_evaluationOptions);
@@ -156,6 +160,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   /// it and not run the local engine, in order to save battery.
   ///
   /// Socket messages are also debounced to avoid sending too many `evalGet` to the server.
+  @nonVirtual
   void requestEval() {
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
@@ -189,7 +194,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
             )
             .toIList();
 
-    onEvalHit(path, depth, pvs);
+    final eval = CloudEval(depth: depth, pvs: pvs, position: positionTree.nodeAt(path).position);
+    positionTree.updateAt(path, (node) => node.eval = eval);
 
     if (state.requireValue.currentPath != path) return;
 
@@ -228,7 +234,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
         )
         ?.forEach((tuple) {
           final (work, eval) = tuple;
-          onEngineEmit(work.path, eval);
+          positionTree.updateAt(work.path, (node) => node.eval = eval);
           if (work.path == state.requireValue.currentPath) {
             refreshCurrentNode(
               recomputeRootView: eval.evalString != state.valueOrNull?.currentPathEval?.evalString,

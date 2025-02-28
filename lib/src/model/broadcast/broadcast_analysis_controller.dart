@@ -57,6 +57,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   @override
   SocketClient get socketClient => _socketClient;
 
+  // ignore: avoid_public_notifier_properties
+  @override
+  Root get positionTree => _root;
+
   @override
   Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
     _socketClient = ref
@@ -182,17 +186,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
         ),
       );
     }
-  }
-
-  @override
-  void onEvalHit(UciPath path, int depth, IList<PvData> pvs) {
-    final eval = CloudEval(depth: depth, pvs: pvs, position: _root.nodeAt(path).position);
-    _root.updateAt(path, (node) => node.eval = eval);
-  }
-
-  @override
-  void onEngineEmit(UciPath path, LocalEval eval) {
-    _root.updateAt(path, (node) => node.eval = eval);
   }
 
   @override
@@ -416,15 +409,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!computerAllowed && engineWasAvailable) {
       toggleEngine();
     }
-  }
-
-  @override
-  void setNumEvalLines(int numEvalLines) {
-    // clear all saved evals since the number of eval lines has changed
-    _root.updateAll((node) => node.eval = null);
-    refreshCurrentNode();
-
-    super.setNumEvalLines(numEvalLines);
   }
 
   void _setPath(

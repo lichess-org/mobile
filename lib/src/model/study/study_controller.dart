@@ -44,6 +44,10 @@ class StudyController extends _$StudyController
   @override
   SocketClient get socketClient => _socketClient;
 
+  // ignore: avoid_public_notifier_properties
+  @override
+  Root get positionTree => _root;
+
   EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
   @override
@@ -66,17 +70,6 @@ class StudyController extends _$StudyController
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return chapter;
-  }
-
-  @override
-  void onEvalHit(UciPath path, int depth, IList<PvData> pvs) {
-    final eval = CloudEval(depth: depth, pvs: pvs, position: _root.nodeAt(path).position);
-    _root.updateAt(path, (node) => node.eval = eval);
-  }
-
-  @override
-  void onEngineEmit(UciPath path, LocalEval eval) {
-    _root.updateAt(path, (node) => node.eval = eval);
   }
 
   @override
