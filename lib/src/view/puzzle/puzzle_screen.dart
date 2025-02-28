@@ -294,15 +294,15 @@ class _Body extends ConsumerWidget {
               lastMove: puzzleState.lastMove as NormalMove?,
               gameData: GameData(
                 playerSide:
-                    puzzleState.mode == PuzzleMode.load || puzzleState.position.isGameOver
+                    puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
                         ? PlayerSide.none
                         : puzzleState.mode == PuzzleMode.view
                         ? PlayerSide.both
                         : puzzleState.pov == Side.white
                         ? PlayerSide.white
                         : PlayerSide.black,
-                isCheck: boardPreferences.boardHighlights && puzzleState.position.isCheck,
-                sideToMove: puzzleState.position.turn,
+                isCheck: boardPreferences.boardHighlights && puzzleState.currentPosition.isCheck,
+                sideToMove: puzzleState.currentPosition.turn,
                 validMoves: puzzleState.validMoves,
                 promotionMove: puzzleState.promotionMove,
                 onMove: (move, {isDrop}) {
@@ -329,7 +329,7 @@ class _Body extends ConsumerWidget {
                       ? (
                         isLocalEngineAvailable: true,
                         orientation: puzzleState.pov,
-                        position: puzzleState.position,
+                        position: puzzleState.currentPosition,
                         savedEval: puzzleState.node.eval,
                         serverEval: puzzleState.node.serverEval,
                       )

@@ -143,7 +143,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   }
 
   Future<void> onUserMove(NormalMove move) async {
-    if (isPromotionPawnMove(state.position, move)) {
+    if (isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
@@ -547,8 +547,6 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   @override
   Position get currentPosition => node.position;
 
-  Position get position => node.position;
-
   String get fen => node.position.fen;
 
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
@@ -558,5 +556,5 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   NormalMove get _nextSolutionMove =>
       NormalMove.fromUci(puzzle.puzzle.solution[currentPath.size - initialPath.size]);
 
-  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(currentPosition);
 }
