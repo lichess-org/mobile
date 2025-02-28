@@ -164,6 +164,9 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> {
   /// during a socket round trip. If the cloud eval is available the [EvaluationService] will detect
   /// it and not run the local engine, in order to save battery.
   ///
+  /// The evaluation will not be requested if the engine is not available by the context or the
+  /// user preferences.
+  ///
   /// Socket messages are also debounced to avoid sending too many `evalGet` to the server.
   @nonVirtual
   void requestEval() {

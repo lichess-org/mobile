@@ -201,6 +201,8 @@ class AnalysisController extends _$AnalysisController
 
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
+    requestEval();
+
     final analysisState = AnalysisState(
       variant: _variant,
       gameId: options.gameId,
@@ -222,10 +224,6 @@ class AnalysisController extends _$AnalysisController
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
     );
-
-    if (analysisState.isEngineAvailable(_evaluationPrefs)) {
-      requestEval();
-    }
 
     return analysisState;
   }
@@ -495,9 +493,7 @@ class AnalysisController extends _$AnalysisController
       );
     }
 
-    if (pathChange && curState.isEngineAvailable(_evaluationPrefs)) {
-      requestEval();
-    }
+    if (pathChange) requestEval();
   }
 
   Future<(UciPath, FullOpening)?> _fetchOpening(Node fromNode, UciPath path) async {
