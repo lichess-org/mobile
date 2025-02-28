@@ -58,7 +58,7 @@ class AnalysisController extends _$AnalysisController
   static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
-  SocketClient? _socketClient;
+  late SocketClient _socketClient;
   late Root _root;
   late Variant _variant;
 
@@ -84,7 +84,7 @@ class AnalysisController extends _$AnalysisController
 
   // ignore: avoid_public_notifier_properties
   @override
-  SocketClient? get socketClient => _socketClient;
+  SocketClient get socketClient => _socketClient;
 
   // ignore: avoid_public_notifier_properties
   @override
@@ -94,9 +94,11 @@ class AnalysisController extends _$AnalysisController
   Future<AnalysisState> build(AnalysisOptions options) async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
-    isOnline(ref.read(defaultClientProvider)).then((isOnline) {
-      if (isOnline) {
-        _socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    _socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+
+    isOnline(ref.read(defaultClientProvider)).then((online) {
+      if (!online) {
+        _socketClient.close();
       }
     });
 

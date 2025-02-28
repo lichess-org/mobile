@@ -36,7 +36,7 @@ part 'puzzle_controller.g.dart';
 class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
-  SocketClient? _socketClient;
+  late SocketClient _socketClient;
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
@@ -63,7 +63,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   // ignore: avoid_public_notifier_properties
   @override
-  SocketClient? get socketClient => _socketClient;
+  SocketClient get socketClient => _socketClient;
 
   // ignore: avoid_public_notifier_properties
   @override
@@ -74,9 +74,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   @override
   PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
-    isOnline(ref.read(defaultClientProvider)).then((isOnline) {
-      if (isOnline) {
-        _socketClient = ref.watch(socketPoolProvider).open(PuzzleController.socketUri);
+    _socketClient = ref.watch(socketPoolProvider).open(PuzzleController.socketUri);
+
+    isOnline(ref.read(defaultClientProvider)).then((online) {
+      if (!online) {
+        _socketClient.close();
       }
     });
 

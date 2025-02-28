@@ -34,7 +34,7 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 final _logger = Logger('Socket');
 
 /// Set of topics that are allowed to be broadcasted to the global stream.
-const _globalSocketStreamAllowedTopics = {'n', 'message', 'challenges', 'evalHit'};
+const _globalSocketStreamAllowedTopics = {'n', 'message', 'challenges'};
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
 
@@ -369,6 +369,8 @@ class SocketClient {
   }
 
   void _handlePong(Duration pingDelay) {
+    if (isDisposed) return;
+
     _reconnectTimer?.cancel();
     if (_pongCount == 0) {
       _logger.fine('Ping/pong protocol for $route established.');
