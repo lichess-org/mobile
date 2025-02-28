@@ -107,7 +107,7 @@ class StudyController extends _$StudyController
   }
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
-    state = AsyncValue.data(await _fetchChapter(state.requireValue.study.id, chapterId: chapterId));
+    await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
     _ensureItsOurTurnIfGamebook();
   }
 
@@ -162,6 +162,10 @@ class StudyController extends _$StudyController
       gamebookActive: study.chapter.gamebook,
       pgn: pgn,
     );
+
+    // We need to define the state value in the build method because `requestEval` require the state
+    // to have a value.
+    state = AsyncData(studyState);
 
     requestEval();
 

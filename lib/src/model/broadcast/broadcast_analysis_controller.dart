@@ -127,6 +127,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
+
     final broadcastState = BroadcastAnalysisState(
       id: gameId,
       currentPath: currentPath,

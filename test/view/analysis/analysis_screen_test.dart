@@ -39,9 +39,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump(const Duration(milliseconds: 1));
-
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
       final currentMove = find.textContaining('Qe1#');
@@ -70,8 +67,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump(const Duration(milliseconds: 1));
 
       // cannot go forward
       expect(tester.widget<BottomBarButton>(find.byKey(const Key('goto-next'))).onTap, isNull);
@@ -121,7 +116,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump(const Duration(milliseconds: 1));
     }
 
     Text parentText(WidgetTester tester, String move) {
@@ -486,8 +480,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
       // The time the controller waits before launching the evaluation
       await tester.pump(const Duration(milliseconds: 800));

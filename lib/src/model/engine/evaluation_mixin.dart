@@ -157,7 +157,7 @@ mixin EngineEvaluationMixin {
     requestEval();
   }
 
-  /// Requests an engine evaluation.
+  /// Requests an engine evaluation if available.
   ///
   /// This sends an `evalGet` event to the server to get the cloud evaluation and starts the local
   /// engine evaluation after an additional delay. The delay should be enough to get the cloud eval
@@ -170,6 +170,8 @@ mixin EngineEvaluationMixin {
   /// Socket messages are also debounced to avoid sending too many `evalGet` to the server.
   @nonVirtual
   void requestEval() {
+    if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
     });

@@ -211,8 +211,6 @@ class AnalysisController extends _$AnalysisController
 
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
-    requestEval();
-
     final analysisState = AnalysisState(
       variant: _variant,
       gameId: options.gameId,
@@ -233,6 +231,12 @@ class AnalysisController extends _$AnalysisController
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
     );
+
+    // We need to define the state value in the build method because `requestEval` require the state
+    // to have a value.
+    state = AsyncData(analysisState);
+
+    requestEval();
 
     return analysisState;
   }
