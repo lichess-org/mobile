@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -54,7 +53,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
 @riverpod
 class AnalysisController extends _$AnalysisController
-    with EngineEvaluationMixin<AnalysisState>
+    with EngineEvaluationMixin
     implements PgnTreeNotifier {
   static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
@@ -67,7 +66,18 @@ class AnalysisController extends _$AnalysisController
 
   Timer? _startEngineEvalTimer;
 
-  EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+  @override
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  @override
+  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
+      ref.read(engineEvaluationPreferencesProvider.notifier);
+
+  @override
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+
+  @override
+  AnalysisState get evaluationState => state.requireValue;
 
   // ignore: avoid_public_notifier_properties
   @override
@@ -219,7 +229,6 @@ class AnalysisController extends _$AnalysisController
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
       evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
-      currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
@@ -366,7 +375,7 @@ class AnalysisController extends _$AnalysisController
     await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable(_evaluationPrefs);
+    final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
 
     state = AsyncData(
       curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
@@ -469,7 +478,6 @@ class AnalysisController extends _$AnalysisController
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
-          currentPathSteps: _root.branchesOn(path).map(Step.fromNode),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -482,7 +490,6 @@ class AnalysisController extends _$AnalysisController
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
-          currentPathSteps: _root.branchesOn(path).map(Step.fromNode),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -667,9 +674,6 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
 
     /// The context that the local engine is initialized with.
     required EvaluationContext evaluationContext,
-
-    /// List of steps of the current path.
-    required Iterable<Step> currentPathSteps,
 
     /// The last move played.
     Move? lastMove,

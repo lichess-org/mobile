@@ -6,12 +6,14 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -22,8 +24,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -31,7 +34,10 @@ part 'puzzle_controller.freezed.dart';
 part 'puzzle_controller.g.dart';
 
 @riverpod
-class PuzzleController extends _$PuzzleController {
+class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
+  static final Uri socketUri = Uri(path: '/analysis/socket/v5');
+
+  SocketClient? _socketClient;
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
@@ -40,20 +46,44 @@ class PuzzleController extends _$PuzzleController {
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
+  @override
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  @override
+  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
+      ref.read(engineEvaluationPreferencesProvider.notifier);
+
+  @override
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+
+  @override
+  PuzzleState get evaluationState => state;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  SocketClient? get socketClient => _socketClient;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  Branch get positionTree => _gameTree;
 
   Future<PuzzleService> get _service =>
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 
   @override
   PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
-    final evaluationService = ref.read(evaluationServiceProvider);
+    isOnline(ref.read(defaultClientProvider)).then((isOnline) {
+      if (isOnline) {
+        _socketClient = ref.watch(socketPoolProvider).open(PuzzleController.socketUri);
+      }
+    });
+
+    initEngineEvaluation();
 
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
-      _engineEvalDebounce.dispose();
-      evaluationService.disposeEngine();
+      disposeEngineEvaluation();
     });
 
     // we might not have the user rating yet so let's update it now
@@ -105,7 +135,6 @@ class PuzzleController extends _$PuzzleController {
       hintShown: false,
       resultSent: false,
       isChangingDifficulty: false,
-      isLocalEvalEnabled: false,
       shouldBlinkNextArrow: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
@@ -419,19 +448,7 @@ class PuzzleController extends _$PuzzleController {
       shouldBlinkNextArrow: false,
     );
 
-    if (pathChange) {
-      _startEngineEval();
-    }
-  }
-
-  void toggleLocalEvaluation() {
-    state = state.copyWith(isLocalEvalEnabled: !state.isLocalEvalEnabled);
-    if (state.isLocalEvalEnabled) {
-      ref.read(evaluationServiceProvider).initEngine(state.evaluationContext);
-      _startEngineEval();
-    } else {
-      ref.read(evaluationServiceProvider).disposeEngine();
-    }
+    if (pathChange) requestEval();
   }
 
   String makePgn() {
@@ -449,30 +466,6 @@ class PuzzleController extends _$PuzzleController {
     final pgn =
         '[FEN "${initPosition.fen}"][Site "${lichessUri('/training/${state.puzzle.puzzle.id}')}"]${pgnMoves.join(' ')}';
     return pgn;
-  }
-
-  Future<void> _startEngineEval() async {
-    if (!state.isEngineEnabled) return;
-    await ref.read(evaluationServiceProvider).ensureEngineInitialized(state.evaluationContext);
-    _engineEvalDebounce(
-      () => ref
-          .read(evaluationServiceProvider)
-          .start(
-            state.currentPath,
-            _gameTree.branchesOn(state.currentPath).map(Step.fromNode),
-            initialPositionEval: _gameTree.eval,
-            shouldEmit: (work) => work.path == state.currentPath,
-          )
-          ?.forEach((t) {
-            final (work, eval) = t;
-            _gameTree.updateAt(work.path, (node) {
-              node.eval = eval;
-            });
-            if (work.path == state.currentPath && eval.searchTime >= work.searchTime) {
-              state = state.copyWith(node: _gameTree.branchAt(state.currentPath).view);
-            }
-          }),
-    );
   }
 
   void _addMove(Move move) {
@@ -508,7 +501,7 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleState with _$PuzzleState {
+class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   const PuzzleState._();
 
   const factory PuzzleState({
@@ -526,7 +519,6 @@ class PuzzleState with _$PuzzleState {
     PuzzleFeedback? feedback,
     required bool hintShown,
     Square? hintSquare,
-    required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
     required bool shouldBlinkNextArrow,
@@ -538,12 +530,22 @@ class PuzzleState with _$PuzzleState {
     required bool nextPuzzleStreakFetchIsRetrying,
   }) = _PuzzleState;
 
-  bool get isEngineEnabled {
-    return mode == PuzzleMode.view && isLocalEvalEnabled;
-  }
+  @override
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
+      mode == PuzzleMode.view && prefs.isEnabled;
 
+  @override
   EvaluationContext get evaluationContext =>
       EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
+
+  @override
+  ClientEval? get initialPositionEval => null;
+
+  @override
+  ClientEval? get currentPathEval => node.eval;
+
+  @override
+  Position get currentPosition => node.position;
 
   Position get position => node.position;
 

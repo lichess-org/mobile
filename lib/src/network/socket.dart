@@ -34,7 +34,7 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 final _logger = Logger('Socket');
 
 /// Set of topics that are allowed to be broadcasted to the global stream.
-const _globalSocketStreamAllowedTopics = {'n', 'message', 'challenges'};
+const _globalSocketStreamAllowedTopics = {'n', 'message', 'challenges', 'evalHit'};
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
 

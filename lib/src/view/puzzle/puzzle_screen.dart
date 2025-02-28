@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -275,6 +276,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
@@ -311,7 +313,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               shapes:
-                  puzzleState.isEngineEnabled && evalBestMove != null
+                  puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
                       ? ISet([
                         Arrow(
                           color: const Color(0x66003088),
@@ -323,7 +325,7 @@ class _Body extends ConsumerWidget {
                       ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
                       : null,
               engineGauge:
-                  puzzleState.isEngineEnabled
+                  puzzleState.isEngineAvailable(enginePrefs)
                       ? (
                         isLocalEngineAvailable: true,
                         orientation: puzzleState.pov,
@@ -446,6 +448,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   Widget build(BuildContext context) {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformBottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -492,11 +495,11 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
             onTap: () {
-              ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+              ref.read(ctrlProvider.notifier).toggleEngine();
             },
             label: context.l10n.toggleLocalEvaluation,
             icon: CupertinoIcons.gauge,
-            highlighted: puzzleState.isLocalEvalEnabled,
+            highlighted: puzzleState.isEngineAvailable(enginePrefs),
           ),
         if (puzzleState.mode == PuzzleMode.view)
           RepeatButton(

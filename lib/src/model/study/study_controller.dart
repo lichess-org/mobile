@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -30,7 +29,7 @@ part 'study_controller.g.dart';
 
 @riverpod
 class StudyController extends _$StudyController
-    with EngineEvaluationMixin<StudyState>
+    with EngineEvaluationMixin
     implements PgnTreeNotifier {
   late Root _root;
 
@@ -48,7 +47,18 @@ class StudyController extends _$StudyController
   @override
   Root get positionTree => _root;
 
-  EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+  @override
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  @override
+  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
+      ref.read(engineEvaluationPreferencesProvider.notifier);
+
+  @override
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+
+  @override
+  StudyState get evaluationState => state.requireValue;
 
   @override
   Future<StudyState> build(StudyId id) async {
@@ -126,7 +136,6 @@ class StudyController extends _$StudyController
         root: null,
         currentNode: StudyCurrentNode.illegalPosition(),
         evaluationContext: EvaluationContext(variant: variant, initialPosition: _root.position),
-        currentPathSteps: _root.branchesOn(UciPath.empty).map(Step.fromNode),
         pgnRootComments: rootComments,
         pov: orientation,
         isComputerAnalysisAllowed: false,
@@ -146,7 +155,6 @@ class StudyController extends _$StudyController
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
       evaluationContext: EvaluationContext(variant: variant, initialPosition: _root.position),
-      currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: orientation,
@@ -155,9 +163,7 @@ class StudyController extends _$StudyController
       pgn: pgn,
     );
 
-    if (studyState.isEngineAvailable(_evaluationPrefs)) {
-      requestEval();
-    }
+    requestEval();
 
     return studyState;
   }
@@ -462,9 +468,6 @@ class StudyState with _$StudyState implements EvaluationMixinState {
 
     /// The context that the local engine is initialized with.
     required EvaluationContext evaluationContext,
-
-    /// List of steps of the current path.
-    required Iterable<Step> currentPathSteps,
 
     /// The side to display the board from.
     required Side pov,

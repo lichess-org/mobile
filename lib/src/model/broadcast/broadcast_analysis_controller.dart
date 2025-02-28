@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -33,7 +32,7 @@ part 'broadcast_analysis_controller.g.dart';
 
 @riverpod
 class BroadcastAnalysisController extends _$BroadcastAnalysisController
-    with EngineEvaluationMixin<BroadcastAnalysisState>
+    with EngineEvaluationMixin
     implements PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
@@ -51,7 +50,18 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   Object? _key = Object();
 
-  EngineEvaluationPrefState get _evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+  @override
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  @override
+  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
+      ref.read(engineEvaluationPreferencesProvider.notifier);
+
+  @override
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+
+  @override
+  BroadcastAnalysisState get evaluationState => state.requireValue;
 
   // ignore: avoid_public_notifier_properties
   @override
@@ -128,7 +138,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
-      currentPathSteps: _root.branchesOn(currentPath).map(Step.fromNode),
       evaluationContext: EvaluationContext(
         variant: Variant.standard,
         initialPosition: _root.position,
@@ -141,9 +150,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
 
-    if (broadcastState.isEngineAvailable(_evaluationPrefs)) {
-      requestEval();
-    }
+    requestEval();
 
     return broadcastState;
   }
@@ -403,7 +410,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable(_evaluationPrefs);
+    final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
 
     state = AsyncData(
       curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
@@ -486,9 +493,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       );
     }
 
-    if (pathChange && state.requireValue.isEngineAvailable(_evaluationPrefs)) {
-      requestEval();
-    }
+    if (pathChange) requestEval();
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -541,8 +546,6 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
 
     /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
-
-    required Iterable<Step> currentPathSteps,
 
     /// The last move played.
     Move? lastMove,
