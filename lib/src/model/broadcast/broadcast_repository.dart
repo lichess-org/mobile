@@ -138,6 +138,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
 }
 
 BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
+  final socketVersion = pick(json, 'socketVersion').asIntOrThrow();
   final groupName = pick(json, 'group', 'name').asStringOrNull();
   final group = pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList();
   final tournament = pick(json, 'tour').required();
@@ -145,6 +146,7 @@ BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
   final games = pick(json, 'games').required();
 
   return (
+    socketVersion: socketVersion,
     groupName: groupName,
     group: group,
     tournament: _tournamentDataFromPick(tournament),

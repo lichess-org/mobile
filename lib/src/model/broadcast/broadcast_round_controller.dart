@@ -46,9 +46,19 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _evalRequestDebouncer.cancel();
     });
 
+    final round = await ref.withClient(
+      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
+    );
+
     _socketClient = ref
         .watch(socketPoolProvider)
-        .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
+        .open(
+          BroadcastRoundController.broadcastSocketUri(broadcastRoundId),
+          version: round.socketVersion,
+          onEventGapFailure: () {
+            _syncRound();
+          },
+        );
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
@@ -70,10 +80,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
           });
         }
       },
-    );
-
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
     return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());

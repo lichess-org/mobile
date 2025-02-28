@@ -125,6 +125,7 @@ sealed class BroadcastRound with _$BroadcastRound {
 
 typedef BroadcastRoundResponse =
     ({
+      int socketVersion,
       String? groupName,
       IList<BroadcastTournamentGroup>? group,
       BroadcastTournamentData tournament,

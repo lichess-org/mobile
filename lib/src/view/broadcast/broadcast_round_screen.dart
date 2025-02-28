@@ -234,6 +234,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           _ => const BottomBar.empty(),
         },
       ),
+      AsyncError() => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
+        body: const Center(child: Text('Could not load tournament data')),
+      ),
       _ => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
