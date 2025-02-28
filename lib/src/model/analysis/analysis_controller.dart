@@ -66,9 +66,11 @@ class AnalysisController extends _$AnalysisController
 
   Timer? _startEngineEvalTimer;
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
@@ -76,6 +78,7 @@ class AnalysisController extends _$AnalysisController
   @override
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   AnalysisState get evaluationState => state.requireValue;
 
@@ -740,12 +743,6 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
-
-  @override
-  ClientEval? get initialPositionEval => root.eval;
-
-  @override
-  ClientEval? get currentPathEval => currentNode.eval;
 
   @override
   Position get currentPosition => currentNode.position;

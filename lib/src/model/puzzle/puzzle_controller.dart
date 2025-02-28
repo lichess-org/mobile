@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -46,9 +45,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
@@ -56,6 +57,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   @override
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   PuzzleState get evaluationState => state;
 
@@ -537,12 +539,6 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   @override
   EvaluationContext get evaluationContext =>
       EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
-
-  @override
-  ClientEval? get initialPositionEval => null;
-
-  @override
-  ClientEval? get currentPathEval => node.eval;
 
   @override
   Position get currentPosition => node.position;

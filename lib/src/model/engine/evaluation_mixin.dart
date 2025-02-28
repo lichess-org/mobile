@@ -38,10 +38,13 @@ abstract class EvaluationMixinState {
 
   /// The context that the local engine is initialized with.
   EvaluationContext get evaluationContext;
+
+  /// Current path in the position tree.
   UciPath get currentPath;
-  ClientEval? get currentPathEval;
+
+  /// Current position in the position tree. Can be `null` to support illegal position that are
+  /// found in studies.
   Position? get currentPosition;
-  ClientEval? get initialPositionEval;
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -66,12 +69,12 @@ mixin EngineEvaluationMixin {
   /// Methods in this mixin always assume that [AsyncNotifier.state] is loaded.
   EvaluationMixinState get evaluationState;
 
-  final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
-
   EngineEvaluationPrefState get evaluationPrefs;
   EngineEvaluationPreferences get evaluationPreferencesNotifier;
   EvaluationService evaluationServiceFactory();
+
+  final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
+  final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
 
   StreamSubscription<SocketEvent>? _subscription;
 
@@ -206,7 +209,9 @@ mixin EngineEvaluationMixin {
     positionTree.updateAt(path, (node) => node.eval = eval);
 
     if (evaluationState.currentPath == path) {
-      onCurrentPathEvalChanged(eval.evalString == evaluationState.currentPathEval?.evalString);
+      onCurrentPathEvalChanged(
+        eval.evalString == positionTree.nodeAt(evaluationState.currentPath).eval?.evalString,
+      );
     }
   }
 
@@ -237,7 +242,7 @@ mixin EngineEvaluationMixin {
         ?.start(
           curState.currentPath,
           positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: curState.initialPositionEval,
+          initialPositionEval: positionTree.eval,
           shouldEmit: (work) => work.path == evaluationState.currentPath,
         )
         ?.forEach((tuple) {
@@ -245,7 +250,7 @@ mixin EngineEvaluationMixin {
           positionTree.updateAt(work.path, (node) => node.eval = eval);
           if (work.path == evaluationState.currentPath) {
             onCurrentPathEvalChanged(
-              eval.evalString == evaluationState.currentPathEval?.evalString,
+              eval.evalString == positionTree.nodeAt(evaluationState.currentPath).eval?.evalString,
             );
           }
         });

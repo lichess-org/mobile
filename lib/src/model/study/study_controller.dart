@@ -47,9 +47,11 @@ class StudyController extends _$StudyController
   @override
   Root get positionTree => _root;
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
@@ -57,6 +59,7 @@ class StudyController extends _$StudyController
   @override
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   StudyState get evaluationState => state.requireValue;
 
@@ -512,12 +515,6 @@ class StudyState with _$StudyState implements EvaluationMixinState {
             serverEval: null,
           )
           : null;
-
-  @override
-  ClientEval? get initialPositionEval => root?.eval;
-
-  @override
-  ClientEval? get currentPathEval => currentNode.eval;
 
   @override
   Position? get currentPosition => currentNode.position;

@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -50,9 +49,11 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   Object? _key = Object();
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
@@ -60,6 +61,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   @override
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
+  // ignore: avoid_public_notifier_properties
   @override
   BroadcastAnalysisState get evaluationState => state.requireValue;
 
@@ -582,12 +584,6 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
       isComputerAnalysisEnabled && prefs.isEnabled;
-
-  @override
-  ClientEval? get initialPositionEval => root.eval;
-
-  @override
-  ClientEval? get currentPathEval => currentNode.eval;
 
   @override
   Position get currentPosition => currentNode.position;
