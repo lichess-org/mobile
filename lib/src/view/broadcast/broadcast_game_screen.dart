@@ -432,7 +432,7 @@ class _PlayerWidget extends ConsumerWidget {
 
         final player = game.players[side]!;
         final liveClock = isCursorOnLiveMove ? player.clock : null;
-        final gameStatus = game.status;
+        final isClockActive = isCursorOnLiveMove && game.isOngoing && side == sideToMove;
 
         final pastClocks = broadcastAnalysisState.clocks;
         final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
@@ -464,7 +464,7 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    gameStatus.resultToString(side),
+                    game.status.resultToString(side),
                     style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),
@@ -482,10 +482,10 @@ class _PlayerWidget extends ConsumerWidget {
                   Container(
                     height: kAnalysisBoardHeaderOrFooterHeight,
                     color:
-                        (side == sideToMove)
-                            ? isCursorOnLiveMove
-                                ? ColorScheme.of(context).tertiaryContainer
-                                : ColorScheme.of(context).secondaryContainer
+                        isClockActive
+                            ? ColorScheme.of(context).tertiaryContainer
+                            : (side == sideToMove)
+                            ? ColorScheme.of(context).secondaryContainer
                             : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -494,12 +494,12 @@ class _PlayerWidget extends ConsumerWidget {
                             liveClock != null
                                 ? CountdownClockBuilder(
                                   timeLeft: liveClock,
-                                  active: side == sideToMove,
+                                  active: isClockActive,
                                   builder:
                                       (context, timeLeft) => _Clock(
                                         timeLeft: timeLeft,
                                         isSideToMove: side == sideToMove,
-                                        isLive: true,
+                                        isClockActive: isClockActive,
                                       ),
                                   tickInterval: const Duration(seconds: 1),
                                   clockUpdatedAt: game.updatedClockAt,
@@ -507,7 +507,7 @@ class _PlayerWidget extends ConsumerWidget {
                                 : _Clock(
                                   timeLeft: pastClock!,
                                   isSideToMove: side == sideToMove,
-                                  isLive: false,
+                                  isClockActive: false,
                                 ),
                       ),
                     ),
@@ -525,11 +525,11 @@ class _PlayerWidget extends ConsumerWidget {
 }
 
 class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isLive});
+  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isClockActive});
 
   final Duration timeLeft;
   final bool isSideToMove;
-  final bool isLive;
+  final bool isClockActive;
 
   @override
   Widget build(BuildContext context) {
@@ -537,10 +537,10 @@ class _Clock extends StatelessWidget {
       timeLeft.toHoursMinutesSeconds(),
       style: TextStyle(
         color:
-            isSideToMove
-                ? isLive
-                    ? ColorScheme.of(context).onTertiaryContainer
-                    : ColorScheme.of(context).onSecondaryContainer
+            isClockActive
+                ? ColorScheme.of(context).tertiaryContainer
+                : isSideToMove
+                ? ColorScheme.of(context).secondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),

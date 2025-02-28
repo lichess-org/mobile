@@ -162,7 +162,7 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   final status = BroadcastResult.resultFromString(stringStatus);
 
   /// The amount of time that the player whose turn it is has been thinking since his last move
-  final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
+  final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull();
   final fen = pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen;
   final playingSide = Setup.parseFen(fen).turn;
 
@@ -174,16 +174,17 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
         Side.white: _playerFromPick(
           pick('players', 0).required(),
           isPlaying: playingSide == Side.white,
-          thinkingTime: thinkTime,
+          thinkTime: thinkTime,
         ),
         Side.black: _playerFromPick(
           pick('players', 1).required(),
           isPlaying: playingSide == Side.black,
-          thinkingTime: thinkTime,
+          thinkTime: thinkTime,
         ),
       }),
       fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
       lastMove: pick('lastMove').asUciMoveOrNull(),
+      thinkTime: thinkTime,
       status: status,
       updatedClockAt: clock.now(),
     ),
@@ -193,10 +194,10 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
 BroadcastPlayer _playerFromPick(
   RequiredPick pick, {
   required bool isPlaying,
-  required Duration thinkingTime,
+  required Duration? thinkTime,
 }) {
   final clock = pick('clock').asDurationFromCentiSecondsOrNull();
-  final updatedClock = clock != null && isPlaying ? clock - thinkingTime : clock;
+  final updatedClock = clock != null && isPlaying ? clock - (thinkTime ?? Duration.zero) : clock;
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
@@ -264,7 +265,7 @@ BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
     opponent: _playerFromPick(
       pick('opponent').required(),
       isPlaying: false,
-      thinkingTime: Duration.zero,
+      thinkTime: Duration.zero,
     ),
   );
 }

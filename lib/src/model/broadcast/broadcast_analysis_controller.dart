@@ -85,7 +85,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.isOngoing == true) {
+      if (state.valueOrNull?.isNewOrOngoing == true) {
         _syncDebouncer(() {
           _reloadPgn();
         });
@@ -94,7 +94,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.isOngoing == true) {
+        if (state.valueOrNull?.isNewOrOngoing == true) {
           _syncDebouncer(() {
             _reloadPgn();
           });
@@ -574,11 +574,13 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  /// Whether the game is still ongoing
-  bool get isOngoing => pgnHeaders['Result'] == '*';
+  /// Whether the game is new or ongoing
+  bool get isNewOrOngoing => pgnHeaders['Result'] == '*';
 
-  /// The path to the current broadcast live move
-  UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
+  /// The path to the current broadcast live move.
+  ///
+  /// If the game is new the path will be empty.
+  UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>

@@ -14,7 +14,7 @@ enum BroadcastResult {
   canceled,
   whiteHalfWins,
   blackHalfWins,
-  ongoing,
+  newOrOngoing,
   noResultPgnTag;
 
   static BroadcastResult resultFromString(String? result) {
@@ -27,7 +27,7 @@ enum BroadcastResult {
           '0-0' => BroadcastResult.canceled,
           '½-0' => BroadcastResult.whiteHalfWins,
           '0-½' => BroadcastResult.blackHalfWins,
-          '*' => BroadcastResult.ongoing,
+          '*' => BroadcastResult.newOrOngoing,
           _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
         };
   }
@@ -44,13 +44,8 @@ enum BroadcastResult {
     };
   }
 
-  bool get isOngoing => switch (this) {
-    ongoing => true,
-    _ => false,
-  };
-
   bool get isOver => switch (this) {
-    ongoing => false,
+    newOrOngoing => false,
     noResultPgnTag => false,
     _ => true,
   };
@@ -148,13 +143,16 @@ class BroadcastGame with _$BroadcastGame {
     required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
+    required Duration? thinkTime,
     required BroadcastResult status,
     required DateTime updatedClockAt,
     int? cp,
     int? mate,
   }) = _BroadcastGame;
 
-  bool get isOngoing => status.isOngoing;
+  // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
+  bool get isOngoing =>
+      status == BroadcastResult.newOrOngoing && thinkTime != null && lastMove != null;
   bool get isOver => status.isOver;
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
