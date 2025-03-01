@@ -20,14 +20,15 @@ import 'package:meta/meta.dart';
 ///
 /// This value was empirically determined to avoid sending requests during a fast rewind or fast
 /// forward of moves.
-const kCloudEvalDebounceDelay = Duration(milliseconds: 400);
+const kCloudEvalDebounceDelay = Duration(milliseconds: 300);
 
 /// The debounce delay for starting the local engine evaluation.
 ///
 /// This delay must be superior to the `kCloudEvalDebounceDelay` to avoid running the local engine
 /// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
-/// 'evalGet/evalHit' round trip is completed, even with reasonable network latency.
-const kEngineEvalDebounceDelay = Duration(seconds: 1);
+/// 'evalGet/evalHit' round trip gets a chance to complete before starting the local engine, even
+/// with reasonably high network latency.
+const kEngineEvalDebounceDelay = Duration(milliseconds: 900);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -203,13 +204,15 @@ mixin EngineEvaluationMixin {
             )
             .toIList();
 
-    final eval = CloudEval(depth: depth, pvs: pvs, position: positionTree.nodeAt(path).position);
-    positionTree.updateAt(path, (node) => node.eval = eval);
+    bool isSameEvalString = true;
+    positionTree.updateAt(path, (node) {
+      final eval = CloudEval(depth: depth, pvs: pvs, position: node.position);
+      isSameEvalString = eval.evalString == node.eval?.evalString;
+      node.eval = eval;
+    });
 
     if (evaluationState.currentPath == path) {
-      onCurrentPathEvalChanged(
-        eval.evalString == positionTree.nodeAt(evaluationState.currentPath).eval?.evalString,
-      );
+      onCurrentPathEvalChanged(isSameEvalString);
     }
   }
 
@@ -245,6 +248,7 @@ mixin EngineEvaluationMixin {
         )
         ?.forEach((tuple) {
           final (work, eval) = tuple;
+          bool isSameEvalString = true;
           positionTree.updateAt(work.path, (node) {
             if (node.eval is CloudEval) {
               // in case of high network latency, the cloud eval may arrive after the local eval
@@ -252,12 +256,11 @@ mixin EngineEvaluationMixin {
               _stopEngineEval();
               return;
             }
+            isSameEvalString = eval.evalString == node.eval?.evalString;
             node.eval = eval;
           });
           if (work.path == evaluationState.currentPath) {
-            onCurrentPathEvalChanged(
-              eval.evalString == positionTree.nodeAt(evaluationState.currentPath).eval?.evalString,
-            );
+            onCurrentPathEvalChanged(isSameEvalString);
           }
         });
   }

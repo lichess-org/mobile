@@ -482,7 +482,7 @@ void main() {
       await tester.pumpWidget(app);
 
       // The time the controller waits before launching the evaluation
-      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump(const Duration(seconds: 1));
     }
 
     testWidgets('Test engine lines are displayed', (tester) async {
