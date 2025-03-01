@@ -153,7 +153,11 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
 
-    requestEval();
+    if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
+      socketClient.firstConnection.then((_) {
+        requestEval();
+      });
+    }
 
     return broadcastState;
   }

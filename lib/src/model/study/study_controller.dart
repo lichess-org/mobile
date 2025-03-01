@@ -170,7 +170,11 @@ class StudyController extends _$StudyController
     // to have a value.
     state = AsyncData(studyState);
 
-    requestEval();
+    if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
+      socketClient.firstConnection.then((_) {
+        requestEval();
+      });
+    }
 
     return studyState;
   }

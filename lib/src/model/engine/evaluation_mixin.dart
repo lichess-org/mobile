@@ -25,9 +25,9 @@ const kCloudEvalDebounceDelay = Duration(milliseconds: 400);
 /// The debounce delay for starting the local engine evaluation.
 ///
 /// This delay must be superior to the `kCloudEvalDebounceDelay` to avoid running the local engine
-/// when the cloud evaluation is available. The delay is thus increased by 400ms to ensure that the
-/// socket 'evalGet/evalHit' round trip is completed.
-const kEngineEvalDebounceDelay = Duration(milliseconds: 800);
+/// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
+/// 'evalGet/evalHit' round trip is completed, even with reasonable network latency.
+const kEngineEvalDebounceDelay = Duration(seconds: 1);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -52,7 +52,7 @@ abstract class EvaluationMixinState {
 /// The parent must initialize the engine evaluation by calling [initEngineEvaluation] and dispose it
 /// by calling [disposeEngineEvaluation].
 ///
-/// The parent must implement the following methods:
+/// The parent must implement the following:
 /// - [evaluationState]
 /// - [socketClient] to provide the [SocketClient] to use for cloud evaluations.
 /// - [positionTree] to provide the tree where the evaluations are stored.
