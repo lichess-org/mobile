@@ -155,9 +155,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     state = AsyncData(broadcastState);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection.then((_) {
-        requestEval();
-      });
+      requestEval();
     }
 
     return broadcastState;

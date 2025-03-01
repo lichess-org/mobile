@@ -242,7 +242,7 @@ class AnalysisController extends _$AnalysisController
     state = AsyncData(analysisState);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection.then((_) {
+      socketClient.firstConnection.timeout(const Duration(seconds: 1)).then((_) {
         requestEval();
       });
     }
