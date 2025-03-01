@@ -245,7 +245,15 @@ mixin EngineEvaluationMixin {
         )
         ?.forEach((tuple) {
           final (work, eval) = tuple;
-          positionTree.updateAt(work.path, (node) => node.eval = eval);
+          positionTree.updateAt(work.path, (node) {
+            if (node.eval is CloudEval) {
+              // in case of high network latency, the cloud eval may arrive after the local eval
+              // in this case, we should not override the cloud eval with the local eval
+              _stopEngineEval();
+              return;
+            }
+            node.eval = eval;
+          });
           if (work.path == evaluationState.currentPath) {
             onCurrentPathEvalChanged(
               eval.evalString == positionTree.nodeAt(evaluationState.currentPath).eval?.evalString,
