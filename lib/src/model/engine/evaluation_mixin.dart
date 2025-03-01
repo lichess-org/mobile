@@ -66,13 +66,16 @@ abstract class EvaluationMixinState {
 mixin EngineEvaluationMixin {
   /// Direct access to underlying [EvaluationMixinState].
   ///
-  /// This is a workaround to enable this mixin in both [Notifier] and [AsyncNotifier].
-  /// Methods in this mixin always assume that [AsyncNotifier.state] is loaded.
+  /// This is a workaround to use this mixin in both [Notifier] and [AsyncNotifier].
+  /// Parent must ensure that [AsyncNotifier.state] is loaded before using methods that require
+  /// [EvaluationMixinState].
   EvaluationMixinState get evaluationState;
 
   EngineEvaluationPrefState get evaluationPrefs;
   EngineEvaluationPreferences get evaluationPreferencesNotifier;
   EvaluationService evaluationServiceFactory();
+  SocketClient get socketClient;
+  Node get positionTree;
 
   final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
   final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
@@ -87,12 +90,6 @@ mixin EngineEvaluationMixin {
   /// [isSameEvalString] parameter will be `true`. It can be used to avoid refreshing the UI if the
   /// evaluation string is the same.
   void onCurrentPathEvalChanged(bool isSameEvalString) {}
-
-  /// The [SocketClient] to use for the cloud evaluation.
-  SocketClient get socketClient;
-
-  /// The tree where the evaluations are stored.
-  Node get positionTree;
 
   /// Initializes the engine evaluation.
   ///
@@ -178,7 +175,7 @@ mixin EngineEvaluationMixin {
       _sendEvalGetEvent();
     });
     _engineEvalDebounce(() {
-      _doStartEngineEval();
+      _startEngineEval();
     });
   }
 
@@ -231,8 +228,7 @@ mixin EngineEvaluationMixin {
     });
   }
 
-  /// Do not call this method directly, use [_startEngineEval] instead.
-  Future<void> _doStartEngineEval() async {
+  Future<void> _startEngineEval() async {
     final curState = evaluationState;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
     await _evaluationService?.ensureEngineInitialized(
