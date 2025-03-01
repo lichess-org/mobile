@@ -9,12 +9,12 @@ part 'home_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   PrefCategory get prefCategory => PrefCategory.home;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   HomePrefs get defaults => HomePrefs.defaults;
 
   @override

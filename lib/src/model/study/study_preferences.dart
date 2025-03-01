@@ -7,12 +7,12 @@ part 'study_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.study;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   StudyPrefs get defaults => StudyPrefs.defaults;
 
   @override

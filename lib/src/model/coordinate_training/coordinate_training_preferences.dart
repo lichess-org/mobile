@@ -11,12 +11,12 @@ part 'coordinate_training_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class CoordinateTrainingPreferences extends _$CoordinateTrainingPreferences
     with PreferencesStorage<CoordinateTrainingPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.coordinateTraining;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   CoordinateTrainingPrefs get defaults => CoordinateTrainingPrefs.defaults;
 
   @override

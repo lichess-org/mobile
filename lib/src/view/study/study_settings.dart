@@ -75,8 +75,7 @@ class StudySettingsScreen extends ConsumerWidget {
           ),
           if (isComputerAnalysisAllowed)
             StockfishSettingsWidget(
-              onToggleLocalEvaluation:
-                  () => ref.read(studyController.notifier).toggleLocalEvaluation(),
+              onToggleLocalEvaluation: () => ref.read(studyController.notifier).toggleEngine(),
               onSetEngineSearchTime:
                   (value) => ref.read(studyController.notifier).setEngineSearchTime(value),
               onSetNumEvalLines:

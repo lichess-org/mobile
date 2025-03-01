@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_game_screen_providers.g.dart';
@@ -26,6 +27,17 @@ Future<ClientEval?> broadcastGameEval(Ref ref, BroadcastRoundId roundId, Broadca
       roundId,
       gameId,
     ).selectAsync((state) => state.currentNode.eval),
+  );
+}
+
+@riverpod
+Future<bool> isBroadcastEngineAvailable(Ref ref, BroadcastRoundId roundId, BroadcastGameId gameId) {
+  final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
+  return ref.watch(
+    broadcastAnalysisControllerProvider(
+      roundId,
+      gameId,
+    ).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
   );
 }
 

@@ -369,6 +369,8 @@ class SocketClient {
   }
 
   void _handlePong(Duration pingDelay) {
+    if (isDisposed) return;
+
     _reconnectTimer?.cancel();
     if (_pongCount == 0) {
       _logger.fine('Ping/pong protocol for $route established.');

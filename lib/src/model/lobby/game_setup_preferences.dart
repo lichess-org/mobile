@@ -14,8 +14,8 @@ part 'game_setup_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class GameSetupPreferences extends _$GameSetupPreferences
     with SessionPreferencesStorage<GameSetupPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.gameSetup;
 
   @override

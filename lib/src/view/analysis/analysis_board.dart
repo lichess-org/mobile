@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -42,6 +43,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
     final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
     final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
@@ -58,7 +60,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final sanMove = currentNode.sanMove;
 
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && analysisState.isEngineAvailable && bestMoves != null
+        showBestMoveArrow && analysisState.isEngineAvailable(enginePrefs) && bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,
@@ -68,18 +70,18 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
 
     return Chessboard(
       size: widget.boardSize,
-      fen: analysisState.position.fen,
+      fen: analysisState.currentPosition.fen,
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
       game: GameData(
         playerSide:
-            analysisState.position.isGameOver
+            analysisState.currentPosition.isGameOver
                 ? PlayerSide.none
-                : analysisState.position.turn == Side.white
+                : analysisState.currentPosition.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
-        sideToMove: analysisState.position.turn,
+        isCheck: boardPrefs.boardHighlights && analysisState.currentPosition.isCheck,
+        sideToMove: analysisState.currentPosition.turn,
         validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
         onMove:

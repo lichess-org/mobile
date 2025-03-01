@@ -105,6 +105,7 @@ class EvaluationService {
   /// Dispose the engine.
   ///
   /// Returns a future that completes once the engine is disposed.
+  /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
     if (_engine == null) return Future.value();
 

@@ -136,7 +136,7 @@ class _Body extends ConsumerWidget {
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,
                                 child: OpeningExplorerView(
-                                  position: state.position,
+                                  position: state.currentPosition,
                                   onMoveSelected: (move) {
                                     ref
                                         .read(analysisControllerProvider(options).notifier)
@@ -175,7 +175,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                       OpeningExplorerView(
-                        position: state.position,
+                        position: state.currentPosition,
                         opening:
                             state.currentNode.isRoot
                                 ? LightOpening(eco: '', name: context.l10n.startPosition)

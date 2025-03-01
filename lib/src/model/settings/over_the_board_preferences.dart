@@ -8,12 +8,12 @@ part 'over_the_board_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class OverTheBoardPreferences extends _$OverTheBoardPreferences
     with PreferencesStorage<OverTheBoardPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   PrefCategory get prefCategory => PrefCategory.overTheBoard;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   OverTheBoardPrefs get defaults => OverTheBoardPrefs.defaults;
 
   @override

@@ -13,8 +13,8 @@ part 'opening_explorer_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.openingExplorer;
 
   @override

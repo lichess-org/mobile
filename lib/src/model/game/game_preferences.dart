@@ -8,12 +8,12 @@ part 'game_preferences.g.dart';
 /// Local game preferences, defined client-side only.
 @Riverpod(keepAlive: true)
 class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.game;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   GamePrefs get defaults => GamePrefs.defaults;
 
   @override
