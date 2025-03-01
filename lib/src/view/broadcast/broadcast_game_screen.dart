@@ -115,12 +115,16 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               _ => const SizedBox.shrink(),
             };
     final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
+    final asyncIsEngineAvailable = ref.watch(
+      isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
+    );
 
     return PlatformScaffold(
       enableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
-        EngineDepth(savedEval: asyncEval.valueOrNull),
+        if (asyncIsEngineAvailable.valueOrNull == true)
+          EngineDepth(savedEval: asyncEval.valueOrNull),
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         AppBarIconButton(
           onPressed: () {

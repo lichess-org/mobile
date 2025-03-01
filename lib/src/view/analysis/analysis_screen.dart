@@ -88,10 +88,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
-    final prefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (prefs.enableComputerAnalysis)
+      if (asyncState.valueOrNull?.isEngineAvailable(enginePrefs) == true)
         EngineDepth(savedEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(

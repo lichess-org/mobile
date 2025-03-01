@@ -21,49 +21,58 @@ class EngineDepth extends ConsumerWidget {
     final localEval = ref.watch(engineEvaluationProvider).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    return eval != null
-        ? AppBarTextButton(
-          onPressed: () {
-            showPopover(
-              context: context,
-              bodyBuilder: (context) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    switch (eval) {
-                      LocalEval() => _StockfishInfo(eval),
-                      CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
-                    },
-                  ],
+    return AppBarTextButton(
+      onPressed:
+          eval != null
+              ? () {
+                showPopover(
+                  context: context,
+                  bodyBuilder: (context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        switch (eval) {
+                          LocalEval() => _StockfishInfo(eval),
+                          CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
+                        },
+                      ],
+                    );
+                  },
+                  direction: PopoverDirection.top,
+                  width: 240,
+                  backgroundColor:
+                      Theme.of(context).platform == TargetPlatform.android
+                          ? DialogTheme.of(context).backgroundColor ??
+                              ColorScheme.of(context).surfaceContainerHigh
+                          : CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiarySystemBackground,
+                            context,
+                          ),
+                  transitionDuration: Duration.zero,
+                  popoverTransitionBuilder: (_, child) => child,
                 );
-              },
-              direction: PopoverDirection.top,
-              width: 240,
-              backgroundColor:
-                  Theme.of(context).platform == TargetPlatform.android
-                      ? DialogTheme.of(context).backgroundColor ??
-                          ColorScheme.of(context).surfaceContainerHigh
-                      : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
-              transitionDuration: Duration.zero,
-              popoverTransitionBuilder: (_, child) => child,
-            );
-          },
-          child: _AppBarButtonChild(eval),
-        )
-        : const SizedBox.shrink();
+              }
+              : null,
+      child: _AppBarButtonChild(eval),
+    );
   }
 }
 
 class _AppBarButtonChild extends StatelessWidget {
-  final ClientEval eval;
+  final ClientEval? eval;
 
   const _AppBarButtonChild(this.eval);
 
   @override
   Widget build(BuildContext context) {
+    const cloudIconAlignment = AlignmentDirectional(-0.05, 0.20);
+    final cloudIcon = Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary);
+    final cloudIconTextStyle = TextStyle(
+      color: ColorScheme.of(context).onSecondary,
+      fontFeatures: const [FontFeature.tabularFigures()],
+      fontSize: 12,
+    );
+
     return switch (eval) {
       LocalEval(:final depth) => RepaintBoundary(
         child: Container(
@@ -87,18 +96,12 @@ class _AppBarButtonChild extends StatelessWidget {
         ),
       ),
       CloudEval(:final depth) => Stack(
-        alignment: const AlignmentDirectional(-0.05, 0.15),
-        children: [
-          Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary),
-          Text(
-            '${math.min(99, depth)}',
-            style: TextStyle(
-              color: ColorScheme.of(context).onSecondary,
-              fontFeatures: const [FontFeature.tabularFigures()],
-              fontSize: 12,
-            ),
-          ),
-        ],
+        alignment: cloudIconAlignment,
+        children: [cloudIcon, Text('${math.min(99, depth)}', style: cloudIconTextStyle)],
+      ),
+      null => Stack(
+        alignment: cloudIconAlignment,
+        children: [cloudIcon, Text('\u{2026}', style: cloudIconTextStyle)],
       ),
     };
   }
