@@ -44,28 +44,29 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   // completes the current one
   FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
 
   @override
+  @protected
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   PuzzleState get evaluationState => state;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   late SocketClient socketClient;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   Branch get positionTree => _gameTree;
 
   Future<PuzzleService> get _service =>

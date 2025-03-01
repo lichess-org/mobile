@@ -10,8 +10,8 @@ part 'puzzle_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStorage<PuzzlePrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.puzzle;
 
   @override

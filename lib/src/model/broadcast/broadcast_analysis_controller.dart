@@ -49,28 +49,29 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   Object? _key = Object();
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
 
   @override
+  @protected
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   BroadcastAnalysisState get evaluationState => state.requireValue;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   SocketClient get socketClient => _socketClient;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   Root get positionTree => _root;
 
   @override

@@ -15,12 +15,12 @@ part 'evaluation_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
     with PreferencesStorage<EngineEvaluationPrefState> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.engineEvaluation;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPrefState get defaults => EngineEvaluationPrefState.defaults;
 
   @override

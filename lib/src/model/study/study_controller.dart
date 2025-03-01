@@ -39,28 +39,29 @@ class StudyController extends _$StudyController
 
   late final SocketClient _socketClient;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   SocketClient get socketClient => _socketClient;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   Root get positionTree => _root;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   EngineEvaluationPreferences get evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
 
   @override
+  @protected
   EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   StudyState get evaluationState => state.requireValue;
 
   @override

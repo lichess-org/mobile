@@ -7,12 +7,12 @@ part 'analysis_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.analysis;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   AnalysisPrefs get defaults => AnalysisPrefs.defaults;
 
   @override
