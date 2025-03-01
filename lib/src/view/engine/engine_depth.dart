@@ -41,7 +41,10 @@ class EngineDepth extends ConsumerWidget {
                       children: [
                         switch (eval) {
                           LocalEval() => _StockfishInfo(eval),
-                          CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
+                          CloudEval(:final depth) => PlatformListTile(
+                            title: Text(context.l10n.cloudAnalysis),
+                            subtitle: Text(context.l10n.depthX('$depth')),
+                          ),
                         },
                       ],
                     );
