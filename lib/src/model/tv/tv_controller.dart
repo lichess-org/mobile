@@ -30,7 +30,8 @@ class TvController extends _$TvController {
   int? _socketEventVersion;
 
   @override
-  Future<TvState> build(TvChannel channel, (GameId id, Side orientation)? initialGame) async {
+  Future<TvState> build(TvChannel? channel, (GameId id, Side orientation)? initialGame) async {
+    assert(channel != null || initialGame != null, 'Either a channel or a game must be provided');
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
@@ -58,7 +59,7 @@ class TvController extends _$TvController {
       orientation = game.$2;
     } else {
       final channels = await ref.withClient((client) => TvRepository(client).channels());
-      final channelGame = channels[channel]!;
+      final channelGame = channels[channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
     }
