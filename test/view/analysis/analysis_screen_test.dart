@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
@@ -462,57 +463,150 @@ void main() {
     });
   });
 
-  group('Test engine widgets', () {
-    Future<void> buildApp(WidgetTester tester) async {
+  group('Engine evaluation:', () {
+    Future<void> buildApp(
+      WidgetTester tester,
+      Future<void> Function() testBody, {
+      int numEvalLines = 1,
+      bool isComputerAnalysisAllowed = true,
+      bool isComputerAnalysisEnabled = true,
+      bool isEngineEnabled = true,
+    }) async {
       final app = await makeTestProviderScopeApp(
         tester,
         defaultPreferences: {
           PrefCategory.engineEvaluation.storageKey: jsonEncode(
-            EngineEvaluationPrefState.defaults.copyWith(numEvalLines: 1).toJson(),
+            EngineEvaluationPrefState.defaults
+                .copyWith(numEvalLines: numEvalLines, isEnabled: isEngineEnabled)
+                .toJson(),
+          ),
+          PrefCategory.analysis.storageKey: jsonEncode(
+            AnalysisPrefs.defaults
+                .copyWith(enableComputerAnalysis: isComputerAnalysisEnabled)
+                .toJson(),
           ),
         },
-        home: const AnalysisScreen(
+        home: AnalysisScreen(
           options: AnalysisOptions(
             orientation: Side.white,
-            standalone: (pgn: '', isComputerAnalysisAllowed: true, variant: Variant.standard),
+            standalone: (
+              pgn: '',
+              isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+              variant: Variant.standard,
+            ),
           ),
         ),
       );
 
       await tester.pumpWidget(app);
 
-      // The time the controller waits before launching the evaluation
+      // The time the controller waits before launching the local evaluation
       await tester.pump(const Duration(seconds: 1));
+
+      await testBody();
+
+      // Wait for the timer of the throttle in the eval stream of the evaluation service, which
+      // cannot be disposed.
+      await tester.pump(const Duration(milliseconds: 300));
     }
 
-    testWidgets('Test engine lines are displayed', (tester) async {
-      await buildApp(tester);
-
-      expect(find.byType(Engineline), findsOne);
-      expect(find.widgetWithText(Engineline, '1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 '), findsOne);
-
-      // Required to stop the timer of the throttle in the eval stream of the evaluation service
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('engine lines are displayed', (tester) async {
+      await buildApp(tester, () async {
+        expect(find.byType(Engineline), findsOne);
+        expect(find.widgetWithText(Engineline, '1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 '), findsOne);
+      });
     });
 
-    testWidgets('Test engine depth is displayed', (tester) async {
-      await buildApp(tester);
-
-      expect(find.byType(EngineDepth), findsOne);
-      expect(find.widgetWithText(EngineDepth, '6'), findsOne);
-
-      // Required to stop the timer of the throttle in the eval stream of the evaluation service
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('engine lines are not displayed if computer analysis is not allowed', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(Engineline), findsNothing);
+      }, isComputerAnalysisAllowed: false);
     });
 
-    testWidgets('Test engine gauge is displayed', (tester) async {
-      await buildApp(tester);
+    testWidgets('engine lines are not displayed if computer analysis is not enabled', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(Engineline), findsNothing);
+      }, isComputerAnalysisEnabled: false);
+    });
 
-      expect(find.byType(EngineGauge), findsOne);
-      expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
+    testWidgets('engine lines are not displayed if engine is disabled by user preferences', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(Engineline), findsNothing);
+      }, isEngineEnabled: false);
+    });
 
-      // Required to stop the timer of the throttle in the eval stream of the evaluation service
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('engine lines are not displayed if they are disabled by user preferences', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(Engineline), findsNothing);
+      }, numEvalLines: 0);
+    });
+
+    testWidgets('engine depth is displayed', (tester) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineDepth), findsOne);
+        expect(find.widgetWithText(EngineDepth, '6'), findsOne);
+      });
+    });
+
+    testWidgets('engine depth is not displayed if engine is disabled by user preferences', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineDepth), findsNothing);
+      }, isEngineEnabled: false);
+    });
+
+    testWidgets('engine gauge is displayed', (tester) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineGauge), findsOne);
+        expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
+      });
+    });
+
+    testWidgets('engine gauge is not displayed if computer analysis is not allowed', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineGauge), findsNothing);
+      }, isComputerAnalysisAllowed: false);
+    });
+
+    testWidgets('engine gauge is not displayed if computer analysis is not enabled', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineGauge), findsNothing);
+      }, isComputerAnalysisEnabled: false);
+    });
+
+    testWidgets('engine gauge is not displayed if engine is disabled by user preferences', (
+      tester,
+    ) async {
+      await buildApp(tester, () async {
+        expect(find.byType(EngineGauge), findsNothing);
+      }, isEngineEnabled: false);
+    });
+
+    testWidgets('eval is displayed in the move tree', (tester) async {
+      await buildApp(tester, () async {
+        await playMove(tester, 'e2', 'e4');
+        expect(find.byType(InlineMove), findsOne);
+        // wait for the engine
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+        await playMove(tester, 'e7', 'e5');
+        // wait for the engine
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
+      });
     });
   });
 }
