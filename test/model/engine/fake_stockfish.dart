@@ -56,8 +56,8 @@ class FakeStockfish implements Stockfish {
             if (moveTime != null) {
               // Emits only 2 info lines, because of the throttler in evaluation service there is no
               // need to emit more.
-              // Only the last line will be used after waiting the throttle duration, which means
-              // the depth will always be 16 after the throttle duration.
+              // Only the last line will be used after waiting the throttle duration. Which means
+              // the depth will always be 15 before throttle delay and 16 after.
               // The cp value will always 23.
               for (var i = 1; i < 3; i++) {
                 _stdoutController.add(

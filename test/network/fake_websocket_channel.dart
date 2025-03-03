@@ -40,7 +40,7 @@ typedef FakeSocketServerHandlers =
 /// It also allows to increase the lag of the connection by setting the
 /// [connectionLag] property. By default [connectionLag] is set to [Duration.zero]
 /// to simplify testing.
-/// When lag is 0, the pong response will be sent in the next microtask.
+/// When lag is 0, the pong and [serverHandlers] responses will be sent in the next microtask.
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
@@ -160,7 +160,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
 }
 
 class _FakeWebSocketSink implements WebSocketSink {
-  _FakeWebSocketSink(this._channel, [this._serverHandlers = const {}]);
+  _FakeWebSocketSink(this._channel, this._serverHandlers);
 
   final FakeWebSocketChannel _channel;
   final FakeSocketServerHandlers _serverHandlers;
@@ -197,9 +197,15 @@ class _FakeWebSocketSink implements WebSocketSink {
           final serverHandler = _serverHandlers[t];
           if (serverHandler != null) {
             final response = serverHandler(json);
-            scheduleMicrotask(() {
-              _channel._incomingController.add(jsonEncode(response));
-            });
+            if (_channel.connectionLag > Duration.zero) {
+              Future<void>.delayed(_channel.connectionLag, () {
+                _channel._incomingController.add(jsonEncode(response));
+              });
+            } else {
+              scheduleMicrotask(() {
+                _channel._incomingController.add(jsonEncode(response));
+              });
+            }
           }
         }
       } catch (e) {
