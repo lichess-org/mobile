@@ -54,9 +54,14 @@ class FakeStockfish implements Stockfish {
           if (parts.length > 2) {
             final moveTime = int.tryParse(parts[2]);
             if (moveTime != null) {
-              for (var i = 0; i < 10; i++) {
+              // Emits only 2 info lines, because of the throttler in evaluation service there is no
+              // need to emit more.
+              // Only the last line will be used after waiting the throttle duration, which means
+              // the depth will always be 16 after the throttle duration.
+              // The cp value will always 23.
+              for (var i = 1; i < 3; i++) {
                 _stdoutController.add(
-                  'info depth ${6 + i} seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 1)} nps 359000 hashfull 0 tbhits 0 time ${100 * (i + 1)} pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6\n',
+                  'info depth ${14 + i} seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 hashfull 0 tbhits 0 time ${100 * (i + 14)} pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6\n',
                 );
               }
               _stdoutController.add('bestmove e2e4 ponder e7e5\n');

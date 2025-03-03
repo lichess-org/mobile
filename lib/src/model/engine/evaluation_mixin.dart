@@ -20,15 +20,15 @@ import 'package:meta/meta.dart';
 ///
 /// This value was empirically determined to avoid sending requests during a fast rewind or fast
 /// forward of moves.
-const kCloudEvalDebounceDelay = Duration(milliseconds: 300);
+const kRequestCloudEvalDebounceDelay = Duration(milliseconds: 300);
 
 /// The debounce delay for starting the local engine evaluation.
 ///
-/// This delay must be superior to the `kCloudEvalDebounceDelay` to avoid running the local engine
+/// This delay must be superior to the `kRequestCloudEvalDebounceDelay` to avoid running the local engine
 /// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
 /// 'evalGet/evalHit' round trip gets a chance to complete before starting the local engine, even
 /// with reasonably high network latency.
-const kEngineEvalDebounceDelay = Duration(milliseconds: 900);
+const kRequestEngineEvalDebounceDelay = Duration(milliseconds: 900);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -77,8 +77,8 @@ mixin EngineEvaluationMixin {
   SocketClient get socketClient;
   Node get positionTree;
 
-  final _cloudEvalGetDebounce = Debouncer(kCloudEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kEngineEvalDebounceDelay);
+  final _cloudEvalGetDebounce = Debouncer(kRequestCloudEvalDebounceDelay);
+  final _engineEvalDebounce = Debouncer(kRequestEngineEvalDebounceDelay);
 
   StreamSubscription<SocketEvent>? _subscription;
 

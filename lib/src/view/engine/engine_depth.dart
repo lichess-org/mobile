@@ -71,7 +71,7 @@ class EngineDepth extends ConsumerWidget {
             children: [
               CustomPaint(
                 size: const Size(28, 28),
-                painter: _MicroChipPainter(ColorScheme.of(context).secondary),
+                painter: MicroChipPainter(ColorScheme.of(context).secondary),
               ),
               Text('${math.min(99, depth)}', style: iconTextStyle),
             ],
@@ -90,8 +90,8 @@ class EngineDepth extends ConsumerWidget {
   }
 }
 
-class _MicroChipPainter extends CustomPainter {
-  const _MicroChipPainter(this.color);
+class MicroChipPainter extends CustomPainter {
+  const MicroChipPainter(this.color);
 
   final Color color;
 

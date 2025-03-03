@@ -19,6 +19,8 @@ import 'package:stream_transform/stream_transform.dart';
 part 'evaluation_service.freezed.dart';
 part 'evaluation_service.g.dart';
 
+const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 300);
+
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
@@ -180,7 +182,7 @@ class EvaluationService {
 
     final evalStream = engine
         .start(work)
-        .throttle(const Duration(milliseconds: 300), trailing: true);
+        .throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
 
     evalStream.forEach((t) {
       final (work, eval) = t;
