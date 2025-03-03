@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -279,14 +280,18 @@ class _StudyMenu extends ConsumerWidget {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),
-                  if (state.position != null)
+                  if (state.currentPosition != null)
                     BottomSheetAction(
                       makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
                       onPressed: () async {
                         try {
                           final image = await ref
                               .read(gameShareServiceProvider)
-                              .screenshotPosition(state.pov, state.position!.fen, state.lastMove);
+                              .screenshotPosition(
+                                state.pov,
+                                state.currentPosition!.fen,
+                                state.lastMove,
+                              );
                           if (context.mounted) {
                             launchShareDialog(
                               context,
@@ -356,6 +361,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final variant = studyState.variant;
     if (!variant.isReadSupported) {
       return DefaultTabController(
@@ -375,12 +381,12 @@ class _Body extends ConsumerWidget {
     }
 
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-    final numEvalLines = analysisPrefs.numEvalLines;
+    final numEvalLines = enginePrefs.numEvalLines;
 
     final gamebookActive = studyState.gamebookActive;
-    final engineGaugeParams = studyState.engineGaugeParams;
+    final engineGaugeParams = studyState.engineGaugeParams(enginePrefs);
     final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
-    final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
+    final isLocalEvaluationEnabled = studyState.isEngineAvailable(enginePrefs);
     final currentNode = studyState.currentNode;
     final pov = studyState.pov;
 
@@ -485,6 +491,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
       }
     });
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final studyState = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
@@ -516,7 +523,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     );
     final bestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && studyState.isEngineAvailable && bestMoves != null
+        showBestMoveArrow && studyState.isEngineAvailable(enginePrefs) && bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position!.turn,
@@ -539,7 +546,10 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
-      fen: studyState.position?.board.fen ?? studyState.study.currentChapterMeta.fen ?? kInitialFEN,
+      fen:
+          studyState.currentPosition?.board.fen ??
+          studyState.study.currentChapterMeta.fen ??
+          kInitialFEN,
       lastMove: studyState.lastMove as NormalMove?,
       orientation: studyState.pov,
       shapes: pgnShapes.union(userShapes).union(variationArrows).union(bestMoveShapes),

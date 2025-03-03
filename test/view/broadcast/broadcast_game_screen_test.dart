@@ -27,7 +27,7 @@ final client = MockClient((request) {
 
 void main() {
   group('Broadcast game screen', () {
-    testWidgets('Displays broadcast game screen', variant: kPlatformVariant, (tester) async {
+    testWidgets('displays screen', variant: kPlatformVariant, (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastGameScreen(

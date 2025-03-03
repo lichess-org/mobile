@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/src/stream_sink_transformer.dart';
+import 'package:flutter/material.dart' show debugPrint;
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -21,10 +22,17 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
   }
 }
 
+/// Fake handlers to simulate server socket responses from client requests.
+typedef FakeSocketServerHandlers =
+    Map<String, Map<String, dynamic> Function(Map<String, dynamic> request)>;
+
 /// A fake implementation of [WebSocketChannel]
 ///
 /// This implementation allows to simulate incoming messages from the server
 /// with the [addIncomingMessages] method.
+///
+/// It also allows to simulate server responses to client requests by setting the
+/// [serverHandlers] property.
 ///
 /// By default the server sends a pong response to a ping request, but this
 /// behavior can be changed by setting [shouldSendPong] to false.
@@ -32,12 +40,14 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
 /// It also allows to increase the lag of the connection by setting the
 /// [connectionLag] property. By default [connectionLag] is set to [Duration.zero]
 /// to simplify testing.
-/// When lag is 0, the pong response will be sent in the next microtask.
+/// When lag is 0, the pong and [serverHandlers] responses will be sent in the next microtask.
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
-  FakeWebSocketChannel({this.connectionLag = Duration.zero});
+  FakeWebSocketChannel({this.connectionLag = Duration.zero, this.serverHandlers = const {}});
+
+  final FakeSocketServerHandlers serverHandlers;
 
   int _pongCount = 0;
 
@@ -104,7 +114,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   Future<void> get ready => Future<void>.value();
 
   @override
-  WebSocketSink get sink => FakeWebSocketSink(this);
+  WebSocketSink get sink => _FakeWebSocketSink(this, serverHandlers);
 
   @override
   Stream<dynamic> get stream => _incomingController.stream;
@@ -149,10 +159,11 @@ class FakeWebSocketChannel implements WebSocketChannel {
   }
 }
 
-class FakeWebSocketSink implements WebSocketSink {
-  final FakeWebSocketChannel _channel;
+class _FakeWebSocketSink implements WebSocketSink {
+  _FakeWebSocketSink(this._channel, this._serverHandlers);
 
-  FakeWebSocketSink(this._channel);
+  final FakeWebSocketChannel _channel;
+  final FakeSocketServerHandlers _serverHandlers;
 
   @override
   void add(dynamic data) {
@@ -175,6 +186,30 @@ class FakeWebSocketSink implements WebSocketSink {
         Future<void>.delayed(_channel.connectionLag, sendPong);
       } else {
         scheduleMicrotask(sendPong);
+      }
+    }
+
+    if (!FakeWebSocketChannel.isPing(data) && data is String) {
+      try {
+        final json = jsonDecode(data);
+        if (json is Map<String, dynamic>) {
+          final t = json['t'] as String?;
+          final serverHandler = _serverHandlers[t];
+          if (serverHandler != null) {
+            final response = serverHandler(json);
+            if (_channel.connectionLag > Duration.zero) {
+              Future<void>.delayed(_channel.connectionLag, () {
+                _channel._incomingController.add(jsonEncode(response));
+              });
+            } else {
+              scheduleMicrotask(() {
+                _channel._incomingController.add(jsonEncode(response));
+              });
+            }
+          }
+        }
+      } catch (e) {
+        debugPrint('Fake socket server handler error: $e');
       }
     }
   }

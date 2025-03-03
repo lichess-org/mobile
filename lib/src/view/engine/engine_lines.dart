@@ -4,8 +4,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -19,7 +19,9 @@ class EngineLines extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final numEvalLines = ref.watch(analysisPreferencesProvider.select((p) => p.numEvalLines));
+    final numEvalLines = ref.watch(
+      engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
+    );
     final localEval = ref.watch(engineEvaluationProvider).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
