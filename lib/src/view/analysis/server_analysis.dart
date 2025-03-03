@@ -127,7 +127,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                       ])
                         TableRow(
                           children: [
-                            _SummaryNumber(item.$1),
+                            _SummaryNumber(item.$1, item.$4),
                             Center(
                               heightFactor: 1.2,
                               child: Text(
@@ -136,7 +136,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                 style: TextStyle(color: item.$4),
                               ),
                             ),
-                            _SummaryNumber(item.$3),
+                            _SummaryNumber(item.$3, item.$4),
                           ],
                         ),
                       if (playersAnalysis.white.acpl != null && playersAnalysis.black.acpl != null)
@@ -249,12 +249,16 @@ class WaitingForServerAnalysis extends StatelessWidget {
 }
 
 class _SummaryNumber extends StatelessWidget {
-  const _SummaryNumber(this.data);
+  const _SummaryNumber(this.data, [this.color]);
   final String data;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(data, softWrap: true));
+    if (color == null) {
+      return Center(child: Text(data, softWrap: true));
+    }
+    return Center(child: Text(data, softWrap: true, style: TextStyle(color: color)));
   }
 }
 
