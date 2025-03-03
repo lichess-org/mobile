@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -234,7 +233,7 @@ class _Body extends ConsumerWidget {
                         child: _RatingWidget(
                           data.highestRating,
                           data.highestRatingGame,
-                          LichessColors.good,
+                          context.lichessColors.good,
                         ),
                       ),
                       StatCard(
@@ -242,7 +241,7 @@ class _Body extends ConsumerWidget {
                         child: _RatingWidget(
                           data.lowestRating,
                           data.lowestRatingGame,
-                          LichessColors.error,
+                          context.lichessColors.error,
                         ),
                       ),
                     ]),
@@ -302,7 +301,7 @@ class _Body extends ConsumerWidget {
                         child: _PercentageValueWidget(
                           data.wonGames,
                           data.totalGames,
-                          color: LichessColors.good,
+                          color: context.lichessColors.good,
                         ),
                       ),
                       StatCard(
@@ -319,7 +318,7 @@ class _Body extends ConsumerWidget {
                         child: _PercentageValueWidget(
                           data.lostGames,
                           data.totalGames,
-                          color: LichessColors.error,
+                          color: context.lichessColors.error,
                         ),
                       ),
                     ]),
@@ -360,7 +359,7 @@ class _Body extends ConsumerWidget {
                         _StreakWidget(
                           data.maxWinStreak,
                           data.curWinStreak,
-                          color: LichessColors.good,
+                          color: context.lichessColors.good,
                         ),
                       ],
                     ),
@@ -370,7 +369,7 @@ class _Body extends ConsumerWidget {
                         _StreakWidget(
                           data.maxLossStreak,
                           data.curLossStreak,
-                          color: LichessColors.error,
+                          color: context.lichessColors.error,
                         ),
                       ],
                     ),
