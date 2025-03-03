@@ -76,10 +76,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
-                secondChild: ListSection(
-                  margin: EdgeInsets.zero,
-                  cupertinoBorderRadius: BorderRadius.zero,
-                  cupertinoClipBehavior: Clip.none,
+                secondChild: Column(
                   children: [
                     SwitchSettingTile(
                       title: Text(context.l10n.evaluationGauge),
