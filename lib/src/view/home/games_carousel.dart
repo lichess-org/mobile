@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 const kGameCarouselFlexWeights = [6, 2];
@@ -211,64 +210,68 @@ class _BoardCarouselItem extends ConsumerWidget {
       brightness == Brightness.light ? 0.25 : 0.0,
     );
 
+    // apply hue settings to background color
+    final hsl = HSLColor.fromColor(backgroundColor);
+    final hue = (hsl.hue + boardPrefs.hue) % 360;
+
+    final backgroundColorWithHueFilter =
+        HSLColor.fromAHSL(1.0, hue, hsl.saturation, hsl.lightness).toColor();
+
     final screenWidth = MediaQuery.sizeOf(context).width;
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
     final double width = screenWidth - 16.0;
     final boardSize =
         width * kGameCarouselFlexWeights[0] / totalFlex - kGameCarouselPadding.horizontal;
 
-    return BrightnessHueFilter(
-      hue: boardPrefs.hue,
-      brightness: boardPrefs.brightness,
-      child: PlatformCard(
-        clipBehavior: Clip.hardEdge,
-        color: backgroundColor,
-        child: OverflowBox(
-          maxWidth: boardSize,
-          minWidth: boardSize,
-          child: Stack(
-            children: [
-              ShaderMask(
-                blendMode: BlendMode.dstOut,
-                shaderCallback: (bounds) {
-                  return LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      backgroundColor.withValues(alpha: 0.25),
-                      backgroundColor.withValues(alpha: 1.0),
-                    ],
-                    stops: const [0.3, 1.00],
-                    tileMode: TileMode.clamp,
-                  ).createShader(bounds);
-                },
-                child: SizedBox(
-                  height: boardSize,
-                  child: StaticChessboard(
-                    size: boardSize,
-                    fen: fen,
-                    orientation: orientation,
-                    lastMove: lastMove,
-                    enableCoordinates: false,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                    pieceAssets: boardPrefs.pieceSet.assets,
-                    colorScheme: boardPrefs.boardTheme.colors,
+    return ColoredBox(
+      color: backgroundColorWithHueFilter,
+      child: OverflowBox(
+        maxWidth: boardSize,
+        minWidth: boardSize,
+        child: Stack(
+          children: [
+            ShaderMask(
+              blendMode: BlendMode.dstOut,
+              shaderCallback: (bounds) {
+                return LinearGradient(
+                  begin: Alignment.center,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    backgroundColorWithHueFilter.withValues(alpha: 0.25),
+                    backgroundColorWithHueFilter.withValues(alpha: 1.0),
+                  ],
+                  stops: const [0.3, 1.00],
+                  tileMode: TileMode.clamp,
+                ).createShader(bounds);
+              },
+              child: SizedBox(
+                height: boardSize,
+                child: StaticChessboard(
+                  hue: boardPrefs.hue,
+                  brightness: boardPrefs.brightness,
+                  size: boardSize,
+                  fen: fen,
+                  orientation: orientation,
+                  lastMove: lastMove,
+                  enableCoordinates: false,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
                   ),
+                  pieceAssets: boardPrefs.pieceSet.assets,
+                  colorScheme: boardPrefs.boardTheme.colors,
                 ),
               ),
-              Positioned(
-                left: 0,
-                bottom: 8,
-                child: DefaultTextStyle.merge(
-                  style: const TextStyle(color: Colors.white),
-                  child: description,
-                ),
+            ),
+            Positioned(
+              left: 0,
+              bottom: 8,
+              child: DefaultTextStyle.merge(
+                style: const TextStyle(color: Colors.white),
+                child: description,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
