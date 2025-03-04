@@ -105,15 +105,12 @@ final _internetCheckUris = [
 ];
 
 /// Checks if the device is online by making a HEAD request to a list of URIs.
-Future<bool> isOnline(Client client) {
+Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 10)}) {
   final completer = Completer<bool>();
   try {
     int remaining = _internetCheckUris.length;
     final futures = _internetCheckUris.map(
-      (uri) => client
-          .head(uri)
-          .timeout(const Duration(seconds: 10))
-          .then((response) => true, onError: (_) => false),
+      (uri) => client.head(uri).timeout(timeout).then((response) => true, onError: (_) => false),
     );
     for (final future in futures) {
       future.then((value) {

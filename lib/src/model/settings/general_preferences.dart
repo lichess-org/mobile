@@ -12,12 +12,12 @@ part 'general_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.general;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override

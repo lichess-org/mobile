@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -23,7 +23,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final prefs = ref.watch(analysisPreferencesProvider);
+    final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return ListSection(
       header: const SettingsSectionTitle('Stockfish 16'),
@@ -31,7 +31,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
         if (onToggleLocalEvaluation != null)
           SwitchSettingTile(
             title: Text(context.l10n.toggleLocalEvaluation),
-            value: prefs.enableLocalEvaluation,
+            value: prefs.isEnabled,
             onChanged: (_) {
               onToggleLocalEvaluation!.call();
             },

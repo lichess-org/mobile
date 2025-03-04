@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -87,10 +88,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
-    final prefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (prefs.enableComputerAnalysis)
+      if (asyncState.valueOrNull?.isEngineAvailable(enginePrefs) == true)
         EngineDepth(savedEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
@@ -171,13 +172,14 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-    final numEvalLines = analysisPrefs.numEvalLines;
+    final numEvalLines = enginePrefs.numEvalLines;
 
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
-    final isEngineAvailable = analysisState.isEngineAvailable;
+    final isEngineAvailable = analysisState.isEngineAvailable(enginePrefs);
     final currentNode = analysisState.currentNode;
     final pov = analysisState.pov;
 
@@ -193,19 +195,19 @@ class _Body extends ConsumerWidget {
             enableDrawingShapes: enableDrawingShapes,
           ),
       engineGaugeBuilder:
-          analysisState.hasAvailableEval && showEvaluationGauge
+          analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
               ? (context, orientation) {
                 return orientation == Orientation.portrait
                     ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: analysisState.engineGaugeParams,
+                      params: analysisState.engineGaugeParams(enginePrefs),
                     )
                     : Container(
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                       child: EngineGauge(
                         displayMode: EngineGaugeDisplayMode.vertical,
-                        params: analysisState.engineGaugeParams,
+                        params: analysisState.engineGaugeParams(enginePrefs),
                       ),
                     );
               }
@@ -248,6 +250,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
+    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformBottomBar(
       transparentBackground: false,
@@ -265,11 +268,11 @@ class _BottomBar extends ConsumerWidget {
             onTap:
                 analysisState.isEngineAllowed
                     ? () {
-                      ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+                      ref.read(ctrlProvider.notifier).toggleEngine();
                     }
                     : null,
             icon: CupertinoIcons.gauge,
-            highlighted: analysisState.isEngineAvailable,
+            highlighted: analysisState.isEngineAvailable(evalPrefs),
           ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -314,7 +317,7 @@ class _BottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: () {
-              final boardFen = analysisState.position.fen;
+              final boardFen = analysisState.currentPosition.fen;
               Navigator.of(
                 context,
               ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
@@ -334,7 +337,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
             onPressed: () {
               final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-              launchShareDialog(context, text: analysisState.position.fen);
+              launchShareDialog(context, text: analysisState.currentPosition.fen);
             },
           ),
         if (options.gameId != null)
@@ -348,7 +351,7 @@ class _BottomBar extends ConsumerWidget {
                     .read(gameShareServiceProvider)
                     .screenshotPosition(
                       analysisState.pov,
-                      analysisState.position.fen,
+                      analysisState.currentPosition.fen,
                       analysisState.lastMove,
                     );
                 if (context.mounted) {

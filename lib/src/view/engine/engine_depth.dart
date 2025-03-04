@@ -21,87 +21,172 @@ class EngineDepth extends ConsumerWidget {
     final localEval = ref.watch(engineEvaluationProvider).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    return eval != null
-        ? AppBarTextButton(
-          onPressed: () {
-            showPopover(
-              context: context,
-              bodyBuilder: (context) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    switch (eval) {
-                      LocalEval() => _StockfishInfo(eval),
-                      CloudEval() => PlatformListTile(title: Text(context.l10n.cloudAnalysis)),
-                    },
-                  ],
+    const cloudIconAlignment = AlignmentDirectional(-0.05, 0.20);
+    final cloudIcon = Icon(Icons.cloud, size: 32, color: ColorScheme.of(context).secondary);
+    final iconTextStyle = TextStyle(
+      color: ColorScheme.of(context).onSecondary,
+      fontFeatures: const [FontFeature.tabularFigures()],
+      fontSize: 12,
+    );
+
+    return AppBarTextButton(
+      onPressed:
+          eval != null
+              ? () {
+                showPopover(
+                  context: context,
+                  bodyBuilder: (context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        switch (eval) {
+                          LocalEval() => _StockfishInfo(eval),
+                          CloudEval(:final depth) => PlatformListTile(
+                            title: Text(context.l10n.cloudAnalysis),
+                            subtitle: Text(context.l10n.depthX('$depth')),
+                          ),
+                        },
+                      ],
+                    );
+                  },
+                  direction: PopoverDirection.top,
+                  width: 240,
+                  backgroundColor:
+                      Theme.of(context).platform == TargetPlatform.android
+                          ? DialogTheme.of(context).backgroundColor ??
+                              ColorScheme.of(context).surfaceContainerHigh
+                          : CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiarySystemBackground,
+                            context,
+                          ),
+                  transitionDuration: Duration.zero,
+                  popoverTransitionBuilder: (_, child) => child,
                 );
-              },
-              direction: PopoverDirection.top,
-              width: 240,
-              backgroundColor:
-                  Theme.of(context).platform == TargetPlatform.android
-                      ? DialogTheme.of(context).backgroundColor ??
-                          ColorScheme.of(context).surfaceContainerHigh
-                      : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
-              transitionDuration: Duration.zero,
-              popoverTransitionBuilder: (_, child) => child,
-            );
-          },
-          child: _AppBarButtonChild(eval),
-        )
-        : const SizedBox.shrink();
+              }
+              : null,
+      child: switch (eval) {
+        LocalEval(:final depth) => RepaintBoundary(
+          child: Stack(
+            alignment: const Alignment(-0.06, 0.0),
+            children: [
+              CustomPaint(
+                size: const Size(28, 28),
+                painter: MicroChipPainter(ColorScheme.of(context).secondary),
+              ),
+              Text('${math.min(99, depth)}', style: iconTextStyle),
+            ],
+          ),
+        ),
+        CloudEval(:final depth) => Stack(
+          alignment: cloudIconAlignment,
+          children: [cloudIcon, Text('${math.min(99, depth)}', style: iconTextStyle)],
+        ),
+        null => Stack(
+          alignment: cloudIconAlignment,
+          children: [cloudIcon, Text('\u{2026}', style: iconTextStyle)],
+        ),
+      },
+    );
   }
 }
 
-class _AppBarButtonChild extends StatelessWidget {
-  final ClientEval eval;
+class MicroChipPainter extends CustomPainter {
+  const MicroChipPainter(this.color);
 
-  const _AppBarButtonChild(this.eval);
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return switch (eval) {
-      LocalEval(:final depth) => RepaintBoundary(
-        child: Container(
-          width: 20.0,
-          height: 20.0,
-          padding: const EdgeInsets.all(2.0),
-          decoration: BoxDecoration(
-            color: ColorScheme.of(context).secondary,
-            borderRadius: BorderRadius.circular(4.0),
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill;
+
+    const pinLength = 3.8;
+    const pinRadius = Radius.circular(3);
+
+    // draw a square with rounded corners
+    final path =
+        Path()..addRRect(
+          RRect.fromLTRBR(
+            pinLength,
+            pinLength,
+            size.width - pinLength,
+            size.height - pinLength,
+            const Radius.circular(4),
           ),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-              '${math.min(99, depth)}',
-              style: TextStyle(
-                color: ColorScheme.of(context).onSecondary,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
-            ),
+        );
+
+    final chipSide = size.width - pinLength * 2;
+    final pinsMargin = (chipSide - chipSide * 0.6) / 2;
+    final pinWidth = chipSide / 10;
+    final pinSpacing = (chipSide - (pinsMargin * 2) - 3 * pinWidth) / 2;
+    // draw left pins
+    for (var i = 0; i < 3; i++) {
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            0,
+            pinLength + pinsMargin + i * (pinWidth + pinSpacing),
+            pinLength,
+            pinWidth,
           ),
+          topLeft: pinRadius,
+          bottomLeft: pinRadius,
         ),
-      ),
-      CloudEval(:final depth) => Stack(
-        alignment: const AlignmentDirectional(-0.05, 0.15),
-        children: [
-          Icon(Icons.cloud, size: 30, color: ColorScheme.of(context).secondary),
-          Text(
-            '${math.min(99, depth)}',
-            style: TextStyle(
-              color: ColorScheme.of(context).onSecondary,
-              fontFeatures: const [FontFeature.tabularFigures()],
-              fontSize: 12,
-            ),
+      );
+    }
+    // draw right pins
+    for (var i = 0; i < 3; i++) {
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            size.width - pinLength,
+            pinLength + pinsMargin + i * (pinWidth + pinSpacing),
+            pinLength,
+            pinWidth,
           ),
-        ],
-      ),
-    };
+          topRight: pinRadius,
+          bottomRight: pinRadius,
+        ),
+      );
+    }
+    // draw top pins
+    for (var i = 0; i < 3; i++) {
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            pinLength + pinsMargin + i * (pinWidth + pinSpacing),
+            0,
+            pinWidth,
+            pinLength,
+          ),
+          topLeft: pinRadius,
+          topRight: pinRadius,
+        ),
+      );
+    }
+    // draw bottom pins
+    for (var i = 0; i < 3; i++) {
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            pinLength + pinsMargin + i * (pinWidth + pinSpacing),
+            size.height - pinLength,
+            pinWidth,
+            pinLength,
+          ),
+          bottomLeft: pinRadius,
+          bottomRight: pinRadius,
+        ),
+      );
+    }
+
+    canvas.drawPath(path, paint);
   }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _StockfishInfo extends ConsumerWidget {
