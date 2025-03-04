@@ -26,7 +26,6 @@ enum Sound {
   confirmation,
   puzzleStormEnd,
   clock,
-  genericNotify,
 }
 
 @Riverpod(keepAlive: true)
