@@ -348,7 +348,7 @@ class GameBody extends ConsumerWidget {
   }) {
     if (prev == null || !prev.hasValue || !state.hasValue) return;
     if (state.requireValue.unreadMessages > prev.requireValue.unreadMessages) {
-      ref.read(soundServiceProvider).play(Sound.confirmation);
+      ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
     }
   }
 
