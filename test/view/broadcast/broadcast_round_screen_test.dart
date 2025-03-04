@@ -923,6 +923,7 @@ const _liveRoundResponse = '''
         }
       ],
       "lastMove": "c4d5",
+      "thinkTime": 0,
       "status": "*"
     }
   ]

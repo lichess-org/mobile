@@ -309,9 +309,7 @@ class _PlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = game.players[side]!;
-    final gameStatus = game.status;
-    // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
-    final isClockActive = game.lastMove != null && side == playingSide;
+    final isClockActive = game.isOngoing && side == playingSide;
 
     return SizedBox(
       width: width,
@@ -333,7 +331,7 @@ class _PlayerWidget extends StatelessWidget {
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
-                  gameStatus.resultToString(side),
+                  game.status.resultToString(side),
                   style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
