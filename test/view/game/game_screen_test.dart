@@ -487,7 +487,9 @@ void main() {
     group('Enabled', () {
       testWidgets('onNewMessage', (WidgetTester tester) async {
         final mockSoundService = MockSoundService();
-        when(() => mockSoundService.play(Sound.confirmation)).thenAnswer((_) async {});
+        when(
+          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
+        ).thenAnswer((_) async {});
         final fakeSocket = FakeWebSocketChannel();
         await createTestGame(
           fakeSocket,
@@ -497,7 +499,9 @@ void main() {
         );
         fakeSocket.addIncomingMessages(['{"t":"message","d":{"u":"Magnus","t":"Hello!"}}']);
         await tester.pump(const Duration(milliseconds: 100));
-        verify(() => mockSoundService.play(Sound.confirmation)).called(1);
+        verify(
+          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
+        ).called(1);
       });
     });
 
