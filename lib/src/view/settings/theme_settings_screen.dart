@@ -366,25 +366,29 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Chessboard.fixed(
-        size: size,
-        orientation: Side.white,
-        lastMove: const NormalMove(from: Square.e2, to: Square.e4),
-        fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes:
-            <Shape>{
-              Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
-              Arrow(
-                color: boardPrefs.shapeColor.color,
-                orig: Square.fromName('b8'),
-                dest: Square.fromName('c6'),
-              ),
-            }.lock,
-        settings: boardPrefs.toBoardSettings().copyWith(
-          brightness: brightness,
-          hue: hue,
-          borderRadius: Styles.boardBorderRadius,
-          boxShadow: boardShadows,
+      child: BrightnessHueFilter(
+        brightness: brightness,
+        hue: hue,
+        child: Chessboard.fixed(
+          size: size,
+          orientation: Side.white,
+          lastMove: const NormalMove(from: Square.e2, to: Square.e4),
+          fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+          shapes:
+              <Shape>{
+                Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
+                Arrow(
+                  color: boardPrefs.shapeColor.color,
+                  orig: Square.fromName('b8'),
+                  dest: Square.fromName('c6'),
+                ),
+              }.lock,
+          settings: boardPrefs.toBoardSettings().copyWith(
+            brightness: kBoardDefaultBrightnessFilter,
+            hue: kBoardDefaultHueFilter,
+            borderRadius: Styles.boardBorderRadius,
+            boxShadow: boardShadows,
+          ),
         ),
       ),
     );
