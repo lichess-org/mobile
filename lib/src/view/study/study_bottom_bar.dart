@@ -293,7 +293,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: '${state.study.getChapterIndex(chapter.id)} ',
+                    text: '${state.study.getChapterIndex(chapter.id) + 1} ',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   TextSpan(text: chapter.name),
