@@ -97,16 +97,34 @@ class MicroChipPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
+    const pinLength = 3.5;
+    const pinRadius = Radius.circular(3);
+    const innerRimWidth = 1.5;
+    const outerRimWidth = 2.0;
+
+    final fillPaint =
         Paint()
           ..color = color
           ..style = PaintingStyle.fill;
+    final strokePaint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = outerRimWidth;
 
-    const pinLength = 3.8;
-    const pinRadius = Radius.circular(3);
+    final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth / 2;
 
-    // draw a square with rounded corners
-    final path =
+    final innerSquarePath =
+        Path()..addRect(
+          Rect.fromLTRB(
+            pinLength + innerRimWidth + outerRimWidth / 2,
+            pinLength + innerRimWidth + outerRimWidth / 2,
+            innerSquareSize,
+            innerSquareSize,
+          ),
+        );
+
+    final outerRimPath =
         Path()..addRRect(
           RRect.fromLTRBR(
             pinLength,
@@ -117,13 +135,14 @@ class MicroChipPainter extends CustomPainter {
           ),
         );
 
+    final pinsPath = Path();
     final chipSide = size.width - pinLength * 2;
     final pinsMargin = (chipSide - chipSide * 0.6) / 2;
     final pinWidth = chipSide / 10;
     final pinSpacing = (chipSide - (pinsMargin * 2) - 3 * pinWidth) / 2;
     // draw left pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             0,
@@ -138,7 +157,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw right pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             size.width - pinLength,
@@ -153,7 +172,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw top pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             pinLength + pinsMargin + i * (pinWidth + pinSpacing),
@@ -168,7 +187,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw bottom pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             pinLength + pinsMargin + i * (pinWidth + pinSpacing),
@@ -182,7 +201,9 @@ class MicroChipPainter extends CustomPainter {
       );
     }
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(outerRimPath, strokePaint);
+    canvas.drawPath(pinsPath, fillPaint);
+    canvas.drawPath(innerSquarePath, fillPaint);
   }
 
   @override
