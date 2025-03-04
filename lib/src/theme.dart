@@ -129,6 +129,11 @@ extension CustomThemeBuildContext on BuildContext {
     textTheme: cupertinoTextTheme(themeDark.colorScheme),
   );
 
+  final cupertinoFloatingActionButtonTheme = FloatingActionButtonThemeData(
+    backgroundColor: themeLight.colorScheme.secondaryFixedDim,
+    foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
+  );
+
   return (
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
@@ -146,6 +151,7 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? BottomSheetThemeData(backgroundColor: lightCupertino.scaffoldBackgroundColor)
               : null,
+      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme:
           isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
@@ -173,6 +179,7 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? BottomSheetThemeData(backgroundColor: darkCupertino.scaffoldBackgroundColor)
               : null,
+      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
       progressIndicatorTheme: kProgressIndicatorTheme,
