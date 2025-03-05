@@ -238,6 +238,10 @@ extension CustomThemeBuildContext on BuildContext {
               ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
               : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
+      foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,
+    ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
     menuTheme:
         isIOS
