@@ -3703,43 +3703,13 @@ class AppLocalizationsSl extends AppLocalizations {
   String get playChessEverywhere => 'Igraj šah kjerkoli';
 
   @override
-  String get asFreeAsLichess => 'Brezplačen kot lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Razvit zaradi ljubezni do šaha, ne denarja';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Vsak dobi vse funkcije zastonj';
-
-  @override
-  String get zeroAdvertisement => 'Brez oglasov';
-
-  @override
-  String get fullFeatured => 'Polna funkcionalnost';
-
-  @override
-  String get phoneAndTablet => 'Telefon in tablica';
-
-  @override
-  String get bulletBlitzClassical => 'Hitropotezno, pospešeno, klasično';
-
-  @override
-  String get correspondenceChess => 'Dopisni šah';
-
-  @override
-  String get onlineAndOfflinePlay => 'Igranje s povezavo ali brez povezave';
 
   @override
   String get viewTheSolution => 'Poglej rešitev';
 
   @override
-  String get followAndChallengeFriends => 'Sledi in izzovi prijatelje';
-
-  @override
   String get noChallenges => 'Ni izzivov.';
-
-  @override
-  String get gameAnalysis => 'Analiza igre';
 
   @override
   String xHostsY(String param1, String param2) {

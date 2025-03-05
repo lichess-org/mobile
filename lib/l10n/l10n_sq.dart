@@ -3655,43 +3655,13 @@ class AppLocalizationsSq extends AppLocalizations {
   String get playChessEverywhere => 'Luani shah kudo';
 
   @override
-  String get asFreeAsLichess => 'I lirë, si Lichess-i';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Ndërtuar nga dashuria për shahun, jo për paranë';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Gjithkush merr falas krejt veçoritë';
-
-  @override
-  String get zeroAdvertisement => 'Zero reklama';
-
-  @override
-  String get fullFeatured => 'I plotë';
-
-  @override
-  String get phoneAndTablet => 'Telefon dhe tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Plumb, blic, klasik';
-
-  @override
-  String get correspondenceChess => 'Shah në korrespodencë';
-
-  @override
-  String get onlineAndOfflinePlay => 'Lojë në internet dhe jashtë tij';
 
   @override
   String get viewTheSolution => 'Shihni zgjidhjen';
 
   @override
-  String get followAndChallengeFriends => 'Ndiqni dhe sfidoni shokë';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Analiza e lojës';
 
   @override
   String xHostsY(String param1, String param2) {

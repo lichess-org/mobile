@@ -3655,43 +3655,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get playChessEverywhere => 'Spela schack var du vill';
 
   @override
-  String get asFreeAsLichess => 'Lika gratis som lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Byggt med kärlek till schack, inte pengar';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Alla får alla funktioner gratis';
-
-  @override
-  String get zeroAdvertisement => 'Ingen reklam';
-
-  @override
-  String get fullFeatured => 'Alla funktioner';
-
-  @override
-  String get phoneAndTablet => 'Mobil och platta';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blixt och klassiskt';
-
-  @override
-  String get correspondenceChess => 'Korrespondensschack';
-
-  @override
-  String get onlineAndOfflinePlay => 'Spela uppkopplad eller nedkopplad';
 
   @override
   String get viewTheSolution => 'Visa lösningen';
 
   @override
-  String get followAndChallengeFriends => 'Följ och utmana vänner';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Partianalys';
 
   @override
   String xHostsY(String param1, String param2) {

@@ -3679,43 +3679,13 @@ class AppLocalizationsRo extends AppLocalizations {
   String get playChessEverywhere => 'Joacă șah oriunde';
 
   @override
-  String get asFreeAsLichess => 'Gratis ca Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Creat din dragoste pentru șah, nu pentru bani';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Toată lumea are access la toate opțiunile, gratuit';
-
-  @override
-  String get zeroAdvertisement => 'Zero reclame';
-
-  @override
-  String get fullFeatured => 'Toate opțiunile';
-
-  @override
-  String get phoneAndTablet => 'Telefon și tabletă';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz și clasic';
-
-  @override
-  String get correspondenceChess => 'Șah prin corespondență';
-
-  @override
-  String get onlineAndOfflinePlay => 'Joc online și offline';
 
   @override
   String get viewTheSolution => 'Vezi soluția';
 
   @override
-  String get followAndChallengeFriends => 'Urmărește și provoacă-ți prietenii';
-
-  @override
   String get noChallenges => 'Nicio provocare.';
-
-  @override
-  String get gameAnalysis => 'Analiza jocului';
 
   @override
   String xHostsY(String param1, String param2) {

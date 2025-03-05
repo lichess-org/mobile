@@ -3633,43 +3633,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get playChessEverywhere => 'Bermain catur dimanapun';
 
   @override
-  String get asFreeAsLichess => 'Gratis seperti lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Dibuat atas dasar cinta terhadap catur, bukan uang';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Semua pengguna mendapatkan seluruh fitur dengan gratis';
-
-  @override
-  String get zeroAdvertisement => 'Tanpa iklan';
-
-  @override
-  String get fullFeatured => 'Fitur lengkap';
-
-  @override
-  String get phoneAndTablet => 'Telefon genggam dan tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Superkilat, kilat, klasik';
-
-  @override
-  String get correspondenceChess => 'Catur korespondensi';
-
-  @override
-  String get onlineAndOfflinePlay => 'Permainan saat online dan offline';
 
   @override
   String get viewTheSolution => 'Lihat jawaban';
 
   @override
-  String get followAndChallengeFriends => 'Mengikuti dan menantang teman';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Analisa Permainan';
 
   @override
   String xHostsY(String param1, String param2) {

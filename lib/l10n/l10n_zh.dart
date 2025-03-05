@@ -3631,43 +3631,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playChessEverywhere => '在任何地方下棋！';
 
   @override
-  String get asFreeAsLichess => 'Lichess 永远免费';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => '不是为了钱，而是因为对国际象棋的热爱而创建的';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => '每个人都可以免费使用所有功能';
-
-  @override
-  String get zeroAdvertisement => '没有广告';
-
-  @override
-  String get fullFeatured => '功能全面';
-
-  @override
-  String get phoneAndTablet => '手机和平板电脑';
-
-  @override
-  String get bulletBlitzClassical => '快棋与慢棋';
-
-  @override
-  String get correspondenceChess => '非即时比赛';
-
-  @override
-  String get onlineAndOfflinePlay => '在线和离线下棋';
 
   @override
   String get viewTheSolution => '看解答';
 
   @override
-  String get followAndChallengeFriends => '关注并挑战朋友';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => '棋局分析';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -9239,40 +9209,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get playChessEverywhere => '隨處下棋！';
 
   @override
-  String get asFreeAsLichess => '完全、永遠免費。';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => '不是為了錢，是為了西洋棋所創建。';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => '每個人都能免費使用所有功能';
 
   @override
-  String get zeroAdvertisement => '沒有廣告';
-
-  @override
-  String get fullFeatured => '功能全面';
-
-  @override
-  String get phoneAndTablet => '手機和平板電腦';
-
-  @override
-  String get bulletBlitzClassical => '快或慢都隨你！';
-
-  @override
-  String get correspondenceChess => '通訊賽';
-
-  @override
-  String get onlineAndOfflinePlay => '線上或離線下棋';
-
-  @override
   String get viewTheSolution => '看解答';
-
-  @override
-  String get followAndChallengeFriends => '添加好友並與他們對戰';
-
-  @override
-  String get gameAnalysis => '棋局分析研究';
 
   @override
   String xHostsY(String param1, String param2) {

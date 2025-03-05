@@ -3747,43 +3747,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get playChessEverywhere => 'العب الشطرنج فى كل مكان';
 
   @override
-  String get asFreeAsLichess => 'مجاني';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'تم بناؤه حباً في الشطرنج, وليس المال :)';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'كل المميزات لكل الأعضاء مجاناً';
-
-  @override
-  String get zeroAdvertisement => 'لا دعايات';
-
-  @override
-  String get fullFeatured => 'كل المميزات';
-
-  @override
-  String get phoneAndTablet => 'للجوالات والأجهزة اللوحية';
-
-  @override
-  String get bulletBlitzClassical => 'بالتوقيت المفضل لك';
-
-  @override
-  String get correspondenceChess => 'شطرنج بالمراسلة';
-
-  @override
-  String get onlineAndOfflinePlay => 'على الإنترنت أو بدون اتصال';
 
   @override
   String get viewTheSolution => 'الحل';
 
   @override
-  String get followAndChallengeFriends => 'تابع وتحدى أصدقاءك';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'تحليل المباراة';
 
   @override
   String xHostsY(String param1, String param2) {

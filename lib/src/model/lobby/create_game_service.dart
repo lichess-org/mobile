@@ -204,6 +204,7 @@ class CreateGameService {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
     } catch (e) {
       _log.warning('Failed to cancel seek: $e', e);
+      rethrow;
     }
   }
 
@@ -215,6 +216,7 @@ class CreateGameService {
         await ChallengeRepository(lichessClient).cancel(id);
       } catch (e) {
         _log.warning('Failed to cancel challenge: $e', e);
+        rethrow;
       }
     }
   }

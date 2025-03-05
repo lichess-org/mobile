@@ -3721,43 +3721,13 @@ class AppLocalizationsGa extends AppLocalizations {
   String get playChessEverywhere => 'Imir ficheall i ngach áit';
 
   @override
-  String get asFreeAsLichess => 'Chomh saor le Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Cruthaithe mar gheall ar ghrá don fhicheall, ní d\'airgead';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Faigheann gach duine gach gné saor in aisce';
-
-  @override
-  String get zeroAdvertisement => 'Gan fógraíocht';
-
-  @override
-  String get fullFeatured => 'Uirlisí iomlána le feiceáil';
-
-  @override
-  String get phoneAndTablet => 'Fón agus táibléad';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, clasaiceach';
-
-  @override
-  String get correspondenceChess => 'Ficheall chomhfhreagrais';
-
-  @override
-  String get onlineAndOfflinePlay => 'Imirt ar líne agus as líne';
 
   @override
   String get viewTheSolution => 'Féach ar an réiteach';
 
   @override
-  String get followAndChallengeFriends => 'Lean agus tabhair dúshlán do chairde';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Anailís cluichí';
 
   @override
   String xHostsY(String param1, String param2) {

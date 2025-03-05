@@ -3655,43 +3655,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get playChessEverywhere => 'Играј шах секаде';
 
   @override
-  String get asFreeAsLichess => 'Бесплатно како lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Направено од љубовта кон шахот, а не за пари';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Секој ги добива сите функции бесплатно';
-
-  @override
-  String get zeroAdvertisement => 'Без реклами';
-
-  @override
-  String get fullFeatured => 'Со сите можности';
-
-  @override
-  String get phoneAndTablet => 'Телефон и таблет';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, classical';
-
-  @override
-  String get correspondenceChess => 'Дописен шах';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online и offline игра';
 
   @override
   String get viewTheSolution => 'Види го решението';
 
   @override
-  String get followAndChallengeFriends => 'Следи и предизвикај пријатели';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Анализи на партијата';
 
   @override
   String xHostsY(String param1, String param2) {

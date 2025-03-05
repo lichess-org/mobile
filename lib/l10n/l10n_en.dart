@@ -3653,43 +3653,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playChessEverywhere => 'Play chess everywhere';
 
   @override
-  String get asFreeAsLichess => 'As free as Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Built for the love of chess, not money';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Everybody gets all features for free';
-
-  @override
-  String get zeroAdvertisement => 'Zero advertisement';
-
-  @override
-  String get fullFeatured => 'Full featured';
-
-  @override
-  String get phoneAndTablet => 'Phone and tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, classical';
-
-  @override
-  String get correspondenceChess => 'Correspondence chess';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online and offline play';
 
   @override
   String get viewTheSolution => 'View the solution';
 
   @override
-  String get followAndChallengeFriends => 'Follow and challenge friends';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Game analysis';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -9351,40 +9321,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get playChessEverywhere => 'Play chess everywhere';
 
   @override
-  String get asFreeAsLichess => 'As free as Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Built for the love of chess, not money';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Everybody gets all features for free';
 
   @override
-  String get zeroAdvertisement => 'Zero advertisement';
-
-  @override
-  String get fullFeatured => 'Full featured';
-
-  @override
-  String get phoneAndTablet => 'Phone and tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, classical';
-
-  @override
-  String get correspondenceChess => 'Correspondence chess';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online and offline play';
-
-  @override
   String get viewTheSolution => 'View the solution';
-
-  @override
-  String get followAndChallengeFriends => 'Follow and challenge friends';
-
-  @override
-  String get gameAnalysis => 'Game analysis';
 
   @override
   String xHostsY(String param1, String param2) {

@@ -3703,43 +3703,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get playChessEverywhere => 'Грайте в шахи будь-де';
 
   @override
-  String get asFreeAsLichess => 'Безкоштовний, як і Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Створений з любов\'ю до шахів, не до грошей';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Усі можливості безкоштовні для всіх';
-
-  @override
-  String get zeroAdvertisement => 'Без реклами';
-
-  @override
-  String get fullFeatured => 'Повнофункціональний';
-
-  @override
-  String get phoneAndTablet => 'Для смартфонів та планшетів';
-
-  @override
-  String get bulletBlitzClassical => 'Куля, бліц, класичні шахи';
-
-  @override
-  String get correspondenceChess => 'Заочні';
-
-  @override
-  String get onlineAndOfflinePlay => 'Гра онлайн та офлайн';
 
   @override
   String get viewTheSolution => 'Дивитись рішення';
 
   @override
-  String get followAndChallengeFriends => 'Спостерігайте і кидайте виклик друзям';
-
-  @override
   String get noChallenges => 'Немає викликів.';
-
-  @override
-  String get gameAnalysis => 'Аналіз гри';
 
   @override
   String xHostsY(String param1, String param2) {

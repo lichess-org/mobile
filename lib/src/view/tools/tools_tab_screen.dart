@@ -50,7 +50,7 @@ class ToolsTabScreen extends ConsumerWidget {
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
-        controller: puzzlesScrollController,
+        controller: toolsScrollController,
         slivers: [
           CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
@@ -191,6 +191,6 @@ class _Body extends ConsumerWidget {
 
     return Theme.of(context).platform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(controller: puzzlesScrollController, children: content);
+        : ListView(controller: toolsScrollController, children: content);
   }
 }

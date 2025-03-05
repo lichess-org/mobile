@@ -408,7 +408,7 @@ class _BottomBar extends ConsumerWidget {
             },
           ),
         BottomBarButton(
-          label: context.l10n.gameAnalysis,
+          label: context.l10n.analysis,
           onTap:
               gameCursor.hasValue
                   ? () {
