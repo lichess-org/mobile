@@ -109,7 +109,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case AsyncData(:final value):
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: _Title(variant: value.variant),
           appBarActions: appBarActions,
           body: _Body(
@@ -128,7 +128,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case _:
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: const _Title(variant: Variant.standard),
           appBarActions: appBarActions,
           body: const Center(child: CircularProgressIndicator()),

@@ -70,7 +70,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: const Text(''),
           body: DefaultTabController(
             length: 1,
@@ -93,7 +93,7 @@ class _StudyScreenLoader extends ConsumerWidget {
         );
       case _:
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: Shimmer(
             child: ShimmerLoading(
               isLoading: true,
@@ -185,7 +185,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      enableBackgroundFilterBlur: false,
+      appBarEnableBackgroundFilterBlur: false,
       appBarTitle: AutoSizeText(
         widget.studyState.currentChapterTitle,
         maxLines: 2,

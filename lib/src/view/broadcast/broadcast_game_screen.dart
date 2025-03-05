@@ -120,7 +120,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     );
 
     return PlatformScaffold(
-      enableBackgroundFilterBlur: false,
+      appBarEnableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
         if (asyncIsEngineAvailable.valueOrNull == true)
