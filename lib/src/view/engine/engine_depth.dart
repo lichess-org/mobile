@@ -21,8 +21,8 @@ class EngineDepth extends ConsumerWidget {
     final localEval = ref.watch(engineEvaluationProvider).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    const cloudSize = 31.0;
-    const microChipSize = 29.0;
+    const cloudSize = 30.0;
+    const microChipSize = 28.0;
     const cloudIconAlignment = AlignmentDirectional(0.0, 0.20);
     final cloudIcon = Icon(Icons.cloud, size: cloudSize, color: ColorScheme.of(context).secondary);
     final iconTextStyle = TextStyle(
@@ -120,9 +120,9 @@ class MicroChipPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const pinLength = 3.5;
-    const pinRadius = Radius.circular(3);
-    const innerRimWidth = 1.5;
+    const pinLength = 4.0;
+    const pinRadius = Radius.circular(1);
+    const innerRimWidth = 1.0;
     const outerRimWidth = 2.0;
 
     final fillPaint =
@@ -138,12 +138,13 @@ class MicroChipPainter extends CustomPainter {
     final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth / 2;
 
     final innerSquarePath =
-        Path()..addRect(
-          Rect.fromLTRB(
+        Path()..addRRect(
+          RRect.fromLTRBR(
             pinLength + innerRimWidth + outerRimWidth / 2,
             pinLength + innerRimWidth + outerRimWidth / 2,
             innerSquareSize,
             innerSquareSize,
+            const Radius.circular(2),
           ),
         );
 
