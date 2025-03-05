@@ -21,8 +21,10 @@ class EngineDepth extends ConsumerWidget {
     final localEval = ref.watch(engineEvaluationProvider).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    const cloudIconAlignment = AlignmentDirectional(-0.05, 0.20);
-    final cloudIcon = Icon(Icons.cloud, size: 32, color: ColorScheme.of(context).secondary);
+    const cloudSize = 31.0;
+    const microChipSize = 29.0;
+    const cloudIconAlignment = AlignmentDirectional(0.0, 0.20);
+    final cloudIcon = Icon(Icons.cloud, size: cloudSize, color: ColorScheme.of(context).secondary);
     final iconTextStyle = TextStyle(
       color: ColorScheme.of(context).onSecondary,
       fontFeatures: const [FontFeature.tabularFigures()],
@@ -67,23 +69,44 @@ class EngineDepth extends ConsumerWidget {
       child: switch (eval) {
         LocalEval(:final depth) => RepaintBoundary(
           child: Stack(
-            alignment: const Alignment(-0.06, 0.0),
             children: [
               CustomPaint(
-                size: const Size(28, 28),
+                size: const Size(microChipSize, microChipSize),
                 painter: MicroChipPainter(ColorScheme.of(context).secondary),
               ),
-              Text('${math.min(99, depth)}', style: iconTextStyle),
+              SizedBox(
+                width: microChipSize,
+                height: microChipSize,
+                child: Center(child: Text('${math.min(99, depth)}', style: iconTextStyle)),
+              ),
             ],
           ),
         ),
         CloudEval(:final depth) => Stack(
-          alignment: cloudIconAlignment,
-          children: [cloudIcon, Text('${math.min(99, depth)}', style: iconTextStyle)],
+          children: [
+            cloudIcon,
+            SizedBox(
+              width: cloudSize,
+              height: cloudSize,
+              child: Align(
+                alignment: cloudIconAlignment,
+                child: Text('${math.min(99, depth)}', style: iconTextStyle),
+              ),
+            ),
+          ],
         ),
         null => Stack(
-          alignment: cloudIconAlignment,
-          children: [cloudIcon, Text('\u{2026}', style: iconTextStyle)],
+          children: [
+            cloudIcon,
+            SizedBox(
+              width: cloudSize,
+              height: cloudSize,
+              child: Align(
+                alignment: cloudIconAlignment,
+                child: Text('\u{2026}', style: iconTextStyle),
+              ),
+            ),
+          ],
         ),
       },
     );
