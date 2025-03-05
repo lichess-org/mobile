@@ -3653,43 +3653,13 @@ class AppLocalizationsFo extends AppLocalizations {
   String get playChessEverywhere => 'Telva allastaðni';
 
   @override
-  String get asFreeAsLichess => 'Ókeypis sum Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Bygt við alski til telving, ikki pengar';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Øll fáa allar hentleikar ókeypis';
-
-  @override
-  String get zeroAdvertisement => 'Ongar lýsingar';
-
-  @override
-  String get fullFeatured => 'Við øllum hentleikum';
-
-  @override
-  String get phoneAndTablet => 'Snildfon og teldil';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, snartalv, vanligt';
-
-  @override
-  String get correspondenceChess => 'Brævtalv';
-
-  @override
-  String get onlineAndOfflinePlay => 'Telva á netinum og uttan net';
 
   @override
   String get viewTheSolution => 'Síggj svarið';
 
   @override
-  String get followAndChallengeFriends => 'Fylg vinum og bjóða teimum av';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Talvgreining';
 
   @override
   String xHostsY(String param1, String param2) {

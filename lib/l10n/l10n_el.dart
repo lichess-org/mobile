@@ -3655,43 +3655,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get playChessEverywhere => 'Παίξτε σκάκι παντού';
 
   @override
-  String get asFreeAsLichess => 'Δωρεάν';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Φτιαγμένο από αγάπη για το σκάκι, όχι για τα χρήματα';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Όλα τα στοιχεία είναι δωρεάν για όλους';
-
-  @override
-  String get zeroAdvertisement => 'Χωρίς διαφημίσεις';
-
-  @override
-  String get fullFeatured => 'Πλήρη χαρακτηριστικά';
-
-  @override
-  String get phoneAndTablet => 'Τηλέφωνο και τάμπλετ';
-
-  @override
-  String get bulletBlitzClassical => 'Υπερταχέα, ταχέα, κλασικά';
-
-  @override
-  String get correspondenceChess => 'Σκάκι δι\' αλληλογραφίας';
-
-  @override
-  String get onlineAndOfflinePlay => 'Παιχνίδια διαδικτυακώς και εκτός σύνδεσης';
 
   @override
   String get viewTheSolution => 'Δείτε τη λύση';
 
   @override
-  String get followAndChallengeFriends => 'Ακολουθήστε και προκαλέστε φίλους';
-
-  @override
   String get noChallenges => 'Δεν έχετε προκλήσεις.';
-
-  @override
-  String get gameAnalysis => 'Ανάλυση παιχνιδιού';
 
   @override
   String xHostsY(String param1, String param2) {

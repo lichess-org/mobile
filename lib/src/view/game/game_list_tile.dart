@@ -297,7 +297,7 @@ class GameContextMenu extends ConsumerWidget {
                       type: SnackBarType.info,
                     );
                   },
-          child: Text(context.l10n.gameAnalysis),
+          child: Text(context.l10n.analysis),
         ),
         if (isLoggedIn && onPressedBookmark != null)
           BottomSheetContextMenuAction(

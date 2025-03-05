@@ -534,7 +534,7 @@ class _GameBottomBar extends ConsumerWidget {
               )
             else if (gameState.game.finished)
               BottomBarButton(
-                label: context.l10n.gameAnalysis,
+                label: context.l10n.analysis,
                 icon: Icons.biotech,
                 onTap: () {
                   Navigator.of(

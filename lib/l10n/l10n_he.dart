@@ -3703,43 +3703,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get playChessEverywhere => 'שחקו שחמט בכל מקום';
 
   @override
-  String get asFreeAsLichess => 'חינמי לחלוטין, ממש כמו האתר!';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'נבנה בגלל אהבה למשחק, לא כדי להרוויח כסף';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'כולם מקבלים את כל התוכן בחינם';
-
-  @override
-  String get zeroAdvertisement => 'אפס פרסומות';
-
-  @override
-  String get fullFeatured => 'מאפיינים';
-
-  @override
-  String get phoneAndTablet => 'טלפון וטאבלט';
-
-  @override
-  String get bulletBlitzClassical => 'קליע, בזק, קלאסי';
-
-  @override
-  String get correspondenceChess => 'שחמט בהתכתבות';
-
-  @override
-  String get onlineAndOfflinePlay => 'שחקו עם או בלי חיבור לאינטרנט';
 
   @override
   String get viewTheSolution => 'הראה פתרון';
 
   @override
-  String get followAndChallengeFriends => 'עקבו אחר חברים והזמינו אותם למשחק';
-
-  @override
   String get noChallenges => 'אין הזמנות למשחק.';
-
-  @override
-  String get gameAnalysis => 'ניתוח המשחק';
 
   @override
   String xHostsY(String param1, String param2) {

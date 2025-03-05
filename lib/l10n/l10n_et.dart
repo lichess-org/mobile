@@ -3655,43 +3655,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get playChessEverywhere => 'Mängi malet kõikjal';
 
   @override
-  String get asFreeAsLichess => 'Tasuta nagu Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Ehitatud armastusest male, mitte raha vastu';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Kõik funktsioonid on kõigile tasuta';
-
-  @override
-  String get zeroAdvertisement => 'Mitte ühtegi reklaami';
-
-  @override
-  String get fullFeatured => 'Kõik omadused';
-
-  @override
-  String get phoneAndTablet => 'Telefon ja tahvelarvuti';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, klassikaline';
-
-  @override
-  String get correspondenceChess => 'Kirimale';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online ja offline mängud';
 
   @override
   String get viewTheSolution => 'Vaata lahendust';
 
   @override
-  String get followAndChallengeFriends => 'Jälgi sõpru ja esita väljakutseid';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Mängu analüüs';
 
   @override
   String xHostsY(String param1, String param2) {

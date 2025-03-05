@@ -3655,43 +3655,13 @@ class AppLocalizationsBg extends AppLocalizations {
   String get playChessEverywhere => 'Играй шах навсякъде';
 
   @override
-  String get asFreeAsLichess => 'Така безплатно, както lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Създадено с любов към шаха, а не към парите';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Всеки взима всички възможности безплатно';
-
-  @override
-  String get zeroAdvertisement => 'Без реклами';
-
-  @override
-  String get fullFeatured => 'С всичките му подробности';
-
-  @override
-  String get phoneAndTablet => 'Телефон и таблет';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, classical';
-
-  @override
-  String get correspondenceChess => 'Кореспондентен шах';
-
-  @override
-  String get onlineAndOfflinePlay => 'Онлайн и офлайн игра';
 
   @override
   String get viewTheSolution => 'Виж решението';
 
   @override
-  String get followAndChallengeFriends => 'Следвай и предизвикай приятели';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Анализ на партията';
 
   @override
   String xHostsY(String param1, String param2) {

@@ -3655,43 +3655,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get playChessEverywhere => 'Sakkozz bárhol!';
 
   @override
-  String get asFreeAsLichess => 'Olyannyira ingyenes mint a Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'A sakk szeretetéért építettük, nem a pénzért';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Az összes funkció ingyenes, mindenki számára';
-
-  @override
-  String get zeroAdvertisement => 'Nincsenek hirdetések';
-
-  @override
-  String get fullFeatured => 'Teljes körű funkciók';
-
-  @override
-  String get phoneAndTablet => 'Telefon vagy táblagép';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, klasszikus';
-
-  @override
-  String get correspondenceChess => 'Levelező sakk';
-
-  @override
-  String get onlineAndOfflinePlay => 'Játssz adatkapcsolattal vagy adatkapcsolat nélkül';
 
   @override
   String get viewTheSolution => 'Megoldás megtekintése';
 
   @override
-  String get followAndChallengeFriends => 'Kövesd és hívd ki  a barátaidat';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Játék elemzés';
 
   @override
   String xHostsY(String param1, String param2) {

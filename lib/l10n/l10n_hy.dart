@@ -3655,43 +3655,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get playChessEverywhere => 'Խաղացեք շախմատ ամենուր';
 
   @override
-  String get asFreeAsLichess => 'Անվճար է Lichess-ի պես';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Սիրով շախմատի, այլ ոչ` փողի հանդեպ';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Բոլոր հնարավորությունները բոլորի համար անվճար են';
-
-  @override
-  String get zeroAdvertisement => 'Ոչ մի գովազդ';
-
-  @override
-  String get fullFeatured => 'Առավելագույն ֆունկցիոնալություն';
-
-  @override
-  String get phoneAndTablet => 'Հեռախոսով և պլանշետով';
-
-  @override
-  String get bulletBlitzClassical => 'Կայծակնային, արագ, դասական';
-
-  @override
-  String get correspondenceChess => 'Նամակագրական շախմատ';
-
-  @override
-  String get onlineAndOfflinePlay => 'Առցանց և օֆլայն խաղ';
 
   @override
   String get viewTheSolution => 'Դիտել լուծումը';
 
   @override
-  String get followAndChallengeFriends => 'Բաժանորդագրություններ և խաղ ընկերների հետ';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Խաղի վերլուծություն';
 
   @override
   String xHostsY(String param1, String param2) {

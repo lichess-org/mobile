@@ -3655,43 +3655,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get playChessEverywhere => 'Pelaa shakkia kaikkialla';
 
   @override
-  String get asFreeAsLichess => 'Yhtä ilmainen ja vapaa kuin lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Rakennettu rakkaudesta shakkiin, ei rahaan';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Jokainen saa kaikki ominaisuudet ilmaiseksi';
-
-  @override
-  String get zeroAdvertisement => 'Ei mainoksia';
-
-  @override
-  String get fullFeatured => 'Kaikki ominaisuudet';
-
-  @override
-  String get phoneAndTablet => 'Puhelin ja tabletti';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, pikapeli, klassinen';
-
-  @override
-  String get correspondenceChess => 'Kirjeshakki';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online- ja offline-peli';
 
   @override
   String get viewTheSolution => 'Katso ratkaisu';
 
   @override
-  String get followAndChallengeFriends => 'Seuraa ja haasta kavereitasi';
-
-  @override
   String get noChallenges => 'Ei haasteita.';
-
-  @override
-  String get gameAnalysis => 'Pelianalyysi';
 
   @override
   String xHostsY(String param1, String param2) {
