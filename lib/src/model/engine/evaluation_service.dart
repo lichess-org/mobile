@@ -60,14 +60,12 @@ class EvaluationService {
   /// If [options] is not provided, the default options are used.
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
-  Future<void> initEngine(
+  Future<void> _initEngine(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? options,
   }) async {
-    if (_context != null || _engine != null) {
-      await disposeEngine();
-    }
+    await disposeEngine();
     _context = context;
     _engineDisposingFuture = null;
     if (options != null) _options = options;
@@ -95,7 +93,7 @@ class EvaluationService {
     EvaluationOptions? options,
   }) async {
     if (_engine == null || _context != context) {
-      await initEngine(context, engineFactory: engineFactory, options: options);
+      await _initEngine(context, engineFactory: engineFactory, options: options);
     }
   }
 
