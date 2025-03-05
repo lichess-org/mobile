@@ -92,7 +92,7 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^1.0.0
-  network_image_mock: ^2.1.1
+  mocktail_image_network: ^1.2.0
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
   sqflite_common_ffi: ^2.2.3
