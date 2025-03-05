@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -10,7 +9,6 @@ import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
   home,
@@ -161,8 +159,6 @@ class BottomNavScaffold extends ConsumerWidget {
             body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
             bottomNavigationBar: Consumer(
               builder: (context, ref, _) {
-                final isOnline =
-                    ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
                 return NavigationBar(
                   selectedIndex: currentTab.index,
                   destinations: [
@@ -172,14 +168,13 @@ class BottomNavScaffold extends ConsumerWidget {
                         label: tab.label(context.l10n),
                       ),
                   ],
-                  onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+                  onDestinationSelected: (i) => _onItemTapped(ref, i),
                 );
               },
             ),
           ),
         );
       case TargetPlatform.iOS:
-        final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
         return FullScreenBackground(
           child: CupertinoTabScaffold(
             tabBuilder: _iOSTabBuilder,
@@ -193,7 +188,7 @@ class BottomNavScaffold extends ConsumerWidget {
                     label: tab.label(context.l10n),
                   ),
               ],
-              onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
+              onTap: (i) => _onItemTapped(ref, i),
             ),
           ),
         );
@@ -208,13 +203,7 @@ class BottomNavScaffold extends ConsumerWidget {
   /// If the route is already at the first route, scroll the tab's root
   /// scrollable to the top.
   /// Otherwise, switch to the tapped tab.
-  void _onItemTapped(WidgetRef ref, int index, {required bool isOnline}) {
-    if (index == BottomTab.watch.index && !isOnline) {
-      _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
-      showPlatformSnackbar(ref.context, 'Not available in offline mode', type: SnackBarType.info);
-      return;
-    }
-
+  void _onItemTapped(WidgetRef ref, int index) {
     final curTab = ref.read(currentBottomTabProvider);
     final tappedTab = BottomTab.values[index];
 
