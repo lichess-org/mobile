@@ -8,7 +8,7 @@ part 'puzzle_streak.freezed.dart';
 typedef Streak = IList<PuzzleId>;
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleStreak with _$PuzzleStreak {
+sealed class PuzzleStreak with _$PuzzleStreak {
   const PuzzleStreak._();
 
   const factory PuzzleStreak({

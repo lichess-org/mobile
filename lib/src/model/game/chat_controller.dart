@@ -112,7 +112,7 @@ class ChatController extends _$ChatController {
 }
 
 @freezed
-class ChatState with _$ChatState {
+sealed class ChatState with _$ChatState {
   const ChatState._();
 
   const factory ChatState({required IList<Message> messages, required int unreadMessages}) =

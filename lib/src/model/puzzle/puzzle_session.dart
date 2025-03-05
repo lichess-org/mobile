@@ -78,7 +78,7 @@ class PuzzleSession extends _$PuzzleSession {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleSessionData with _$PuzzleSessionData {
+sealed class PuzzleSessionData with _$PuzzleSessionData {
   const factory PuzzleSessionData({
     required PuzzleAngle angle,
     required IList<PuzzleAttempt> attempts,
@@ -103,7 +103,7 @@ class PuzzleSessionData with _$PuzzleSessionData {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleAttempt with _$PuzzleAttempt {
+sealed class PuzzleAttempt with _$PuzzleAttempt {
   const PuzzleAttempt._();
 
   const factory PuzzleAttempt({required PuzzleId id, required bool win, int? ratingDiff}) =

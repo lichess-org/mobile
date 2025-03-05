@@ -11,7 +11,7 @@ part 'study.freezed.dart';
 part 'study.g.dart';
 
 @freezed
-class Study with _$Study {
+sealed class Study with _$Study {
   const Study._();
 
   const factory Study({
@@ -92,7 +92,7 @@ Study _studyFromPick(RequiredPick pick) {
 typedef StudyFeatures = ({bool cloneable, bool chat, bool sticky});
 
 @Freezed(fromJson: true)
-class StudyChapter with _$StudyChapter {
+sealed class StudyChapter with _$StudyChapter {
   const StudyChapter._();
 
   const factory StudyChapter({
@@ -117,7 +117,7 @@ StudyChapterFeatures studyChapterFeaturesFromJson(Map<String, Object?> json) {
 }
 
 @Freezed(fromJson: true)
-class StudyChapterSetup with _$StudyChapterSetup {
+sealed class StudyChapterSetup with _$StudyChapterSetup {
   const StudyChapterSetup._();
 
   const factory StudyChapterSetup({
@@ -136,7 +136,7 @@ Variant _variantFromJson(Map<String, Object?> json) {
 }
 
 @Freezed(fromJson: true)
-class StudyChapterMeta with _$StudyChapterMeta {
+sealed class StudyChapterMeta with _$StudyChapterMeta {
   const StudyChapterMeta._();
 
   const factory StudyChapterMeta({
@@ -149,7 +149,7 @@ class StudyChapterMeta with _$StudyChapterMeta {
 }
 
 @Freezed(fromJson: true)
-class StudyPageData with _$StudyPageData {
+sealed class StudyPageData with _$StudyPageData {
   const StudyPageData._();
 
   const factory StudyPageData({
@@ -169,7 +169,7 @@ class StudyPageData with _$StudyPageData {
 }
 
 @Freezed(fromJson: true)
-class StudyMember with _$StudyMember {
+sealed class StudyMember with _$StudyMember {
   const StudyMember._();
 
   const factory StudyMember({required LightUser user, required String role}) = _StudyMember;

@@ -7,7 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -22,8 +21,6 @@ class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsP
 
 class CorrespondenceServiceMock extends Mock implements CorrespondenceService {}
 
-class FakePlayableGame extends Fake implements PlayableGame {}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -31,10 +28,6 @@ void main() {
   final correspondenceServiceMock = CorrespondenceServiceMock();
 
   int registerDeviceCalls = 0;
-
-  setUpAll(() {
-    registerFallbackValue(FakePlayableGame());
-  });
 
   tearDown(() {
     registerDeviceCalls = 0;

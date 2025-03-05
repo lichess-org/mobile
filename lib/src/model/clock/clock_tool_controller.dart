@@ -169,7 +169,7 @@ class ClockToolController extends _$ClockToolController {
 }
 
 @freezed
-class ClockOptions with _$ClockOptions {
+sealed class ClockOptions with _$ClockOptions {
   const ClockOptions._();
 
   const factory ClockOptions({
@@ -198,7 +198,7 @@ class ClockOptions with _$ClockOptions {
 }
 
 @freezed
-class ClockState with _$ClockState {
+sealed class ClockState with _$ClockState {
   const ClockState._();
 
   const factory ClockState({
