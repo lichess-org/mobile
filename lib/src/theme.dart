@@ -12,11 +12,6 @@ const kPageTransitionsTheme = PageTransitionsTheme(
   },
 );
 
-const kProgressIndicatorTheme = ProgressIndicatorThemeData(
-  // ignore: deprecated_member_use
-  year2023: false,
-);
-
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
@@ -155,7 +150,6 @@ extension CustomThemeBuildContext on BuildContext {
       menuTheme:
           isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
-      progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
       extensions: [
         lichessCustomColors.harmonized(themeLight.colorScheme),
@@ -182,7 +176,6 @@ extension CustomThemeBuildContext on BuildContext {
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
-      progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -267,7 +260,6 @@ extension CustomThemeBuildContext on BuildContext {
       },
     ),
 
-    progressIndicatorTheme: kProgressIndicatorTheme,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
