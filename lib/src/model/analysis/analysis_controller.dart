@@ -63,8 +63,6 @@ class AnalysisController extends _$AnalysisController
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
-  Timer? _startEngineEvalTimer;
-
   @override
   @protected
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
@@ -206,7 +204,6 @@ class AnalysisController extends _$AnalysisController
     }
 
     ref.onDispose(() {
-      _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
       if (isEngineAllowed) {
         disposeEngineEvaluation();
