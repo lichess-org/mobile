@@ -580,7 +580,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                 if (tournamentSlug != null && roundSlug != null)
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                    onPressed: () async {
+                    onPressed: () {
                       launchShareDialog(
                         context,
                         uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),

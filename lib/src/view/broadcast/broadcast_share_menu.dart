@@ -7,12 +7,12 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 Future<void> showBroadcastShareMenu(
   BuildContext context,
   Broadcast broadcast,
-) async => showAdaptiveActionSheet<void>(
+) => showAdaptiveActionSheet<void>(
   context: context,
   actions: [
     BottomSheetAction(
       makeLabel: (context) => Text(broadcast.title),
-      onPressed: () async {
+      onPressed: () {
         launchShareDialog(
           context,
           uri: lichessUri('/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}'),
@@ -21,7 +21,7 @@ Future<void> showBroadcastShareMenu(
     ),
     BottomSheetAction(
       makeLabel: (context) => Text(broadcast.round.name),
-      onPressed: () async {
+      onPressed: () {
         launchShareDialog(
           context,
           uri: lichessUri(
@@ -32,7 +32,7 @@ Future<void> showBroadcastShareMenu(
     ),
     BottomSheetAction(
       makeLabel: (context) => Text('${broadcast.round.name} PGN'),
-      onPressed: () async {
+      onPressed: () {
         launchShareDialog(
           context,
           uri: lichessUri(

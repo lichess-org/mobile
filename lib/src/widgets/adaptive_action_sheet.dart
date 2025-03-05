@@ -19,7 +19,7 @@ Future<T?> showAdaptiveActionSheet<T>({
   Widget? title,
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
-}) async {
+}) {
   if (Theme.of(context).platform == TargetPlatform.iOS) {
     return showCupertinoActionSheet(
       context: context,

@@ -32,7 +32,7 @@ final testContainerMockClient = MockClient((request) async {
 
 /// Returns a [ProviderContainer] with the [httpClientFactoryProvider] configured
 /// with the given [mockClient].
-Future<ProviderContainer> lichessClientContainer(MockClient mockClient) async {
+Future<ProviderContainer> lichessClientContainer(MockClient mockClient) {
   return makeContainer(
     overrides: [
       httpClientFactoryProvider.overrideWith((ref) {

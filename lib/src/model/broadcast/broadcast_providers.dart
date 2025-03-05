@@ -84,7 +84,7 @@ BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
 class BroadcastImageWorkerFactory {
   const BroadcastImageWorkerFactory();
 
-  Future<ImageColorWorker> spawn() async {
+  Future<ImageColorWorker> spawn() {
     return ImageColorWorker.spawn();
   }
 }

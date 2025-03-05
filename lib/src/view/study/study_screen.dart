@@ -239,13 +239,13 @@ class _StudyMenu extends ConsumerWidget {
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
                   },
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(
                       context,
                       uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
@@ -276,7 +276,7 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () async {
+                    onPressed: () {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),

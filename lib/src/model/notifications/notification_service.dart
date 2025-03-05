@@ -172,7 +172,7 @@ class NotificationService {
   }
 
   /// Cancels/removes a notification.
-  Future<void> cancel(int id) async {
+  Future<void> cancel(int id) {
     _logger.info('canceled notification id: [$id]');
     return _notificationDisplay.cancel(id);
   }

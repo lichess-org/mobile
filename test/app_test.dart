@@ -33,7 +33,7 @@ void main() {
     tester,
   ) async {
     int tokenTestRequests = 0;
-    final mockClient = MockClient((request) async {
+    final mockClient = MockClient((request) {
       if (request.url.path == '/api/token/test') {
         tokenTestRequests++;
         return mockResponse('''

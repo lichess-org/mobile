@@ -52,7 +52,7 @@ Future<int> getDbSizeInBytes(Ref ref) async {
 }
 
 /// Opens the app database.
-Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
+Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(

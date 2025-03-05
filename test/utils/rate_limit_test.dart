@@ -59,7 +59,7 @@ void main() {
   });
 
   group('throttle', () {
-    test('should call the callback immediately', () async {
+    test('should call the callback immediately', () {
       final throttler = Throttler(const Duration(milliseconds: 100));
       var called = false;
       throttler(() {

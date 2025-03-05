@@ -356,7 +356,7 @@ class _StudyFlair extends StatelessWidget {
     return (flair != null)
         ? CachedNetworkImage(
           imageUrl: lichessFlairSrc(flair!),
-          errorWidget: (_, __, ___) => iconIfNoFlair,
+          errorWidget: (_, _, _) => iconIfNoFlair,
           width: size,
           height: size,
         )

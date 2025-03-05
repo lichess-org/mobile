@@ -383,7 +383,7 @@ class BroadcastListTile extends StatelessWidget {
               width: thumbnailSize,
               cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
               fit: BoxFit.cover,
-              errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+              errorBuilder: (context, _, _) => const Icon(LichessIcons.radio_tower_lichess),
             )
             : Image(image: kDefaultBroadcastImage, width: thumbnailSize);
 

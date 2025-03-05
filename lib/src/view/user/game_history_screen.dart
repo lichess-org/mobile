@@ -391,7 +391,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
                 .when(
                   data: (user) => perfFilter(availablePerfs(user)),
                   loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-                  error: (_, __) => perfFilter(gamePerfs),
+                  error: (_, _) => perfFilter(gamePerfs),
                 )
             : perfFilter(gamePerfs);
 

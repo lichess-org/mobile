@@ -188,7 +188,7 @@ class CreateGameService {
   ///
   /// Returns the created challenge immediately. If the challenge is accepted,
   /// a notification will be sent to the user when the game starts.
-  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) async {
+  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) {
     assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
 
     _log.info('Creating new correspondence challenge');

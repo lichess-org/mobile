@@ -9,7 +9,7 @@ class RelationRepository {
 
   final LichessClient client;
 
-  Future<IList<User>> getFollowing() async {
+  Future<IList<User>> getFollowing() {
     return client.readNdJsonList(
       Uri(path: '/api/rel/following'),
       headers: {'Accept': 'application/x-ndjson'},

@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'relation_repository_providers.g.dart';
 
 @riverpod
-Future<IList<User>> following(Ref ref) async {
+Future<IList<User>> following(Ref ref) {
   return ref.withClientCacheFor(
     (client) => RelationRepository(client).getFollowing(),
     const Duration(hours: 1),

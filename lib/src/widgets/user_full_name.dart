@@ -109,7 +109,7 @@ class UserFullNameWidget extends ConsumerWidget {
           const SizedBox(width: 5),
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
-            errorWidget: (_, __, ___) => kEmptyWidget,
+            errorWidget: (_, _, _) => kEmptyWidget,
             width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
             height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),

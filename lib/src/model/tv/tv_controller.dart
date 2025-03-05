@@ -30,7 +30,7 @@ class TvController extends _$TvController {
   int? _socketEventVersion;
 
   @override
-  Future<TvState> build(TvChannel? channel, (GameId id, Side orientation)? initialGame) async {
+  Future<TvState> build(TvChannel? channel, (GameId id, Side orientation)? initialGame) {
     assert(channel != null || initialGame != null, 'Either a channel or a game must be provided');
     ref.onDispose(() {
       _socketSubscription?.cancel();

@@ -191,7 +191,7 @@ class PuzzleService {
             )),
 
             // we don't need to save the batch if the request failed
-            (_, __) => Result.value((data, null, null, false)),
+            (_, _) => Result.value((data, null, null, false)),
           )
           .flatMap((tuple) async {
             final (newBatch, glicko, rounds, shouldSave) = tuple;

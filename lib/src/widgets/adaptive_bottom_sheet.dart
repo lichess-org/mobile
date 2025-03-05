@@ -11,7 +11,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
   bool isScrollControlled = false,
   bool? showDragHandle,
   BoxConstraints? constraints,
-}) async {
+}) {
   return showModalBottomSheet<T>(
     context: context,
     isDismissible: isDismissible,

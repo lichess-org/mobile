@@ -37,7 +37,7 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.classical,
 });
 
-final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) {
   return ref.withClient((client) async {
     final channels = await TvRepository(client).channels();
     return _featuredChannelsSet
