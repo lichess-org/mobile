@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:network_image_mock/network_image_mock.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -46,51 +45,47 @@ final client = MockClient((request) {
 void main() {
   group('BroadcastListScreen', () {
     testWidgets('Displays broadcast tournament screen', variant: kPlatformVariant, (tester) async {
-      await mockNetworkImagesFor(() async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const BroadcastListScreen(),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-            broadcastImageWorkerFactoryProvider.overrideWith(
-              (ref) => FakeBroadcastImageWorkerFactory(),
-            ),
-          ],
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastListScreen(),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+          broadcastImageWorkerFactoryProvider.overrideWith(
+            (ref) => FakeBroadcastImageWorkerFactory(),
+          ),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // Wait for broadcast tournaments to load
-        await tester.pump(const Duration(milliseconds: 100));
+      // Load the broadcast tournaments
+      await tester.pump();
 
-        expect(find.byType(BroadcastListTile), findsAtLeast(1));
-      });
+      expect(find.byType(BroadcastListTile), findsAtLeast(1));
     });
 
     testWidgets('Scroll broadcast tournament screen', variant: kPlatformVariant, (tester) async {
-      await mockNetworkImagesFor(() async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const BroadcastListScreen(),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-            broadcastImageWorkerFactoryProvider.overrideWith(
-              (ref) => FakeBroadcastImageWorkerFactory(),
-            ),
-          ],
-        );
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastListScreen(),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+          broadcastImageWorkerFactoryProvider.overrideWith(
+            (ref) => FakeBroadcastImageWorkerFactory(),
+          ),
+        ],
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-        // Wait for broadcast tournaments to load
-        await tester.pump(const Duration(milliseconds: 100));
+      // Load the broadcast tournaments
+      await tester.pump();
 
-        await tester.scrollUntilVisible(find.byKey(const ValueKey('past')), 100.0);
-      });
+      await tester.scrollUntilVisible(find.byKey(const ValueKey('past')), 100.0);
     });
   });
 }
