@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -208,6 +209,7 @@ class _StudyMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
     return PlatformContextMenuButton(
@@ -221,14 +223,15 @@ class _StudyMenu extends ConsumerWidget {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        PlatformContextMenuAction(
-          dismissOnPress: false,
-          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
-          onPressed: () {
-            ref.read(studyControllerProvider(id).notifier).toggleLike();
-          },
-        ),
+        if (session != null)
+          PlatformContextMenuAction(
+            dismissOnPress: false,
+            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            onPressed: () {
+              ref.read(studyControllerProvider(id).notifier).toggleLike();
+            },
+          ),
         PlatformContextMenuAction(
           icon:
               Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
