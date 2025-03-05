@@ -33,7 +33,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
@@ -111,7 +111,7 @@ class ChallengeLoadingContent extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
@@ -186,7 +186,7 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
         lastMove: lastMove as NormalMove?,
         topTable: const LoadingPlayerWidget(),
         bottomTable: const LoadingPlayerWidget(),
-        showMoveListPlaceholder: true,
+        moves: const [],
       ),
     );
   }
@@ -255,7 +255,7 @@ class LoadGameError extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               errorMessage: errorMessage,
             ),
           ),
@@ -296,7 +296,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
