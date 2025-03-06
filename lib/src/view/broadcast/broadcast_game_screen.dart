@@ -635,16 +635,32 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          label: context.l10n.toggleLocalEvaluation,
-          onTap:
-              analysisPrefs.enableComputerAnalysis
-                  ? () {
-                    ref.read(ctrlProvider.notifier).toggleEngine();
-                  }
-                  : null,
-          icon: CupertinoIcons.gauge,
-          highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
+        Builder(
+          builder: (context) {
+            Future<void>? toggleFuture;
+            return FutureBuilder(
+              future: toggleFuture,
+              builder: (context, snapshot) {
+                return BottomBarButton(
+                  label: context.l10n.toggleLocalEvaluation,
+                  onTap:
+                      analysisPrefs.enableComputerAnalysis &&
+                              snapshot.connectionState == ConnectionState.done
+                          ? () async {
+                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                            try {
+                              await toggleFuture;
+                            } finally {
+                              toggleFuture = null;
+                            }
+                          }
+                          : null,
+                  icon: CupertinoIcons.gauge,
+                  highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
+                );
+              },
+            );
+          },
         ),
         BottomBarButton(
           label: context.l10n.flipBoard,
