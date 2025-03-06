@@ -38,7 +38,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     ref.onDispose(() {
       _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
-      _connectivityChangesDebouncer.dispose();
+      _connectivityChangesDebouncer.cancel();
     });
 
     _connectivitySubscription?.cancel();

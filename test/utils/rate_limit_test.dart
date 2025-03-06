@@ -45,14 +45,14 @@ void main() {
       expect(called, false);
     });
 
-    test('dispose should cancel the callback', () async {
+    test('cancel should cancel the callback', () async {
       final debouncer = Debouncer(const Duration(milliseconds: 100));
       var called = false;
       debouncer(() {
         called = true;
       });
       await Future<void>.delayed(const Duration(milliseconds: 20));
-      debouncer.dispose();
+      debouncer.cancel();
       await Future<void>.delayed(const Duration(milliseconds: 150));
       expect(called, false);
     });

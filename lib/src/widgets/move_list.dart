@@ -54,7 +54,7 @@ class _MoveListState extends ConsumerState<MoveList> {
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _debounce.cancel();
     super.dispose();
   }
 

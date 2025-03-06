@@ -105,8 +105,8 @@ mixin EngineEvaluationMixin {
   /// Disposes all resources related to the engine evaluation.
   @nonVirtual
   void disposeEngineEvaluation() {
-    _cloudEvalGetDebounce.dispose();
-    _engineEvalDebounce.dispose();
+    _cloudEvalGetDebounce.cancel();
+    _engineEvalDebounce.cancel();
     _subscription?.cancel();
     _evaluationService?.disposeEngine();
     _evaluationService = null;

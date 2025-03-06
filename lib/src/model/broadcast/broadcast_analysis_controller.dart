@@ -110,7 +110,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
-      _syncDebouncer.dispose();
+      _syncDebouncer.cancel();
       disposeEngineEvaluation();
     });
 

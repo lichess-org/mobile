@@ -74,7 +74,7 @@ class StudyController extends _$StudyController
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _socketSubscription?.cancel();
-      _likeDebouncer.dispose();
+      _likeDebouncer.cancel();
       disposeEngineEvaluation();
     });
 

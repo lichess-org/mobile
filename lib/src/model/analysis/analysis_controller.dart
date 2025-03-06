@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -60,8 +59,6 @@ class AnalysisController extends _$AnalysisController
 
   late Root _root;
   late Variant _variant;
-
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
 
   @override
   @protected
@@ -204,7 +201,6 @@ class AnalysisController extends _$AnalysisController
     }
 
     ref.onDispose(() {
-      _engineEvalDebounce.dispose();
       if (isEngineAllowed) {
         disposeEngineEvaluation();
       }

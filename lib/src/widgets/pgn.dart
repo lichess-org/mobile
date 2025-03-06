@@ -194,7 +194,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _debounce.cancel();
     _scrollTimer?.cancel();
     super.dispose();
   }
