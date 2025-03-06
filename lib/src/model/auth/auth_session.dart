@@ -29,7 +29,7 @@ class AuthSession extends _$AuthSession {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class AuthSessionState with _$AuthSessionState {
+sealed class AuthSessionState with _$AuthSessionState {
   const factory AuthSessionState({required LightUser user, required String token}) =
       _AuthSessionState;
 

@@ -232,7 +232,7 @@ class UserGameHistory extends _$UserGameHistory {
 }
 
 @freezed
-class UserGameHistoryState with _$UserGameHistoryState {
+sealed class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
     required IList<LightArchivedGameWithPov> gameList,
     required bool isLoading,
