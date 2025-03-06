@@ -34,11 +34,6 @@ class EvaluationService {
 
   Engine? _engine;
 
-  /// A future that completes once the engine is disposed.
-  ///
-  /// This is used to avoid disposing the engine twice.
-  Future<void>? _engineDisposingFuture;
-
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
     multiPv: 1,
@@ -67,7 +62,6 @@ class EvaluationService {
   }) async {
     await disposeEngine();
     _context = context;
-    _engineDisposingFuture = null;
     if (options != null) _options = options;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
@@ -107,12 +101,11 @@ class EvaluationService {
   /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
-    if (_engine == null) return Future.value();
-
-    return _engineDisposingFuture ??= _engine!.dispose().then((_) {
-      _engine = null;
-      _context = null;
-    });
+    return _engine?.dispose().then((_) {
+          _engine = null;
+          _context = null;
+        }) ??
+        Future.value();
   }
 
   /// Start the engine evaluation with the given [path] and [steps].

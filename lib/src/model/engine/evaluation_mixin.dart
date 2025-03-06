@@ -102,7 +102,7 @@ mixin EngineEvaluationMixin {
     _evaluationService = evaluationServiceFactory();
   }
 
-  /// Disposes the engine evaluation.
+  /// Disposes all resources related to the engine evaluation.
   @nonVirtual
   void disposeEngineEvaluation() {
     _cloudEvalGetDebounce.dispose();
@@ -121,7 +121,7 @@ mixin EngineEvaluationMixin {
       requestEval();
     } else {
       _stopEngineEval();
-      _evaluationService?.disposeEngine();
+      await _evaluationService?.disposeEngine();
     }
   }
 

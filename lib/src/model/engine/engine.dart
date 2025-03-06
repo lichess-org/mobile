@@ -10,10 +10,32 @@ import 'package:stockfish/stockfish.dart';
 enum EngineState { initial, loading, idle, computing, error, disposed }
 
 abstract class Engine {
+  /// The current state of the engine.
   ValueListenable<EngineState> get state;
+
+  /// The name of the engine.
   String get name;
+
+  /// Start the engine with the given [work].
   Stream<EvalResult> start(Work work);
+
+  /// Stop the engine current computation.
   void stop();
+
+  /// A future that completes once the underlying engine process is exited.
+  Future<void> get exited;
+
+  /// Whether the engine is disposed.
+  ///
+  /// This will be `true` once [dispose] is called. Once the engine is disposed, it cannot be
+  /// used anymore, and [start] and [stop] methods will throw a [StateError].
+  bool get isDisposed;
+
+  /// Dispose the engine. It cannot be used after this method is called.
+  ///
+  /// Returns the same future as [exited], that completes once the underlying engine process is exited.
+  ///
+  /// It is safe to call this method multiple times.
   Future<void> dispose();
 }
 
@@ -24,10 +46,15 @@ class StockfishEngine implements Engine {
   String _name = 'Stockfish';
   StreamSubscription<String>? _stdoutSubscription;
 
+  bool _isDisposed = false;
+
   final _state = ValueNotifier(EngineState.initial);
 
   final UCIProtocol _protocol;
   final _log = Logger('StockfishEngine');
+
+  /// A completer that completes once the underlying engine has exited.
+  final _exitCompleter = Completer<void>();
 
   @override
   ValueListenable<EngineState> get state => _state;
@@ -36,7 +63,17 @@ class StockfishEngine implements Engine {
   String get name => _name;
 
   @override
+  Future<void> get exited => _exitCompleter.future;
+
+  @override
+  bool get isDisposed => _isDisposed;
+
+  @override
   Stream<EvalResult> start(Work work) {
+    if (isDisposed) {
+      throw StateError('Engine is disposed');
+    }
+
     _log.info('engine start at ply ${work.ply} and path ${work.path}');
     _protocol.compute(work);
 
@@ -82,35 +119,31 @@ class StockfishEngine implements Engine {
     } else if (_stockfish?.state.value case StockfishState.disposed) {
       _log.info('engine disposed');
       _state.value = EngineState.disposed;
-      _state.dispose();
+      _exitCompleter.complete();
       _stockfish?.state.removeListener(_stockfishStateListener);
+      _state.dispose();
     }
   }
 
   @override
   void stop() {
+    if (isDisposed) {
+      throw StateError('Engine is disposed');
+    }
     _protocol.compute(null);
   }
 
   @override
   Future<void> dispose() {
-    _log.fine('disposing engine');
-    if (_stockfish == null || _stockfish?.state.value == StockfishState.disposed) {
-      return Future.value();
+    if (isDisposed) {
+      return exited;
     }
+    _log.fine('disposing engine');
+    _isDisposed = true;
     _stdoutSubscription?.cancel();
     _protocol.dispose();
-    final completer = Completer<void>();
-    void stateListener() {
-      if (_stockfish?.state.value case StockfishState.disposed) {
-        _stockfish?.state.removeListener(stateListener);
-        completer.complete();
-      }
-    }
-
-    _stockfish!.state.addListener(stateListener);
     _stockfish?.dispose();
-    return completer.future;
+    return exited;
   }
 }
 
