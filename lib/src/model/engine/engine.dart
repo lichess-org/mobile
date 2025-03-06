@@ -9,6 +9,11 @@ import 'package:stockfish/stockfish.dart';
 
 enum EngineState { initial, loading, idle, computing, error, disposed }
 
+/// An engine that can compute chess positions.
+///
+/// This is a high-level abstraction over a chess engine process.
+///
+/// See [StockfishEngine] for a concrete implementation.
 abstract class Engine {
   /// The current state of the engine.
   ValueListenable<EngineState> get state;
@@ -78,50 +83,62 @@ class StockfishEngine implements Engine {
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      final stockfishFuture = LichessBinding.instance.stockfishFactory();
+      try {
+        final stockfish = LichessBinding.instance.stockfishFactory();
+        _stockfish = stockfish;
 
-      stockfishFuture
-          .then((stockfish) {
-            _state.value = EngineState.loading;
-            _stockfish = stockfish;
-            _stdoutSubscription = stockfish.stdout.listen((line) {
-              _protocol.received(line);
-            });
-            stockfish.state.addListener(_stockfishStateListener);
-            _protocol.isComputing.addListener(() {
-              if (_protocol.isComputing.value) {
-                _state.value = EngineState.computing;
-              } else {
-                _state.value = EngineState.idle;
-              }
-            });
+        _state.value = EngineState.loading;
+        _stdoutSubscription = stockfish.stdout.listen((line) {
+          _protocol.received(line);
+        });
+
+        stockfish.state.addListener(_stockfishStateListener);
+
+        // Ensure the engine is ready before sending commands
+        void onReadyOnce() {
+          if (stockfish.state.value == StockfishState.ready) {
             _protocol.connected((String cmd) {
               stockfish.stdin = cmd;
             });
-            _protocol.engineName.then((name) {
-              _name = name;
-            });
-          })
-          .catchError((Object e, StackTrace s) {
-            _log.severe('error loading stockfish', e, s);
-            _state.value = EngineState.error;
-          });
+            stockfish.state.removeListener(onReadyOnce);
+          }
+        }
+
+        stockfish.state.addListener(onReadyOnce);
+
+        _protocol.isComputing.addListener(() {
+          if (_protocol.isComputing.value) {
+            _state.value = EngineState.computing;
+          } else {
+            _state.value = EngineState.idle;
+          }
+        });
+        _protocol.engineName.then((name) {
+          _name = name;
+        });
+      } catch (e, s) {
+        _log.severe('error loading stockfish', e, s);
+        _state.value = EngineState.error;
+      }
     }
 
     return _protocol.evalStream.where((e) => e.$1 == work);
   }
 
   void _stockfishStateListener() {
-    if (_stockfish?.state.value case StockfishState.ready) {
-      _state.value = EngineState.idle;
-    } else if (_stockfish?.state.value case StockfishState.error) {
-      _state.value = EngineState.error;
-    } else if (_stockfish?.state.value case StockfishState.disposed) {
-      _log.info('engine disposed');
-      _state.value = EngineState.disposed;
-      _exitCompleter.complete();
-      _stockfish?.state.removeListener(_stockfishStateListener);
-      _state.dispose();
+    switch (_stockfish?.state.value) {
+      case StockfishState.ready:
+        _state.value = EngineState.idle;
+      case StockfishState.error:
+        _state.value = EngineState.error;
+      case StockfishState.disposed:
+        _log.info('engine disposed');
+        _state.value = EngineState.disposed;
+        _exitCompleter.complete();
+        _stockfish?.state.removeListener(_stockfishStateListener);
+        _state.dispose();
+      default:
+      // do nothing
     }
   }
 
@@ -142,16 +159,20 @@ class StockfishEngine implements Engine {
     _isDisposed = true;
     _stdoutSubscription?.cancel();
     _protocol.dispose();
-    _stockfish?.dispose();
+    if (_stockfish != null) {
+      _stockfish!.dispose();
+    } else {
+      _exitCompleter.complete();
+    }
     return exited;
   }
 }
 
-/// A factory to create a [Stockfish] asynchronously.
+/// A factory to create a [Stockfish].
 ///
 /// This is useful to be able to mock [Stockfish] in tests.
 class StockfishFactory {
   const StockfishFactory();
 
-  Future<Stockfish> call() => stockfishAsync();
+  Stockfish call() => Stockfish();
 }

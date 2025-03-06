@@ -65,7 +65,6 @@ class EvaluationService {
     if (options != null) _options = options;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
-      debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
           _engine?.state.value == EngineState.disposed) {
         _state.value = _defaultState;
@@ -86,7 +85,7 @@ class EvaluationService {
     Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? options,
   }) async {
-    if (_engine == null || _context != context) {
+    if (_engine == null || _engine?.isDisposed == true || _context != context) {
       await _initEngine(context, engineFactory: engineFactory, options: options);
     }
   }
@@ -101,11 +100,7 @@ class EvaluationService {
   /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
-    return _engine?.dispose().then((_) {
-          _engine = null;
-          _context = null;
-        }) ??
-        Future.value();
+    return _engine?.dispose() ?? Future.value();
   }
 
   /// Start the engine evaluation with the given [path] and [steps].
