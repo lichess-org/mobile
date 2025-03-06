@@ -159,7 +159,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
 @freezed
 // ignore: freezed_missing_private_empty_constructor
-sealed class BroadcastPlayer with _$BroadcastPlayer {
+class BroadcastPlayer with _$BroadcastPlayer {
   const BroadcastPlayer({
     required this.name,
     required this.title,
