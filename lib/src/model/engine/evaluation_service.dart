@@ -65,6 +65,7 @@ class EvaluationService {
     if (options != null) _options = options;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
+      debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
           _engine?.state.value == EngineState.disposed) {
         _state.value = _defaultState;
