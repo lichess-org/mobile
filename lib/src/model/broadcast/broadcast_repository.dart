@@ -53,7 +53,7 @@ class BroadcastRepository {
   ) {
     return client.readJson(
       Uri(path: 'broadcast/$tournamentId/players/$playerId'),
-      mapper: _makePlayerResultsFromJson,
+      mapper: _makePlayerWithGamesFromJson,
     );
   }
 }
@@ -171,12 +171,12 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
     BroadcastGame(
       id: pick('id').asBroadcastGameIdOrThrow(),
       players: IMap({
-        Side.white: _playerFromPick(
+        Side.white: _playerWithClockFromPick(
           pick('players', 0).required(),
           isPlaying: playingSide == Side.white,
           thinkTime: thinkTime,
         ),
-        Side.black: _playerFromPick(
+        Side.black: _playerWithClockFromPick(
           pick('players', 1).required(),
           isPlaying: playingSide == Side.black,
           thinkTime: thinkTime,
@@ -191,20 +191,32 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayerWithClock _playerFromPick(
+BroadcastPlayer _playerFromPick(RequiredPick pick) {
+  return BroadcastPlayer(
+    name: pick('name').asStringOrThrow(),
+    title: pick('title').asStringOrNull(),
+    rating: pick('rating').asIntOrNull(),
+    federation: pick('fed').asStringOrNull(),
+    fideId: pick('fideId').asFideIdOrNull(),
+  );
+}
+
+BroadcastPlayerWithClock _playerWithClockFromPick(
   RequiredPick pick, {
   required bool isPlaying,
   required Duration? thinkTime,
 }) {
+  final player = _playerFromPick(pick);
   final clock = pick('clock').asDurationFromCentiSecondsOrNull();
   final updatedClock = clock != null && isPlaying ? clock - (thinkTime ?? Duration.zero) : clock;
+
   return BroadcastPlayerWithClock(
-    name: pick('name').asStringOrThrow(),
-    title: pick('title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
+    name: player.name,
+    title: player.title,
+    rating: player.rating,
     clock: (updatedClock?.isNegative ?? false) ? Duration.zero : updatedClock,
-    federation: pick('fed').asStringOrNull(),
-    fideId: pick('fideId').asFideIdOrNull(),
+    federation: player.federation,
+    fideId: player.fideId,
   );
 }
 
@@ -213,12 +225,14 @@ BroadcastPlayerWithResult _makePlayerFromJson(Map<String, dynamic> json) {
 }
 
 BroadcastPlayerWithResult _playerWithResultFromPick(RequiredPick pick) {
+  final player = _playerFromPick(pick);
+
   return BroadcastPlayerWithResult(
-    name: pick('name').asStringOrThrow(),
-    title: pick('title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    federation: pick('fed').asStringOrNull(),
-    fideId: pick('fideId').asFideIdOrNull(),
+    name: player.name,
+    title: player.title,
+    rating: player.rating,
+    federation: player.federation,
+    fideId: player.fideId,
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
@@ -226,7 +240,7 @@ BroadcastPlayerWithResult _playerWithResultFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayerWithGames _makePlayerResultsFromJson(Map<String, dynamic> json) {
+BroadcastPlayerWithGames _makePlayerWithGamesFromJson(Map<String, dynamic> json) {
   final playerWithResult = _playerWithResultFromPick(pick(json).required());
 
   return BroadcastPlayerWithGames(
@@ -272,7 +286,7 @@ BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
     color: pick('color').asSideOrThrow(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
-    opponent: _playerFromPick(
+    opponent: _playerWithClockFromPick(
       pick('opponent').required(),
       isPlaying: false,
       thinkTime: Duration.zero,
