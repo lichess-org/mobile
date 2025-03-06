@@ -40,14 +40,14 @@ class BroadcastRepository {
     return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
   }
 
-  Future<IList<BroadcastPlayerExtended>> getPlayers(BroadcastTournamentId tournamentId) {
+  Future<IList<BroadcastPlayerWithResult>> getPlayers(BroadcastTournamentId tournamentId) {
     return client.readJsonList(
       Uri(path: '/broadcast/$tournamentId/players'),
       mapper: _makePlayerFromJson,
     );
   }
 
-  Future<BroadcastPlayerResults> getPlayerResults(
+  Future<BroadcastPlayerWithGames> getPlayerResults(
     BroadcastTournamentId tournamentId,
     String playerId,
   ) {
@@ -191,14 +191,14 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayer _playerFromPick(
+BroadcastPlayerWithClock _playerFromPick(
   RequiredPick pick, {
   required bool isPlaying,
   required Duration? thinkTime,
 }) {
   final clock = pick('clock').asDurationFromCentiSecondsOrNull();
   final updatedClock = clock != null && isPlaying ? clock - (thinkTime ?? Duration.zero) : clock;
-  return BroadcastPlayer(
+  return BroadcastPlayerWithClock(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
@@ -208,12 +208,12 @@ BroadcastPlayer _playerFromPick(
   );
 }
 
-BroadcastPlayerExtended _makePlayerFromJson(Map<String, dynamic> json) {
-  return _playerExtendedFromPick(pick(json).required());
+BroadcastPlayerWithResult _makePlayerFromJson(Map<String, dynamic> json) {
+  return _playerWithResultFromPick(pick(json).required());
 }
 
-BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
-  return BroadcastPlayerExtended(
+BroadcastPlayerWithResult _playerWithResultFromPick(RequiredPick pick) {
+  return BroadcastPlayerWithResult(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
@@ -226,9 +226,9 @@ BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayerResults _makePlayerResultsFromJson(Map<String, dynamic> json) {
+BroadcastPlayerWithGames _makePlayerResultsFromJson(Map<String, dynamic> json) {
   return (
-    player: _playerExtendedFromPick(pick(json).required()),
+    player: _playerWithResultFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
     games: pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList(),
   );

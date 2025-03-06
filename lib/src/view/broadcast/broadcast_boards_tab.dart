@@ -321,13 +321,7 @@ class _PlayerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: BroadcastPlayerWidget(
-                  federation: player.federation,
-                  title: player.title,
-                  name: player.name,
-                ),
-              ),
+              Expanded(child: BroadcastPlayerWidget(player: player, showRating: false)),
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(

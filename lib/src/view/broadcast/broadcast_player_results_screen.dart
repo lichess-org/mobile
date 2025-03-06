@@ -20,32 +20,18 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreenLoading(
-    this.roundId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreenLoading({required this.roundId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreenLoading(
-        roundId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreenLoading(roundId: roundId, player: player),
     );
   }
 
@@ -54,11 +40,9 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
     final tournamentId = ref.watch(broadcastTournamentIdProvider(roundId));
 
     return switch (tournamentId) {
-      AsyncData(:final value) => BroadcastPlayerResultsScreen(
-        value,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
+      AsyncData(value: final tournamentId) => BroadcastPlayerResultsScreen(
+        tournamentId: tournamentId,
+        player: player,
       ),
       AsyncError(:final error) => PlatformScaffold(
         appBarTitle: const Text(''),
@@ -74,40 +58,26 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
 
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreen(
-    this.tournamentId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreen({required this.tournamentId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastTournamentId tournamentId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreen(
-        tournamentId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreen(tournamentId: tournamentId, player: player),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBarTitle: BroadcastPlayerWidget(title: playerTitle, name: playerName),
-      body: _Body(tournamentId, playerId),
+      appBarTitle: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+      body: _Body(tournamentId, player.id),
     );
   }
 }
@@ -288,11 +258,7 @@ class _Body extends ConsumerWidget {
                       ),
                       Expanded(
                         flex: 5,
-                        child: BroadcastPlayerWidget(
-                          federation: playerResult.opponent.federation,
-                          title: playerResult.opponent.title,
-                          name: playerResult.opponent.name,
-                        ),
+                        child: BroadcastPlayerWidget(player: player, showRating: false),
                       ),
                       Expanded(
                         flex: 3,

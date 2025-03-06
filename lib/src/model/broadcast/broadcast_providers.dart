@@ -58,7 +58,7 @@ Future<BroadcastRoundResponse> broadcastRound(Ref ref, BroadcastRoundId roundId)
 }
 
 @riverpod
-Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
+Future<IList<BroadcastPlayerWithResult>> broadcastPlayers(
   Ref ref,
   BroadcastTournamentId tournamentId,
 ) {
@@ -66,7 +66,7 @@ Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
 }
 
 @riverpod
-Future<BroadcastPlayerResults> broadcastPlayerResult(
+Future<BroadcastPlayerWithGames> broadcastPlayerResult(
   Ref ref,
   BroadcastTournamentId broadcastTournamentId,
   String playerId,

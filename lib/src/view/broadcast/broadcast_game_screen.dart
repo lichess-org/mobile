@@ -441,20 +441,8 @@ class _PlayerWidget extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).push(
               (tournamentId != null)
-                  ? BroadcastPlayerResultsScreen.buildRoute(
-                    context,
-                    tournamentId!,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  )
-                  : BroadcastPlayerResultsScreenLoading.buildRoute(
-                    context,
-                    roundId,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  ),
+                  ? BroadcastPlayerResultsScreen.buildRoute(context, tournamentId!, player)
+                  : BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, player),
             );
           },
           child: Container(
@@ -471,10 +459,7 @@ class _PlayerWidget extends ConsumerWidget {
                 ],
                 Expanded(
                   child: BroadcastPlayerWidget(
-                    federation: player.federation,
-                    title: player.title,
-                    name: player.name,
-                    rating: player.rating,
+                    player: player,
                     textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),

@@ -43,7 +43,7 @@ const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextO
 class PlayersList extends ConsumerStatefulWidget {
   const PlayersList(this.players, this.tournamentId);
 
-  final IList<BroadcastPlayerExtended> players;
+  final IList<BroadcastPlayerWithResult> players;
   final BroadcastTournamentId tournamentId;
 
   @override
@@ -51,7 +51,7 @@ class PlayersList extends ConsumerStatefulWidget {
 }
 
 class _PlayersListState extends ConsumerState<PlayersList> {
-  late IList<BroadcastPlayerExtended> players;
+  late IList<BroadcastPlayerWithResult> players;
   late _SortingTypes currentSort;
   bool reverse = false;
 
@@ -76,13 +76,13 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
       _SortingTypes.player =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) => a.name.compareTo(b.name),
-      _SortingTypes.elo => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
+        (BroadcastPlayerWithResult a, BroadcastPlayerWithResult b) => a.name.compareTo(b.name),
+      _SortingTypes.elo => (BroadcastPlayerWithResult a, BroadcastPlayerWithResult b) {
         if (a.rating == null) return 1;
         if (b.rating == null) return -1;
         return b.rating!.compareTo(a.rating!);
       },
-      _SortingTypes.score => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
+      _SortingTypes.score => (BroadcastPlayerWithResult a, BroadcastPlayerWithResult b) {
         if (a.score == null) return 1;
         if (b.score == null) return -1;
 
@@ -177,15 +177,9 @@ class _PlayersListState extends ConsumerState<PlayersList> {
 
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                BroadcastPlayerResultsScreen.buildRoute(
-                  context,
-                  widget.tournamentId,
-                  player.fideId != null ? player.fideId.toString() : player.name,
-                  playerTitle: player.title,
-                  playerName: player.name,
-                ),
-              );
+              Navigator.of(
+                context,
+              ).push(BroadcastPlayerResultsScreen.buildRoute(context, widget.tournamentId, player));
             },
             child: ColoredBox(
               color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
@@ -195,11 +189,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                   Expanded(
                     child: Padding(
                       padding: _kTableRowPadding,
-                      child: BroadcastPlayerWidget(
-                        federation: player.federation,
-                        title: player.title,
-                        name: player.name,
-                      ),
+                      child: BroadcastPlayerWidget(player: player, showRating: false),
                     ),
                   ),
                   SizedBox(

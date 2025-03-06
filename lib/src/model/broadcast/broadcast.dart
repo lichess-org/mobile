@@ -140,7 +140,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required IMap<Side, BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -158,37 +158,76 @@ sealed class BroadcastGame with _$BroadcastGame {
 }
 
 @freezed
+// ignore: freezed_missing_private_empty_constructor
 sealed class BroadcastPlayer with _$BroadcastPlayer {
-  const factory BroadcastPlayer({
-    required String name,
-    required String? title,
-    required int? rating,
-    required Duration? clock,
-    required String? federation,
-    required FideId? fideId,
-  }) = _BroadcastPlayer;
+  const BroadcastPlayer({
+    required this.name,
+    required this.title,
+    required this.rating,
+    required this.federation,
+    required this.fideId,
+  });
+
+  // ignore: annotate_overrides
+  final String name;
+  // ignore: annotate_overrides
+  final String? title;
+  // ignore: annotate_overrides
+  final int? rating;
+  // ignore: annotate_overrides
+  final String? federation;
+  // ignore: annotate_overrides
+  final FideId? fideId;
+
+  String get id => (fideId != null) ? fideId!.toString() : name;
 }
 
 @freezed
-sealed class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
-  const factory BroadcastPlayerExtended({
-    required String name,
-    required String? title,
-    required int? rating,
-    required String? federation,
-    required FideId? fideId,
-    required int played,
-    required double? score,
-    required int? ratingDiff,
-    required int? performance,
-  }) = _BroadcastPlayerExtended;
+// ignore: freezed_missing_private_empty_constructor
+class BroadcastPlayerWithClock extends BroadcastPlayer with _$BroadcastPlayerWithClock {
+  const BroadcastPlayerWithClock({
+    required super.name,
+    required super.title,
+    required super.rating,
+    required this.clock,
+    required super.federation,
+    required super.fideId,
+  });
+
+  // ignore: annotate_overrides
+  final Duration? clock;
+}
+
+@freezed
+// ignore: freezed_missing_private_empty_constructor
+class BroadcastPlayerWithResult extends BroadcastPlayer with _$BroadcastPlayerWithResult {
+  const BroadcastPlayerWithResult({
+    required super.name,
+    required super.title,
+    required super.rating,
+    required super.federation,
+    required super.fideId,
+    required this.played,
+    required this.score,
+    required this.ratingDiff,
+    required this.performance,
+  });
+
+  // ignore: annotate_overrides
+  final int played;
+  // ignore: annotate_overrides
+  final double? score;
+  // ignore: annotate_overrides
+  final int? ratingDiff;
+  // ignore: annotate_overrides
+  final int? performance;
 }
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerResults =
+typedef BroadcastPlayerWithGames =
     ({
-      BroadcastPlayerExtended player,
+      BroadcastPlayerWithResult player,
       BroadcastFideData fideData,
       IList<BroadcastPlayerResultData> games,
     });
