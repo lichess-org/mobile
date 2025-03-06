@@ -227,8 +227,18 @@ BroadcastPlayerWithResult _playerWithResultFromPick(RequiredPick pick) {
 }
 
 BroadcastPlayerWithGames _makePlayerResultsFromJson(Map<String, dynamic> json) {
-  return (
-    player: _playerWithResultFromPick(pick(json).required()),
+  final playerWithResult = _playerWithResultFromPick(pick(json).required());
+
+  return BroadcastPlayerWithGames(
+    name: playerWithResult.name,
+    title: playerWithResult.title,
+    rating: playerWithResult.rating,
+    federation: playerWithResult.federation,
+    fideId: playerWithResult.fideId,
+    played: playerWithResult.played,
+    score: playerWithResult.score,
+    ratingDiff: playerWithResult.ratingDiff,
+    performance: playerWithResult.performance,
     fideData: _fideDataFromPick(pick(json, 'fide')),
     games: pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList(),
   );

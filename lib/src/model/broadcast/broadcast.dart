@@ -225,12 +225,28 @@ class BroadcastPlayerWithResult extends BroadcastPlayer with _$BroadcastPlayerWi
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerWithGames =
-    ({
-      BroadcastPlayerWithResult player,
-      BroadcastFideData fideData,
-      IList<BroadcastPlayerResultData> games,
-    });
+@freezed
+// ignore: freezed_missing_private_empty_constructor
+class BroadcastPlayerWithGames extends BroadcastPlayerWithResult with _$BroadcastPlayerWithGames {
+  const BroadcastPlayerWithGames({
+    required super.name,
+    required super.title,
+    required super.rating,
+    required super.federation,
+    required super.fideId,
+    required super.played,
+    required super.score,
+    required super.ratingDiff,
+    required super.performance,
+    required this.fideData,
+    required this.games,
+  });
+
+  // ignore: annotate_overrides
+  final BroadcastFideData fideData;
+  // ignore: annotate_overrides
+  final IList<BroadcastPlayerResultData> games;
+}
 
 enum BroadcastPoints { one, half, zero }
 

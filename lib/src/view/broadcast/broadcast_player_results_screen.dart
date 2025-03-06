@@ -92,20 +92,20 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playersResults = ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
+    final player = ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
 
-    switch (playersResults) {
-      case AsyncData(value: final playerResults):
-        final player = playerResults.player;
-        final fideData = playerResults.fideData;
-        final showRatingDiff = playerResults.games.any((result) => result.ratingDiff != null);
+    switch (player) {
+      case AsyncData(value: final player):
+        final fideData = player.fideData;
+        final games = player.games;
+        final showRatingDiff = games.any((result) => result.ratingDiff != null);
         final statWidth =
             (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
         const cardSpacing = 10.0;
-        final indexWidth = max(8.0 + playerResults.games.length.toString().length * 10.0, 28.0);
+        final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
         return ListView.builder(
-          itemCount: playerResults.games.length + 1,
+          itemCount: games.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Padding(
@@ -228,7 +228,7 @@ class _Body extends ConsumerWidget {
               );
             }
 
-            final playerResult = playerResults.games[index - 1];
+            final playerResult = games[index - 1];
 
             return GestureDetector(
               onTap: () {
