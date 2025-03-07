@@ -452,7 +452,7 @@ class StudyController extends _$StudyController
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState with _$StudyState implements EvaluationMixinState {
+class StudyState with _$StudyState implements EvaluationMixinState {
   const StudyState._();
 
   const factory StudyState({
@@ -581,7 +581,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState {
 }
 
 @freezed
-sealed class StudyCurrentNode with _$StudyCurrentNode {
+class StudyCurrentNode with _$StudyCurrentNode {
   const StudyCurrentNode._();
 
   const factory StudyCurrentNode({

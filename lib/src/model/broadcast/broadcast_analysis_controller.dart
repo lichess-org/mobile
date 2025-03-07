@@ -514,7 +514,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 }
 
 @freezed
-sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
+class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({

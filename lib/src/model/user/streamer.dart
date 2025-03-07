@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 part 'streamer.freezed.dart';
 
 @freezed
-sealed class Streamer with _$Streamer {
+class Streamer with _$Streamer {
   const factory Streamer({
     required UserId id,
     required String username,

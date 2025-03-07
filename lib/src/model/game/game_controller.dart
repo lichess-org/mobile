@@ -932,7 +932,7 @@ class GameController extends _$GameController {
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState {
+class GameState with _$GameState {
   const GameState._();
 
   const factory GameState({

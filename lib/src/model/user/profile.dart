@@ -8,7 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile.freezed.dart';
 
 @freezed
-sealed class Profile with _$Profile {
+class Profile with _$Profile {
   const factory Profile({
     String? country,
     String? location,
@@ -59,7 +59,7 @@ sealed class Profile with _$Profile {
 }
 
 @freezed
-sealed class SocialLink with _$SocialLink {
+class SocialLink with _$SocialLink {
   const factory SocialLink({required LinkSite? site, required Uri url}) = _SocialLink;
 
   const SocialLink._();

@@ -35,7 +35,7 @@ class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePref
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class GamePrefs with _$GamePrefs implements Serializable {
+class GamePrefs with _$GamePrefs implements Serializable {
   const factory GamePrefs({bool? enableChat, bool? blindfoldMode}) = _GamePrefs;
 
   static const defaults = GamePrefs(enableChat: true);

@@ -49,7 +49,7 @@ class PuzzleServiceFactory {
 }
 
 @freezed
-sealed class PuzzleContext with _$PuzzleContext {
+class PuzzleContext with _$PuzzleContext {
   const factory PuzzleContext({
     required Puzzle puzzle,
     required PuzzleAngle angle,

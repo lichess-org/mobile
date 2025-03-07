@@ -224,13 +224,13 @@ class EngineEvaluation extends _$EngineEvaluation {
 }
 
 @freezed
-sealed class EvaluationContext with _$EvaluationContext {
+class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
       _EvaluationContext;
 }
 
 @freezed
-sealed class EvaluationOptions with _$EvaluationOptions {
+class EvaluationOptions with _$EvaluationOptions {
   const factory EvaluationOptions({
     required int multiPv,
     required int cores,

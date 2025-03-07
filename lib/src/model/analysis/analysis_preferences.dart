@@ -53,7 +53,7 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
+class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({

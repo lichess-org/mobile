@@ -28,7 +28,7 @@ typedef ClockData = ({Duration initial, Duration increment});
 /// See also [PlayableGame] for a game owned by the current user and that can be
 /// played unless finished.
 @Freezed(fromJson: true, toJson: true)
-sealed class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements BaseGame {
+class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements BaseGame {
   const ArchivedGame._();
 
   @Assert('steps.isNotEmpty')
@@ -75,7 +75,7 @@ typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
 /// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
-sealed class LightArchivedGame with _$LightArchivedGame {
+class LightArchivedGame with _$LightArchivedGame {
   const LightArchivedGame._();
 
   const factory LightArchivedGame({

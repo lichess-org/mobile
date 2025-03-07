@@ -505,7 +505,7 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
+class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   const PuzzleState._();
 
   const factory PuzzleState({

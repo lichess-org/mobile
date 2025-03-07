@@ -588,7 +588,7 @@ abstract class ViewNode {
 
 /// An immutable view of a [Root] node.
 @freezed
-sealed class ViewRoot extends ViewNode with _$ViewRoot {
+class ViewRoot extends ViewNode with _$ViewRoot {
   const ViewRoot._();
   const factory ViewRoot({
     required Position position,
@@ -620,7 +620,7 @@ sealed class ViewRoot extends ViewNode with _$ViewRoot {
 
 /// An immutable view of a [Branch] node.
 @freezed
-sealed class ViewBranch extends ViewNode with _$ViewBranch {
+class ViewBranch extends ViewNode with _$ViewBranch {
   const ViewBranch._();
 
   const factory ViewBranch({
