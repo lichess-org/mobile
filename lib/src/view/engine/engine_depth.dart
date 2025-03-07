@@ -120,10 +120,10 @@ class MicroChipPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const pinLength = 4.0;
+    const pinLength = 3.5;
     const pinRadius = Radius.circular(1);
     const innerRimWidth = 1.0;
-    const outerRimWidth = 2.0;
+    const outerRimWidth = 2.5;
 
     final fillPaint =
         Paint()
