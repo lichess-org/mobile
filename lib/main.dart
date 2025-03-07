@@ -23,6 +23,9 @@ Future<void> main() async {
     await androidDisplayInitialization(widgetsBinding);
   }
 
+  final view = widgetsBinding.platformDispatcher.views.first;
+  await setupOrientation(MediaQueryData.fromView(view).size);
+
   await preloadPieceImages();
 
   await setupFirstLaunch();

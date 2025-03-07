@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/orientation_mode.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
@@ -141,13 +142,6 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
     _logger.fine('Device does not support core palette: $e');
   }
 
-  // lock orientation to portrait on android phones
-  final view = widgetsBinding.platformDispatcher.views.first;
-  final data = MediaQueryData.fromView(view);
-  if (data.size.shortestSide < FormFactor.tablet) {
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  }
-
   // Sets edge-to-edge system UI mode on Android 12+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
@@ -172,4 +166,12 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
+}
+
+/// Sets the screen orientation based on the device form factor.
+Future<void> setupOrientation(Size size) {
+  if (size.shortestSide < FormFactor.tablet) {
+    return OrientationMode.portraitUp.apply();
+  }
+  return OrientationMode.allOrientations.apply();
 }
