@@ -15,6 +15,7 @@ const puzzleTTL = Duration(days: 60);
 const corresGameTTL = Duration(days: 60);
 const gameTTL = Duration(days: 90);
 const chatReadMessagesTTL = Duration(days: 60);
+const httpLogTTL = Duration(days: 7);
 
 const kStorageAnonId = '**anonymous**';
 
@@ -56,7 +57,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 3,
+      version: 4,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -67,6 +68,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _deleteOldEntries(db, 'correspondence_game', corresGameTTL),
           _deleteOldEntries(db, 'game', gameTTL),
           _deleteOldEntries(db, 'chat_read_messages', chatReadMessagesTTL),
+          _deleteOldEntries(db, 'http_log', httpLogTTL),
         ]);
       },
       onCreate: (db, version) async {
@@ -76,6 +78,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
+        _createHttpLogTableV1(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -85,6 +88,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 3) {
           _updatePuzzleBatchTableToV3(batch);
+        }
+        if (oldVersion < 4) {
+          _createHttpLogTableV1(batch);
         }
         await batch.commit();
       },
@@ -170,6 +176,22 @@ void _createChatReadMessagesTableV1(Batch batch) {
     lastModified TEXT NOT NULL,
     nbRead INTEGER NOT NULL,
     PRIMARY KEY (id)
+  )
+    ''');
+}
+
+void _createHttpLogTableV1(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS http_log');
+  batch.execute('''
+    CREATE TABLE http_log(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    httpLogId TEXT NOT NULL UNIQUE,
+    requestDateTime TEXT NOT NULL,
+    requestMethod TEXT NOT NULL,
+    requestUrl TEXT NOT NULL,
+    responseCode INTEGER,
+    responseDateTime TEXT,
+    lastModified TEXT NOT NULL
   )
     ''');
 }
