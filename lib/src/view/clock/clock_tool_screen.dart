@@ -170,18 +170,19 @@ class ClockTile extends ConsumerWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 24,
-            left: 24,
-            child: RotatedBox(
-              quarterTurns: 2,
-              child: _ClockDisplay(
-                clockState: clockState,
-                playerType: playerType,
-                clockStyle: clockStyle,
+          if (orientation == Orientation.portrait)
+            Positioned(
+              top: 24,
+              left: 24,
+              child: RotatedBox(
+                quarterTurns: 2,
+                child: _ClockDisplay(
+                  clockState: clockState,
+                  playerType: playerType,
+                  clockStyle: clockStyle,
+                ),
               ),
             ),
-          ),
           Positioned(
             bottom: MediaQuery.paddingOf(context).bottom + 48.0,
             child: AnimatedOpacity(
