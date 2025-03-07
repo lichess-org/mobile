@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/orientation_mode.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -21,8 +23,12 @@ class ClockToolScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ImmersiveModeWidget(
-      child: PopScope(canPop: false, child: Scaffold(body: _Body())),
+    return FocusDetector(
+      onFocusGained: OrientationMode.clockToolScreen.apply,
+      onFocusLost: OrientationMode.restoreLast,
+      child: const ImmersiveModeWidget(
+        child: PopScope(canPop: false, child: Scaffold(body: _Body())),
+      ),
     );
   }
 }
