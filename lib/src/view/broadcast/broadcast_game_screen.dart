@@ -538,9 +538,9 @@ class _Clock extends StatelessWidget {
       style: TextStyle(
         color:
             isClockActive
-                ? ColorScheme.of(context).tertiaryContainer
+                ? ColorScheme.of(context).onTertiaryContainer
                 : isSideToMove
-                ? ColorScheme.of(context).secondaryContainer
+                ? ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
