@@ -645,7 +645,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                   label: context.l10n.toggleLocalEvaluation,
                   onTap:
                       analysisPrefs.enableComputerAnalysis &&
-                              snapshot.connectionState == ConnectionState.done
+                              snapshot.connectionState != ConnectionState.waiting
                           ? () async {
                             toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
                             try {

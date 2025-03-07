@@ -16,19 +16,20 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:meta/meta.dart';
 
-/// The debounce delay for sending `evalGet` to the server.
+/// The debounce delay for requesting an eval.
 ///
 /// This value was empirically determined to avoid sending requests during a fast rewind or fast
 /// forward of moves.
-const kRequestCloudEvalDebounceDelay = Duration(milliseconds: 300);
+const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 
-/// The debounce delay for starting the local engine evaluation.
+/// The debounce delay for starting the local engine evaluation in case we assume the cloud eval
+/// will be available.
 ///
-/// This delay must be superior to the `kRequestCloudEvalDebounceDelay` to avoid running the local engine
+/// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine
 /// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
 /// 'evalGet/evalHit' round trip gets a chance to complete before starting the local engine, even
 /// with reasonably high network latency.
-const kRequestEngineEvalDebounceDelay = Duration(milliseconds: 900);
+const kStartLocalEngineDebounceDelay = Duration(milliseconds: 800);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -46,6 +47,21 @@ abstract class EvaluationMixinState {
   /// Current position in the position tree. Can be `null` to support illegal position that are
   /// found in studies.
   Position? get currentPosition;
+
+  /// Whether to delay the local engine evaluation to give time to get the cloud eval.
+  ///
+  /// By default, this should be `false`, which means the local engine evaluation is started at the
+  /// same time as the cloud evaluation is requested, after a debounce delay.
+  ///
+  /// This is the most common use case, because most of the time the cloud eval is not available
+  /// except on opening positions.
+  ///
+  /// However, on some cases, we know the cloud evaluations are available, as for instance in a broadcast.
+  /// So this can be set to `true` to delay the local engine evaluation in order to save battery.
+  /// The local engine will be started with a higher delay which gives time to get the cloud
+  /// eval during a socket round trip. If the cloud eval is available the [EvaluationService] will
+  /// detect it and not run the local engine.
+  bool get delayLocalEngine;
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -77,8 +93,8 @@ mixin EngineEvaluationMixin {
   SocketClient get socketClient;
   Node get positionTree;
 
-  final _cloudEvalGetDebounce = Debouncer(kRequestCloudEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kRequestEngineEvalDebounceDelay);
+  final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
+  final _engineEvalDebounce = Debouncer(kStartLocalEngineDebounceDelay);
 
   StreamSubscription<SocketEvent>? _subscription;
 
@@ -159,24 +175,32 @@ mixin EngineEvaluationMixin {
   /// Requests an engine evaluation if available.
   ///
   /// This sends an `evalGet` event to the server to get the cloud evaluation and starts the local
-  /// engine evaluation after an additional delay. The delay should be enough to get the cloud eval
-  /// during a socket round trip. If the cloud eval is available the [EvaluationService] will detect
-  /// it and not run the local engine, in order to save battery.
+  /// engine evaluation.
+  ///
+  /// If [EvaluationMixinState.delayLocalEngine] is `true`, the local engine evaluation will be
+  /// delayed to give time to get the cloud eval.
   ///
   /// The evaluation will not be requested if the engine is not available by the context or the
   /// user preferences.
   ///
-  /// Socket messages are also debounced to avoid sending too many `evalGet` to the server.
+  /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
+  /// moves.
   @nonVirtual
   void requestEval() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
+      if (!evaluationState.delayLocalEngine) {
+        _startEngineEval();
+      }
     });
-    _engineEvalDebounce(() {
-      _startEngineEval();
-    });
+
+    if (evaluationState.delayLocalEngine) {
+      _engineEvalDebounce(() {
+        _startEngineEval();
+      });
+    }
   }
 
   void _handleSocketEvent(SocketEvent event) {

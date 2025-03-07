@@ -95,18 +95,16 @@ class EngineDepth extends ConsumerWidget {
             ),
           ],
         ),
-        null => Stack(
-          children: [
-            cloudIcon,
-            SizedBox(
-              width: cloudSize,
-              height: cloudSize,
-              child: Align(
-                alignment: cloudIconAlignment,
-                child: Text('\u{2026}', style: iconTextStyle),
-              ),
+        null => SizedBox(
+          width: cloudSize,
+          height: cloudSize,
+          child: Align(
+            alignment: cloudIconAlignment,
+            child: Text(
+              '\u{2026}',
+              style: iconTextStyle.copyWith(color: ColorScheme.of(context).onSurface),
             ),
-          ],
+          ),
         ),
       },
     );
