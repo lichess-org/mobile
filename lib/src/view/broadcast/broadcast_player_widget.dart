@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
 class BroadcastPlayerWidget extends ConsumerWidget {
   const BroadcastPlayerWidget({
-    this.federation,
-    required this.title,
-    required this.name,
-    this.rating,
+    required this.player,
+    this.showFederation = true,
+    this.showRating = true,
     this.textStyle,
   });
 
-  final String? federation;
-  final String? title;
-  final int? rating;
-  final String name;
+  final BroadcastPlayer player;
+  final bool showFederation;
+  final bool showRating;
   final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final federation = player.federation;
+    final title = player.title;
+    final name = player.name;
+    final rating = player.rating;
+
     return Row(
       children: [
         if (federation != null) ...[
@@ -27,7 +31,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
         ],
         if (title != null) ...[
           Text(
-            title!,
+            title,
             style: TextStyle(
               color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
               fontWeight: FontWeight.bold,

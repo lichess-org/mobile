@@ -140,7 +140,7 @@ class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required IMap<Side, BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -159,52 +159,59 @@ class BroadcastGame with _$BroadcastGame {
 
 @freezed
 class BroadcastPlayer with _$BroadcastPlayer {
+  const BroadcastPlayer._();
+
   const factory BroadcastPlayer({
     required String name,
     required String? title,
     required int? rating,
-    required Duration? clock,
     required String? federation,
     required FideId? fideId,
   }) = _BroadcastPlayer;
+
+  String get id => (fideId != null) ? fideId.toString() : name;
 }
 
 @freezed
-class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
-  const factory BroadcastPlayerExtended({
-    required String name,
-    required String? title,
-    required int? rating,
-    required String? federation,
-    required FideId? fideId,
+class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
+  const factory BroadcastPlayerWithClock({
+    required BroadcastPlayer player,
+    required Duration? clock,
+  }) = _BroadcastPlayerWithClock;
+}
+
+@freezed
+class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
+  const factory BroadcastPlayerWithOverallResult({
+    required BroadcastPlayer player,
     required int played,
     required double? score,
     required int? ratingDiff,
     required int? performance,
-  }) = _BroadcastPlayerExtended;
+  }) = _BroadcastPlayerWithOverallResult;
 }
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerResults =
+typedef BroadcastPlayerWithGameResults =
     ({
-      BroadcastPlayerExtended player,
+      BroadcastPlayerWithOverallResult player,
       BroadcastFideData fideData,
-      IList<BroadcastPlayerResultData> games,
+      IList<BroadcastPlayerGameResult> games,
     });
 
 enum BroadcastPoints { one, half, zero }
 
 @freezed
-class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
-  const factory BroadcastPlayerResultData({
+class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
+  const factory BroadcastPlayerGameResult({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
     required BroadcastPoints? points,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
-  }) = _BroadcastPlayerResult;
+  }) = _BroadcastPlayerGameResult;
 }
 
 enum RoundStatus { live, finished, upcoming }
