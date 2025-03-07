@@ -18,7 +18,7 @@ import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-/// Creates a test app to test engine evaluation with the [AnalysisScreen] and the given [testBody].
+/// Creates a test app to test engine evaluation with the [AnalysisScreen].
 Future<void> makeEngineTestApp(
   WidgetTester tester, {
   GameId? gameId,

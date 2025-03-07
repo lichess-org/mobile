@@ -503,6 +503,9 @@ class StudyState with _$StudyState implements EvaluationMixinState {
   IMap<Square, ISet<Square>> get validMoves =>
       currentNode.position != null ? makeLegalMoves(currentNode.position!) : const IMap.empty();
 
+  @override
+  bool get delayLocalEngine => false;
+
   /// Whether the engine is available for evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>

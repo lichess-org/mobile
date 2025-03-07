@@ -717,6 +717,12 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position, isChess960: variant == Variant.chess960);
 
+  /// Whether to delay the local engine evaluation.
+  ///
+  /// Cloud evaluations are most likely available for the opening moves.
+  @override
+  bool get delayLocalEngine => variant != Variant.fromPosition && currentPosition.ply < 20;
+
   /// Whether the user can request server analysis.
   ///
   /// It must be a lichess game, which is finished and not already analyzed.
