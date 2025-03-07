@@ -44,29 +44,28 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
+
+    final enableComputerAnalysis = analysisState.isComputerAnalysisAllowedAndEnabled;
     final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
     final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
-    final evalBestMoves =
-        enableComputerAnalysis
-            ? ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves))
-            : null;
-
     final currentNode = analysisState.currentNode;
-    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
 
-    final bestMoves = enableComputerAnalysis ? evalBestMoves ?? currentNode.eval?.bestMoves : null;
-
-    final sanMove = currentNode.sanMove;
-
+    final localBestMoves =
+        analysisState.isEngineAvailable(enginePrefs) && showBestMoveArrow
+            ? ref.watch(engineEvaluationProvider.select((value) => value.eval?.bestMoves))
+            : null;
+    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && analysisState.isEngineAvailable(enginePrefs) && bestMoves != null
+        bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,
               boardPrefs.pieceSet.assets,
             )
             : ISet();
+
+    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
+    final sanMove = currentNode.sanMove;
 
     return Chessboard(
       size: widget.boardSize,

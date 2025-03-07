@@ -146,24 +146,11 @@ class EvaluationService {
     // cancel evaluation if we already have an interesting eval
     final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
     switch (cachedEval) {
-      // we have a local eval
-      case final LocalEval localEval:
-        // if the search time is greater than the current search time, don't evaluate again but
-        // update the engine state with the local eval
-        if (localEval.searchTime >= _options.searchTime) {
-          _state.value = (
-            engineName: _state.value.engineName,
-            state: _state.value.state,
-            eval: localEval,
-          );
-          return null;
-        }
-      // we have a cloud eval, no need to evaluate
+      // if the search time is greater than the current search time, don't evaluate again
+      case final LocalEval localEval when localEval.searchTime >= _options.searchTime:
       case CloudEval _:
-        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
         return null;
-      // no eval, continue
-      case null:
+      case _:
         break;
     }
 
@@ -183,6 +170,10 @@ class EvaluationService {
 
   void stop() {
     _engine?.stop();
+  }
+
+  void resetEval() {
+    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
   }
 }
 
@@ -204,7 +195,7 @@ typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEva
 class EngineEvaluation extends _$EngineEvaluation {
   @override
   EngineEvaluationState build() {
-    final listenable = ref.watch(evaluationServiceProvider).state;
+    final listenable = ref.read(evaluationServiceProvider).state;
 
     listenable.addListener(_listener);
 

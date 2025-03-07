@@ -189,6 +189,8 @@ mixin EngineEvaluationMixin {
   void requestEval() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
+    _evaluationService?.resetEval();
+
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
       if (!evaluationState.delayLocalEngine) {

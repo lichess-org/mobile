@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
@@ -18,13 +19,19 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final (engineName: _, eval: localEval, state: engineState) = ref.watch(
+      engineEvaluationProvider,
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     const cloudSize = 30.0;
     const microChipSize = 28.0;
     const cloudIconAlignment = AlignmentDirectional(0.0, 0.20);
-    final cloudIcon = Icon(Icons.cloud, size: cloudSize, color: ColorScheme.of(context).secondary);
+    final cloudIcon = Icon(
+      Icons.cloud,
+      size: cloudSize,
+      color: ColorScheme.of(context).secondary.withValues(alpha: 0.7),
+    );
     final iconTextStyle = TextStyle(
       color: ColorScheme.of(context).onSecondary,
       fontFeatures: const [FontFeature.tabularFigures()],
@@ -72,7 +79,11 @@ class EngineDepth extends ConsumerWidget {
             children: [
               CustomPaint(
                 size: const Size(microChipSize, microChipSize),
-                painter: MicroChipPainter(ColorScheme.of(context).secondary),
+                painter: MicroChipPainter(
+                  ColorScheme.of(
+                    context,
+                  ).secondary.withValues(alpha: engineState == EngineState.computing ? 1.0 : 0.7),
+                ),
               ),
               SizedBox(
                 width: microChipSize,
@@ -95,16 +106,10 @@ class EngineDepth extends ConsumerWidget {
             ),
           ],
         ),
-        null => SizedBox(
-          width: cloudSize,
-          height: cloudSize,
-          child: Align(
-            alignment: cloudIconAlignment,
-            child: Text(
-              '\u{2026}',
-              style: iconTextStyle.copyWith(color: ColorScheme.of(context).onSurface),
-            ),
-          ),
+        null => const SizedBox(
+          width: microChipSize,
+          height: microChipSize,
+          child: Center(child: threeBounceLoadingIndicator),
         ),
       },
     );
@@ -229,7 +234,7 @@ class MicroChipPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
 class _StockfishInfo extends ConsumerWidget {

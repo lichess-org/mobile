@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
@@ -46,7 +47,10 @@ void main() {
       await makeEngineTestApp(tester);
 
       // displays loading indicator
-      expect(find.widgetWithText(EngineDepth, '\u{2026}'), findsOne);
+      expect(
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        findsOne,
+      );
       await tester.pump(kRequestEvalDebounceDelay);
       expect(isCloudEvalDisplayed(), isTrue);
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
@@ -64,11 +68,17 @@ void main() {
       await makeEngineTestApp(tester, isCloudEvalEnabled: false);
       expect(find.byType(EngineDepth), findsOne);
       // displays loading indicator
-      expect(find.widgetWithText(EngineDepth, '\u{2026}'), findsOne);
+      expect(
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        findsOne,
+      );
 
       await tester.pump(kRequestEvalDebounceDelay);
       // cloud eval is not available, so it still displays loading indicator
-      expect(find.widgetWithText(EngineDepth, '\u{2026}'), findsOne);
+      expect(
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        findsOne,
+      );
       // local engine eval still not available
       expect(isLocalEngineEvalDisplayed(), isFalse);
 
@@ -134,7 +144,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       // engine not yet started, so it still displays loading indicator
-      expect(find.widgetWithText(EngineDepth, '\u{2026}'), findsOne);
+      expect(
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        findsOne,
+      );
 
       // wait for engine
       await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
