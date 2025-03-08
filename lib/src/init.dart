@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -170,8 +171,8 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
 /// Sets the screen orientation based on the device form factor.
 Future<void> setupOrientation(Size size) {
-  if (size.shortestSide < FormFactor.tablet) {
+  if (defaultTargetPlatform == TargetPlatform.android && size.shortestSide < FormFactor.tablet) {
     return OrientationMode.portraitUp.apply();
   }
-  return OrientationMode.allOrientations.apply();
+  return OrientationMode.systemDefault.apply();
 }

@@ -14,7 +14,10 @@ enum OrientationMode {
   allOrientations,
 
   /// Sets orientations for a specialized clock tool screen.
-  clockToolScreen;
+  clockToolScreen,
+
+  /// The default orientation mode.
+  systemDefault;
 
   /// Holds a history of the last applied orientation modes.
   ///
@@ -22,15 +25,17 @@ enum OrientationMode {
   @visibleForTesting
   static List<OrientationMode> lastOrientations = [];
 
-  /// Restores the last orientation mode from the history,
-  /// if there is more than one entry available.
+  /// Restores the last applied orientation mode.
+  /// If there are no more orientations to restore, the system default is applied.
   ///
-  /// Removes the most recent orientation mode and applies the previous one.
-  static Future<void> restoreLast() async {
-    if (lastOrientations.length > 1) {
-      lastOrientations.removeLast();
-      return SystemChrome.setPreferredOrientations(lastOrientations.last.orientations);
+  /// This method is used to revert the screen orientation to the previous state.
+  static Future<void> restoreLast() {
+    if (lastOrientations.isEmpty) {
+      return SystemChrome.setPreferredOrientations(systemDefault.orientations);
     }
+
+    lastOrientations.removeLast();
+    return SystemChrome.setPreferredOrientations(lastOrientations.last.orientations);
   }
 
   /// Returns the list of [DeviceOrientation] values associated with the current enum value.
@@ -44,6 +49,10 @@ enum OrientationMode {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ],
+
+    /// The empty list causes the application to defer to the operating system default.
+    /// https://github.com/flutter/flutter/blob/5491c8c146441d3126aff91beaa3fb5df6d710d0/packages/flutter/lib/src/services/system_chrome.dart#L400
+    systemDefault => [],
   };
 
   /// Applies the orientation list for the current enum value
