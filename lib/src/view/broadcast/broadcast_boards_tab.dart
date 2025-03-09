@@ -150,7 +150,6 @@ class BroadcastPreview extends ConsumerWidget {
         final playingSide = Setup.parseFen(game.fen).turn;
 
         return ObservedBoardThumbnail(
-          boardKey: ValueKey(game.id),
           roundId: roundId,
           game: game,
           title: title,
@@ -169,8 +168,6 @@ class BroadcastPreview extends ConsumerWidget {
 
 class ObservedBoardThumbnail extends ConsumerStatefulWidget {
   const ObservedBoardThumbnail({
-    super.key,
-    required this.boardKey,
     required this.roundId,
     required this.game,
     required this.title,
@@ -183,7 +180,6 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
     required this.playingSide,
   });
 
-  final Key boardKey;
   final BroadcastRoundId roundId;
   final BroadcastGame game;
   final String title;
@@ -205,7 +201,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: widget.boardKey,
+      key: ValueKey(widget.game.id),
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0) {
           if (!isBoardVisible) {
