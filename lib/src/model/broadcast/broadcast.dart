@@ -195,7 +195,7 @@ typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings,
 
 typedef BroadcastPlayerWithGameResults =
     ({
-      BroadcastPlayerWithOverallResult player,
+      BroadcastPlayerWithOverallResult playerWithOverallResult,
       BroadcastFideData fideData,
       IList<BroadcastPlayerGameResult> games,
     });
