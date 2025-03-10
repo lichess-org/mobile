@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
@@ -181,12 +182,13 @@ class _TournamentListBody extends StatelessWidget {
               if (cmp != 0) return cmp;
               return a.position.compareTo(b.position);
             })
+            .where((tournament) => playSupportedVariants.contains(tournament.variant))
             .map((tournament) => _TournamentListItem(tournament: tournament))
             .toList();
 
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: tournaments.length,
+      itemCount: tournamentListItems.length,
       separatorBuilder:
           (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
       itemBuilder: (context, index) => tournamentListItems[index],
