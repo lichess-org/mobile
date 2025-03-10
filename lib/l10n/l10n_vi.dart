@@ -3631,43 +3631,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get playChessEverywhere => 'Chơi cờ ở bất cứ đâu';
 
   @override
-  String get asFreeAsLichess => 'Miễn phí như Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Được xây dựng trên nền tảng tình yêu dành cho cờ vua, không phải vì tiền bạc';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Mọi người đều được sử dụng tất cả các tính năng hoàn toàn miễn phí';
-
-  @override
-  String get zeroAdvertisement => 'Không có quảng cáo';
-
-  @override
-  String get fullFeatured => 'Toàn bộ chức năng hiện có';
-
-  @override
-  String get phoneAndTablet => 'Điện thoại và máy tính bảng';
-
-  @override
-  String get bulletBlitzClassical => 'Cờ đạn, cờ chớp, cờ nhanh, cờ chậm';
-
-  @override
-  String get correspondenceChess => 'Cờ qua thư';
-
-  @override
-  String get onlineAndOfflinePlay => 'Chơi trực tuyến và ngoại tuyến';
 
   @override
   String get viewTheSolution => 'Xem đáp án';
 
   @override
-  String get followAndChallengeFriends => 'Theo dõi và thách đấu bạn bè';
-
-  @override
   String get noChallenges => 'Không có lời thách đấu nào.';
-
-  @override
-  String get gameAnalysis => 'Phân tích ván cờ';
 
   @override
   String xHostsY(String param1, String param2) {

@@ -3653,43 +3653,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get playChessEverywhere => 'हर जगह शतरंज खेलें';
 
   @override
-  String get asFreeAsLichess => 'Lichess जैसा मुक्त';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'शतरंज के प्यार के लिए निर्मित, धन के लिए नहीं';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'हर कोई मुफ्त में सभी सुविधाओं प्राप्त करता है';
-
-  @override
-  String get zeroAdvertisement => 'शून्य विज्ञापन';
-
-  @override
-  String get fullFeatured => 'पूरा विशेष रुप से प्रदर्शित';
-
-  @override
-  String get phoneAndTablet => 'फोन और टैबलेट';
-
-  @override
-  String get bulletBlitzClassical => 'बुलेट, ब्लिट्ज, क्लासिकल';
-
-  @override
-  String get correspondenceChess => 'पत्राचार शतरंज';
-
-  @override
-  String get onlineAndOfflinePlay => 'ऑनलाइन और ऑफ़लाइन खेलने के लिए';
 
   @override
   String get viewTheSolution => 'समाधान देखें';
 
   @override
-  String get followAndChallengeFriends => 'अपने दोस्तों को चुनौती';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'खेल अध्ययन';
 
   @override
   String xHostsY(String param1, String param2) {

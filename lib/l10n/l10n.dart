@@ -11,7 +11,6 @@ import 'l10n_az.dart';
 import 'l10n_be.dart';
 import 'l10n_bg.dart';
 import 'l10n_bn.dart';
-import 'l10n_br.dart';
 import 'l10n_bs.dart';
 import 'l10n_ca.dart';
 import 'l10n_cs.dart';
@@ -25,9 +24,7 @@ import 'l10n_et.dart';
 import 'l10n_eu.dart';
 import 'l10n_fa.dart';
 import 'l10n_fi.dart';
-import 'l10n_fo.dart';
 import 'l10n_fr.dart';
-import 'l10n_ga.dart';
 import 'l10n_gl.dart';
 import 'l10n_gsw.dart';
 import 'l10n_he.dart';
@@ -40,13 +37,11 @@ import 'l10n_it.dart';
 import 'l10n_ja.dart';
 import 'l10n_kk.dart';
 import 'l10n_ko.dart';
-import 'l10n_lb.dart';
 import 'l10n_lt.dart';
 import 'l10n_lv.dart';
 import 'l10n_mk.dart';
 import 'l10n_nb.dart';
 import 'l10n_nl.dart';
-import 'l10n_nn.dart';
 import 'l10n_pl.dart';
 import 'l10n_pt.dart';
 import 'l10n_ro.dart';
@@ -151,7 +146,6 @@ abstract class AppLocalizations {
     Locale('be'),
     Locale('bg'),
     Locale('bn'),
-    Locale('br'),
     Locale('bs'),
     Locale('ca'),
     Locale('cs'),
@@ -165,9 +159,7 @@ abstract class AppLocalizations {
     Locale('eu'),
     Locale('fa'),
     Locale('fi'),
-    Locale('fo'),
     Locale('fr'),
-    Locale('ga'),
     Locale('gl'),
     Locale('gsw'),
     Locale('he'),
@@ -180,13 +172,11 @@ abstract class AppLocalizations {
     Locale('ja'),
     Locale('kk'),
     Locale('ko'),
-    Locale('lb'),
     Locale('lt'),
     Locale('lv'),
     Locale('mk'),
     Locale('nb'),
     Locale('nl'),
-    Locale('nn'),
     Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
@@ -6732,59 +6722,11 @@ abstract class AppLocalizations {
   /// **'Play chess everywhere'**
   String get playChessEverywhere;
 
-  /// No description provided for @asFreeAsLichess.
-  ///
-  /// In en, this message translates to:
-  /// **'As free as Lichess'**
-  String get asFreeAsLichess;
-
-  /// No description provided for @builtForTheLoveOfChessNotMoney.
-  ///
-  /// In en, this message translates to:
-  /// **'Built for the love of chess, not money'**
-  String get builtForTheLoveOfChessNotMoney;
-
   /// No description provided for @everybodyGetsAllFeaturesForFree.
   ///
   /// In en, this message translates to:
   /// **'Everybody gets all features for free'**
   String get everybodyGetsAllFeaturesForFree;
-
-  /// No description provided for @zeroAdvertisement.
-  ///
-  /// In en, this message translates to:
-  /// **'Zero advertisement'**
-  String get zeroAdvertisement;
-
-  /// No description provided for @fullFeatured.
-  ///
-  /// In en, this message translates to:
-  /// **'Full featured'**
-  String get fullFeatured;
-
-  /// No description provided for @phoneAndTablet.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone and tablet'**
-  String get phoneAndTablet;
-
-  /// No description provided for @bulletBlitzClassical.
-  ///
-  /// In en, this message translates to:
-  /// **'Bullet, blitz, classical'**
-  String get bulletBlitzClassical;
-
-  /// No description provided for @correspondenceChess.
-  ///
-  /// In en, this message translates to:
-  /// **'Correspondence chess'**
-  String get correspondenceChess;
-
-  /// No description provided for @onlineAndOfflinePlay.
-  ///
-  /// In en, this message translates to:
-  /// **'Online and offline play'**
-  String get onlineAndOfflinePlay;
 
   /// No description provided for @viewTheSolution.
   ///
@@ -6792,23 +6734,11 @@ abstract class AppLocalizations {
   /// **'View the solution'**
   String get viewTheSolution;
 
-  /// No description provided for @followAndChallengeFriends.
-  ///
-  /// In en, this message translates to:
-  /// **'Follow and challenge friends'**
-  String get followAndChallengeFriends;
-
   /// No description provided for @noChallenges.
   ///
   /// In en, this message translates to:
   /// **'No challenges.'**
   String get noChallenges;
-
-  /// No description provided for @gameAnalysis.
-  ///
-  /// In en, this message translates to:
-  /// **'Game analysis'**
-  String get gameAnalysis;
 
   /// No description provided for @xHostsY.
   ///
@@ -9652,7 +9582,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lt', 'lv', 'mk', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -9691,7 +9621,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'be': return AppLocalizationsBe();
     case 'bg': return AppLocalizationsBg();
     case 'bn': return AppLocalizationsBn();
-    case 'br': return AppLocalizationsBr();
     case 'bs': return AppLocalizationsBs();
     case 'ca': return AppLocalizationsCa();
     case 'cs': return AppLocalizationsCs();
@@ -9704,9 +9633,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'eu': return AppLocalizationsEu();
     case 'fa': return AppLocalizationsFa();
     case 'fi': return AppLocalizationsFi();
-    case 'fo': return AppLocalizationsFo();
     case 'fr': return AppLocalizationsFr();
-    case 'ga': return AppLocalizationsGa();
     case 'gl': return AppLocalizationsGl();
     case 'gsw': return AppLocalizationsGsw();
     case 'he': return AppLocalizationsHe();
@@ -9719,13 +9646,11 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'ja': return AppLocalizationsJa();
     case 'kk': return AppLocalizationsKk();
     case 'ko': return AppLocalizationsKo();
-    case 'lb': return AppLocalizationsLb();
     case 'lt': return AppLocalizationsLt();
     case 'lv': return AppLocalizationsLv();
     case 'mk': return AppLocalizationsMk();
     case 'nb': return AppLocalizationsNb();
     case 'nl': return AppLocalizationsNl();
-    case 'nn': return AppLocalizationsNn();
     case 'pl': return AppLocalizationsPl();
     case 'pt': return AppLocalizationsPt();
     case 'ro': return AppLocalizationsRo();

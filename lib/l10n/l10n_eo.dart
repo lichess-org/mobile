@@ -3655,43 +3655,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get playChessEverywhere => 'Ludi ŝakon ĉie';
 
   @override
-  String get asFreeAsLichess => 'Tiom libera kiom lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Konstruita por la amo de ŝako , ne mono';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Ĉiuj ricevas ĉiujn trajtojn senpage';
-
-  @override
-  String get zeroAdvertisement => 'Nulo anonco';
-
-  @override
-  String get fullFeatured => 'Plen-trajte';
-
-  @override
-  String get phoneAndTablet => 'Telefono kaj tablojdo';
-
-  @override
-  String get bulletBlitzClassical => 'Kuglo , blitz , klasika';
-
-  @override
-  String get correspondenceChess => 'Korespondado ŝako';
-
-  @override
-  String get onlineAndOfflinePlay => 'interrete kaj eksterrete ludi';
 
   @override
   String get viewTheSolution => 'Vidi la solvon';
 
   @override
-  String get followAndChallengeFriends => 'Sekvi kaj defii amikojn';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Ludanalizo';
 
   @override
   String xHostsY(String param1, String param2) {

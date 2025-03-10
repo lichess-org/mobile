@@ -35,40 +35,32 @@ class BoardTable extends ConsumerStatefulWidget {
     this.shapes,
     this.engineGauge,
     this.moves,
-    this.currentMoveIndex,
+    this.currentMoveIndex = 0,
     this.onSelectMove,
     this.boardOverlay,
     this.errorMessage,
-    this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
     super.key,
-  }) : assert(
-         moves == null || currentMoveIndex != null,
-         'You must provide `currentMoveIndex` along with `moves`',
-       );
+  });
 
   /// Creates an empty board table (useful for loading).
-  const BoardTable.empty({
-    this.showMoveListPlaceholder = false,
-    this.showEngineGaugePlaceholder = false,
-    this.errorMessage,
-  }) : fen = kEmptyBoardFEN,
-       orientation = Side.white,
-       gameData = null,
-       lastMove = null,
-       boardSettingsOverrides = null,
-       topTable = const SizedBox.shrink(),
-       bottomTable = const SizedBox.shrink(),
-       shapes = null,
-       engineGauge = null,
-       moves = null,
-       currentMoveIndex = null,
-       onSelectMove = null,
-       boardOverlay = null,
-       boardKey = null,
-       zenMode = false;
+  const BoardTable.empty({this.moves, this.showEngineGaugePlaceholder = false, this.errorMessage})
+    : fen = kEmptyBoardFEN,
+      orientation = Side.white,
+      gameData = null,
+      lastMove = null,
+      boardSettingsOverrides = null,
+      topTable = const SizedBox.shrink(),
+      bottomTable = const SizedBox.shrink(),
+      shapes = null,
+      engineGauge = null,
+      currentMoveIndex = 0,
+      onSelectMove = null,
+      boardOverlay = null,
+      boardKey = null,
+      zenMode = false;
 
   final String fen;
 
@@ -99,8 +91,8 @@ class BoardTable extends ConsumerStatefulWidget {
   /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
 
-  /// Index of the current move in the [moves] list. Must be provided if [moves] is provided.
-  final int? currentMoveIndex;
+  /// Index of the current move in the [moves] list.
+  final int currentMoveIndex;
 
   /// Callback that will be called when a move is selected from the [moves] list.
   final void Function(int moveIndex)? onSelectMove;
@@ -110,9 +102,6 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// Optional widget that will be displayed on top of the board.
   final Widget? boardOverlay;
-
-  /// Whether to show the move list placeholder. Useful when loading.
-  final bool showMoveListPlaceholder;
 
   /// Whether to show the engine gauge placeholder.
   final bool showEngineGaugePlaceholder;
@@ -208,7 +197,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                             child: MoveList(
                               type: MoveListType.stacked,
                               slicedMoves: slicedMoves,
-                              currentMoveIndex: widget.currentMoveIndex ?? 0,
+                              currentMoveIndex: widget.currentMoveIndex,
                               onSelectMove: widget.onSelectMove,
                             ),
                           ),
@@ -235,15 +224,17 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (!widget.zenMode && slicedMoves != null && verticalSpaceLeftBoardOnPortrait >= 130)
-                MoveList(
-                  type: MoveListType.inline,
-                  slicedMoves: slicedMoves,
-                  currentMoveIndex: widget.currentMoveIndex ?? 0,
-                  onSelectMove: widget.onSelectMove,
-                )
-              else if (widget.showMoveListPlaceholder && verticalSpaceLeftBoardOnPortrait >= 130)
-                const SizedBox(height: 40),
+              if (slicedMoves != null && verticalSpaceLeftBoardOnPortrait >= 130)
+                if (widget.zenMode)
+                  // display empty move list to keep the layout consistent in zen mode
+                  const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
+                else
+                  MoveList(
+                    type: MoveListType.inline,
+                    slicedMoves: slicedMoves,
+                    currentMoveIndex: widget.currentMoveIndex,
+                    onSelectMove: widget.onSelectMove,
+                  ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(

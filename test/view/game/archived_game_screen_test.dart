@@ -66,7 +66,6 @@ void main() {
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).game, null);
 
       // moves are not loaded
-      expect(find.byType(MoveList), findsNothing);
       expect(
         tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
         isNull,
@@ -86,7 +85,6 @@ void main() {
       expect(find.text('0:46', findRichText: true), findsNWidgets(1));
 
       // moves and players are loaded
-      expect(find.byType(MoveList), findsOneWidget);
       expect(
         tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
         isNotNull,

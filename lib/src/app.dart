@@ -147,7 +147,7 @@ class _AppState extends ConsumerState<Application> {
         CupertinoLocalizationsEo.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      onGenerateTitle: (BuildContext context) => 'lichess.org',
+      title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: themeLight.copyWith(
         navigationBarTheme: NavigationBarTheme.of(

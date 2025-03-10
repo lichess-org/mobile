@@ -197,7 +197,7 @@ class _BodyState extends ConsumerState<_Body> {
         slivers: [
           for (final section in sections)
             SliverMainAxisGroup(
-              key: ValueKey(section),
+              key: ValueKey(section.$1),
               slivers: [
                 if (section.$3.isNotEmpty)
                   if (Theme.of(context).platform == TargetPlatform.iOS)
@@ -383,7 +383,7 @@ class BroadcastListTile extends StatelessWidget {
               width: thumbnailSize,
               cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
               fit: BoxFit.cover,
-              errorBuilder: (context, _, __) => const Icon(LichessIcons.radio_tower_lichess),
+              errorBuilder: (context, _, _) => const Icon(LichessIcons.radio_tower_lichess),
             )
             : Image(image: kDefaultBroadcastImage, width: thumbnailSize);
 

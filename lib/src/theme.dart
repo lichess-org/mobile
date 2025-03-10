@@ -12,11 +12,6 @@ const kPageTransitionsTheme = PageTransitionsTheme(
   },
 );
 
-const kProgressIndicatorTheme = ProgressIndicatorThemeData(
-  // ignore: deprecated_member_use
-  year2023: false,
-);
-
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
@@ -129,6 +124,11 @@ extension CustomThemeBuildContext on BuildContext {
     textTheme: cupertinoTextTheme(themeDark.colorScheme),
   );
 
+  final cupertinoFloatingActionButtonTheme = FloatingActionButtonThemeData(
+    backgroundColor: themeLight.colorScheme.secondaryFixedDim,
+    foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
+  );
+
   return (
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
@@ -146,10 +146,10 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? BottomSheetThemeData(backgroundColor: lightCupertino.scaffoldBackgroundColor)
               : null,
+      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme:
           isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
-      progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
       extensions: [
         lichessCustomColors.harmonized(themeLight.colorScheme),
@@ -173,9 +173,9 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? BottomSheetThemeData(backgroundColor: darkCupertino.scaffoldBackgroundColor)
               : null,
+      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
       pageTransitionsTheme: kPageTransitionsTheme,
-      progressIndicatorTheme: kProgressIndicatorTheme,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -231,6 +231,10 @@ extension CustomThemeBuildContext on BuildContext {
               ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
               : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
+      foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,
+    ),
     dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
     menuTheme:
         isIOS
@@ -256,7 +260,6 @@ extension CustomThemeBuildContext on BuildContext {
       },
     ),
 
-    progressIndicatorTheme: kProgressIndicatorTheme,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );

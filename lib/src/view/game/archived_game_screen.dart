@@ -291,7 +291,7 @@ class _BoardBody extends ConsumerWidget {
     final gameData = archivedGameData;
 
     if (gameData == null) {
-      return BoardTable.empty(showMoveListPlaceholder: true, errorMessage: error?.toString());
+      return BoardTable.empty(moves: const [], errorMessage: error?.toString());
     }
 
     if (initialCursor != null) {
@@ -307,7 +307,7 @@ class _BoardBody extends ConsumerWidget {
     final loadingBoard = BoardTable(
       orientation: (isBoardTurned ? orientation.opposite : orientation),
       fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
-      showMoveListPlaceholder: true,
+      moves: const [],
     );
 
     return gameCursor.when(
@@ -408,7 +408,7 @@ class _BottomBar extends ConsumerWidget {
             },
           ),
         BottomBarButton(
-          label: context.l10n.gameAnalysis,
+          label: context.l10n.analysis,
           onTap:
               gameCursor.hasValue
                   ? () {

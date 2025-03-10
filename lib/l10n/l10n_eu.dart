@@ -3655,43 +3655,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get playChessEverywhere => 'Jokatu xakean, nonnahi';
 
   @override
-  String get asFreeAsLichess => 'Debalde, lichess bezala';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Xakea maite dugulako sortuta, ez diruagatik.';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Ezaugarri guztiak eskuragarri, dohain.';
-
-  @override
-  String get zeroAdvertisement => 'Publizitaterik gabe';
-
-  @override
-  String get fullFeatured => 'Aukeraz beteta';
-
-  @override
-  String get phoneAndTablet => 'Sakelekoan zein tabletan';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, klasikoa';
-
-  @override
-  String get correspondenceChess => 'Posta-xakea';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online zein offline jokatu';
 
   @override
   String get viewTheSolution => 'Erantzuna ikusi';
 
   @override
-  String get followAndChallengeFriends => 'Jarraitu eta desafio egin lagunei';
-
-  @override
   String get noChallenges => 'Erronkarik ez.';
-
-  @override
-  String get gameAnalysis => 'Partidaren analisia';
 
   @override
   String xHostsY(String param1, String param2) {

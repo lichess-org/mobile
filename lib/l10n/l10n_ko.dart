@@ -3631,43 +3631,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get playChessEverywhere => '어디에서나 체스를 즐기세요';
 
   @override
-  String get asFreeAsLichess => 'Lichess처럼 무료예요';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => '오직 체스에 대한 열정으로 만들어졌습니다';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => '모두가 모든 기능을 무료로 이용할 수 있습니다';
-
-  @override
-  String get zeroAdvertisement => '광고가 없습니다';
-
-  @override
-  String get fullFeatured => '모든 기능을 지원합니다';
-
-  @override
-  String get phoneAndTablet => '스마트폰과 태블릿 지원';
-
-  @override
-  String get bulletBlitzClassical => '불릿, 블리츠, 클래식 방식 지원';
-
-  @override
-  String get correspondenceChess => '통신 체스';
-
-  @override
-  String get onlineAndOfflinePlay => '온라인/오프라인 게임 모두 지원';
 
   @override
   String get viewTheSolution => '정답 보기';
 
   @override
-  String get followAndChallengeFriends => '친구를 팔로우하고 도전하기';
-
-  @override
   String get noChallenges => '도전 없음.';
-
-  @override
-  String get gameAnalysis => '게임 분석기';
 
   @override
   String xHostsY(String param1, String param2) {

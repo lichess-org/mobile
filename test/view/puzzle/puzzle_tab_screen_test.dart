@@ -24,7 +24,7 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
 
-final mockClient = MockClient((request) async {
+final mockClient = MockClient((request) {
   if (request.url.path == '/api/puzzle/daily') {
     return mockResponse(mockDailyPuzzleResponse, 200);
   }
@@ -238,7 +238,7 @@ void main() {
           httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-          databaseProvider.overrideWith((ref) async {
+          databaseProvider.overrideWith((ref) {
             ref.onDispose(testDb.close);
             return testDb;
           }),

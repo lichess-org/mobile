@@ -166,7 +166,7 @@ class _BodyState extends ConsumerState<_Body> {
                                   );
                                 },
                         icon: Icons.biotech,
-                        label: context.l10n.gameAnalysis,
+                        label: context.l10n.analysis,
                       ),
                     ],
                   ),

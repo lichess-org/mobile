@@ -40,20 +40,20 @@ class BroadcastRepository {
     return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
   }
 
-  Future<IList<BroadcastPlayerExtended>> getPlayers(BroadcastTournamentId tournamentId) {
+  Future<IList<BroadcastPlayerWithOverallResult>> getPlayers(BroadcastTournamentId tournamentId) {
     return client.readJsonList(
       Uri(path: '/broadcast/$tournamentId/players'),
-      mapper: _makePlayerFromJson,
+      mapper: _makePlayerWithOverallResultFromJson,
     );
   }
 
-  Future<BroadcastPlayerResults> getPlayerResults(
+  Future<BroadcastPlayerWithGameResults> getPlayerResults(
     BroadcastTournamentId tournamentId,
     String playerId,
   ) {
     return client.readJson(
       Uri(path: 'broadcast/$tournamentId/players/$playerId'),
-      mapper: _makePlayerResultsFromJson,
+      mapper: _makePlayerWithGameResultsFromJson,
     );
   }
 }
@@ -162,7 +162,7 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
   final status = BroadcastResult.resultFromString(stringStatus);
 
   /// The amount of time that the player whose turn it is has been thinking since his last move
-  final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero;
+  final thinkTime = pick('thinkTime').asDurationFromSecondsOrNull();
   final fen = pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen;
   final playingSide = Setup.parseFen(fen).turn;
 
@@ -171,53 +171,60 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
     BroadcastGame(
       id: pick('id').asBroadcastGameIdOrThrow(),
       players: IMap({
-        Side.white: _playerFromPick(
+        Side.white: _playerWithClockFromPick(
           pick('players', 0).required(),
           isPlaying: playingSide == Side.white,
-          thinkingTime: thinkTime,
+          thinkTime: thinkTime,
         ),
-        Side.black: _playerFromPick(
+        Side.black: _playerWithClockFromPick(
           pick('players', 1).required(),
           isPlaying: playingSide == Side.black,
-          thinkingTime: thinkTime,
+          thinkTime: thinkTime,
         ),
       }),
       fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
       lastMove: pick('lastMove').asUciMoveOrNull(),
+      thinkTime: thinkTime,
       status: status,
       updatedClockAt: clock.now(),
     ),
   );
 }
 
-BroadcastPlayer _playerFromPick(
-  RequiredPick pick, {
-  required bool isPlaying,
-  required Duration thinkingTime,
-}) {
-  final clock = pick('clock').asDurationFromCentiSecondsOrNull();
-  final updatedClock = clock != null && isPlaying ? clock - thinkingTime : clock;
+BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    clock: (updatedClock?.isNegative ?? false) ? Duration.zero : updatedClock,
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
   );
 }
 
-BroadcastPlayerExtended _makePlayerFromJson(Map<String, dynamic> json) {
-  return _playerExtendedFromPick(pick(json).required());
+BroadcastPlayerWithClock _playerWithClockFromPick(
+  RequiredPick pick, {
+  required bool isPlaying,
+  required Duration? thinkTime,
+}) {
+  final player = _playerFromPick(pick);
+  final clock = pick('clock').asDurationFromCentiSecondsOrNull();
+  final updatedClock = clock != null && isPlaying ? clock - (thinkTime ?? Duration.zero) : clock;
+
+  return BroadcastPlayerWithClock(
+    player: player,
+    clock: (updatedClock?.isNegative ?? false) ? Duration.zero : updatedClock,
+  );
 }
 
-BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
-  return BroadcastPlayerExtended(
-    name: pick('name').asStringOrThrow(),
-    title: pick('title').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
-    federation: pick('fed').asStringOrNull(),
-    fideId: pick('fideId').asFideIdOrNull(),
+BroadcastPlayerWithOverallResult _makePlayerWithOverallResultFromJson(Map<String, dynamic> json) {
+  return _playerWithOverallResultFromPick(pick(json).required());
+}
+
+BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick pick) {
+  final player = _playerFromPick(pick);
+
+  return BroadcastPlayerWithOverallResult(
+    player: player,
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
@@ -225,11 +232,11 @@ BroadcastPlayerExtended _playerExtendedFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastPlayerResults _makePlayerResultsFromJson(Map<String, dynamic> json) {
+BroadcastPlayerWithGameResults _makePlayerWithGameResultsFromJson(Map<String, dynamic> json) {
   return (
-    player: _playerExtendedFromPick(pick(json).required()),
+    player: _playerWithOverallResultFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
-    games: pick(json, 'games').asListOrThrow(_makePlayerResultFromPick).toIList(),
+    games: pick(json, 'games').asListOrThrow(_playerGameResultFromPick).toIList(),
   );
 }
 
@@ -244,7 +251,7 @@ BroadcastFideData _fideDataFromPick(Pick pick) {
   );
 }
 
-BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
+BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
   final pointsString = pick('points').asStringOrNull();
   BroadcastPoints? points;
   if (pointsString == '1') {
@@ -255,16 +262,12 @@ BroadcastPlayerResultData _makePlayerResultFromPick(RequiredPick pick) {
     points = BroadcastPoints.zero;
   }
 
-  return BroadcastPlayerResultData(
+  return BroadcastPlayerGameResult(
     roundId: pick('round').asBroadcastRoundIdOrThrow(),
     gameId: pick('id').asBroadcastGameIdOrThrow(),
     color: pick('color').asSideOrThrow(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
-    opponent: _playerFromPick(
-      pick('opponent').required(),
-      isPlaying: false,
-      thinkingTime: Duration.zero,
-    ),
+    opponent: _playerFromPick(pick('opponent').required()),
   );
 }

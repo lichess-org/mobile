@@ -13,7 +13,7 @@ import '../../test_container.dart';
 import '../../test_helpers.dart';
 
 void main() {
-  Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
+  Future<ProviderContainer> makeTestContainer(MockClient mockClient) {
     return makeContainer(
       overrides: [
         lichessClientProvider.overrideWith((ref) {

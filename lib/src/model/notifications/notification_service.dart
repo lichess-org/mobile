@@ -172,7 +172,7 @@ class NotificationService {
   }
 
   /// Cancels/removes a notification.
-  Future<void> cancel(int id) async {
+  Future<void> cancel(int id) {
     _logger.info('canceled notification id: [$id]');
     return _notificationDisplay.cancel(id);
   }
@@ -281,7 +281,7 @@ class NotificationService {
   /// Register the device for push notifications.
   Future<void> registerDevice() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
       if (apnsToken == null) {
         _logger.warning('APNS token is null');
         return;

@@ -535,6 +535,9 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   }) = _PuzzleState;
 
   @override
+  bool get delayLocalEngine => false;
+
+  @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
       mode == PuzzleMode.view && prefs.isEnabled;
 

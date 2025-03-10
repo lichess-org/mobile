@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:network_image_mock/network_image_mock.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -119,55 +119,53 @@ void main() {
     testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
-      mockNetworkImagesFor(() async {
-        final client = MockClient((request) {
-          if (request.url.path == '/api/broadcast/KnP1dgul') {
-            return mockResponse(
-              _upcomingTournamentResponse,
-              200,
-              headers: {'content-type': 'application/json; charset=utf-8'},
-            );
-          }
-          if (request.url.path == '/api/broadcast/-/-/UN587WBI') {
-            return mockResponse(
-              _upcomingRoundResponse,
-              200,
-              headers: {'content-type': 'application/json; charset=utf-8'},
-            );
-          }
-          return mockResponse('', 404);
-        });
-
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
-          overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
-        );
-
-        await tester.pumpWidget(app);
-
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-        // Load the tournament
-        await tester.pump();
-
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-        // Load the overview
-        await tester.pump();
-
-        final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
-        final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
-        final f = DateFormat.MMMd();
-
-        expect(find.text('${f.format(startsAt)} - ${f.format(endsAt)}'), findsOneWidget);
-        expect(find.text('9-round Swiss'), findsOneWidget);
-        expect(find.text('90 min + 30 sec / move'), findsOneWidget);
-        expect(find.text('Seville, Spain'), findsOneWidget);
-        expect(find.text('Xu, Bonelli, Jacobson'), findsOneWidget);
-        expect(find.text('Official website'), findsOneWidget);
-        expect(find.text('Standings'), findsOneWidget);
+      final client = MockClient((request) {
+        if (request.url.path == '/api/broadcast/KnP1dgul') {
+          return mockResponse(
+            _upcomingTournamentResponse,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        if (request.url.path == '/api/broadcast/-/-/UN587WBI') {
+          return mockResponse(
+            _upcomingRoundResponse,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        return mockResponse('', 404);
       });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the tournament
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the overview
+      await mockNetworkImages(() => tester.pump());
+
+      final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
+      final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
+      final f = DateFormat.MMMd();
+
+      expect(find.text('${f.format(startsAt)} - ${f.format(endsAt)}'), findsOneWidget);
+      expect(find.text('9-round Swiss'), findsOneWidget);
+      expect(find.text('90 min + 30 sec / move'), findsOneWidget);
+      expect(find.text('Seville, Spain'), findsOneWidget);
+      expect(find.text('Xu, Bonelli, Jacobson'), findsOneWidget);
+      expect(find.text('Official website'), findsOneWidget);
+      expect(find.text('Standings'), findsOneWidget);
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
@@ -923,6 +921,7 @@ const _liveRoundResponse = '''
         }
       ],
       "lastMove": "c4d5",
+      "thinkTime": 0,
       "status": "*"
     }
   ]

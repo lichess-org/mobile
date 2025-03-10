@@ -157,7 +157,7 @@ class StormController extends _$StormController {
             state = newState;
           }
         },
-        onError: (_, __) {
+        onError: (_, _) {
           state = newState;
         },
       );

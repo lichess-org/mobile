@@ -11,7 +11,7 @@ class Debouncer {
     _timer = Timer(delay, action);
   }
 
-  void dispose() {
+  void cancel() {
     _timer?.cancel();
   }
 }
@@ -28,5 +28,9 @@ class Throttler {
     _timer?.cancel();
     action();
     _timer = Timer(delay, () {});
+  }
+
+  void cancel() {
+    _timer?.cancel();
   }
 }

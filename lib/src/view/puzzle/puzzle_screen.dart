@@ -118,7 +118,7 @@ class _Title extends ConsumerWidget {
           .when(
             data: (data) => Text(data),
             loading: () => const SizedBox.shrink(),
-            error: (_, __) => Text(key.replaceAll('_', ' ')),
+            error: (_, _) => Text(key.replaceAll('_', ' ')),
           ),
     };
   }

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -18,18 +19,30 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final (engineName: engineName, eval: localEval, state: engineState) = ref.watch(
+      engineEvaluationProvider,
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    const cloudIconAlignment = AlignmentDirectional(-0.05, 0.20);
-    final cloudIcon = Icon(Icons.cloud, size: 32, color: ColorScheme.of(context).secondary);
+    final loadingIndicator = SpinKitFadingFour(
+      color: ColorScheme.of(context).onSecondary.withValues(alpha: 0.7),
+      size: 10,
+    );
+
+    const microChipSize = 28.0;
     final iconTextStyle = TextStyle(
       color: ColorScheme.of(context).onSecondary,
       fontFeatures: const [FontFeature.tabularFigures()],
-      fontSize: 12,
+      fontSize: 11,
     );
 
-    return AppBarTextButton(
+    return AppBarIconButton(
+      semanticsLabel: switch (eval) {
+        LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
+        CloudEval(:final depth) =>
+          '${context.l10n.cloudAnalysis}, ${context.l10n.depthX('$depth')}',
+        _ => context.l10n.loadingEngine,
+      },
       onPressed:
           eval != null
               ? () {
@@ -64,28 +77,39 @@ class EngineDepth extends ConsumerWidget {
                 );
               }
               : null,
-      child: switch (eval) {
-        LocalEval(:final depth) => RepaintBoundary(
+      icon: Badge(
+        offset: const Offset(4, -7),
+        backgroundColor: ColorScheme.of(context).tertiaryContainer,
+        textColor: ColorScheme.of(context).onTertiaryContainer,
+        label: eval is CloudEval ? const Text('CLOUD') : null,
+        textStyle: const TextStyle(fontSize: 8),
+        isLabelVisible: eval is CloudEval,
+        child: AnimatedOpacity(
+          opacity: engineState == EngineState.computing ? 1.0 : 0.7,
+          duration: const Duration(milliseconds: 150),
           child: Stack(
-            alignment: const Alignment(-0.06, 0.0),
+            alignment: Alignment.center,
             children: [
               CustomPaint(
-                size: const Size(28, 28),
+                size: const Size(microChipSize, microChipSize),
                 painter: MicroChipPainter(ColorScheme.of(context).secondary),
               ),
-              Text('${math.min(99, depth)}', style: iconTextStyle),
+              SizedBox(
+                width: microChipSize,
+                height: microChipSize,
+                child: RepaintBoundary(
+                  child: Center(
+                    child:
+                        eval?.depth != null
+                            ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                            : loadingIndicator,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        CloudEval(:final depth) => Stack(
-          alignment: cloudIconAlignment,
-          children: [cloudIcon, Text('${math.min(99, depth)}', style: iconTextStyle)],
-        ),
-        null => Stack(
-          alignment: cloudIconAlignment,
-          children: [cloudIcon, Text('\u{2026}', style: iconTextStyle)],
-        ),
-      },
+      ),
     );
   }
 }
@@ -97,16 +121,36 @@ class MicroChipPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
+    const pinLength = 3.5;
+    const pinRadius = Radius.circular(1);
+    const innerRimWidth = 1.0;
+    const outerRimWidth = 2.5;
+
+    final fillPaint =
         Paint()
           ..color = color
           ..style = PaintingStyle.fill;
 
-    const pinLength = 3.8;
-    const pinRadius = Radius.circular(3);
+    final strokePaint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = outerRimWidth;
 
-    // draw a square with rounded corners
-    final path =
+    final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth / 2;
+
+    final innerSquarePath =
+        Path()..addRRect(
+          RRect.fromLTRBR(
+            pinLength + innerRimWidth + outerRimWidth / 2,
+            pinLength + innerRimWidth + outerRimWidth / 2,
+            innerSquareSize,
+            innerSquareSize,
+            const Radius.circular(2),
+          ),
+        );
+
+    final outerRimPath =
         Path()..addRRect(
           RRect.fromLTRBR(
             pinLength,
@@ -117,13 +161,14 @@ class MicroChipPainter extends CustomPainter {
           ),
         );
 
+    final pinsPath = Path();
     final chipSide = size.width - pinLength * 2;
     final pinsMargin = (chipSide - chipSide * 0.6) / 2;
     final pinWidth = chipSide / 10;
     final pinSpacing = (chipSide - (pinsMargin * 2) - 3 * pinWidth) / 2;
     // draw left pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             0,
@@ -138,7 +183,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw right pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             size.width - pinLength,
@@ -153,7 +198,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw top pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             pinLength + pinsMargin + i * (pinWidth + pinSpacing),
@@ -168,7 +213,7 @@ class MicroChipPainter extends CustomPainter {
     }
     // draw bottom pins
     for (var i = 0; i < 3; i++) {
-      path.addRRect(
+      pinsPath.addRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
             pinLength + pinsMargin + i * (pinWidth + pinSpacing),
@@ -182,11 +227,13 @@ class MicroChipPainter extends CustomPainter {
       );
     }
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(outerRimPath, strokePaint);
+    canvas.drawPath(pinsPath, fillPaint);
+    canvas.drawPath(innerSquarePath, fillPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
 class _StockfishInfo extends ConsumerWidget {

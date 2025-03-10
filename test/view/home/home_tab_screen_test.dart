@@ -106,7 +106,7 @@ void main() {
 
     testWidgets('session, no played game: do not show welcome screen', (tester) async {
       int nbUserGamesRequests = 0;
-      final mockClient = MockClient((request) async {
+      final mockClient = MockClient((request) {
         if (request.url.path == '/api/games/user/testuser') {
           nbUserGamesRequests++;
           return mockResponse('', 200);
@@ -153,7 +153,7 @@ void main() {
 
     testWidgets('session, with played games: shows recent games', (tester) async {
       int nbUserGamesRequests = 0;
-      final mockClient = MockClient((request) async {
+      final mockClient = MockClient((request) {
         if (request.url.path == '/api/games/user/testuser') {
           nbUserGamesRequests++;
           return mockResponse(mockUserRecentGameResponse('testUser'), 200);
@@ -182,7 +182,7 @@ void main() {
 
     testWidgets('shows ongoing games if any', (tester) async {
       int nbOngoingGamesRequests = 0;
-      final mockClient = MockClient((request) async {
+      final mockClient = MockClient((request) {
         if (request.url.path == '/api/account/playing') {
           nbOngoingGamesRequests++;
           return mockResponse(mockAccountOngoingGamesResponse(), 200);

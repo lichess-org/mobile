@@ -14,7 +14,7 @@ enum BroadcastResult {
   canceled,
   whiteHalfWins,
   blackHalfWins,
-  ongoing,
+  newOrOngoing,
   noResultPgnTag;
 
   static BroadcastResult resultFromString(String? result) {
@@ -27,7 +27,7 @@ enum BroadcastResult {
           '0-0' => BroadcastResult.canceled,
           '½-0' => BroadcastResult.whiteHalfWins,
           '0-½' => BroadcastResult.blackHalfWins,
-          '*' => BroadcastResult.ongoing,
+          '*' => BroadcastResult.newOrOngoing,
           _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
         };
   }
@@ -44,13 +44,8 @@ enum BroadcastResult {
     };
   }
 
-  bool get isOngoing => switch (this) {
-    ongoing => true,
-    _ => false,
-  };
-
   bool get isOver => switch (this) {
-    ongoing => false,
+    newOrOngoing => false,
     noResultPgnTag => false,
     _ => true,
   };
@@ -145,68 +140,78 @@ class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required IMap<Side, BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
+    required Duration? thinkTime,
     required BroadcastResult status,
     required DateTime updatedClockAt,
     int? cp,
     int? mate,
   }) = _BroadcastGame;
 
-  bool get isOngoing => status.isOngoing;
+  // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
+  bool get isOngoing =>
+      status == BroadcastResult.newOrOngoing && thinkTime != null && lastMove != null;
   bool get isOver => status.isOver;
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
 
 @freezed
 class BroadcastPlayer with _$BroadcastPlayer {
+  const BroadcastPlayer._();
+
   const factory BroadcastPlayer({
     required String name,
     required String? title,
     required int? rating,
-    required Duration? clock,
     required String? federation,
     required FideId? fideId,
   }) = _BroadcastPlayer;
+
+  String get id => (fideId != null) ? fideId.toString() : name;
 }
 
 @freezed
-class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
-  const factory BroadcastPlayerExtended({
-    required String name,
-    required String? title,
-    required int? rating,
-    required String? federation,
-    required FideId? fideId,
+class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
+  const factory BroadcastPlayerWithClock({
+    required BroadcastPlayer player,
+    required Duration? clock,
+  }) = _BroadcastPlayerWithClock;
+}
+
+@freezed
+class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
+  const factory BroadcastPlayerWithOverallResult({
+    required BroadcastPlayer player,
     required int played,
     required double? score,
     required int? ratingDiff,
     required int? performance,
-  }) = _BroadcastPlayerExtended;
+  }) = _BroadcastPlayerWithOverallResult;
 }
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerResults =
+typedef BroadcastPlayerWithGameResults =
     ({
-      BroadcastPlayerExtended player,
+      BroadcastPlayerWithOverallResult player,
       BroadcastFideData fideData,
-      IList<BroadcastPlayerResultData> games,
+      IList<BroadcastPlayerGameResult> games,
     });
 
 enum BroadcastPoints { one, half, zero }
 
 @freezed
-class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
-  const factory BroadcastPlayerResultData({
+class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
+  const factory BroadcastPlayerGameResult({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
     required BroadcastPoints? points,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
-  }) = _BroadcastPlayerResult;
+  }) = _BroadcastPlayerGameResult;
 }
 
 enum RoundStatus { live, finished, upcoming }

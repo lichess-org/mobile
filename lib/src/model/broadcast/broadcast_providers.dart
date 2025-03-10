@@ -58,7 +58,7 @@ Future<BroadcastRoundResponse> broadcastRound(Ref ref, BroadcastRoundId roundId)
 }
 
 @riverpod
-Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
+Future<IList<BroadcastPlayerWithOverallResult>> broadcastPlayers(
   Ref ref,
   BroadcastTournamentId tournamentId,
 ) {
@@ -66,7 +66,7 @@ Future<IList<BroadcastPlayerExtended>> broadcastPlayers(
 }
 
 @riverpod
-Future<BroadcastPlayerResults> broadcastPlayerResult(
+Future<BroadcastPlayerWithGameResults> broadcastPlayer(
   Ref ref,
   BroadcastTournamentId broadcastTournamentId,
   String playerId,
@@ -84,7 +84,7 @@ BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
 class BroadcastImageWorkerFactory {
   const BroadcastImageWorkerFactory();
 
-  Future<ImageColorWorker> spawn() async {
+  Future<ImageColorWorker> spawn() {
     return ImageColorWorker.spawn();
   }
 }

@@ -109,7 +109,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case AsyncData(:final value):
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: _Title(variant: value.variant),
           appBarActions: appBarActions,
           body: _Body(
@@ -128,7 +128,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case _:
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: const _Title(variant: Variant.standard),
           appBarActions: appBarActions,
           body: const Center(child: CircularProgressIndicator()),
@@ -263,16 +263,32 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.menu,
         ),
         if (analysisState.isComputerAnalysisAllowed)
-          BottomBarButton(
-            label: context.l10n.toggleLocalEvaluation,
-            onTap:
-                analysisState.isEngineAllowed
-                    ? () {
-                      ref.read(ctrlProvider.notifier).toggleEngine();
-                    }
-                    : null,
-            icon: CupertinoIcons.gauge,
-            highlighted: analysisState.isEngineAvailable(evalPrefs),
+          Builder(
+            builder: (context) {
+              Future<void>? toggleFuture;
+              return FutureBuilder(
+                future: toggleFuture,
+                builder: (context, snapshot) {
+                  return BottomBarButton(
+                    label: context.l10n.toggleLocalEvaluation,
+                    onTap:
+                        analysisState.isEngineAllowed &&
+                                snapshot.connectionState != ConnectionState.waiting
+                            ? () async {
+                              toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                              try {
+                                await toggleFuture;
+                              } finally {
+                                toggleFuture = null;
+                              }
+                            }
+                            : null,
+                    icon: CupertinoIcons.gauge,
+                    highlighted: analysisState.isEngineAvailable(evalPrefs),
+                  );
+                },
+              );
+            },
           ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,

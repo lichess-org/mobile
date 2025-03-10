@@ -3701,43 +3701,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get playChessEverywhere => 'Žaiskite šachmatais visur';
 
   @override
-  String get asFreeAsLichess => 'Nemokama, kaip ir „lichess“';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Sukurta iš meilės šachmatams, ne dėl pinigų';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Kiekvienas gauna visas galimybes už dyką';
-
-  @override
-  String get zeroAdvertisement => 'Jokių reklamų';
-
-  @override
-  String get fullFeatured => 'Visiškai parengta';
-
-  @override
-  String get phoneAndTablet => 'Telefonui ir planšetei';
-
-  @override
-  String get bulletBlitzClassical => 'Kulka, Žaibas, klasikiniai';
-
-  @override
-  String get correspondenceChess => 'Korespondenciniai';
-
-  @override
-  String get onlineAndOfflinePlay => 'Žaidimas su ir be interneto';
 
   @override
   String get viewTheSolution => 'Parodyti sprendimą';
 
   @override
-  String get followAndChallengeFriends => 'Sekti ir žaisti su draugais';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Partijos analizė';
 
   @override
   String xHostsY(String param1, String param2) {

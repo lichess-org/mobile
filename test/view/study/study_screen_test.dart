@@ -157,15 +157,21 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('1. Chapter 1')),
+        find.descendant(
+          of: find.byType(Scrollable),
+          matching: find.text('1 Chapter 1', findRichText: true),
+        ),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('2. Chapter 2')),
+        find.descendant(
+          of: find.byType(Scrollable),
+          matching: find.text('2 Chapter 2', findRichText: true),
+        ),
         findsOneWidget,
       );
 
-      await tester.tap(find.text('1. Chapter 1'));
+      await tester.tap(find.text('1 Chapter 1', findRichText: true));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 

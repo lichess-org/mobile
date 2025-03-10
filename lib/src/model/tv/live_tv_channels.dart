@@ -25,7 +25,7 @@ class LiveTvChannels extends _$LiveTvChannels {
   late SocketClient _socketClient;
 
   @override
-  Future<LiveTvChannelsState> build() async {
+  Future<LiveTvChannelsState> build() {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _socketReadySubscription?.cancel();

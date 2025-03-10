@@ -3655,43 +3655,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get playChessEverywhere => 'Schpill überall Schach';
 
   @override
-  String get asFreeAsLichess => 'So gratis wie Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Erschaffe us Liebi zum Schach, nöd zum Gäld';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Jede chann alli Funktione gratis nutze';
-
-  @override
-  String get zeroAdvertisement => 'Null Werbig';
-
-  @override
-  String get fullFeatured => 'Alli Funktione';
-
-  @override
-  String get phoneAndTablet => 'Smart Phone und Tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, Blitz, Klassisch';
-
-  @override
-  String get correspondenceChess => 'Fernschach';
-
-  @override
-  String get onlineAndOfflinePlay => 'Online und offline schpille';
 
   @override
   String get viewTheSolution => 'Lueg d\'Lösig a';
 
   @override
-  String get followAndChallengeFriends => 'Folg Fründe und forder sie zum Schpil';
-
-  @override
   String get noChallenges => 'Kei Useforderige.';
-
-  @override
-  String get gameAnalysis => 'Schpil-Analyse';
 
   @override
   String xHostsY(String param1, String param2) {

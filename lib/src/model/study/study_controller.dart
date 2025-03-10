@@ -74,7 +74,7 @@ class StudyController extends _$StudyController
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _socketSubscription?.cancel();
-      _likeDebouncer.dispose();
+      _likeDebouncer.cancel();
       disposeEngineEvaluation();
     });
 
@@ -503,6 +503,9 @@ class StudyState with _$StudyState implements EvaluationMixinState {
   IMap<Square, ISet<Square>> get validMoves =>
       currentNode.position != null ? makeLegalMoves(currentNode.position!) : const IMap.empty();
 
+  @override
+  bool get delayLocalEngine => false;
+
   /// Whether the engine is available for evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
@@ -528,7 +531,11 @@ class StudyState with _$StudyState implements EvaluationMixinState {
   bool get canGoNext => currentNode.children.isNotEmpty;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  String get currentChapterTitle => study.getChapterIndexedName(study.chapter.id);
+  String get currentChapterTitle {
+    final index = study.getChapterIndex(currentChapter.id);
+    return '${index + 1}. ${study.chapters[index].name}';
+  }
+
   bool get hasNextChapter => study.chapter.id != study.chapters.last.id;
 
   bool get isAtEndOfChapter => isOnMainline && currentNode.children.isEmpty;

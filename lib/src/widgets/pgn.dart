@@ -194,7 +194,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _debounce.cancel();
     _scrollTimer?.cancel();
     super.dispose();
   }
@@ -1076,9 +1076,11 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
           })
           .toList(growable: false);
 
-      setState(() {
-        _sideLineStartPositions = positions;
-      });
+      if (mounted) {
+        setState(() {
+          _sideLineStartPositions = positions;
+        });
+      }
     });
   }
 

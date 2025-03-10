@@ -9,26 +9,36 @@ class FakeStockfishFactory extends StockfishFactory {
   const FakeStockfishFactory();
 
   @override
-  Future<Stockfish> call() async => Future.value(FakeStockfish());
+  Stockfish call() => FakeStockfish();
 }
 
 /// A fake implementation of [Stockfish].
 class FakeStockfish implements Stockfish {
-  FakeStockfish();
+  FakeStockfish() {
+    scheduleMicrotask(() {
+      _state.value = StockfishState.ready;
+    });
+  }
 
-  final _state = ValueNotifier<StockfishState>(StockfishState.ready);
+  final _state = ValueNotifier<StockfishState>(StockfishState.starting);
   final _stdoutController = StreamController<String>();
 
   Position? _position;
+
+  void _emit(String line) {
+    scheduleMicrotask(() {
+      _stdoutController.add(line);
+    });
+  }
 
   @override
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
       case 'uci':
-        _stdoutController.add('uciok\n');
+        _emit('uciok\n');
       case 'isready':
-        _stdoutController.add('readyok\n');
+        _emit('readyok\n');
       case 'position':
         if (parts.length > 1 && parts[1] == 'fen') {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
@@ -60,11 +70,11 @@ class FakeStockfish implements Stockfish {
               // the depth will always be 15 before throttle delay and 16 after.
               // The cp value will always 23.
               for (var i = 1; i < 3; i++) {
-                _stdoutController.add(
+                _emit(
                   'info depth ${14 + i} seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 hashfull 0 tbhits 0 time ${100 * (i + 14)} pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6\n',
                 );
               }
-              _stdoutController.add('bestmove e2e4 ponder e7e5\n');
+              _emit('bestmove e2e4 ponder e7e5\n');
             }
           }
         }

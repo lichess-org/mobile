@@ -51,7 +51,7 @@ class _Comment extends ConsumerWidget {
             child: Linkify(
               text: comment,
               style: const TextStyle(fontSize: 16),
-              onOpen: (link) async {
+              onOpen: (link) {
                 launchUrl(Uri.parse(link.url));
               },
             ),

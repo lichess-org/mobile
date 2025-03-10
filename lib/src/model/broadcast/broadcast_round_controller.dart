@@ -68,8 +68,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _appLifecycleListener?.dispose();
-      _syncRoundDebouncer.dispose();
-      _evalRequestDebouncer.dispose();
+      _syncRoundDebouncer.cancel();
+      _evalRequestDebouncer.cancel();
     });
 
     final round = await ref.withClient(

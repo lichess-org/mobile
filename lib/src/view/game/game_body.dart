@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -96,11 +97,21 @@ class GameBody extends ConsumerWidget {
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final blindfoldMode = ref.watch(gamePreferencesProvider.select((prefs) => prefs.blindfoldMode));
+    final enableChat = ref.watch(
+      gamePreferencesProvider.select((prefs) => prefs.enableChat ?? false),
+    );
 
     final gameStateAsync = ref.watch(ctrlProvider);
 
     return gameStateAsync.when(
       data: (gameState) {
+        final isChatEnabled = enableChat && !gameState.isZenModeActive;
+        if (isChatEnabled) {
+          ref.listen(
+            chatControllerProvider(id),
+            (prev, state) => _chatListener(prev, state, context: context, ref: ref),
+          );
+        }
         final (position, legalMoves) = gameState.currentPosition;
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
@@ -329,6 +340,18 @@ class GameBody extends ConsumerWidget {
     );
   }
 
+  void _chatListener(
+    AsyncValue<ChatState>? prev,
+    AsyncValue<ChatState> state, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    if (prev == null || !prev.hasValue || !state.hasValue) return;
+    if (state.requireValue.unreadMessages > prev.requireValue.unreadMessages) {
+      ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
+    }
+  }
+
   void _stateListener(
     AsyncValue<GameState>? prev,
     AsyncValue<GameState> state, {
@@ -511,7 +534,7 @@ class _GameBottomBar extends ConsumerWidget {
               )
             else if (gameState.game.finished)
               BottomBarButton(
-                label: context.l10n.gameAnalysis,
+                label: context.l10n.analysis,
                 icon: Icons.biotech,
                 onTap: () {
                   Navigator.of(

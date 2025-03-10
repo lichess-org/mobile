@@ -140,7 +140,7 @@ class _InvertBackgroundState extends State<_AnimatedInvertBackground>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _colorAnimation,
-      builder: (_, __) => Container(color: _colorAnimation.value, child: widget.child),
+      builder: (_, _) => Container(color: _colorAnimation.value, child: widget.child),
     );
   }
 }

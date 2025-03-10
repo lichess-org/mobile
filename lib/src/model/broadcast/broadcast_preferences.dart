@@ -24,7 +24,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
     return fetch();
   }
 
-  Future<void> toggleEvaluationBar() async {
+  Future<void> toggleEvaluationBar() {
     return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
 }

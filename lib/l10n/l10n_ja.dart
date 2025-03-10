@@ -3631,43 +3631,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playChessEverywhere => 'どこでもチェスを対局';
 
   @override
-  String get asFreeAsLichess => 'Lichess は常に無料';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => '金ではなくチェス愛のために作られたアプリ';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => '誰でもすべての機能が無料です';
-
-  @override
-  String get zeroAdvertisement => '広告いっさいなし';
-
-  @override
-  String get fullFeatured => '幅広い機能';
-
-  @override
-  String get phoneAndTablet => '携帯やタブレットで';
-
-  @override
-  String get bulletBlitzClassical => 'ブレット、ブリッツ、クラシカル';
-
-  @override
-  String get correspondenceChess => '通信戦';
-
-  @override
-  String get onlineAndOfflinePlay => 'オンラインでもオフラインでも';
 
   @override
   String get viewTheSolution => '解答を見る';
 
   @override
-  String get followAndChallengeFriends => '友達をフォローして対局しよう';
-
-  @override
   String get noChallenges => 'チャレンジはありません。';
-
-  @override
-  String get gameAnalysis => '棋譜解析';
 
   @override
   String xHostsY(String param1, String param2) {

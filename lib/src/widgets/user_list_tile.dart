@@ -83,7 +83,7 @@ class UserListTile extends StatelessWidget {
               const SizedBox(width: 5),
               CachedNetworkImage(
                 imageUrl: lichessFlairSrc(flair!),
-                errorWidget: (_, __, ___) => kEmptyWidget,
+                errorWidget: (_, _, _) => kEmptyWidget,
                 width: DefaultTextStyle.of(context).style.fontSize,
                 height: DefaultTextStyle.of(context).style.fontSize,
               ),

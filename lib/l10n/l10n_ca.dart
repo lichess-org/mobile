@@ -3655,43 +3655,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playChessEverywhere => 'Jugueu a escacs a qualsevol lloc';
 
   @override
-  String get asFreeAsLichess => 'Tan lliure com lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Fet per amor als escacs, no per diners';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Tothom accedeix gratuïtament a totes les funcions';
-
-  @override
-  String get zeroAdvertisement => 'Cap anunci';
-
-  @override
-  String get fullFeatured => 'Amb totes les funcions';
-
-  @override
-  String get phoneAndTablet => 'Telèfon i tauleta';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, clàssic';
-
-  @override
-  String get correspondenceChess => 'Escacs per correspondència';
-
-  @override
-  String get onlineAndOfflinePlay => 'Jugar en línia i desconectat';
 
   @override
   String get viewTheSolution => 'Veure la solució';
 
   @override
-  String get followAndChallengeFriends => 'Seguiu i desafieu amics';
-
-  @override
   String get noChallenges => 'Sense desafiaments.';
-
-  @override
-  String get gameAnalysis => 'Anàlisi de la partida';
 
   @override
   String xHostsY(String param1, String param2) {

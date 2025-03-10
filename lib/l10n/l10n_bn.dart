@@ -3655,43 +3655,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get playChessEverywhere => 'দাবা খেলুন সব জায়গায়';
 
   @override
-  String get asFreeAsLichess => 'যেমন লিচাস মুক্ত হিসাবে';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'দাবার ভালবাসার জন্য তৈরি, টাকা না';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'সকলেই পাবে বিনামূল্যে সব বৈশিষ্ট্য';
-
-  @override
-  String get zeroAdvertisement => 'শূন্য বিজ্ঞাপন';
-
-  @override
-  String get fullFeatured => 'সম্পূর্ণ বৈশিষ্ট্যযুক্ত';
-
-  @override
-  String get phoneAndTablet => 'ফোন এবং ট্যাবলেট';
-
-  @override
-  String get bulletBlitzClassical => 'গুলি, খুব দ্রুত আক্রমণ, ক্লাসিকাল';
-
-  @override
-  String get correspondenceChess => 'সাদৃশ্য দাবা';
-
-  @override
-  String get onlineAndOfflinePlay => 'অনলাইন এবং অফলাইন খেলা';
 
   @override
   String get viewTheSolution => 'সমাধান দেখুন';
 
   @override
-  String get followAndChallengeFriends => 'অনুসরন করুন এবং বন্ধুদের চ্যালেঞ্জ করুন';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'খেলা বিশ্লেষন';
 
   @override
   String xHostsY(String param1, String param2) {

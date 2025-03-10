@@ -34,13 +34,9 @@ class EvaluationService {
 
   Engine? _engine;
 
-  /// A future that completes once the engine is disposed.
-  ///
-  /// This is used to avoid disposing the engine twice.
-  Future<void>? _engineDisposingFuture;
-
   EvaluationContext? _context;
-  EvaluationOptions _options = EvaluationOptions(
+
+  EvaluationOptions options = EvaluationOptions(
     multiPv: 1,
     cores: defaultEngineCores,
     searchTime: const Duration(seconds: 10),
@@ -60,17 +56,14 @@ class EvaluationService {
   /// If [options] is not provided, the default options are used.
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
-  Future<void> initEngine(
+  Future<void> _initEngine(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
-    EvaluationOptions? options,
+    EvaluationOptions? initOptions,
   }) async {
-    if (_context != null || _engine != null) {
-      await disposeEngine();
-    }
+    await disposeEngine();
     _context = context;
-    _engineDisposingFuture = null;
-    if (options != null) _options = options;
+    if (initOptions != null) options = initOptions;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
@@ -92,16 +85,14 @@ class EvaluationService {
   Future<void> ensureEngineInitialized(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
-    EvaluationOptions? options,
+    EvaluationOptions? initOptions,
   }) async {
-    if (_engine == null || _context != context) {
-      await initEngine(context, engineFactory: engineFactory, options: options);
+    if (_engine == null ||
+        _engine?.isDisposed == true ||
+        _context != context ||
+        options != initOptions) {
+      await _initEngine(context, engineFactory: engineFactory, initOptions: initOptions);
     }
-  }
-
-  void setOptions(EvaluationOptions options) {
-    stop();
-    _options = options;
   }
 
   /// Dispose the engine.
@@ -109,12 +100,7 @@ class EvaluationService {
   /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
-    if (_engine == null) return Future.value();
-
-    return _engineDisposingFuture ??= _engine!.dispose().then((_) {
-      _engine = null;
-      _context = null;
-    });
+    return _engine?.dispose() ?? Future.value();
   }
 
   /// Start the engine evaluation with the given [path] and [steps].
@@ -147,10 +133,10 @@ class EvaluationService {
 
     final work = Work(
       variant: context.variant,
-      threads: _options.cores,
+      threads: options.cores,
       hashSize: maxMemory,
-      searchTime: _options.searchTime,
-      multiPv: _options.multiPv,
+      searchTime: options.searchTime,
+      multiPv: options.multiPv,
       path: path,
       initialPosition: context.initialPosition,
       steps: IList(steps),
@@ -159,24 +145,11 @@ class EvaluationService {
     // cancel evaluation if we already have an interesting eval
     final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
     switch (cachedEval) {
-      // we have a local eval
-      case final LocalEval localEval:
-        // if the search time is greater than the current search time, don't evaluate again but
-        // update the engine state with the local eval
-        if (localEval.searchTime >= _options.searchTime) {
-          _state.value = (
-            engineName: _state.value.engineName,
-            state: _state.value.state,
-            eval: localEval,
-          );
-          return null;
-        }
-      // we have a cloud eval, no need to evaluate
+      // if the search time is greater than the current search time, don't evaluate again
+      case final LocalEval localEval when localEval.searchTime >= options.searchTime:
       case CloudEval _:
-        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
         return null;
-      // no eval, continue
-      case null:
+      case _:
         break;
     }
 
@@ -196,6 +169,10 @@ class EvaluationService {
 
   void stop() {
     _engine?.stop();
+  }
+
+  void resetEval() {
+    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
   }
 }
 
@@ -217,7 +194,7 @@ typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEva
 class EngineEvaluation extends _$EngineEvaluation {
   @override
   EngineEvaluationState build() {
-    final listenable = ref.watch(evaluationServiceProvider).state;
+    final listenable = ref.read(evaluationServiceProvider).state;
 
     listenable.addListener(_listener);
 

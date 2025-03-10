@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -60,10 +59,6 @@ class AnalysisController extends _$AnalysisController
 
   late Root _root;
   late Variant _variant;
-
-  final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 800));
-
-  Timer? _startEngineEvalTimer;
 
   @override
   @protected
@@ -206,8 +201,6 @@ class AnalysisController extends _$AnalysisController
     }
 
     ref.onDispose(() {
-      _startEngineEvalTimer?.cancel();
-      _engineEvalDebounce.dispose();
       if (isEngineAllowed) {
         disposeEngineEvaluation();
       }
@@ -723,6 +716,12 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
 
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position, isChess960: variant == Variant.chess960);
+
+  /// Whether to delay the local engine evaluation.
+  ///
+  /// Cloud evaluations are most likely available for the opening moves.
+  @override
+  bool get delayLocalEngine => variant != Variant.fromPosition && currentPosition.ply < 20;
 
   /// Whether the user can request server analysis.
   ///

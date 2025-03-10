@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -70,7 +71,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: const Text(''),
           body: DefaultTabController(
             length: 1,
@@ -93,7 +94,7 @@ class _StudyScreenLoader extends ConsumerWidget {
         );
       case _:
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: Shimmer(
             child: ShimmerLoading(
               isLoading: true,
@@ -185,7 +186,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      enableBackgroundFilterBlur: false,
+      appBarEnableBackgroundFilterBlur: false,
       appBarTitle: AutoSizeText(
         widget.studyState.currentChapterTitle,
         maxLines: 2,
@@ -208,6 +209,7 @@ class _StudyMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
     return PlatformContextMenuButton(
@@ -221,14 +223,15 @@ class _StudyMenu extends ConsumerWidget {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        PlatformContextMenuAction(
-          dismissOnPress: false,
-          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
-          onPressed: () {
-            ref.read(studyControllerProvider(id).notifier).toggleLike();
-          },
-        ),
+        if (session != null)
+          PlatformContextMenuAction(
+            dismissOnPress: false,
+            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            onPressed: () {
+              ref.read(studyControllerProvider(id).notifier).toggleLike();
+            },
+          ),
         PlatformContextMenuAction(
           icon:
               Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
@@ -239,13 +242,13 @@ class _StudyMenu extends ConsumerWidget {
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
                   },
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(
                       context,
                       uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
@@ -276,7 +279,7 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () async {
+                    onPressed: () {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),

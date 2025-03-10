@@ -9,13 +9,13 @@ import 'test_engine_app.dart';
 void main() {
   testWidgets('engine gauge is not displayed if computer analysis is not allowed', (tester) async {
     await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
-    await tester.pump(kRequestCloudEvalDebounceDelay);
+    await tester.pump(kRequestEvalDebounceDelay);
     expect(find.byType(EngineGauge), findsNothing);
   });
 
   testWidgets('engine gauge is not displayed if computer analysis is not enabled', (tester) async {
     await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
-    await tester.pump(kRequestCloudEvalDebounceDelay);
+    await tester.pump(kRequestEvalDebounceDelay);
     expect(find.byType(EngineGauge), findsNothing);
   });
 
@@ -23,13 +23,13 @@ void main() {
     tester,
   ) async {
     await makeEngineTestApp(tester, isEngineEnabled: false);
-    await tester.pump(kRequestCloudEvalDebounceDelay);
+    await tester.pump(kRequestEvalDebounceDelay);
     expect(find.byType(EngineGauge), findsNothing);
   });
 
   testWidgets('engine gauge is displayed if engine is available', (tester) async {
     await makeEngineTestApp(tester);
-    await tester.pump(kRequestCloudEvalDebounceDelay);
+    await tester.pump(kRequestEvalDebounceDelay);
     expect(find.byType(EngineGauge), findsOne);
     expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
   });

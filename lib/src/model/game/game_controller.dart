@@ -83,6 +83,7 @@ class GameController extends _$GameController {
       _transientMoveTimer?.cancel();
       _appLifecycleListener?.dispose();
       _clock?.dispose();
+      _onFlagThrottler.cancel();
     });
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {

@@ -85,7 +85,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.isOngoing == true) {
+      if (state.valueOrNull?.isNewOrOngoing == true) {
         _syncDebouncer(() {
           _reloadPgn();
         });
@@ -94,7 +94,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.isOngoing == true) {
+        if (state.valueOrNull?.isNewOrOngoing == true) {
           _syncDebouncer(() {
             _reloadPgn();
           });
@@ -110,7 +110,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       _socketOpenSubscription?.cancel();
       _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
-      _syncDebouncer.dispose();
+      _syncDebouncer.cancel();
       disposeEngineEvaluation();
     });
 
@@ -180,15 +180,22 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
-      final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
+      final lastMove =
+          wasOnLivePath ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move : curState.lastMove;
 
       newRoot.merge(_root);
 
       _root = newRoot;
 
       final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
+      final newCurrentNode =
+          wasOnLivePath
+              ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
+              : curState.currentNode;
+
       state = AsyncData(
         state.requireValue.copyWith(
+          currentNode: newCurrentNode,
           currentPath: newCurrentPath,
           pgnHeaders: pgnHeaders,
           pgnRootComments: rootComments,
@@ -574,11 +581,18 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
 
-  /// Whether the game is still ongoing
-  bool get isOngoing => pgnHeaders['Result'] == '*';
+  /// Whether the game is new or ongoing
+  bool get isNewOrOngoing => pgnHeaders['Result'] == '*';
 
-  /// The path to the current broadcast live move
-  UciPath? get broadcastLivePath => isOngoing ? broadcastPath : null;
+  /// The path to the current broadcast live move.
+  ///
+  /// If the game is new the path will be empty.
+  UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
+
+  /// In a broadcast analysis, the cloud evals are most likely available, so we always want to delay
+  /// the local engine evaluation to save battery.
+  @override
+  bool get delayLocalEngine => true;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
