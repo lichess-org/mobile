@@ -35,7 +35,8 @@ class EvaluationService {
   Engine? _engine;
 
   EvaluationContext? _context;
-  EvaluationOptions _options = EvaluationOptions(
+
+  EvaluationOptions options = EvaluationOptions(
     multiPv: 1,
     cores: defaultEngineCores,
     searchTime: const Duration(seconds: 10),
@@ -58,11 +59,11 @@ class EvaluationService {
   Future<void> _initEngine(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
-    EvaluationOptions? options,
+    EvaluationOptions? initOptions,
   }) async {
     await disposeEngine();
     _context = context;
-    if (options != null) _options = options;
+    if (initOptions != null) options = initOptions;
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
@@ -84,16 +85,14 @@ class EvaluationService {
   Future<void> ensureEngineInitialized(
     EvaluationContext context, {
     Engine Function() engineFactory = StockfishEngine.new,
-    EvaluationOptions? options,
+    EvaluationOptions? initOptions,
   }) async {
-    if (_engine == null || _engine?.isDisposed == true || _context != context) {
-      await _initEngine(context, engineFactory: engineFactory, options: options);
+    if (_engine == null ||
+        _engine?.isDisposed == true ||
+        _context != context ||
+        options != initOptions) {
+      await _initEngine(context, engineFactory: engineFactory, initOptions: initOptions);
     }
-  }
-
-  void setOptions(EvaluationOptions options) {
-    stop();
-    _options = options;
   }
 
   /// Dispose the engine.
@@ -134,10 +133,10 @@ class EvaluationService {
 
     final work = Work(
       variant: context.variant,
-      threads: _options.cores,
+      threads: options.cores,
       hashSize: maxMemory,
-      searchTime: _options.searchTime,
-      multiPv: _options.multiPv,
+      searchTime: options.searchTime,
+      multiPv: options.multiPv,
       path: path,
       initialPosition: context.initialPosition,
       steps: IList(steps),
@@ -147,7 +146,7 @@ class EvaluationService {
     final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
     switch (cachedEval) {
       // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval when localEval.searchTime >= _options.searchTime:
+      case final LocalEval localEval when localEval.searchTime >= options.searchTime:
       case CloudEval _:
         return null;
       case _:

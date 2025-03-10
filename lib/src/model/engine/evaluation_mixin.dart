@@ -136,7 +136,6 @@ mixin EngineEvaluationMixin {
     if (evaluationState.isEngineAvailable(evaluationPrefs)) {
       requestEval();
     } else {
-      _stopEngineEval();
       await _evaluationService?.disposeEngine();
     }
   }
@@ -149,7 +148,7 @@ mixin EngineEvaluationMixin {
 
     evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    _evaluationService?.setOptions(evaluationPrefs.evaluationOptions);
+    _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
     requestEval();
   }
@@ -158,7 +157,7 @@ mixin EngineEvaluationMixin {
   void setEngineCores(int numEngineCores) {
     evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    _evaluationService?.setOptions(evaluationPrefs.evaluationOptions);
+    _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
     requestEval();
   }
@@ -167,7 +166,7 @@ mixin EngineEvaluationMixin {
   void setEngineSearchTime(Duration searchTime) {
     evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
 
-    _evaluationService?.setOptions(evaluationPrefs.evaluationOptions);
+    _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
     requestEval();
   }
@@ -259,7 +258,7 @@ mixin EngineEvaluationMixin {
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
     await _evaluationService?.ensureEngineInitialized(
       evaluationState.evaluationContext,
-      options: evaluationPrefs.evaluationOptions,
+      initOptions: evaluationPrefs.evaluationOptions,
     );
     _evaluationService
         ?.start(
