@@ -18,10 +18,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final federation = player.federation;
-    final title = player.title;
-    final name = player.name;
-    final rating = player.rating;
+    final BroadcastPlayer(:federation, :title, :name, :rating) = player;
 
     return Row(
       children: [

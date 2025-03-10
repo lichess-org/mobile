@@ -180,11 +180,9 @@ class _PlayersListState extends ConsumerState<PlayersList> {
             ),
           );
         } else {
-          final playerWithOverallResult = players[index - 1];
-          final player = playerWithOverallResult.player;
-          final ratingDiff = playerWithOverallResult.ratingDiff;
-          final score = playerWithOverallResult.score;
-          final played = playerWithOverallResult.played;
+          final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played) =
+              players[index - 1];
+          final rating = player.rating;
 
           return GestureDetector(
             onTap: () {
@@ -209,8 +207,8 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                       padding: _kTableRowPadding,
                       child: Row(
                         children: [
-                          if (player.rating != null) ...[
-                            Text(player.rating.toString()),
+                          if (rating != null) ...[
+                            Text(rating.toString()),
                             const SizedBox(width: 5),
                             if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
                           ],

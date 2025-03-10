@@ -234,7 +234,7 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
 
 BroadcastPlayerWithGameResults _makePlayerWithGameResultsFromJson(Map<String, dynamic> json) {
   return (
-    player: _playerWithOverallResultFromPick(pick(json).required()),
+    playerWithOverallResult: _playerWithOverallResultFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
     games: pick(json, 'games').asListOrThrow(_playerGameResultFromPick).toIList(),
   );
