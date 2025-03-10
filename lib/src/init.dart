@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
-import 'package:lichess_mobile/src/utils/orientation_mode.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
@@ -146,7 +145,7 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   final view = widgetsBinding.platformDispatcher.views.first;
   final data = MediaQueryData.fromView(view);
   if (data.size.shortestSide < FormFactor.tablet) {
-    await OrientationMode.portraitUp.apply();
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   // Sets edge-to-edge system UI mode on Android 12+
