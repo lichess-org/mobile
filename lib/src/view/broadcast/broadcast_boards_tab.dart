@@ -304,7 +304,9 @@ class _PlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final player = game.players[side]!;
+    final playerWithClock = game.players[side]!;
+    final player = playerWithClock.player;
+    final clock = playerWithClock.clock;
     final isClockActive = game.isOngoing && side == playingSide;
 
     return SizedBox(
@@ -317,22 +319,16 @@ class _PlayerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: BroadcastPlayerWidget(
-                  federation: player.federation,
-                  title: player.title,
-                  name: player.name,
-                ),
-              ),
+              Expanded(child: BroadcastPlayerWidget(player: player, showRating: false)),
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
                   game.status.resultToString(side),
                   style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
-              else if (player.clock != null)
+              else if (clock != null)
                 CountdownClockBuilder(
-                  timeLeft: player.clock!,
+                  timeLeft: clock,
                   active: isClockActive,
                   builder:
                       (context, timeLeft) => Text(
