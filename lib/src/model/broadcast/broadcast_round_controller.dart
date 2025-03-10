@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -21,83 +20,42 @@ part 'broadcast_round_controller.g.dart';
 
 @riverpod
 class BroadcastRoundController extends _$BroadcastRoundController {
-  static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
-      Uri(path: 'study/$broadcastRoundId/socket/v6');
+  static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId, int socketVersion) => Uri(
+    path: 'study/$broadcastRoundId/socket/v6',
+    queryParameters: {'v': socketVersion.toString()},
+  );
 
   StreamSubscription<SocketEvent>? _subscription;
   StreamSubscription<void>? _socketOpenSubscription;
-  AppLifecycleListener? _appLifecycleListener;
 
   late SocketClient _socketClient;
 
   final _syncRoundDebouncer = Debouncer(const Duration(milliseconds: 150));
   final _evalRequestDebouncer = Debouncer(const Duration(milliseconds: 200));
 
-  Object? _key = Object();
-
   @override
   Future<BroadcastRoundState> build(BroadcastRoundId broadcastRoundId) async {
-    _socketClient = ref
-        .watch(socketPoolProvider)
-        .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
-
-    _subscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    await _socketClient.firstConnection;
-
-    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.round.status == RoundStatus.live) {
-        _syncRoundDebouncer(() {
-          _syncRound();
-        });
-      }
-    });
-
-    _appLifecycleListener = AppLifecycleListener(
-      onResume: () {
-        if (state.valueOrNull?.round.status == RoundStatus.live) {
-          _syncRoundDebouncer(() {
-            _syncRound();
-          });
-        }
-      },
+    final round = await ref.withClient(
+      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
+    _socketClient = ref
+        .watch(socketPoolProvider)
+        .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId, round.socketVersion));
+
+    _subscription = _socketClient.stream.listen(_handleSocketEvent);
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      _syncRoundDebouncer(() => ref.invalidateSelf());
+    });
+
     ref.onDispose(() {
-      _key = null;
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
-      _appLifecycleListener?.dispose();
       _syncRoundDebouncer.cancel();
       _evalRequestDebouncer.cancel();
     });
 
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
-
     return BroadcastRoundState(round: round.round, games: round.games, observedGames: IList());
-  }
-
-  Future<void> _syncRound() async {
-    if (state.hasValue == false) return;
-
-    final key = _key;
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
-    // check provider is still mounted
-    if (key == _key) {
-      state = AsyncData(
-        BroadcastRoundState(
-          round: round.round,
-          games: round.games,
-          observedGames: state.requireValue.observedGames,
-        ),
-      );
-    }
-
-    _sendEvalMultiGet();
   }
 
   void _handleSocketEvent(SocketEvent event) {
