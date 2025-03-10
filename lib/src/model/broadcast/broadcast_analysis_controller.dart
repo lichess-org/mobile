@@ -180,15 +180,22 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
-      final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
+      final lastMove =
+          wasOnLivePath ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move : curState.lastMove;
 
       newRoot.merge(_root);
 
       _root = newRoot;
 
       final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
+      final newCurrentNode =
+          wasOnLivePath
+              ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
+              : curState.currentNode;
+
       state = AsyncData(
         state.requireValue.copyWith(
+          currentNode: newCurrentNode,
           currentPath: newCurrentPath,
           pgnHeaders: pgnHeaders,
           pgnRootComments: rootComments,
