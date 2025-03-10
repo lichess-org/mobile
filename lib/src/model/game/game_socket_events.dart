@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'game_socket_events.freezed.dart';
 
 @freezed
-sealed class GameFullEvent with _$GameFullEvent {
+class GameFullEvent with _$GameFullEvent {
   const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
       _GameFullEvent;
 
@@ -27,7 +27,7 @@ sealed class GameFullEvent with _$GameFullEvent {
 }
 
 @freezed
-sealed class MoveEvent with _$MoveEvent {
+class MoveEvent with _$MoveEvent {
   const MoveEvent._();
 
   const factory MoveEvent({
@@ -87,7 +87,7 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class GameEndEvent with _$GameEndEvent {
+class GameEndEvent with _$GameEndEvent {
   const GameEndEvent._();
 
   const factory GameEndEvent({
@@ -120,7 +120,7 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class ServerEvalEvent with _$ServerEvalEvent {
+class ServerEvalEvent with _$ServerEvalEvent {
   const ServerEvalEvent._();
 
   const factory ServerEvalEvent({

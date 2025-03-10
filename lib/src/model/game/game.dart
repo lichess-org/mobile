@@ -275,7 +275,7 @@ enum GameRule {
 }
 
 @freezed
-sealed class ServerGamePrefs with _$ServerGamePrefs {
+class ServerGamePrefs with _$ServerGamePrefs {
   const ServerGamePrefs._();
 
   const factory ServerGamePrefs({
@@ -289,7 +289,7 @@ sealed class ServerGamePrefs with _$ServerGamePrefs {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class GameMeta with _$GameMeta {
+class GameMeta with _$GameMeta {
   const GameMeta._();
 
   @Assert('!(clock != null && daysPerTurn != null)')
@@ -325,7 +325,7 @@ sealed class GameMeta with _$GameMeta {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class CorrespondenceClockData with _$CorrespondenceClockData {
+class CorrespondenceClockData with _$CorrespondenceClockData {
   const factory CorrespondenceClockData({required Duration white, required Duration black}) =
       _CorrespondenceClockData;
 
@@ -334,7 +334,7 @@ sealed class CorrespondenceClockData with _$CorrespondenceClockData {
 }
 
 @freezed
-sealed class GameStep with _$GameStep {
+class GameStep with _$GameStep {
   const factory GameStep({
     required Position position,
     SanMove? sanMove,

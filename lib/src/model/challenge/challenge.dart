@@ -34,7 +34,7 @@ abstract mixin class BaseChallenge {
 
 /// A challenge already created server-side.
 @Freezed(fromJson: true, toJson: true)
-sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
+class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
   const factory Challenge({
@@ -110,7 +110,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 
 /// A challenge request to play a game with another user.
 @freezed
-sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
+class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
   const ChallengeRequest._();
 
   @Assert('clock != null || days != null', 'Either clock or days must be set but not both.')

@@ -43,7 +43,7 @@ const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextO
 class PlayersList extends ConsumerStatefulWidget {
   const PlayersList(this.players, this.tournamentId);
 
-  final IList<BroadcastPlayerExtended> players;
+  final IList<BroadcastPlayerWithOverallResult> players;
   final BroadcastTournamentId tournamentId;
 
   @override
@@ -51,7 +51,7 @@ class PlayersList extends ConsumerStatefulWidget {
 }
 
 class _PlayersListState extends ConsumerState<PlayersList> {
-  late IList<BroadcastPlayerExtended> players;
+  late IList<BroadcastPlayerWithOverallResult> players;
   late _SortingTypes currentSort;
   bool reverse = false;
 
@@ -76,13 +76,20 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
     final compare = switch (newSort) {
       _SortingTypes.player =>
-        (BroadcastPlayerExtended a, BroadcastPlayerExtended b) => a.name.compareTo(b.name),
-      _SortingTypes.elo => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
-        if (a.rating == null) return 1;
-        if (b.rating == null) return -1;
-        return b.rating!.compareTo(a.rating!);
+        (BroadcastPlayerWithOverallResult a, BroadcastPlayerWithOverallResult b) =>
+            a.player.name.compareTo(b.player.name),
+      _SortingTypes.elo => (
+        BroadcastPlayerWithOverallResult a,
+        BroadcastPlayerWithOverallResult b,
+      ) {
+        if (a.player.rating == null) return 1;
+        if (b.player.rating == null) return -1;
+        return b.player.rating!.compareTo(a.player.rating!);
       },
-      _SortingTypes.score => (BroadcastPlayerExtended a, BroadcastPlayerExtended b) {
+      _SortingTypes.score => (
+        BroadcastPlayerWithOverallResult a,
+        BroadcastPlayerWithOverallResult b,
+      ) {
         if (a.score == null) return 1;
         if (b.score == null) return -1;
 
@@ -173,19 +180,17 @@ class _PlayersListState extends ConsumerState<PlayersList> {
             ),
           );
         } else {
-          final player = players[index - 1];
+          final playerWithOverallResult = players[index - 1];
+          final player = playerWithOverallResult.player;
+          final ratingDiff = playerWithOverallResult.ratingDiff;
+          final score = playerWithOverallResult.score;
+          final played = playerWithOverallResult.played;
 
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                BroadcastPlayerResultsScreen.buildRoute(
-                  context,
-                  widget.tournamentId,
-                  player.fideId != null ? player.fideId.toString() : player.name,
-                  playerTitle: player.title,
-                  playerName: player.name,
-                ),
-              );
+              Navigator.of(
+                context,
+              ).push(BroadcastPlayerResultsScreen.buildRoute(context, widget.tournamentId, player));
             },
             child: ColoredBox(
               color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
@@ -195,11 +200,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                   Expanded(
                     child: Padding(
                       padding: _kTableRowPadding,
-                      child: BroadcastPlayerWidget(
-                        federation: player.federation,
-                        title: player.title,
-                        name: player.name,
-                      ),
+                      child: BroadcastPlayerWidget(player: player, showRating: false),
                     ),
                   ),
                   SizedBox(
@@ -211,8 +212,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                           if (player.rating != null) ...[
                             Text(player.rating.toString()),
                             const SizedBox(width: 5),
-                            if (player.ratingDiff != null)
-                              ProgressionWidget(player.ratingDiff!, fontSize: 14),
+                            if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
                           ],
                         ],
                       ),
@@ -223,16 +223,16 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                     child: Padding(
                       padding: _kTableRowPadding,
                       child:
-                          (player.score != null)
+                          (score != null)
                               ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                                  '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
                                 ),
                               )
                               : Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(player.played.toString()),
+                                child: Text(played.toString()),
                               ),
                     ),
                   ),

@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'tv_socket_events.freezed.dart';
 
 @freezed
-sealed class FenSocketEvent with _$FenSocketEvent {
+class FenSocketEvent with _$FenSocketEvent {
   const factory FenSocketEvent({
     required GameId id,
     required String fen,
@@ -34,7 +34,7 @@ FenSocketEvent _tvFenEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class TvSelectEvent with _$TvSelectEvent {
+class TvSelectEvent with _$TvSelectEvent {
   const factory TvSelectEvent({
     required TvChannel channel,
     required GameId id,

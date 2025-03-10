@@ -276,7 +276,7 @@ class StormController extends _$StormController {
 }
 
 @freezed
-sealed class StormState with _$StormState {
+class StormState with _$StormState {
   const StormState._();
 
   const factory StormState({
@@ -344,7 +344,7 @@ enum ComboState { increase, reset, noChange }
 
 /// A `StormCombo` object represents the current and best combo of a storm run
 @freezed
-sealed class StormCombo with _$StormCombo {
+class StormCombo with _$StormCombo {
   const StormCombo._();
 
   const factory StormCombo({required int current, required int best}) = _StormCombo;

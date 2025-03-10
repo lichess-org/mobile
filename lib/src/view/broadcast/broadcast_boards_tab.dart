@@ -150,7 +150,6 @@ class BroadcastPreview extends ConsumerWidget {
         final playingSide = Setup.parseFen(game.fen).turn;
 
         return ObservedBoardThumbnail(
-          boardKey: ValueKey(game.id),
           roundId: roundId,
           game: game,
           title: title,
@@ -169,8 +168,6 @@ class BroadcastPreview extends ConsumerWidget {
 
 class ObservedBoardThumbnail extends ConsumerStatefulWidget {
   const ObservedBoardThumbnail({
-    super.key,
-    required this.boardKey,
     required this.roundId,
     required this.game,
     required this.title,
@@ -183,7 +180,6 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
     required this.playingSide,
   });
 
-  final Key boardKey;
   final BroadcastRoundId roundId;
   final BroadcastGame game;
   final String title;
@@ -205,7 +201,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: widget.boardKey,
+      key: ValueKey(widget.game.id),
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0) {
           if (!isBoardVisible) {
@@ -308,7 +304,9 @@ class _PlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final player = game.players[side]!;
+    final playerWithClock = game.players[side]!;
+    final player = playerWithClock.player;
+    final clock = playerWithClock.clock;
     final isClockActive = game.isOngoing && side == playingSide;
 
     return SizedBox(
@@ -321,22 +319,16 @@ class _PlayerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: BroadcastPlayerWidget(
-                  federation: player.federation,
-                  title: player.title,
-                  name: player.name,
-                ),
-              ),
+              Expanded(child: BroadcastPlayerWidget(player: player, showRating: false)),
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
                   game.status.resultToString(side),
                   style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
-              else if (player.clock != null)
+              else if (clock != null)
                 CountdownClockBuilder(
-                  timeLeft: player.clock!,
+                  timeLeft: clock,
                   active: isClockActive,
                   builder:
                       (context, timeLeft) => Text(

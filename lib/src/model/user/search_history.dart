@@ -53,7 +53,7 @@ class SearchHistory extends _$SearchHistory {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class SearchHistoryState with _$SearchHistoryState {
+class SearchHistoryState with _$SearchHistoryState {
   const factory SearchHistoryState({required IList<String> history}) = _SearchHistoryState;
 
   factory SearchHistoryState.fromJson(Map<String, dynamic> json) =>

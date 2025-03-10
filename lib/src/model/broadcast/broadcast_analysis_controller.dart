@@ -180,15 +180,22 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
-      final lastMove = newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move;
+      final lastMove =
+          wasOnLivePath ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move : curState.lastMove;
 
       newRoot.merge(_root);
 
       _root = newRoot;
 
       final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
+      final newCurrentNode =
+          wasOnLivePath
+              ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
+              : curState.currentNode;
+
       state = AsyncData(
         state.requireValue.copyWith(
+          currentNode: newCurrentNode,
           currentPath: newCurrentPath,
           pgnHeaders: pgnHeaders,
           pgnRootComments: rootComments,
@@ -514,7 +521,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 }
 
 @freezed
-sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
+class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({
@@ -581,6 +588,11 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
   ///
   /// If the game is new the path will be empty.
   UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
+
+  /// In a broadcast analysis, the cloud evals are most likely available, so we always want to delay
+  /// the local engine evaluation to save battery.
+  @override
+  bool get delayLocalEngine => true;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>

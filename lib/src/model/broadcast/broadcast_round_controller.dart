@@ -265,7 +265,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 }
 
 @freezed
-sealed class BroadcastRoundState with _$BroadcastRoundState {
+class BroadcastRoundState with _$BroadcastRoundState {
   const factory BroadcastRoundState({
     /// The broadcast round
     required BroadcastRound round,

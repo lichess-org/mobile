@@ -145,7 +145,7 @@ class ClockTile extends ConsumerWidget {
                       }
                       : null,
               child: Padding(
-                padding: const EdgeInsets.all(40),
+                padding: const EdgeInsets.all(48),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
@@ -154,16 +154,10 @@ class ClockTile extends ConsumerWidget {
                     FittedBox(
                       child: AnimatedCrossFade(
                         duration: const Duration(milliseconds: 300),
-                        firstChild: ValueListenableBuilder(
-                          valueListenable: clockState.getDuration(playerType),
-                          builder: (context, value, _) {
-                            return Clock(
-                              padLeft: true,
-                              clockStyle: clockStyle,
-                              timeLeft: value,
-                              active: clockState.isActivePlayer(playerType),
-                            );
-                          },
+                        firstChild: _ClockDisplay(
+                          clockState: clockState,
+                          playerType: playerType,
+                          clockStyle: clockStyle,
                         ),
                         secondChild: const Icon(Icons.flag),
                         crossFadeState:
@@ -191,6 +185,19 @@ class ClockTile extends ConsumerWidget {
               ),
             ),
           ),
+          if (orientation == Orientation.portrait)
+            Positioned(
+              top: 24,
+              left: 24,
+              child: RotatedBox(
+                quarterTurns: 2,
+                child: _ClockDisplay(
+                  clockState: clockState,
+                  playerType: playerType,
+                  clockStyle: clockStyle,
+                ),
+              ),
+            ),
           Positioned(
             bottom: MediaQuery.paddingOf(context).bottom + 48.0,
             child: AnimatedOpacity(
@@ -232,6 +239,34 @@ class ClockTile extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ClockDisplay extends StatelessWidget {
+  const _ClockDisplay({
+    required this.clockState,
+    required this.playerType,
+    required this.clockStyle,
+  });
+
+  final ClockState clockState;
+  final Side playerType;
+  final ClockStyle clockStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: clockState.getDuration(playerType),
+      builder: (context, value, _) {
+        return Clock(
+          padLeft: true,
+          clockStyle: clockStyle,
+          timeLeft: value,
+          active: clockState.isActivePlayer(playerType),
+          padding: EdgeInsets.zero,
+        );
+      },
     );
   }
 }

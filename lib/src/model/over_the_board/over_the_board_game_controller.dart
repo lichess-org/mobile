@@ -111,7 +111,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 }
 
 @freezed
-sealed class OverTheBoardGameState with _$OverTheBoardGameState {
+class OverTheBoardGameState with _$OverTheBoardGameState {
   const OverTheBoardGameState._();
 
   const factory OverTheBoardGameState({

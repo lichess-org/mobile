@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'leaderboard.freezed.dart';
 
 @freezed
-sealed class Leaderboard with _$Leaderboard {
+class Leaderboard with _$Leaderboard {
   const factory Leaderboard({
     required List<LeaderboardUser> bullet,
     required List<LeaderboardUser> blitz,
@@ -25,7 +25,7 @@ sealed class Leaderboard with _$Leaderboard {
 }
 
 @freezed
-sealed class LeaderboardUser with _$LeaderboardUser {
+class LeaderboardUser with _$LeaderboardUser {
   const LeaderboardUser._();
 
   const factory LeaderboardUser({

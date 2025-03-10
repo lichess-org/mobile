@@ -52,7 +52,7 @@ enum BroadcastResult {
 }
 
 @freezed
-sealed class Broadcast with _$Broadcast {
+class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
@@ -72,7 +72,7 @@ sealed class Broadcast with _$Broadcast {
 }
 
 @freezed
-sealed class BroadcastTournament with _$BroadcastTournament {
+class BroadcastTournament with _$BroadcastTournament {
   const factory BroadcastTournament({
     required BroadcastTournamentData data,
     required IList<BroadcastRound> rounds,
@@ -82,7 +82,7 @@ sealed class BroadcastTournament with _$BroadcastTournament {
 }
 
 @freezed
-sealed class BroadcastTournamentData with _$BroadcastTournamentData {
+class BroadcastTournamentData with _$BroadcastTournamentData {
   const factory BroadcastTournamentData({
     required BroadcastTournamentId id,
     required String name,
@@ -111,7 +111,7 @@ typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
 typedef BroadcastTournamentGroup = ({BroadcastTournamentId id, String name});
 
 @freezed
-sealed class BroadcastRound with _$BroadcastRound {
+class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
     required BroadcastRoundId id,
     required String name,
@@ -135,12 +135,12 @@ typedef BroadcastRoundResponse =
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-sealed class BroadcastGame with _$BroadcastGame {
+class BroadcastGame with _$BroadcastGame {
   const BroadcastGame._();
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required IMap<Side, BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -158,53 +158,60 @@ sealed class BroadcastGame with _$BroadcastGame {
 }
 
 @freezed
-sealed class BroadcastPlayer with _$BroadcastPlayer {
+class BroadcastPlayer with _$BroadcastPlayer {
+  const BroadcastPlayer._();
+
   const factory BroadcastPlayer({
     required String name,
     required String? title,
     required int? rating,
-    required Duration? clock,
     required String? federation,
     required FideId? fideId,
   }) = _BroadcastPlayer;
+
+  String get id => (fideId != null) ? fideId.toString() : name;
 }
 
 @freezed
-sealed class BroadcastPlayerExtended with _$BroadcastPlayerExtended {
-  const factory BroadcastPlayerExtended({
-    required String name,
-    required String? title,
-    required int? rating,
-    required String? federation,
-    required FideId? fideId,
+class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
+  const factory BroadcastPlayerWithClock({
+    required BroadcastPlayer player,
+    required Duration? clock,
+  }) = _BroadcastPlayerWithClock;
+}
+
+@freezed
+class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
+  const factory BroadcastPlayerWithOverallResult({
+    required BroadcastPlayer player,
     required int played,
     required double? score,
     required int? ratingDiff,
     required int? performance,
-  }) = _BroadcastPlayerExtended;
+  }) = _BroadcastPlayerWithOverallResult;
 }
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerResults =
+typedef BroadcastPlayerWithGameResults =
     ({
-      BroadcastPlayerExtended player,
+      BroadcastPlayerWithOverallResult player,
       BroadcastFideData fideData,
-      IList<BroadcastPlayerResultData> games,
+      IList<BroadcastPlayerGameResult> games,
     });
 
 enum BroadcastPoints { one, half, zero }
 
 @freezed
-sealed class BroadcastPlayerResultData with _$BroadcastPlayerResultData {
-  const factory BroadcastPlayerResultData({
+class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
+  const factory BroadcastPlayerGameResult({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
     required BroadcastPoints? points,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
-  }) = _BroadcastPlayerResult;
+  }) = _BroadcastPlayerGameResult;
 }
 
 enum RoundStatus { live, finished, upcoming }

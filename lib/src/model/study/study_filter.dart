@@ -50,7 +50,7 @@ class StudyFilter extends _$StudyFilter {
 }
 
 @freezed
-sealed class StudyFilterState with _$StudyFilterState {
+class StudyFilterState with _$StudyFilterState {
   const StudyFilterState._();
 
   const factory StudyFilterState({

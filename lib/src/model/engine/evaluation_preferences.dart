@@ -52,7 +52,7 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
+class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
   const EngineEvaluationPrefState._();
 
   const factory EngineEvaluationPrefState({

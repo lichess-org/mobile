@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'tv_game.freezed.dart';
 
 @freezed
-sealed class TvGame with _$TvGame {
+class TvGame with _$TvGame {
   const factory TvGame({
     required GameId id,
     required LightUser user,
@@ -18,7 +18,7 @@ sealed class TvGame with _$TvGame {
 }
 
 @freezed
-sealed class TvGameSnapshot with _$TvGameSnapshot {
+class TvGameSnapshot with _$TvGameSnapshot {
   const factory TvGameSnapshot({
     required TvChannel channel,
     required GameId id,

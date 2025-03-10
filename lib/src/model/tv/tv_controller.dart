@@ -229,7 +229,7 @@ class TvController extends _$TvController {
 }
 
 @freezed
-sealed class TvState with _$TvState {
+class TvState with _$TvState {
   const TvState._();
 
   const factory TvState({

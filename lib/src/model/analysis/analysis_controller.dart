@@ -36,7 +36,7 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 typedef StandaloneAnalysis = ({String pgn, Variant variant, bool isComputerAnalysisAllowed});
 
 @freezed
-sealed class AnalysisOptions with _$AnalysisOptions {
+class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
 
   @Assert('standalone != null || gameId != null')
@@ -636,7 +636,7 @@ class AnalysisController extends _$AnalysisController
 }
 
 @freezed
-sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState {
+class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   const AnalysisState._();
 
   const factory AnalysisState({
@@ -717,6 +717,12 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position, isChess960: variant == Variant.chess960);
 
+  /// Whether to delay the local engine evaluation.
+  ///
+  /// Cloud evaluations are most likely available for the opening moves.
+  @override
+  bool get delayLocalEngine => variant != Variant.fromPosition && currentPosition.ply < 20;
+
   /// Whether the user can request server analysis.
   ///
   /// It must be a lichess game, which is finished and not already analyzed.
@@ -759,7 +765,7 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
 }
 
 @freezed
-sealed class AnalysisCurrentNode with _$AnalysisCurrentNode {
+class AnalysisCurrentNode with _$AnalysisCurrentNode {
   const AnalysisCurrentNode._();
 
   const factory AnalysisCurrentNode({

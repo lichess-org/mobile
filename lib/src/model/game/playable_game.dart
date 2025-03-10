@@ -29,7 +29,7 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ArchivedGame] for a game that is finished and not owned by the current user.
 @freezed
-sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
+class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -147,7 +147,7 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
 }
 
 @freezed
-sealed class PlayableClockData with _$PlayableClockData {
+class PlayableClockData with _$PlayableClockData {
   const PlayableClockData._();
 
   const factory PlayableClockData({

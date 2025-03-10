@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 
+const threeBounceLoadingIndicator = SpinKitThreeBounce(color: Colors.grey, size: 15);
+
 class LagIndicator extends StatelessWidget {
   const LagIndicator({
     required this.lagRating,

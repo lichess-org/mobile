@@ -20,32 +20,18 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreenLoading(
-    this.roundId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreenLoading({required this.roundId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreenLoading(
-        roundId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreenLoading(roundId: roundId, player: player),
     );
   }
 
@@ -54,11 +40,9 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
     final tournamentId = ref.watch(broadcastTournamentIdProvider(roundId));
 
     return switch (tournamentId) {
-      AsyncData(:final value) => BroadcastPlayerResultsScreen(
-        value,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
+      AsyncData(value: final tournamentId) => BroadcastPlayerResultsScreen(
+        tournamentId: tournamentId,
+        player: player,
       ),
       AsyncError(:final error) => PlatformScaffold(
         appBarTitle: const Text(''),
@@ -74,40 +58,26 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
 
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreen(
-    this.tournamentId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreen({required this.tournamentId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastTournamentId tournamentId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreen(
-        tournamentId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreen(tournamentId: tournamentId, player: player),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBarTitle: BroadcastPlayerWidget(title: playerTitle, name: playerName),
-      body: _Body(tournamentId, playerId),
+      appBarTitle: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+      body: _Body(tournamentId, player.id),
     );
   }
 }
@@ -122,20 +92,30 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playersResults = ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
+    final playerWithGameResults = ref.watch(broadcastPlayerProvider(tournamentId, playerId));
 
-    switch (playersResults) {
-      case AsyncData(value: final playerResults):
-        final player = playerResults.player;
-        final fideData = playerResults.fideData;
-        final showRatingDiff = playerResults.games.any((result) => result.ratingDiff != null);
+    switch (playerWithGameResults) {
+      case AsyncData(value: final playerWithGameResults):
+        final playerWithOverallResult = playerWithGameResults.player;
+        final player = playerWithOverallResult.player;
+        final score = playerWithOverallResult.score;
+        final played = playerWithOverallResult.played;
+        final performance = playerWithOverallResult.performance;
+        final ratingDiff = playerWithOverallResult.ratingDiff;
+        final fideData = playerWithGameResults.fideData;
+        final showRatingDiff = playerWithGameResults.games.any(
+          (result) => result.ratingDiff != null,
+        );
         final statWidth =
             (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
         const cardSpacing = 10.0;
-        final indexWidth = max(8.0 + playerResults.games.length.toString().length * 10.0, 28.0);
+        final indexWidth = max(
+          8.0 + playerWithGameResults.games.length.toString().length * 10.0,
+          28.0,
+        );
 
         return ListView.builder(
-          itemCount: playerResults.games.length + 1,
+          itemCount: playerWithGameResults.games.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Padding(
@@ -226,29 +206,29 @@ class _Body extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: cardSpacing,
                       children: [
-                        if (player.score != null)
+                        if (score != null)
                           SizedBox(
                             width: statWidth,
                             child: _StatCard(
                               context.l10n.broadcastScore,
                               value:
-                                  '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
+                                  '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
                             ),
                           ),
-                        if (player.performance != null)
+                        if (performance != null)
                           SizedBox(
                             width: statWidth,
                             child: _StatCard(
                               context.l10n.performance,
-                              value: player.performance.toString(),
+                              value: performance.toString(),
                             ),
                           ),
-                        if (player.ratingDiff != null)
+                        if (ratingDiff != null)
                           SizedBox(
                             width: statWidth,
                             child: _StatCard(
                               context.l10n.broadcastRatingDiff,
-                              child: ProgressionWidget(player.ratingDiff!, fontSize: 18.0),
+                              child: ProgressionWidget(ratingDiff, fontSize: 18.0),
                             ),
                           ),
                       ],
@@ -258,7 +238,7 @@ class _Body extends ConsumerWidget {
               );
             }
 
-            final playerResult = playerResults.games[index - 1];
+            final playerGameResult = playerWithGameResults.games[index - 1];
 
             return GestureDetector(
               onTap: () {
@@ -266,8 +246,8 @@ class _Body extends ConsumerWidget {
                   BroadcastGameScreen.buildRoute(
                     context,
                     tournamentId: tournamentId,
-                    roundId: playerResult.roundId,
-                    gameId: playerResult.gameId,
+                    roundId: playerGameResult.roundId,
+                    gameId: playerGameResult.gameId,
                   ),
                 );
               },
@@ -288,17 +268,13 @@ class _Body extends ConsumerWidget {
                       ),
                       Expanded(
                         flex: 5,
-                        child: BroadcastPlayerWidget(
-                          federation: playerResult.opponent.federation,
-                          title: playerResult.opponent.title,
-                          name: playerResult.opponent.name,
-                        ),
+                        child: BroadcastPlayerWidget(player: player, showRating: false),
                       ),
                       Expanded(
                         flex: 3,
                         child:
-                            (playerResult.opponent.rating != null)
-                                ? Center(child: Text(playerResult.opponent.rating.toString()))
+                            (playerGameResult.opponent.rating != null)
+                                ? Center(child: Text(playerGameResult.opponent.rating.toString()))
                                 : const SizedBox.shrink(),
                       ),
                       SizedBox(
@@ -310,16 +286,16 @@ class _Body extends ConsumerWidget {
                             decoration: BoxDecoration(
                               border:
                                   (Theme.of(context).brightness == Brightness.light &&
-                                              playerResult.color == Side.white ||
+                                              playerGameResult.color == Side.white ||
                                           Theme.of(context).brightness == Brightness.dark &&
-                                              playerResult.color == Side.black)
+                                              playerGameResult.color == Side.black)
                                       ? Border.all(
                                         width: 2.0,
                                         color: ColorScheme.of(context).outline,
                                       )
                                       : null,
                               shape: BoxShape.circle,
-                              color: switch (playerResult.color) {
+                              color: switch (playerGameResult.color) {
                                 Side.white => Colors.white.withValues(alpha: 0.9),
                                 Side.black => Colors.black.withValues(alpha: 0.9),
                               },
@@ -331,7 +307,7 @@ class _Body extends ConsumerWidget {
                         width: 30,
                         child: Center(
                           child: Text(
-                            switch (playerResult.points) {
+                            switch (playerGameResult.points) {
                               BroadcastPoints.one => '1',
                               BroadcastPoints.half => '½',
                               BroadcastPoints.zero => '0',
@@ -340,7 +316,7 @@ class _Body extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: switch (playerResult.points) {
+                              color: switch (playerGameResult.points) {
                                 BroadcastPoints.one => context.lichessColors.good,
                                 BroadcastPoints.zero => context.lichessColors.error,
                                 _ => null,
@@ -353,8 +329,8 @@ class _Body extends ConsumerWidget {
                         SizedBox(
                           width: 38,
                           child:
-                              (playerResult.ratingDiff != null)
-                                  ? ProgressionWidget(playerResult.ratingDiff!, fontSize: 14)
+                              (playerGameResult.ratingDiff != null)
+                                  ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
                                   : null,
                         ),
                     ],

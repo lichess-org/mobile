@@ -106,7 +106,7 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 }
 
 @freezed
-sealed class CoordinateTrainingState with _$CoordinateTrainingState {
+class CoordinateTrainingState with _$CoordinateTrainingState {
   const CoordinateTrainingState._();
 
   const factory CoordinateTrainingState({

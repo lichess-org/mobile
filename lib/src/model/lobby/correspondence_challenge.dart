@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 part 'correspondence_challenge.freezed.dart';
 
 @freezed
-sealed class CorrespondenceChallenge with _$CorrespondenceChallenge {
+class CorrespondenceChallenge with _$CorrespondenceChallenge {
   const factory CorrespondenceChallenge({
     required GameId id,
     required String username,

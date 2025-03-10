@@ -10,7 +10,7 @@ part 'user.freezed.dart';
 part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-sealed class LightUser with _$LightUser {
+class LightUser with _$LightUser {
   const factory LightUser({
     required UserId id,
     required String name,
@@ -57,12 +57,12 @@ extension LightUserExtension on Pick {
 }
 
 @freezed
-sealed class TemporaryBan with _$TemporaryBan {
+class TemporaryBan with _$TemporaryBan {
   const factory TemporaryBan({required DateTime date, required Duration duration}) = _TemporaryBan;
 }
 
 @freezed
-sealed class User with _$User {
+class User with _$User {
   const User._();
 
   const factory User({
@@ -135,7 +135,7 @@ sealed class User with _$User {
 }
 
 @freezed
-sealed class UserGameCount with _$UserGameCount {
+class UserGameCount with _$UserGameCount {
   const factory UserGameCount({
     required int all,
     // TODO(#454): enable rest of fields when needed for filtering
@@ -175,7 +175,7 @@ sealed class UserGameCount with _$UserGameCount {
 }
 
 @freezed
-sealed class PlayTime with _$PlayTime {
+class PlayTime with _$PlayTime {
   const factory PlayTime({required Duration total, required Duration tv}) = _PlayTime;
 
   factory PlayTime.fromJson(Map<String, dynamic> json) => PlayTime.fromPick(pick(json).required());
@@ -189,7 +189,7 @@ sealed class PlayTime with _$PlayTime {
 }
 
 @freezed
-sealed class UserPerf with _$UserPerf {
+class UserPerf with _$UserPerf {
   const UserPerf._();
 
   const factory UserPerf({
@@ -224,7 +224,7 @@ sealed class UserPerf with _$UserPerf {
 }
 
 @freezed
-sealed class UserStatus with _$UserStatus {
+class UserStatus with _$UserStatus {
   const factory UserStatus({
     required UserId id,
     required String name,
@@ -244,7 +244,7 @@ sealed class UserStatus with _$UserStatus {
 }
 
 @freezed
-sealed class UserActivityTournament with _$UserActivityTournament {
+class UserActivityTournament with _$UserActivityTournament {
   const factory UserActivityTournament({
     required String id,
     required String name,
@@ -268,7 +268,7 @@ sealed class UserActivityTournament with _$UserActivityTournament {
 }
 
 @freezed
-sealed class UserActivityStreak with _$UserActivityStreak {
+class UserActivityStreak with _$UserActivityStreak {
   const factory UserActivityStreak({required int runs, required int score}) = _UserActivityStreak;
 
   factory UserActivityStreak.fromJson(Map<String, dynamic> json) =>
@@ -279,7 +279,7 @@ sealed class UserActivityStreak with _$UserActivityStreak {
 }
 
 @freezed
-sealed class UserActivityScore with _$UserActivityScore {
+class UserActivityScore with _$UserActivityScore {
   const factory UserActivityScore({
     required int win,
     required int loss,
@@ -301,7 +301,7 @@ sealed class UserActivityScore with _$UserActivityScore {
 }
 
 @freezed
-sealed class UserActivity with _$UserActivity {
+class UserActivity with _$UserActivity {
   const UserActivity._();
 
   const factory UserActivity({
@@ -336,7 +336,7 @@ sealed class UserActivity with _$UserActivity {
 }
 
 @freezed
-sealed class UserPerfStats with _$UserPerfStats {
+class UserPerfStats with _$UserPerfStats {
   const factory UserPerfStats({
     required double rating,
     required double deviation,
@@ -372,7 +372,7 @@ sealed class UserPerfStats with _$UserPerfStats {
 }
 
 @freezed
-sealed class UserStreak with _$UserStreak {
+class UserStreak with _$UserStreak {
   const factory UserStreak.gameStreak({
     required int gamesPlayed,
     required bool isValueEmpty,
@@ -389,7 +389,7 @@ sealed class UserStreak with _$UserStreak {
 }
 
 @freezed
-sealed class UserPerfGame with _$UserPerfGame {
+class UserPerfGame with _$UserPerfGame {
   const UserPerfGame._();
 
   const factory UserPerfGame({

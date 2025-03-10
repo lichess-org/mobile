@@ -55,7 +55,7 @@ class ChallengePreferences extends _$ChallengePreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
+class ChallengePrefs with _$ChallengePrefs implements Serializable {
   const ChallengePrefs._();
 
   const factory ChallengePrefs({

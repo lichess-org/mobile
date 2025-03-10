@@ -430,8 +430,9 @@ class _PlayerWidget extends ConsumerWidget {
           _PlayerWidgetPosition.top => broadcastAnalysisState.pov.opposite,
         };
 
-        final player = game.players[side]!;
-        final liveClock = isCursorOnLiveMove ? player.clock : null;
+        final playerWithClock = game.players[side]!;
+        final player = playerWithClock.player;
+        final liveClock = isCursorOnLiveMove ? playerWithClock.clock : null;
         final isClockActive = isCursorOnLiveMove && game.isOngoing && side == sideToMove;
 
         final pastClocks = broadcastAnalysisState.clocks;
@@ -441,20 +442,8 @@ class _PlayerWidget extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).push(
               (tournamentId != null)
-                  ? BroadcastPlayerResultsScreen.buildRoute(
-                    context,
-                    tournamentId!,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  )
-                  : BroadcastPlayerResultsScreenLoading.buildRoute(
-                    context,
-                    roundId,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  ),
+                  ? BroadcastPlayerResultsScreen.buildRoute(context, tournamentId!, player)
+                  : BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, player),
             );
           },
           child: Container(
@@ -471,10 +460,7 @@ class _PlayerWidget extends ConsumerWidget {
                 ],
                 Expanded(
                   child: BroadcastPlayerWidget(
-                    federation: player.federation,
-                    title: player.title,
-                    name: player.name,
-                    rating: player.rating,
+                    player: player,
                     textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -538,9 +524,9 @@ class _Clock extends StatelessWidget {
       style: TextStyle(
         color:
             isClockActive
-                ? ColorScheme.of(context).tertiaryContainer
+                ? ColorScheme.of(context).onTertiaryContainer
                 : isSideToMove
-                ? ColorScheme.of(context).secondaryContainer
+                ? ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
@@ -645,7 +631,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                   label: context.l10n.toggleLocalEvaluation,
                   onTap:
                       analysisPrefs.enableComputerAnalysis &&
-                              snapshot.connectionState == ConnectionState.done
+                              snapshot.connectionState != ConnectionState.waiting
                           ? () async {
                             toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
                             try {

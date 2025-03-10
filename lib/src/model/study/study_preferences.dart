@@ -29,7 +29,7 @@ class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyP
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class StudyPrefs with _$StudyPrefs implements Serializable {
+class StudyPrefs with _$StudyPrefs implements Serializable {
   const StudyPrefs._();
 
   const factory StudyPrefs({required bool showVariationArrows}) = _StudyPrefs;

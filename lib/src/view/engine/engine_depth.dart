@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -18,20 +19,30 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final (engineName: engineName, eval: localEval, state: engineState) = ref.watch(
+      engineEvaluationProvider,
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    const cloudSize = 30.0;
+    final loadingIndicator = SpinKitFadingFour(
+      color: ColorScheme.of(context).onSecondary.withValues(alpha: 0.7),
+      size: 10,
+    );
+
     const microChipSize = 28.0;
-    const cloudIconAlignment = AlignmentDirectional(0.0, 0.20);
-    final cloudIcon = Icon(Icons.cloud, size: cloudSize, color: ColorScheme.of(context).secondary);
     final iconTextStyle = TextStyle(
       color: ColorScheme.of(context).onSecondary,
       fontFeatures: const [FontFeature.tabularFigures()],
-      fontSize: 12,
+      fontSize: 11,
     );
 
-    return AppBarTextButton(
+    return AppBarIconButton(
+      semanticsLabel: switch (eval) {
+        LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
+        CloudEval(:final depth) =>
+          '${context.l10n.cloudAnalysis}, ${context.l10n.depthX('$depth')}',
+        _ => context.l10n.loadingEngine,
+      },
       onPressed:
           eval != null
               ? () {
@@ -66,9 +77,18 @@ class EngineDepth extends ConsumerWidget {
                 );
               }
               : null,
-      child: switch (eval) {
-        LocalEval(:final depth) => RepaintBoundary(
+      icon: Badge(
+        offset: const Offset(4, -7),
+        backgroundColor: ColorScheme.of(context).tertiaryContainer,
+        textColor: ColorScheme.of(context).onTertiaryContainer,
+        label: eval is CloudEval ? const Text('CLOUD') : null,
+        textStyle: const TextStyle(fontSize: 8),
+        isLabelVisible: eval is CloudEval,
+        child: AnimatedOpacity(
+          opacity: engineState == EngineState.computing ? 1.0 : 0.7,
+          duration: const Duration(milliseconds: 150),
           child: Stack(
+            alignment: Alignment.center,
             children: [
               CustomPaint(
                 size: const Size(microChipSize, microChipSize),
@@ -77,38 +97,19 @@ class EngineDepth extends ConsumerWidget {
               SizedBox(
                 width: microChipSize,
                 height: microChipSize,
-                child: Center(child: Text('${math.min(99, depth)}', style: iconTextStyle)),
+                child: RepaintBoundary(
+                  child: Center(
+                    child:
+                        eval?.depth != null
+                            ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                            : loadingIndicator,
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        CloudEval(:final depth) => Stack(
-          children: [
-            cloudIcon,
-            SizedBox(
-              width: cloudSize,
-              height: cloudSize,
-              child: Align(
-                alignment: cloudIconAlignment,
-                child: Text('${math.min(99, depth)}', style: iconTextStyle),
-              ),
-            ),
-          ],
-        ),
-        null => Stack(
-          children: [
-            cloudIcon,
-            SizedBox(
-              width: cloudSize,
-              height: cloudSize,
-              child: Align(
-                alignment: cloudIconAlignment,
-                child: Text('\u{2026}', style: iconTextStyle),
-              ),
-            ),
-          ],
-        ),
-      },
+      ),
     );
   }
 }
@@ -120,15 +121,16 @@ class MicroChipPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const pinLength = 4.0;
+    const pinLength = 3.5;
     const pinRadius = Radius.circular(1);
     const innerRimWidth = 1.0;
-    const outerRimWidth = 2.0;
+    const outerRimWidth = 2.5;
 
     final fillPaint =
         Paint()
           ..color = color
           ..style = PaintingStyle.fill;
+
     final strokePaint =
         Paint()
           ..color = color
@@ -231,7 +233,7 @@ class MicroChipPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
 class _StockfishInfo extends ConsumerWidget {

@@ -39,7 +39,7 @@ class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStora
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
+class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
   const factory PuzzlePrefs({
     required UserId? id,
     required PuzzleDifficulty difficulty,

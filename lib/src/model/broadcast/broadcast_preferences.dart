@@ -30,7 +30,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
+class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
   const factory BroadcastPrefs({required bool showEvaluationBar}) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(showEvaluationBar: true);
