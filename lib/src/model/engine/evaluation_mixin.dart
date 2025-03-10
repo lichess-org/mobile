@@ -29,7 +29,7 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 /// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
 /// 'evalGet/evalHit' round trip gets a chance to complete before starting the local engine, even
 /// with reasonably high network latency.
-const kStartLocalEngineDebounceDelay = Duration(milliseconds: 800);
+const kStartLocalEngineDebounceDelay = Duration(milliseconds: 600);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {

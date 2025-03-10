@@ -7,10 +7,11 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
-class EngineLines extends ConsumerWidget {
+class EngineLines extends ConsumerStatefulWidget {
   const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
 
   final void Function(NormalMove move) onTapMove;
@@ -18,22 +19,39 @@ class EngineLines extends ConsumerWidget {
   final bool isGameOver;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EngineLines> createState() => _EngineLinesState();
+}
+
+class _EngineLinesState extends ConsumerState<EngineLines> {
+  ClientEval? lastEval;
+
+  @override
+  Widget build(BuildContext context) {
     final numEvalLines = ref.watch(
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
     final localEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
+    final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
+    // save the last eval to display when the current eval is not yet available to avoid flickering
+    if (eval != null) lastEval = eval;
 
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
+    final evalOrLastEval = eval ?? lastEval;
+
     final content =
-        isGameOver
+        widget.isGameOver
             ? emptyLines
-            : (eval != null
-                ? eval.pvs
+            : (evalOrLastEval != null
+                ? evalOrLastEval.pvs
                     .take(numEvalLines)
-                    .map((pv) => Engineline(onTapMove, eval.position, pv))
+                    .map(
+                      (pv) => Engineline(
+                        eval != null ? widget.onTapMove : null,
+                        evalOrLastEval.position,
+                        pv,
+                      ),
+                    )
                     .toList()
                 : emptyLines);
 
@@ -124,6 +142,7 @@ class Engineline extends ConsumerWidget {
                   softWrap: false,
                   style: TextStyle(
                     fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
+                    color: textShade(context, onTapMove == null ? 0.8 : 1.0),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

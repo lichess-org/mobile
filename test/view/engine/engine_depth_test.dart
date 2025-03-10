@@ -8,23 +8,9 @@ import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 
 import 'test_engine_app.dart';
 
-/// Checks if the cloud eval is displayed in the EngineDepth widget by looking for the cloud icon
+/// Checks if the cloud eval label is displayed in the EngineDepth widget
 bool isCloudEvalDisplayed() {
-  return find
-      .descendant(of: find.byType(EngineDepth), matching: find.byIcon(Icons.cloud))
-      .evaluate()
-      .isNotEmpty;
-}
-
-/// Checks if the local engine eval is displayed in the EngineDepth widget by looking for the microchip icon
-bool isLocalEngineEvalDisplayed() {
-  TestAsyncUtils.guardSync();
-  return find
-      .descendant(of: find.byType(EngineDepth), matching: find.byType(CustomPaint))
-      .evaluate()
-      .map((w) => w.widget as CustomPaint)
-      .where((w) => w.painter is MicroChipPainter)
-      .isNotEmpty;
+  return find.widgetWithText(EngineDepth, 'CLOUD').evaluate().isNotEmpty;
 }
 
 void main() {
@@ -43,12 +29,12 @@ void main() {
   // This test group is for the case where the local engine is delayed (which is the case for the
   // first 20 plies of the game)
   group('Local engine is delayed', () {
-    testWidgets('displays a cloud icon if cloud eval is available', (tester) async {
+    testWidgets('displays a CLOUD label if cloud eval is available', (tester) async {
       await makeEngineTestApp(tester);
 
       // displays loading indicator
       expect(
-        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
         findsOne,
       );
       await tester.pump(kRequestEvalDebounceDelay);
@@ -59,32 +45,29 @@ void main() {
       await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
       // Local engine has not even started
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
-      expect(isLocalEngineEvalDisplayed(), isFalse);
     });
 
-    testWidgets('Displays a microchip for local engine if cloud eval is not available', (
-      tester,
-    ) async {
+    testWidgets('Starts local engine if cloud eval is not available', (tester) async {
       await makeEngineTestApp(tester, isCloudEvalEnabled: false);
       expect(find.byType(EngineDepth), findsOne);
       // displays loading indicator
       expect(
-        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
         findsOne,
       );
 
       await tester.pump(kRequestEvalDebounceDelay);
       // cloud eval is not available, so it still displays loading indicator
       expect(
-        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
         findsOne,
       );
-      // local engine eval still not available
-      expect(isLocalEngineEvalDisplayed(), isFalse);
+      expect(isCloudEvalDisplayed(), isFalse);
 
       // Now wait for local engine
-      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
-      expect(isLocalEngineEvalDisplayed(), isTrue);
+      await tester.pump(kStartLocalEngineDebounceDelay);
+      expect(find.widgetWithText(EngineDepth, '15'), findsOne);
+      await tester.pump(kEngineEvalEmissionThrottleDelay);
       expect(find.widgetWithText(EngineDepth, '16'), findsOne);
     });
 
@@ -98,7 +81,6 @@ void main() {
 
       // Wait for local engine eval
       await tester.pump(kStartLocalEngineDebounceDelay);
-      expect(isLocalEngineEvalDisplayed(), isTrue);
       expect(find.widgetWithText(EngineDepth, '15'), findsOne);
 
       // cloud eval will be available 300ms after the local engine eval
@@ -117,7 +99,6 @@ void main() {
 
       // Wait for local engine eval
       await tester.pump(kStartLocalEngineDebounceDelay);
-      expect(isLocalEngineEvalDisplayed(), isTrue);
       expect(find.widgetWithText(EngineDepth, '15'), findsOne);
 
       // Cloud eval will be available 100ms after the first local engine eval emission
@@ -145,7 +126,7 @@ void main() {
 
       // engine not yet started, so it still displays loading indicator
       expect(
-        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitThreeBounce)),
+        find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
         findsOne,
       );
 
