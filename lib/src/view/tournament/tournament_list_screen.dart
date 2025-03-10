@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -27,26 +28,17 @@ class TournamentListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Could not load tournaments'));
-          } else {
-            return PlatformWidget(
-              androidBuilder: (_) => _AndroidBody(tournaments: snapshot.requireData),
-              iosBuilder: (_) => _CupertinoBody(tournaments: snapshot.requireData),
-            );
-          }
-        }
-
-        return PlatformScaffold(
-          appBarTitle: Text(context.l10n.tournaments),
-          body: const Center(child: CircularProgressIndicator()),
-        );
-      },
-      future: ref.watch(tournamentRepositoryProvider).getTournaments(),
-    );
+    return switch (ref.watch(tournamentsProvider)) {
+      AsyncData(:final value) => PlatformWidget(
+        androidBuilder: (_) => _AndroidBody(tournaments: value),
+        iosBuilder: (_) => _CupertinoBody(tournaments: value),
+      ),
+      AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
+      _ => PlatformScaffold(
+        appBarTitle: Text(context.l10n.tournaments),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+    };
   }
 }
 
