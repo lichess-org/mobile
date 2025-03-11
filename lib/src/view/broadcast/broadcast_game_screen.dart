@@ -126,19 +126,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         if (asyncIsEngineAvailable.valueOrNull == true)
           EngineDepth(savedEval: asyncEval.valueOrNull),
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-        AppBarIconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              BroadcastGameSettingsScreen.buildRoute(
-                context,
-                roundId: widget.roundId,
-                gameId: widget.gameId,
-              ),
-            );
-          },
-          semanticsLabel: context.l10n.settingsSettings,
-          icon: const Icon(Icons.settings),
-        ),
       ],
       body: _Body(
         widget.tournamentId,
@@ -563,6 +550,18 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             showAdaptiveActionSheet<void>(
               context: context,
               actions: [
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.settingsSettings),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      BroadcastGameSettingsScreen.buildRoute(
+                        context,
+                        roundId: roundId,
+                        gameId: gameId,
+                      ),
+                    );
+                  },
+                ),
                 if (tournamentSlug != null && roundSlug != null)
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.mobileShareGameURL),

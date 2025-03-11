@@ -94,15 +94,6 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       if (asyncState.valueOrNull?.isEngineAvailable(enginePrefs) == true)
         EngineDepth(savedEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      AppBarIconButton(
-        onPressed: () {
-          Navigator.of(
-            context,
-          ).push(AnalysisSettingsScreen.buildRoute(context, options: widget.options));
-        },
-        semanticsLabel: context.l10n.settingsSettings,
-        icon: const Icon(Icons.settings),
-      ),
     ];
 
     switch (asyncState) {
@@ -324,6 +315,14 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () {
+            Navigator.of(
+              context,
+            ).push(AnalysisSettingsScreen.buildRoute(context, options: options));
+          },
+        ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
