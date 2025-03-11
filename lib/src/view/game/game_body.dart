@@ -563,13 +563,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.flag,
               )
             else
-              BottomBarButton(
-                label: context.l10n.flipBoard,
-                onTap: () {
-                  ref.read(isBoardTurnedProvider.notifier).toggle();
-                },
-                icon: CupertinoIcons.arrow_2_squarepath,
-              ),
+              const SizedBox(width: 44),
             if (gameState.game.meta.speed == Speed.correspondence && !gameState.game.finished)
               BottomBarButton(
                 label: 'Go to the next game',
