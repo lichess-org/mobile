@@ -204,12 +204,12 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   void userNext() {
     _viewSolutionTimer?.cancel();
-    _goToNextNode(replaying: true);
+    _goToNextNode(isNavigating: true);
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
-    _goToPreviousNode(replaying: true);
+    _goToPreviousNode(isNavigating: true);
   }
 
   void viewSolution() {
@@ -325,13 +325,13 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         : Future.value(Result.value(null));
   }
 
-  void _goToNextNode({bool replaying = false}) {
+  void _goToNextNode({bool isNavigating = false}) {
     if (state.node.children.isEmpty) return;
-    _setPath(state.currentPath + state.node.children.first.id, replaying: replaying);
+    _setPath(state.currentPath + state.node.children.first.id, isNavigating: isNavigating);
   }
 
-  void _goToPreviousNode({bool replaying = false}) {
-    _setPath(state.currentPath.penultimate, replaying: replaying);
+  void _goToPreviousNode({bool isNavigating = false}) {
+    _setPath(state.currentPath.penultimate, isNavigating: isNavigating);
   }
 
   Future<void> _completePuzzle() async {
@@ -420,11 +420,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     }
   }
 
-  void _setPath(UciPath path, {bool replaying = false, bool firstMove = false}) {
+  void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
-    if (!replaying) {
+    if (!isNavigating) {
       final isForward = path.size > state.currentPath.size;
       if (isForward) {
         final isCheck = sanMove.isCheck;
@@ -435,7 +435,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         }
       }
     } else {
-      // when replaying moves fast we don't want haptic feedback
+      // when isNavigating moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
       if (sanMove.isCapture) {
         soundService.play(Sound.capture);

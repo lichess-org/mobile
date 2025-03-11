@@ -321,6 +321,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     }
   }
 
+  void userPrevious() {
+    _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+  }
+
   void userNext() {
     if (!state.hasValue) return;
 
@@ -328,7 +332,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     _setPath(
       state.requireValue.currentPath +
           _root.nodeAt(state.requireValue.currentPath).children.first.id,
-      replaying: true,
+      isNavigating: true,
     );
   }
 
@@ -359,10 +363,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!state.hasValue) return;
 
     state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
-  }
-
-  void userPrevious() {
-    _setPath(state.requireValue.currentPath.penultimate, replaying: true);
   }
 
   @override
@@ -439,7 +439,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     UciPath path, {
     bool shouldForceShowVariation = false,
     bool shouldRecomputeRootView = false,
-    bool replaying = false,
+
+    /// Whether the user is navigating through the moves (as opposed to playing a move).
+    bool isNavigating = false,
     UciPath? broadcastPath,
   }) {
     if (!state.hasValue) return;
@@ -462,16 +464,17 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     final isForward = path.size > state.requireValue.currentPath.size;
     if (currentNode is Branch) {
-      if (!replaying) {
-        if (isForward) {
-          final isCheck = currentNode.sanMove.isCheck;
-          if (currentNode.sanMove.isCapture) {
-            ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
-          } else {
-            ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
-          }
+      // normal move feedback
+      if (!isNavigating && isForward) {
+        final isCheck = currentNode.sanMove.isCheck;
+        if (currentNode.sanMove.isCapture) {
+          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+        } else {
+          ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
-      } else if (isForward) {
+      }
+      // if navigating, only sound feedback
+      else {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
           soundService.play(Sound.capture);
