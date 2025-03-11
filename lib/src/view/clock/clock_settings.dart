@@ -25,7 +25,12 @@ class ClockSettings extends ConsumerWidget {
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    final quarterTurns = clockOrientation == ClockOrientation.portrait ? 0 : 1;
+    final quarterTurns =
+        MediaQuery.orientationOf(context) == Orientation.landscape
+            ? 0
+            : clockOrientation == ClockOrientation.portrait
+            ? 0
+            : 1;
 
     return ColoredBox(
       color: Theme.of(context).colorScheme.surfaceContainer,
@@ -117,15 +122,12 @@ class ClockSettings extends ConsumerWidget {
                 child: IconButton(
                   padding: _kIconPadding,
                   iconSize: _iconSize,
+                  tooltip: 'Toggle orientation',
                   onPressed:
                       () => ref
                           .read(clockToolControllerProvider.notifier)
                           .toggleOrientation(clockOrientation.toggle),
-                  icon: Icon(
-                    clockOrientation == ClockOrientation.portrait
-                        ? Icons.screen_rotation_alt_sharp
-                        : Icons.screen_rotation_alt,
-                  ),
+                  icon: const Icon(Icons.screen_rotation_alt),
                 ),
               ),
             ),
