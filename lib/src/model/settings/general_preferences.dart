@@ -76,6 +76,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const GeneralPrefs._();
 
+  @Assert('masterVolume >= 0 && masterVolume <= 1')
   const factory GeneralPrefs({
     @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
