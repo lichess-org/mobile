@@ -29,11 +29,32 @@ class ClockToolScreen extends StatelessWidget {
 
 enum TilePosition { bottom, top }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  Orientation? _last;
+
+  @override
+  void didChangeDependencies() {
+    final curr = MediaQuery.orientationOf(context);
+    if (_last != curr) {
+      _last = curr;
+      Future.microtask(
+        () => ref
+            .read(clockToolControllerProvider.notifier)
+            .toggleOrientation(curr == Orientation.portrait ? ClockOrientation.portrait : null),
+      );
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(clockToolControllerProvider);
 
     return OrientationBuilder(
@@ -103,8 +124,15 @@ class ClockTile extends ConsumerWidget {
       emergencyBackgroundColor: const Color(0xFF673431),
     );
 
+    final clockOrientation = ref.watch(clockToolControllerProvider).clockOrientation;
+
     return RotatedBox(
-      quarterTurns: orientation == Orientation.portrait && position == TilePosition.top ? 2 : 0,
+      quarterTurns:
+          clockOrientation != null
+              ? (clockOrientation == ClockOrientation.portrait
+                  ? (position == TilePosition.top ? 2 : 0)
+                  : 1)
+              : ((orientation == Orientation.portrait && position == TilePosition.top) ? 2 : 0),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
@@ -170,7 +198,7 @@ class ClockTile extends ConsumerWidget {
               ),
             ),
           ),
-          if (orientation == Orientation.portrait)
+          if (orientation == Orientation.portrait && clockOrientation == ClockOrientation.portrait)
             Positioned(
               top: 24,
               left: 24,
