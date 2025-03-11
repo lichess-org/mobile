@@ -122,6 +122,7 @@ class ClockSettings extends ConsumerWidget {
                 child: IconButton(
                   padding: _kIconPadding,
                   iconSize: _iconSize,
+                  // TODO: translate
                   tooltip: 'Toggle orientation',
                   onPressed:
                       () => ref
