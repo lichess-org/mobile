@@ -164,19 +164,21 @@ class ClockTile extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FittedBox(
-                      child: AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 300),
-                        firstChild: _ClockDisplay(
-                          clockState: clockState,
-                          playerType: playerType,
-                          clockStyle: clockStyle,
+                    Expanded(
+                      child: FittedBox(
+                        child: AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 300),
+                          firstChild: _ClockDisplay(
+                            clockState: clockState,
+                            playerType: playerType,
+                            clockStyle: clockStyle,
+                          ),
+                          secondChild: const Icon(Icons.flag),
+                          crossFadeState:
+                              clockState.isFlagged(playerType)
+                                  ? CrossFadeState.showSecond
+                                  : CrossFadeState.showFirst,
                         ),
-                        secondChild: const Icon(Icons.flag),
-                        crossFadeState:
-                            clockState.isFlagged(playerType)
-                                ? CrossFadeState.showSecond
-                                : CrossFadeState.showFirst,
                       ),
                     ),
                   ],
