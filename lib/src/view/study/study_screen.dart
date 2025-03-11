@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -185,6 +186,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return PlatformScaffold(
       appBarEnableBackgroundFilterBlur: false,
       appBarTitle: AutoSizeText(
@@ -194,6 +196,8 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
         overflow: TextOverflow.ellipsis,
       ),
       appBarActions: [
+        if (widget.studyState.isEngineAvailable(enginePrefs))
+          EngineDepth(savedEval: widget.studyState.currentNode.eval),
         if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         _StudyMenu(id: widget.id),
       ],
