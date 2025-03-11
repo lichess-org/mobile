@@ -136,10 +136,10 @@ class GamePlayer extends StatelessWidget {
                             style: TextStyle(
                               color:
                                   player.ratingDiff! > 0
-                                      ? LichessColors.good
+                                      ? context.lichessColors.good
                                       : player.ratingDiff! == 0
-                                      ? LichessColors.brag
-                                      : LichessColors.error,
+                                      ? context.lichessColors.brag
+                                      : context.lichessColors.error,
                             ),
                           ),
                       ],
