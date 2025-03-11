@@ -228,7 +228,7 @@ class GameListDetailTile extends StatelessWidget {
                                               );
                                             }),
                                         TextSpan(
-                                          text: '\u2026 ${moveList.length} moves',
+                                          text: '\u2026 ${(moveList.length / 2).ceil()} moves',
                                           style: const TextStyle(fontWeight: FontWeight.normal),
                                         ),
                                       ],
