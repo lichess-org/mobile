@@ -5,13 +5,6 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 
-const kPageTransitionsTheme = PageTransitionsTheme(
-  builders: {
-    TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-  },
-);
-
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
@@ -149,7 +142,6 @@ extension CustomThemeBuildContext on BuildContext {
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme:
           isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
-      pageTransitionsTheme: kPageTransitionsTheme,
       sliderTheme: kSliderTheme,
       extensions: [
         lichessCustomColors.harmonized(themeLight.colorScheme),
@@ -175,7 +167,6 @@ extension CustomThemeBuildContext on BuildContext {
               : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
-      pageTransitionsTheme: kPageTransitionsTheme,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -253,7 +244,7 @@ extension CustomThemeBuildContext on BuildContext {
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+        TargetPlatform.android: ZoomPageTransitionsBuilder(
           backgroundColor: seedColor.withValues(alpha: 0),
         ),
         TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
