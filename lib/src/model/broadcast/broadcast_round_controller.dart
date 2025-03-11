@@ -259,7 +259,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final round = state.requireValue;
 
     _socketClient.send('evalGetMulti', {
-      'fens': [for (final id in round.observedGames) round.games[id]!.fen],
+      'fens': [
+        for (final id in round.observedGames)
+          // TODO: investigate why this happens
+          if (round.games[id] != null) round.games[id]!.fen,
+      ],
     });
   }
 }
