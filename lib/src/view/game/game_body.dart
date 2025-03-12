@@ -563,7 +563,11 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.flag,
               )
             else
-              const SizedBox(width: 44),
+              const BottomBarButton(
+                label: 'No game action available',
+                onTap: null,
+                icon: Icons.pending_outlined,
+              ),
             if (gameState.game.meta.speed == Speed.correspondence && !gameState.game.finished)
               BottomBarButton(
                 label: 'Go to the next game',
