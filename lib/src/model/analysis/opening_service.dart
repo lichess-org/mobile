@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/openings_database.dart';
@@ -27,12 +26,10 @@ class OpeningService {
 
   Future<Database> get _db => _ref.read(openingsDatabaseProvider.future);
 
-  Future<FullOpening?> fetchFromMoves(Iterable<Move> moves) async {
+  Future<FullOpening?> fetchFromFen(String fen) async {
     final db = await _db;
-    final movesString = moves
-        .map((move) => altCastles.containsKey(move.uci) ? altCastles[move.uci] : move.uci)
-        .join(' ');
-    final list = await db.query('openings', where: 'uci = ?', whereArgs: [movesString]);
+    final epd = '${fen.split(' - ')[0]} -';
+    final list = await db.query('openings', where: 'epd = ?', whereArgs: [epd], limit: 1);
     final first = list.firstOrNull;
 
     if (first != null) {
