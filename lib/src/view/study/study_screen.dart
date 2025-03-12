@@ -229,7 +229,6 @@ class _StudyMenu extends ConsumerWidget {
         ),
         if (session != null)
           PlatformContextMenuAction(
-            dismissOnPress: false,
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
             label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
             onPressed: () {
