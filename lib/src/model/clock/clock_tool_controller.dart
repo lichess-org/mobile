@@ -234,8 +234,27 @@ class ClockState with _$ClockState {
 }
 
 enum ClockOrientation {
-  portrait,
-  landscape;
+  portraitUp,
+  landscapeLeft,
+  landscapeRight;
 
-  ClockOrientation get toggle => this == portrait ? landscape : portrait;
+  ClockOrientation get toggle => switch (this) {
+    portraitUp => landscapeLeft,
+    landscapeLeft => landscapeRight,
+    landscapeRight => portraitUp,
+  };
+
+  int get quarterTurns => switch (this) {
+    portraitUp => 0,
+    landscapeLeft => 1,
+    landscapeRight => 3,
+  };
+
+  int get oppositeQuarterTurns => switch (this) {
+    portraitUp => 2,
+    landscapeLeft => 3,
+    landscapeRight => 1,
+  };
+
+  bool get isPortrait => this == portraitUp;
 }

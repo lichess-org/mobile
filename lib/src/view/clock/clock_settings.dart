@@ -25,13 +25,6 @@ class ClockSettings extends ConsumerWidget {
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    final quarterTurns =
-        MediaQuery.orientationOf(context) == Orientation.landscape
-            ? 0
-            : clockOrientation == ClockOrientation.portrait
-            ? 0
-            : 1;
-
     return ColoredBox(
       color: Theme.of(context).colorScheme.surfaceContainer,
       child: (orientation == Orientation.portrait ? Row.new : Column.new)(
@@ -39,13 +32,13 @@ class ClockSettings extends ConsumerWidget {
         children: [
           Expanded(
             child: RotatedBox(
-              quarterTurns: quarterTurns,
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
               child: const _PlayResumeButton(_iconSize),
             ),
           ),
           Expanded(
             child: RotatedBox(
-              quarterTurns: quarterTurns,
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
               child: IconButton(
                 padding: _kIconPadding,
                 tooltip: context.l10n.reset,
@@ -62,7 +55,7 @@ class ClockSettings extends ConsumerWidget {
           ),
           Expanded(
             child: RotatedBox(
-              quarterTurns: quarterTurns,
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
               child: IconButton(
                 padding: _kIconPadding,
                 tooltip: context.l10n.settingsSettings,
@@ -104,7 +97,7 @@ class ClockSettings extends ConsumerWidget {
           ),
           Expanded(
             child: RotatedBox(
-              quarterTurns: quarterTurns,
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
               child: IconButton(
                 padding: _kIconPadding,
                 iconSize: _iconSize,
@@ -118,23 +111,23 @@ class ClockSettings extends ConsumerWidget {
           if (clockOrientation != null)
             Expanded(
               child: RotatedBox(
-                quarterTurns: quarterTurns,
+                quarterTurns: clockOrientation.quarterTurns,
                 child: IconButton(
                   padding: _kIconPadding,
                   iconSize: _iconSize,
                   // TODO: translate
-                  tooltip: 'Toggle orientation',
+                  tooltip: 'Flip clock',
                   onPressed:
                       () => ref
                           .read(clockToolControllerProvider.notifier)
                           .toggleOrientation(clockOrientation.toggle),
-                  icon: const Icon(Icons.screen_rotation_alt),
+                  icon: const Icon(Icons.screen_rotation),
                 ),
               ),
             ),
           Expanded(
             child: RotatedBox(
-              quarterTurns: quarterTurns,
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
               child: IconButton(
                 padding: _kIconPadding,
                 tooltip: context.l10n.close,

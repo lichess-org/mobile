@@ -47,7 +47,7 @@ class _BodyState extends ConsumerState<_Body> {
       Future.microtask(
         () => ref
             .read(clockToolControllerProvider.notifier)
-            .toggleOrientation(curr == Orientation.portrait ? ClockOrientation.portrait : null),
+            .toggleOrientation(curr == Orientation.portrait ? ClockOrientation.portraitUp : null),
       );
     }
     super.didChangeDependencies();
@@ -129,9 +129,11 @@ class ClockTile extends ConsumerWidget {
     return RotatedBox(
       quarterTurns:
           clockOrientation != null
-              ? (clockOrientation == ClockOrientation.portrait
-                  ? (position == TilePosition.top ? 2 : 0)
-                  : 1)
+              ? (clockOrientation.isPortrait
+                  ? (position == TilePosition.top
+                      ? clockOrientation.oppositeQuarterTurns
+                      : clockOrientation.quarterTurns)
+                  : clockOrientation.quarterTurns)
               : ((orientation == Orientation.portrait && position == TilePosition.top) ? 2 : 0),
       child: Stack(
         alignment: Alignment.center,
@@ -200,7 +202,7 @@ class ClockTile extends ConsumerWidget {
               ),
             ),
           ),
-          if (orientation == Orientation.portrait && clockOrientation == ClockOrientation.portrait)
+          if (orientation == Orientation.portrait && (clockOrientation?.isPortrait ?? false))
             Positioned(
               top: 24,
               left: 24,
