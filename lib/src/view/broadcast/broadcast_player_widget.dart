@@ -22,7 +22,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
 
     return Row(
       children: [
-        if (federation != null) ...[
+        if (federation != null && showFederation) ...[
           Image.asset('assets/images/fide-fed/$federation.png', height: 12),
           const SizedBox(width: 5),
         ],
@@ -37,7 +37,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
         Flexible(child: Text(name, style: textStyle, overflow: TextOverflow.ellipsis)),
-        if (rating != null) ...[
+        if (rating != null && showRating) ...[
           const SizedBox(width: 5),
           Text(rating.toString(), overflow: TextOverflow.ellipsis),
         ],
