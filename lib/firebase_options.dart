@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDQI6NZ5CM8xpuq9jfM0-D4Tq6fYfsaSh0',
-    appId: '1:974101866555:android:91f3475b526b436bb8541e',
-    messagingSenderId: '974101866555',
-    projectId: 'lichessv2',
-    storageBucket: 'lichessv2.appspot.com',
+    apiKey: 'AIzaSyA27Hl4IMAvgq0EqQRqxMg0koLQ3duDJjs',
+    appId: '1:1035858141908:android:60237f4a04d640ca1f9141',
+    messagingSenderId: '1035858141908',
+    projectId: 'rooktook-ed217',
+    storageBucket: 'rooktook-ed217.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC48jXlu52bjsbINcl3ixrrMEAbDf1uh90',
-    appId: '1:974101866555:ios:1974acbdbcbfbe0eb8541e',
-    messagingSenderId: '974101866555',
-    projectId: 'lichessv2',
-    storageBucket: 'lichessv2.appspot.com',
+    apiKey: 'AIzaSyA9rduP3DCN2FcnkaauxHYJkw0AxbXCaVw',
+    appId: '1:1035858141908:ios:40ddd9232ff4c61e1f9141',
+    messagingSenderId: '1035858141908',
+    projectId: 'rooktook-ed217',
+    storageBucket: 'rooktook-ed217.firebasestorage.app',
     iosClientId:
-        '974101866555-8ag66ua0p0pn1ab7u982i58a9iubhbod.apps.googleusercontent.com',
-    iosBundleId: 'org.lichess.mobileV2',
+        '1035858141908-al1kd7bu48flkrr3k3rq6q3fbcq090le.apps.googleusercontent.com',
+    iosBundleId: 'com.buntikki.rooktook',
   );
 }

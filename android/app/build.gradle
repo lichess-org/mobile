@@ -51,7 +51,7 @@ android {
 
     defaultConfig {
         multiDexEnabled true
-        applicationId "org.lichess.mobileV2"
+        applicationId "com.buntikki.rooktook"
         minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

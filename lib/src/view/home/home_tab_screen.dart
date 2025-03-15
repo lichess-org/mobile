@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,9 +37,7 @@ import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
 
@@ -272,7 +272,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required bool isTablet,
   }) {
     final welcomeWidgets = [
-      Padding(
+      /*Padding(
         padding: Styles.horizontalBodyPadding,
         child: LichessMessage(
           style:
@@ -281,10 +281,37 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   : TextTheme.of(context).bodyLarge,
           textAlign: TextAlign.center,
         ),
-      ),
+      ),*/
       const SizedBox(height: 24.0),
       if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
-      if (Theme.of(context).platform != TargetPlatform.iOS &&
+      MaterialButton(
+          color: Colors.teal[100],
+          elevation: 10,
+          onPressed: (){
+            log('google sign in');
+          },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 30.0,
+              width: 30.0,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image:
+                    AssetImage('assets/images/googleimage.png'),
+                    fit: BoxFit.cover),
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            const Text('Sign In with Google')
+          ],
+        ),
+      ),
+      /*if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
           child: SecondaryButton(
@@ -305,7 +332,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           },
           child: Text(context.l10n.aboutX('Lichess...')),
         ),
-      ),
+      ),*/
     ];
 
     return [
@@ -386,6 +413,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     ]);
   }
 }
+
 
 class _SignInWidget extends ConsumerWidget {
   const _SignInWidget();

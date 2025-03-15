@@ -27,6 +27,7 @@ dependencies:
   device_info_plus: ^11.0.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
+  firebase_auth: ^5.5.1
   firebase_core: ^3.0.0
   firebase_crashlytics: ^4.0.0
   firebase_messaging: ^15.0.0
@@ -47,6 +48,7 @@ dependencies:
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
+  google_sign_in: ^6.3.0
   http: ^1.1.0
   image_picker: ^1.1.2
   intl: ^0.20.2

@@ -73,10 +73,10 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
-      if (prev != BottomTab.watch && current == BottomTab.watch) {
-        ref.invalidate(featuredChannelsProvider);
-        ref.invalidate(liveStreamersProvider);
-      }
+      // if (prev != BottomTab.watch && current == BottomTab.watch) {
+      //   ref.invalidate(featuredChannelsProvider);
+      //   ref.invalidate(liveStreamersProvider);
+      // }
     });
 
     return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
@@ -110,7 +110,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       child: OrientationBuilder(
         builder: (context, orientation) {
           return CustomScrollView(
-            controller: watchScrollController,
+           // controller: watchScrollController,
             slivers: [
               const CupertinoSliverNavigationBar(
                 padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
@@ -181,7 +181,9 @@ class _BodyState extends ConsumerState<_Body> {
 
     return Theme.of(context).platform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(controller: watchScrollController, children: content);
+        : ListView(
+       // controller: watchScrollController,
+        children: content);
   }
 }
 

@@ -1,41 +1,42 @@
 {
   "project_info": {
-    "project_number": "974101866555",
-    "project_id": "lichessv2",
-    "storage_bucket": "lichessv2.appspot.com"
+    "project_number": "1035858141908",
+    "project_id": "rooktook-ed217",
+    "storage_bucket": "rooktook-ed217.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:974101866555:android:91f3475b526b436bb8541e",
+        "mobilesdk_app_id": "1:1035858141908:android:60237f4a04d640ca1f9141",
         "android_client_info": {
-          "package_name": "org.lichess.mobileV2"
+          "package_name": "com.buntikki.rooktook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "974101866555-om4jq3npgepplk0fihrldnhuso1gm7k0.apps.googleusercontent.com",
+          "client_id": "1035858141908-bfltfpjgmpurg53m595l619442k5305d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buntikki.rooktook",
+            "certificate_hash": "2ef47c972db836156b4270ceb9f54bc3f27c08f8"
+          }
+        },
+        {
+          "client_id": "1035858141908-p1k575m728jsqf0ednh3lfrvb4qs6mtf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDQI6NZ5CM8xpuq9jfM0-D4Tq6fYfsaSh0"
+          "current_key": "AIzaSyA27Hl4IMAvgq0EqQRqxMg0koLQ3duDJjs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "974101866555-om4jq3npgepplk0fihrldnhuso1gm7k0.apps.googleusercontent.com",
+              "client_id": "1035858141908-p1k575m728jsqf0ednh3lfrvb4qs6mtf.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "974101866555-8ag66ua0p0pn1ab7u982i58a9iubhbod.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.lichess.mobileV2"
-              }
             }
           ]
         }

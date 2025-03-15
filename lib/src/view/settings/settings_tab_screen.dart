@@ -260,14 +260,14 @@ class _Body extends ConsumerWidget {
       ListSection(
         hasLeading: true,
         children: [
-          PlatformListTile(
+          /*PlatformListTile(
             leading: const Icon(Icons.info_outlined),
             title: Text(context.l10n.aboutX('Lichess')),
             trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/about'));
             },
-          ),
+          ),*/
           PlatformListTile(
             leading: const Icon(Icons.feedback_outlined),
             title: Text(context.l10n.mobileFeedbackButton),
@@ -294,7 +294,7 @@ class _Body extends ConsumerWidget {
           ),
         ],
       ),
-      ListSection(
+      /*ListSection(
         hasLeading: true,
         children: [
           PlatformListTile(
@@ -322,7 +322,7 @@ class _Body extends ConsumerWidget {
             },
           ),
         ],
-      ),
+      ),*/
       ListSection(
         hasLeading: true,
         children: [
@@ -372,7 +372,7 @@ class _Body extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LichessMessage(style: TextTheme.of(context).bodyMedium),
+           // LichessMessage(style: TextTheme.of(context).bodyMedium),
             const SizedBox(height: 10),
             Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ],

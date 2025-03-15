@@ -9,7 +9,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
+//import 'package:lichess_mobile/src/navigation.dart' show watchTabInteraction;
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -69,12 +69,12 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
   @override
   void initState() {
     super.initState();
-    watchTabInteraction.addListener(_onTabInteraction);
+    //watchTabInteraction.addListener(_onTabInteraction);
   }
 
   @override
   void dispose() {
-    watchTabInteraction.removeListener(_onTabInteraction);
+   // watchTabInteraction.removeListener(_onTabInteraction);
     super.dispose();
   }
 

@@ -16,7 +16,7 @@ enum BottomTab {
   home,
   puzzles,
   tools,
-  watch,
+  //watch,
   settings;
 
   String label(AppLocalizations strings) {
@@ -27,8 +27,8 @@ enum BottomTab {
         return strings.mobilePuzzlesTab;
       case BottomTab.tools:
         return strings.mobileToolsTab;
-      case BottomTab.watch:
-        return strings.mobileWatchTab;
+      // case BottomTab.watch:
+      //   return strings.mobileWatchTab;
       case BottomTab.settings:
         return strings.mobileSettingsTab;
     }
@@ -42,8 +42,8 @@ enum BottomTab {
         return Icons.extension_outlined;
       case BottomTab.tools:
         return Icons.handyman_outlined;
-      case BottomTab.watch:
-        return Icons.live_tv_outlined;
+      // case BottomTab.watch:
+      //   return Icons.live_tv_outlined;
       case BottomTab.settings:
         return Icons.settings_outlined;
     }
@@ -57,8 +57,8 @@ enum BottomTab {
         return Icons.extension;
       case BottomTab.tools:
         return Icons.handyman;
-      case BottomTab.watch:
-        return Icons.live_tv;
+      // case BottomTab.watch:
+      //   return Icons.live_tv;
       case BottomTab.settings:
         return Icons.settings;
     }
@@ -76,8 +76,8 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return puzzlesNavigatorKey;
     case BottomTab.tools:
       return toolsNavigatorKey;
-    case BottomTab.watch:
-      return watchNavigatorKey;
+    // case BottomTab.watch:
+    //   return watchNavigatorKey;
     case BottomTab.settings:
       return settingsNavigatorKey;
   }
@@ -92,8 +92,8 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return puzzlesScrollController;
     case BottomTab.tools:
       return toolsScrollController;
-    case BottomTab.watch:
-      return watchScrollController;
+    // case BottomTab.watch:
+    //   return watchScrollController;
     case BottomTab.settings:
       return settingsScrollController;
   }
@@ -102,13 +102,13 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
 final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
-final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
+//final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
 final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
 final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
-final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
+//final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
@@ -129,7 +129,7 @@ final toolsTabInteraction = _BottomTabInteraction();
 
 /// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
-final watchTabInteraction = _BottomTabInteraction();
+//final watchTabInteraction = _BottomTabInteraction();
 
 /// A [ChangeNotifier] that can be used to notify when the Settings tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
@@ -209,11 +209,11 @@ class BottomNavScaffold extends ConsumerWidget {
   /// scrollable to the top.
   /// Otherwise, switch to the tapped tab.
   void _onItemTapped(WidgetRef ref, int index, {required bool isOnline}) {
-    if (index == BottomTab.watch.index && !isOnline) {
-      _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
-      showPlatformSnackbar(ref.context, 'Not available in offline mode', type: SnackBarType.info);
-      return;
-    }
+    // if (index == BottomTab.watch.index && !isOnline) {
+    //   _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
+    //   showPlatformSnackbar(ref.context, 'Not available in offline mode', type: SnackBarType.info);
+    //   return;
+    // }
 
     final curTab = ref.read(currentBottomTabProvider);
     final tappedTab = BottomTab.values[index];
@@ -237,8 +237,8 @@ class BottomNavScaffold extends ConsumerWidget {
             puzzlesTabInteraction.notifyItemTapped();
           case BottomTab.tools:
             toolsTabInteraction.notifyItemTapped();
-          case BottomTab.watch:
-            watchTabInteraction.notifyItemTapped();
+          /*case BottomTab.watch:
+            watchTabInteraction.notifyItemTapped();*/
           case BottomTab.settings:
             settingsTabInteraction.notifyItemTapped();
         }
@@ -269,13 +269,13 @@ Widget _androidTabBuilder(BuildContext context, int index) {
         tab: BottomTab.tools,
         builder: (context) => const ToolsTabScreen(),
       );
+    // case 3:
+    //   return _MaterialTabView(
+    //     navigatorKey: watchNavigatorKey,
+    //     tab: BottomTab.watch,
+    //     builder: (context) => const WatchTabScreen(),
+    //   );
     case 3:
-      return _MaterialTabView(
-        navigatorKey: watchNavigatorKey,
-        tab: BottomTab.watch,
-        builder: (context) => const WatchTabScreen(),
-      );
-    case 4:
       return _MaterialTabView(
         navigatorKey: settingsNavigatorKey,
         tab: BottomTab.settings,
@@ -307,13 +307,13 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
         navigatorKey: toolsNavigatorKey,
         builder: (context) => const ToolsTabScreen(),
       );
+    // case 3:
+    //   return CupertinoTabView(
+    //     defaultTitle: context.l10n.mobileWatchTab,
+    //     navigatorKey: watchNavigatorKey,
+    //     builder: (context) => const WatchTabScreen(),
+    //   );
     case 3:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobileWatchTab,
-        navigatorKey: watchNavigatorKey,
-        builder: (context) => const WatchTabScreen(),
-      );
-    case 4:
       return CupertinoTabView(
         defaultTitle: context.l10n.mobileSettingsTab,
         navigatorKey: settingsNavigatorKey,
