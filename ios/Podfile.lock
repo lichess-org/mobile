@@ -82,7 +82,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (11.8.0)
+  - FirebaseRemoteConfigInterop (11.9.0)
   - FirebaseSessions (11.8.0):
     - FirebaseCore (~> 11.8.0)
     - FirebaseCoreExtension (~> 11.8.0)
@@ -170,6 +170,8 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - sound_effect (0.0.2):
     - Flutter
   - sqflite_darwin (0.0.4):
@@ -203,6 +205,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sound_effect (from `.symlinks/plugins/sound_effect/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - stockfish (from `.symlinks/plugins/stockfish/ios`)
@@ -275,6 +278,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sound_effect:
     :path: ".symlinks/plugins/sound_effect/ios"
   sqflite_darwin:
@@ -306,7 +311,7 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: a1102c035f18d5dd94a5969ee439c526d0c9e313
   FirebaseInstallations: 6c963bd2a86aca0481eef4f48f5a4df783ae5917
   FirebaseMessaging: 487b634ccdf6f7b7ff180fdcb2a9935490f764e8
-  FirebaseRemoteConfigInterop: 98897a64aa372eac3c5b3fe2816594ccfaac55ef
+  FirebaseRemoteConfigInterop: 710954a00e956c5fe5144a8e46164f0361389203
   FirebaseSessions: c4d40a97f88f9eaff2834d61b4fea0a522d62123
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_appauth: aff60f61e4a80b8b5c051615f00bf8f3b54fc5e8
@@ -329,12 +334,13 @@ SPEC CHECKSUMS:
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sound_effect: 5280cfa89d4a576032186f15600dc948ca6d39ce
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   stockfish: d00cf6b95579f1d7032cbfd8e4fe874972fe2ff9
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
 
-PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
+PODFILE CHECKSUM: 66791031430cdcb0135ea4c6d612990a0f405ca5
 
 COCOAPODS: 1.16.2

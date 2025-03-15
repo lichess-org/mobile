@@ -82,9 +82,6 @@ android {
             )
             signingConfig signingConfigs.release
         }
-        debug {
-            applicationIdSuffix ".debug"
-        }
     }
 
     dependenciesInfo {

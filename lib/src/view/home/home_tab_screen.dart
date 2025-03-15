@@ -23,6 +23,8 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/common/apple_sign_in_button.dart';
+import 'package:lichess_mobile/src/view/common/google_sign_in_button.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
@@ -283,34 +285,27 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         ),
       ),*/
       const SizedBox(height: 24.0),
-      if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
-      MaterialButton(
-          color: Colors.teal[100],
-          elevation: 10,
-          onPressed: (){
-            log('google sign in');
-          },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 30.0,
-              width: 30.0,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image:
-                    AssetImage('assets/images/googleimage.png'),
-                    fit: BoxFit.cover),
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            const Text('Sign In with Google')
-          ],
+      if (session == null) ...[
+        const Center(child: _SignInWidget()),
+        const SizedBox(height: 16.0),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: GoogleSignInButton(onSignInError: (e) {
+            print(e);
+          }, onSignInSuccess: (credentials) {
+            print(credentials);
+          }),
         ),
-      ),
+        const SizedBox(height: 16.0),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppleSignInButton(onSignInError: (e) {
+            print(e);
+          }, onSignInSuccess: (credentials) {
+            print(credentials);
+          }),
+        ),
+      ],
       /*if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
