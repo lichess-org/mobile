@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -25,6 +27,7 @@ import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/game/ping_rating.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -373,6 +376,35 @@ class _ChallengeGameTitle extends ConsumerWidget {
   }
 }
 
+class _TournamentGameTitle extends ConsumerWidget {
+  const _TournamentGameTitle(this.tournament);
+
+  final TournamentMeta tournament;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(child: AutoSizeText(tournament.name, maxLines: 1, minFontSize: 14.0)),
+        CountdownClockBuilder(
+          timeLeft: tournament.timeLeft,
+          clockUpdatedAt: DateTime.now(),
+          active: true,
+          tickInterval: const Duration(seconds: 1),
+          builder:
+              (BuildContext context, Duration timeLeft) => Center(
+                child: Text(
+                  '${timeLeft.toHoursMinutesSeconds()} ',
+                  style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+                ),
+              ),
+        ),
+      ],
+    );
+  }
+}
+
 class _StandaloneGameTitle extends ConsumerWidget {
   const _StandaloneGameTitle({required this.id, this.lastMoveAt});
 
@@ -387,6 +419,10 @@ class _StandaloneGameTitle extends ConsumerWidget {
     final metaAsync = ref.watch(gameMetaProvider(id));
     return metaAsync.when(
       data: (meta) {
+        if (meta.tournament != null) {
+          return _TournamentGameTitle(meta.tournament!);
+        }
+
         final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
         final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;

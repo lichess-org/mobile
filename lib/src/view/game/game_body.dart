@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -477,6 +478,13 @@ class _GameBottomBar extends ConsumerWidget {
                   );
                 },
                 icon: Icons.info_outline,
+              ),
+            if (gameState.canBerserk)
+              BottomBarButton(
+                // TODO l10n
+                label: 'Berserk',
+                onTap: () => ref.read(gameControllerProvider(id).notifier).berserk(),
+                icon: LichessIcons.body_cut,
               ),
             if (gameState.game.playable && gameState.game.opponent?.offeringDraw == true)
               BottomBarButton(

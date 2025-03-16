@@ -66,6 +66,8 @@ class GamePlayer extends StatelessWidget {
 
     final player = game.playerOf(side);
 
+    final tournament = game.meta.tournament;
+
     final playerWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +79,11 @@ class GamePlayer extends StatelessWidget {
                     ? MainAxisAlignment.start
                     : MainAxisAlignment.end,
             children: [
+              if (tournament != null)
+                Text(
+                  '#${side == Side.white ? tournament.ranks.white : tournament.ranks.black} ',
+                  style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
+                ),
               if (player.user != null) ...[
                 Icon(
                   player.onGame == true ? Icons.cloud : Icons.cloud_off,
@@ -148,6 +155,16 @@ class GamePlayer extends StatelessWidget {
                     style: TextStyle(fontSize: 14, color: textShade(context, 0.7)),
                   ),
                 ),
+              if (player.berserk == true) ...[
+                const SizedBox(width: 5),
+                Icon(
+                  LichessIcons.body_cut,
+                  color: LichessColors.brag,
+                  size: playerFontSize,
+                  // TODO l10n
+                  semanticLabel: 'Berserked',
+                ),
+              ],
             ],
           ),
         if (timeToMove != null)
