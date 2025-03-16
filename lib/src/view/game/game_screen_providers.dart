@@ -124,3 +124,8 @@ userGamePrefs(Ref ref, GameFullId gameId) async {
 Future<GameMeta> gameMeta(Ref ref, GameFullId gameId) async {
   return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
 }
+
+@riverpod
+Future<TournamentMeta?> gameTournament(Ref ref, GameFullId gameId) async {
+  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.tournament));
+}
