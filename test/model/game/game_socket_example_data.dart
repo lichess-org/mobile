@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 typedef FullEventTestClock =
     ({
@@ -32,6 +33,7 @@ String makeFullEvent(
     black: Duration(minutes: 3),
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
+  TournamentMeta? tournament,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
   final clockStr =
@@ -58,6 +60,22 @@ String makeFullEvent(
       "black": ${(correspondenceClock.black.inMilliseconds / 1000).toStringAsFixed(2)}
     },
 '''
+          : '';
+
+  final tournamentStr =
+      tournament != null
+          ? '''
+    "tournament": {
+      "id": "${tournament.id}",
+      "name": "${tournament.name}",
+      "secondsLeft": ${tournament.timeLeft.inSeconds},
+      "berserkable": ${tournament.berserkable},
+      "ranks": {
+        "white": ${tournament.ranks.white},
+        "black": ${tournament.ranks.black}
+      }
+    },
+  '''
           : '';
 
   return '''
@@ -104,6 +122,7 @@ String makeFullEvent(
     $clockStr
     $correspondenceClockStr
     $youAreStr
+    $tournamentStr
     "socket": $socketVersion,
     "expiration": {
       "idleMillis": 245,

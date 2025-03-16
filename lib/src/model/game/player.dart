@@ -32,6 +32,9 @@ class Player with _$Player {
 
     /// Post game player analysis summary
     PlayerAnalysis? analysis,
+
+    /// If in a tournament, whether the player has berserked or not. Null otherwise.
+    bool? berserk,
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

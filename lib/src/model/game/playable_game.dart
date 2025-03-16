@@ -260,8 +260,20 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
       ),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
+    tournament: pick('tournament').letOrNull(_playableGameTournamentDataFromPick),
   );
 }
+
+TournamentMeta? _playableGameTournamentDataFromPick(RequiredPick pick) => TournamentMeta(
+  id: pick('id').asTournamentIdOrThrow(),
+  name: pick('name').asStringOrThrow(),
+  timeLeft: Duration(seconds: pick('secondsLeft').asIntOrThrow()),
+  berserkable: pick('berserkable').asBoolOrFalse(),
+  ranks: (
+    white: pick('ranks', 'white').asIntOrThrow(),
+    black: pick('ranks', 'black').asIntOrThrow(),
+  ),
+);
 
 ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {
   return ServerGamePrefs(
