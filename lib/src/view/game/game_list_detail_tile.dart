@@ -200,7 +200,7 @@ class GameListDetailTile extends StatelessWidget {
                             children: [
                               if (game.opening != null || moveList?.isNotEmpty == true)
                                 Text.rich(
-                                  maxLines: 3,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: textShade(context, Styles.subtitleOpacity),
