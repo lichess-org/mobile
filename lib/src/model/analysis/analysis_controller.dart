@@ -162,7 +162,7 @@ class AnalysisController extends _$AnalysisController
           lastMove = branch.sanMove.move;
         }
         if (isMainline && opening == null && branch.position.ply <= 10) {
-          openingFutures.add(_fetchOpening(root, path));
+          openingFutures.add(_fetchOpening(branch.position.fen, path));
         }
       },
     );
@@ -476,7 +476,7 @@ class AnalysisController extends _$AnalysisController
       }
 
       if (currentNode.opening == null && currentNode.position.ply <= 30) {
-        _fetchOpening(_root, path).then((value) {
+        _fetchOpening(currentNode.position.fen, path).then((value) {
           if (value != null) {
             final (path, opening) = value;
             _updateOpening(path, opening);
@@ -512,14 +512,10 @@ class AnalysisController extends _$AnalysisController
     if (pathChange) requestEval();
   }
 
-  Future<(UciPath, FullOpening)?> _fetchOpening(Node fromNode, UciPath path) async {
+  Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(_variant)) return null;
 
-    final moves = fromNode.branchesOn(path).map((node) => node.sanMove.move);
-    if (moves.isEmpty) return null;
-    if (moves.length > 40) return null;
-
-    final opening = await ref.read(openingServiceProvider).fetchFromMoves(moves);
+    final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
     if (opening != null) {
       return (path, opening);
     }
