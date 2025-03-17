@@ -97,7 +97,6 @@ class _Body extends ConsumerWidget {
     switch (playerWithGameResults) {
       case AsyncData(value: final playerWithGameResults):
         final games = playerWithGameResults.games;
-        final player = playerWithGameResults.playerWithOverallResult.player;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
@@ -113,7 +112,6 @@ class _Body extends ConsumerWidget {
 
             return _GameResultRow(
               playerGameResult: playerGameResult,
-              player: player,
               tournamentId: tournamentId,
               index: index,
               indexWidth: indexWidth,
@@ -251,7 +249,6 @@ class _OverallStatPlayer extends StatelessWidget {
 class _GameResultRow extends StatelessWidget {
   const _GameResultRow({
     required this.playerGameResult,
-    required this.player,
     required this.tournamentId,
     required this.index,
     required this.indexWidth,
@@ -259,7 +256,6 @@ class _GameResultRow extends StatelessWidget {
   });
 
   final BroadcastPlayerGameResult playerGameResult;
-  final BroadcastPlayer player;
   final BroadcastTournamentId tournamentId;
   final int index;
   final double indexWidth;
@@ -297,7 +293,7 @@ class _GameResultRow extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(flex: 5, child: BroadcastPlayerWidget(player: player, showRating: false)),
+              Expanded(flex: 5, child: BroadcastPlayerWidget(player: opponent, showRating: false)),
               Expanded(
                 flex: 3,
                 child:
