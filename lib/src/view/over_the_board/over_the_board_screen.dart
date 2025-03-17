@@ -182,11 +182,7 @@ class _BottomBar extends ConsumerWidget {
 
     return PlatformBottomBar(
       children: [
-        BottomBarButton(
-          label: 'Configure game',
-          onTap: () => showConfigureGameSheet(context, isDismissible: true),
-          icon: Icons.add,
-        ),
+        BottomBarButton(label: context.l10n.menu, onTap: () {}, icon: Icons.menu),
         BottomBarButton(
           key: const Key('flip-button'),
           label: context.l10n.flipBoard,
