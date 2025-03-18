@@ -1,4 +1,5 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -12,7 +13,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 /// Opens a game screen for the given [LightArchivedGame].
 ///
@@ -52,8 +53,8 @@ void openGameScreen(
   }
 }
 
-class GameBookmarkMenuItemButton extends ConsumerStatefulWidget {
-  const GameBookmarkMenuItemButton({
+class GameBookmarkContextMenuAction extends ConsumerStatefulWidget {
+  const GameBookmarkContextMenuAction({
     required this.id,
     required this.bookmarked,
     required this.onToggleBookmark,
@@ -72,30 +73,43 @@ class GameBookmarkMenuItemButton extends ConsumerStatefulWidget {
   final (UserId?, GameFilterState)? gameListContext;
 
   @override
-  ConsumerState<GameBookmarkMenuItemButton> createState() => _GameBookmarkMenuItemButtonState();
+  ConsumerState<GameBookmarkContextMenuAction> createState() =>
+      _GameBookmarkContextMenuActionState();
 }
 
-class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuItemButton> {
+class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkContextMenuAction> {
   Future<void>? _pendingBookmarkAction;
+  late bool _bookmarked;
+
+  @override
+  void initState() {
+    _bookmarked = widget.bookmarked;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _pendingBookmarkAction,
       builder: (context, snapshot) {
-        return MenuItemButton(
-          closeOnActivate: false,
-          leadingIcon: Icon(
-            widget.bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-          ),
-          semanticsLabel: widget.bookmarked ? 'Unbookmark' : 'Bookmark',
+        return PlatformContextMenuAction(
+          dismissOnPress: false,
+          icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
+          label: _bookmarked ? 'Unbookmark' : 'Bookmark',
           onPressed:
               snapshot.connectionState == ConnectionState.waiting
                   ? null
                   : () async {
                     try {
-                      await widget.onToggleBookmark();
+                      final future = widget.onToggleBookmark();
+                      setState(() {
+                        _pendingBookmarkAction = future;
+                      });
+                      await future;
                       if (context.mounted) {
+                        setState(() {
+                          _bookmarked = !_bookmarked;
+                        });
                         if (widget.gameListContext != null) {
                           final historyProvider = userGameHistoryProvider(
                             widget.gameListContext!.$1,
@@ -117,14 +131,13 @@ class _GameBookmarkMenuItemButtonState extends ConsumerState<GameBookmarkMenuIte
                       }
                     }
                   },
-          child: Text(widget.bookmarked ? 'Unbookmark' : 'Bookmark'),
         );
       },
     );
   }
 }
 
-/// Makes a list of [MenuItemButton] for game sharing options.
+/// Makes a list of [PlatformContextMenuAction] for game sharing options.
 List<Widget> makeFinishedGameShareMenuItemButtons(
   BuildContext context,
   WidgetRef ref, {
@@ -132,15 +145,16 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
   required Side orientation,
 }) {
   return [
-    MenuItemButton(
-      leadingIcon: const PlatformShareIcon(),
+    PlatformContextMenuAction(
+      icon: Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+      label: context.l10n.mobileShareGameURL,
       onPressed: () {
         launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));
       },
-      child: Text(context.l10n.mobileShareGameURL),
     ),
-    MenuItemButton(
-      leadingIcon: const Icon(Icons.gif_outlined),
+    PlatformContextMenuAction(
+      icon: Icons.gif_outlined,
+      label: context.l10n.gameAsGIF,
       onPressed: () async {
         try {
           final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
@@ -154,10 +168,10 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
           }
         }
       },
-      child: Text(context.l10n.gameAsGIF),
     ),
-    MenuItemButton(
-      leadingIcon: const Icon(Icons.text_snippet_outlined),
+    PlatformContextMenuAction(
+      icon: Icons.text_snippet_outlined,
+      label: 'PGN: ${context.l10n.downloadAnnotated}',
       onPressed: () async {
         try {
           final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
@@ -170,10 +184,10 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
           }
         }
       },
-      child: Text('PGN: ${context.l10n.downloadAnnotated}'),
     ),
-    MenuItemButton(
-      leadingIcon: const Icon(Icons.description_outlined),
+    PlatformContextMenuAction(
+      icon: Icons.description_outlined,
+      label: 'PGN: ${context.l10n.downloadRaw}',
       onPressed: () async {
         try {
           final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
@@ -186,7 +200,6 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
           }
         }
       },
-      child: Text('PGN: ${context.l10n.downloadRaw}'),
     ),
   ];
 }

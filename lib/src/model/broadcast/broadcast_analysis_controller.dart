@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -181,6 +182,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
       // Sent when a pgn tag changes
       case 'setTags':
         _handleSetTagsEvent(event);
+      // Sent when a new eval is received
+      case 'evalHit':
+        _handleEvalHitEvent(event);
     }
   }
 
@@ -238,6 +242,42 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController implemen
 
     final pgnHeaders = state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
+  }
+
+  void _handleEvalHitEvent(SocketEvent event) {
+    final path = pick(event.data, 'path').asUciPathOrThrow();
+
+    final depth = pick(event.data, 'depth').asIntOrThrow();
+    final pvs =
+        pick(event.data, 'pvs')
+            .asListOrThrow(
+              (pv) => PvData(
+                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+                cp: pv('cp').asIntOrNull(),
+                mate: pv('mate').asIntOrNull(),
+              ),
+            )
+            .toIList();
+
+    final cloudEval = CloudEval(depth: depth, position: state.requireValue.position, pvs: pvs);
+
+    _root.updateAt(path, (node) => node.eval = cloudEval);
+
+    if (state.requireValue.currentPath != path) return;
+
+    _refreshCurrentNode(shouldRecomputeRootView: true);
+  }
+
+  // ignore: unused_element
+  void _sendEvalGetEvent() {
+    final numEvalLines = ref.read(analysisPreferencesProvider).numEvalLines;
+
+    _socketClient.send('evalGet', {
+      'fen': state.requireValue.currentNode.position.fen,
+      'path': state.requireValue.currentPath.value,
+      'mpv': numEvalLines,
+      'up': true,
+    });
   }
 
   EvaluationContext get _evaluationContext =>

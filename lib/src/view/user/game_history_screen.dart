@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 // TODO l10n
@@ -97,40 +98,22 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
-    final displayModeButton = MenuAnchor(
-      crossAxisUnconstrained: false,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
-        ),
-      ),
-      builder:
-          (context, controller, _) => AppBarIconButton(
-            icon: const Icon(Icons.more_horiz),
-            semanticsLabel: context.l10n.menu,
-            onPressed: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-          ),
-      menuChildren: [
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.ballot_outlined),
-          semanticsLabel: 'Detailed view',
-          child: const Text('Detailed view'),
+    final displayModeButton = PlatformContextMenuButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        PlatformContextMenuAction(
+          icon: Icons.ballot_outlined,
+          label: 'Detailed view',
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
                 .setDisplayMode(GameHistoryDisplayMode.detail);
           },
         ),
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.list_outlined),
-          semanticsLabel: 'Compact view',
-          child: const Text('Compact view'),
+        PlatformContextMenuAction(
+          icon: Icons.list_outlined,
+          label: 'Compact view',
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)

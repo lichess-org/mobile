@@ -15,11 +15,13 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -199,6 +201,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     (_) => _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
               ),
           semanticsLabel: context.l10n.settingsSettings,
+        ),
+        AppBarIconButton(
+          icon: const PlatformShareIcon(),
+          semanticsLabel: context.l10n.studyShareAndExport,
+          onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
         ),
       ],
       body: switch (asyncRound) {

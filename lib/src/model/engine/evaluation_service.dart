@@ -26,9 +26,7 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
-  EvaluationService(this.ref, {required this.maxMemory});
-
-  final Ref ref;
+  EvaluationService({required this.maxMemory});
 
   final int maxMemory;
 
@@ -191,7 +189,7 @@ class EvaluationService {
 EvaluationService evaluationService(Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
-  final service = EvaluationService(ref, maxMemory: maxMemory);
+  final service = EvaluationService(maxMemory: maxMemory);
   ref.onDispose(() {
     service.disposeEngine();
   });

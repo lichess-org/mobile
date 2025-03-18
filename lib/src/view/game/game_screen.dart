@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/game/ping_rating.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -285,30 +285,13 @@ class _GameMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
 
-    return MenuAnchor(
-      crossAxisUnconstrained: false,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
-        ),
-      ),
-      builder:
-          (context, controller, _) => AppBarIconButton(
-            icon: const Icon(Icons.more_horiz),
-            semanticsLabel: context.l10n.menu,
-            onPressed: () {
-              if (controller.isOpen) {
-                controller.close();
-              } else {
-                controller.open();
-              }
-            },
-          ),
-      menuChildren: [
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.settings),
-          semanticsLabel: context.l10n.settingsSettings,
-          child: Text(context.l10n.settingsSettings),
+    return PlatformContextMenuButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        PlatformContextMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
           onPressed:
               () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -318,8 +301,8 @@ class _GameMenu extends ConsumerWidget {
                 builder: (_) => GameSettings(id: gameId),
               ),
         ),
-        const ToggleSoundMenuItemButton(),
-        GameBookmarkMenuItemButton(
+        const ToggleSoundContextMenuAction(),
+        GameBookmarkContextMenuAction(
           id: gameId.gameId,
           bookmarked: isBookmarkedAsync.valueOrNull ?? false,
           onToggleBookmark:

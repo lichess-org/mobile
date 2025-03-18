@@ -91,7 +91,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     final appBarActions = [
       if (prefs.enableComputerAnalysis)
-        EngineDepth(defaultEval: asyncState.valueOrNull?.currentNode.eval),
+        EngineDepth(savedEval: asyncState.valueOrNull?.currentNode.eval),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       AppBarIconButton(
         onPressed: () {
@@ -214,7 +214,7 @@ class _Body extends ConsumerWidget {
           isEngineAvailable && numEvalLines > 0
               ? EngineLines(
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                localEval: currentNode.eval,
+                savedEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
               )
               : null,
