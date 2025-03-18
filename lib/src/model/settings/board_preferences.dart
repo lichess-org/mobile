@@ -129,6 +129,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required ClockPosition clockPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(defaultValue: CastlingMethod.either, unknownEnumValue: CastlingMethod.either)
     required CastlingMethod castlingMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
@@ -358,12 +359,11 @@ enum CastlingMethod {
   kingTwoSquares,
   either;
 
-  String l10n(AppLocalizations l10n) =>
-      switch (this) {
-        CastlingMethod.kingOverRook => l10n.preferencesCastleByMovingOntoTheRook,
-        CastlingMethod.kingTwoSquares => l10n.preferencesCastleByMovingTwoSquares,
-        CastlingMethod.either => 'Either', //TODO l10n string
-      };
+  String l10n(AppLocalizations l10n) => switch (this) {
+    CastlingMethod.kingOverRook => l10n.preferencesCastleByMovingOntoTheRook,
+    CastlingMethod.kingTwoSquares => l10n.preferencesCastleByMovingTwoSquares,
+    CastlingMethod.either => 'Either', //TODO l10n string
+  };
 }
 
 String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
