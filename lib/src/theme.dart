@@ -128,7 +128,7 @@ extension CustomThemeBuildContext on BuildContext {
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       cardTheme:
           isIOS
-              ? CardTheme(
+              ? CardThemeData(
                 color: themeLight.colorScheme.surfaceContainerLowest,
                 elevation: 0,
                 margin: EdgeInsets.zero,
@@ -154,7 +154,7 @@ extension CustomThemeBuildContext on BuildContext {
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       cardTheme:
           isIOS
-              ? CardTheme(
+              ? CardThemeData(
                 color: themeDark.colorScheme.surfaceContainerHigh,
                 elevation: 0,
                 margin: EdgeInsets.zero,
@@ -215,7 +215,7 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     cupertinoOverrideTheme: cupertinoTheme,
     listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
-    cardTheme: isIOS ? const CardTheme(elevation: 0, margin: EdgeInsets.zero) : null,
+    cardTheme: isIOS ? const CardThemeData(elevation: 0, margin: EdgeInsets.zero) : null,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor:
           isIOS
@@ -226,7 +226,9 @@ extension CustomThemeBuildContext on BuildContext {
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
       foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,
     ),
-    dialogTheme: DialogTheme(backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9)),
+    dialogTheme: DialogThemeData(
+      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+    ),
     menuTheme:
         isIOS
             ? _makeCupertinoMenuThemeData(
