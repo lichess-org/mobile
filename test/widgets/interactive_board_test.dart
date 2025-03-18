@@ -10,23 +10,20 @@ import '../test_provider_scope.dart';
 
 void main() {
   final setup = Setup.parseFen('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1');
-  Position pos = Chess.fromSetup(setup);
+  final Position pos = Chess.fromSetup(setup);
 
   final gameData = GameData(
     playerSide: PlayerSide.white,
     sideToMove: Side.white,
     validMoves: makeLegalMoves(pos),
     promotionMove: null,
-    onMove: (NormalMove move, {bool? isDrop}) {
-      //This doesn't work because the position is not updated in the UI
-      pos = pos.play(move);
-    },
+    onMove: (NormalMove move, {bool? isDrop}) {},
     onPromotionSelection: (Role? unused) {},
     premovable: null,
   );
 
   testWidgets(
-    'Should only castle by moving the king over the rook when that preference is selected',
+    "Highlight valid king moves when 'move king over the rook' castling preference is selected",
 
     (WidgetTester tester) async {
       const CastlingMethod castlingMethodToTest = CastlingMethod.kingOverRook;
@@ -69,7 +66,7 @@ void main() {
   );
 
   testWidgets(
-    'Should only castle by moving the king two squares when that preference is selected',
+    "Highlight valid king moves when 'move king two squares' castling preference is selected",
 
     (WidgetTester tester) async {
       const CastlingMethod castlingMethodToTest = CastlingMethod.kingTwoSquares;
@@ -108,43 +105,41 @@ void main() {
     },
   );
 
-  testWidgets(
-    "Should only castle by moving the king two squares or over the rook when 'either' preference is selected",
+  testWidgets("Highlight valid king moves when 'either' castling preference is selected", (
+    WidgetTester tester,
+  ) async {
+    const CastlingMethod castlingMethodToTest = CastlingMethod.either;
 
-    (WidgetTester tester) async {
-      const CastlingMethod castlingMethodToTest = CastlingMethod.either;
+    final app = await makeTestProviderScope(
+      tester,
+      child: InteractiveBoardWidget(
+        size: kTestSurfaceSize.width,
+        boardPrefs: BoardPrefs.defaults.copyWith(castlingMethod: castlingMethodToTest),
+        fen: pos.fen,
+        orientation: Side.white,
+        gameData: gameData,
+        settings: const ChessboardSettings(showValidMoves: true),
+      ),
+    );
+    await tester.pumpWidget(app);
 
-      final app = await makeTestProviderScope(
-        tester,
-        child: InteractiveBoardWidget(
-          size: kTestSurfaceSize.width,
-          boardPrefs: BoardPrefs.defaults.copyWith(castlingMethod: castlingMethodToTest),
-          fen: pos.fen,
-          orientation: Side.white,
-          gameData: gameData,
-          settings: const ChessboardSettings(showValidMoves: true),
-        ),
-      );
-      await tester.pumpWidget(app);
+    await tester.tap(find.byKey(const Key('e1-whiteking')));
 
-      await tester.tap(find.byKey(const Key('e1-whiteking')));
+    await tester.pump();
 
-      await tester.pump();
+    //Normal king moves
+    expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+    expect(find.byKey(const Key('d2-dest')), findsOneWidget);
+    expect(find.byKey(const Key('e2-dest')), findsOneWidget);
+    expect(find.byKey(const Key('f2-dest')), findsOneWidget);
+    expect(find.byKey(const Key('f1-dest')), findsOneWidget);
 
-      //Normal king moves
-      expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('d2-dest')), findsOneWidget);
-      expect(find.byKey(const Key('e2-dest')), findsOneWidget);
-      expect(find.byKey(const Key('f2-dest')), findsOneWidget);
-      expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+    //King over rook
+    expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+    expect(find.byKey(const Key('h1-dest')), findsOneWidget);
 
-      //King over rook
-      expect(find.byKey(const Key('a1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-
-      //King two squares
-      expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-    },
-  );
+    //King two squares
+    expect(find.byKey(const Key('c1-dest')), findsOneWidget);
+    expect(find.byKey(const Key('g1-dest')), findsOneWidget);
+  });
 }
