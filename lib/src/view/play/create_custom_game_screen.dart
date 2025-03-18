@@ -84,6 +84,7 @@ class _CreateCustomGameScreenState extends State<CreateCustomGameScreen>
           Tab(text: context.l10n.mobileCustomGameJoinAGame),
         ],
       ),
+      appBarAutomaticBackgroundVisibility: false,
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[

@@ -38,7 +38,7 @@ Future<Database> _openDb(String path) async {
     } catch (_) {}
 
     // Delete existing previous if any
-    directory.list().forEach((file) async {
+    directory.list().forEach((file) {
       if (file.path.startsWith('chess_openings')) {
         deleteDatabase(file.path);
       }

@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -77,9 +78,10 @@ void main() {
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
         defaultPreferences: {
           PrefCategory.analysis.storageKey: jsonEncode(
-            AnalysisPrefs.defaults
-                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
-                .toJson(),
+            AnalysisPrefs.defaults.copyWith(inlineNotation: true).toJson(),
+          ),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
           ),
         },
       );
@@ -155,15 +157,21 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('1. Chapter 1')),
+        find.descendant(
+          of: find.byType(Scrollable),
+          matching: find.text('1 Chapter 1', findRichText: true),
+        ),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(Scrollable), matching: find.text('2. Chapter 2')),
+        find.descendant(
+          of: find.byType(Scrollable),
+          matching: find.text('2 Chapter 2', findRichText: true),
+        ),
         findsOneWidget,
       );
 
-      await tester.tap(find.text('1. Chapter 1'));
+      await tester.tap(find.text('1 Chapter 1', findRichText: true));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 
@@ -189,9 +197,10 @@ void main() {
         overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
         defaultPreferences: {
           PrefCategory.analysis.storageKey: jsonEncode(
-            AnalysisPrefs.defaults
-                .copyWith(enableLocalEvaluation: false, inlineNotation: true)
-                .toJson(),
+            AnalysisPrefs.defaults.copyWith(inlineNotation: true).toJson(),
+          ),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
           ),
         },
       );

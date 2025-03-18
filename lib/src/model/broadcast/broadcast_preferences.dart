@@ -8,12 +8,12 @@ part 'broadcast_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorage<BroadcastPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   PrefCategory get prefCategory => PrefCategory.broadcast;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   BroadcastPrefs get defaults => BroadcastPrefs.defaults;
 
   @override
@@ -24,7 +24,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
     return fetch();
   }
 
-  Future<void> toggleEvaluationBar() async {
+  Future<void> toggleEvaluationBar() {
     return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
 }

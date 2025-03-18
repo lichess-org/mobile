@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
@@ -37,7 +38,7 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.classical,
 });
 
-final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) {
   return ref.withClient((client) async {
     final channels = await TvRepository(client).channels();
     return _featuredChannelsSet
@@ -70,6 +71,10 @@ class WatchTabScreen extends ConsumerStatefulWidget {
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
+  static const offlineWidget = Center(
+    child: Text('No internet connection.', style: TextStyle(color: Colors.grey, fontSize: 20.0)),
+  );
+
   @override
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
@@ -83,6 +88,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -92,36 +98,45 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: Scaffold(
         appBar: AppBar(title: Text(context.l10n.watch)),
-        body: OrientationBuilder(
-          builder: (context, orientation) {
-            return RefreshIndicator(
-              key: _androidRefreshKey,
-              onRefresh: refreshData,
-              child: _Body(orientation),
-            );
-          },
-        ),
+        body:
+            isOnline
+                ? OrientationBuilder(
+                  builder: (context, orientation) {
+                    return RefreshIndicator(
+                      key: _androidRefreshKey,
+                      onRefresh: refreshData,
+                      child: _Body(orientation),
+                    );
+                  },
+                )
+                : offlineWidget,
       ),
     );
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          return CustomScrollView(
-            controller: watchScrollController,
-            slivers: [
-              const CupertinoSliverNavigationBar(
-                padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-              ),
-              CupertinoSliverRefreshControl(onRefresh: refreshData),
-              SliverSafeArea(top: false, sliver: _Body(orientation)),
-            ],
-          );
-        },
-      ),
-    );
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+    return isOnline
+        ? CupertinoPageScaffold(
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              return CustomScrollView(
+                controller: watchScrollController,
+                slivers: [
+                  const CupertinoSliverNavigationBar(
+                    padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
+                  ),
+                  CupertinoSliverRefreshControl(onRefresh: refreshData),
+                  SliverSafeArea(top: false, sliver: _Body(orientation)),
+                ],
+              );
+            },
+          ),
+        )
+        : const CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(),
+          child: offlineWidget,
+        );
   }
 
   Future<void> refreshData() => _refreshData(ref);

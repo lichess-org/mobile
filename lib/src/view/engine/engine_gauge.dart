@@ -22,8 +22,11 @@ typedef EngineGaugeParams =
       /// Position to evaluate.
       Position position,
 
-      /// Saved evaluation to display when the current evaluation is not available.
-      Eval? savedEval,
+      /// Cached evaluation to display when the current evaluation is not available.
+      ClientEval? savedEval,
+
+      /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
+      ExternalEval? serverEval,
     });
 
 class EngineGauge extends ConsumerWidget {
@@ -45,8 +48,13 @@ class EngineGauge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final eval =
-        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : params.savedEval;
+    final localEval =
+        params.isLocalEngineAvailable ? ref.watch(engineEvaluationProvider).eval : null;
+    final eval = pickBestEval(
+      localEval: localEval,
+      savedEval: params.savedEval,
+      serverEval: params.serverEval,
+    );
 
     return _EvalGauge(
       displayMode: displayMode,
@@ -70,9 +78,17 @@ class _EvalGauge extends StatefulWidget {
   final Eval? eval;
   final Side orientation;
 
-  double get whiteWinningChances => eval?.winningChances(Side.white) ?? 0.0;
-  double get animationValue =>
-      (((whiteWinningChances + 1) * 0.5).abs() * 100).roundToDouble() / 100;
+  double? get whiteWinningChances => eval?.winningChances(Side.white);
+  double? get animationValue =>
+      position.outcome != null
+          ? position.outcome!.winner == null
+              ? 0.5
+              : position.outcome!.winner == Side.white
+              ? 1.0
+              : 0.0
+          : whiteWinningChances != null
+          ? (((whiteWinningChances! + 1) * 0.5).abs() * 100).roundToDouble() / 100
+          : null;
 
   @override
   State<_EvalGauge> createState() => _EvalGaugeState();
@@ -81,10 +97,17 @@ class _EvalGauge extends StatefulWidget {
 class _EvalGaugeState extends State<_EvalGauge> {
   double fromValue = 0.5;
 
+  Eval? oldEval;
+
+  double get toValue => widget.animationValue ?? fromValue;
+
   @override
   void didUpdateWidget(_EvalGauge oldWidget) {
     super.didUpdateWidget(oldWidget);
-    fromValue = oldWidget.animationValue;
+    fromValue = oldWidget.animationValue ?? fromValue;
+    if (oldWidget.eval != null) {
+      oldEval = oldWidget.eval;
+    }
   }
 
   @override
@@ -100,16 +123,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                 : widget.position.isCheckmate
                 ? context.l10n.checkmate
                 : context.l10n.variantEnding
-            : widget.eval?.evalString;
-
-    final toValue =
-        widget.position.outcome != null
-            ? widget.position.outcome!.winner == null
-                ? 0.5
-                : widget.position.outcome!.winner == Side.white
-                ? 1.0
-                : 0.0
-            : widget.animationValue;
+            : widget.eval?.evalString ?? oldEval?.evalString;
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: fromValue, end: toValue),

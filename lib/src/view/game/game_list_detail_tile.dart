@@ -200,7 +200,7 @@ class GameListDetailTile extends StatelessWidget {
                             children: [
                               if (game.opening != null || moveList?.isNotEmpty == true)
                                 Text.rich(
-                                  maxLines: 3,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: textShade(context, Styles.subtitleOpacity),
@@ -228,7 +228,7 @@ class GameListDetailTile extends StatelessWidget {
                                               );
                                             }),
                                         TextSpan(
-                                          text: '\u2026 ${moveList.length} moves',
+                                          text: '\u2026 ${(moveList.length / 2).ceil()} moves',
                                           style: const TextStyle(fontWeight: FontWeight.normal),
                                         ),
                                       ],

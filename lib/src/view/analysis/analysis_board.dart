@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/widgets/interactive_board.dart';
@@ -43,23 +44,20 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final enableComputerAnalysis = analysisPrefs.enableComputerAnalysis;
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
+
+    final enableComputerAnalysis = analysisState.isComputerAnalysisAllowedAndEnabled;
     final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
     final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
-    final evalBestMoves =
-        enableComputerAnalysis
-            ? ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves))
-            : null;
-
     final currentNode = analysisState.currentNode;
-    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
 
-    final bestMoves = enableComputerAnalysis ? evalBestMoves ?? currentNode.eval?.bestMoves : null;
-
-    final sanMove = currentNode.sanMove;
-
+    final localBestMoves =
+        analysisState.isEngineAvailable(enginePrefs) && showBestMoveArrow
+            ? ref.watch(engineEvaluationProvider.select((value) => value.eval?.bestMoves))
+            : null;
+    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && analysisState.isEngineAvailable && bestMoves != null
+        bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,
@@ -67,21 +65,24 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             )
             : ISet();
 
+    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
+    final sanMove = currentNode.sanMove;
+
     return InteractiveBoardWidget(
-      size: widget.boardSize,
       boardPrefs: boardPrefs,
-      fen: analysisState.position.fen,
+      size: widget.boardSize,
+      fen: analysisState.currentPosition.fen,
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
       gameData: GameData(
         playerSide:
-            analysisState.position.isGameOver
+            analysisState.currentPosition.isGameOver
                 ? PlayerSide.none
-                : analysisState.position.turn == Side.white
+                : analysisState.currentPosition.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
-        sideToMove: analysisState.position.turn,
+        isCheck: boardPrefs.boardHighlights && analysisState.currentPosition.isCheck,
+        sideToMove: analysisState.currentPosition.turn,
         validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
         onMove:

@@ -3699,43 +3699,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get playChessEverywhere => 'Гуляйце ў шахматы дзе заўгодна';
 
   @override
-  String get asFreeAsLichess => 'Бясплатна, як і Lichess';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Створана дзеля шахматаў, а не дзеля грошай';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Кожны бясплатна атрымлівае ўсе магчымасці';
-
-  @override
-  String get zeroAdvertisement => 'Без рэкламы';
-
-  @override
-  String get fullFeatured => 'Паўнавартасны';
-
-  @override
-  String get phoneAndTablet => 'Для смартфонаў і планшэтаў';
-
-  @override
-  String get bulletBlitzClassical => '«Куля», бліц, класічны рэжым';
-
-  @override
-  String get correspondenceChess => 'Шахматы па ліставанні';
-
-  @override
-  String get onlineAndOfflinePlay => 'Гульня анлайн і афлайн';
 
   @override
   String get viewTheSolution => 'Паглядзець рашэнне';
 
   @override
-  String get followAndChallengeFriends => 'Падпісацца і выклікаць на гульню сяброў';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Аналіз гульні';
 
   @override
   String xHostsY(String param1, String param2) {

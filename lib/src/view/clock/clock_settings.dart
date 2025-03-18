@@ -19,6 +19,7 @@ class ClockSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockToolControllerProvider);
     final buttonsEnabled = !state.started || state.paused;
+    final clockOrientation = state.clockOrientation;
 
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
@@ -29,77 +30,111 @@ class ClockSettings extends ConsumerWidget {
       child: (orientation == Orientation.portrait ? Row.new : Column.new)(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Expanded(child: _PlayResumeButton(_iconSize)),
           Expanded(
-            child: IconButton(
-              padding: _kIconPadding,
-              tooltip: context.l10n.reset,
-              iconSize: _iconSize,
-              onPressed:
-                  buttonsEnabled
-                      ? () {
-                        ref.read(clockToolControllerProvider.notifier).reset();
-                      }
-                      : null,
-              icon: const Icon(Icons.refresh),
+            child: RotatedBox(
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
+              child: const _PlayResumeButton(_iconSize),
             ),
           ),
           Expanded(
-            child: IconButton(
-              padding: _kIconPadding,
-              tooltip: context.l10n.settingsSettings,
-              iconSize: _iconSize,
-              onPressed:
-                  buttonsEnabled
-                      ? () {
-                        final double screenHeight = MediaQuery.sizeOf(context).height;
-                        showAdaptiveBottomSheet<void>(
-                          context: context,
-                          isScrollControlled: true,
-                          showDragHandle: true,
-                          constraints: BoxConstraints(
-                            maxHeight: screenHeight - (screenHeight / 10),
-                          ),
-                          builder: (BuildContext context) {
-                            final options = ref.watch(
-                              clockToolControllerProvider.select((value) => value.options),
-                            );
-                            return TimeControlModal(
-                              excludeUltraBullet: true,
-                              value: TimeIncrement(
-                                options.whiteTime.inSeconds,
-                                options.whiteIncrement.inSeconds,
-                              ),
-                              onSelected: (choice) {
-                                ref
-                                    .read(clockToolControllerProvider.notifier)
-                                    .updateOptions(choice);
-                              },
-                            );
-                          },
-                        );
-                      }
-                      : null,
-              icon: const Icon(Icons.settings),
+            child: RotatedBox(
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
+              child: IconButton(
+                padding: _kIconPadding,
+                tooltip: context.l10n.reset,
+                iconSize: _iconSize,
+                onPressed:
+                    buttonsEnabled
+                        ? () {
+                          ref.read(clockToolControllerProvider.notifier).reset();
+                        }
+                        : null,
+                icon: const Icon(Icons.refresh),
+              ),
             ),
           ),
           Expanded(
-            child: IconButton(
-              padding: _kIconPadding,
-              iconSize: _iconSize,
-              // TODO: translate
-              tooltip: 'Toggle sound',
-              onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-              icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+            child: RotatedBox(
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
+              child: IconButton(
+                padding: _kIconPadding,
+                tooltip: context.l10n.settingsSettings,
+                iconSize: _iconSize,
+                onPressed:
+                    buttonsEnabled
+                        ? () {
+                          final double screenHeight = MediaQuery.sizeOf(context).height;
+                          showAdaptiveBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            showDragHandle: true,
+                            constraints: BoxConstraints(
+                              maxHeight: screenHeight - (screenHeight / 10),
+                            ),
+                            builder: (BuildContext context) {
+                              final options = ref.watch(
+                                clockToolControllerProvider.select((value) => value.options),
+                              );
+                              return TimeControlModal(
+                                excludeUltraBullet: true,
+                                value: TimeIncrement(
+                                  options.whiteTime.inSeconds,
+                                  options.whiteIncrement.inSeconds,
+                                ),
+                                onSelected: (choice) {
+                                  ref
+                                      .read(clockToolControllerProvider.notifier)
+                                      .updateOptions(choice);
+                                },
+                              );
+                            },
+                          );
+                        }
+                        : null,
+                icon: const Icon(Icons.settings),
+              ),
             ),
           ),
           Expanded(
-            child: IconButton(
-              padding: _kIconPadding,
-              tooltip: context.l10n.close,
-              iconSize: _iconSize,
-              onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
-              icon: const Icon(Icons.home),
+            child: RotatedBox(
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
+              child: IconButton(
+                padding: _kIconPadding,
+                iconSize: _iconSize,
+                // TODO: translate
+                tooltip: 'Toggle sound',
+                onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+                icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
+              ),
+            ),
+          ),
+          if (clockOrientation != null)
+            Expanded(
+              child: RotatedBox(
+                quarterTurns: clockOrientation.quarterTurns,
+                child: IconButton(
+                  padding: _kIconPadding,
+                  iconSize: _iconSize,
+                  // TODO: translate
+                  tooltip: 'Flip clock',
+                  onPressed:
+                      () => ref
+                          .read(clockToolControllerProvider.notifier)
+                          .toggleOrientation(clockOrientation.toggle),
+                  icon: const Icon(Icons.screen_rotation),
+                ),
+              ),
+            ),
+          Expanded(
+            child: RotatedBox(
+              quarterTurns: clockOrientation?.quarterTurns ?? 0,
+              child: IconButton(
+                padding: _kIconPadding,
+                tooltip: context.l10n.close,
+                iconSize: _iconSize,
+                onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
+                icon: const Icon(Icons.home),
+              ),
             ),
           ),
         ],

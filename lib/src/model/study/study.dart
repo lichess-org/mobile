@@ -35,24 +35,17 @@ class Study with _$Study {
     required IList<String?> deviationComments,
   }) = _Study;
 
-  /// Returns the indexed name of a chapter given its [chapterId].
+  /// Returns the index of the chapter with the given [chapterId].
   ///
-  /// The indexed name is a string that combines the chapter's index (1-based)
-  /// and its name, formatted as "index. name".
+  /// Searches through the list of chapters and returns the index of the first
+  /// chapter that matches the provided [chapterId]. If no chapter is found,
+  /// returns -1.
   ///
-  /// Throws a [RangeError] if the chapter with the given [chapterId] is not found.
+  /// [chapterId] - The ID of the chapter to find.
   ///
-  /// Example:
-  /// ```dart
-  /// final chapterName = study.getChapterIndexedName(chapterId);
-  /// print(chapterName); // Output: "1. Chapter Name"
-  /// ```
-  ///
-  /// - Parameter chapterId: The ID of the chapter to find.
-  /// - Returns: A string representing the indexed name of the chapter.
-  String getChapterIndexedName(StudyChapterId chapterId) {
-    final index = chapters.indexWhere((c) => c.id == chapterId);
-    return '${index + 1}. ${chapters[index].name}';
+  /// Returns the index of the chapter if found, otherwise -1.
+  int getChapterIndex(StudyChapterId chapterId) {
+    return chapters.indexWhere((c) => c.id == chapterId);
   }
 
   StudyChapterMeta get currentChapterMeta => chapters.firstWhere((c) => c.id == chapter.id);

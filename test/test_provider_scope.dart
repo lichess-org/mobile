@@ -42,7 +42,7 @@ final mockClient = MockClient((request) async {
   return http.Response('', 200);
 });
 
-final offlineClient = MockClient((request) async {
+final offlineClient = MockClient((request) {
   throw const SocketException('No internet');
 });
 
@@ -61,7 +61,7 @@ Future<Widget> makeTestProviderScopeApp(
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
-}) async {
+}) {
   return makeTestProviderScope(
     tester,
     child: MaterialApp(

@@ -67,7 +67,7 @@ class UserProfileWidget extends ConsumerWidget {
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
               Linkify(
-                onOpen: (link) async {
+                onOpen: (link) {
                   if (link.originText.startsWith('@')) {
                     final username = link.originText.substring(1);
                     Navigator.of(context).push(
@@ -165,7 +165,7 @@ class Location extends StatelessWidget {
         if (profile.country != null) ...[
           CachedNetworkImage(
             imageUrl: lichessFlagSrc(profile.country!),
-            errorWidget: (_, __, ___) => kEmptyWidget,
+            errorWidget: (_, _, _) => kEmptyWidget,
           ),
           const SizedBox(width: 5),
         ],

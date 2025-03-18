@@ -8,12 +8,12 @@ part 'game_history_preferences.g.dart';
 @Riverpod(keepAlive: true)
 class GameHistoryPreferences extends _$GameHistoryPreferences
     with PreferencesStorage<GameHistoryPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.gameHistory;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   GameHistoryPrefs get defaults => GameHistoryPrefs.defaults;
 
   @override

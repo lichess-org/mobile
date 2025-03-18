@@ -188,7 +188,7 @@ class CreateGameService {
   ///
   /// Returns the created challenge immediately. If the challenge is accepted,
   /// a notification will be sent to the user when the game starts.
-  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) async {
+  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) {
     assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
 
     _log.info('Creating new correspondence challenge');
@@ -204,6 +204,7 @@ class CreateGameService {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
     } catch (e) {
       _log.warning('Failed to cancel seek: $e', e);
+      rethrow;
     }
   }
 
@@ -215,6 +216,7 @@ class CreateGameService {
         await ChallengeRepository(lichessClient).cancel(id);
       } catch (e) {
         _log.warning('Failed to cancel challenge: $e', e);
+        rethrow;
       }
     }
   }

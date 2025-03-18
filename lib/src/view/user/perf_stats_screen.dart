@@ -489,16 +489,20 @@ class _PercentageValueWidget extends StatelessWidget {
       children: [
         Text(
           value.toString().localizeNumbers(),
-          style: const TextStyle(fontSize: _defaultValueFontSize),
+          style: TextStyle(fontSize: _defaultValueFontSize, color: color),
         ),
         Text(
           _getPercentageString(value, denominator),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
             color:
-                isShaded
-                    ? textShade(context, _customOpacity / 2)
-                    : textShade(context, _customOpacity),
+                color == null
+                    ? isShaded
+                        ? textShade(context, _customOpacity / 2)
+                        : textShade(context, _customOpacity)
+                    : isShaded
+                    ? color!.withValues(alpha: _customOpacity / 2)
+                    : color!.withValues(alpha: _customOpacity),
           ),
         ),
       ],
@@ -515,7 +519,7 @@ class _StreakWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const valueStyle = TextStyle(fontSize: _defaultValueFontSize);
+    final valueStyle = TextStyle(fontSize: _defaultValueFontSize, color: color);
 
     final streakTitleStyle = TextStyle(
       fontSize: _defaultStatFontSize,

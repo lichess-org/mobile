@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) async {
+final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
     const Duration(hours: 5),
@@ -175,7 +175,7 @@ class _ContextMenu extends ConsumerWidget {
               const SizedBox(height: 8.0),
               if (bot.profile?.bio != null)
                 Linkify(
-                  onOpen: (link) async {
+                  onOpen: (link) {
                     if (link.originText.startsWith('@')) {
                       final username = link.originText.substring(1);
                       Navigator.of(context).push(

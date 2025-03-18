@@ -20,32 +20,18 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreenLoading(
-    this.roundId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreenLoading({required this.roundId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreenLoading(
-        roundId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreenLoading(roundId: roundId, player: player),
     );
   }
 
@@ -54,11 +40,9 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
     final tournamentId = ref.watch(broadcastTournamentIdProvider(roundId));
 
     return switch (tournamentId) {
-      AsyncData(:final value) => BroadcastPlayerResultsScreen(
-        value,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
+      AsyncData(value: final tournamentId) => BroadcastPlayerResultsScreen(
+        tournamentId: tournamentId,
+        player: player,
       ),
       AsyncError(:final error) => PlatformScaffold(
         appBarTitle: const Text(''),
@@ -74,40 +58,26 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
 
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
-  final String playerId;
-  final String? playerTitle;
-  final String playerName;
+  final BroadcastPlayer player;
 
-  const BroadcastPlayerResultsScreen(
-    this.tournamentId,
-    this.playerId, {
-    required this.playerName,
-    this.playerTitle,
-  });
+  const BroadcastPlayerResultsScreen({required this.tournamentId, required this.player});
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastTournamentId tournamentId,
-    String playerId, {
-    String? playerTitle,
-    required String playerName,
-  }) {
+    BroadcastPlayer player,
+  ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreen(
-        tournamentId,
-        playerId,
-        playerTitle: playerTitle,
-        playerName: playerName,
-      ),
+      screen: BroadcastPlayerResultsScreen(tournamentId: tournamentId, player: player),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBarTitle: BroadcastPlayerWidget(title: playerTitle, name: playerName),
-      body: _Body(tournamentId, playerId),
+      appBarTitle: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+      body: _Body(tournamentId, player.id),
     );
   }
 }
@@ -122,245 +92,30 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playersResults = ref.watch(broadcastPlayerResultProvider(tournamentId, playerId));
+    final playerWithGameResults = ref.watch(broadcastPlayerProvider(tournamentId, playerId));
 
-    switch (playersResults) {
-      case AsyncData(value: final playerResults):
-        final player = playerResults.player;
-        final fideData = playerResults.fideData;
-        final showRatingDiff = playerResults.games.any((result) => result.ratingDiff != null);
-        final statWidth =
-            (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
-        const cardSpacing = 10.0;
-        final indexWidth = max(8.0 + playerResults.games.length.toString().length * 10.0, 28.0);
+    switch (playerWithGameResults) {
+      case AsyncData(value: final playerWithGameResults):
+        final games = playerWithGameResults.games;
+
+        final showRatingDiff = games.any((result) => result.ratingDiff != null);
+        final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
         return ListView.builder(
-          itemCount: playerResults.games.length + 1,
+          itemCount: games.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
-              return Padding(
-                padding: Styles.bodyPadding,
-                child: Column(
-                  spacing: cardSpacing,
-                  children: [
-                    if (fideData.ratings.standard != null &&
-                        fideData.ratings.rapid != null &&
-                        fideData.ratings.blitz != null)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: cardSpacing,
-                        children: [
-                          if (fideData.ratings.standard != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard(
-                                context.l10n.classical,
-                                value: fideData.ratings.standard.toString(),
-                              ),
-                            ),
-                          if (fideData.ratings.rapid != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard(
-                                context.l10n.rapid,
-                                value: fideData.ratings.rapid.toString(),
-                              ),
-                            ),
-                          if (fideData.ratings.blitz != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard(
-                                context.l10n.blitz,
-                                value: fideData.ratings.blitz.toString(),
-                              ),
-                            ),
-                        ],
-                      ),
-                    if (fideData.birthYear != null &&
-                        player.federation != null &&
-                        player.fideId != null)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: cardSpacing,
-                        children: [
-                          if (fideData.birthYear != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard(
-                                context.l10n.broadcastAgeThisYear,
-                                value: (DateTime.now().year - fideData.birthYear!).toString(),
-                              ),
-                            ),
-                          if (player.federation != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard(
-                                context.l10n.broadcastFederation,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/fide-fed/${player.federation}.png',
-                                      height: 12,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Flexible(
-                                      child: Text(
-                                        federationIdToName[player.federation!]!,
-                                        style: const TextStyle(fontSize: 18.0),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          if (player.fideId != null)
-                            SizedBox(
-                              width: statWidth,
-                              child: _StatCard('FIDE ID', value: player.fideId!.toString()),
-                            ),
-                        ],
-                      ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: cardSpacing,
-                      children: [
-                        if (player.score != null)
-                          SizedBox(
-                            width: statWidth,
-                            child: _StatCard(
-                              context.l10n.broadcastScore,
-                              value:
-                                  '${player.score!.toStringAsFixed((player.score! == player.score!.roundToDouble()) ? 0 : 1)} / ${player.played}',
-                            ),
-                          ),
-                        if (player.performance != null)
-                          SizedBox(
-                            width: statWidth,
-                            child: _StatCard(
-                              context.l10n.performance,
-                              value: player.performance.toString(),
-                            ),
-                          ),
-                        if (player.ratingDiff != null)
-                          SizedBox(
-                            width: statWidth,
-                            child: _StatCard(
-                              context.l10n.broadcastRatingDiff,
-                              child: ProgressionWidget(player.ratingDiff!, fontSize: 18.0),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+              return _OverallStatPlayer(playerWithGameResults: playerWithGameResults);
             }
 
-            final playerResult = playerResults.games[index - 1];
+            final playerGameResult = playerWithGameResults.games[index - 1];
 
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  BroadcastGameScreen.buildRoute(
-                    context,
-                    tournamentId: tournamentId,
-                    roundId: playerResult.roundId,
-                    gameId: playerResult.gameId,
-                  ),
-                );
-              },
-              child: ColoredBox(
-                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-                child: Padding(
-                  padding: _kTableRowPadding,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: indexWidth,
-                        child: Center(
-                          child: Text(
-                            index.toString(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 5,
-                        child: BroadcastPlayerWidget(
-                          federation: playerResult.opponent.federation,
-                          title: playerResult.opponent.title,
-                          name: playerResult.opponent.name,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child:
-                            (playerResult.opponent.rating != null)
-                                ? Center(child: Text(playerResult.opponent.rating.toString()))
-                                : const SizedBox.shrink(),
-                      ),
-                      SizedBox(
-                        width: 30,
-                        child: Center(
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              border:
-                                  (Theme.of(context).brightness == Brightness.light &&
-                                              playerResult.color == Side.white ||
-                                          Theme.of(context).brightness == Brightness.dark &&
-                                              playerResult.color == Side.black)
-                                      ? Border.all(
-                                        width: 2.0,
-                                        color: ColorScheme.of(context).outline,
-                                      )
-                                      : null,
-                              shape: BoxShape.circle,
-                              color: switch (playerResult.color) {
-                                Side.white => Colors.white.withValues(alpha: 0.9),
-                                Side.black => Colors.black.withValues(alpha: 0.9),
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 30,
-                        child: Center(
-                          child: Text(
-                            switch (playerResult.points) {
-                              BroadcastPoints.one => '1',
-                              BroadcastPoints.half => '½',
-                              BroadcastPoints.zero => '0',
-                              _ => '*',
-                            },
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: switch (playerResult.points) {
-                                BroadcastPoints.one => context.lichessColors.good,
-                                BroadcastPoints.zero => context.lichessColors.error,
-                                _ => null,
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (showRatingDiff)
-                        SizedBox(
-                          width: 38,
-                          child:
-                              (playerResult.ratingDiff != null)
-                                  ? ProgressionWidget(playerResult.ratingDiff!, fontSize: 14)
-                                  : null,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+            return _GameResultRow(
+              playerGameResult: playerGameResult,
+              tournamentId: tournamentId,
+              index: index,
+              indexWidth: indexWidth,
+              showRatingDiff: showRatingDiff,
             );
           },
         );
@@ -369,6 +124,241 @@ class _Body extends ConsumerWidget {
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
+  }
+}
+
+class _OverallStatPlayer extends StatelessWidget {
+  const _OverallStatPlayer({required this.playerWithGameResults});
+
+  final BroadcastPlayerWithGameResults playerWithGameResults;
+
+  @override
+  Widget build(BuildContext context) {
+    final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
+        playerWithGameResults;
+    final birthYear = fideData.birthYear;
+    final (:standard, :rapid, :blitz) = fideData.ratings;
+    final BroadcastPlayerWithOverallResult(:player, :score, :played, :performance, :ratingDiff) =
+        playerWithOverallResult;
+    final BroadcastPlayer(:federation, :fideId) = player;
+
+    final statWidth =
+        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    const cardSpacing = 10.0;
+
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Column(
+        spacing: cardSpacing,
+        children: [
+          if (standard != null || rapid != null || blitz != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: cardSpacing,
+              children: [
+                if (standard != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(context.l10n.classical, value: standard.toString()),
+                  ),
+                if (rapid != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(context.l10n.rapid, value: rapid.toString()),
+                  ),
+                if (blitz != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(context.l10n.blitz, value: blitz.toString()),
+                  ),
+              ],
+            ),
+          if (birthYear != null || federation != null || fideId != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: cardSpacing,
+              children: [
+                if (birthYear != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(
+                      context.l10n.broadcastAgeThisYear,
+                      value: (DateTime.now().year - birthYear).toString(),
+                    ),
+                  ),
+                if (federation != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(
+                      context.l10n.broadcastFederation,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                          const SizedBox(width: 5),
+                          Flexible(
+                            child: Text(
+                              federationIdToName[federation]!,
+                              style: const TextStyle(fontSize: 18.0),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (fideId != null)
+                  SizedBox(width: statWidth, child: _StatCard('FIDE ID', value: fideId.toString())),
+              ],
+            ),
+          if (score != null || performance != null || ratingDiff != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: cardSpacing,
+              children: [
+                if (score != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(
+                      context.l10n.broadcastScore,
+                      value:
+                          '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                    ),
+                  ),
+                if (performance != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(context.l10n.performance, value: performance.toString()),
+                  ),
+                if (ratingDiff != null)
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard(
+                      context.l10n.broadcastRatingDiff,
+                      child: ProgressionWidget(ratingDiff, fontSize: 18.0),
+                    ),
+                  ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GameResultRow extends StatelessWidget {
+  const _GameResultRow({
+    required this.playerGameResult,
+    required this.tournamentId,
+    required this.index,
+    required this.indexWidth,
+    required this.showRatingDiff,
+  });
+
+  final BroadcastPlayerGameResult playerGameResult;
+  final BroadcastTournamentId tournamentId;
+  final int index;
+  final double indexWidth;
+  final bool showRatingDiff;
+
+  @override
+  Widget build(BuildContext context) {
+    final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
+        playerGameResult;
+    final opponentRating = opponent.rating;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          BroadcastGameScreen.buildRoute(
+            context,
+            tournamentId: tournamentId,
+            roundId: roundId,
+            gameId: gameId,
+          ),
+        );
+      },
+      child: ColoredBox(
+        color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+        child: Padding(
+          padding: _kTableRowPadding,
+          child: Row(
+            children: [
+              SizedBox(
+                width: indexWidth,
+                child: Center(
+                  child: Text(
+                    index.toString(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Expanded(flex: 5, child: BroadcastPlayerWidget(player: opponent, showRating: false)),
+              Expanded(
+                flex: 3,
+                child:
+                    (opponentRating != null)
+                        ? Center(child: Text(opponentRating.toString()))
+                        : const SizedBox.shrink(),
+              ),
+              SizedBox(
+                width: 30,
+                child: Center(
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      border:
+                          (Theme.of(context).brightness == Brightness.light &&
+                                      color == Side.white ||
+                                  Theme.of(context).brightness == Brightness.dark &&
+                                      color == Side.black)
+                              ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
+                              : null,
+                      shape: BoxShape.circle,
+                      color: switch (color) {
+                        Side.white => Colors.white.withValues(alpha: 0.9),
+                        Side.black => Colors.black.withValues(alpha: 0.9),
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 30,
+                child: Center(
+                  child: Text(
+                    switch (points) {
+                      BroadcastPoints.one => '1',
+                      BroadcastPoints.half => '½',
+                      BroadcastPoints.zero => '0',
+                      _ => '*',
+                    },
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: switch (points) {
+                        BroadcastPoints.one => context.lichessColors.good,
+                        BroadcastPoints.zero => context.lichessColors.error,
+                        _ => null,
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              if (showRatingDiff)
+                SizedBox(
+                  width: 38,
+                  child:
+                      (playerGameResult.ratingDiff != null)
+                          ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
+                          : null,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

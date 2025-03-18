@@ -3655,43 +3655,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get playChessEverywhere => 'Шахматты кез-келген жерде ойнаңыз';
 
   @override
-  String get asFreeAsLichess => 'Личес-тей тегін';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Ақша қуып емес, шахматты жақсы көргеннен жасап отырмыз';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Барлық құралдары барлық адам үшін тегін';
-
-  @override
-  String get zeroAdvertisement => 'Еш жарнамасыз';
-
-  @override
-  String get fullFeatured => 'Толыққанды жабдықталған';
-
-  @override
-  String get phoneAndTablet => 'Телепон мен планшет';
-
-  @override
-  String get bulletBlitzClassical => 'Буллит, Блиц, Классикалық';
-
-  @override
-  String get correspondenceChess => 'Хат-хабарлы шахмат';
-
-  @override
-  String get onlineAndOfflinePlay => 'Онлайн мен оффлайн ойнау';
 
   @override
   String get viewTheSolution => 'Жауабты қарау';
 
   @override
-  String get followAndChallengeFriends => 'Серік болып, достарды ойынға шақыру';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Ойынды талдау';
 
   @override
   String xHostsY(String param1, String param2) {

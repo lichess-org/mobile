@@ -10,12 +10,16 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
-  const BoardSettingsScreen({super.key});
+  const BoardSettingsScreen({super.key, this.showCloseButton = false});
+
+  /// Whether to show a close button in the app bar instead of the back button.
+  final bool showCloseButton;
 
   static Route<dynamic> buildRoute(BuildContext context, {bool fullscreenDialog = false}) {
     return buildScreenRoute(
@@ -29,6 +33,15 @@ class BoardSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      appBarLeading:
+          showCloseButton
+              ? Theme.of(context).platform == TargetPlatform.iOS
+                  ? AppBarTextButton(
+                    onPressed: () => Navigator.maybePop(context),
+                    child: Text(context.l10n.close),
+                  )
+                  : const CloseButton()
+              : null,
       appBarTitle: Text(context.l10n.preferencesGameBehavior),
       body: const _Body(),
     );

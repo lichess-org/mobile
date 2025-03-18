@@ -118,7 +118,7 @@ class GamePlayer extends StatelessWidget {
                 const SizedBox(width: 5),
                 CachedNetworkImage(
                   imageUrl: lichessFlairSrc(player.user!.flair!),
-                  errorWidget: (_, __, ___) => kEmptyWidget,
+                  errorWidget: (_, _, _) => kEmptyWidget,
                   width: 16,
                   height: 16,
                 ),
@@ -137,6 +137,8 @@ class GamePlayer extends StatelessWidget {
                               color:
                                   player.ratingDiff! > 0
                                       ? context.lichessColors.good
+                                      : player.ratingDiff! == 0
+                                      ? context.lichessColors.brag
                                       : context.lichessColors.error,
                             ),
                           ),

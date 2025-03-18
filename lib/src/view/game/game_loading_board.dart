@@ -15,11 +15,18 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class LobbyScreenLoadingContent extends StatelessWidget {
+class LobbyScreenLoadingContent extends StatefulWidget {
   const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
 
   final GameSeek seek;
   final Future<void> Function() cancelGameCreation;
+
+  @override
+  State<LobbyScreenLoadingContent> createState() => _LobbyScreenLoadingContentState();
+}
+
+class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
+  Future<void>? _cancelGameCreationFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
@@ -48,19 +55,22 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
+                          Icon(
+                            widget.seek.perf.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
                           const SizedBox(width: 8.0),
                           Text(
-                            seek.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${seek.days}',
+                            widget.seek.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${widget.seek.days}',
                             style: TextTheme.of(context).titleLarge,
                           ),
                         ],
                       ),
-                      if (seek.ratingRange != null) ...[
+                      if (widget.seek.ratingRange != null) ...[
                         const SizedBox(height: 8.0),
                         Text(
-                          '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                          '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
                           style: TextTheme.of(context).titleMedium,
                         ),
                       ],
@@ -75,16 +85,37 @@ class LobbyScreenLoadingContent extends StatelessWidget {
         ),
         PlatformBottomBar(
           children: [
-            BottomBarButton(
-              onTap: () async {
-                await cancelGameCreation();
-                if (context.mounted) {
-                  Navigator.of(context, rootNavigator: true).pop();
-                }
+            FutureBuilder(
+              future: _cancelGameCreationFuture,
+              builder: (context, snapshot) {
+                return BottomBarButton(
+                  onTap:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? null
+                          : () async {
+                            setState(() {
+                              _cancelGameCreationFuture = widget.cancelGameCreation();
+                            });
+                            try {
+                              await _cancelGameCreationFuture;
+                            } catch (_) {
+                              if (context.mounted) {
+                                showPlatformSnackbar(
+                                  context,
+                                  'Error cancelling game creation',
+                                  type: SnackBarType.error,
+                                );
+                              }
+                            }
+                            if (context.mounted) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }
+                          },
+                  label: context.l10n.cancel,
+                  showLabel: true,
+                  icon: CupertinoIcons.xmark,
+                );
               },
-              label: context.l10n.cancel,
-              showLabel: true,
-              icon: CupertinoIcons.xmark,
             ),
           ],
         ),
@@ -93,11 +124,18 @@ class LobbyScreenLoadingContent extends StatelessWidget {
   }
 }
 
-class ChallengeLoadingContent extends StatelessWidget {
+class ChallengeLoadingContent extends StatefulWidget {
   const ChallengeLoadingContent(this.challenge, this.cancelChallenge);
 
   final ChallengeRequest challenge;
   final Future<void> Function() cancelChallenge;
+
+  @override
+  State<ChallengeLoadingContent> createState() => _ChallengeLoadingContentState();
+}
+
+class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
+  Future<void>? _cancelChallengeFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +149,7 @@ class ChallengeLoadingContent extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
@@ -123,7 +161,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                       Text(context.l10n.waitingForOpponent),
                       const SizedBox(height: 16.0),
                       UserFullNameWidget(
-                        user: challenge.destUser,
+                        user: widget.challenge.destUser,
                         style: TextTheme.of(context).titleLarge,
                       ),
                       const SizedBox(height: 16.0),
@@ -132,13 +170,13 @@ class ChallengeLoadingContent extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            challenge.perf.icon,
+                            widget.challenge.perf.icon,
                             color: DefaultTextStyle.of(context).style.color,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            challenge.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${challenge.days}',
+                            widget.challenge.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
                             style: TextTheme.of(context).titleLarge,
                           ),
                         ],
@@ -152,16 +190,37 @@ class ChallengeLoadingContent extends StatelessWidget {
         ),
         PlatformBottomBar(
           children: [
-            BottomBarButton(
-              onTap: () async {
-                await cancelChallenge();
-                if (context.mounted) {
-                  Navigator.of(context, rootNavigator: true).pop();
-                }
+            FutureBuilder(
+              future: _cancelChallengeFuture,
+              builder: (context, snapshot) {
+                return BottomBarButton(
+                  onTap:
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? null
+                          : () async {
+                            setState(() {
+                              _cancelChallengeFuture = widget.cancelChallenge();
+                            });
+                            try {
+                              await _cancelChallengeFuture;
+                            } catch (_) {
+                              if (context.mounted) {
+                                showPlatformSnackbar(
+                                  context,
+                                  'Error cancelling challenge',
+                                  type: SnackBarType.error,
+                                );
+                              }
+                            }
+                            if (context.mounted) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }
+                          },
+                  label: context.l10n.cancel,
+                  showLabel: true,
+                  icon: CupertinoIcons.xmark,
+                );
               },
-              label: context.l10n.cancel,
-              showLabel: true,
-              icon: CupertinoIcons.xmark,
             ),
           ],
         ),
@@ -186,7 +245,7 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
         lastMove: lastMove as NormalMove?,
         topTable: const LoadingPlayerWidget(),
         bottomTable: const LoadingPlayerWidget(),
-        showMoveListPlaceholder: true,
+        moves: const [],
       ),
     );
   }
@@ -255,7 +314,7 @@ class LoadGameError extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               errorMessage: errorMessage,
             ),
           ),
@@ -296,7 +355,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
+              moves: const [],
               boardOverlay: PlatformCard(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,

@@ -12,12 +12,12 @@ part 'general_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   final prefCategory = PrefCategory.general;
 
-  // ignore: avoid_public_notifier_properties
   @override
+  @protected
   GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override
@@ -76,6 +76,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
 class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const GeneralPrefs._();
 
+  @Assert('masterVolume >= 0 && masterVolume <= 1')
   const factory GeneralPrefs({
     @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,

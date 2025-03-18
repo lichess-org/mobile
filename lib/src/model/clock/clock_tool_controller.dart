@@ -166,6 +166,10 @@ class ClockToolController extends _$ClockToolController {
     _clock.start();
     state = state.copyWith(paused: false);
   }
+
+  void toggleOrientation(ClockOrientation? clockOrientation) {
+    state = state.copyWith(clockOrientation: clockOrientation);
+  }
 }
 
 @freezed
@@ -212,6 +216,7 @@ class ClockState with _$ClockState {
     @Default(false) bool paused,
     @Default(0) int whiteMoves,
     @Default(0) int blackMoves,
+    @Default(null) ClockOrientation? clockOrientation,
   }) = _ClockState;
 
   ValueListenable<Duration> getDuration(Side playerType) =>
@@ -226,4 +231,30 @@ class ClockState with _$ClockState {
   bool isActivePlayer(Side playerType) => isPlayersTurn(playerType) && !paused;
 
   bool isFlagged(Side playerType) => flagged == playerType;
+}
+
+enum ClockOrientation {
+  portraitUp,
+  landscapeLeft,
+  landscapeRight;
+
+  ClockOrientation get toggle => switch (this) {
+    portraitUp => landscapeLeft,
+    landscapeLeft => landscapeRight,
+    landscapeRight => portraitUp,
+  };
+
+  int get quarterTurns => switch (this) {
+    portraitUp => 0,
+    landscapeLeft => 1,
+    landscapeRight => 3,
+  };
+
+  int get oppositeQuarterTurns => switch (this) {
+    portraitUp => 2,
+    landscapeLeft => 3,
+    landscapeRight => 1,
+  };
+
+  bool get isPortrait => this == portraitUp;
 }

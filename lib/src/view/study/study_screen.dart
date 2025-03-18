@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -22,6 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -70,7 +73,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: const Text(''),
           body: DefaultTabController(
             length: 1,
@@ -93,7 +96,7 @@ class _StudyScreenLoader extends ConsumerWidget {
         );
       case _:
         return PlatformScaffold(
-          enableBackgroundFilterBlur: false,
+          appBarEnableBackgroundFilterBlur: false,
           appBarTitle: Shimmer(
             child: ShimmerLoading(
               isLoading: true,
@@ -184,8 +187,9 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return PlatformScaffold(
-      enableBackgroundFilterBlur: false,
+      appBarEnableBackgroundFilterBlur: false,
       appBarTitle: AutoSizeText(
         widget.studyState.currentChapterTitle,
         maxLines: 2,
@@ -193,6 +197,8 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
         overflow: TextOverflow.ellipsis,
       ),
       appBarActions: [
+        if (widget.studyState.isEngineAvailable(enginePrefs))
+          EngineDepth(savedEval: widget.studyState.currentNode.eval),
         if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
         _StudyMenu(id: widget.id),
       ],
@@ -208,6 +214,7 @@ class _StudyMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
     return PlatformContextMenuButton(
@@ -221,14 +228,14 @@ class _StudyMenu extends ConsumerWidget {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        PlatformContextMenuAction(
-          dismissOnPress: false,
-          icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-          label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
-          onPressed: () {
-            ref.read(studyControllerProvider(id).notifier).toggleLike();
-          },
-        ),
+        if (session != null)
+          PlatformContextMenuAction(
+            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            onPressed: () {
+              ref.read(studyControllerProvider(id).notifier).toggleLike();
+            },
+          ),
         PlatformContextMenuAction(
           icon:
               Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
@@ -239,13 +246,13 @@ class _StudyMenu extends ConsumerWidget {
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
                   },
                 ),
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () async {
+                  onPressed: () {
                     launchShareDialog(
                       context,
                       uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
@@ -276,18 +283,22 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () async {
+                    onPressed: () {
                       launchShareDialog(context, text: state.pgn);
                     },
                   ),
-                  if (state.position != null)
+                  if (state.currentPosition != null)
                     BottomSheetAction(
                       makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
                       onPressed: () async {
                         try {
                           final image = await ref
                               .read(gameShareServiceProvider)
-                              .screenshotPosition(state.pov, state.position!.fen, state.lastMove);
+                              .screenshotPosition(
+                                state.pov,
+                                state.currentPosition!.fen,
+                                state.lastMove,
+                              );
                           if (context.mounted) {
                             launchShareDialog(
                               context,
@@ -357,6 +368,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final variant = studyState.variant;
     if (!variant.isReadSupported) {
       return DefaultTabController(
@@ -376,12 +388,12 @@ class _Body extends ConsumerWidget {
     }
 
     final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-    final numEvalLines = analysisPrefs.numEvalLines;
+    final numEvalLines = enginePrefs.numEvalLines;
 
     final gamebookActive = studyState.gamebookActive;
-    final engineGaugeParams = studyState.engineGaugeParams;
+    final engineGaugeParams = studyState.engineGaugeParams(enginePrefs);
     final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
-    final isLocalEvaluationEnabled = studyState.isLocalEvaluationEnabled;
+    final isLocalEvaluationEnabled = studyState.isEngineAvailable(enginePrefs);
     final currentNode = studyState.currentNode;
     final pov = studyState.pov;
 
@@ -486,6 +498,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
       }
     });
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final studyState = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
@@ -517,7 +530,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     );
     final bestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && studyState.isEngineAvailable && bestMoves != null
+        showBestMoveArrow && studyState.isEngineAvailable(enginePrefs) && bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position!.turn,
@@ -541,7 +554,10 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
-      fen: studyState.position?.board.fen ?? studyState.study.currentChapterMeta.fen ?? kInitialFEN,
+      fen:
+          studyState.currentPosition?.board.fen ??
+          studyState.study.currentChapterMeta.fen ??
+          kInitialFEN,
       lastMove: studyState.lastMove as NormalMove?,
       orientation: studyState.pov,
       shapes: pgnShapes.union(userShapes).union(variationArrows).union(bestMoveShapes),

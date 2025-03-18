@@ -68,8 +68,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
       _appLifecycleListener?.dispose();
-      _syncRoundDebouncer.dispose();
-      _evalRequestDebouncer.dispose();
+      _syncRoundDebouncer.cancel();
+      _evalRequestDebouncer.cancel();
     });
 
     final round = await ref.withClient(
@@ -259,7 +259,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final round = state.requireValue;
 
     _socketClient.send('evalGetMulti', {
-      'fens': [for (final id in round.observedGames) round.games[id]!.fen],
+      'fens': [
+        for (final id in round.observedGames)
+          // TODO: investigate why this happens
+          if (round.games[id] != null) round.games[id]!.fen,
+      ],
     });
   }
 }

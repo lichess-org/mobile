@@ -20,11 +20,12 @@ class PlatformScaffold extends StatelessWidget {
     this.appBarActions = const [],
     this.appBarBottom,
     this.appBarAndroidTitleSpacing,
+    this.appBarEnableBackgroundFilterBlur = true,
+    this.appBarAutomaticBackgroundVisibility = true,
     required this.body,
     this.bottomNavigationBar,
     this.resizeToAvoidBottomInset = true,
     this.backgroundColor,
-    this.enableBackgroundFilterBlur = true,
   });
 
   /// Widget to place at the start of the navigation bar
@@ -52,6 +53,16 @@ class PlatformScaffold extends StatelessWidget {
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
   final double? appBarAndroidTitleSpacing;
 
+  /// {@macro flutter.cupertino.CupertinoNavigationBar.enableBackgroundFilterBlur}
+  ///
+  /// Has no effect on Android.
+  final bool appBarEnableBackgroundFilterBlur;
+
+  /// {@macro flutter.cupertino.CupertinoNavigationBar.automaticBackgroundVisibility}
+  ///
+  /// Has no effect on Android.
+  final bool appBarAutomaticBackgroundVisibility;
+
   /// The main content of the screen, displayed below the navigation bar.
   final Widget body;
 
@@ -65,11 +76,6 @@ class PlatformScaffold extends StatelessWidget {
   ///
   /// Typically used for a [BottomNavigationBar].
   final Widget? bottomNavigationBar;
-
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.enableBackgroundFilterBlur}
-  ///
-  /// Has no effect on Android.
-  final bool enableBackgroundFilterBlur;
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
@@ -100,7 +106,8 @@ class PlatformScaffold extends StatelessWidget {
             appBarActions.isNotEmpty
                 ? Row(mainAxisSize: MainAxisSize.min, children: appBarActions)
                 : null,
-        enableBackgroundFilterBlur: enableBackgroundFilterBlur,
+        enableBackgroundFilterBlur: appBarEnableBackgroundFilterBlur,
+        automaticBackgroundVisibility: appBarAutomaticBackgroundVisibility,
       ),
       backgroundColor: backgroundColor,
       child: Column(

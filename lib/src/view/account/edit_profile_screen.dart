@@ -35,7 +35,7 @@ class EditProfileScreen extends StatelessWidget {
     );
   }
 
-  Future<bool?> _showBackDialog(BuildContext context) async {
+  Future<bool?> _showBackDialog(BuildContext context) {
     return showAdaptiveDialog<bool>(
       context: context,
       builder: (context) {
@@ -290,7 +290,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               final result = await future;
 
                               result.match(
-                                onError: (err, __) {
+                                onError: (err, _) {
                                   if (context.mounted) {
                                     showPlatformSnackbar(
                                       context,

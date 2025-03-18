@@ -3653,43 +3653,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get playChessEverywhere => 'Şahmatı hər yerdə oyna';
 
   @override
-  String get asFreeAsLichess => 'Lichess kimi azad';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'Pula görə deyil, şahmat sevgisinə görə yaradılmışdır';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'Hər kəs bütün özəllikləri pulsuz əldə edir';
-
-  @override
-  String get zeroAdvertisement => 'Sıfır reklam';
-
-  @override
-  String get fullFeatured => 'Tam özəllikli';
-
-  @override
-  String get phoneAndTablet => 'Telefon və tablet';
-
-  @override
-  String get bulletBlitzClassical => 'Bullet, blitz, klassik';
-
-  @override
-  String get correspondenceChess => 'Yazışmalı şahmat';
-
-  @override
-  String get onlineAndOfflinePlay => 'Onlayn və oflayn oyun';
 
   @override
   String get viewTheSolution => 'Həllə bax';
 
   @override
-  String get followAndChallengeFriends => 'Dostlarını izlə və oyuna çağır';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'Oyun təhlili';
 
   @override
   String xHostsY(String param1, String param2) {

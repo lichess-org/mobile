@@ -69,7 +69,7 @@ class ImmersiveMode {
   ///
   /// This hides the system UI (status bar and navigation bar) and forces the
   /// device to stay awake.
-  Future<void> enable() async {
+  Future<void> enable() {
     return Future.wait([
       WakelockPlus.enable(),
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky),

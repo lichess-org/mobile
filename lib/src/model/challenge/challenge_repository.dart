@@ -23,7 +23,7 @@ class ChallengeRepository {
 
   final LichessClient client;
 
-  Future<ChallengesList> list() async {
+  Future<ChallengesList> list() {
     final uri = Uri(path: '/api/challenge');
     return client.readJson(
       uri,
@@ -37,12 +37,12 @@ class ChallengeRepository {
     );
   }
 
-  Future<Challenge> show(ChallengeId id) async {
+  Future<Challenge> show(ChallengeId id) {
     final uri = Uri(path: '/api/challenge/$id/show');
     return client.readJson(uri, mapper: Challenge.fromServerJson);
   }
 
-  Future<Challenge> create(ChallengeRequest challenge) async {
+  Future<Challenge> create(ChallengeRequest challenge) {
     final uri = Uri(path: '/api/challenge/${challenge.destUser.id}');
     return client.postReadJson(
       uri,

@@ -7,12 +7,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
+import '../engine/test_engine_app.dart';
 
 void main() {
   // ignore: avoid_dynamic_calls
@@ -35,9 +40,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump(const Duration(milliseconds: 1));
-
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
       final currentMove = find.textContaining('Qe1#');
@@ -66,8 +68,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump(const Duration(milliseconds: 1));
 
       // cannot go forward
       expect(tester.widget<BottomBarButton>(find.byKey(const Key('goto-next'))).onTap, isNull);
@@ -100,11 +100,11 @@ void main() {
         defaultPreferences: {
           PrefCategory.analysis.storageKey: jsonEncode(
             AnalysisPrefs.defaults
-                .copyWith(
-                  enableLocalEvaluation: false,
-                  inlineNotation: displayMode == PgnTreeDisplayMode.inlineNotation,
-                )
+                .copyWith(inlineNotation: displayMode == PgnTreeDisplayMode.inlineNotation)
                 .toJson(),
+          ),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
           ),
         },
         home: AnalysisScreen(
@@ -117,7 +117,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump(const Duration(milliseconds: 1));
     }
 
     Text parentText(WidgetTester tester, String move) {
@@ -463,29 +462,21 @@ void main() {
       });
     });
   });
-}
 
-// final gameData = LightArchivedGame(
-//   id: const GameId('qVChCOTc'),
-//   rated: false,
-//   speed: Speed.blitz,
-//   perf: Perf.blitz,
-//   createdAt: DateTime.parse('2023-01-11 14:30:22.389'),
-//   lastMoveAt: DateTime.parse('2023-01-11 14:33:56.416'),
-//   status: GameStatus.mate,
-//   white: const Player(aiLevel: 1),
-//   black: const Player(
-//     user: LightUser(
-//       id: UserId('veloce'),
-//       name: 'veloce',
-//       isPatron: true,
-//     ),
-//     rating: 1435,
-//   ),
-//   variant: Variant.standard,
-//   lastFen: '1r3rk1/p1pb1ppp/3p4/8/1nBN1P2/1P6/PBPP1nPP/R1K1q3 w - - 4 1',
-//   winner: Side.black,
-// );
+  // more engine evaluation test files are to be found in /test/view/engine/
+  group('Engine evaluation:', () {
+    testWidgets('evals are displayed in the move tree', (tester) async {
+      await makeEngineTestApp(tester, isCloudEvalEnabled: false);
+      await playMove(tester, 'e2', 'e4');
+      expect(find.byType(InlineMove), findsOne);
+      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+      expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+      await playMove(tester, 'e7', 'e5');
+      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+      expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
+    });
+  });
+}
 
 const gameResponse = '''
 {"id":"qVChCOTc","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673443822389,"lastMoveAt":1673444036416,"status":"mate","players":{"white":{"aiLevel":1},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1435,"provisional":true}},"winner":"black","opening":{"eco":"C20","name":"King's Pawn Game: Wayward Queen Attack, Kiddie Countergambit","ply":4},"moves":"e4 e5 Qh5 Nf6 Qxe5+ Be7 b3 d6 Qb5+ Bd7 Qxb7 Nc6 Ba3 Rb8 Qa6 Nxe4 Bb2 O-O Nc3 Nb4 Nf3 Nxa6 Nd5 Nb4 Nxe7+ Qxe7 Nd4 Qf6 f4 Qe7 Ke2 Ng3+ Kd1 Nxh1 Bc4 Nf2+ Kc1 Qe1#","clocks":[18003,18003,17915,17627,17771,16691,17667,16243,17475,15459,17355,14779,17155,13795,16915,13267,14771,11955,14451,10995,14339,10203,13899,9099,12427,8379,12003,7547,11787,6691,11355,6091,11147,5763,10851,5099,10635,4657],"clock":{"initial":180,"increment":0,"totalTime":180}}

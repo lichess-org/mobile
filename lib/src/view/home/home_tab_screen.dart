@@ -198,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           );
         }
       },
-      error: (_, __) => const CenterLoadingIndicator(),
+      error: (_, _) => const CenterLoadingIndicator(),
       loading: () => const CenterLoadingIndicator(),
     );
   }

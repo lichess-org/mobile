@@ -274,10 +274,10 @@ class RepeatButton extends StatefulWidget {
     required this.onLongPress,
     required this.child,
     this.triggerDelays = const [
-      Duration(milliseconds: 500),
-      Duration(milliseconds: 300),
-      Duration(milliseconds: 250),
-      Duration(milliseconds: 150),
+      Duration(milliseconds: 200),
+      Duration(milliseconds: 180),
+      Duration(milliseconds: 100),
+      Duration(milliseconds: 40),
     ],
     this.holdDelay = const Duration(milliseconds: 30),
   });
@@ -288,7 +288,6 @@ class RepeatButton extends StatefulWidget {
   final VoidCallback? onLongPress;
 
   /// Delays between callbacks at the beginning. Leave default to get an acceleration effect.
-  /// The maximum length of the list is 3
   final List<Duration> triggerDelays;
 
   /// Delay between callbacks
@@ -300,11 +299,11 @@ class RepeatButton extends StatefulWidget {
 
 class _RepeatButtonState extends State<RepeatButton> {
   bool _isPressed = false;
-  Timer? _timer;
+  Timer? _holdTimer;
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _holdTimer?.cancel();
     super.dispose();
   }
 
@@ -321,7 +320,7 @@ class _RepeatButtonState extends State<RepeatButton> {
       widget.onLongPress?.call();
     }
 
-    _timer = Timer.periodic(widget.holdDelay, (_) {
+    _holdTimer = Timer.periodic(widget.holdDelay, (_) {
       if (_isPressed) {
         widget.onLongPress?.call();
       }
@@ -330,7 +329,7 @@ class _RepeatButtonState extends State<RepeatButton> {
 
   void _onPressEnd() {
     _isPressed = false;
-    _timer?.cancel();
+    _holdTimer?.cancel();
   }
 
   @override

@@ -289,7 +289,18 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
         for (final chapter in state.study.chapters)
           PlatformListTile(
             key: chapter.id == state.currentChapter.id ? currentChapterKey : null,
-            title: Text(state.study.getChapterIndexedName(chapter.id), maxLines: 2),
+            title: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '${state.study.getChapterIndex(chapter.id) + 1} ',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: chapter.name),
+                ],
+              ),
+              maxLines: 2,
+            ),
             onTap: () {
               ref.read(studyControllerProvider(widget.id).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();

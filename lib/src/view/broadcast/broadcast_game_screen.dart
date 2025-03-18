@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
@@ -113,25 +115,18 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
               ),
               _ => const SizedBox.shrink(),
             };
+    final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
+    final asyncIsEngineAvailable = ref.watch(
+      isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
+    );
 
     return PlatformScaffold(
-      enableBackgroundFilterBlur: false,
+      appBarEnableBackgroundFilterBlur: false,
       appBarTitle: title,
       appBarActions: [
+        if (asyncIsEngineAvailable.valueOrNull == true)
+          EngineDepth(savedEval: asyncEval.valueOrNull),
         AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-        AppBarIconButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              BroadcastGameSettingsScreen.buildRoute(
-                context,
-                roundId: widget.roundId,
-                gameId: widget.gameId,
-              ),
-            );
-          },
-          semanticsLabel: context.l10n.settingsSettings,
-          icon: const Icon(Icons.settings),
-        ),
       ],
       body: _Body(
         widget.tournamentId,
@@ -167,11 +162,12 @@ class _Body extends ConsumerWidget {
     switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
       case AsyncValue(value: final state?, hasValue: true):
         final analysisPrefs = ref.watch(analysisPreferencesProvider);
+        final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
         final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-        final numEvalLines = analysisPrefs.numEvalLines;
+        final numEvalLines = enginePrefs.numEvalLines;
 
-        final engineGaugeParams = state.engineGaugeParams;
-        final isLocalEvaluationEnabled = state.isLocalEvaluationEnabled;
+        final engineGaugeParams = state.engineGaugeParams(enginePrefs);
+        final isLocalEvaluationEnabled = state.isEngineAvailable(enginePrefs);
         final currentNode = state.currentNode;
         final pov = state.pov;
 
@@ -195,7 +191,7 @@ class _Body extends ConsumerWidget {
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
           engineGaugeBuilder:
-              state.hasAvailableEval && showEvaluationGauge
+              state.hasAvailableEval(enginePrefs) && showEvaluationGauge
                   ? (context, orientation) {
                     return orientation == Orientation.portrait
                         ? EngineGauge(
@@ -310,19 +306,21 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-
-    final evalBestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final currentNode = broadcastAnalysisState.currentNode;
     final annotation = makeAnnotation(currentNode.nags);
 
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+    final localBestMoves = ref.watch(
+      engineEvaluationProvider.select((value) => value.eval?.bestMoves),
+    );
+    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
 
     final sanMove = currentNode.sanMove;
 
     final ISet<Shape> bestMoveShapes =
         analysisPrefs.showBestMoveArrow &&
-                broadcastAnalysisState.isLocalEvaluationEnabled &&
+                broadcastAnalysisState.isEngineAvailable(enginePrefs) &&
                 bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
@@ -421,9 +419,10 @@ class _PlayerWidget extends ConsumerWidget {
           _PlayerWidgetPosition.top => broadcastAnalysisState.pov.opposite,
         };
 
-        final player = game.players[side]!;
-        final liveClock = isCursorOnLiveMove ? player.clock : null;
-        final gameStatus = game.status;
+        final playerWithClock = game.players[side]!;
+        final player = playerWithClock.player;
+        final liveClock = isCursorOnLiveMove ? playerWithClock.clock : null;
+        final isClockActive = isCursorOnLiveMove && game.isOngoing && side == sideToMove;
 
         final pastClocks = broadcastAnalysisState.clocks;
         final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
@@ -432,20 +431,8 @@ class _PlayerWidget extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).push(
               (tournamentId != null)
-                  ? BroadcastPlayerResultsScreen.buildRoute(
-                    context,
-                    tournamentId!,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  )
-                  : BroadcastPlayerResultsScreenLoading.buildRoute(
-                    context,
-                    roundId,
-                    (player.fideId != null) ? player.fideId!.toString() : player.name,
-                    playerTitle: player.title,
-                    playerName: player.name,
-                  ),
+                  ? BroadcastPlayerResultsScreen.buildRoute(context, tournamentId!, player)
+                  : BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, player),
             );
           },
           child: Container(
@@ -455,17 +442,14 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    gameStatus.resultToString(side),
+                    game.status.resultToString(side),
                     style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),
                 ],
                 Expanded(
                   child: BroadcastPlayerWidget(
-                    federation: player.federation,
-                    title: player.title,
-                    name: player.name,
-                    rating: player.rating,
+                    player: player,
                     textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -473,10 +457,10 @@ class _PlayerWidget extends ConsumerWidget {
                   Container(
                     height: kAnalysisBoardHeaderOrFooterHeight,
                     color:
-                        (side == sideToMove)
-                            ? isCursorOnLiveMove
-                                ? ColorScheme.of(context).tertiaryContainer
-                                : ColorScheme.of(context).secondaryContainer
+                        isClockActive
+                            ? ColorScheme.of(context).tertiaryContainer
+                            : (side == sideToMove)
+                            ? ColorScheme.of(context).secondaryContainer
                             : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -485,12 +469,12 @@ class _PlayerWidget extends ConsumerWidget {
                             liveClock != null
                                 ? CountdownClockBuilder(
                                   timeLeft: liveClock,
-                                  active: side == sideToMove,
+                                  active: isClockActive,
                                   builder:
                                       (context, timeLeft) => _Clock(
                                         timeLeft: timeLeft,
                                         isSideToMove: side == sideToMove,
-                                        isLive: true,
+                                        isClockActive: isClockActive,
                                       ),
                                   tickInterval: const Duration(seconds: 1),
                                   clockUpdatedAt: game.updatedClockAt,
@@ -498,7 +482,7 @@ class _PlayerWidget extends ConsumerWidget {
                                 : _Clock(
                                   timeLeft: pastClock!,
                                   isSideToMove: side == sideToMove,
-                                  isLive: false,
+                                  isClockActive: false,
                                 ),
                       ),
                     ),
@@ -516,11 +500,11 @@ class _PlayerWidget extends ConsumerWidget {
 }
 
 class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isLive});
+  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isClockActive});
 
   final Duration timeLeft;
   final bool isSideToMove;
-  final bool isLive;
+  final bool isClockActive;
 
   @override
   Widget build(BuildContext context) {
@@ -528,10 +512,10 @@ class _Clock extends StatelessWidget {
       timeLeft.toHoursMinutesSeconds(),
       style: TextStyle(
         color:
-            isSideToMove
-                ? isLive
-                    ? ColorScheme.of(context).onTertiaryContainer
-                    : ColorScheme.of(context).onSecondaryContainer
+            isClockActive
+                ? ColorScheme.of(context).onTertiaryContainer
+                : isSideToMove
+                ? ColorScheme.of(context).onSecondaryContainer
                 : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
@@ -555,6 +539,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
@@ -567,10 +552,22 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             showAdaptiveActionSheet<void>(
               context: context,
               actions: [
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.settingsSettings),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      BroadcastGameSettingsScreen.buildRoute(
+                        context,
+                        roundId: roundId,
+                        gameId: gameId,
+                      ),
+                    );
+                  },
+                ),
                 if (tournamentSlug != null && roundSlug != null)
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                    onPressed: () async {
+                    onPressed: () {
                       launchShareDialog(
                         context,
                         uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
@@ -625,16 +622,32 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          label: context.l10n.toggleLocalEvaluation,
-          onTap:
-              analysisPrefs.enableComputerAnalysis
-                  ? () {
-                    ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                  }
-                  : null,
-          icon: CupertinoIcons.gauge,
-          highlighted: broadcastAnalysisState.isLocalEvaluationEnabled,
+        Builder(
+          builder: (context) {
+            Future<void>? toggleFuture;
+            return FutureBuilder(
+              future: toggleFuture,
+              builder: (context, snapshot) {
+                return BottomBarButton(
+                  label: context.l10n.toggleLocalEvaluation,
+                  onTap:
+                      analysisPrefs.enableComputerAnalysis &&
+                              snapshot.connectionState != ConnectionState.waiting
+                          ? () async {
+                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                            try {
+                              await toggleFuture;
+                            } finally {
+                              toggleFuture = null;
+                            }
+                          }
+                          : null,
+                  icon: CupertinoIcons.gauge,
+                  highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
+                );
+              },
+            );
+          },
         ),
         BottomBarButton(
           label: context.l10n.flipBoard,

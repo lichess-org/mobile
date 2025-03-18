@@ -62,7 +62,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
         child: ListView.separated(
           itemCount: PieceSet.values.length,
           separatorBuilder:
-              (_, __) => PlatformDivider(
+              (_, _) => PlatformDivider(
                 height: 1,
                 // on iOS: 14 (default indent) + 16 (padding)
                 indent: Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,

@@ -12,6 +12,9 @@ import 'package:sound_effect/sound_effect.dart';
 
 part 'sound_service.g.dart';
 
+/// Maximum number of concurrent sounds that can be played.
+const _kMaxConcurrentStreams = 2;
+
 final _soundEffectPlugin = SoundEffect();
 
 final _logger = Logger('SoundService');
@@ -73,7 +76,7 @@ class SoundService {
                   ? GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>)
                   : GeneralPrefs.defaults)
               .soundTheme;
-      await _soundEffectPlugin.initialize();
+      await _soundEffectPlugin.initialize(maxStreams: _kMaxConcurrentStreams);
       await _loadAllSounds(theme);
     } catch (e) {
       _logger.warning('Failed to initialize sound service: $e');
@@ -81,13 +84,14 @@ class SoundService {
   }
 
   /// Play the given sound if sound is enabled.
-  Future<void> play(Sound sound) async {
+  Future<void> play(Sound sound, {double volume = 1.0}) async {
+    assert((volume >= 0.0) && (volume <= 1.0));
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
-    final volume = _ref.read(generalPreferencesProvider).masterVolume;
-    if (!isEnabled || volume == 0.0) {
+    final finalVolume = _ref.read(generalPreferencesProvider).masterVolume * volume;
+    if (!isEnabled || finalVolume == 0.0) {
       return;
     }
-    _soundEffectPlugin.play(sound.name, volume: volume);
+    _soundEffectPlugin.play(sound.name, volume: finalVolume);
   }
 
   /// Change the sound theme and optionally play a move sound.
@@ -97,7 +101,7 @@ class SoundService {
   /// If [playSound] is true, a move sound will be played.
   Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
     await _soundEffectPlugin.release();
-    await _soundEffectPlugin.initialize();
+    await _soundEffectPlugin.initialize(maxStreams: _kMaxConcurrentStreams);
     await _loadSound(theme, Sound.move);
     if (playSound) {
       play(Sound.move);

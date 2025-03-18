@@ -3655,43 +3655,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playChessEverywhere => 'همه جا شطرنج بازی کنید';
 
   @override
-  String get asFreeAsLichess => 'کاملا رایگان';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'ساخته شده با عشق به شطرنج نه پول';
-
-  @override
   String get everybodyGetsAllFeaturesForFree => 'همگی از مزایا بصورت رایگان استفاده می کنند';
-
-  @override
-  String get zeroAdvertisement => 'بدون تبلیغات';
-
-  @override
-  String get fullFeatured => 'با تمامی امکانات';
-
-  @override
-  String get phoneAndTablet => 'گوشی و رایانک';
-
-  @override
-  String get bulletBlitzClassical => 'گلوله‌ای، برق‌آسا، فکری';
-
-  @override
-  String get correspondenceChess => 'شطرنج مکاتبه ای';
-
-  @override
-  String get onlineAndOfflinePlay => 'بازی بَرخط و بُرون‌خط';
 
   @override
   String get viewTheSolution => 'دیدن راه‌حل';
 
   @override
-  String get followAndChallengeFriends => 'دنبالیدن و پیشنهاد بازی دادن به دوستان';
-
-  @override
   String get noChallenges => 'No challenges.';
-
-  @override
-  String get gameAnalysis => 'تجزیه و تحلیلِ بازی';
 
   @override
   String xHostsY(String param1, String param2) {
