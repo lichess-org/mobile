@@ -159,14 +159,14 @@ class _AppState extends ConsumerState<Application> {
           context,
         ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
       ),
-      themeMode:
-          generalPrefs.isForcedDarkMode
-              ? ThemeMode.dark
-              : switch (generalPrefs.themeMode) {
-                BackgroundThemeMode.light => ThemeMode.light,
-                BackgroundThemeMode.dark => ThemeMode.dark,
-                BackgroundThemeMode.system => ThemeMode.system,
-              },
+      themeMode:ThemeMode.dark,
+          // generalPrefs.isForcedDarkMode
+          //     ? ThemeMode.dark
+          //     : switch (generalPrefs.themeMode) {
+          //       BackgroundThemeMode.light => ThemeMode.light,
+          //       BackgroundThemeMode.dark => ThemeMode.dark,
+          //       BackgroundThemeMode.system => ThemeMode.system,
+          //     },
       builder:
           isIOS
               ? (context, child) => IconTheme.merge(
