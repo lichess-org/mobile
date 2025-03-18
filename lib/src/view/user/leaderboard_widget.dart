@@ -20,7 +20,7 @@ class LeaderboardWidget extends ConsumerWidget {
       data: (data) {
         return ListSection(
           hasLeading: true,
-          header: Text(context.l10n.leaderboard),
+          header: Text('World Rank'),
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
               Navigator.of(context).push(LeaderboardScreen.buildRoute(context));

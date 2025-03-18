@@ -11,7 +11,7 @@
         </intent>
     </queries>
     <application
-        android:label="Lichess"
+        android:label="RookTook"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"

@@ -69,7 +69,14 @@ class PlayerScreen extends ConsumerWidget {
       child: PlatformWidget(
         androidBuilder:
             (context) => Scaffold(
-              appBar: AppBar(title: Text(context.l10n.players), bottom: searchButton),
+              appBar: AppBar(
+                title:const Text('Leaderboard'),
+                centerTitle: true,
+                //  bottom: searchButton
+                actions: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.share))
+                ],
+              ),
               body: _Body(),
             ),
         iosBuilder:

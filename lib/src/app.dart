@@ -155,6 +155,13 @@ class _AppState extends ConsumerState<Application> {
         ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
       ),
       darkTheme: themeDark.copyWith(
+        primaryColor: const Color(0xFF13191D),
+        scaffoldBackgroundColor: const Color(0xFF13191D),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF13191D)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF13191D),
+          brightness: Brightness.dark,
+        ),
         navigationBarTheme: NavigationBarTheme.of(
           context,
         ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
