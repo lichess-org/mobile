@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -182,7 +183,13 @@ class _BottomBar extends ConsumerWidget {
 
     return PlatformBottomBar(
       children: [
-        BottomBarButton(label: context.l10n.menu, onTap: () {}, icon: Icons.menu),
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showOtbGameMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
         BottomBarButton(
           key: const Key('flip-button'),
           label: context.l10n.flipBoard,
@@ -234,6 +241,18 @@ class _BottomBar extends ConsumerWidget {
                   : null,
           icon: CupertinoIcons.chevron_forward,
         ),
+      ],
+    );
+  }
+
+  Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: () {}),
+        BottomSheetAction(makeLabel: (context) => Text(context.l10n.flipBoard), onPressed: () {}),
+        BottomSheetAction(makeLabel: (context) => Text(context.l10n.offerDraw), onPressed: () {}),
+        BottomSheetAction(makeLabel: (context) => Text(context.l10n.resign), onPressed: () {}),
       ],
     );
   }
