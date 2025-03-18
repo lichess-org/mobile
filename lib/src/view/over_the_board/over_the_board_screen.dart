@@ -249,8 +249,14 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: () {}),
-        BottomSheetAction(makeLabel: (context) => Text(context.l10n.flipBoard), onPressed: () {}),
+        BottomSheetAction(
+          makeLabel: (context) => const Text('New game'),
+          onPressed: () => showConfigureGameSheet(context, isDismissible: true),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: onFlipBoard,
+        ),
         BottomSheetAction(makeLabel: (context) => Text(context.l10n.offerDraw), onPressed: () {}),
         BottomSheetAction(makeLabel: (context) => Text(context.l10n.resign), onPressed: () {}),
       ],
