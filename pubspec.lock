@@ -961,8 +961,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "40abcece5be4610620a8dcc506901d9be84bab1b"
-      resolved-ref: "40abcece5be4610620a8dcc506901d9be84bab1b"
+      ref: "62d45c60f7840a4591318bb477172136c999f946"
+      resolved-ref: "62d45c60f7840a4591318bb477172136c999f946"
       url: "https://github.com/veloce/l10n_esperanto.git"
     source: git
     version: "2.0.12"

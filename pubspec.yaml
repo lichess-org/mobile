@@ -54,7 +54,7 @@ dependencies:
   l10n_esperanto:
     git:
       url: https://github.com/veloce/l10n_esperanto.git
-      ref: 40abcece5be4610620a8dcc506901d9be84bab1b
+      ref: 62d45c60f7840a4591318bb477172136c999f946
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
