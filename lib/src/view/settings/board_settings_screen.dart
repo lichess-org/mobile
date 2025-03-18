@@ -75,7 +75,7 @@ class _Body extends ConsumerWidget {
               settingsLabel: Text(
                 context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
               ),
-              settingsValue: boardPrefs.castlingMethod.name,
+              settingsValue: boardPrefs.castlingMethod.l10n(context.l10n),
               showCupertinoTrailingValue: false,
               onTap: () {
                 if (Theme.of(context).platform == TargetPlatform.android) {
@@ -83,7 +83,7 @@ class _Body extends ConsumerWidget {
                     context,
                     choices: CastlingMethod.values,
                     selectedItem: boardPrefs.castlingMethod,
-                    labelBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
+                    labelBuilder: (t) => Text(t.l10n(context.l10n)),
                     onSelectedItemChanged: (CastlingMethod? value) {
                       ref
                           .read(boardPreferencesProvider.notifier)
@@ -294,7 +294,7 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
     return buildScreenRoute(
       context,
       screen: const CastlingMethodSettingsScreen(),
-      title: 'Castling method',
+      title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
     );
   }
 
@@ -316,7 +316,7 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
             notchedTile: true,
             choices: CastlingMethod.values,
             selectedItem: castlingMethod,
-            titleBuilder: (t) => Text(t.castlingMethodl10n(context, t)),
+            titleBuilder: (t) => Text(t.l10n(context.l10n)),
             onSelectedItemChanged: onChanged,
           ),
         ],
