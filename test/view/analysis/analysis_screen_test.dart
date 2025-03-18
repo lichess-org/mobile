@@ -10,14 +10,18 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import '../engine/test_engine_app.dart';
+
+class BoardPreferencesMock extends Mock implements BoardPreferences {}
 
 void main() {
   // ignore: avoid_dynamic_calls
@@ -474,6 +478,29 @@ void main() {
       await playMove(tester, 'e7', 'e5');
       await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
       expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
+    });
+  });
+
+  group('Respect castling preference', () {
+    const String pgn = '[Variant "From Position"]\n[FEN "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"]';
+
+    testWidgets('Move king two squares - kingside', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions(
+            orientation: Side.white,
+            standalone: (pgn: pgn, isComputerAnalysisAllowed: false, variant: Variant.standard),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await playMove(tester, 'e1', 'h1');
+      expect(find.byKey(const Key('g1-whiteking')), findsOneWidget);
+      expect(find.byKey(const Key('e1-whiteking')), findsNothing);
+      expect(find.byKey(const Key('f1-whiterook')), findsOneWidget);
+      expect(find.byKey(const Key('h1-whiterook')), findsNothing);
     });
   });
 }
