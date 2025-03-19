@@ -43,6 +43,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(state.copyWith(castlingMethod: castlingMethod));
+  }
+
   Future<void> toggleHapticFeedback() {
     return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
@@ -125,6 +129,8 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required ClockPosition clockPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(defaultValue: CastlingMethod.either, unknownEnumValue: CastlingMethod.either)
+    required CastlingMethod castlingMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -150,6 +156,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
+    castlingMethod: CastlingMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
@@ -344,6 +351,18 @@ enum ClockPosition {
   String get label => switch (this) {
     ClockPosition.left => 'Left',
     ClockPosition.right => 'Right',
+  };
+}
+
+enum CastlingMethod {
+  kingOverRook,
+  kingTwoSquares,
+  either;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    CastlingMethod.kingOverRook => l10n.preferencesCastleByMovingOntoTheRook,
+    CastlingMethod.kingTwoSquares => l10n.preferencesCastleByMovingTwoSquares,
+    CastlingMethod.either => 'Either', //TODO l10n string
   };
 }
 
