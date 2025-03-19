@@ -246,6 +246,7 @@ class _BottomBar extends ConsumerWidget {
   }
 
   Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
+    final gameState = ref.read(overTheBoardGameControllerProvider);
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -257,8 +258,10 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: onFlipBoard,
         ),
-        BottomSheetAction(makeLabel: (context) => Text(context.l10n.offerDraw), onPressed: () {}),
-        BottomSheetAction(makeLabel: (context) => Text(context.l10n.resign), onPressed: () {}),
+        if (gameState.game.drawable)
+          BottomSheetAction(makeLabel: (context) => Text(context.l10n.offerDraw), onPressed: () {}),
+        if (gameState.game.resignable)
+          BottomSheetAction(makeLabel: (context) => Text(context.l10n.resign), onPressed: () {}),
       ],
     );
   }
