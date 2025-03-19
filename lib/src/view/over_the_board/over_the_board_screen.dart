@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dar
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
@@ -23,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({super.key});
@@ -259,9 +261,45 @@ class _BottomBar extends ConsumerWidget {
           onPressed: onFlipBoard,
         ),
         if (gameState.game.drawable)
-          BottomSheetAction(makeLabel: (context) => Text(context.l10n.offerDraw), onPressed: () {}),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.offerDraw),
+            onPressed: () {
+              final offerer = gameState.turn.name.capitalize();
+              showAdaptiveDialog<void>(
+                context: context,
+                builder:
+                    (context) => YesNoDialog(
+                      title: Text('${context.l10n.draw}?'),
+                      content: Text('$offerer offers draw. Does opponent accept?'),
+                      onYes: () {
+                        Navigator.pop(context);
+                        ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                      },
+                      onNo: () => Navigator.pop(context),
+                    ),
+              );
+            },
+          ),
         if (gameState.game.resignable)
-          BottomSheetAction(makeLabel: (context) => Text(context.l10n.resign), onPressed: () {}),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.resign),
+            onPressed: () {
+              final offerer = gameState.turn.name.capitalize();
+              showAdaptiveDialog<void>(
+                context: context,
+                builder:
+                    (context) => YesNoDialog(
+                      title: Text('${context.l10n.resign}?'),
+                      content: Text('Are you sure you want to resign as $offerer?'),
+                      onYes: () {
+                        Navigator.pop(context);
+                        ref.read(overTheBoardGameControllerProvider.notifier).resign();
+                      },
+                      onNo: () => Navigator.pop(context),
+                    ),
+              );
+            },
+          ),
       ],
     );
   }

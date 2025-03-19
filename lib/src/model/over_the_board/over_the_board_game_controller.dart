@@ -32,6 +32,16 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
     state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
   }
 
+  void resign() {
+    state = state.copyWith(
+      game: state.game.copyWith(status: GameStatus.resign, winner: state.turn.opposite),
+    );
+  }
+
+  void draw() {
+    state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
+  }
+
   void makeMove(NormalMove move) {
     if (isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
