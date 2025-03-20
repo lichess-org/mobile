@@ -32,6 +32,8 @@ class BroadcastPlayersTab extends ConsumerWidget {
 
 enum _SortingTypes { player, elo, score }
 
+typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
+
 const _kTableRowVerticalPadding = 12.0;
 const _kTableRowHorizontalPadding = 8.0;
 const _kTableRowPadding = EdgeInsets.symmetric(
@@ -52,61 +54,80 @@ class PlayersList extends ConsumerStatefulWidget {
 
 class _PlayersListState extends ConsumerState<PlayersList> {
   late IList<BroadcastPlayerWithOverallResult> players;
-  late _SortingTypes currentSort;
-  bool reverse = false;
+  late bool reverse;
+  _SortingTypes? currentSort;
+  bool get withRating => players.any((p) => p.player.rating != null);
+  bool get withScores => players.any((p) => p.score != null);
+
+  void resetState() {
+    players = widget.players;
+    reverse = false;
+    final newSort = withScores ? _SortingTypes.score : _SortingTypes.elo;
+    sort(newSort);
+  }
 
   @override
   void initState() {
     super.initState();
-    players = widget.players;
-    currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
-    sort(currentSort);
+    resetState();
   }
 
   @override
   void didUpdateWidget(PlayersList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.players != widget.players) {
-      players = widget.players;
-      currentSort = players.firstOrNull?.score != null ? _SortingTypes.score : _SortingTypes.elo;
-      sort(currentSort);
+      resetState();
     }
   }
 
-  void sort(_SortingTypes newSort, {bool toggleReverse = false}) {
-    final compare = switch (newSort) {
-      _SortingTypes.player =>
-        (BroadcastPlayerWithOverallResult a, BroadcastPlayerWithOverallResult b) =>
-            a.player.name.compareTo(b.player.name),
-      _SortingTypes.elo => (
-        BroadcastPlayerWithOverallResult a,
-        BroadcastPlayerWithOverallResult b,
-      ) {
-        if (a.player.rating == null) return 1;
-        if (b.player.rating == null) return -1;
-        return b.player.rating!.compareTo(a.player.rating!);
-      },
-      _SortingTypes.score => (
-        BroadcastPlayerWithOverallResult a,
-        BroadcastPlayerWithOverallResult b,
-      ) {
-        if (a.score == null) return 1;
-        if (b.score == null) return -1;
+  /// Sort items by values from the [picker] in increasing order.
+  ///
+  /// Null values are smaller than any other value.
+  Comparator<BroadcastPlayerWithOverallResult> nullableCompare<T extends Comparable<T>>(
+    _BroadcastPlayerPicker<T> picker,
+  ) => (p1, p2) {
+    final field1 = picker(p1);
+    final field2 = picker(p2);
+    if (field1 == null) return -1;
+    if (field2 == null) return 1;
 
-        final value = b.score!.compareTo(a.score!);
-        if (value == 0) {
-          return a.played.compareTo(b.played);
-        } else {
-          return value;
-        }
-      },
+    return field1.compareTo(field2);
+  };
+
+  /// Sort items first by values from the [picker1] and solve ties by values from the [picker2].
+  ///
+  /// Null values are smaller than any other value.
+  Comparator<BroadcastPlayerWithOverallResult> bothCompare<
+    T extends Comparable<T>,
+    U extends Comparable<U>
+  >(_BroadcastPlayerPicker<T> picker1, _BroadcastPlayerPicker<U> picker2) => (p1, p2) {
+    final value = nullableCompare(picker1)(p1, p2);
+
+    if (value == 0) {
+      return nullableCompare(picker2)(p1, p2);
+    } else {
+      return value;
+    }
+  };
+
+  void sort(_SortingTypes newSort) {
+    final compare = switch (newSort) {
+      _SortingTypes.player => nullableCompare((p) => p.player.name),
+      _SortingTypes.elo =>
+        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
+            bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
+      _SortingTypes.score =>
+        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) => bothCompare(
+          withScores ? (p) => p.score : (p) => p.played,
+          (p) => p.player.rating,
+        )(p2, p1),
     };
 
     setState(() {
       if (currentSort != newSort) {
         reverse = false;
       } else {
-        reverse = toggleReverse ? !reverse : reverse;
+        reverse = !reverse;
       }
       currentSort = newSort;
       players = reverse ? players.sortReversed(compare) : players.sort(compare);
@@ -117,8 +138,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   Widget build(BuildContext context) {
     final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
-
-    final firstPlayer = players.firstOrNull;
+    final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
 
     return ListView.builder(
       itemCount: players.length + 1,
@@ -132,48 +152,28 @@ class _PlayersListState extends ConsumerState<PlayersList> {
                 Expanded(
                   child: _TableTitleCell(
                     title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                    onTap:
-                        () => sort(
-                          _SortingTypes.player,
-                          toggleReverse: currentSort == _SortingTypes.player,
-                        ),
-                    sortIcon:
-                        (currentSort == _SortingTypes.player)
-                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                            : null,
+                    onTap: () => sort(_SortingTypes.player),
+                    sortIcon: (currentSort == _SortingTypes.player) ? sortIcon : null,
                   ),
                 ),
-                SizedBox(
-                  width: eloWidth,
-                  child: _TableTitleCell(
-                    title: const Text('Elo', style: _kHeaderTextStyle),
-                    onTap:
-                        () => sort(
-                          _SortingTypes.elo,
-                          toggleReverse: currentSort == _SortingTypes.elo,
-                        ),
-                    sortIcon:
-                        (currentSort == _SortingTypes.elo)
-                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                            : null,
+                if (withRating)
+                  SizedBox(
+                    width: eloWidth,
+                    child: _TableTitleCell(
+                      title: const Text('Elo', style: _kHeaderTextStyle),
+                      onTap: () => sort(_SortingTypes.elo),
+                      sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                    ),
                   ),
-                ),
                 SizedBox(
                   width: scoreWidth,
                   child: _TableTitleCell(
                     title: Text(
-                      firstPlayer?.score != null ? context.l10n.broadcastScore : context.l10n.games,
+                      withScores ? context.l10n.broadcastScore : context.l10n.games,
                       style: _kHeaderTextStyle,
                     ),
-                    onTap:
-                        () => sort(
-                          _SortingTypes.score,
-                          toggleReverse: currentSort == _SortingTypes.score,
-                        ),
-                    sortIcon:
-                        (currentSort == _SortingTypes.score)
-                            ? (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down)
-                            : null,
+                    onTap: () => sort(_SortingTypes.score),
+                    sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
                   ),
                 ),
               ],
