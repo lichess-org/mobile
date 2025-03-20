@@ -357,7 +357,7 @@ class PlatformListTile extends StatelessWidget {
           visualDensity: visualDensity,
           onTap: onTap,
           onLongPress: onLongPress,
-          tileColor: backgroundColor,
+          tileColor:  const Color(0xff2B2D30),
           selected: selected,
           isThreeLine: isThreeLine,
           contentPadding: padding,
@@ -369,7 +369,7 @@ class PlatformListTile extends StatelessWidget {
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor: selected == true ? activatedColor : backgroundColor,
+              backgroundColor: const Color(0xff2B2D30),
               backgroundColorActivated: activatedColor,
               leading: leading,
               title:

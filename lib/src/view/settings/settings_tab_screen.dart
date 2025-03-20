@@ -157,6 +157,7 @@ class _Body extends ConsumerWidget {
               )
             else
               PlatformListTile(
+                backgroundColor: const Color(0xff2B2D30),
                 leading: const Icon(Icons.login_outlined),
                 title: Text(context.l10n.signIn),
                 onTap: () {
@@ -372,7 +373,7 @@ class _Body extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           // LichessMessage(style: TextTheme.of(context).bodyMedium),
+            // LichessMessage(style: TextTheme.of(context).bodyMedium),
             const SizedBox(height: 10),
             Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ],

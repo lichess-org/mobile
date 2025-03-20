@@ -114,18 +114,19 @@ extension CustomThemeBuildContext on BuildContext {
     primaryColor: themeLight.colorScheme.primary,
     primaryContrastingColor: themeLight.colorScheme.onPrimary,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 237, 235, 233),
+    scaffoldBackgroundColor: Color(0xFF13191D),
+    // scaffoldBackgroundColor: Colors.green,
     barBackgroundColor: const Color(0xE6F9F9F9),
     textTheme: cupertinoTextTheme(themeLight.colorScheme),
   );
 
   final darkCupertino = CupertinoThemeData(
     applyThemeToAll: true,
-    primaryColor: themeDark.colorScheme.primary,
+    primaryColor: Colors.white,
     primaryContrastingColor: themeDark.colorScheme.onPrimary,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: lighten(themeDark.scaffoldBackgroundColor, 0.04),
-    barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
+    scaffoldBackgroundColor: Color(0xFF13191D),
+    barBackgroundColor: Color(0xFF13191D),
     textTheme: cupertinoTextTheme(themeDark.colorScheme),
   );
 
@@ -203,7 +204,7 @@ extension CustomThemeBuildContext on BuildContext {
     primaryContrastingColor: onPrimary,
     brightness: Brightness.dark,
     textTheme: cupertinoTextTheme(baseTheme.colorScheme),
-    scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
+    scaffoldBackgroundColor: Color(0xFF13191D),
     barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.6),
     applyThemeToAll: true,
   );
@@ -251,7 +252,7 @@ extension CustomThemeBuildContext on BuildContext {
                 ),
               ),
             ),
-    scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
+    scaffoldBackgroundColor:Color(0xFF13191D),
     appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
@@ -286,7 +287,7 @@ MenuThemeData _makeCupertinoMenuThemeData(Color backgroundColor) {
 /// Makes a Cupertino text theme based on the given [colors].
 CupertinoTextThemeData cupertinoTextTheme(ColorScheme colors) =>
     const CupertinoThemeData().textTheme.copyWith(
-      primaryColor: colors.primary,
+      primaryColor: Colors.white,
       textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(color: colors.onSurface),
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: colors.onSurface,

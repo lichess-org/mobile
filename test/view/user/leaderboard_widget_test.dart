@@ -21,7 +21,7 @@ void main() {
       final SemanticsHandle handle = tester.ensureSemantics();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: Column(children: [LeaderboardWidget()]),
+        home: Column(children: [LeaderboardWidget(index: 0,)]),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 

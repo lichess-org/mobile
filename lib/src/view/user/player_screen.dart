@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -20,7 +21,7 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class PlayerScreen extends ConsumerWidget {
+class PlayerScreen extends ConsumerStatefulWidget {
   const PlayerScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -28,7 +29,35 @@ class PlayerScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PlayerScreen> createState() => _PlayerScreenState();
+}
+
+class _PlayerScreenState extends ConsumerState<PlayerScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  int _selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    // Initial filter
+    // filterData(0);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        // filterData(_tabController.index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<Widget> filteredChildren = [];
+  @override
+  Widget build(BuildContext context) {
     final session = ref.watch(authSessionProvider);
     void onUserTap(LightUser user) =>
         Navigator.of(context).push(UserScreen.buildRoute(context, user));
@@ -54,7 +83,47 @@ class PlayerScreen extends ConsumerWidget {
 
     final listContent = [
       if (session != null) _OnlineFriendsWidget(),
-      RatingPrefAware(child: LeaderboardWidget()),
+      RatingPrefAware(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Container(
+                height: 44.0,
+                decoration: BoxDecoration(
+                  color: const Color(0xff464A4F),
+
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: [
+                      _buildTabButton(
+                        0,
+                        'Bullet',
+                        Image.asset('assets/images/bullet.png', color: Colors.amber),
+                      ),
+                      _buildTabButton(1, 'Rapid', Icon(Icons.timer_outlined, color: Colors.green)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 480,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  LeaderboardWidget(index: _selectedIndex),
+                  LeaderboardWidget(index: _selectedIndex),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     ];
 
     return FocusDetector(
@@ -70,12 +139,10 @@ class PlayerScreen extends ConsumerWidget {
         androidBuilder:
             (context) => Scaffold(
               appBar: AppBar(
-                title:const Text('Leaderboard'),
+                title: const Text('Leaderboard'),
                 centerTitle: true,
+
                 //  bottom: searchButton
-                actions: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.share))
-                ],
               ),
               body: _Body(),
             ),
@@ -83,10 +150,14 @@ class PlayerScreen extends ConsumerWidget {
             (context) => CupertinoPageScaffold(
               child: CustomScrollView(
                 slivers: [
-                  CupertinoSliverNavigationBar(
-                    largeTitle: Text(context.l10n.players),
-                    bottom: searchButton,
-                  ),
+                  SliverAppBar(title: const Text('Leaderboard'), centerTitle: true),
+
+                  // CupertinoSliverNavigationBar(
+                  //   previousPageTitle: 'Leaderboard',
+                  //   alwaysShowMiddle: true,
+                  //   largeTitle: Text(''),
+                  //   // bottom: searchButton,
+                  // ),
                   SliverList(delegate: SliverChildListDelegate(listContent)),
                 ],
               ),
@@ -94,18 +165,183 @@ class PlayerScreen extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _buildTabButton(int index, String text, Widget icon) {
+    final isSelected = _selectedIndex == index;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedIndex = index;
+            // filterData(index);
+          });
+        },
+        child: Container(
+          height: 40.0,
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon,
+              const SizedBox(width: 8.0),
+              Text(
+                text,
+                style: TextStyle(
+                  color: isSelected ? Colors.black : Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  int _selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    // Initial filter
+    // filterData(0);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        // filterData(_tabController.index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<Widget> filteredChildren = [];
+  @override
+  Widget build(BuildContext context) {
     final session = ref.watch(authSessionProvider);
+    final leaderboardState = ref.watch(top1Provider);
 
     return ListView(
       children: [
         if (session != null) _OnlineFriendsWidget(),
-        RatingPrefAware(child: LeaderboardWidget()),
+        RatingPrefAware(
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Container(
+                  height: 44.0,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff464A4F),
+
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        _buildTabButton(
+                          0,
+                          'Bullet',
+                          Image.asset('assets/images/bullet.png', color: Colors.amber),
+                        ),
+                        _buildTabButton(
+                          1,
+                          'Rapid',
+                          Icon(Icons.timer_outlined, color: Colors.green),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: 480,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    LeaderboardWidget(index: _selectedIndex),
+                    LeaderboardWidget(index: _selectedIndex),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+
+  // void filterData(int index) {
+  //   setState(() {
+  //     if (index == 0) {
+  //       // Show only items related to Bullet
+  //       debugPrint(widget.children.toList().toString());
+  //       filteredChildren =
+  //           widget.children.where((item) {
+  //             debugPrint(item.key.toString());
+  //             return item.key == Perf.bullet;
+  //           }).toList();
+  //     } else {
+  //       // Show only items related to Rapid
+  //       filteredChildren =
+  //           widget.children.where((item) {
+  //             return item.key.toString().contains('Rapid');
+  //           }).toList();
+  //     }
+  //   });
+  // }
+
+  Widget _buildTabButton(int index, String text, Widget icon) {
+    final isSelected = _selectedIndex == index;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedIndex = index;
+            // filterData(index);
+          });
+        },
+        child: Container(
+          height: 40.0,
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon,
+              const SizedBox(width: 8.0),
+              Text(
+                text,
+                style: TextStyle(
+                  color: isSelected ? Colors.black : Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

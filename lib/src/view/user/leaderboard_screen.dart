@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {
@@ -43,18 +42,18 @@ class _Body extends ConsumerWidget {
       data: (data) {
         final List<Widget> list = [
           _Leaderboard(data.bullet, LichessIcons.bullet, 'BULLET'),
-          _Leaderboard(data.blitz, LichessIcons.blitz, 'BLITZ'),
+          // _Leaderboard(data.blitz, LichessIcons.blitz, 'BLITZ'),
           _Leaderboard(data.rapid, LichessIcons.rapid, 'RAPID'),
-          _Leaderboard(data.classical, LichessIcons.classical, 'CLASSICAL'),
-          _Leaderboard(data.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
-          _Leaderboard(data.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
-          _Leaderboard(data.chess960, LichessIcons.die_six, 'CHESS 960'),
-          _Leaderboard(data.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
-          _Leaderboard(data.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
-          _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
-          _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
-          _Leaderboard(data.antichess, LichessIcons.antichess, 'ANTICHESS'),
-          _Leaderboard(data.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
+          // _Leaderboard(data.classical, LichessIcons.classical, 'CLASSICAL'),
+          // _Leaderboard(data.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
+          // _Leaderboard(data.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
+          // _Leaderboard(data.chess960, LichessIcons.die_six, 'CHESS 960'),
+          // _Leaderboard(data.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
+          // _Leaderboard(data.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
+          // _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
+          // _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
+          // _Leaderboard(data.antichess, LichessIcons.antichess, 'ANTICHESS'),
+          // _Leaderboard(data.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
         ];
 
         return SafeArea(
@@ -82,21 +81,72 @@ class _Body extends ConsumerWidget {
 ///
 /// Optionaly Provide the [perfIcon] for the Variant of the List
 class LeaderboardListTile extends StatelessWidget {
-  const LeaderboardListTile({required this.user, this.perfIcon});
+  const LeaderboardListTile({required this.user, this.perfIcon, this.index});
   final LeaderboardUser user;
   final IconData? perfIcon;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: () => _handleTap(context),
-      leading: perfIcon != null ? Icon(perfIcon) : null,
+      leading: Container(
+        height: 22,
+        width: 36,
+        // padding: EdgeInsets.all(8.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: Text(index != null ? '#$index' : '', style: const TextStyle(fontSize: 12)),
+      ),
+      // perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
-        child: UserFullNameWidget(user: user.lightUser),
+        child: Row(
+          children: [
+            Image.asset('assets/images/avatar.png', height: 30, width: 30),
+            const SizedBox(width: 12),
+            if (user.title != null) ...[
+              Container(
+                // height: 30,
+                width: 35,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: const Color(0xff21B8E8),
+                ),
+                child: Center(
+                  child: Text(
+                    user.title!,
+                    // style: (style ?? const TextStyle()).copyWith(
+                    //   color:
+                    //       user?.title == 'BOT'
+                    //           ? context.lichessColors.fancy
+                    //           : context.lichessColors.brag,
+                    //   fontWeight: user?.title == 'BOT' ? null : FontWeight.bold,
+                    // ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 5),
+            ],
+            Text(
+              user.lightUser.name,
+              style: const TextStyle(fontSize: 14, color: Color(0xffEFEDED)),
+            ),
+          ],
+        ),
+        //  UserFullNameWidget(user: user.lightUser),
       ),
-      subtitle: perfIcon != null ? Text(user.rating.toString()) : null,
-      trailing: perfIcon != null ? _Progress(user.progress) : Text(user.rating.toString()),
+      // subtitle: perfIcon != null ? Text(user.rating.toString()) : null,
+      trailing: Text(
+        user.rating.toString(),
+        style: const TextStyle(fontSize: 14, color: Color(0xffEFEDED)),
+      ),
+
+      //  perfIcon != null ? _Progress(user.progress) : Text(user.rating.toString()),
     );
   }
 
@@ -145,6 +195,7 @@ class _Leaderboard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: ListSection(
+        backgroundColor: const Color(0xff2B2D30),
         hasLeading: false,
         header: Row(
           children: [
@@ -153,7 +204,12 @@ class _Leaderboard extends StatelessWidget {
             Text(title),
           ],
         ),
-        children: userList.map((user) => LeaderboardListTile(user: user)).toList(),
+        children:
+            userList.asMap().entries.map((entry) {
+              final index = entry.key;
+              final user = entry.value;
+              return LeaderboardListTile(index: index + 1, user: user);
+            }).toList(),
       ),
     );
   }
