@@ -143,7 +143,7 @@ class AppLichessBinding extends LichessBinding {
         if (kDebugMode) {
           return false;
         } else {
-          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+          FirebaseCrashlytics.instance.recordError(error, stack);
           return true;
         }
       };
