@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
@@ -281,6 +283,24 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => const Text('New game'),
           onPressed: () => showConfigureGameSheet(context, isDismissible: true),
         ),
+        if (gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed:
+                () => Navigator.of(context).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: gameState.game.makePgn(),
+                        isComputerAnalysisAllowed: true,
+                        variant: gameState.game.meta.variant,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: onFlipBoard,
