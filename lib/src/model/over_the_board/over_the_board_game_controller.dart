@@ -68,6 +68,13 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       stepCursor: state.stepCursor + 1,
     );
 
+    // check for threefold repetition
+    if (state.game.steps.count((p) => p.position.board == newStep.position.board) == 3) {
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: true));
+    } else {
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: false));
+    }
+
     if (state.currentPosition.isCheckmate) {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),

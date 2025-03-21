@@ -98,6 +98,31 @@ class _BodyState extends ConsumerState<_Body> {
           }
         });
       }
+
+      if (previous?.game.isThreefoldRepetition == false &&
+          newGameState.game.isThreefoldRepetition == true) {
+        ref.read(overTheBoardClockProvider.notifier).pause();
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder:
+                  (context) => YesNoDialog(
+                    title: Text(context.l10n.threefoldRepetition),
+                    content: const Text('Accept draw?'),
+                    onYes: () {
+                      Navigator.pop(context);
+                      ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                    },
+                    onNo: () {
+                      Navigator.pop(context);
+                      ref.read(overTheBoardClockProvider.notifier).resume(previous!.turn);
+                    },
+                  ),
+            );
+          }
+        });
+      }
     });
 
     return WakelockWidget(
