@@ -193,7 +193,7 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final session = getSession();
-    final uri = lichessWSUri(route.path);
+    final uri = lichessWSUri(route.path, route.queryParameters);
     final Map<String, String> headers =
         session != null ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'} : {};
     WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
