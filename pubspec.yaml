@@ -5,9 +5,9 @@ publish_to: "none"
 version: 0.14.14+001414 # See README.md for details about versioning
 
 environment:
-  sdk: '^3.8.0-70.0'
+  sdk: ^3.8.0-171.0.dev
   # We're using the beta channel for the flutter version
-  flutter: "3.30.0-0.1"
+  flutter: 3.31.0-0.1.pre
 
 dependencies:
   app_settings: ^5.1.1
