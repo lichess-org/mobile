@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Toutes les parties</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Êtes-vous sûr ?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Annuler la proposition de reprise du coup</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Effacer</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Effacer les coups enregistrés</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Joindre une partie</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Commentaires</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Bonjour %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Bonjour</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Masquer les variantes</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Accueil</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Diffuseurs en direct</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Vous devez être connecté pour voir cette page.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Aucun résultat</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Vous ne suivez aucun utilisateur.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Joueurs – \"%s\"</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Grossir la pièce déplacée</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Voulez-vous mettre fin à cette série ?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Rien à afficher. Veuillez changer les filtres</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Rien à afficher. Jouez quelques séries de problèmes.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Faites un maximum de problèmes en 3 minutes.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Votre série actuelle prendra fin et votre résultat sera sauvegardé.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Faites des problèmes basés sur vos ouvertures préférées ou choisissez un thème.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Problèmes</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recherches récentes</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Mode vibration</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Mode plein écran</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Masquer l\'interface système durant la partie. À utiliser lorsque les gestes pour naviguer dans l\'interface système sur les bords de l\'écran vous gênent. S\'applique en jeu et pour les séries de problèmes.</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Paramètres</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Partager le PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partager l\'URL de la partie</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Partager la position FEN</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Partager ce problème</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Afficher les commentaires</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Afficher le résultat</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Afficher les variantes</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Une erreur s\'est produite.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Couleurs du système</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Thème</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Outils</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">En attente d\'un adversaire...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Regarder</string>
+</resources>
