@@ -152,9 +152,9 @@ class GamePlayer extends StatelessWidget {
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
-        else if (materialDiff != null)
+        else
           MaterialDifferenceDisplay(
-            materialDiff: materialDiff!,
+            materialDiff: materialDiff,
             materialDifferenceFormat: materialDifferenceFormat,
           ),
         // to avoid shifts use an empty text widget
@@ -322,26 +322,28 @@ class MaterialDifferenceDisplay extends StatelessWidget {
     this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
   });
 
-  final MaterialDiffSide materialDiff;
+  final MaterialDiffSide? materialDiff;
   final MaterialDifferenceFormat? materialDifferenceFormat;
 
   @override
   Widget build(BuildContext context) {
     final IMap<Role, int> piecesToRender =
-        (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
-            ? materialDiff.capturedPieces
-            : materialDiff.pieces);
+        materialDiff != null
+            ? (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
+                ? materialDiff!.capturedPieces
+                : materialDiff!.pieces)
+            : IMap();
 
     return materialDifferenceFormat?.visible ?? true
         ? Row(
           children: [
             for (final role in Role.values)
-              for (int i = 0; i < piecesToRender[role]!; i++)
+              for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++)
                 Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
             const SizedBox(width: 3),
             Text(
               style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
-              materialDiff.score > 0 ? '+${materialDiff.score}' : '',
+              materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
             ),
           ],
         )
