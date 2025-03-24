@@ -20,7 +20,7 @@ class HttpLogPaginator extends _$HttpLogPaginator {
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
     return HttpLogState(
-      data: IList.new([await AsyncValue.guard(() async => storage.page(limit: _pageSize))]),
+      data: IList.new([await AsyncValue.guard(() => storage.page(limit: _pageSize))]),
     );
   }
 
@@ -32,7 +32,7 @@ class HttpLogPaginator extends _$HttpLogPaginator {
     if (state.hasValue && state.requireValue.hasMore) {
       final storage = await ref.read(httpLogStorageProvider.future);
       final asyncPage = await AsyncValue.guard(
-        () async => storage.page(limit: _pageSize, cursor: state.requireValue.nextPage),
+        () => storage.page(limit: _pageSize, cursor: state.requireValue.nextPage),
       );
       state = AsyncValue.data(
         state.requireValue.copyWith(data: state.requireValue.data.add(asyncPage)),

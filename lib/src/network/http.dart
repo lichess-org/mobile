@@ -49,9 +49,9 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 ///
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
 class HttpClientFactory {
-  const HttpClientFactory({this.onCreate});
+  const HttpClientFactory({this.wrapper});
 
-  final Client Function(Client client)? onCreate;
+  final Client Function(Client client)? wrapper;
 
   Client _createClient() {
     const userAgent = 'Lichess Mobile';
@@ -75,14 +75,14 @@ class HttpClientFactory {
 
   Client call() {
     final client = _createClient();
-    return onCreate?.call(client) ?? client;
+    return wrapper?.call(client) ?? client;
   }
 }
 
 @Riverpod(keepAlive: true)
 HttpClientFactory httpClientFactory(Ref ref) {
   return HttpClientFactory(
-    onCreate:
+    wrapper:
         (client) => _RegisterCallbackClient(
           client,
           onRequest: (request) async {
