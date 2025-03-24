@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +11,9 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class TournamentListScreen extends ConsumerWidget {
+class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
@@ -27,28 +25,7 @@ class TournamentListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return switch (ref.watch(tournamentsProvider)) {
-      AsyncData(:final value) => PlatformWidget(
-        androidBuilder: (_) => _AndroidBody(tournaments: value),
-        iosBuilder: (_) => _CupertinoBody(tournaments: value),
-      ),
-      AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
-      _ => PlatformScaffold(
-        appBarTitle: Text(context.l10n.tournaments),
-        body: const Center(child: CircularProgressIndicator()),
-      ),
-    };
-  }
-}
-
-class _AndroidBody extends StatefulWidget {
-  const _AndroidBody({required this.tournaments});
-
-  final TournamentLists tournaments;
-
-  @override
-  State<_AndroidBody> createState() => _AndroidBodyState();
+  ConsumerState<TournamentListScreen> createState() => _TournamentListScreenState();
 }
 
 enum _ViewMode {
@@ -69,13 +46,14 @@ enum _ViewMode {
   }
 }
 
-class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixin {
+class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
+    with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 1, length: 3, vsync: this);
+    _tabController = TabController(length: 3, initialIndex: 1, vsync: this);
   }
 
   @override
@@ -84,85 +62,39 @@ class _AndroidBodyState extends State<_AndroidBody> with TickerProviderStateMixi
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.tournaments),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: _ViewMode.values.map((mode) => Tab(text: mode.l10n(context))).toList(),
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          _TournamentListBody(tournaments: widget.tournaments.finished),
-          _TournamentListBody(tournaments: widget.tournaments.started),
-          _TournamentListBody(tournaments: widget.tournaments.created),
-        ],
-      ),
-    );
-  }
-}
-
-class _CupertinoBody extends StatefulWidget {
-  const _CupertinoBody({required this.tournaments});
-
-  final TournamentLists tournaments;
-
-  @override
-  _CupertinoBodyState createState() => _CupertinoBodyState();
-}
-
-class _CupertinoBodyState extends State<_CupertinoBody> {
-  _ViewMode _selectedSegment = _ViewMode.ongoing;
-
   void setViewMode(_ViewMode mode) {
-    setState(() {
-      _selectedSegment = mode;
+    _tabController.animateTo(switch (mode) {
+      _ViewMode.completed => 0,
+      _ViewMode.ongoing => 1,
+      _ViewMode.upcoming => 2,
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: Styles.bodyPadding,
-              child: CupertinoSlidingSegmentedControl<_ViewMode>(
-                groupValue: _selectedSegment,
-                children: {
-                  _ViewMode.completed: Text(_ViewMode.completed.l10n(context)),
-                  _ViewMode.ongoing: Text(_ViewMode.ongoing.l10n(context)),
-                  _ViewMode.upcoming: Text(_ViewMode.upcoming.l10n(context)),
-                },
-                onValueChanged: (_ViewMode? view) {
-                  if (view != null) {
-                    setState(() {
-                      _selectedSegment = view;
-                    });
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: _TournamentListBody(
-                tournaments: switch (_selectedSegment) {
-                  _ViewMode.completed => widget.tournaments.finished,
-                  _ViewMode.ongoing => widget.tournaments.started,
-                  _ViewMode.upcoming => widget.tournaments.created,
-                },
-              ),
-            ),
+    return PlatformScaffold(
+      appBarTitle: Text(context.l10n.tournaments),
+      appBarBottom: TabBar(
+        controller: _tabController,
+        tabs: <Widget>[
+          Tab(text: _ViewMode.completed.l10n(context)),
+          Tab(text: _ViewMode.ongoing.l10n(context)),
+          Tab(text: _ViewMode.upcoming.l10n(context)),
+        ],
+      ),
+      appBarAutomaticBackgroundVisibility: false,
+      body: switch (ref.watch(tournamentsProvider)) {
+        AsyncData(:final value) => TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            _TournamentListBody(tournaments: value.finished),
+            _TournamentListBody(tournaments: value.started),
+            _TournamentListBody(tournaments: value.created),
           ],
         ),
-      ),
+        AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
+        _ => const Center(child: CircularProgressIndicator()),
+      },
     );
   }
 }
