@@ -78,7 +78,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
-        _createHttpLogTableV1(batch);
+        _createHttpLogTableV4(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -90,7 +90,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _updatePuzzleBatchTableToV3(batch);
         }
         if (oldVersion < 4) {
-          _createHttpLogTableV1(batch);
+          _createHttpLogTableV4(batch);
         }
         await batch.commit();
       },
@@ -180,7 +180,7 @@ void _createChatReadMessagesTableV1(Batch batch) {
     ''');
 }
 
-void _createHttpLogTableV1(Batch batch) {
+void _createHttpLogTableV4(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS http_log');
   batch.execute('''
     CREATE TABLE http_log(
