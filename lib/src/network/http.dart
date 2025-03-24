@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -48,7 +49,11 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 ///
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
 class HttpClientFactory {
-  Client call() {
+  const HttpClientFactory({this.wrapper});
+
+  final Client Function(Client client)? wrapper;
+
+  Client _createClient() {
     const userAgent = 'Lichess Mobile';
     if (Platform.isAndroid) {
       final engine = CronetEngine.build(
@@ -57,22 +62,72 @@ class HttpClientFactory {
         userAgent: userAgent,
       );
       return CronetClient.fromCronetEngine(engine);
-    }
-
-    if (Platform.isIOS || Platform.isMacOS) {
+    } else if (Platform.isIOS || Platform.isMacOS) {
       final config =
           URLSessionConfiguration.ephemeralSessionConfiguration()
             ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
             ..httpAdditionalHeaders = {'User-Agent': userAgent};
       return CupertinoClient.fromSessionConfiguration(config);
+    } else {
+      return IOClient(HttpClient()..userAgent = userAgent);
     }
+  }
 
-    return IOClient(HttpClient()..userAgent = userAgent);
+  Client call() {
+    final client = _createClient();
+    return wrapper?.call(client) ?? client;
   }
 }
 
+/// The global [HttpClientFactory] provider.
+///
+/// Http clients created by this factory log all requests and responses to the database.
 @Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
+HttpClientFactory httpClientFactory(Ref ref) {
+  return HttpClientFactory(
+    wrapper:
+        (client) => _RegisterCallbackClient(
+          client,
+          onRequest: (request) async {
+            if (request.method == 'HEAD') return;
+            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+            httpLogStorage.save(
+              HttpLogEntry(
+                httpLogId: request.hashCode.toString(),
+                requestDateTime: DateTime.now(),
+                requestMethod: request.method,
+                requestUrl: request.url,
+              ),
+            );
+          },
+          onResponse: (response) async {
+            if (response.request != null) {
+              final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+              httpLogStorage.updateWithResponse(
+                response.request!.hashCode.toString(),
+                responseCode: response.statusCode,
+                responseDateTime: DateTime.now(),
+              );
+            }
+          },
+          onError: (request, error, [st]) async {
+            if (request.method == 'HEAD') return;
+            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+            if (error is ClientException) {
+              httpLogStorage.updateWithError(
+                request.hashCode.toString(),
+                errorMessage: error.message,
+              );
+            } else {
+              httpLogStorage.updateWithError(
+                request.hashCode.toString(),
+                errorMessage: error.toString(),
+              );
+            }
+          },
+        ),
+  );
+}
 
 /// The default http client.
 ///
@@ -81,7 +136,10 @@ HttpClientFactory httpClientFactory(Ref _) => HttpClientFactory();
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(Ref ref) {
-  final client = LoggingClient(ref.read(httpClientFactoryProvider)());
+  final client = _RegisterCallbackClient(
+    ref.read(httpClientFactoryProvider)(),
+    onRequest: (request) => _logger.info('${request.method} ${request.url}'),
+  );
   ref.onDispose(() => client.close());
   return client;
 }
@@ -133,16 +191,41 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
   return base;
 }
 
-/// A [Client] that logs all requests.
-class LoggingClient extends BaseClient {
-  LoggingClient(this._inner);
+/// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.
+///
+/// This client wraps around another [Client] and intercepts the requests, responses,
+/// and errors, allowing custom handling through the provided callback functions.
+///
+/// The [onRequest] callback is called before the request is sent.
+/// The [onResponse] callback is called after a response is received.
+/// The [onError] callback is called when an error occurs during the request.
+///
+///
+/// This class is intended for debugging and monitoring purposes.
+///
+/// See also:
+/// - [BaseClient] for the base class.
+/// - [Client] for the interface that this class implements.
+class _RegisterCallbackClient extends BaseClient {
+  _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
 
   final Client _inner;
 
+  final void Function(BaseRequest request)? onRequest;
+  final void Function(BaseResponse response)? onResponse;
+  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError;
+
   @override
-  Future<StreamedResponse> send(BaseRequest request) {
-    _logger.info('${request.method} ${request.url}');
-    return _inner.send(request);
+  Future<StreamedResponse> send(BaseRequest request) async {
+    try {
+      onRequest?.call(request);
+      final response = await _inner.send(request);
+      onResponse?.call(response);
+      return response;
+    } catch (error, st) {
+      onError?.call(request, error, st);
+      rethrow;
+    }
   }
 }
 
