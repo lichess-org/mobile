@@ -191,7 +191,8 @@ void _createHttpLogTableV4(Batch batch) {
     requestUrl TEXT NOT NULL,
     responseCode INTEGER,
     responseDateTime TEXT,
-    lastModified TEXT NOT NULL
+    lastModified TEXT NOT NULL,
+    errorMessage TEXT
   )
     ''');
 }

@@ -45,7 +45,7 @@ class HttpLogStorage {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> update(
+  Future<void> updateWithResponse(
     String httpLogId, {
     required int responseCode,
     required DateTime responseDateTime,
@@ -56,6 +56,20 @@ class HttpLogStorage {
         'responseCode': responseCode,
         'responseDateTime': responseDateTime.toIso8601String(),
         'lastModified': DateTime.now().toIso8601String(),
+      },
+      where: 'httpLogId = ?',
+      whereArgs: [httpLogId],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateWithError(String httpLogId, {String? errorMessage}) async {
+    await _db.update(
+      kHttpLogStorageTable,
+      {
+        'responseCode': 0,
+        'lastModified': DateTime.now().toIso8601String(),
+        'errorMessage': errorMessage,
       },
       where: 'httpLogId = ?',
       whereArgs: [httpLogId],
@@ -76,10 +90,11 @@ class HttpLogEntry with _$HttpLogEntry {
   const factory HttpLogEntry({
     required String httpLogId,
     required String requestMethod,
-    required String requestUrl,
+    @JsonKey(toJson: _urlToJson, fromJson: _urlFromJson) required Uri requestUrl,
     required DateTime requestDateTime,
     int? responseCode,
     DateTime? responseDateTime,
+    String? errorMessage,
   }) = _HttpLogEntry;
 
   bool get hasResponse => responseCode != null;
@@ -91,6 +106,9 @@ class HttpLogEntry with _$HttpLogEntry {
 
   factory HttpLogEntry.fromJson(Map<String, dynamic> json) => _$HttpLogEntryFromJson(json);
 }
+
+String _urlToJson(Uri url) => url.toString();
+Uri _urlFromJson(String url) => Uri.parse(url);
 
 /// A class representing a collection of HTTP logs.
 ///

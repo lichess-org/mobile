@@ -79,6 +79,9 @@ class HttpClientFactory {
   }
 }
 
+/// The global [HttpClientFactory] provider.
+///
+/// Http clients created by this factory log all requests and responses to the database.
 @Riverpod(keepAlive: true)
 HttpClientFactory httpClientFactory(Ref ref) {
   return HttpClientFactory(
@@ -86,23 +89,39 @@ HttpClientFactory httpClientFactory(Ref ref) {
         (client) => _RegisterCallbackClient(
           client,
           onRequest: (request) async {
+            if (request.method == 'HEAD') return;
             final httpLogStorage = await ref.read(httpLogStorageProvider.future);
             httpLogStorage.save(
               HttpLogEntry(
                 httpLogId: request.hashCode.toString(),
                 requestDateTime: DateTime.now(),
                 requestMethod: request.method,
-                requestUrl: request.url.toString(),
+                requestUrl: request.url,
               ),
             );
           },
           onResponse: (response) async {
             if (response.request != null) {
               final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-              httpLogStorage.update(
+              httpLogStorage.updateWithResponse(
                 response.request!.hashCode.toString(),
                 responseCode: response.statusCode,
                 responseDateTime: DateTime.now(),
+              );
+            }
+          },
+          onError: (request, error, [st]) async {
+            if (request.method == 'HEAD') return;
+            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+            if (error is ClientException) {
+              httpLogStorage.updateWithError(
+                request.hashCode.toString(),
+                errorMessage: error.message,
+              );
+            } else {
+              httpLogStorage.updateWithError(
+                request.hashCode.toString(),
+                errorMessage: error.toString(),
               );
             }
           },
@@ -188,14 +207,13 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 /// - [BaseClient] for the base class.
 /// - [Client] for the interface that this class implements.
 class _RegisterCallbackClient extends BaseClient {
-  // ignore: unused_element_parameter
   _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
 
   final Client _inner;
 
   final void Function(BaseRequest request)? onRequest;
   final void Function(BaseResponse response)? onResponse;
-  final void Function(Object error, [StackTrace? stackTrace])? onError;
+  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -205,7 +223,7 @@ class _RegisterCallbackClient extends BaseClient {
       onResponse?.call(response);
       return response;
     } catch (error, st) {
-      onError?.call(error, st);
+      onError?.call(request, error, st);
       rethrow;
     }
   }

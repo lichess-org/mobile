@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_paginator.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-// TODO localize
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
 
@@ -56,6 +57,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider);
     return PlatformScaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: const Text('HTTP Logs'),
       appBarActions: [
         if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
@@ -121,15 +123,17 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
               ? MediaQuery.paddingOf(context).top + 16.0
               : 0,
       onRefresh: widget.onRefresh,
-      child: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
+      child: ListView.separated(
         controller: widget.scrollController,
         itemCount: widget.logs.length,
-        itemBuilder: (context, index) => HttpLogTile(httpLog: widget.logs[index]),
+        separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
+        itemBuilder: (_, index) => HttpLogTile(httpLog: widget.logs[index]),
       ),
     );
   }
 }
+
+final _logDateFormatter = DateFormat.yMd().add_Hms();
 
 class HttpLogTile extends StatelessWidget {
   const HttpLogTile({super.key, required this.httpLog});
@@ -138,31 +142,54 @@ class HttpLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      backgroundColor: switch (httpLog.responseCode) {
-        null => Colors.yellow.shade50,
-        final int code when code >= 400 => Colors.red.shade100,
-        _ => Colors.white,
-      },
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: '[${httpLog.responseCode ?? '?'}]'),
-            const WidgetSpan(child: SizedBox(width: 4)),
-            TextSpan(text: '[${httpLog.requestMethod}]'),
-            const WidgetSpan(child: SizedBox(width: 4)),
-            TextSpan(text: httpLog.requestUrl),
-          ],
+    return AdaptiveListTile(
+      dense: true,
+      leading:
+          httpLog.hasResponse
+              ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    httpLog.responseCode!.toString(),
+                    style: TextStyle(
+                      color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${httpLog.elapsed!.inMilliseconds}ms',
+                    style: TextStyle(
+                      color: textShade(context, 0.7),
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
+              )
+              : const Icon(Icons.error),
+      title: Text(
+        httpLog.requestUrl.host == kLichessHost
+            ? httpLog.requestUrl.path
+            : httpLog.requestUrl.toString(),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 14,
+          letterSpacing: -0.15,
+          color:
+              httpLog.hasResponse
+                  ? httpLog.responseCode! >= 400
+                      ? context.lichessColors.error
+                      : null
+                  : textShade(context, 0.7),
         ),
       ),
-      subtitle: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: '[${DateFormat.yMd().add_Hms().format(httpLog.requestDateTime)}]'),
-            const WidgetSpan(child: SizedBox(width: 4)),
-            if (httpLog.hasResponse) TextSpan(text: '[${httpLog.elapsed!.inMilliseconds} ms]'),
-          ],
-        ),
+      subtitle: Text(
+        _logDateFormatter.format(httpLog.requestDateTime),
+        style: TextStyle(color: textShade(context, 0.7), fontSize: 12),
       ),
     );
   }
