@@ -10,7 +10,20 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'tournament.freezed.dart';
 
-typedef TournamentSchedule = ({String freq, String speed});
+enum TournamentFreq {
+  hourly,
+  daily,
+  eastern,
+  weekly,
+  weekend,
+  monthly,
+  shield,
+  marathon,
+  yearly,
+  unique;
+
+  static final IMap<String, TournamentFreq> nameMap = IMap(TournamentFreq.values.asNameMap());
+}
 
 typedef TournamentLists =
     ({
@@ -28,12 +41,16 @@ extension TournamentExtension on Pick {
     );
   }
 
-  TournamentSchedule asTournamentScheduleOrThrow() {
-    final requiredPick = this.required();
-    return (
-      freq: requiredPick('freq').asStringOrThrow(),
-      speed: requiredPick('speed').asStringOrThrow(),
-    );
+  TournamentFreq asTournamentFreqOrThrow() {
+    final value = this.required().value;
+    if (value is TournamentFreq) {
+      return value;
+    }
+    if (value is String) {
+      final freq = TournamentFreq.nameMap[value];
+      if (freq != null) return freq;
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
   }
 
   IList<TournamentListItem> asTournamentListOrThrow() =>
@@ -58,7 +75,7 @@ class TournamentListItem with _$TournamentListItem {
     required int nbPlayers,
     required Perf perf,
     required int position,
-    required TournamentSchedule schedule,
+    required TournamentFreq freq,
     required Variant variant,
     required LightUser? winner,
   }) = _TournamentListItem;
@@ -80,7 +97,7 @@ TournamentListItem _tournamentListItemFromPick(RequiredPick pick) {
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     position: pick('perf', 'position').asIntOrThrow(),
-    schedule: pick('schedule').asTournamentScheduleOrThrow(),
+    freq: pick('schedule', 'freq').asTournamentFreqOrThrow(),
     timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow(),
     variant: pick('variant').asVariantOrThrow(),

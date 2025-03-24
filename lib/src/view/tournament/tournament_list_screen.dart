@@ -198,10 +198,10 @@ class _TournamentListBody extends StatelessWidget {
 Color? _iconColor(TournamentListItem tournament) {
   return tournament.maxRating != null
       ? LichessColors.purple
-      : switch (tournament.schedule.freq) {
-        'hourly' => LichessColors.green,
-        'daily' => LichessColors.blue,
-        'monthly' => LichessColors.red,
+      : switch (tournament.freq) {
+        TournamentFreq.hourly => LichessColors.green,
+        TournamentFreq.daily => LichessColors.blue,
+        TournamentFreq.monthly => LichessColors.red,
         _ => null,
       };
 }
