@@ -26,4 +26,6 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Ji destpêkirinên xwe yên favorî pazilan bilîze, an temayekê bibijêre.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pazil</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Lêgerînên dawî</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Moda hejandinê</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Moda kaşkirinê</string>
 </resources>
