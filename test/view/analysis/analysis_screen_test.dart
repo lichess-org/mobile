@@ -475,6 +475,18 @@ void main() {
       await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
       expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
     });
+
+    testWidgets('best move arrow is shown if enabled', (tester) async {
+      await makeEngineTestApp(tester);
+      await tester.pump(kStartLocalEngineDebounceDelay);
+      expect(find.byType(BoardShapeWidget), findsOneWidget);
+    });
+
+    testWidgets('best move arrow is not shown if disabled', (tester) async {
+      await makeEngineTestApp(tester, showBestMoveArrow: false);
+      await tester.pump(kStartLocalEngineDebounceDelay);
+      expect(find.byType(BoardShapeWidget), findsNothing);
+    });
   });
 }
 
