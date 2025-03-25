@@ -32,6 +32,10 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
     return fetch();
   }
 
+  Future<void> setEvaluationFunction(EvaluationFunctionPref evaluationFunction) {
+    return save(state.copyWith(evaluationFunction: evaluationFunction));
+  }
+
   Future<void> toggle() {
     return save(state.copyWith(isEnabled: !state.isEnabled));
   }

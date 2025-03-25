@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -128,13 +129,19 @@ Future<Widget> makeTestProviderScope(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  // disable piece animation to simplify tests
-  final defaultBoardPref = {
+  final defaultTestPrefs = {
+    // disable piece animation to simplify tests
     'preferences.board': jsonEncode(BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson()),
+    // set the default engine evaluation to HCE to avoid mocking the download of the NN
+    'preferences.engineEvaluation': jsonEncode(
+      EngineEvaluationPrefState.defaults
+          .copyWith(evaluationFunction: EvaluationFunctionPref.hce)
+          .toJson(),
+    ),
   };
 
   await binding.setInitialSharedPreferencesValues(
-    defaultPreferences != null ? {...defaultBoardPref, ...defaultPreferences} : defaultBoardPref,
+    defaultPreferences != null ? {...defaultTestPrefs, ...defaultPreferences} : defaultTestPrefs,
   );
 
   FlutterSecureStorage.setMockInitialValues({
