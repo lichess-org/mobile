@@ -23,7 +23,7 @@ class BroadcastPlayersTab extends ConsumerWidget {
     final players = ref.watch(broadcastPlayersProvider(tournamentId));
 
     return switch (players) {
-      AsyncData(value: final players) => PlayersList(players, tournamentId),
+      AsyncData(value: final players) => BroadcastPlayersList(players, tournamentId),
       AsyncError(:final error) => Center(child: Text('Cannot load players data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
@@ -42,17 +42,17 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
-class PlayersList extends ConsumerStatefulWidget {
-  const PlayersList(this.players, this.tournamentId);
+class BroadcastPlayersList extends ConsumerStatefulWidget {
+  const BroadcastPlayersList(this.players, this.tournamentId);
 
   final IList<BroadcastPlayerWithOverallResult> players;
   final BroadcastTournamentId tournamentId;
 
   @override
-  ConsumerState<PlayersList> createState() => _PlayersListState();
+  ConsumerState<BroadcastPlayersList> createState() => _BroadcastPlayersListState();
 }
 
-class _PlayersListState extends ConsumerState<PlayersList> {
+class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   late IList<BroadcastPlayerWithOverallResult> players;
   late bool reverse;
   _SortingTypes? currentSort;
@@ -73,7 +73,7 @@ class _PlayersListState extends ConsumerState<PlayersList> {
   }
 
   @override
-  void didUpdateWidget(PlayersList oldWidget) {
+  void didUpdateWidget(BroadcastPlayersList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.players != widget.players) {
       resetState();
@@ -180,63 +180,12 @@ class _PlayersListState extends ConsumerState<PlayersList> {
             ),
           );
         } else {
-          final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played) =
-              players[index - 1];
-          final rating = player.rating;
-
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(
-                context,
-              ).push(BroadcastPlayerResultsScreen.buildRoute(context, widget.tournamentId, player));
-            },
-            child: ColoredBox(
-              color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: _kTableRowPadding,
-                      child: BroadcastPlayerWidget(player: player, showRating: false),
-                    ),
-                  ),
-                  SizedBox(
-                    width: eloWidth,
-                    child: Padding(
-                      padding: _kTableRowPadding,
-                      child: Row(
-                        children: [
-                          if (rating != null) ...[
-                            Text(rating.toString()),
-                            const SizedBox(width: 5),
-                            if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: scoreWidth,
-                    child: Padding(
-                      padding: _kTableRowPadding,
-                      child:
-                          (score != null)
-                              ? Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
-                                ),
-                              )
-                              : Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(played.toString()),
-                              ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return BroadcastPlayerRow(
+            playerWithOverallResult: players[index - 1],
+            tournamentId: widget.tournamentId,
+            index: index,
+            eloWidth: eloWidth,
+            scoreWidth: scoreWidth,
           );
         }
       },
@@ -271,6 +220,81 @@ class _TableTitleCell extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class BroadcastPlayerRow extends StatelessWidget {
+  const BroadcastPlayerRow({
+    required this.playerWithOverallResult,
+    required this.tournamentId,
+    required this.index,
+    required this.eloWidth,
+    required this.scoreWidth,
+  });
+
+  final BroadcastPlayerWithOverallResult playerWithOverallResult;
+  final BroadcastTournamentId tournamentId;
+  final int index;
+  final double eloWidth;
+  final double scoreWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played) =
+        playerWithOverallResult;
+    final rating = player.rating;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(
+          context,
+        ).push(BroadcastPlayerResultsScreen.buildRoute(context, tournamentId, player));
+      },
+      child: ColoredBox(
+        color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: _kTableRowPadding,
+                child: BroadcastPlayerWidget(player: player, showRating: false),
+              ),
+            ),
+            SizedBox(
+              width: eloWidth,
+              child: Padding(
+                padding: _kTableRowPadding,
+                child: Row(
+                  children: [
+                    if (rating != null) ...[
+                      Text(rating.toString()),
+                      const SizedBox(width: 5),
+                      if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: scoreWidth,
+              child: Padding(
+                padding: _kTableRowPadding,
+                child:
+                    (score != null)
+                        ? Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                          ),
+                        )
+                        : Align(alignment: Alignment.centerRight, child: Text(played.toString())),
+              ),
+            ),
+          ],
         ),
       ),
     );
