@@ -51,6 +51,14 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
   }
 }
 
+enum EvaluationFunctionPref {
+  /// Handcrafted evaluation function.
+  hce,
+
+  /// Neural network evaluation function.
+  nnue,
+}
+
 @Freezed(fromJson: true, toJson: true)
 class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
   const EngineEvaluationPrefState._();
@@ -66,6 +74,11 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(
+      defaultValue: EvaluationFunctionPref.nnue,
+      unknownEnumValue: EvaluationFunctionPref.nnue,
+    )
+    required EvaluationFunctionPref evaluationFunction,
   }) = _EngineEvaluationPrefState;
 
   static const defaults = EngineEvaluationPrefState(
@@ -73,6 +86,7 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 6),
+    evaluationFunction: EvaluationFunctionPref.nnue,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
