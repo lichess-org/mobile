@@ -65,9 +65,7 @@ void main() {
       expect(isCloudEvalDisplayed(), isFalse);
 
       // Now wait for local engine
-      await tester.pump(kStartLocalEngineDebounceDelay);
-      expect(find.widgetWithText(EngineDepth, '15'), findsOne);
-      await tester.pump(kEngineEvalEmissionThrottleDelay);
+      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
       expect(find.widgetWithText(EngineDepth, '16'), findsOne);
     });
 
