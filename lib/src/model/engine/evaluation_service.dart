@@ -324,44 +324,10 @@ Future<NNUEFiles?> stockfishNNUEFiles(Ref ref) async {
 
   final client = ref.read(defaultClientProvider);
 
-  int? bigNetLength;
-  int? smallNetLength;
-  int? totalLength;
-
-  int? bigNetReceived;
-  int? smallNetReceived;
-  int? totalReceived;
-
-  void onProgress(int received, int length) {
-    // ref.read(nNUEDownloadProgressProvider.notifier).state = received / length;
-  }
-
   try {
     await Future.wait([
-      downloadFile(
-        client,
-        bigNetUrl,
-        bigNetFile,
-        onProgress: (received, length) {
-          bigNetLength = length;
-          totalLength = (bigNetLength ?? 0) + (smallNetLength ?? 0);
-          bigNetReceived = received;
-          totalReceived = (bigNetReceived ?? 0) + (smallNetReceived ?? 0);
-          onProgress(totalReceived!, totalLength!);
-        },
-      ),
-      downloadFile(
-        client,
-        smallNetUrl,
-        smallNetFile,
-        onProgress: (received, length) {
-          smallNetLength = length;
-          totalLength = (bigNetLength ?? 0) + (smallNetLength ?? 0);
-          smallNetReceived = received;
-          totalReceived = (bigNetReceived ?? 0) + (smallNetReceived ?? 0);
-          onProgress(totalReceived!, totalLength!);
-        },
-      ),
+      downloadFile(client, bigNetUrl, bigNetFile),
+      downloadFile(client, smallNetUrl, smallNetFile),
     ]);
     return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
   } catch (e) {
