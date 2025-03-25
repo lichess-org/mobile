@@ -47,6 +47,21 @@ class CreateGameOptions extends ConsumerWidget {
             ),
           ],
         ),
+        // TODO: Implement tournaments
+        // _Section(
+        //   children: [
+        //     _CreateGamePlatformButton(
+        //       onTap: () {
+        //         Navigator.of(
+        //           context,
+        //           rootNavigator: true,
+        //         ).push(TournamentListScreen.buildRoute(context));
+        //       },
+        //       icon: LichessIcons.tournament_cup,
+        //       label: context.l10n.tournaments,
+        //     ),
+        //   ],
+        // ),
         _Section(
           children: [
             _CreateGamePlatformButton(

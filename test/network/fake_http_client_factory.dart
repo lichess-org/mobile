@@ -7,6 +7,9 @@ class FakeHttpClientFactory implements HttpClientFactory {
   final http.Client Function() _factory;
 
   @override
+  http.Client Function(http.Client client)? get wrapper => throw UnimplementedError();
+
+  @override
   http.Client call() {
     return _factory();
   }

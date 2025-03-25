@@ -69,8 +69,6 @@ class StudyController extends _$StudyController
     final socketPool = ref.watch(socketPoolProvider);
     _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
 
-    initEngineEvaluation();
-
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _socketSubscription?.cancel();
@@ -82,6 +80,8 @@ class StudyController extends _$StudyController
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    initEngineEvaluation();
 
     return chapter;
   }

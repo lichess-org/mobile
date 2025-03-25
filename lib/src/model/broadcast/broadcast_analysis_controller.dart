@@ -102,8 +102,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       },
     );
 
-    initEngineEvaluation();
-
     ref.onDispose(() {
       _key = null;
       _subscription?.cancel();
@@ -153,6 +151,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // We need to define the state value in the build method because `sendEvalGetEvent` and
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
+
+    initEngineEvaluation();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();
