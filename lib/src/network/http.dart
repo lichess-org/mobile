@@ -672,6 +672,9 @@ extension ClientRefExtension on Ref {
     } on SocketException catch (_) {
       link.close();
       rethrow;
+    } on ClientException catch (_) {
+      link.close();
+      rethrow;
     }
   }
 }
