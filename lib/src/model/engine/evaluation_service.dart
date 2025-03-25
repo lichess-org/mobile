@@ -7,6 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -40,16 +41,17 @@ EvaluationService evaluationService(Ref ref) {
   Future<Engine> engineFactory() async {
     switch (evalPref) {
       case EvaluationFunctionPref.nnue:
-        final nnueFiles = await ref.read(stockfishNNUEFilesProvider.future);
-        if (nnueFiles == null) {
-          // fallback to hce if nnue files are not available
+        try {
+          final nnueFiles = await ref.read(stockfishNNUEFilesProvider.future);
+          return StockfishEngine(
+            StockfishFlavor.nnue,
+            bigNetPath: nnueFiles.bigNetPath,
+            smallNetPath: nnueFiles.smallNetPath,
+          );
+        } catch (e, st) {
+          debugPrint('Failed to load NNUE files: $e\n$st');
           return StockfishEngine(StockfishFlavor.hce);
         }
-        return StockfishEngine(
-          StockfishFlavor.nnue,
-          bigNetPath: nnueFiles.bigNetPath,
-          smallNetPath: nnueFiles.smallNetPath,
-        );
       case EvaluationFunctionPref.hce:
         return StockfishEngine(StockfishFlavor.hce);
     }
@@ -299,9 +301,11 @@ const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
 typedef NNUEFiles = ({String bigNetPath, String smallNetPath});
 
 /// Fetches and saves locally the Stockfish NNUE files from the server.
-@Riverpod(keepAlive: true)
-Future<NNUEFiles?> stockfishNNUEFiles(Ref ref) async {
+@riverpod
+Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
   _appSupportDirectory ??= await getApplicationSupportDirectory();
+
+  final link = ref.keepAlive();
 
   final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultBigNetFile}');
   final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultSmallNetFile}');
@@ -313,26 +317,28 @@ Future<NNUEFiles?> stockfishNNUEFiles(Ref ref) async {
     return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
   }
 
-  // delete any existing nnue files before downloading
-  final dir = Directory(_appSupportDirectory!.path);
-  await for (final entity in dir.list(followLinks: false)) {
-    if (entity is File && entity.path.endsWith('.nnue')) {
-      debugPrint('Deleting existing nnue ${entity.path}');
-      await entity.delete();
-    }
-  }
-
-  final client = ref.read(defaultClientProvider);
-
   try {
+    // delete any existing nnue files before downloading
+    final dir = Directory(_appSupportDirectory!.path);
+    await for (final entity in dir.list(followLinks: false)) {
+      if (entity is File && entity.path.endsWith('.nnue')) {
+        debugPrint('Deleting existing nnue ${entity.path}');
+        await entity.delete();
+      }
+    }
+
+    final client = ref.read(defaultClientProvider);
+
     await Future.wait([
       downloadFile(client, bigNetUrl, bigNetFile),
       downloadFile(client, smallNetUrl, smallNetFile),
     ]);
     return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
-  } catch (e) {
-    debugPrint('Failed to download NNUE files: $e');
+  } on SocketException catch (_) {
+    link.close();
+    rethrow;
+  } on ClientException catch (_) {
+    link.close();
+    rethrow;
   }
-
-  return null;
 }
