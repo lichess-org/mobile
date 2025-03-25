@@ -252,9 +252,12 @@ class _StockfishInfo extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
 
+    // default name is Stockfish 11 64 POPCNT, so we remove the POPCNT part
+    final fixedEngineName = engineName.startsWith('Stockfish 11') ? 'Stockfish 11' : engineName;
+
     return PlatformListTile(
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-      title: Text(engineName),
+      title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),
     );
   }

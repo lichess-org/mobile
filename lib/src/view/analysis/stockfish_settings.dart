@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -26,7 +27,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return ListSection(
-      header: const SettingsSectionTitle('Stockfish 16'),
+      header: const SettingsSectionTitle('Stockfish'),
       children: [
         if (onToggleLocalEvaluation != null)
           SwitchSettingTile(
@@ -36,6 +37,31 @@ class StockfishSettingsWidget extends ConsumerWidget {
               onToggleLocalEvaluation!.call();
             },
           ),
+        SettingsListTile(
+          settingsLabel: const Text('Engine'),
+          settingsValue:
+              prefs.evaluationFunction == EvaluationFunctionPref.hce
+                  ? 'Stockfish 11 HCE'
+                  : 'Stockfish 17 NNUE (79MB)',
+          onTap: () {
+            showChoicePicker(
+              context,
+              choices: EvaluationFunctionPref.values,
+              selectedItem: prefs.evaluationFunction,
+              labelBuilder:
+                  (t) => Text(
+                    t == EvaluationFunctionPref.hce
+                        ? 'Stockfish 11 HCE'
+                        : 'Stockfish 17 NNUE (79MB)',
+                  ),
+              onSelectedItemChanged: (EvaluationFunctionPref? value) {
+                ref
+                    .read(engineEvaluationPreferencesProvider.notifier)
+                    .setEvaluationFunction(value ?? EvaluationFunctionPref.nnue);
+              },
+            );
+          },
+        ),
         PlatformListTile(
           title: Text.rich(
             TextSpan(
