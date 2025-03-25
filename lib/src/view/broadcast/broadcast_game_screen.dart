@@ -255,7 +255,8 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         pgnRootComments: state.pgnRootComments,
         shouldShowComputerVariations: analysisPrefs.enableComputerAnalysis,
         shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,
-        shouldShowAnnotations: analysisPrefs.showAnnotations,
+        shouldShowAnnotations:
+            analysisPrefs.enableComputerAnalysis && analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
         displayMode:
             analysisPrefs.inlineNotation
@@ -308,25 +309,30 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final currentNode = broadcastAnalysisState.currentNode;
-    final annotation = makeAnnotation(currentNode.nags);
 
-    final localBestMoves = ref.watch(
-      engineEvaluationProvider.select((value) => value.eval?.bestMoves),
-    );
-    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
-
-    final sanMove = currentNode.sanMove;
-
+    final bestMoves =
+        broadcastAnalysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow
+            ? pickBestMoves(
+              localBestMoves: ref.watch(
+                engineEvaluationProvider.select((value) => value.eval?.bestMoves),
+              ),
+              savedEval: currentNode.eval,
+            )
+            : null;
     final ISet<Shape> bestMoveShapes =
-        analysisPrefs.showBestMoveArrow &&
-                broadcastAnalysisState.isEngineAvailable(enginePrefs) &&
-                bestMoves != null
+        bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,
               boardPrefs.pieceSet.assets,
             )
             : ISet();
+
+    final annotation =
+        broadcastAnalysisState.isComputerAnalysisEnabled && analysisPrefs.showAnnotations
+            ? makeAnnotation(currentNode.nags)
+            : null;
+    final sanMove = currentNode.sanMove;
 
     return Chessboard(
       size: widget.boardSize,
@@ -349,7 +355,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
-          analysisPrefs.showAnnotations && sanMove != null && annotation != null
+          sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
                   ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
@@ -372,7 +378,6 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       setState(() {
         userShapes = userShapes.remove(shape);
       });
-      return;
     } else {
       setState(() {
         userShapes = userShapes.add(shape);
