@@ -215,7 +215,7 @@ typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEva
 class EngineEvaluation extends _$EngineEvaluation {
   @override
   EngineEvaluationState build() {
-    final listenable = ref.read(evaluationServiceProvider).state;
+    final listenable = ref.watch(evaluationServiceProvider).state;
 
     listenable.addListener(_listener);
 
