@@ -73,6 +73,8 @@ class Clock extends StatelessWidget {
                     ? isEmergency
                         ? effectiveClockStyle.emergencyBackgroundColor
                         : effectiveClockStyle.activeBackgroundColor
+                    : isEmergency
+                    ? effectiveClockStyle.emergencyBackgroundColor
                     : effectiveClockStyle.backgroundColor,
           ),
           child: Padding(
