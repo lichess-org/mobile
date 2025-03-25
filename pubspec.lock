@@ -610,10 +610,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: d59eeafd6df92174b1d5f68fc9d66634c97ce2e7cfe2293476236547bb19bbbd
+      sha256: "33b3e0269ae9d51669957a923f2376bee96299b09915d856395af8c4238aebfa"
       url: "https://pub.dev"
     source: hosted
-    version: "19.0.0"
+    version: "19.1.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -1078,6 +1078,29 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  multistockfish:
+    dependency: "direct main"
+    description:
+      path: "../dart-multistockfish/pkgs/multistockfish"
+      relative: true
+    source: path
+    version: "0.1.0"
+  multistockfish_chess:
+    dependency: transitive
+    description:
+      name: multistockfish_chess
+      sha256: e2469e10d2f4c23210d875d8a7036ccec23784cafd2722929d0974d4549a4f85
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
+  multistockfish_variant:
+    dependency: transitive
+    description:
+      name: multistockfish_variant
+      sha256: "68e6213a2ae68223b24cac209e538bcf10f43909230ea106408940d519ca7bba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   nm:
     dependency: transitive
     description:
@@ -1338,10 +1361,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3ec7210872c4ba945e3244982918e502fa2bfb5230dff6832459ca0e1879b7ad"
+      sha256: c2c8c46297b5d6a80bed7741ec1f2759742c77d272f1a1698176ae828f8e1a18
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.8"
+    version: "2.4.9"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -1523,15 +1546,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  stockfish:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
-      resolved-ref: "47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29"
-      url: "https://github.com/lichess-org/dart-stockfish.git"
-    source: git
-    version: "1.6.2"
   stream_channel:
     dependency: "direct dev"
     description:

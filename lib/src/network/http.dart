@@ -191,6 +191,40 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
   return base;
 }
 
+/// Downloads a file from the given [url] and saves it to the [file].
+Future<void> downloadFile(
+  Client client,
+  Uri url,
+  File file, {
+  void Function(int received, int length)? onProgress,
+}) async {
+  debugPrint('Downloading $url to ${file.path}');
+
+  final response = await client.send(Request('GET', url));
+  final sink = file.openWrite();
+
+  int received = 0;
+
+  try {
+    await response.stream
+        .map((s) {
+          received += s.length;
+          onProgress?.call(received, response.contentLength!);
+          return s;
+        })
+        .pipe(sink);
+  } catch (e) {
+    debugPrint('Failed to download file: $e');
+  } finally {
+    try {
+      await sink.flush();
+      await sink.close();
+    } on FileSystemException catch (e) {
+      debugPrint('Failed to save file: $e');
+    }
+  }
+}
+
 /// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.
 ///
 /// This client wraps around another [Client] and intercepts the requests, responses,

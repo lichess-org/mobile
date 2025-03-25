@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
-import 'package:stockfish/stockfish.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 enum EngineState { initial, loading, idle, computing, error, disposed }
 
@@ -44,8 +44,21 @@ abstract class Engine {
   Future<void> dispose();
 }
 
+/// A concrete implementation of [Engine] that uses Stockfish as the underlying engine.
 class StockfishEngine implements Engine {
-  StockfishEngine() : _protocol = UCIProtocol();
+  StockfishEngine(this.flavor, {String? smallNetPath, String? bigNetPath})
+    : _protocol = UCIProtocol(),
+      _smallNetPath = smallNetPath,
+      _bigNetPath = bigNetPath,
+      assert(
+        flavor != StockfishFlavor.nnue || smallNetPath != null && bigNetPath != null,
+        'NNUE paths must be provided for NNUE flavor',
+      );
+
+  final StockfishFlavor flavor;
+  final UCIProtocol _protocol;
+  final String? _smallNetPath;
+  final String? _bigNetPath;
 
   Stockfish? _stockfish;
   String _name = 'Stockfish';
@@ -55,7 +68,6 @@ class StockfishEngine implements Engine {
 
   final _state = ValueNotifier(EngineState.initial);
 
-  final UCIProtocol _protocol;
   final _log = Logger('StockfishEngine');
 
   /// A completer that completes once the underlying engine has exited.
@@ -84,7 +96,11 @@ class StockfishEngine implements Engine {
 
     if (_stockfish == null) {
       try {
-        final stockfish = LichessBinding.instance.stockfishFactory();
+        final stockfish = LichessBinding.instance.stockfishFactory(
+          flavor,
+          smallNetPath: _smallNetPath,
+          bigNetPath: _bigNetPath,
+        );
         _stockfish = stockfish;
 
         _state.value = EngineState.loading;
@@ -174,5 +190,13 @@ class StockfishEngine implements Engine {
 class StockfishFactory {
   const StockfishFactory();
 
-  Stockfish call() => Stockfish();
+  Stockfish call(
+    StockfishFlavor flavor, {
+
+    /// Full path to the small net file for NNUE evaluation.
+    String? smallNetPath,
+
+    /// Full path to the big net file for NNUE evaluation.
+    String? bigNetPath,
+  }) => Stockfish(flavor, smallNetPath: smallNetPath, bigNetPath: bigNetPath);
 }

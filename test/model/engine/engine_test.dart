@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 
@@ -14,7 +15,7 @@ void main() {
 
   group('Engine', () {
     test('Test fake engine', () async {
-      final stockfishEngine = StockfishEngine();
+      final stockfishEngine = StockfishEngine(StockfishFlavor.hce);
 
       final work = Work(
         variant: Variant.standard,

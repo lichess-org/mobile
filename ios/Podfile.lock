@@ -113,6 +113,12 @@ PODS:
     - GoogleUtilities/Privacy
   - image_picker_ios (0.0.1):
     - Flutter
+  - multistockfish_fairy (0.1.0):
+    - Flutter
+  - multistockfish_hce (0.1.0):
+    - Flutter
+  - multistockfish_nnue (0.1.0):
+    - Flutter
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -138,8 +144,6 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
-  - stockfish (1.6.2):
-    - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
   - wakelock_plus (0.0.1):
@@ -159,6 +163,9 @@ DEPENDENCIES:
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - multistockfish_fairy (from `.symlinks/plugins/multistockfish_fairy/ios`)
+  - multistockfish_hce (from `.symlinks/plugins/multistockfish_hce/ios`)
+  - multistockfish_nnue (from `.symlinks/plugins/multistockfish_nnue/ios`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -166,7 +173,6 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sound_effect (from `.symlinks/plugins/sound_effect/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - stockfish (from `.symlinks/plugins/stockfish/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
@@ -215,6 +221,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  multistockfish_fairy:
+    :path: ".symlinks/plugins/multistockfish_fairy/ios"
+  multistockfish_hce:
+    :path: ".symlinks/plugins/multistockfish_hce/ios"
+  multistockfish_nnue:
+    :path: ".symlinks/plugins/multistockfish_nnue/ios"
   objective_c:
     :path: ".symlinks/plugins/objective_c/ios"
   package_info_plus:
@@ -229,8 +241,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sound_effect/ios"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  stockfish:
-    :path: ".symlinks/plugins/stockfish/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   wakelock_plus:
@@ -262,6 +272,9 @@ SPEC CHECKSUMS:
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  multistockfish_fairy: bd0b8308283a6dae6c0fe869b32e426b4133f8eb
+  multistockfish_hce: c50e251b4c7a195718bf1911cc3d337eabb523a2
+  multistockfish_nnue: 26af3a3f3a7f865b45aa1df11e23906b61d0b1e6
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
@@ -272,7 +285,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sound_effect: 318f1417937eb16269c5ec424c06ee84d8ef2c74
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  stockfish: 3125c5e5fdd6789c398bb2d1a29a58ba3c9e5577
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
   wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
 
