@@ -6,8 +6,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
   const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
@@ -27,8 +25,6 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
 
     switch (state.mode) {
       case PuzzleMode.view:
-        final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
-        final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return _FeedbackTile(
           leading:
               state.result == PuzzleResult.win
@@ -47,17 +43,6 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                         ? context.l10n.puzzlePuzzleSuccess
                         : context.l10n.puzzlePuzzleComplete,
                     overflow: TextOverflow.ellipsis,
-                  ),
-          subtitle:
-              onStreak && state.result == PuzzleResult.lose
-                  ? null
-                  : RatingPrefAware(
-                    orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
-                    child: Text(
-                      '$puzzleRating. $playedXTimes.',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
                   ),
         );
       case PuzzleMode.load:

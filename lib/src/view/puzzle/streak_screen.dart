@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -180,7 +181,19 @@ class _Body extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      Text(context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString())),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString()),
+                          ),
+                          Text(
+                            context.l10n
+                                .puzzlePlayedXTimes(puzzleState.puzzle.puzzle.plays)
+                                .localizeNumbers(),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
