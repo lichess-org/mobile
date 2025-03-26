@@ -35,14 +35,43 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-  final evalPref = ref.watch(
-    engineEvaluationPreferencesProvider.select((s) => s.evaluationFunction),
+  final service = EvaluationService(ref, maxMemory: maxMemory);
+
+  ref.onDispose(() {
+    service._dispose();
+  });
+
+  return service;
+}
+
+/// A service to evaluate chess positions using an engine.
+class EvaluationService {
+  EvaluationService(Ref ref, {required this.maxMemory}) : _ref = ref;
+
+  final Ref _ref;
+  final int maxMemory;
+
+  Engine? _engine;
+
+  EvaluationContext? _context;
+
+  EvaluationOptions options = EvaluationOptions(
+    evaluationFunction: EvaluationFunctionPref.hce,
+    multiPv: 1,
+    cores: defaultEngineCores,
+    searchTime: const Duration(seconds: 10),
   );
-  Future<Engine> engineFactory() async {
-    switch (evalPref) {
+
+  static const _defaultState = (engineName: 'Stockfish', state: EngineState.initial, eval: null);
+
+  final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
+  ValueListenable<EngineEvaluationState> get state => _state;
+
+  Future<Engine> _engineFactory(EvaluationFunctionPref pref) async {
+    switch (pref) {
       case EvaluationFunctionPref.nnue:
         try {
-          final nnueFiles = await ref.read(stockfishNNUEFilesProvider.future);
+          final nnueFiles = await _ref.read(stockfishNNUEFilesProvider.future);
           return StockfishEngine(
             StockfishFlavor.nnue,
             bigNetPath: nnueFiles.bigNetPath,
@@ -57,35 +86,6 @@ EvaluationService evaluationService(Ref ref) {
     }
   }
 
-  final service = EvaluationService(maxMemory: maxMemory, engineFactory: engineFactory);
-  ref.onDispose(() {
-    service.disposeEngine();
-  });
-  return service;
-}
-
-/// A service to evaluate chess positions using an engine.
-class EvaluationService {
-  EvaluationService({required this.maxMemory, required this.engineFactory});
-
-  final int maxMemory;
-  final Future<Engine> Function() engineFactory;
-
-  Engine? _engine;
-
-  EvaluationContext? _context;
-
-  EvaluationOptions options = EvaluationOptions(
-    multiPv: 1,
-    cores: defaultEngineCores,
-    searchTime: const Duration(seconds: 10),
-  );
-
-  static const _defaultState = (engineName: 'Stockfish', state: EngineState.initial, eval: null);
-
-  final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
-  ValueListenable<EngineEvaluationState> get state => _state;
-
   /// Initialize the engine with the given context and options.
   ///
   /// If the engine is already initialized, it is disposed first.
@@ -97,7 +97,7 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = await engineFactory();
+    _engine = await _engineFactory(options.evaluationFunction);
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -135,6 +135,12 @@ class EvaluationService {
     return _engine?.dispose() ?? Future.value();
   }
 
+  /// Dispose the service.
+  void _dispose() {
+    disposeEngine();
+    _state.dispose();
+  }
+
   /// Start the engine evaluation with the given [path] and [steps].
   ///
   /// Returns a stream of [EvalResult]s. The stream is throttled to emit at most
@@ -162,6 +168,9 @@ class EvaluationService {
     if (!engineSupportedVariants.contains(context.variant)) {
       return null;
     }
+
+    // reset eval
+    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
 
     final work = Work(
       variant: context.variant,
@@ -202,10 +211,6 @@ class EvaluationService {
   void stop() {
     _engine?.stop();
   }
-
-  void resetEval() {
-    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
-  }
 }
 
 typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEval? eval});
@@ -243,6 +248,7 @@ class EvaluationContext with _$EvaluationContext {
 @freezed
 class EvaluationOptions with _$EvaluationOptions {
   const factory EvaluationOptions({
+    required EvaluationFunctionPref evaluationFunction,
     required int multiPv,
     required int cores,
     required Duration searchTime,

@@ -97,8 +97,12 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     return _$EngineEvaluationPrefStateFromJson(json);
   }
 
-  EvaluationOptions get evaluationOptions =>
-      EvaluationOptions(multiPv: numEvalLines, cores: numEngineCores, searchTime: engineSearchTime);
+  EvaluationOptions get evaluationOptions => EvaluationOptions(
+    multiPv: numEvalLines,
+    cores: numEngineCores,
+    searchTime: engineSearchTime,
+    evaluationFunction: evaluationFunction,
+  );
 }
 
 Duration _searchTimeDefault() {

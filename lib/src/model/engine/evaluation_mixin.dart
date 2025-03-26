@@ -35,7 +35,7 @@ const kStartLocalEngineDebounceDelay = Duration(milliseconds: 600);
 abstract class EvaluationMixinState {
   /// Returns `true` if the engine evaluation is available (for both local and cloud).
   ///
-  /// This value depends on the current state and the user preferences.
+  /// This value may depend on the current state and the user preferences.
   bool isEngineAvailable(EngineEvaluationPrefState prefs);
 
   /// The context that the local engine is initialized with.
@@ -126,7 +126,6 @@ mixin EngineEvaluationMixin {
     _engineEvalDebounce.cancel();
     _subscription?.cancel();
     _evaluationService?.disposeEngine();
-    _evaluationService = null;
   }
 
   /// Toggles the engine evaluation on/off.
@@ -188,8 +187,6 @@ mixin EngineEvaluationMixin {
   @nonVirtual
   void requestEval() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
-
-    _evaluationService?.resetEval();
 
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();

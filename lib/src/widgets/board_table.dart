@@ -317,6 +317,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
   }
 
   void _onCompleteShape(Shape shape) {
+    if (!mounted) return;
+
     if (userShapes.any((element) => element == shape)) {
       setState(() {
         userShapes = userShapes.remove(shape);
@@ -330,6 +332,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
   }
 
   void _onClearShapes() {
+    if (!mounted) return;
+
     setState(() {
       userShapes = ISet();
     });

@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -131,9 +132,11 @@ Future<Widget> makeTestProviderScope(
 
   final defaultTestPrefs = {
     // disable piece animation to simplify tests
-    'preferences.board': jsonEncode(BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson()),
+    PrefCategory.board.storageKey: jsonEncode(
+      BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson(),
+    ),
     // set the default engine evaluation to HCE to avoid mocking the download of the NN
-    'preferences.engineEvaluation': jsonEncode(
+    PrefCategory.engineEvaluation.storageKey: jsonEncode(
       EngineEvaluationPrefState.defaults
           .copyWith(evaluationFunction: EvaluationFunctionPref.hce)
           .toJson(),
