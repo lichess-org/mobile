@@ -12,6 +12,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
+// final RegExp _stockfishVersion = RegExp(r'Stockfish (\d+)');
+
 class EngineDepth extends ConsumerWidget {
   const EngineDepth({this.savedEval});
 
@@ -35,6 +37,22 @@ class EngineDepth extends ConsumerWidget {
       fontFeatures: const [FontFeature.tabularFigures()],
       fontSize: 11,
     );
+
+    // String? evaluationFunctionLabel;
+    // if (engineName.startsWith('Stockfish 11')) {
+    //   evaluationFunctionLabel = 'HCE';
+    // } else if (engineName.startsWith('Fairy-Stockfish')) {
+    //   evaluationFunctionLabel = 'HCE';
+    // } else {
+    //   final versionMatch = _stockfishVersion.firstMatch(engineName);
+    //   final version =
+    //       versionMatch != null && versionMatch.group(1) != null
+    //           ? int.tryParse(versionMatch.group(1)!)
+    //           : null;
+    //   if (version != null && version >= 17) {
+    //     evaluationFunctionLabel = 'NNUE';
+    //   }
+    // }
 
     return AppBarIconButton(
       semanticsLabel: switch (eval) {

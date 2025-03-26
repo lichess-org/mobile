@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show showAdaptiveDialog;
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
@@ -16,7 +19,10 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -331,6 +337,39 @@ Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
         debugPrint('Deleting existing nnue ${entity.path}');
         await entity.delete();
       }
+    }
+
+    final connectivityResult = await ref.read(connectivityPluginProvider).checkConnectivity();
+
+    bool? downloadAllowed;
+
+    final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (currentContext == null || !currentContext.mounted) {
+      throw StateError('No current context');
+    }
+
+    // if only mobile data is available, prompt the user with a confirmation dialog
+    if (connectivityResult.contains(ConnectivityResult.mobile) &&
+        !connectivityResult.contains(ConnectivityResult.wifi)) {
+      downloadAllowed = await showAdaptiveDialog<bool>(
+        context: currentContext,
+        builder:
+            (context) => YesNoDialog(
+              title: const Text('Confirm download'),
+              content: const Text(
+                'You are about to download the Stockfish NNUE files (79MB) using mobile data. Do you want to proceed?\n\nIf you do not download the files, the engine will use the handcrafted evaluation function instead.\n\nYou can also change the preferred evaluation function in the engine settings.',
+              ),
+              onYes: () {
+                return Navigator.of(context).pop(true);
+              },
+              onNo: () => Navigator.of(context).pop(false),
+            ),
+      );
+    }
+
+    if (downloadAllowed == false) {
+      link.close();
+      throw Exception('Download not allowed');
     }
 
     final client = ref.read(defaultClientProvider);

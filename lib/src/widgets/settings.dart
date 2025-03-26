@@ -11,6 +11,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
+    this.explanationDuration = const Duration(seconds: 4),
     this.showCupertinoTrailingValue = true,
     super.key,
   });
@@ -27,6 +28,9 @@ class SettingsListTile extends StatelessWidget {
 
   /// The optional explanation of the settings.
   final String? explanation;
+
+  /// The explanation tooltip display duration.
+  final Duration explanationDuration;
 
   /// Whether to show the value in the trailing position on iOS.
   ///
@@ -58,7 +62,11 @@ class SettingsListTile extends StatelessWidget {
             Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : explanation != null
-                ? _SettingsInfoTooltip(message: explanation!, child: const Icon(Icons.info_outline))
+                ? _SettingsInfoTooltip(
+                  message: explanation!,
+                  showDuration: explanationDuration,
+                  child: const Icon(Icons.info_outline),
+                )
                 : null,
       ),
     );
@@ -169,10 +177,15 @@ class SettingsSectionTitle extends StatelessWidget {
 }
 
 class _SettingsInfoTooltip extends StatelessWidget {
-  const _SettingsInfoTooltip({required this.message, required this.child});
+  const _SettingsInfoTooltip({
+    required this.message,
+    required this.showDuration,
+    required this.child,
+  });
 
   final String message;
   final Widget child;
+  final Duration showDuration;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +193,7 @@ class _SettingsInfoTooltip extends StatelessWidget {
       message: message,
       triggerMode: TooltipTriggerMode.tap,
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      showDuration: const Duration(seconds: 4),
+      showDuration: showDuration,
       child: child,
     );
   }
