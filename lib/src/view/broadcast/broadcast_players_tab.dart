@@ -54,29 +54,25 @@ class BroadcastPlayersList extends ConsumerStatefulWidget {
 
 class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   late IList<BroadcastPlayerWithOverallResult> players;
-  late bool reverse;
-  _SortingTypes? currentSort;
+  late _SortingTypes currentSort;
+  bool reverse = false;
   bool get withRating => players.any((p) => p.player.rating != null);
   bool get withScores => players.any((p) => p.score != null);
-
-  void resetState() {
-    players = widget.players;
-    reverse = false;
-    final newSort = withScores ? _SortingTypes.score : _SortingTypes.elo;
-    sort(newSort);
-  }
 
   @override
   void initState() {
     super.initState();
-    resetState();
+    players = widget.players;
+    currentSort = withScores ? _SortingTypes.score : _SortingTypes.elo;
+    sort();
   }
 
   @override
   void didUpdateWidget(BroadcastPlayersList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.players != widget.players) {
-      resetState();
+      players = widget.players;
+      sort();
     }
   }
 
@@ -110,8 +106,19 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
     }
   };
 
-  void sort(_SortingTypes newSort) {
-    final compare = switch (newSort) {
+  void toggleSort(_SortingTypes newSort) {
+    if (currentSort != newSort) {
+      currentSort = newSort;
+      reverse = false;
+    } else {
+      reverse = !reverse;
+    }
+
+    sort();
+  }
+
+  void sort() {
+    final compare = switch (currentSort) {
       _SortingTypes.player => nullableCompare((p) => p.player.name),
       _SortingTypes.elo =>
         (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
@@ -124,12 +131,6 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
     };
 
     setState(() {
-      if (currentSort != newSort) {
-        reverse = false;
-      } else {
-        reverse = !reverse;
-      }
-      currentSort = newSort;
       players = reverse ? players.sortReversed(compare) : players.sort(compare);
     });
   }
@@ -152,7 +153,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                 Expanded(
                   child: _TableTitleCell(
                     title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                    onTap: () => sort(_SortingTypes.player),
+                    onTap: () => toggleSort(_SortingTypes.player),
                     sortIcon: (currentSort == _SortingTypes.player) ? sortIcon : null,
                   ),
                 ),
@@ -161,7 +162,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                     width: eloWidth,
                     child: _TableTitleCell(
                       title: const Text('Elo', style: _kHeaderTextStyle),
-                      onTap: () => sort(_SortingTypes.elo),
+                      onTap: () => toggleSort(_SortingTypes.elo),
                       sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
                     ),
                   ),
@@ -172,7 +173,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                       withScores ? context.l10n.broadcastScore : context.l10n.games,
                       style: _kHeaderTextStyle,
                     ),
-                    onTap: () => sort(_SortingTypes.score),
+                    onTap: () => toggleSort(_SortingTypes.score),
                     sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
                   ),
                 ),
