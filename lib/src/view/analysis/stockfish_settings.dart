@@ -41,8 +41,8 @@ class StockfishSettingsWidget extends ConsumerWidget {
           settingsLabel: const Text('Engine'),
           settingsValue:
               prefs.evaluationFunction == EvaluationFunctionPref.hce
-                  ? 'Stockfish 11 HCE'
-                  : 'Stockfish 17 NNUE (79MB)',
+                  ? 'Stockfish HCE'
+                  : 'Stockfish NNUE (79MB)',
           onTap: () {
             showChoicePicker(
               context,
@@ -50,9 +50,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
               selectedItem: prefs.evaluationFunction,
               labelBuilder:
                   (t) => Text(
-                    t == EvaluationFunctionPref.hce
-                        ? 'Stockfish 11 HCE'
-                        : 'Stockfish 17 NNUE (79MB)',
+                    t == EvaluationFunctionPref.hce ? 'Stockfish HCE' : 'Stockfish NNUE (79MB)',
                   ),
               onSelectedItemChanged: (EvaluationFunctionPref? value) {
                 ref
@@ -61,6 +59,9 @@ class StockfishSettingsWidget extends ConsumerWidget {
               },
             );
           },
+          explanation:
+              'Stockfish HCE is the traditional Stockfish engine using Handcrafted Evaluation.\n\nStockfish NNUE is the modern Stockfish engine using Neural Network Evaluation.\nThe NNUE engine is better at evaluating positions but requires a 79MB download for the neural network.',
+          explanationDuration: const Duration(seconds: 10),
         ),
         PlatformListTile(
           title: Text.rich(
