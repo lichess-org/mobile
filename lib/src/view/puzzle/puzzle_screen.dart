@@ -493,13 +493,31 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.menu,
           ),
         if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
-            onTap: () {
-              ref.read(ctrlProvider.notifier).toggleEngine();
+          Builder(
+            builder: (context) {
+              Future<void>? toggleFuture;
+              return FutureBuilder<void>(
+                future: toggleFuture,
+                builder: (context, snapshot) {
+                  return BottomBarButton(
+                    onTap:
+                        snapshot.connectionState != ConnectionState.waiting
+                            ? () async {
+                              toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
+                              try {
+                                await toggleFuture;
+                              } finally {
+                                toggleFuture = null;
+                              }
+                            }
+                            : null,
+                    label: context.l10n.toggleLocalEvaluation,
+                    icon: CupertinoIcons.gauge,
+                    highlighted: puzzleState.isEngineAvailable(enginePrefs),
+                  );
+                },
+              );
             },
-            label: context.l10n.toggleLocalEvaluation,
-            icon: CupertinoIcons.gauge,
-            highlighted: puzzleState.isEngineAvailable(enginePrefs),
           ),
         if (puzzleState.mode == PuzzleMode.view)
           RepeatButton(

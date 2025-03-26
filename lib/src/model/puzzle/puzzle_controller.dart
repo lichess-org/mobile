@@ -140,10 +140,20 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       resultSent: false,
       isChangingDifficulty: false,
       shouldBlinkNextArrow: false,
+      isEvaluationEnabled: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
     );
+  }
+
+  Future<void> toggleEvaluation() async {
+    state = state.copyWith(isEvaluationEnabled: !state.isEvaluationEnabled);
+    if (state.isEvaluationEnabled) {
+      requestEval();
+    } else {
+      await ref.read(evaluationServiceProvider).disposeEngine();
+    }
   }
 
   Future<void> onUserMove(NormalMove move) async {
@@ -526,6 +536,7 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required bool resultSent,
     required bool isChangingDifficulty,
     required bool shouldBlinkNextArrow,
+    required bool isEvaluationEnabled,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails
@@ -538,8 +549,8 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   bool get delayLocalEngine => false;
 
   @override
-  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      mode == PuzzleMode.view && prefs.isEnabled;
+  bool isEngineAvailable(EngineEvaluationPrefState _) =>
+      mode == PuzzleMode.view && isEvaluationEnabled;
 
   @override
   EvaluationContext get evaluationContext =>
