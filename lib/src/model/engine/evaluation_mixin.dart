@@ -125,6 +125,7 @@ mixin EngineEvaluationMixin {
     _engineEvalDebounce.cancel();
     _subscription?.cancel();
     _evaluationService?.disposeEngine();
+    _evaluationService = null;
   }
 
   /// Toggles the engine evaluation on/off.
