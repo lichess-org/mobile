@@ -6,12 +6,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show showAdaptiveDialog;
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -19,12 +16,9 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:multistockfish/multistockfish.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -138,7 +132,10 @@ class EvaluationService {
   /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
-    return _engine?.dispose() ?? Future.value();
+    return (_engine?.dispose() ?? Future.value()).then((_) {
+      _engine = null;
+      _state.value = _defaultState;
+    });
   }
 
   /// Dispose the service.
@@ -308,22 +305,21 @@ IList<MoveWithWinningChances>? pickBestMoves({
   };
 }
 
-Directory? _appSupportDirectory;
-const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
 typedef NNUEFiles = ({String bigNetPath, String smallNetPath});
 
 /// Fetches and saves locally the Stockfish NNUE files from the server.
 @riverpod
 Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
-  _appSupportDirectory ??= await getApplicationSupportDirectory();
-
   final link = ref.keepAlive();
 
-  final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultBigNetFile}');
-  final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultSmallNetFile}');
+  final appSupportDirectory = ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
 
-  final bigNetFile = File('${_appSupportDirectory!.path}/${Stockfish.defaultBigNetFile}');
-  final smallNetFile = File('${_appSupportDirectory!.path}/${Stockfish.defaultSmallNetFile}');
+  if (appSupportDirectory == null) {
+    throw Exception('App support directory is null.');
+  }
+
+  final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultBigNetFile}');
+  final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultSmallNetFile}');
 
   if (await bigNetFile.exists() && await smallNetFile.exists()) {
     return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
@@ -331,8 +327,7 @@ Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
 
   try {
     // delete any existing nnue files before downloading
-    final dir = Directory(_appSupportDirectory!.path);
-    await for (final entity in dir.list(followLinks: false)) {
+    await for (final entity in appSupportDirectory.list(followLinks: false)) {
       if (entity is File && entity.path.endsWith('.nnue')) {
         debugPrint('Deleting existing nnue ${entity.path}');
         await entity.delete();
@@ -340,43 +335,17 @@ Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
     }
 
     final connectivityResult = await ref.read(connectivityPluginProvider).checkConnectivity();
-
-    bool? downloadAllowed;
-
-    final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (currentContext == null || !currentContext.mounted) {
-      throw StateError('No current context');
-    }
-
-    // if only mobile data is available, prompt the user with a confirmation dialog
-    if (connectivityResult.contains(ConnectivityResult.mobile) &&
-        !connectivityResult.contains(ConnectivityResult.wifi)) {
-      downloadAllowed = await showAdaptiveDialog<bool>(
-        context: currentContext,
-        builder:
-            (context) => YesNoDialog(
-              title: const Text('Confirm download'),
-              content: const Text(
-                'You are about to download the Stockfish NNUE files (79MB) using mobile data. Do you want to proceed?\n\nIf you do not download the files, the engine will use the handcrafted evaluation function instead.\n\nYou can also change the preferred evaluation function in the engine settings.',
-              ),
-              onYes: () {
-                return Navigator.of(context).pop(true);
-              },
-              onNo: () => Navigator.of(context).pop(false),
-            ),
-      );
-    }
-
+    final downloadAllowed = connectivityResult.contains(ConnectivityResult.wifi);
     if (downloadAllowed == false) {
       link.close();
-      throw Exception('Download not allowed');
+      throw Exception('Cannot download in background on mobile data.');
     }
 
     final client = ref.read(defaultClientProvider);
 
     await Future.wait([
-      downloadFile(client, bigNetUrl, bigNetFile),
-      downloadFile(client, smallNetUrl, smallNetFile),
+      downloadFile(client, StockfishEngine.bigNetUrl, bigNetFile),
+      downloadFile(client, StockfishEngine.smallNetUrl, smallNetFile),
     ]);
     return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
   } on SocketException catch (_) {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
@@ -44,6 +45,8 @@ abstract class Engine {
   Future<void> dispose();
 }
 
+const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
+
 /// A concrete implementation of [Engine] that uses Stockfish as the underlying engine.
 class StockfishEngine implements Engine {
   StockfishEngine(this.flavor, {String? smallNetPath, String? bigNetPath})
@@ -54,6 +57,9 @@ class StockfishEngine implements Engine {
         flavor != StockfishFlavor.nnue || smallNetPath != null && bigNetPath != null,
         'NNUE paths must be provided for NNUE flavor',
       );
+
+  static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultBigNetFile}');
+  static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultSmallNetFile}');
 
   final StockfishFlavor flavor;
   final UCIProtocol _protocol;

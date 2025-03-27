@@ -78,7 +78,7 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
-    @JsonKey(defaultValue: EvaluationFunctionPref.hce, unknownEnumValue: EvaluationFunctionPref.hce)
+    @JsonKey(defaultValue: EvaluationFunctionPref.nnue, unknownEnumValue: EvaluationFunctionPref.nnue)
     required EvaluationFunctionPref evaluationFunction,
   }) = _EngineEvaluationPrefState;
 
@@ -87,7 +87,7 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 6),
-    evaluationFunction: EvaluationFunctionPref.hce,
+    evaluationFunction: EvaluationFunctionPref.nnue,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
