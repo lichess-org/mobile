@@ -44,7 +44,7 @@ class ClockToolController extends _$ClockToolController {
       whiteTime: _clock.whiteTime,
       blackTime: _clock.blackTime,
       activeSide: Side.white,
-      clockOrientation: ClockOrientation.portraitUp,
+      clockOrientation: null,
     );
   }
 
@@ -169,7 +169,7 @@ class ClockToolController extends _$ClockToolController {
     state = state.copyWith(paused: false);
   }
 
-  void toggleOrientation(ClockOrientation clockOrientation) {
+  void toggleOrientation(ClockOrientation? clockOrientation) {
     state = state.copyWith(clockOrientation: clockOrientation);
   }
 }
@@ -218,7 +218,7 @@ class ClockState with _$ClockState {
     @Default(false) bool paused,
     @Default(0) int whiteMoves,
     @Default(0) int blackMoves,
-    required ClockOrientation clockOrientation,
+    required ClockOrientation? clockOrientation,
   }) = _ClockState;
 
   ValueListenable<Duration> getDuration(Side playerType) =>

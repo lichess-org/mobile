@@ -1,13 +1,11 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -39,25 +37,20 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  bool isTablet = false;
+  Orientation? _last;
 
   @override
-  void initState() {
-    super.initState();
-    final view = WidgetsBinding.instance.platformDispatcher.views.first;
-    final data = MediaQueryData.fromView(view);
-    isTablet = data.size.shortestSide >= FormFactor.tablet;
-    if (isTablet) {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  void didChangeDependencies() {
+    final curr = MediaQuery.orientationOf(context);
+    if (_last != curr) {
+      _last = curr;
+      Future.microtask(
+        () => ref
+            .read(clockToolControllerProvider.notifier)
+            .toggleOrientation(curr == Orientation.portrait ? ClockOrientation.portraitUp : null),
+      );
     }
-  }
-
-  @override
-  void dispose() {
-    if (isTablet) {
-      SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-    }
-    super.dispose();
+    super.didChangeDependencies();
   }
 
   @override
@@ -135,11 +128,13 @@ class ClockTile extends ConsumerWidget {
 
     return RotatedBox(
       quarterTurns:
-          clockOrientation.isPortrait
-              ? (position == TilePosition.top
-                  ? clockOrientation.oppositeQuarterTurns
+          clockOrientation != null
+              ? (clockOrientation.isPortrait
+                  ? (position == TilePosition.top
+                      ? clockOrientation.oppositeQuarterTurns
+                      : clockOrientation.quarterTurns)
                   : clockOrientation.quarterTurns)
-              : clockOrientation.quarterTurns,
+              : ((orientation == Orientation.portrait && position == TilePosition.top) ? 2 : 0),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
@@ -207,7 +202,7 @@ class ClockTile extends ConsumerWidget {
               ),
             ),
           ),
-          if (orientation == Orientation.portrait && clockOrientation.isPortrait)
+          if (orientation == Orientation.portrait && (clockOrientation?.isPortrait ?? false))
             Positioned(
               top: 24,
               left: 24,
