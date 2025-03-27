@@ -267,7 +267,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
         );
 
         return _buildContent(context, asyncTour, roundState);
-
       case _:
         return _buildContent(context, asyncTour, loadingRound);
     }
