@@ -57,7 +57,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             : null;
     final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
     final ISet<Shape> bestMoveShapes =
-        bestMoves != null
+        bestMoves != null && showBestMoveArrow
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,

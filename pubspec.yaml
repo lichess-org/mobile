@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.14.13+001413 # See README.md for details about versioning
+version: 0.14.14+001414 # See README.md for details about versioning
 
 environment:
   sdk: '^3.8.0-70.0'
@@ -14,7 +14,7 @@ dependencies:
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^7.0.0
+  chessground: ^7.1.0
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
@@ -54,7 +54,7 @@ dependencies:
   l10n_esperanto:
     git:
       url: https://github.com/veloce/l10n_esperanto.git
-      ref: 40abcece5be4610620a8dcc506901d9be84bab1b
+      ref: 62d45c60f7840a4591318bb477172136c999f946
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1

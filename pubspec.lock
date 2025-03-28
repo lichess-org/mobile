@@ -61,18 +61,18 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6
+      sha256: d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0"
+    version: "2.7.0"
   async:
     dependency: "direct main"
     description:
       name: async
-      sha256: d2872f9c19731c2e5f10444b14686eb7cc85c76274bd6c16e1816bff9a3bab63
+      sha256: "758e6d74e971c3e5aceb4110bfd6698efc7f501675bcfe0c775459a8140750eb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.0"
+    version: "2.13.0"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -197,10 +197,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: b5b5d329c116fdaa545de3e7e64111e1cd7a3f9813d257469b2eaa310bd157dd
+      sha256: "5ee24bf66674d45021d8ab5c2df0b6dc1e4072c61bea2148ac2e2c38fe2bb0dd"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "7.1.0"
   ci:
     dependency: transitive
     description:
@@ -301,10 +301,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_http
-      sha256: "6fcf79586ad872ddcd6004d55c8c2aab3cdf0337436e8f99837b1b6c30665d0c"
+      sha256: "5a043ec21fd7f56b24c549fd293a7fc60bba899509246cd0ffc2a91cb78c9be2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -881,10 +881,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_linux
-      sha256: "4ed1d9bb36f7cd60aa6e6cd479779cc56a4cb4e4de8f49d487b1aaad831300fa"
+      sha256: "34a65f6740df08bbbeb0a1abd8e6d32107941fd4868f67a507b25601651022c9"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1+1"
+    version: "0.2.1+2"
   image_picker_macos:
     dependency: transitive
     description:
@@ -961,8 +961,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "40abcece5be4610620a8dcc506901d9be84bab1b"
-      resolved-ref: "40abcece5be4610620a8dcc506901d9be84bab1b"
+      ref: "62d45c60f7840a4591318bb477172136c999f946"
+      resolved-ref: "62d45c60f7840a4591318bb477172136c999f946"
       url: "https://github.com/veloce/l10n_esperanto.git"
     source: git
     version: "2.0.12"
@@ -1082,10 +1082,10 @@ packages:
     dependency: transitive
     description:
       name: objective_c
-      sha256: "62e79ab8c3ed6f6a340ea50dd48d65898f5d70425d404f0d99411f6e56e04584"
+      sha256: "49e569fac1202d7fee1655fbbdfbf228840e11416be592bce2a6797b23de8231"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "7.0.0"
   octo_image:
     dependency: transitive
     description:

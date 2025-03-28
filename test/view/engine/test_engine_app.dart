@@ -27,6 +27,7 @@ Future<void> makeEngineTestApp(
   bool isComputerAnalysisEnabled = true,
   bool isEngineEnabled = true,
   bool isCloudEvalEnabled = true,
+  bool showBestMoveArrow = true,
   Duration connectionLag = Duration.zero,
 }) async {
   final fakeChannel = FakeWebSocketChannel(
@@ -59,7 +60,12 @@ Future<void> makeEngineTestApp(
             .toJson(),
       ),
       PrefCategory.analysis.storageKey: jsonEncode(
-        AnalysisPrefs.defaults.copyWith(enableComputerAnalysis: isComputerAnalysisEnabled).toJson(),
+        AnalysisPrefs.defaults
+            .copyWith(
+              enableComputerAnalysis: isComputerAnalysisEnabled,
+              showBestMoveArrow: showBestMoveArrow,
+            )
+            .toJson(),
       ),
     },
     overrides: [
