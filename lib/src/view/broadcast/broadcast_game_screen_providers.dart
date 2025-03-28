@@ -10,13 +10,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'broadcast_game_screen_providers.g.dart';
 
 @riverpod
-Future<BroadcastGame> broadcastRoundGame(
+Future<BroadcastGame?> broadcastRoundGame(
   Ref ref,
   BroadcastRoundId roundId,
   BroadcastGameId gameId,
 ) {
   return ref.watch(
-    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.games[gameId]!),
+    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.games[gameId]),
   );
 }
 

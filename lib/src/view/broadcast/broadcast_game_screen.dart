@@ -405,7 +405,10 @@ class _PlayerWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
-      case AsyncValue(value: final game?, hasValue: true):
+      case AsyncValue(value: final game, hasValue: true):
+        if (game == null) {
+          return const Text('Cannot find player data');
+        }
         final broadcastAnalysisState =
             ref.watch(broadcastAnalysisControllerProvider(roundId, gameId)).requireValue;
 
