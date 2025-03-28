@@ -43,6 +43,8 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
+    this.squareSemanticHintBuilder,
+    this.squareSemanticValueBuilder,
     super.key,
   }) : assert(
          moves == null || currentMoveIndex != null,
@@ -54,6 +56,8 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.errorMessage,
+    this.squareSemanticHintBuilder,
+    this.squareSemanticValueBuilder,
   }) : fen = kEmptyBoardFEN,
        orientation = Side.white,
        gameData = null,
@@ -119,6 +123,10 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// If true, the move list will be hidden
   final bool zenMode;
+
+  final SemanticBuilder? squareSemanticHintBuilder;
+
+  final SemanticBuilder? squareSemanticValueBuilder;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -331,6 +339,8 @@ class _BoardWidget extends StatelessWidget {
     required this.settings,
     required this.boardOverlay,
     required this.error,
+    this.squareSemanticHintBuilder,
+    this.squareSemanticValueBuilder,
     this.boardKey,
   });
 
@@ -345,6 +355,8 @@ class _BoardWidget extends StatelessWidget {
   final String? error;
   final Widget? boardOverlay;
   final GlobalKey? boardKey;
+  final SemanticBuilder? squareSemanticHintBuilder;
+  final SemanticBuilder? squareSemanticValueBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -357,6 +369,8 @@ class _BoardWidget extends StatelessWidget {
       lastMove: lastMove,
       shapes: shapes,
       settings: settings,
+      squareSemanticHintBuilder: squareSemanticHintBuilder,
+      squareSemanticValueBuilder: squareSemanticValueBuilder,
     );
 
     if (boardOverlay != null) {
