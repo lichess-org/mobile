@@ -27,14 +27,15 @@ class TournamentController extends _$TournamentController {
 
   @override
   Future<TournamentState> build(TournamentId id) async {
-    final state = await _loadTournament(id, standingsPage: 1);
-
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/tournament/$id/socket/v6'));
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _pauseDelayTimer?.cancel();
     });
+
+    final state = await _loadTournament(id, standingsPage: 1);
+
+    final socketPool = ref.watch(socketPoolProvider);
+    _socketClient = socketPool.open(Uri(path: '/tournament/$id/socket/v6'));
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
