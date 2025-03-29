@@ -20,7 +20,7 @@ class TournamentController extends _$TournamentController {
 
   late final SocketClient _socketClient;
 
-  // If we join/leave to often, the server blocks us from joining, see [TournamentMe.pauseDelay].
+  // If we join/leave too often, the server blocks us from joining, see [TournamentMe.pauseDelay].
   // However, there's no "reload" event from the socket once we're able to join again,
   // so we manually have to set this timer to schedule a reload once we can join again.
   Timer? _pauseDelayTimer;
