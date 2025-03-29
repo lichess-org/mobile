@@ -336,10 +336,10 @@ class _Verdicts extends ConsumerWidget {
         const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: verdicts.list
-              .whereNot((verdict) => verdict.condition == 'Bot players are not allowed')
-              .map(
-                (verdict) => Text(
+          children: [
+            for (final verdict in verdicts.list)
+              if (verdict.condition != 'Bot players are not allowed')
+                Text(
                   verdict.condition,
                   style: TextStyle(
                     color:
@@ -350,8 +350,7 @@ class _Verdicts extends ConsumerWidget {
                             : null,
                   ),
                 ),
-              )
-              .toList(growable: false),
+          ],
         ),
       ],
     );
