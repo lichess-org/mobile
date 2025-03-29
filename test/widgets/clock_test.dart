@@ -36,7 +36,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: false,
             builder: clockBuilder,
           ),
@@ -54,7 +53,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: true,
             builder: clockBuilder,
           ),
@@ -108,12 +106,10 @@ void main() {
     });
 
     testWidgets('do not update if clockUpdatedAt is same', (WidgetTester tester) async {
-      final clockUpdatedAt = clock.clock.now();
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
             active: true,
             builder: clockBuilder,
           ),
@@ -132,7 +128,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 11),
-            clockUpdatedAt: clockUpdatedAt,
             active: true,
             builder: clockBuilder,
           ),
@@ -145,12 +140,10 @@ void main() {
     });
 
     testWidgets('stops when active become false', (WidgetTester tester) async {
-      final clockUpdatedAt = clock.clock.now();
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
             active: true,
             builder: clockBuilder,
           ),
@@ -169,7 +162,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
             active: false,
             builder: clockBuilder,
           ),
@@ -186,7 +178,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: true,
             delay: const Duration(milliseconds: 250),
             builder: clockBuilder,
