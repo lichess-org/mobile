@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -197,7 +198,7 @@ class _TournamentListItem extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap: () => Navigator.of(context).push(TournamentScreen.buildRoute(context, tournament.id)),
     );
   }
 }
