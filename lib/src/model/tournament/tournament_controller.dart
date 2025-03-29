@@ -92,6 +92,7 @@ class TournamentController extends _$TournamentController {
         .reload(state.requireValue.tournament, standingsPage: standingsPage);
 
     if (tournament.me?.pauseDelay != null) {
+      _pauseDelayTimer?.cancel();
       _pauseDelayTimer = Timer(tournament.me!.pauseDelay!, () {
         _reload(standingsPage: standingsPage);
       });
