@@ -32,7 +32,10 @@ class TournamentController extends _$TournamentController {
       _pauseDelayTimer?.cancel();
     });
 
-    final state = await _loadTournament(id, standingsPage: 1);
+    final state = TournamentState(
+      tournament: await ref.read(tournamentRepositoryProvider).getTournament(id),
+      standingsPage: 1,
+    );
 
     final socketPool = ref.watch(socketPoolProvider);
     _socketClient = socketPool.open(Uri(path: '/tournament/$id/socket/v6'));
@@ -41,13 +44,6 @@ class TournamentController extends _$TournamentController {
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return state;
-  }
-
-  Future<TournamentState> _loadTournament(TournamentId id, {required int standingsPage}) async {
-    final tournament = await ref
-        .read(tournamentRepositoryProvider)
-        .getTournament(id, standingsPage: standingsPage);
-    return TournamentState(tournament: tournament, standingsPage: standingsPage);
   }
 
   void loadNextStandingsPage() {

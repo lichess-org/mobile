@@ -194,7 +194,6 @@ class Tournament with _$Tournament {
     required int nbPlayers,
     required StandingPage? standing,
     required Verdicts verdicts,
-    required String? myUsername,
     required String? reloadEndpoint,
   }) = _Tournament;
 
@@ -224,7 +223,6 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     variant: pick('variant').asVariantOrThrow(),
     berserkable: pick('berserkable').asBoolOrFalse(),
     verdicts: pick('verdicts').asVerdictsOrThrow(),
-    myUsername: pick('myUsername').asStringOrNull(),
     reloadEndpoint: pick('reloadEndpoint').asStringOrNull(),
   );
 }

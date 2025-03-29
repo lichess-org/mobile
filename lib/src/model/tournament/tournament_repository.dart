@@ -33,9 +33,9 @@ class TournamentRepository {
     );
   }
 
-  Future<Tournament> getTournament(TournamentId id, {required int standingsPage}) {
+  Future<Tournament> getTournament(TournamentId id) {
     return client.readJson(
-      Uri(path: '/api/tournament/$id', queryParameters: {'page': standingsPage.toString()}),
+      Uri(path: '/api/tournament/$id'),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) => Tournament.fromServerJson(json),
     );
