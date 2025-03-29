@@ -37,7 +37,7 @@ class StudyController extends _$StudyController
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
-  late final SocketClient _socketClient;
+  late SocketClient _socketClient;
 
   @override
   @protected

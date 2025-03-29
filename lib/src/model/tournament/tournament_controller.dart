@@ -18,7 +18,7 @@ final _logger = Logger('TournamentController');
 class TournamentController extends _$TournamentController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  late final SocketClient _socketClient;
+  late SocketClient _socketClient;
 
   // If we join/leave too often, the server blocks us from joining, see [TournamentMe.pauseDelay].
   // However, there's no "reload" event from the socket once we're able to join again,
