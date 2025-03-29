@@ -129,7 +129,6 @@ class _Title extends StatelessWidget {
         if (timeLeft != null)
           CountdownClockBuilder(
             timeLeft: timeLeft,
-            clockUpdatedAt: DateTime.now(),
             active: true,
             tickInterval: const Duration(seconds: 1),
             builder:
