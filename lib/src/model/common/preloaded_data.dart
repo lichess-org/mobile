@@ -10,7 +10,8 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart' show getApplicationDocumentsDirectory;
+import 'package:path_provider/path_provider.dart'
+    show getApplicationDocumentsDirectory, getApplicationSupportDirectory;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'preloaded_data.g.dart';
@@ -23,6 +24,7 @@ typedef PreloadedData =
       String sri,
       int engineMaxMemoryInMb,
       Directory? appDocumentsDirectory,
+      Directory? appSupportDirectory,
     });
 
 @Riverpod(keepAlive: true)
@@ -59,6 +61,11 @@ Future<PreloadedData> preloadedData(Ref ref) async {
     appDocumentsDirectory = await getApplicationDocumentsDirectory();
   } catch (_) {}
 
+  Directory? appSupportDirectory;
+  try {
+    appSupportDirectory = await getApplicationSupportDirectory();
+  } catch (_) {}
+
   return (
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
@@ -66,5 +73,6 @@ Future<PreloadedData> preloadedData(Ref ref) async {
     sri: sri,
     engineMaxMemoryInMb: engineMaxMemory,
     appDocumentsDirectory: appDocumentsDirectory,
+    appSupportDirectory: appSupportDirectory,
   );
 }

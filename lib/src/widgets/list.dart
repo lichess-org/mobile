@@ -12,6 +12,7 @@ class ListSection extends StatelessWidget {
     required this.children,
     this.header,
     this.headerTrailing,
+    this.footer,
     this.margin,
     this.hasLeading = false,
     this.showDividerBetweenTiles = false,
@@ -31,6 +32,7 @@ class ListSection extends StatelessWidget {
   }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
        headerTrailing = null,
        header = header ? const SizedBox.shrink() : null,
+       footer = null,
        showDividerBetweenTiles = false,
        dense = false,
        materialFilledCard = false,
@@ -51,6 +53,9 @@ class ListSection extends StatelessWidget {
 
   /// A widget to show at the end of the header.
   final Widget? headerTrailing;
+
+  /// A widget to show at the end of the section.
+  final Widget? footer;
 
   final EdgeInsetsGeometry? margin;
 
@@ -141,6 +146,7 @@ class ListSection extends StatelessWidget {
                     ...ListTile.divideTiles(context: context, tiles: children)
                   else
                     ...children,
+                  if (footer != null) footer!,
                   const SizedBox(height: materialVerticalPadding),
                 ],
               ),
@@ -227,6 +233,8 @@ class ListSection extends StatelessWidget {
                     additionalDividerMargin: cupertinoAdditionalDividerMargin,
                     children: children,
                   ),
+                  if (footer != null)
+                    Padding(padding: const EdgeInsets.only(top: 6.0), child: footer),
                 ],
               ),
             );

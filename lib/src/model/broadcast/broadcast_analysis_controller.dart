@@ -76,6 +76,16 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   @override
   Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
+    ref.onDispose(() {
+      _key = null;
+      _subscription?.cancel();
+      _socketOpenSubscription?.cancel();
+      _startEngineEvalTimer?.cancel();
+      _appLifecycleListener?.dispose();
+      _syncDebouncer.cancel();
+      disposeEngineEvaluation();
+    });
+
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastAnalysisController.broadcastSocketUri(roundId));
@@ -101,16 +111,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
         }
       },
     );
-
-    ref.onDispose(() {
-      _key = null;
-      _subscription?.cancel();
-      _socketOpenSubscription?.cancel();
-      _startEngineEvalTimer?.cancel();
-      _appLifecycleListener?.dispose();
-      _syncDebouncer.cancel();
-      disposeEngineEvaluation();
-    });
 
     final pgn = await ref.withClient(
       (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),

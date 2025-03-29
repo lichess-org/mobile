@@ -12,6 +12,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
+// final RegExp _stockfishVersion = RegExp(r'Stockfish (\d+)');
+
 class EngineDepth extends ConsumerWidget {
   const EngineDepth({this.savedEval});
 
@@ -35,6 +37,22 @@ class EngineDepth extends ConsumerWidget {
       fontFeatures: const [FontFeature.tabularFigures()],
       fontSize: 11,
     );
+
+    // String? evaluationFunctionLabel;
+    // if (engineName.startsWith('Stockfish 11')) {
+    //   evaluationFunctionLabel = 'HCE';
+    // } else if (engineName.startsWith('Fairy-Stockfish')) {
+    //   evaluationFunctionLabel = 'HCE';
+    // } else {
+    //   final versionMatch = _stockfishVersion.firstMatch(engineName);
+    //   final version =
+    //       versionMatch != null && versionMatch.group(1) != null
+    //           ? int.tryParse(versionMatch.group(1)!)
+    //           : null;
+    //   if (version != null && version >= 17) {
+    //     evaluationFunctionLabel = 'NNUE';
+    //   }
+    // }
 
     return AppBarIconButton(
       semanticsLabel: switch (eval) {
@@ -252,9 +270,12 @@ class _StockfishInfo extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
 
+    // default name is Stockfish 11 64 POPCNT, so we remove the POPCNT part
+    final fixedEngineName = engineName.startsWith('Stockfish 11') ? 'Stockfish 11' : engineName;
+
     return PlatformListTile(
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-      title: Text(engineName),
+      title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),
     );
   }

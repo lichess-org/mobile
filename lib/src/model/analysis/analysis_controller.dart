@@ -89,6 +89,11 @@ class AnalysisController extends _$AnalysisController
   Future<AnalysisState> build(AnalysisOptions options) async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
+    ref.onDispose(() {
+      disposeEngineEvaluation();
+      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
+    });
+
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
     isOnline(ref.read(defaultClientProvider)).then((online) {
@@ -199,13 +204,6 @@ class AnalysisController extends _$AnalysisController
     if (isEngineAllowed) {
       initEngineEvaluation();
     }
-
-    ref.onDispose(() {
-      if (isEngineAllowed) {
-        disposeEngineEvaluation();
-      }
-      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
-    });
 
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 

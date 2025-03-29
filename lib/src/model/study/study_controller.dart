@@ -66,15 +66,15 @@ class StudyController extends _$StudyController
 
   @override
   Future<StudyState> build(StudyId id) async {
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
-
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
       disposeEngineEvaluation();
     });
+
+    final socketPool = ref.watch(socketPoolProvider);
+    _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
 
     final chapter = await _fetchChapter(id);
 
