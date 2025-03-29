@@ -386,15 +386,13 @@ class _FeaturedGame extends ConsumerWidget {
                 side: Side.black,
               );
 
-              return GestureDetector(
-                child: BoardThumbnail(
-                  size: boardSize,
-                  orientation: featuredGame.orientation,
-                  fen: game.lastPosition.fen,
-                  header: featuredGame.orientation == Side.white ? blackPlayer : whitePlayer,
-                  footer: featuredGame.orientation == Side.white ? whitePlayer : blackPlayer,
-                  lastMove: game.lastMove,
-                ),
+              return BoardThumbnail(
+                size: boardSize,
+                orientation: featuredGame.orientation,
+                fen: game.lastPosition.fen,
+                header: featuredGame.orientation == Side.white ? blackPlayer : whitePlayer,
+                footer: featuredGame.orientation == Side.white ? whitePlayer : blackPlayer,
+                lastMove: game.lastMove,
               );
             }
           case _:
