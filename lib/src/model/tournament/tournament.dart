@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -239,7 +240,7 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
   );
 }
 
-typedef StandingSheet = ({bool fire, String scores});
+typedef StandingSheet = ({bool fire, IList<int> scores});
 
 @freezed
 class StandingPlayer with _$StandingPlayer {
@@ -269,7 +270,8 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
     score: pick('score').asIntOrThrow(),
     sheet: (
       fire: pick('sheet', 'fire').asBoolOrFalse(),
-      scores: pick('sheet', 'scores').asStringOrThrow(),
+      scores:
+          pick('sheet', 'scores').asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
     ),
     withdraw: pick('withdraw').asBoolOrFalse(),
   );

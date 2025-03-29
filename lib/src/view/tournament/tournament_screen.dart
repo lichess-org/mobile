@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -160,6 +161,7 @@ class _Standing extends ConsumerWidget {
         ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, i) {
             final player = standing.players.getOrNull(i);
             return player != null
@@ -191,46 +193,65 @@ class _StandingPlayer extends StatelessWidget {
                 ? ColorScheme.of(context).surfaceContainerLow
                 : ColorScheme.of(context).surfaceContainerHigh,
         child: Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 12, right: 8, left: 4),
+          padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 2),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 5,
             children: [
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      WidgetSpan(
-                        child: SizedBox(
-                          width: 30,
-                          child:
-                              player.withdraw
-                                  ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
-                                  : Text('$rank', textAlign: TextAlign.center),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: UserFullNameWidget(
-                          user: player.user,
-                          rating: player.rating,
-                          provisional: player.provisional,
-                          shouldShowOnline: false,
-                          showFlair: false,
-                          showPatron: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              SizedBox(
+                width: 30,
+                child:
+                    player.withdraw
+                        ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
+                        : Text('$rank', textAlign: TextAlign.center),
               ),
-              if (player.sheet.fire) ...[
-                const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
-                const SizedBox(width: 5),
-              ],
-              Text('${player.score}'),
+              UserFullNameWidget(
+                user: player.user,
+                rating: player.rating,
+                provisional: player.provisional,
+                shouldShowOnline: false,
+                showFlair: false,
+                showPatron: false,
+              ),
+              Expanded(child: _Scores(player.sheet.scores)),
+              Visibility.maintain(
+                visible: player.sheet.fire,
+                child: const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
+              ),
+              Text('${player.score}', style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Scores extends StatelessWidget {
+  const _Scores(this.scores);
+
+  final IList<int> scores;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.end,
+      children: scores.reversed
+          .map(
+            (score) => Text(
+              softWrap: false,
+              '$score',
+              style: TextStyle(
+                color:
+                    score >= 4
+                        ? LichessColors.brag
+                        : score > 1
+                        ? LichessColors.good
+                        : LichessColors.grey,
+              ),
+            ),
+          )
+          .toList(growable: false),
     );
   }
 }
