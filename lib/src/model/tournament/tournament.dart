@@ -234,6 +234,8 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
     featuredGame: pick('featured').asFeaturedGameOrNull(),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
+    timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
+    timeToFinish: pick('secondsToFinish').asDurationFromSecondsOrNull(),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
