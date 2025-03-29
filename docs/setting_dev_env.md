@@ -45,7 +45,7 @@ If you work with a local lila, you will also need to setup [lila-ws](https://git
 
 ### lila-gitpod
 
-The fastest and most straight-forward way to run you own lila is [lila-gitpod](https://github.com/lichess-org/lila-gitpod).
+The fastest and most straight-forward way to run your own lila is [lila-gitpod](https://github.com/lichess-org/lila-gitpod).
 
 ### lila-docker
 
