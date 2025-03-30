@@ -352,7 +352,7 @@ class GameController extends _$GameController {
   }
 
   void berserk() {
-    if (state.valueOrNull?.canBerserk == true) {
+    if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
       _socketClient.send('berserk', null);
     }
   }
@@ -1012,8 +1012,8 @@ class GameState with _$GameState {
       game.meta.tournament?.berserkable == true &&
       game.playable &&
       game.steps.length <= 2 &&
-      game.youAre != null &&
-      game.playerOf(game.youAre!).berserk != true;
+      game.youAre != null;
+  bool get hasBerserked => game.youAre != null && game.playerOf(game.youAre!).berserk == true;
 
   bool get canGetNewOpponent =>
       !game.playable &&
