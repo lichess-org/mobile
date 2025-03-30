@@ -45,10 +45,14 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
+    final showBestMoveArrow =
+        analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+    final showAnnotations =
+        analysisState.isComputerAnalysisAllowedAndEnabled && analysisPrefs.showAnnotations;
     final currentNode = analysisState.currentNode;
 
     final bestMoves =
-        analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow
+        showBestMoveArrow
             ? pickBestMoves(
               localBestMoves: ref.watch(
                 engineEvaluationProvider.select((value) => value.eval?.bestMoves),
@@ -65,10 +69,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             )
             : ISet();
 
-    final annotation =
-        analysisState.isComputerAnalysisAllowedAndEnabled && analysisPrefs.showAnnotations
-            ? makeAnnotation(currentNode.nags)
-            : null;
+    final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
     return Chessboard(
