@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 
 typedef FullEventTestClock =
     ({
@@ -29,6 +30,7 @@ String makeFullEvent(
     black: Duration(minutes: 3),
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
+  TournamentMeta? tournament,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
   final clockStr =
@@ -57,27 +59,43 @@ String makeFullEvent(
 '''
           : '';
 
+  final tournamentStr =
+      tournament != null
+          ? '''
+    "tournament": {
+      "id": "${tournament.id}",
+      "name": "${tournament.name}",
+      "secondsLeft": ${tournament.timeLeft.inSeconds},
+      "berserkable": ${tournament.berserkable},
+      "ranks": {
+        "white": ${tournament.ranks.white},
+        "black": ${tournament.ranks.black}
+      }
+    },
+  '''
+          : '';
+
   return '''
 {
   "t": "full",
   "d": {
     "game": {
       "id": "$id",
-        "variant": {
-          "key": "standard",
-          "name": "Standard",
-          "short": "Std"
-        },
-        "speed": "${clock != null ? 'blitz' : 'correspondence'}",
-        "perf": "${clock != null ? 'blitz' : 'correspondence'}",
-        "rated": false,
-        "source": "lobby",
-        "status": {
-          "id": 20,
-          "name": "started"
-        },
-        "createdAt": 1685698678928,
-        "pgn": "$pgn"
+      "variant": {
+        "key": "standard",
+        "name": "Standard",
+        "short": "Std"
+      },
+      "speed": "${clock != null ? 'blitz' : 'correspondence'}",
+      "perf": "${clock != null ? 'blitz' : 'correspondence'}",
+      "rated": false,
+      "source": "lobby",
+      "status": {
+        "id": 20,
+        "name": "started"
+      },
+      "createdAt": 1685698678928,
+      "pgn": "$pgn"
     },
     "white": {
       "user": {
@@ -100,6 +118,7 @@ String makeFullEvent(
     $clockStr
     $correspondenceClockStr
     $youAreStr
+    $tournamentStr
     "socket": $socketVersion,
     "expiration": {
       "idleMillis": 245,
