@@ -1018,6 +1018,7 @@ class GameState with _$GameState {
       game.steps.length <= 2 &&
       game.youAre != null &&
       game.playerOf(game.youAre!).berserk != true;
+  bool get hasBerserked => game.youAre != null && game.playerOf(game.youAre!).berserk == true;
 
   bool get canGetNewOpponent =>
       !game.playable &&

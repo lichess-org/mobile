@@ -476,11 +476,14 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: Icons.info_outline,
               ),
-            if (gameState.canBerserk)
+            if (gameState.tournament?.berserkable == true && gameState.game.steps.length < 2)
               BottomBarButton(
                 // TODO l10n
                 label: 'Berserk',
-                onTap: () => ref.read(gameControllerProvider(id).notifier).berserk(),
+                onTap:
+                    gameState.canBerserk
+                        ? ref.read(gameControllerProvider(id).notifier).berserk
+                        : null,
                 icon: LichessIcons.body_cut,
               ),
             if (gameState.game.playable && gameState.game.opponent?.offeringDraw == true)
