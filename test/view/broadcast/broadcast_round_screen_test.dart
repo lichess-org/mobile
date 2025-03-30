@@ -716,6 +716,7 @@ const _finishedTournamentResponse = '''
 
 const _finishedRoundResponse = '''
 {
+  "socketVersion":10,
   "round": {
     "id": "S5VCwuVn",
     "name": "Final - Tie-breaks",
@@ -1033,6 +1034,7 @@ const _upcomingTournamentResponse = r'''
 
 const _upcomingRoundResponse = r'''
 {
+  "socketVersion":10,
   "round": {
     "id": "UN587WBI",
     "name": "Round 1",
@@ -1127,6 +1129,7 @@ const _liveTournamentResponse = '''
 
 const _liveRoundResponse = '''
 {
+  "socketVersion":10,
   "round": {
     "id": "00000000",
     "name": "Test round",
