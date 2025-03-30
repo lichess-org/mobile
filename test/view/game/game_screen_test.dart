@@ -299,15 +299,15 @@ void main() {
 
       expect(await hasBerserkedFuture, true);
 
-      // We have berserked, which caused the berserk icon appear next to our name,
-      // but the berserk button in the bottom bar disappeared.
-      expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
+      // We have berserked, which caused the berserk icon appear next to our name.
+      // Also, the berserk button is still there (but disabled).
+      expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
 
       // opponent berserks
       fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "black"}''']);
       await tester.pump();
 
-      expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
+      expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(3));
     });
   });
 
