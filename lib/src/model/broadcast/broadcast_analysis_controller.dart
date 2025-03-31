@@ -597,7 +597,7 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs) || currentNode.serverEval != null;
+      isEngineAvailable(prefs) || (isComputerAnalysisEnabled && currentNode.serverEval != null);
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
