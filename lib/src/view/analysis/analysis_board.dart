@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class AnalysisBoard extends ConsumerStatefulWidget {
@@ -67,12 +68,13 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
-    return Chessboard(
+    return InteractiveBoardWidget(
+      boardPrefs: boardPrefs,
       size: widget.boardSize,
       fen: analysisState.currentPosition.fen,
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
-      game: GameData(
+      gameData: GameData(
         playerSide:
             analysisState.currentPosition.isGameOver
                 ? PlayerSide.none

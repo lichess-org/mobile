@@ -35,6 +35,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -328,12 +329,13 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
             )
             : ISet();
 
-    return Chessboard(
+    return InteractiveBoardWidget(
       size: widget.boardSize,
+      boardPrefs: boardPrefs,
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
-      game: GameData(
+      gameData: GameData(
         playerSide:
             broadcastAnalysisState.position.isGameOver
                 ? PlayerSide.none
