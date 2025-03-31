@@ -312,7 +312,8 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params, {required bool isMainline}) {
   final children = _filteredChildren(node, params.shouldShowComputerAnalysis);
   return isMainline && params.displayMode == PgnTreeDisplayMode.twoColumn
-      ? children.length >= 2 || node.children.firstOrNull?.hasTextComment == true
+      ? children.length >= 2 ||
+          (params.shouldShowComputerVariations && children.firstOrNull?.hasTextComment == true)
       : children.length > 2 || (children.length == 2 && !_displaySideLineAsInline(children[1]));
 }
 
