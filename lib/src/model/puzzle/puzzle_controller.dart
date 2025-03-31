@@ -567,6 +567,4 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
 
   NormalMove get _nextSolutionMove =>
       NormalMove.fromUci(puzzle.puzzle.solution[currentPath.size - initialPath.size]);
-
-  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(currentPosition);
 }

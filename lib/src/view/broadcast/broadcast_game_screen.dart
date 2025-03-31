@@ -35,7 +35,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -329,22 +328,20 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
             )
             : ISet();
 
-    return InteractiveBoardWidget(
+    return Chessboard(
       size: widget.boardSize,
-      boardPrefs: boardPrefs,
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
-      gameData: GameData(
+      game: boardPrefs.toGameData(
+        variant: Variant.standard,
+        position: broadcastAnalysisState.position,
         playerSide:
             broadcastAnalysisState.position.isGameOver
                 ? PlayerSide.none
                 : broadcastAnalysisState.position.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights && broadcastAnalysisState.position.isCheck,
-        sideToMove: broadcastAnalysisState.position.turn,
-        validMoves: broadcastAnalysisState.validMoves,
         promotionMove: broadcastAnalysisState.promotionMove,
         onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),

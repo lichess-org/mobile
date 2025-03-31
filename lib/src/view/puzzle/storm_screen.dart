@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
@@ -149,7 +150,9 @@ class _Body extends ConsumerWidget {
                   orientation: stormState.pov,
                   lastMove: stormState.lastMove as NormalMove?,
                   fen: stormState.position.fen,
-                  gameData: GameData(
+                  interactiveBoardParams: (
+                    position: stormState.position,
+                    variant: Variant.standard,
                     playerSide:
                         !stormState.firstMovePlayed ||
                                 stormState.mode == StormMode.ended ||
@@ -158,15 +161,13 @@ class _Body extends ConsumerWidget {
                             : stormState.pov == Side.white
                             ? PlayerSide.white
                             : PlayerSide.black,
-                    isCheck: boardPreferences.boardHighlights && stormState.position.isCheck,
-                    sideToMove: stormState.position.turn,
-                    validMoves: stormState.validMoves,
                     promotionMove: stormState.promotionMove,
                     onMove:
                         (move, {isDrop, captured}) =>
                             ref.read(ctrlProvider.notifier).onUserMove(move),
                     onPromotionSelection:
                         (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                    premovable: null,
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),

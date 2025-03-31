@@ -140,7 +140,6 @@ class _BodyState extends ConsumerState<_Body> {
     final offlineOngoingGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
 
     final position = game.positionAt(stepCursor);
-    final sideToMove = position.turn;
     final youAre = game.youAre;
 
     final black = GamePlayer(
@@ -192,23 +191,22 @@ class _BodyState extends ConsumerState<_Body> {
             bottom: false,
             child: BoardTable(
               orientation: isBoardTurned ? youAre!.opposite : youAre!,
-              fen: position.fen,
               lastMove: game.moveAt(stepCursor) as NormalMove?,
-              gameData: GameData(
+              interactiveBoardParams: (
+                variant: game.meta.variant,
+                position: position,
                 playerSide:
                     game.playable && !isReplaying
                         ? youAre == Side.white
                             ? PlayerSide.white
                             : PlayerSide.black
                         : PlayerSide.none,
-                isCheck: position.isCheck,
-                sideToMove: sideToMove,
-                validMoves: makeLegalMoves(position, isChess960: game.variant == Variant.chess960),
                 promotionMove: promotionMove,
-                onMove: (move, {isDrop, captured}) {
+                onMove: (move, {isDrop}) {
                   onUserMove(move);
                 },
                 onPromotionSelection: onPromotionSelection,
+                premovable: null,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,

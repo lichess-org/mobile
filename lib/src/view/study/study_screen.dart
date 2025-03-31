@@ -34,7 +34,6 @@ import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -541,9 +540,8 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     final sanMove = currentNode.sanMove;
     final annotation = makeAnnotation(studyState.currentNode.nags);
 
-    return InteractiveBoardWidget(
+    return Chessboard(
       size: widget.boardSize,
-      boardPrefs: boardPrefs,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
@@ -567,13 +565,12 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
                   ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
               : null,
-      gameData:
+      game:
           position != null
-              ? GameData(
+              ? boardPrefs.toGameData(
+                variant: studyState.variant,
+                position: position,
                 playerSide: studyState.playerSide,
-                isCheck: position.isCheck,
-                sideToMove: position.turn,
-                validMoves: makeLegalMoves(position),
                 promotionMove: studyState.promotionMove,
                 onMove: (move, {isDrop, captured}) {
                   ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);

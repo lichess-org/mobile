@@ -965,12 +965,8 @@ class GameState with _$GameState {
     GameFullId? redirectGameId,
   }) = _GameState;
 
-  /// The [Position] and its legal moves at the current cursor.
-  (Position, IMap<Square, ISet<Square>>) get currentPosition {
-    final position = game.positionAt(stepCursor);
-    final legalMoves = makeLegalMoves(position, isChess960: game.meta.variant == Variant.chess960);
-    return (position, legalMoves);
-  }
+  /// The [Position] at the current cursor.
+  Position get currentPosition => game.positionAt(stepCursor);
 
   /// Whether the zen mode is active
   bool get isZenModeActive => game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;

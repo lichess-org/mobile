@@ -503,9 +503,6 @@ class StudyState with _$StudyState implements EvaluationMixinState {
     IList<PgnComment>? pgnRootComments,
   }) = _StudyState;
 
-  IMap<Square, ISet<Square>> get validMoves =>
-      currentNode.position != null ? makeLegalMoves(currentNode.position!) : const IMap.empty();
-
   @override
   bool get delayLocalEngine => false;
 

@@ -100,7 +100,7 @@ class _Body extends ConsumerWidget {
                     onSelectedItemChanged: (CastlingMethod? value) {
                       ref
                           .read(boardPreferencesProvider.notifier)
-                          .setCastlingMethod(value ?? CastlingMethod.either);
+                          .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
                     },
                   );
                 } else {
@@ -318,7 +318,9 @@ class CastlingMethodSettingsScreen extends ConsumerWidget {
     );
 
     void onChanged(CastlingMethod? value) {
-      ref.read(boardPreferencesProvider.notifier).setCastlingMethod(value ?? CastlingMethod.either);
+      ref
+          .read(boardPreferencesProvider.notifier)
+          .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
     }
 
     return CupertinoPageScaffold(

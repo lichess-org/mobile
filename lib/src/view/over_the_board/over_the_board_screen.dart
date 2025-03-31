@@ -61,8 +61,6 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
-    final boardPreferences = ref.watch(boardPreferencesProvider);
-
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
 
     ref.listen(overTheBoardClockProvider.select((value) => value.flagSide), (previous, flagSide) {
@@ -121,16 +119,15 @@ class _BodyState extends ConsumerState<_Body> {
                   orientation: orientation,
                   fen: gameState.currentPosition.fen,
                   lastMove: gameState.lastMove,
-                  gameData: GameData(
-                    isCheck: boardPreferences.boardHighlights && gameState.currentPosition.isCheck,
+                  interactiveBoardParams: (
+                    variant: gameState.game.meta.variant,
+                    position: gameState.currentPosition,
                     playerSide:
                         gameState.game.finished
                             ? PlayerSide.none
                             : gameState.turn == Side.white
                             ? PlayerSide.white
                             : PlayerSide.black,
-                    sideToMove: gameState.turn,
-                    validMoves: gameState.legalMoves,
                     onPromotionSelection:
                         ref.read(overTheBoardGameControllerProvider.notifier).onPromotionSelection,
                     promotionMove: gameState.promotionMove,
@@ -140,6 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
                           .onMove(newSideToMove: gameState.turn.opposite);
                       ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                     },
+                    premovable: null,
                   ),
                   moves: gameState.moves,
                   currentMoveIndex: gameState.stepCursor,

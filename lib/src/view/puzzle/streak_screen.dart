@@ -120,9 +120,10 @@ class _Body extends ConsumerWidget {
             child: SafeArea(
               child: BoardTable(
                 orientation: puzzleState.pov,
-                fen: puzzleState.fen,
                 lastMove: puzzleState.lastMove as NormalMove?,
-                gameData: GameData(
+                interactiveBoardParams: (
+                  variant: Variant.standard,
+                  position: puzzleState.currentPosition,
                   playerSide:
                       puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
                           ? PlayerSide.none
@@ -131,9 +132,6 @@ class _Body extends ConsumerWidget {
                           : puzzleState.pov == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                  isCheck: puzzleState.currentPosition.isCheck,
-                  sideToMove: puzzleState.currentPosition.turn,
-                  validMoves: puzzleState.validMoves,
                   promotionMove: puzzleState.promotionMove,
                   onMove: (move, {isDrop, captured}) {
                     ref.read(ctrlProvider.notifier).onUserMove(move);
@@ -141,6 +139,7 @@ class _Body extends ConsumerWidget {
                   onPromotionSelection: (role) {
                     ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                   },
+                  premovable: null,
                 ),
                 topTable: Center(
                   child: Padding(

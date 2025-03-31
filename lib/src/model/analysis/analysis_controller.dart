@@ -716,9 +716,6 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
 
-  IMap<Square, ISet<Square>> get validMoves =>
-      makeLegalMoves(currentNode.position, isChess960: variant == Variant.chess960);
-
   /// Whether to delay the local engine evaluation.
   ///
   /// Cloud evaluations are most likely available for the opening moves.
