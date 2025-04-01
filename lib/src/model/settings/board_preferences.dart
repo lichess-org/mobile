@@ -1,7 +1,10 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -41,6 +44,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
+  Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
+    return save(state.copyWith(castlingMethod: castlingMethod));
   }
 
   Future<void> toggleHapticFeedback() {
@@ -125,6 +132,11 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     required ClockPosition clockPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(
+      defaultValue: CastlingMethod.kingOverRook,
+      unknownEnumValue: CastlingMethod.kingOverRook,
+    )
+    required CastlingMethod castlingMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -150,6 +162,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     pieceShiftMethod: PieceShiftMethod.either,
+    castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
@@ -184,12 +197,67 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     );
   }
 
+  GameData toGameData({
+    required Variant variant,
+    required Position position,
+    required PlayerSide playerSide,
+    required NormalMove? promotionMove,
+    required void Function(NormalMove, {bool? isDrop}) onMove,
+    required void Function(Role? role) onPromotionSelection,
+    Premovable? premovable,
+  }) {
+    return GameData(
+      playerSide: playerSide,
+      onMove: onMove,
+      onPromotionSelection: onPromotionSelection,
+      premovable: premovable,
+      promotionMove: promotionMove,
+      sideToMove: position.turn,
+      validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
+      isCheck: boardHighlights && position.isCheck,
+    );
+  }
+
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
     return _$BoardPrefsFromJson(json);
   }
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
+}
+
+IMap<Square, ISet<Square>> _makeLegalMoves(
+  Position pos, {
+  required CastlingMethod castlingMethod,
+  required Variant variant,
+}) {
+  final Map<Square, ISet<Square>> result = {};
+  for (final entry in pos.legalMoves.entries) {
+    final dests = entry.value.squares;
+    if (dests.isNotEmpty) {
+      final from = entry.key;
+      final destSet = dests.toSet();
+      if (variant != Variant.chess960 &&
+          from == pos.board.kingOf(pos.turn) &&
+          entry.key.file == 4) {
+        if (dests.contains(Square.a1)) {
+          destSet.add(Square.c1);
+        } else if (dests.contains(Square.a8)) {
+          destSet.add(Square.c8);
+        }
+        if (dests.contains(Square.h1)) {
+          destSet.add(Square.g1);
+        } else if (dests.contains(Square.h8)) {
+          destSet.add(Square.g8);
+        }
+        if (castlingMethod == CastlingMethod.kingTwoSquares) {
+          destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
+        }
+      }
+      result[from] = ISet(destSet);
+    }
+  }
+  return IMap(result);
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
@@ -344,6 +412,19 @@ enum ClockPosition {
   String get label => switch (this) {
     ClockPosition.left => 'Left',
     ClockPosition.right => 'Right',
+  };
+}
+
+enum CastlingMethod {
+  /// Allow castling by moving either the king over the rook or two squares (to match lichess website).
+  kingOverRook,
+
+  /// Allow castling only by moving the king two squares.
+  kingTwoSquares;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    CastlingMethod.kingOverRook => l10n.preferencesCastleByMovingOntoTheRook,
+    CastlingMethod.kingTwoSquares => l10n.preferencesCastleByMovingTwoSquares,
   };
 }
 

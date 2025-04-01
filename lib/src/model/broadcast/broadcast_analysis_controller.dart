@@ -578,8 +578,6 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
     IList<PgnComment>? pgnRootComments,
   }) = _BroadcastGameState;
 
-  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(currentNode.position);
-
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;

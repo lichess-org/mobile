@@ -72,16 +72,15 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       fen: analysisState.currentPosition.fen,
       lastMove: analysisState.lastMove as NormalMove?,
       orientation: analysisState.pov,
-      game: GameData(
+      game: boardPrefs.toGameData(
+        variant: analysisState.variant,
+        position: analysisState.currentPosition,
         playerSide:
             analysisState.currentPosition.isGameOver
                 ? PlayerSide.none
                 : analysisState.currentPosition.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights && analysisState.currentPosition.isCheck,
-        sideToMove: analysisState.currentPosition.turn,
-        validMoves: analysisState.validMoves,
         promotionMove: analysisState.promotionMove,
         onMove:
             (move, {isDrop, captured}) => ref

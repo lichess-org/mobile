@@ -145,9 +145,6 @@ class OverTheBoardGameState with _$OverTheBoardGameState {
   NormalMove? get lastMove =>
       stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
 
-  IMap<Square, ISet<Square>> get legalMoves =>
-      makeLegalMoves(currentPosition, isChess960: game.meta.variant == Variant.chess960);
-
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);
   }

@@ -567,11 +567,10 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
               : null,
       game:
           position != null
-              ? GameData(
+              ? boardPrefs.toGameData(
+                variant: studyState.variant,
+                position: position,
                 playerSide: studyState.playerSide,
-                isCheck: position.isCheck,
-                sideToMove: position.turn,
-                validMoves: makeLegalMoves(position),
                 promotionMove: studyState.promotionMove,
                 onMove: (move, {isDrop, captured}) {
                   ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);

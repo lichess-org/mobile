@@ -2,15 +2,26 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
+
+typedef InteractiveBoardParams =
+    ({
+      Variant variant,
+      Position position,
+      PlayerSide playerSide,
+      NormalMove? promotionMove,
+      void Function(NormalMove, {bool? isDrop}) onMove,
+      void Function(Role? role) onPromotionSelection,
+      Premovable? premovable,
+    });
 
 /// Board layout that adapts to screen size and aspect ratio.
 ///
@@ -25,9 +36,9 @@ import 'package:lichess_mobile/src/widgets/move_list.dart';
 class BoardTable extends ConsumerStatefulWidget {
   /// Creates a board table with the given values.
   const BoardTable({
-    required this.fen,
     required this.orientation,
-    this.gameData,
+    this.fen,
+    this.interactiveBoardParams,
     this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
@@ -43,13 +54,16 @@ class BoardTable extends ConsumerStatefulWidget {
     this.boardKey,
     this.zenMode = false,
     super.key,
-  });
+  }) : assert(
+         fen != null || interactiveBoardParams != null,
+         'Either a fen or interactiveBoardParams must be provided',
+       );
 
   /// Creates an empty board table (useful for loading).
   const BoardTable.empty({this.moves, this.showEngineGaugePlaceholder = false, this.errorMessage})
-    : fen = kEmptyBoardFEN,
-      orientation = Side.white,
-      gameData = null,
+    : orientation = Side.white,
+      fen = kEmptyFen,
+      interactiveBoardParams = null,
       lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
@@ -62,11 +76,11 @@ class BoardTable extends ConsumerStatefulWidget {
       boardKey = null,
       zenMode = false;
 
-  final String fen;
+  final String? fen;
+
+  final InteractiveBoardParams? interactiveBoardParams;
 
   final Side orientation;
-
-  final GameData? gameData;
 
   final Move? lastMove;
 
@@ -147,6 +161,20 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final shapes = userShapes.union(widget.shapes ?? ISet());
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
+        final fen = widget.interactiveBoardParams?.position.fen ?? widget.fen!;
+        final gameData =
+            widget.interactiveBoardParams != null
+                ? boardPrefs.toGameData(
+                  variant: widget.interactiveBoardParams!.variant,
+                  position: widget.interactiveBoardParams!.position,
+                  playerSide: widget.interactiveBoardParams!.playerSide,
+                  promotionMove: widget.interactiveBoardParams!.promotionMove,
+                  onMove: widget.interactiveBoardParams!.onMove,
+                  onPromotionSelection: widget.interactiveBoardParams!.onPromotionSelection,
+                  premovable: widget.interactiveBoardParams!.premovable,
+                )
+                : null;
+
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
               constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
@@ -163,10 +191,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               children: [
                 _BoardWidget(
                   size: boardSize,
-                  boardPrefs: boardPrefs,
-                  fen: widget.fen,
+                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: widget.gameData,
+                  gameData: gameData,
                   lastMove: widget.lastMove,
                   shapes: shapes,
                   settings: settings,
@@ -263,10 +290,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         : EdgeInsets.zero,
                 child: _BoardWidget(
                   size: boardSize,
-                  boardPrefs: boardPrefs,
-                  fen: widget.fen,
+                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: widget.gameData,
+                  gameData: gameData,
                   lastMove: widget.lastMove,
                   shapes: shapes,
                   settings: settings,
@@ -313,25 +339,23 @@ class _BoardTableState extends ConsumerState<BoardTable> {
 class _BoardWidget extends StatelessWidget {
   const _BoardWidget({
     required this.size,
-    required this.boardPrefs,
     required this.fen,
     required this.orientation,
     required this.gameData,
-    required this.lastMove,
-    required this.shapes,
+    this.lastMove,
+    this.shapes,
     required this.settings,
-    required this.boardOverlay,
-    required this.error,
+    this.boardOverlay,
+    this.error,
     this.boardKey,
   });
 
   final double size;
-  final BoardPrefs boardPrefs;
   final String fen;
   final Side orientation;
   final GameData? gameData;
   final Move? lastMove;
-  final ISet<Shape> shapes;
+  final ISet<Shape>? shapes;
   final ChessboardSettings settings;
   final String? error;
   final Widget? boardOverlay;
@@ -394,10 +418,7 @@ class _ErrorWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
-                      : ColorScheme.of(context).surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),

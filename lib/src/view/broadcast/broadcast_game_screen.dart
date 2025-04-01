@@ -333,16 +333,15 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       fen: broadcastAnalysisState.position.fen,
       lastMove: broadcastAnalysisState.lastMove as NormalMove?,
       orientation: broadcastAnalysisState.pov,
-      game: GameData(
+      game: boardPrefs.toGameData(
+        variant: Variant.standard,
+        position: broadcastAnalysisState.position,
         playerSide:
             broadcastAnalysisState.position.isGameOver
                 ? PlayerSide.none
                 : broadcastAnalysisState.position.turn == Side.white
                 ? PlayerSide.white
                 : PlayerSide.black,
-        isCheck: boardPrefs.boardHighlights && broadcastAnalysisState.position.isCheck,
-        sideToMove: broadcastAnalysisState.position.turn,
-        validMoves: broadcastAnalysisState.validMoves,
         promotionMove: broadcastAnalysisState.promotionMove,
         onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),

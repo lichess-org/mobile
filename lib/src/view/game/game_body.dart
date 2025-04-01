@@ -112,7 +112,6 @@ class GameBody extends ConsumerWidget {
             (prev, state) => _chatListener(prev, state, context: context, ref: ref),
           );
         }
-        final (position, legalMoves) = gameState.currentPosition;
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
         final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
@@ -249,18 +248,16 @@ class GameBody extends ConsumerWidget {
                         blindfoldMode: blindfoldMode,
                       ),
                       orientation: isBoardTurned ? youAre.opposite : youAre,
-                      fen: position.fen,
                       lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                      gameData: GameData(
+                      interactiveBoardParams: (
+                        variant: gameState.game.meta.variant,
+                        position: gameState.currentPosition,
                         playerSide:
                             gameState.game.playable && !gameState.isReplaying
                                 ? youAre == Side.white
                                     ? PlayerSide.white
                                     : PlayerSide.black
                                 : PlayerSide.none,
-                        isCheck: boardPreferences.boardHighlights && position.isCheck,
-                        sideToMove: position.turn,
-                        validMoves: legalMoves,
                         promotionMove: gameState.promotionMove,
                         onMove: (move, {isDrop}) {
                           ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);

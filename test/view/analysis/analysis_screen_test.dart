@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -487,6 +488,99 @@ void main() {
       await tester.pump(kStartLocalEngineDebounceDelay);
       expect(find.byType(BoardShapeWidget), findsNothing);
     });
+  });
+
+  group('Castling', () {
+    const String castlingSetupPgn =
+        '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. d3 d6 5. Bd2 Bd7 6. Nc3 Nc6 7. Qe2 Qe7';
+
+    for (final castlingMethod in CastlingMethod.values) {
+      testWidgets('respect castling preference ($castlingMethod)', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(castlingMethod: castlingMethod).toJson(),
+            ),
+          },
+          home: const AnalysisScreen(
+            options: AnalysisOptions(
+              orientation: Side.white,
+              standalone: (
+                pgn: castlingSetupPgn,
+                isComputerAnalysisAllowed: false,
+                variant: Variant.standard,
+              ),
+              initialMoveCursor: 14,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+
+        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        await tester.pump();
+
+        switch (castlingMethod) {
+          case CastlingMethod.kingOverRook:
+            // kingOverRook acts as either kingTwoSquares or kingOverRook
+            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('h1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+          case CastlingMethod.kingTwoSquares:
+            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('h1-dest')), findsNothing);
+            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('a1-dest')), findsNothing);
+        }
+      });
+    }
+
+    for (final castlingMethod in CastlingMethod.values) {
+      testWidgets('Chess960 castling: $castlingMethod', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(castlingMethod: castlingMethod).toJson(),
+            ),
+          },
+          home: AnalysisScreen(
+            key: ValueKey(castlingMethod),
+            options: const AnalysisOptions(
+              orientation: Side.white,
+              standalone: (
+                pgn: castlingSetupPgn,
+                isComputerAnalysisAllowed: false,
+                variant: Variant.chess960,
+              ),
+              initialMoveCursor: 14,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byKey(const Key('e1-whiteking')));
+
+        await tester.pump();
+
+        // in chess960, castling is only king over rook, no matter the preference
+        expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('g1-dest')), findsNothing);
+        expect(find.byKey(const Key('h1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('c1-dest')), findsNothing);
+        expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+      });
+    }
   });
 }
 
