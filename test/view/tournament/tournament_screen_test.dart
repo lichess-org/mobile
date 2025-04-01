@@ -176,5 +176,89 @@ void main() {
       await tester.pump();
       expect(find.text('11-12 / 12'), findsOneWidget);
     });
+
+    testWidgets('Cannot join tournament if not logged in', (WidgetTester tester) async {
+      final mockRepository = MockTournamentRepository();
+      when(
+        () => mockRepository.getTournament(kTournament.id),
+      ).thenAnswer((_) async => kTournament.copyWith(standing: kFirstStandingPage));
+
+      const me = (rank: 11, gameId: null, withdraw: false, pauseDelay: null);
+      when(
+        () => mockRepository.reload(any(that: isOurTestTournament), standingsPage: 1),
+      ).thenAnswer((_) async => kTournament.copyWith(standing: kFirstStandingPage, me: me));
+
+      when(
+        () => mockRepository.reload(any(that: isOurTestTournament), standingsPage: 2),
+      ).thenAnswer((_) async => kTournament.copyWith(standing: kSecondStandingPage, me: me));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: kTournamentId),
+        overrides: [tournamentRepositoryProvider.overrideWith((ref) => mockRepository)],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for tournament data to load
+      await tester.pump();
+
+      expect(find.text('Sign in'), findsOneWidget);
+      expect(find.text('Join'), findsNothing);
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pump();
+
+      verifyNever(() => mockRepository.join(any()));
+    });
+
+    testWidgets('Cannot join tournament if not meeting entry conditions', (
+      WidgetTester tester,
+    ) async {
+      const name = 'tom-anders';
+      final user = LightUser(id: UserId.fromUserName(name), name: name);
+      final session = AuthSessionState(user: user, token: 'test-token');
+
+      final mockRepository = MockTournamentRepository();
+      when(() => mockRepository.getTournament(kTournament.id)).thenAnswer(
+        (_) async => kTournament.copyWith(
+          standing: kFirstStandingPage,
+          verdicts: (
+            list:
+                [
+                  (condition: 'condition1', ok: true),
+                  (condition: 'condition2', ok: false),
+                ].toIList(),
+            accepted: false,
+          ),
+        ),
+      );
+
+      final fakeSocket = FakeWebSocketChannel();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: kTournamentId),
+        userSession: session,
+        overrides: [
+          tournamentRepositoryProvider.overrideWith((ref) => mockRepository),
+          webSocketChannelFactoryProvider.overrideWith((ref) {
+            return FakeWebSocketChannelFactory((_) => fakeSocket);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for tournament data to load
+      await tester.pump();
+
+      expect(find.text('Join'), findsOneWidget);
+
+      expect(find.text('condition1'), findsOneWidget);
+      expect(find.text('condition2'), findsOneWidget);
+
+      await tester.tap(find.text('Join'));
+      await tester.pump();
+
+      verifyNever(() => mockRepository.join(any()));
+    });
   });
 }
