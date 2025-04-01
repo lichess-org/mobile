@@ -1,2 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ټولې لوبې</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">ایا تاسو ډاډه یاست?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">د بیرته اخیستلو وړاندیز لغوه کړئ</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">روښانه</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">خوندي شوي حرکت پاک کړئ</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">يوځلی بيا</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">فیډبیک</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">سلام، %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">سلام</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">توپیر پټ کړئ</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">کور</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ژوندۍ خپرونې</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">د دې پاڼې د لیدلو لپاره تاسو باید ننوتل شوي یاست.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">هیڅ پایلې نلري</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">تاسو هیڅ کارن نه تعقیبوئ.?</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">لوبغاړي چې \"%s\" لري</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">کش شوې ټوټه لویه کړئ</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">آیا غواړې چې دا منډه پای ته ورسوې?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">د ښودلو لپاره هیڅ نشته، مهرباني وکړئ فلټرونه بدل کړئ</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">د ښودلو لپاره هیڅ نشته د پزل سټارم ځینې منډې ولوبیږئ</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">په 3 دقیقو کې د امکان تر حده ډیری معماګانې حل کړئ.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">تاسو به خپل اوسنی سټریک له لاسه ورکړئ او ستاسو نمره به خوندي شي.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">د خپلې خوښې ځایونو څخه پزلونه ولوبیږئ، یا یوه موضوع غوره کړئ.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">پزلونه</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">وروستي لټونونه</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">هپټیک غبرګون</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">عمیق حالت</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">د لوبې کولو پرمهال د سیسټم UI پټ کړئ. دا وکاروئ که تاسو د سکرین په څنډو کې د سیسټم د نیویګیشن اشارو څخه ځوریږئ. د لوبې او پزل سټارم سکرینونو لپاره پلي کیږي.</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ترتیبات</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN شریک کړئ</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">د لوبې URL شریک کړئ</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">د FEN په توګه موقعیت شریک کړئ</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">دا پزل شریک کړئ</string>
+  <string name="showComments" comment="Shown in the analysis screen.">نظرونه ښکاره کړئ</string>
+</resources>
