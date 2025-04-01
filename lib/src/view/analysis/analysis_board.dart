@@ -121,7 +121,8 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
           } else {
             return 'Tap to deselect ${selected.square.name}';
           }
-        } else if (highlighted.piece != null && analysisState.currentPosition.turn == highlighted.piece!.color) {
+        } else if (highlighted.piece != null &&
+            analysisState.currentPosition.turn == highlighted.piece!.color) {
           return 'Tap to select ${highlighted.square.name}';
         } else {
           return null;

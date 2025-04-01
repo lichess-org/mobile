@@ -294,22 +294,24 @@ class GameBody extends ConsumerWidget {
                         ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                       },
                       zenMode: gameState.isZenModeActive,
-                      squareSemanticValueBuilder: (highlighted, selected) => highlighted.piece?.localizedName(context),
+                      squareSemanticValueBuilder:
+                          (highlighted, selected) => highlighted.piece?.localizedName(context),
                       squareSemanticHintBuilder: (highlighted, selected) {
-                      if (selected != null) {
-                        final move = NormalMove(from: selected.square, to: highlighted.square);
-                        if (gameState.currentPosition.isLegal(move)) {
-                          final san = gameState.currentPosition.makeSanUnchecked(move).$2;
-                          return 'Tap to play $san';
+                        if (selected != null) {
+                          final move = NormalMove(from: selected.square, to: highlighted.square);
+                          if (gameState.currentPosition.isLegal(move)) {
+                            final san = gameState.currentPosition.makeSanUnchecked(move).$2;
+                            return 'Tap to play $san';
+                          } else {
+                            return 'Tap to deselect ${selected.square.name}';
+                          }
+                        } else if (highlighted.piece != null &&
+                            gameState.currentPosition.turn == highlighted.piece!.color) {
+                          return 'Tap to select ${highlighted.square.name}';
                         } else {
-                          return 'Tap to deselect ${selected.square.name}';
+                          return null;
                         }
-                      } else if (highlighted.piece != null && gameState.currentPosition.turn == highlighted.piece!.color) {
-                        return 'Tap to select ${highlighted.square.name}';
-                      } else {
-                        return null;
-                      }
-                    },
+                      },
                     ),
                   ),
                 ),
