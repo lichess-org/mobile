@@ -203,8 +203,8 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
     return VisibilityDetector(
       key: ValueKey(widget.game.id),
       onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction > 0) {
-          if (!isBoardVisible) {
+        if (visibilityInfo.visibleFraction > 0.3) {
+          if (!isBoardVisible && context.mounted) {
             ref
                 .read(broadcastRoundControllerProvider(widget.roundId).notifier)
                 .addObservedGame(widget.game.id);
@@ -213,15 +213,13 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
             });
           }
         } else {
-          if (isBoardVisible) {
-            if (context.mounted) {
-              ref
-                  .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                  .removeObservedGame(widget.game.id);
-              setState(() {
-                isBoardVisible = false;
-              });
-            }
+          if (isBoardVisible && context.mounted) {
+            ref
+                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
+                .removeObservedGame(widget.game.id);
+            setState(() {
+              isBoardVisible = false;
+            });
           }
         }
       },
