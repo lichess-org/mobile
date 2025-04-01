@@ -307,6 +307,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  squareSemanticHintBuilder: widget.squareSemanticHintBuilder,
+                  squareSemanticValueBuilder: widget.squareSemanticValueBuilder,
                 ),
               ),
               Expanded(
