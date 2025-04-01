@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -259,6 +260,58 @@ void main() {
       await tester.pump();
 
       verifyNever(() => mockRepository.join(any()));
+    });
+
+    testWidgets('Opens game screen when there is a new pairing', (WidgetTester tester) async {
+      const name = 'tom-anders';
+      final user = LightUser(id: UserId.fromUserName(name), name: name);
+      final session = AuthSessionState(user: user, token: 'test-token');
+
+      final mockRepository = MockTournamentRepository();
+
+      when(() => mockRepository.getTournament(kTournament.id)).thenAnswer(
+        (_) async =>
+            kTournament.copyWith(me: (rank: 11, gameId: null, withdraw: false, pauseDelay: null)),
+      );
+
+      final fakeSocket = FakeWebSocketChannel();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: kTournamentId),
+        userSession: session,
+        overrides: [
+          tournamentRepositoryProvider.overrideWith((ref) => mockRepository),
+          webSocketChannelFactoryProvider.overrideWith((ref) {
+            return FakeWebSocketChannelFactory((_) => fakeSocket);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for tournament data to load
+      await tester.pump();
+
+      // Pretend we have a new game
+      when(
+        () => mockRepository.reload(any(that: isOurTestTournament), standingsPage: 1),
+      ).thenAnswer(
+        (_) async => kTournament.copyWith(
+          me: (
+            rank: 11,
+            gameId: const GameFullId('1234567890ab'),
+            withdraw: false,
+            pauseDelay: null,
+          ),
+        ),
+      );
+      fakeSocket.addIncomingMessages(['{"t": "reload"}']);
+      // Wait for reload
+      await tester.pump();
+
+      // Wait for game screen to load
+      await tester.pump();
+
+      expect(find.byType(GameScreen), findsOneWidget);
     });
   });
 }
