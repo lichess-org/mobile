@@ -219,12 +219,6 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        BottomBarButton(
-          key: const Key('flip-button'),
-          label: context.l10n.flipBoard,
-          onTap: onFlipBoard,
-          icon: CupertinoIcons.arrow_2_squarepath,
-        ),
         if (!clock.timeIncrement.isInfinite)
           BottomBarButton(
             label: clock.active ? 'Pause' : 'Resume',
