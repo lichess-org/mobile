@@ -138,7 +138,7 @@ class TournamentState with _$TournamentState {
 
   GameFullId? get currentGame => tournament.me?.gameId;
 
-  bool get canJoin => tournament.me?.pauseDelay == null;
+  bool get canJoin => tournament.me?.pauseDelay == null && tournament.verdicts.accepted;
 
   int get firstRankOfPage => (standingsPage - 1) * kStandingsPageSize + 1;
   bool get hasPreviousPage => standingsPage > 1;
