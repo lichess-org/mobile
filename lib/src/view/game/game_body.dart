@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -299,13 +298,13 @@ class GameBody extends ConsumerWidget {
                       squareSemanticHintBuilder: (highlighted, selected) {
                       if (selected != null) {
                         final move = NormalMove(from: selected.square, to: highlighted.square);
-                        if (gameState.currentPosition.$1.isLegal(move)) {
-                          final san = gameState.currentPosition.$1.makeSanUnchecked(move).$2;
+                        if (gameState.currentPosition.isLegal(move)) {
+                          final san = gameState.currentPosition.makeSanUnchecked(move).$2;
                           return 'Tap to play $san';
                         } else {
                           return 'Tap to deselect ${selected.square.name}';
                         }
-                      } else if (highlighted.piece != null && gameState.currentPosition.$1.turn == highlighted.piece!.color) {
+                      } else if (highlighted.piece != null && gameState.currentPosition.turn == highlighted.piece!.color) {
                         return 'Tap to select ${highlighted.square.name}';
                       } else {
                         return null;
@@ -415,7 +414,7 @@ class GameBody extends ConsumerWidget {
       if (prev?.value?.game.lastMove != state.value?.game.lastMove) {
         // If was the oppenent's turn and the last move is not null
         if (prev?.value?.game.isMyTurn == false && state.value?.game.lastMove != null) {
-          final prevPosition = prev?.value?.currentPosition.$1;
+          final prevPosition = prev?.value?.currentPosition;
           final lastMove = state.value?.game.lastMove;
           final san = prevPosition!.makeSanUnchecked(lastMove!).$2;
           // Announce the move using the SemanticsService for accessibility

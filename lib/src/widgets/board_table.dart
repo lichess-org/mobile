@@ -76,7 +76,9 @@ class BoardTable extends ConsumerStatefulWidget {
       onSelectMove = null,
       boardOverlay = null,
       boardKey = null,
-      zenMode = false;
+      zenMode = false,
+      squareSemanticHintBuilder = null,
+      squareSemanticValueBuilder = null;
 
   final String? fen;
 
