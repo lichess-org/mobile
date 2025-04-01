@@ -1,4 +1,5 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
 typedef FullEventTestClock =
@@ -16,10 +17,12 @@ typedef FullEventTestCorrespondenceClock = ({Duration white, Duration black, int
 String makeFullEvent(
   GameId id,
   String pgn, {
+  String? initialFen,
   required String whiteUserName,
   required String blackUserName,
   int socketVersion = 0,
   Side? youAre,
+  Variant? variant,
   FullEventTestClock? clock = const (
     running: false,
     initial: Duration(minutes: 3),
@@ -64,9 +67,9 @@ String makeFullEvent(
     "game": {
       "id": "$id",
         "variant": {
-          "key": "standard",
-          "name": "Standard",
-          "short": "Std"
+          "key": "${variant?.name ?? 'standard'}",
+          "name": "${variant?.label ?? 'Standard'}",
+          "short": "${variant?.label ?? 'Std'}"
         },
         "speed": "${clock != null ? 'blitz' : 'correspondence'}",
         "perf": "${clock != null ? 'blitz' : 'correspondence'}",
@@ -77,6 +80,7 @@ String makeFullEvent(
           "name": "started"
         },
         "createdAt": 1685698678928,
+        ${initialFen != null ? '"initialFen": "$initialFen",' : ''}
         "pgn": "$pgn"
     },
     "white": {

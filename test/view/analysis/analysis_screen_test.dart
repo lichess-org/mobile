@@ -490,121 +490,99 @@ void main() {
     });
   });
 
-  testWidgets('Respect castling preference (kingOverRook)', (tester) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      defaultPreferences: {
-        PrefCategory.board.storageKey: jsonEncode(
-          BoardPrefs.defaults.copyWith(castlingMethod: CastlingMethod.kingOverRook).toJson(),
-        ),
-      },
-      home: const AnalysisScreen(
-        options: AnalysisOptions(
-          orientation: Side.white,
-          standalone: (
-            pgn: castlingSetupPgn,
-            isComputerAnalysisAllowed: false,
-            variant: Variant.standard,
-          ),
-          initialMoveCursor: 14,
-        ),
-      ),
-    );
+  group('Castling', () {
+    const String castlingSetupPgn =
+        '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. d3 d6 5. Bd2 Bd7 6. Nc3 Nc6 7. Qe2 Qe7';
 
-    await tester.pumpWidget(app);
-
-    expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
-
-    await tester.tap(find.byKey(const Key('e1-whiteking')));
-    await tester.pump();
-
-    // kingOverRook acts as either kingTwoSquares or kingOverRook
-    expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('a1-dest')), findsOneWidget);
-  });
-
-  testWidgets('Respect castling preference (kingTwoSquares)', (tester) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      defaultPreferences: {
-        PrefCategory.board.storageKey: jsonEncode(
-          BoardPrefs.defaults.copyWith(castlingMethod: CastlingMethod.kingTwoSquares).toJson(),
-        ),
-      },
-      home: const AnalysisScreen(
-        options: AnalysisOptions(
-          orientation: Side.white,
-          standalone: (
-            pgn: castlingSetupPgn,
-            isComputerAnalysisAllowed: false,
-            variant: Variant.standard,
-          ),
-          initialMoveCursor: 14,
-        ),
-      ),
-    );
-
-    await tester.pumpWidget(app);
-
-    expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
-
-    await tester.tap(find.byKey(const Key('e1-whiteking')));
-    await tester.pump();
-
-    expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('h1-dest')), findsNothing);
-    expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-    expect(find.byKey(const Key('a1-dest')), findsNothing);
-  });
-
-  for (final castlingMethod in CastlingMethod.values) {
-    testWidgets('Chess960 castling: $castlingMethod', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        defaultPreferences: {
-          PrefCategory.board.storageKey: jsonEncode(
-            BoardPrefs.defaults.copyWith(castlingMethod: castlingMethod).toJson(),
-          ),
-        },
-        home: AnalysisScreen(
-          key: ValueKey(castlingMethod),
-          options: const AnalysisOptions(
-            orientation: Side.white,
-            standalone: (
-              pgn: castlingSetupPgn,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.chess960,
+    for (final castlingMethod in CastlingMethod.values) {
+      testWidgets('respect castling preference ($castlingMethod)', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(castlingMethod: castlingMethod).toJson(),
             ),
-            initialMoveCursor: 14,
+          },
+          home: const AnalysisScreen(
+            options: AnalysisOptions(
+              orientation: Side.white,
+              standalone: (
+                pgn: castlingSetupPgn,
+                isComputerAnalysisAllowed: false,
+                variant: Variant.standard,
+              ),
+              initialMoveCursor: 14,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-      await tester.tap(find.byKey(const Key('e1-whiteking')));
+        expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
 
-      await tester.pump();
+        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        await tester.pump();
 
-      // in chess960, castling is only king over rook, no matter the preference
-      expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('g1-dest')), findsNothing);
-      expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('c1-dest')), findsNothing);
-      expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-      expect(find.byKey(const Key('a1-dest')), findsOneWidget);
-    });
-  }
+        switch (castlingMethod) {
+          case CastlingMethod.kingOverRook:
+            // kingOverRook acts as either kingTwoSquares or kingOverRook
+            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('h1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+          case CastlingMethod.kingTwoSquares:
+            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('h1-dest')), findsNothing);
+            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+            expect(find.byKey(const Key('a1-dest')), findsNothing);
+        }
+      });
+    }
+
+    for (final castlingMethod in CastlingMethod.values) {
+      testWidgets('Chess960 castling: $castlingMethod', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(castlingMethod: castlingMethod).toJson(),
+            ),
+          },
+          home: AnalysisScreen(
+            key: ValueKey(castlingMethod),
+            options: const AnalysisOptions(
+              orientation: Side.white,
+              standalone: (
+                pgn: castlingSetupPgn,
+                isComputerAnalysisAllowed: false,
+                variant: Variant.chess960,
+              ),
+              initialMoveCursor: 14,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byKey(const Key('e1-whiteking')));
+
+        await tester.pump();
+
+        // in chess960, castling is only king over rook, no matter the preference
+        expect(find.byKey(const Key('f1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('g1-dest')), findsNothing);
+        expect(find.byKey(const Key('h1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('c1-dest')), findsNothing);
+        expect(find.byKey(const Key('d1-dest')), findsOneWidget);
+        expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+      });
+    }
+  });
 }
-
-const String castlingSetupPgn =
-    '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. d3 d6 5. Bd2 Bd7 6. Nc3 Nc6 7. Qe2 Qe7';
 
 const gameResponse = '''
 {"id":"qVChCOTc","rated":false,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673443822389,"lastMoveAt":1673444036416,"status":"mate","players":{"white":{"aiLevel":1},"black":{"user":{"name":"veloce","patron":true,"id":"veloce"},"rating":1435,"provisional":true}},"winner":"black","opening":{"eco":"C20","name":"King's Pawn Game: Wayward Queen Attack, Kiddie Countergambit","ply":4},"moves":"e4 e5 Qh5 Nf6 Qxe5+ Be7 b3 d6 Qb5+ Bd7 Qxb7 Nc6 Ba3 Rb8 Qa6 Nxe4 Bb2 O-O Nc3 Nb4 Nf3 Nxa6 Nd5 Nb4 Nxe7+ Qxe7 Nd4 Qf6 f4 Qe7 Ke2 Ng3+ Kd1 Nxh1 Bc4 Nf2+ Kc1 Qe1#","clocks":[18003,18003,17915,17627,17771,16691,17667,16243,17475,15459,17355,14779,17155,13795,16915,13267,14771,11955,14451,10995,14339,10203,13899,9099,12427,8379,12003,7547,11787,6691,11355,6091,11147,5763,10851,5099,10635,4657],"clock":{"initial":180,"increment":0,"totalTime":180}}
