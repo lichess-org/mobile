@@ -92,7 +92,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         BroadcastRoundState(
           round: round.round,
           games: round.games,
-          // We keep the observed games but we remove the ones that are not in the new round
           observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
         ),
       );
@@ -157,7 +156,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       ),
     );
 
-    // If the game was observed we ask the sever for new evaluations
     if (state.requireValue.observedGames.contains(broadcastGameId)) {
       _sendEvalMultiGet();
     }
@@ -277,7 +275,7 @@ class BroadcastRoundState with _$BroadcastRoundState {
 
     /// The games that are visible on the screen
     ///
-    /// The controller has the responsibility to keep the observed games as a subset of the games.
+    /// The controller has the responsibility to maintain the observed games as a subset of the games.
     required ISet<BroadcastGameId> observedGames,
   }) = _BroadcastRoundState;
 }
