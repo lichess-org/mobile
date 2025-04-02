@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -16,6 +17,7 @@ final _logger = Logger('TournamentController');
 
 @riverpod
 class TournamentController extends _$TournamentController {
+  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   late SocketClient _socketClient;
@@ -29,8 +31,17 @@ class TournamentController extends _$TournamentController {
   Future<TournamentState> build(TournamentId id) async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _appLifecycleListener?.dispose();
       _pauseDelayTimer?.cancel();
     });
+
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        if (this.state.hasValue) {
+          _reload(standingsPage: this.state.requireValue.standingsPage);
+        }
+      },
+    );
 
     final state = TournamentState(
       tournament: await ref.read(tournamentRepositoryProvider).getTournament(id),
