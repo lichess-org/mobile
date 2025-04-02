@@ -108,7 +108,7 @@ class _ChallengesBody extends ConsumerStatefulWidget {
 class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  late final SocketClient socketClient;
+  late SocketClient socketClient;
 
   @override
   void initState() {
