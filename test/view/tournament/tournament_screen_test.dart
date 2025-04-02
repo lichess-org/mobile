@@ -47,6 +47,7 @@ const kTournament = Tournament(
 StandingPlayer makeTestPlayer(int index) => StandingPlayer(
   user: LightUser(id: UserId.fromUserName('player$index'), name: 'player$index'),
   rating: 1500 + index,
+  rank: index,
   score: index,
   provisional: false,
   withdraw: index.isOdd,

@@ -251,6 +251,7 @@ class StandingPlayer with _$StandingPlayer {
     required int rating,
     required bool provisional,
     required int score,
+    required int rank,
     required StandingSheet sheet,
     required bool withdraw,
   }) = _StandingPlayer;
@@ -268,6 +269,7 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrThrow(),
     provisional: pick('provisional').asBoolOrFalse(),
     score: pick('score').asIntOrThrow(),
+    rank: pick('rank').asIntOrThrow(),
     sheet: (
       fire: pick('sheet', 'fire').asBoolOrFalse(),
       scores:

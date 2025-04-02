@@ -157,17 +157,10 @@ class _Standing extends ConsumerWidget {
     }
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, i) {
-            final player = standing.players.getOrNull(i);
-            return player != null
-                ? _StandingPlayer(player: player, rank: state.firstRankOfPage + i)
-                : null;
-          },
-        ),
+        ...List.generate(
+          10,
+          (i) => standing.players.getOrNull(i),
+        ).nonNulls.map((player) => _StandingPlayer(player: player)),
         _StandingControls(state: state),
       ],
     );
@@ -175,10 +168,9 @@ class _Standing extends ConsumerWidget {
 }
 
 class _StandingPlayer extends StatelessWidget {
-  const _StandingPlayer({required this.player, required this.rank});
+  const _StandingPlayer({required this.player});
 
   final StandingPlayer player;
-  final int rank;
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +180,7 @@ class _StandingPlayer extends StatelessWidget {
       },
       child: ColoredBox(
         color:
-            rank.isEven
+            player.rank.isEven
                 ? ColorScheme.of(context).surfaceContainerLow
                 : ColorScheme.of(context).surfaceContainerHigh,
         child: Padding(
@@ -202,7 +194,7 @@ class _StandingPlayer extends StatelessWidget {
                 child:
                     player.withdraw
                         ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
-                        : Text('$rank', textAlign: TextAlign.center),
+                        : Text('${player.rank}', textAlign: TextAlign.center),
               ),
               UserFullNameWidget(
                 user: player.user,
