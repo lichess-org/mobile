@@ -1,3 +1,4 @@
+import 'package:chessground/chessground.dart' show PieceWidget;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_provider_scope.dart';
 
@@ -267,6 +269,8 @@ void main() {
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
 
+      const pairingGameId = GameFullId('1234567890ab');
+
       final mockRepository = MockTournamentRepository();
 
       when(() => mockRepository.getTournament(kTournament.id)).thenAnswer(
@@ -274,7 +278,8 @@ void main() {
             kTournament.copyWith(me: (rank: 11, gameId: null, withdraw: false, pauseDelay: null)),
       );
 
-      final fakeSocket = FakeWebSocketChannel();
+      final fakeTournamentSocket = FakeWebSocketChannel();
+      final fakeGameSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: kTournamentId),
@@ -282,7 +287,17 @@ void main() {
         overrides: [
           tournamentRepositoryProvider.overrideWith((ref) => mockRepository),
           webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
+            return FakeWebSocketChannelFactory((String url) {
+              final uri = Uri.parse(url);
+              switch (uri.path) {
+                case '/tournament/$kTournamentId/socket/v6':
+                  return fakeTournamentSocket;
+                case '/play/$pairingGameId/v6':
+                  return fakeGameSocket;
+                default:
+                  throw Exception('Unexpected URL: $url');
+              }
+            });
           }),
         ],
       );
@@ -296,15 +311,10 @@ void main() {
         () => mockRepository.reload(any(that: isOurTestTournament), standingsPage: 1),
       ).thenAnswer(
         (_) async => kTournament.copyWith(
-          me: (
-            rank: 11,
-            gameId: const GameFullId('1234567890ab'),
-            withdraw: false,
-            pauseDelay: null,
-          ),
+          me: (rank: 11, gameId: pairingGameId, withdraw: false, pauseDelay: null),
         ),
       );
-      fakeSocket.addIncomingMessages(['{"t": "reload"}']);
+      fakeTournamentSocket.addIncomingMessages(['{"t": "reload"}']);
       // Wait for reload
       await tester.pump();
 
@@ -312,6 +322,18 @@ void main() {
       await tester.pump();
 
       expect(find.byType(GameScreen), findsOneWidget);
+      await fakeGameSocket.connectionEstablished;
+      fakeGameSocket.addIncomingMessages([
+        makeFullEvent(
+          pairingGameId.gameId,
+          '',
+          whiteUserName: session.user.name,
+          blackUserName: 'Steven',
+        ),
+      ]);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+      expect(find.byType(PieceWidget), findsNWidgets(32));
     });
   });
 }
