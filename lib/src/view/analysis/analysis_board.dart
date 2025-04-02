@@ -45,18 +45,23 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
-    final enableComputerAnalysis = analysisState.isComputerAnalysisAllowedAndEnabled;
-    final showBestMoveArrow = enableComputerAnalysis && analysisPrefs.showBestMoveArrow;
-    final showAnnotationsOnBoard = enableComputerAnalysis && analysisPrefs.showAnnotations;
+    final showBestMoveArrow =
+        analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+    final showAnnotations =
+        analysisState.isComputerAnalysisAllowedAndEnabled && analysisPrefs.showAnnotations;
     final currentNode = analysisState.currentNode;
 
-    final localBestMoves =
-        analysisState.isEngineAvailable(enginePrefs) && showBestMoveArrow
-            ? ref.watch(engineEvaluationProvider.select((value) => value.eval?.bestMoves))
+    final bestMoves =
+        showBestMoveArrow
+            ? pickBestMoves(
+              localBestMoves: ref.watch(
+                engineEvaluationProvider.select((value) => value.eval?.bestMoves),
+              ),
+              savedEval: currentNode.eval,
+            )
             : null;
-    final bestMoves = pickBestMoves(localBestMoves: localBestMoves, savedEval: currentNode.eval);
     final ISet<Shape> bestMoveShapes =
-        bestMoves != null && showBestMoveArrow
+        bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position.turn,
@@ -64,7 +69,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             )
             : ISet();
 
-    final annotation = showAnnotationsOnBoard ? makeAnnotation(currentNode.nags) : null;
+    final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
     return Chessboard(
@@ -90,7 +95,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       ),
       shapes: userShapes.union(bestMoveShapes),
       annotations:
-          showAnnotationsOnBoard && sanMove != null && annotation != null
+          sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
                   ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                   : IMap({sanMove.move.to: annotation})
@@ -113,7 +118,6 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       setState(() {
         userShapes = userShapes.remove(shape);
       });
-      return;
     } else {
       setState(() {
         userShapes = userShapes.add(shape);
