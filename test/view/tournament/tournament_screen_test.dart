@@ -18,6 +18,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 const kTournamentId = TournamentId('test');
@@ -68,7 +69,9 @@ void main() {
   group('Tournament screen', () {
     final isOurTestTournament = isA<Tournament>().having((t) => t.id, 'id', kTournamentId);
 
-    testWidgets('Displays tournament data and standings', (WidgetTester tester) async {
+    testWidgets('Displays tournament data and standings', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
       final mockRepository = MockTournamentRepository();
 
       when(
@@ -117,7 +120,7 @@ void main() {
       expect(find.text('player10'), findsNothing);
     });
 
-    testWidgets('Can join tournament', (WidgetTester tester) async {
+    testWidgets('Can join tournament', variant: kPlatformVariant, (WidgetTester tester) async {
       const name = 'tom-anders';
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
@@ -180,7 +183,9 @@ void main() {
       expect(find.text('11-12 / 12'), findsOneWidget);
     });
 
-    testWidgets('Cannot join tournament if not logged in', (WidgetTester tester) async {
+    testWidgets('Cannot join tournament if not logged in', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
       final mockRepository = MockTournamentRepository();
       when(
         () => mockRepository.getTournament(kTournament.id),
@@ -214,57 +219,61 @@ void main() {
       verifyNever(() => mockRepository.join(any()));
     });
 
-    testWidgets('Cannot join tournament if not meeting entry conditions', (
+    testWidgets(
+      'Cannot join tournament if not meeting entry conditions',
+      variant: kPlatformVariant,
+      (WidgetTester tester) async {
+        const name = 'tom-anders';
+        final user = LightUser(id: UserId.fromUserName(name), name: name);
+        final session = AuthSessionState(user: user, token: 'test-token');
+
+        final mockRepository = MockTournamentRepository();
+        when(() => mockRepository.getTournament(kTournament.id)).thenAnswer(
+          (_) async => kTournament.copyWith(
+            standing: kFirstStandingPage,
+            verdicts: (
+              list:
+                  [
+                    (condition: 'condition1', ok: true),
+                    (condition: 'condition2', ok: false),
+                  ].toIList(),
+              accepted: false,
+            ),
+          ),
+        );
+
+        final fakeSocket = FakeWebSocketChannel();
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: kTournamentId),
+          userSession: session,
+          overrides: [
+            tournamentRepositoryProvider.overrideWith((ref) => mockRepository),
+            webSocketChannelFactoryProvider.overrideWith((ref) {
+              return FakeWebSocketChannelFactory((_) => fakeSocket);
+            }),
+          ],
+        );
+        await tester.pumpWidget(app);
+
+        // Wait for tournament data to load
+        await tester.pump();
+
+        expect(find.text('Join'), findsOneWidget);
+
+        expect(find.text('condition1'), findsOneWidget);
+        expect(find.text('condition2'), findsOneWidget);
+
+        await tester.tap(find.text('Join'));
+        await tester.pump();
+
+        verifyNever(() => mockRepository.join(any()));
+      },
+    );
+
+    testWidgets('Opens game screen when there is a new pairing', variant: kPlatformVariant, (
       WidgetTester tester,
     ) async {
-      const name = 'tom-anders';
-      final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
-
-      final mockRepository = MockTournamentRepository();
-      when(() => mockRepository.getTournament(kTournament.id)).thenAnswer(
-        (_) async => kTournament.copyWith(
-          standing: kFirstStandingPage,
-          verdicts: (
-            list:
-                [
-                  (condition: 'condition1', ok: true),
-                  (condition: 'condition2', ok: false),
-                ].toIList(),
-            accepted: false,
-          ),
-        ),
-      );
-
-      final fakeSocket = FakeWebSocketChannel();
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const TournamentScreen(id: kTournamentId),
-        userSession: session,
-        overrides: [
-          tournamentRepositoryProvider.overrideWith((ref) => mockRepository),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
-      );
-      await tester.pumpWidget(app);
-
-      // Wait for tournament data to load
-      await tester.pump();
-
-      expect(find.text('Join'), findsOneWidget);
-
-      expect(find.text('condition1'), findsOneWidget);
-      expect(find.text('condition2'), findsOneWidget);
-
-      await tester.tap(find.text('Join'));
-      await tester.pump();
-
-      verifyNever(() => mockRepository.join(any()));
-    });
-
-    testWidgets('Opens game screen when there is a new pairing', (WidgetTester tester) async {
       const name = 'tom-anders';
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
