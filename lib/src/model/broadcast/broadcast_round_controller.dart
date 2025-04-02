@@ -236,7 +236,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void addObservedGame(BroadcastGameId gameId) {
-    if (!state.hasValue) return;
+    if (state.valueOrNull?.games.containsKey(gameId) != true) return;
 
     state = AsyncData(
       state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
@@ -275,7 +275,7 @@ class BroadcastRoundState with _$BroadcastRoundState {
 
     /// The games that are visible on the screen
     ///
-    /// The controller has the responsibility to maintain the observed games as a subset of the games.
+    /// The controller has the responsibility to maintain [observedGames] as a subset of [games].
     required ISet<BroadcastGameId> observedGames,
   }) = _BroadcastRoundState;
 }
