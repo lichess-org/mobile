@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -257,43 +258,49 @@ class _StandingControls extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-          onPressed:
+        PlatformIconButton(
+          onTap:
               state.hasPreviousPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
                   : null,
-          icon: const Icon(Icons.first_page),
+          semanticsLabel: context.l10n.studyFirst,
+          icon: Icons.first_page,
         ),
-        IconButton(
-          onPressed:
+        PlatformIconButton(
+          onTap:
               state.hasPreviousPage
                   ? ref
                       .read(tournamentControllerProvider(state.id).notifier)
                       .loadPreviousStandingsPage
                   : null,
-          icon: const Icon(Icons.skip_previous),
+          semanticsLabel: context.l10n.studyPrevious,
+          icon: Icons.skip_previous,
         ),
         Text(
           '${state.firstRankOfPage}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
         ),
-        IconButton(
-          onPressed:
+        PlatformIconButton(
+          onTap:
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
                   : null,
-          icon: const Icon(Icons.skip_next),
+          semanticsLabel: context.l10n.studyNext,
+          icon: Icons.skip_next,
         ),
-        IconButton(
-          onPressed:
+        PlatformIconButton(
+          onTap:
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
-          icon: const Icon(Icons.last_page),
+          semanticsLabel: context.l10n.studyLast,
+          icon: Icons.last_page,
         ),
         if (state.tournament.me != null)
-          IconButton(
-            onPressed: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
-            icon: const Icon(LichessIcons.target),
+          PlatformIconButton(
+            onTap: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
+            icon: LichessIcons.target,
+            // TODO l10n
+            semanticsLabel: 'Jump to my page',
           ),
       ],
     );
