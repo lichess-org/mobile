@@ -81,29 +81,29 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Padding(
               padding: Styles.bodySectionPadding,
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: 20,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _Verdicts(state.tournament.verdicts),
-                    if (!state.tournament.berserkable)
-                      const Text.rich(
-                        TextSpan(
-                          children: [
-                            WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                            TextSpan(
-                              // TODO l10n
-                              text: ' No Berserk allowed',
-                            ),
-                          ],
-                        ),
+              child: ListView(
+                children: [
+                  _Verdicts(state.tournament.verdicts),
+                  const SizedBox(height: 10),
+                  if (!state.tournament.berserkable) ...[
+                    const Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                          TextSpan(
+                            // TODO l10n
+                            text: ' No Berserk allowed',
+                          ),
+                        ],
                       ),
-                    _Standing(state),
-                    if (state.tournament.featuredGame != null)
-                      _FeaturedGame(state.tournament.featuredGame!),
+                    ),
+                    const SizedBox(height: 10),
                   ],
-                ),
+                  _Standing(state),
+                  const SizedBox(height: 10),
+                  if (state.tournament.featuredGame != null)
+                    _FeaturedGame(state.tournament.featuredGame!),
+                ],
               ),
             ),
           ),
