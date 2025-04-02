@@ -37,6 +37,15 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   @override
   Future<BroadcastRoundState> build(BroadcastRoundId broadcastRoundId) async {
+    ref.onDispose(() {
+      _key = null;
+      _subscription?.cancel();
+      _socketOpenSubscription?.cancel();
+      _appLifecycleListener?.dispose();
+      _syncRoundDebouncer.cancel();
+      _evalRequestDebouncer.cancel();
+    });
+
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
@@ -63,20 +72,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       },
     );
 
-    ref.onDispose(() {
-      _key = null;
-      _subscription?.cancel();
-      _socketOpenSubscription?.cancel();
-      _appLifecycleListener?.dispose();
-      _syncRoundDebouncer.cancel();
-      _evalRequestDebouncer.cancel();
-    });
-
     final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    return BroadcastRoundState(round: round.round, games: round.games, observedGames: IList());
+    return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
   }
 
   Future<void> _syncRound() async {
@@ -92,12 +92,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         BroadcastRoundState(
           round: round.round,
           games: round.games,
-          observedGames: state.requireValue.observedGames,
+          observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
         ),
       );
+      _sendEvalMultiGet();
     }
-
-    _sendEvalMultiGet();
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -109,10 +108,10 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         _handleAddNodeEvent(event);
       // Sent when a new board is added
       case 'addChapter':
-        _handleAddChapterEvent(event);
+        _handleAddBoardEvent(event);
       // Sent when the state of games changes
       case 'chapters':
-        _handleChaptersEvent(event);
+        _handleGamesChangeEvent(event);
       // Sent when clocks are updated from the broadcast
       case 'clock':
         _handleClockEvent(event);
@@ -157,23 +156,24 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       ),
     );
 
-    // If the game was observed we ask the sever for new evaluations
     if (state.requireValue.observedGames.contains(broadcastGameId)) {
       _sendEvalMultiGet();
     }
   }
 
-  void _handleAddChapterEvent(SocketEvent event) {
-    ref.invalidateSelf();
-
-    _sendEvalMultiGet();
+  void _handleAddBoardEvent(SocketEvent event) {
+    _syncRound();
   }
 
-  void _handleChaptersEvent(SocketEvent event) {
-    final games = pick(event.data).asListOrThrow(gameFromPick);
+  void _handleGamesChangeEvent(SocketEvent event) {
+    final games = IMap.fromEntries(pick(event.data).asListOrThrow(gameFromPick));
 
     state = AsyncData(
-      state.requireValue.copyWith(round: state.requireValue.round, games: IMap.fromEntries(games)),
+      state.requireValue.copyWith(
+        round: state.requireValue.round,
+        games: games,
+        observedGames: state.requireValue.observedGames.where(games.containsKey).toISet(),
+      ),
     );
 
     _sendEvalMultiGet();
@@ -236,7 +236,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void addObservedGame(BroadcastGameId gameId) {
-    if (!state.hasValue) return;
+    if (state.valueOrNull?.games.containsKey(gameId) != true) return;
 
     state = AsyncData(
       state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
@@ -259,11 +259,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final round = state.requireValue;
 
     _socketClient.send('evalGetMulti', {
-      'fens': [
-        for (final id in round.observedGames)
-          // TODO: investigate why this happens
-          if (round.games[id] != null) round.games[id]!.fen,
-      ],
+      'fens': [for (final id in round.observedGames) round.games[id]!.fen],
     });
   }
 }
@@ -278,6 +274,8 @@ class BroadcastRoundState with _$BroadcastRoundState {
     required IMap<BroadcastGameId, BroadcastGame> games,
 
     /// The games that are visible on the screen
-    required IList<BroadcastGameId> observedGames,
+    ///
+    /// The controller has the responsibility to maintain [observedGames] as a subset of [games].
+    required ISet<BroadcastGameId> observedGames,
   }) = _BroadcastRoundState;
 }
