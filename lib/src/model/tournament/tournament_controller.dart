@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
+import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,7 +55,17 @@ class TournamentController extends _$TournamentController {
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
+    await _socketClient.firstConnection;
+
+    _watchFeaturedGameIfChanged(previous: null, current: state.tournament.featuredGame?.id);
+
     return state;
+  }
+
+  void _watchFeaturedGameIfChanged({required GameId? previous, required GameId? current}) {
+    if (current != null && previous != current) {
+      _socketClient.send('startWatching', current.value);
+    }
   }
 
   void loadNextStandingsPage() {
@@ -105,6 +116,11 @@ class TournamentController extends _$TournamentController {
       });
     }
 
+    _watchFeaturedGameIfChanged(
+      previous: state.requireValue.featuredGame?.id,
+      current: tournament.featuredGame?.id,
+    );
+
     state = AsyncValue.data(
       state.requireValue.copyWith(tournament: tournament, standingsPage: standingsPage),
     );
@@ -120,6 +136,44 @@ class TournamentController extends _$TournamentController {
     switch (event.topic) {
       case 'reload':
         _reload(standingsPage: state.requireValue.standingsPage);
+
+      case 'fen':
+        final json = event.data as Map<String, dynamic>;
+        final fenEvent = FenSocketEvent.fromJson(json);
+
+        final oldState = state.requireValue;
+
+        if (fenEvent.id == oldState.featuredGame?.id) {
+          state = AsyncValue.data(
+            oldState.copyWith(
+              tournament: oldState.tournament.copyWith(
+                featuredGame: oldState.featuredGame!.copyWith(
+                  fen: fenEvent.fen,
+                  lastMove: fenEvent.lastMove,
+                  clocks: (white: fenEvent.whiteClock, black: fenEvent.blackClock),
+                ),
+              ),
+            ),
+          );
+        }
+
+      case 'finish':
+        final json = event.data as Map<String, dynamic>;
+        final finishEvent = FinishSocketEvent.fromJson(json);
+
+        final oldState = state.requireValue;
+        if (finishEvent.id == oldState.featuredGame?.id) {
+          state = AsyncValue.data(
+            oldState.copyWith(
+              tournament: oldState.tournament.copyWith(
+                featuredGame: oldState.featuredGame!.copyWith(
+                  finished: true,
+                  winner: finishEvent.winner,
+                ),
+              ),
+            ),
+          );
+        }
     }
   }
 
@@ -148,6 +202,8 @@ class TournamentState with _$TournamentState {
   TournamentId get id => tournament.id;
 
   GameFullId? get currentGame => tournament.me?.gameId;
+
+  FeaturedGame? get featuredGame => tournament.featuredGame;
 
   bool get canJoin => tournament.me?.pauseDelay == null && tournament.verdicts.accepted;
 

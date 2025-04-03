@@ -228,8 +228,15 @@ Tournament _tournamentFromPick(RequiredPick pick) {
 }
 
 Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick pick) {
+  final newFeaturedGameId = pick('featured', 'id').asGameIdOrNull();
   return tournament.copyWith(
-    featuredGame: pick('featured').asFeaturedGameOrNull(),
+    // Sometimes a new FEN comes in via the websocket, but the API reload response
+    // still has the FEN of the previous move, leading to sync issues.
+    // So only copy the whole game here if it's a new ID.
+    featuredGame:
+        tournament.featuredGame?.id != newFeaturedGameId
+            ? pick('featured').asFeaturedGameOrNull()
+            : tournament.featuredGame,
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
@@ -287,6 +294,8 @@ class FeaturedPlayer with _$FeaturedPlayer {
     required LightUser user,
     required int? rank,
     required bool? berserk,
+    required int? rating,
+    required bool provisional,
   }) = _FeaturedPlayer;
 
   factory FeaturedPlayer.fromServerJson(Map<String, Object?> json) =>
@@ -298,8 +307,12 @@ FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
     user: pick.asLightUserOrThrow(),
     rank: pick('rank').asIntOrNull(),
     berserk: pick('berserk').asBoolOrNull(),
+    rating: pick('rating').asIntOrNull(),
+    provisional: pick('provisional').asBoolOrFalse(),
   );
 }
+
+typedef FeaturedGameClocks = ({Duration white, Duration black});
 
 @freezed
 class FeaturedGame with _$FeaturedGame {
@@ -314,7 +327,12 @@ class FeaturedGame with _$FeaturedGame {
     required Move? lastMove,
     required bool? finished,
     required Side? winner,
+    required FeaturedGameClocks clocks,
   }) = _FeaturedGame;
+
+  Duration clockOf(Side side) => side == Side.white ? clocks.white : clocks.black;
+
+  FeaturedPlayer playerOf(Side side) => side == Side.white ? white : black;
 }
 
 FeaturedGame _featuredGameFromPick(RequiredPick pick) {
@@ -327,5 +345,9 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
     lastMove: pick('lastMove').asUciMoveOrNull(),
     finished: pick('finished').asBoolOrNull(),
     winner: pick('winner').asSideOrNull(),
+    clocks: (
+      white: pick('c', 'white').asDurationFromSecondsOrThrow(),
+      black: pick('c', 'black').asDurationFromSecondsOrThrow(),
+    ),
   );
 }

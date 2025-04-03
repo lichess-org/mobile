@@ -8,18 +8,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
-import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -27,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TournamentScreen extends ConsumerWidget {
@@ -102,8 +97,10 @@ class _Body extends ConsumerWidget {
                   ],
                   _Standing(state),
                   const SizedBox(height: 10),
-                  if (state.tournament.featuredGame != null)
+                  if (state.tournament.featuredGame != null) ...[
                     _FeaturedGame(state.tournament.featuredGame!),
+                    const SizedBox(height: 10),
+                  ],
                 ],
               ),
             ),
@@ -366,74 +363,86 @@ class _FeaturedGame extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.maxWidth;
-        switch (ref.watch(
-          tvControllerProvider(null, (featuredGame.id, featuredGame.orientation)),
-        )) {
-          case AsyncData(:final value):
-            {
-              final game = value.game;
 
-              final whitePlayer = _FeaturedGamePlayer(
-                game: game,
-                player: featuredGame.white,
-                side: Side.white,
-              );
+        // Don't bother parsing the whole FEN here, we just need the turn
+        final turn = featuredGame.fen.endsWith(' b') ? Side.black : Side.white;
 
-              final blackPlayer = _FeaturedGamePlayer(
-                game: game,
-                player: featuredGame.black,
-                side: Side.black,
-              );
-
-              return BoardThumbnail(
-                size: boardSize,
-                orientation: featuredGame.orientation,
-                fen: game.lastPosition.fen,
-                header: featuredGame.orientation == Side.white ? blackPlayer : whitePlayer,
-                footer: featuredGame.orientation == Side.white ? whitePlayer : blackPlayer,
-                lastMove: game.lastMove,
-              );
-            }
-          case _:
-            return BoardThumbnail(
-              size: boardSize,
-              fen: featuredGame.fen,
-              orientation: featuredGame.orientation,
-              header: const Shimmer(child: LoadingPlayerWidget()),
-              footer: const Shimmer(child: LoadingPlayerWidget()),
-            );
-        }
+        return BoardThumbnail(
+          size: boardSize,
+          orientation: featuredGame.orientation,
+          fen: featuredGame.fen,
+          header: _FeaturedGamePlayer(
+            game: featuredGame,
+            side: featuredGame.orientation.opposite,
+            clockActive: turn == featuredGame.orientation.opposite,
+          ),
+          footer: _FeaturedGamePlayer(
+            game: featuredGame,
+            side: featuredGame.orientation,
+            clockActive: turn == featuredGame.orientation,
+          ),
+          lastMove: featuredGame.lastMove,
+        );
       },
     );
   }
 }
 
 class _FeaturedGamePlayer extends StatelessWidget {
-  const _FeaturedGamePlayer({required this.game, required this.player, required this.side});
+  const _FeaturedGamePlayer({required this.game, required this.side, required this.clockActive});
 
-  final PlayableGame game;
-  final FeaturedPlayer player;
+  final FeaturedGame game;
   final Side side;
+  final bool clockActive;
 
   @override
   Widget build(BuildContext context) {
-    final activeClockSide = game.lastPosition.fullmoves > 1 ? game.lastPosition.turn : null;
-    return GamePlayer(
-      game: game,
-      side: side,
-      clock:
-          game.clock != null
-              ? CountdownClockBuilder(
-                key: key,
-                timeLeft: game.clockOf(side)!,
-                delay: game.clock!.lag ?? const Duration(milliseconds: 10),
-                clockUpdatedAt: game.clock!.at,
-                active: activeClockSide == side,
-                builder: (context, timeLeft) {
-                  return Clock(timeLeft: timeLeft, active: activeClockSide == side);
-                },
-              )
-              : null,
+    final player = game.playerOf(side);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Text('#${player.rank} ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                UserFullNameWidget(
+                  user: player.user,
+                  showPatron: false,
+                  rating: player.rating,
+                  provisional: player.provisional,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 5),
+          if (game.finished == true)
+            Text(
+              game.winner == side
+                  ? '1'
+                  : game.winner == side.opposite
+                  ? '0'
+                  : '½',
+              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+            )
+          else
+            CountdownClockBuilder(
+              timeLeft: game.clockOf(side),
+              active: clockActive,
+              builder:
+                  (context, timeLeft) => Text(
+                    timeLeft.toHoursMinutesSeconds(),
+                    style: TextStyle(
+                      color: clockActive ? Colors.orange[900] : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+            ),
+        ],
+      ),
     );
   }
 }

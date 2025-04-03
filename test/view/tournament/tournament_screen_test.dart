@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -50,6 +52,32 @@ String meToJson(TournamentMe? me) {
       : '';
 }
 
+String kFeaturedGame = '''
+"featured": {
+    "id": "CW8jtJJO",
+    "fen": "r4rk1/pp3p1p/3pq1p1/2p5/3pP3/P2P3P/1PP2PP1/R2Q1RK1 w",
+    "orientation": "white",
+    "color": "white",
+    "lastMove": "e8h8",
+    "white": {
+      "name": "WhiteFeatured",
+      "id": "whitefeatured",
+      "rank": 2,
+      "rating": 1278
+    },
+    "black": {
+      "name": "BlackFeatured",
+      "id": "blackfeatured",
+      "rank": 4,
+      "rating": 1261
+    },
+    "c": {
+      "white": 148,
+      "black": 151
+    }
+  }
+''';
+
 String makeTournamentJson({
   required List<StandingPlayer> standings,
   required int nbPlayers,
@@ -87,6 +115,7 @@ String makeTournamentJson({
     "page": 1,
     "players": [ ${standingPlayersToJson(standings)} ]
   },
+  $kFeaturedGame,
   "id": "82QbxlJb",
   "createdBy": "lichess",
   "startsAt": "2025-04-01T17:00:25Z",
@@ -131,6 +160,7 @@ String makeReloadedTournamentJson({
   "nbPlayers": $nbPlayers,
   "duels": [ ],
   "secondsToFinish": 1063,
+  $kFeaturedGame,
   "isStarted": true,
   ${meToJson(me)}
   $featuredGameJson
@@ -226,6 +256,58 @@ void main() {
       }
 
       expect(find.text('1-10 / 11'), findsOneWidget);
+    });
+
+    testWidgets('Displays featured game', (WidgetTester tester) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tournament/82QbxlJb') {
+          return mockResponse(
+            makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final fakeSocket = FakeWebSocketChannel();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          webSocketChannelFactoryProvider.overrideWith(
+            (ref) => FakeWebSocketChannelFactory((_) => fakeSocket),
+          ),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for tournament data to load
+      await tester.pump();
+
+      await tester.dragUntilVisible(
+        find.text('BlackFeatured'),
+        find.byType(ListView),
+        const Offset(0, -250),
+      );
+
+      expect(find.text('BlackFeatured'), findsOneWidget);
+      expect(find.text('WhiteFeatured'), findsOneWidget);
+      expect(find.byType(PieceWidget), findsAny);
+      expect(find.byType(BoardThumbnail), findsOneWidget);
+
+      // Pretend all the pieces are gone to check that the board is updated
+      fakeSocket.addIncomingMessages([
+        '{"t": "fen", "d": {"id": "CW8jtJJO", "fen": "$kEmptyBoardFEN", "lm": "e2e4", "wc": 0, "bc": 0}  }',
+      ]);
+
+      // Wait for board to update
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardThumbnail), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNothing);
     });
 
     testWidgets('Can join tournament', (WidgetTester tester) async {
@@ -474,7 +556,7 @@ void main() {
       ]);
       // wait for socket message
       await tester.pump(const Duration(milliseconds: 10));
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(find.text('Steven'), findsOneWidget);
     });
   });
 }
