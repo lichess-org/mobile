@@ -243,17 +243,17 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   }
 
   void toggleHint() {
-    if (state.hintSquare == null) {
-      state = state.copyWith(hintShown: true, hintSquare: state._nextSolutionMove.from);
+    if (state.hintSquare == null && state._nextSolutionMove != null) {
+      state = state.copyWith(hintShown: true, hintSquare: state._nextSolutionMove!.from);
     } else {
       state = state.copyWith(hintSquare: null);
     }
   }
 
   void skipMove() {
-    if (state.streak != null) {
+    if (state.streak != null && state._nextSolutionMove != null) {
       state = state.copyWith.streak!(hasSkipped: true);
-      onUserMove(state._nextSolutionMove);
+      onUserMove(state._nextSolutionMove!);
     }
   }
 
@@ -565,6 +565,8 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
 
   bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
-  NormalMove get _nextSolutionMove =>
-      NormalMove.fromUci(puzzle.puzzle.solution[currentPath.size - initialPath.size]);
+  NormalMove? get _nextSolutionMove {
+    final uci = puzzle.puzzle.solution.getOrNull(currentPath.size - initialPath.size);
+    return uci == null ? null : NormalMove.fromUci(uci);
+  }
 }
