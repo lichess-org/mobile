@@ -40,9 +40,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   bool isLoading = false;
 
   void setIsLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = value;
+      });
+    }
   }
 
   @override
