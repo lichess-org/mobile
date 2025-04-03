@@ -364,23 +364,12 @@ class _FeaturedGame extends ConsumerWidget {
       builder: (context, constraints) {
         final boardSize = constraints.maxWidth;
 
-        // Don't bother parsing the whole FEN here, we just need the turn
-        final turn = featuredGame.fen.endsWith(' b') ? Side.black : Side.white;
-
         return BoardThumbnail(
           size: boardSize,
           orientation: featuredGame.orientation,
           fen: featuredGame.fen,
-          header: _FeaturedGamePlayer(
-            game: featuredGame,
-            side: featuredGame.orientation.opposite,
-            clockActive: turn == featuredGame.orientation.opposite,
-          ),
-          footer: _FeaturedGamePlayer(
-            game: featuredGame,
-            side: featuredGame.orientation,
-            clockActive: turn == featuredGame.orientation,
-          ),
+          header: _FeaturedGamePlayer(game: featuredGame, side: featuredGame.orientation.opposite),
+          footer: _FeaturedGamePlayer(game: featuredGame, side: featuredGame.orientation),
           lastMove: featuredGame.lastMove,
         );
       },
@@ -389,15 +378,25 @@ class _FeaturedGame extends ConsumerWidget {
 }
 
 class _FeaturedGamePlayer extends StatelessWidget {
-  const _FeaturedGamePlayer({required this.game, required this.side, required this.clockActive});
+  const _FeaturedGamePlayer({required this.game, required this.side});
 
   final FeaturedGame game;
   final Side side;
-  final bool clockActive;
 
   @override
   Widget build(BuildContext context) {
     final player = game.playerOf(side);
+
+    final isOurTurn =
+        game.fen.endsWith(' w') && side == Side.white ||
+        game.fen.endsWith(' b') && side == Side.black;
+
+    // See https://github.com/lichess-org/lila/blob/974e1fbd9af0a9d125cec3008d4e72ec09834cf3/ui/lib/src/clock.ts#L13
+    final clockActive =
+        isOurTurn &&
+        (side == Side.white
+            ? !game.fen.contains('PPPPPPPP/RNBQKBNR')
+            : !game.fen.startsWith('rnbqkbnr/pppppppp'));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
