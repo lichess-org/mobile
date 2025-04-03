@@ -103,9 +103,9 @@ class _BodyState extends ConsumerState<_Body> {
 
       if (previous?.game.isThreefoldRepetition == false &&
           newGameState.game.isThreefoldRepetition == true) {
-        ref.read(overTheBoardClockProvider.notifier).pause();
         Timer(const Duration(milliseconds: 500), () {
           if (context.mounted) {
+            ref.read(overTheBoardClockProvider.notifier).pause();
             showAdaptiveDialog<void>(
               context: context,
               builder:

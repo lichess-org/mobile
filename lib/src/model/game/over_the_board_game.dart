@@ -42,13 +42,10 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   @override
   GameId get id => const GameId('--------');
 
-  bool get abortable =>
-      playable &&
-      lastPosition.fullmoves <= 1 &&
-      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
+  bool get abortable => playable && lastPosition.fullmoves <= 1;
 
   bool get resignable => playable && !abortable;
-  bool get drawable => playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true);
+  bool get drawable => playable && lastPosition.fullmoves >= 2;
 
   @Assert('steps.isNotEmpty')
   factory OverTheBoardGame({
