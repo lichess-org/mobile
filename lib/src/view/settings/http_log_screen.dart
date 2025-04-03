@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -127,7 +128,13 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
         controller: widget.scrollController,
         itemCount: widget.logs.length,
         separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
-        itemBuilder: (_, index) => HttpLogTile(httpLog: widget.logs[index]),
+        itemBuilder: (_, index) {
+          if (index < 0 || index >= widget.logs.length) {
+            return null;
+          }
+
+          return HttpLogTile(httpLog: widget.logs[index]);
+        },
       ),
     );
   }
@@ -144,32 +151,36 @@ class HttpLogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveListTile(
       dense: true,
-      leading:
-          httpLog.hasResponse
-              ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    httpLog.responseCode!.toString(),
-                    style: TextStyle(
-                      color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                      fontSize: 12,
+      leading: SizedBox(
+        width: 40,
+        child:
+            httpLog.hasResponse
+                ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      httpLog.responseCode!.toString(),
+                      style: TextStyle(
+                        color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${httpLog.elapsed!.inMilliseconds}ms',
-                    style: TextStyle(
-                      color: textShade(context, 0.7),
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              )
-              : const Icon(Icons.error),
+                    const SizedBox(height: 4),
+                    if (httpLog.elapsed != null)
+                      Text(
+                        '${httpLog.elapsed!.inMilliseconds}ms',
+                        style: TextStyle(
+                          color: textShade(context, 0.7),
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                          fontSize: 10,
+                        ),
+                      ),
+                  ],
+                )
+                : const Icon(Icons.error_outline, color: Colors.grey),
+      ),
       title: Text(
         httpLog.requestUrl.host == kLichessHost
             ? httpLog.requestUrl.path

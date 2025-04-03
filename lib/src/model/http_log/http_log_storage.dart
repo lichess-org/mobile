@@ -97,7 +97,7 @@ class HttpLogEntry with _$HttpLogEntry {
     String? errorMessage,
   }) = _HttpLogEntry;
 
-  bool get hasResponse => responseCode != null;
+  bool get hasResponse => responseCode != null && responseCode != 0;
 
   Duration? get elapsed {
     if (responseDateTime == null) return null;
