@@ -30,7 +30,7 @@ class AnalysisTreeView extends ConsumerWidget {
             currentPath: analysisState.currentPath,
             pgnRootComments: analysisState.pgnRootComments,
             notifier: ref.read(ctrlProvider.notifier),
-            shouldShowComputerVariations: enableComputerAnalysis,
+            shouldShowComputerAnalysis: enableComputerAnalysis,
             shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
             shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
             displayMode:

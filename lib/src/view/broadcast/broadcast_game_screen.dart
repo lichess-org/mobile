@@ -253,7 +253,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         currentPath: state.currentPath,
         broadcastLivePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
-        shouldShowComputerVariations: analysisPrefs.enableComputerAnalysis,
+        shouldShowComputerAnalysis: analysisPrefs.enableComputerAnalysis,
         shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,
         shouldShowAnnotations:
             analysisPrefs.enableComputerAnalysis && analysisPrefs.showAnnotations,

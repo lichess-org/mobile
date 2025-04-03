@@ -120,7 +120,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.broadcastLivePath,
     required this.pgnRootComments,
     required this.notifier,
-    this.shouldShowComputerVariations = true,
+    this.shouldShowComputerAnalysis = true,
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
     this.displayMode = PgnTreeDisplayMode.twoColumn,
@@ -141,10 +141,11 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
   final PgnTreeNotifier notifier;
 
-  /// Whether to show analysis variations.
+  /// Whether to show computer analysis informations.
   ///
+  /// If `true`, the tree view will show computer analysis variations and evaluations.
   /// Only applied to lichess game analysis.
-  final bool shouldShowComputerVariations;
+  final bool shouldShowComputerAnalysis;
 
   /// Display mode of the tree view.
   ///
@@ -246,7 +247,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
       root: widget.root,
       rootComments: widget.pgnRootComments,
       params: (
-        shouldShowComputerVariations: widget.shouldShowComputerVariations,
+        shouldShowComputerAnalysis: widget.shouldShowComputerAnalysis,
         shouldShowAnnotations: widget.shouldShowAnnotations,
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
@@ -272,7 +273,7 @@ typedef _PgnTreeViewParams =
       UciPath? pathToBroadcastLiveMove,
 
       /// Whether to show analysis variations.
-      bool shouldShowComputerVariations,
+      bool shouldShowComputerAnalysis,
 
       /// Whether to show NAG annotations like '!' and '??'.
       bool shouldShowAnnotations,
@@ -292,10 +293,8 @@ typedef _PgnTreeViewParams =
     });
 
 /// Filter node children when computer analysis is disabled
-IList<ViewBranch> _filteredChildren(ViewNode node, bool shouldShowComputerVariations) {
-  return node.children
-      .where((c) => shouldShowComputerVariations || !c.isComputerVariation)
-      .toIList();
+IList<ViewBranch> _filteredChildren(ViewNode node, bool shouldShowComputerAnalysis) {
+  return node.children.where((c) => shouldShowComputerAnalysis || !c.isComputerVariation).toIList();
 }
 
 /// Whether to display the sideline inline.
@@ -311,7 +310,7 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 
 /// Returns whether this node has a sideline that should not be displayed inline.
 bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params, {required bool isMainline}) {
-  final children = _filteredChildren(node, params.shouldShowComputerVariations);
+  final children = _filteredChildren(node, params.shouldShowComputerAnalysis);
   return isMainline && params.displayMode == PgnTreeDisplayMode.twoColumn
       ? children.length >= 2 || node.children.firstOrNull?.hasTextComment == true
       : children.length > 2 || (children.length == 2 && !_displaySideLineAsInline(children[1]));
@@ -457,8 +456,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     _updateLines(
       fullRebuild:
           oldWidget.root != widget.root ||
-          oldWidget.params.shouldShowComputerVariations !=
-              widget.params.shouldShowComputerVariations ||
+          oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
           oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
           oldWidget.params.displayMode != widget.params.displayMode,
@@ -698,14 +696,14 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
     final firstMoveIsBlack = nodes.first.position.turn == Side.black;
 
     final filteredNodes = nodes.takeWhile(
-      (node) => _filteredChildren(node, params.shouldShowComputerVariations).isNotEmpty,
+      (node) => _filteredChildren(node, params.shouldShowComputerAnalysis).isNotEmpty,
     );
 
     var path = initialPath;
     final moves = [
       if (firstMoveIsBlack) threeDots,
       ...filteredNodes.mapIndexed((i, node) {
-        final mainlineNode = _filteredChildren(node, params.shouldShowComputerVariations).first;
+        final mainlineNode = _filteredChildren(node, params.shouldShowComputerAnalysis).first;
         final move = InlineMove(
           branch: mainlineNode,
           textStyle: textStyle,
@@ -717,7 +715,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
           path: path + mainlineNode.id,
           params: params,
           showIndex: false,
-          showEval: true,
+          canShowEval: true,
         );
         path = path + mainlineNode.id;
         return move as Widget;
@@ -725,8 +723,7 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
       if (firstMoveIsBlack == filteredNodes.length.isEven) threeDots,
     ];
 
-    final lastBranch =
-        _filteredChildren(nodes.last, params.shouldShowComputerVariations).firstOrNull;
+    final lastBranch = _filteredChildren(nodes.last, params.shouldShowComputerAnalysis).firstOrNull;
 
     final initialFullmoves = nodes.first.position.fullmoves;
 
@@ -837,10 +834,10 @@ class _InlineNotationMainlinePart extends ConsumerWidget {
         TextSpan(
           children: nodes
               .takeWhile(
-                (node) => _filteredChildren(node, params.shouldShowComputerVariations).isNotEmpty,
+                (node) => _filteredChildren(node, params.shouldShowComputerAnalysis).isNotEmpty,
               )
               .mapIndexed((i, node) {
-                final children = _filteredChildren(node, params.shouldShowComputerVariations);
+                final children = _filteredChildren(node, params.shouldShowComputerAnalysis);
                 final mainlineNode = children.first;
                 final moves = [
                   _moveWithComment(
@@ -1178,7 +1175,7 @@ class InlineMove extends ConsumerWidget {
     required this.lineInfo,
     required this.params,
     this.showIndex = true,
-    this.showEval = false,
+    this.canShowEval = false,
     super.key,
   });
 
@@ -1191,8 +1188,15 @@ class InlineMove extends ConsumerWidget {
 
   final _PgnTreeViewParams params;
 
+  /// Whether to show the index of the move.
   final bool showIndex;
-  final bool showEval;
+
+  /// Whether to show the computer evaluation of the move.
+  ///
+  /// Default is `false` because we don't want to show the eval in the sidelines and in the mainline
+  /// if the [PgnTreeDisplayMode] is [PgnTreeDisplayMode.inlineNotation].
+  /// It is set to `true` in the mainline part of [PgnTreeDisplayMode.twoColumn] view.
+  final bool canShowEval;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
@@ -1242,7 +1246,7 @@ class InlineMove extends ConsumerWidget {
     final ply = branch.position.ply;
 
     final eval =
-        params.shouldShowComputerVariations && showEval ? branch.eval ?? branch.serverEval : null;
+        params.shouldShowComputerAnalysis && canShowEval ? branch.eval ?? branch.serverEval : null;
 
     return AdaptiveInkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
