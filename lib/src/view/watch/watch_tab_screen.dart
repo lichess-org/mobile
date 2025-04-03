@@ -104,7 +104,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                   builder: (context, orientation) {
                     return RefreshIndicator(
                       key: _androidRefreshKey,
-                      onRefresh: refreshData,
+                      onRefresh: _refreshData,
                       child: _Body(orientation),
                     );
                   },
@@ -126,7 +126,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                   const CupertinoSliverNavigationBar(
                     padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
                   ),
-                  CupertinoSliverRefreshControl(onRefresh: refreshData),
+                  CupertinoSliverRefreshControl(onRefresh: _refreshData),
                   SliverSafeArea(top: false, sliver: _Body(orientation)),
                 ],
               );
@@ -139,7 +139,10 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         );
   }
 
-  Future<void> refreshData() => _refreshData(ref);
+  Future<void> _refreshData() async {
+    if (!mounted) return;
+    return _doRefreshDataForRef(ref);
+  }
 }
 
 class _Body extends ConsumerStatefulWidget {
@@ -200,7 +203,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-Future<void> _refreshData(WidgetRef ref) {
+Future<void> _doRefreshDataForRef(WidgetRef ref) {
   return Future.wait([
     ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
@@ -280,9 +283,12 @@ class _WatchTvWidget extends ConsumerWidget {
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed:
-                () => Navigator.of(
-                  context,
-                ).push(LiveTvChannelsScreen.buildRoute(context)).then((_) => _refreshData(ref)),
+                () =>
+                    Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+                      if (context.mounted) {
+                        _doRefreshDataForRef(ref);
+                      }
+                    }),
             child: Text(context.l10n.more),
           ),
           children: data
@@ -305,7 +311,11 @@ class _WatchTvWidget extends ConsumerWidget {
                               orientation: snapshot.player.side,
                             ),
                           )
-                          .then((_) => _refreshData(ref)),
+                          .then((_) {
+                            if (context.mounted) {
+                              _doRefreshDataForRef(ref);
+                            }
+                          }),
                 );
               })
               .toList(growable: false),

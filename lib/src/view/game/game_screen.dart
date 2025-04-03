@@ -162,9 +162,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   blackClockKey: _blackClockKey,
                   boardKey: _boardKey,
                   onLoadGameCallback: (id) {
-                    ref.read(provider.notifier).loadGame(id);
+                    if (mounted) {
+                      ref.read(provider.notifier).loadGame(id);
+                    }
                   },
                   onNewOpponentCallback: (game) {
+                    if (!mounted) return;
+
                     if (widget.source == _GameSource.lobby) {
                       ref.read(provider.notifier).newOpponent();
                     } else {
