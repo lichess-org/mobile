@@ -243,10 +243,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     // The path of the last and current move of the broadcasted game
     // Its value is "!" if the path is identical to one of the node that was received
-    final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
+    final currentPath = pick(event.data, 'relayPath').asUciPathOrNull();
 
     // We check that the event we received is for the last move of the game
-    if (currentPath.value != '!') return;
+    if (currentPath?.value != '!') return;
 
     // The path for the node that was received
     final path = pick(event.data, 'p', 'path').asUciPathOrThrow();

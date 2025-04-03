@@ -59,10 +59,28 @@ extension UciExtension on Pick {
     return UciCharPair.fromStringId(value);
   }
 
+  UciCharPair? asUciCharPairOrNull() {
+    if (value == null) return null;
+    try {
+      return asUciCharPairOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Matches a UciPath from a string.
   UciPath asUciPathOrThrow() {
     final value = required().asStringOrThrow();
     return UciPath(value);
+  }
+
+  UciPath? asUciPathOrNull() {
+    if (value == null) return null;
+    try {
+      return asUciPathOrThrow();
+    } catch (_) {
+      return null;
+    }
   }
 }
 

@@ -124,10 +124,10 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   void _handleAddNodeEvent(SocketEvent event) {
     // The path of the last and current move of the broadcasted game
     // Its value is "!" if the path is identical to one of the node that was received
-    final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
+    final currentPath = pick(event.data, 'relayPath').asUciPathOrNull();
 
     // We check that the event we received is for the last move of the game
-    if (currentPath.value != '!') return;
+    if (currentPath?.value != '!') return;
 
     final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
