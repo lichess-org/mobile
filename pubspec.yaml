@@ -10,7 +10,7 @@ environment:
   flutter: 3.31.0-0.1.pre
 
 dependencies:
-  app_settings: ^5.1.1
+  app_settings: ^6.1.1
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
@@ -37,7 +37,7 @@ dependencies:
   flutter_displaymode: ^0.6.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^19.0.0
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.7.3+1
