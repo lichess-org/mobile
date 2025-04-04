@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -13,15 +14,19 @@ import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dar
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_game.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({super.key});
@@ -89,6 +94,31 @@ class _BodyState extends ConsumerState<_Body> {
                     },
                   ),
               barrierDismissible: true,
+            );
+          }
+        });
+      }
+
+      if (previous?.game.isThreefoldRepetition == false &&
+          newGameState.game.isThreefoldRepetition == true) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            ref.read(overTheBoardClockProvider.notifier).pause();
+            showAdaptiveDialog<void>(
+              context: context,
+              builder:
+                  (context) => YesNoDialog(
+                    title: Text(context.l10n.threefoldRepetition),
+                    content: const Text('Accept draw?'),
+                    onYes: () {
+                      Navigator.pop(context);
+                      ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                    },
+                    onNo: () {
+                      Navigator.pop(context);
+                      ref.read(overTheBoardClockProvider.notifier).resume(previous!.turn);
+                    },
+                  ),
             );
           }
         });
@@ -181,15 +211,11 @@ class _BottomBar extends ConsumerWidget {
     return PlatformBottomBar(
       children: [
         BottomBarButton(
-          label: 'Configure game',
-          onTap: () => showConfigureGameSheet(context, isDismissible: true),
-          icon: Icons.add,
-        ),
-        BottomBarButton(
-          key: const Key('flip-button'),
-          label: context.l10n.flipBoard,
-          onTap: onFlipBoard,
-          icon: CupertinoIcons.arrow_2_squarepath,
+          label: context.l10n.menu,
+          onTap: () {
+            _showOtbGameMenu(context, ref);
+          },
+          icon: Icons.menu,
         ),
         if (!clock.timeIncrement.isInfinite)
           BottomBarButton(
@@ -236,6 +262,81 @@ class _BottomBar extends ConsumerWidget {
                   : null,
           icon: CupertinoIcons.chevron_forward,
         ),
+      ],
+    );
+  }
+
+  Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
+    final gameState = ref.read(overTheBoardGameControllerProvider);
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => const Text('New game'),
+          onPressed: () => showConfigureGameSheet(context, isDismissible: true),
+        ),
+        if (gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed:
+                () => Navigator.of(context).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: gameState.game.makePgn(),
+                        isComputerAnalysisAllowed: true,
+                        variant: gameState.game.meta.variant,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: onFlipBoard,
+        ),
+        if (gameState.game.drawable)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.offerDraw),
+            onPressed: () {
+              final offerer = gameState.turn.name.capitalize();
+              showAdaptiveDialog<void>(
+                context: context,
+                builder:
+                    (context) => YesNoDialog(
+                      title: Text('${context.l10n.draw}?'),
+                      content: Text('$offerer offers draw. Does opponent accept?'),
+                      onYes: () {
+                        Navigator.pop(context);
+                        ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                      },
+                      onNo: () => Navigator.pop(context),
+                    ),
+              );
+            },
+          ),
+        if (gameState.game.resignable)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.resign),
+            onPressed: () {
+              final offerer = gameState.turn.name.capitalize();
+              showAdaptiveDialog<void>(
+                context: context,
+                builder:
+                    (context) => YesNoDialog(
+                      title: Text('${context.l10n.resign}?'),
+                      content: Text('Are you sure you want to resign as $offerer?'),
+                      onYes: () {
+                        Navigator.pop(context);
+                        ref.read(overTheBoardGameControllerProvider.notifier).resign();
+                      },
+                      onNo: () => Navigator.pop(context),
+                    ),
+              );
+            },
+          ),
       ],
     );
   }

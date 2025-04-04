@@ -32,6 +32,16 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
     state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
   }
 
+  void resign() {
+    state = state.copyWith(
+      game: state.game.copyWith(status: GameStatus.resign, winner: state.turn.opposite),
+    );
+  }
+
+  void draw() {
+    state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
+  }
+
   void makeMove(NormalMove move) {
     if (isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
@@ -57,6 +67,13 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       ),
       stepCursor: state.stepCursor + 1,
     );
+
+    // check for threefold repetition
+    if (state.game.steps.count((p) => p.position.board == newStep.position.board) == 3) {
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: true));
+    } else {
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: false));
+    }
 
     if (state.currentPosition.isCheckmate) {
       state = state.copyWith(

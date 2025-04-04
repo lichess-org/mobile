@@ -42,6 +42,11 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   @override
   GameId get id => const GameId('--------');
 
+  bool get abortable => playable && lastPosition.fullmoves <= 1;
+
+  bool get resignable => playable && !abortable;
+  bool get drawable => playable && lastPosition.fullmoves >= 2;
+
   @Assert('steps.isNotEmpty')
   factory OverTheBoardGame({
     @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
