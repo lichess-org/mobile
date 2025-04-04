@@ -390,6 +390,224 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Aréna';
+
+  @override
+  String get arenaArenaTournaments => 'Arénové turnaje';
+
+  @override
+  String get arenaIsItRated => 'Započítava sa turnaj do môjho ratingu?';
+
+  @override
+  String get arenaWillBeNotified => 'Dáme Vám vedieť keď turnaj začne, takže kým čakáte, môžete pokojne hrať na ďalšej karte prehliadača.';
+
+  @override
+  String get arenaIsRated => 'Tento turnaj sa bude počítať do Vášho ratingu.';
+
+  @override
+  String get arenaIsNotRated => 'Tento turnaj sa *NE*bude počítať do Vášho ratingu.';
+
+  @override
+  String get arenaSomeRated => 'Niektoré turnaje sa počítajú do ratingu hráčov a ovplyvnia aj ten Váš.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Ako sa počíta skóre turnaja?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Základné hodnotenie je nasledovné: výhra 2 body, remíza 1 bod, prehra 0 bodov.\nAk vyhráte 2 po sebe nasledujúce partie, odštartujete tzv. \"dvojnásobne bodovanú sériu\", symbolizovanú ikonou plameňa.\nNasledujúce partie budú ohodnotené dvojnásobným počtom bodov až dokiaľ neprehráte alebo neremizujete.\nTo znamená, že výhra bude za 4 body a remíza 2 body. Prehra bude stále za 0 bodov.';
+
+  @override
+  String get arenaBerserk => 'Aréna Besnenia';
+
+  @override
+  String get arenaBerserkAnswer => 'Keď hráč na začiatku partie klikne na tlačidlo \"Berserk\" (besnenie), stratí polovicu svojho času, jeho výhra však bude ohodnotená 1 bodom naviac.\n\nBesnenie automaticky vynuluje časový prírastok na hodinách. Výnimkou je čas 1+2, ktorý sa zmení na 1+0.\n\nBesnenie nie je umožnené pri hrách s nulovým počiatočným časom (0+1, 0+2).\n\nBesnenie Vám zabezpečí 1 bod naviac iba v prípade odohrania aspoň 7 ťahov v partii.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Ako sa rozhodne o víťazovi?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Hráč, ktorý má po uplynutí časového limitu turnaja najvyšší počet bodov sa stane víťazom.';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Ako funguje párovanie hráčov?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Na začiatku turnaja sa hráči spárujú na základe ich ratingu.\nAkonáhle ukončíte partiu, vráťte sa do turnajovej miestnosti: budete spárovaný so súperom, ktorý má podobný rating ako Vy. Takýto postup Vám zabezpečí minimum čakacieho času, avšak môže sa stať, že nebudete hrať so všetkými hráčmi v turnaji.\nHrajte rýchlo a vráťte sa vždy čo najrýchlejšie do turnajovej miestnosti aby ste stihli odohrať viac partií a získať tak viac bodov.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Ako turnaj končí?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'Dĺžku turnaja merajú hodiny s časovým odpočítavaním. Keď dosiahnu nulu, turnajový rebríček sa zmrazí a vyhlási sa víťaz. Rozohrané partie sa musia dohrať, avšak neovplyvnia už výsledok turnaja.';
+
+  @override
+  String get arenaOtherRules => 'Ďalšie dôležité pravidlá';
+
+  @override
+  String get arenaThereIsACountdown => 'Pre Váš prvý ťah sme spustili odpočítavanie. Nevykonanie ťahu bude mať za následok kontumáciu partie v prospech protihráča.';
+
+  @override
+  String get arenaThisIsPrivate => 'Toto je uzavretý turnaj';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Zdieľaním tejto adresy umožníte ľuďom účasť v turnaji: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Séria remíz: Keď hráč v aréne remizuje viackrát po sebe, bod sa udelí iba za prvú remízu alebo za remízy v štandardných partiách, ktoré trvajú viac ako $param ťahov. Séria remíz môže byť prerušená iba výhrou, nie prehrou alebo remízou.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Minimálna dĺžka partie, za ktorú sa udeľujú body, sa líši podľa variantu. V nasledujúcej tabuľke sú uvedené hraničné hodnoty pre jednotlivé varianty.';
+
+  @override
+  String get arenaVariant => 'Variant';
+
+  @override
+  String get arenaMinimumGameLength => 'Minimálna dĺžka partie';
+
+  @override
+  String get arenaHistory => 'História zápasov v aréne';
+
+  @override
+  String get arenaNewTeamBattle => 'Nový tímový súboj';
+
+  @override
+  String get arenaCustomStartDate => 'Vlastný dátum začiatku';
+
+  @override
+  String get arenaCustomStartDateHelp => 'Vo Vašom miestnom časovom pásme. Toto nastavenie je nadradené nastaveniu \"Čas pred začiatkom turnaja\"';
+
+  @override
+  String get arenaAllowBerserk => 'Povoliť besnenie';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Umožnite hráčom skrátiť čas na polovicu, aby získali bod navyše';
+
+  @override
+  String get arenaAllowChatHelp => 'Umožnite hráčom diskutovať v chate';
+
+  @override
+  String get arenaArenaStreaks => 'Série výhier';
+
+  @override
+  String get arenaArenaStreaksHelp => 'Po 2 víťazstvách sa za po sebe idúce víťazstvá udeľujú 4 body namiesto 2.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Besnenie zakázané';
+
+  @override
+  String get arenaNoArenaStreaks => 'Série výhier vypnuté';
+
+  @override
+  String get arenaAveragePerformance => 'Priemerný výkon';
+
+  @override
+  String get arenaAverageScore => 'Priemerné skóre';
+
+  @override
+  String get arenaMyTournaments => 'Moje turnaje';
+
+  @override
+  String get arenaEditTournament => 'Editovať turnaj';
+
+  @override
+  String get arenaEditTeamBattle => 'Editovať turnaj tímov';
+
+  @override
+  String get arenaDefender => 'Obhajca';
+
+  @override
+  String get arenaPickYourTeam => 'Zvoľte si tím';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Ktorý tím budete v tomto turnaji reprezentovať?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Ak sa chcete zúčastniť, musíte sa pridať k jednému z týchto tímov!';
+
+  @override
+  String get arenaCreated => 'Vytvorené';
+
+  @override
+  String get arenaRecentlyPlayed => 'Naposledy odohrané';
+
+  @override
+  String get arenaBestResults => 'Najlepšie výsledky';
+
+  @override
+  String get arenaTournamentStats => 'Turnajové štatistiky';
+
+  @override
+  String get arenaRankAvgHelp => 'Priemerná pozícia je percentuálny podiel vášho hodnotenia. Nižšia hodnota je lepšia.\n\nNapríklad 3. miesto v turnaji so 100 hráčmi = 3 %. Byť na 10. mieste v turnaji s 1000 hráčmi = 1 %.';
+
+  @override
+  String get arenaMedians => 'mediány';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Všetky priemery na tejto stránke sú $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Spolu';
+
+  @override
+  String get arenaPointsAvg => 'Priemer bodov';
+
+  @override
+  String get arenaPointsSum => 'Súčet bodov';
+
+  @override
+  String get arenaRankAvg => 'Priemer umiestnení';
+
+  @override
+  String get arenaTournamentWinners => 'Víťazi turnajov';
+
+  @override
+  String get arenaTournamentShields => 'Shield turnaje';
+
+  @override
+  String get arenaOnlyTitled => 'Iba hráči s titulom';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Na účasť v turnaji je potrebný oficiálny titul';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'V prípade remízy do $count ťahov získajú obaja hráči nula bodov.',
+      many: 'V prípade remízy do $count ťahov získajú obaja hráči nula bodov.',
+      few: 'V prípade remízy do $count ťahov získajú obaja hráči nula bodov.',
+      one: 'V prípade remízy do $count ťahu získajú obaja hráči nula bodov.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Prezerať všetkých $count tímov',
+      many: 'Prezerať všetkých $count tímov',
+      few: 'Prezerať všetky $count tímy',
+      one: 'Prezerať tím',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Vysielanie';
 
   @override
@@ -632,6 +850,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastSinceHideResults => 'Keďže ste sa rozhodli skryť výsledky, všetky náhľadové šachovnice sú prázdne, aby sme Vám neprezradili priveľa.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -640,6 +861,17 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count vysielaní',
       few: '$count vysielania',
       one: '$count vysielanie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2134,6 +2366,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get claimADraw => 'Požadovať remízu';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Ponúknuť remízu';
 
   @override
@@ -2835,7 +3070,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createdBy => 'Vytvorené';
 
   @override
-  String get tournamentIsStarting => 'Turnaj sa začína';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Párovanie hráčov v turnaji je už uzavreté.';
@@ -2880,11 +3115,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get draws => 'Remízy';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Ďalší $param turnaj:';
-  }
 
   @override
   String get averageOpponent => 'Priemerná sila súpera';
@@ -3608,6 +3838,17 @@ class AppLocalizationsSk extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ak nevidíte email, pozrite iné miesta kde by mohol byť, ako napríklad kôš, spam, sociálne, alebo iné priečinky.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Poslali sme email na $param. Kliknite na link v emaili na obnovenie hesla.';
   }
@@ -3636,6 +3877,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get downloadImported => 'Stiahnuť importované';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Tabuľka';
@@ -3742,6 +3986,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get language => 'Jazyk';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Pozadie';
@@ -5270,16 +5517,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyShowEvalBar => 'Ukazovatele hodnotenia';
 
   @override
-  String get studyFirst => 'Prvá';
-
-  @override
-  String get studyPrevious => 'Späť';
-
-  @override
   String get studyNext => 'Ďalej';
-
-  @override
-  String get studyLast => 'Posledná';
 
   @override
   String get studyShareAndExport => 'Zdielať & export';
@@ -5612,6 +5850,105 @@ class AppLocalizationsSk extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param na stránku';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

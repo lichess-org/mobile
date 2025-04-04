@@ -26,6 +26,7 @@ const mobileTranslationsPath = `${tmpDir}/[lichess-org.mobile] main/translation/
 const modules = [
   'mobile', // mobile is not a module in crowdin, but another source of translations, we'll treat it as a module here for simplicity
   'activity',
+  'arena',
   'broadcast',
   'challenge',
   'contact',

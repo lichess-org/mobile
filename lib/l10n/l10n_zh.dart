@@ -336,6 +336,218 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => '竞技场';
+
+  @override
+  String get arenaArenaTournaments => '竞技场';
+
+  @override
+  String get arenaIsItRated => '会影响等级分吗？';
+
+  @override
+  String get arenaWillBeNotified => '当锦标赛开始时，你将收到通知，所以在其他标签页中下棋是无碍的。';
+
+  @override
+  String get arenaIsRated => '本锦标赛为排位赛，会影响你的等级分。';
+
+  @override
+  String get arenaIsNotRated => '本锦标赛为休闲赛，不会影响你的等级分。';
+
+  @override
+  String get arenaSomeRated => '部分锦标赛是排位赛，会影响你的等级分。';
+
+  @override
+  String get arenaHowAreScoresCalculated => '分数是如何计算的？';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => '赢局的基础分数是2分，平局1分，输局不得分。如果你连胜两局将开始双倍积分，以火焰图标表示。接下来的对局将继续获得双倍积分，直到你输棋为止。也就是说，在双倍积分的情况下赢局值4分，平局2分。输局仍然不得分。 \n\n例如两场胜利紧接着一场平局得6分： 2 + 2 + (2 x 1)。';
+
+  @override
+  String get arenaBerserk => '神速锦标赛';
+
+  @override
+  String get arenaBerserkAnswer => '如果棋手在棋局开始时点击“神速”按钮，将会损失一半的时间，但战胜该局将多得1分。\n\n如果棋局时限有加秒，那么启动神速会导致神速方加秒被取消。(唯一的例外是1+2, 在这个情况下启动神速会把神速方的时限变为1+0)。\n\n在无基础局时的棋局 (如0+1、0+2等) ，神速功能被禁用。\n\n只有走过7步棋以上的棋局会有神速加分。';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => '赢家是如何决定的？';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => '在锦标赛设定时间限制结束时积分最多的玩家将被宣布为获胜者。\n\n当两个或两个以上的玩家拥有相同分数时，锦标赛的表现是決勝。';
+
+  @override
+  String get arenaHowDoesPairingWork => '棋手是怎么配对的？';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => '在锦标赛开始时，系统会根据棋手的等级分进行配对。一局结束后，回到锦标赛主页等待。此后你会和与你锦标赛名次接近的棋手配对，这尽可能降低了等待时间。然而，你不一定会和锦标赛所有其他棋手下棋。\n\n为了下更多的棋局以得到更多的锦标赛积分，尽量快地下完每一盘棋并回到主页。';
+
+  @override
+  String get arenaHowDoesItEnd => '锦标赛如何结束？';
+
+  @override
+  String get arenaHowDoesItEndAnswer => '锦标赛有倒计时。当它到零的时候锦标赛名次不再变动，赢家就确定了。此时未下完的棋局必须下完但这些棋局不计入锦标赛分数。';
+
+  @override
+  String get arenaOtherRules => '其他重要规则';
+
+  @override
+  String get arenaThereIsACountdown => '第一次移动有时间限制。规定时间内未能采取行动将会转由对手操作。';
+
+  @override
+  String get arenaThisIsPrivate => '这是一个私人锦标赛';
+
+  @override
+  String arenaShareUrl(String param) {
+    return '分享本链接让其他人加入本锦标赛：$param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return '连和场数：当棋手在竞技场中连续和棋时，只有第一次和棋或者超过 $param 步的和局才会计分。连和场数只能被胜利打破，不会被输棋或和棋打破。';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => '计分的和局的最小步数由不同的变体而变化。下面的表格列出了每个变体的阀值。';
+
+  @override
+  String get arenaVariant => '变体';
+
+  @override
+  String get arenaMinimumGameLength => '最少棋局步数';
+
+  @override
+  String get arenaHistory => '竞技场历史';
+
+  @override
+  String get arenaNewTeamBattle => '新团队战';
+
+  @override
+  String get arenaCustomStartDate => '自定义开始日期';
+
+  @override
+  String get arenaCustomStartDateHelp => '在你的本地时区，这将覆盖 \"距比赛开始时间\" 选项';
+
+  @override
+  String get arenaAllowBerserk => '允许神速模式';
+
+  @override
+  String get arenaAllowBerserkHelp => '允许玩家将自己的时间减半以获得额外得分';
+
+  @override
+  String get arenaAllowChatHelp => '允许玩家在聊天室中讨论';
+
+  @override
+  String get arenaArenaStreaks => '连胜奖励';
+
+  @override
+  String get arenaArenaStreaksHelp => '连胜两场后，获得4分而不是2分。';
+
+  @override
+  String get arenaNoBerserkAllowed => '禁止“神速”模式';
+
+  @override
+  String get arenaNoArenaStreaks => '取消连胜积分奖励';
+
+  @override
+  String get arenaAveragePerformance => '平均表现';
+
+  @override
+  String get arenaAverageScore => '平均分数';
+
+  @override
+  String get arenaMyTournaments => '我的锦标赛';
+
+  @override
+  String get arenaEditTournament => '编辑锦标赛';
+
+  @override
+  String get arenaEditTeamBattle => '编辑团队战斗';
+
+  @override
+  String get arenaDefender => '防守方';
+
+  @override
+  String get arenaPickYourTeam => '请选择您的团队';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => '你将代表哪个团队出战？';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => '您必须加入这些团队之一才能参与！';
+
+  @override
+  String get arenaCreated => '创建于';
+
+  @override
+  String get arenaRecentlyPlayed => '最近结束';
+
+  @override
+  String get arenaBestResults => '最佳结果';
+
+  @override
+  String get arenaTournamentStats => '锦标赛统计';
+
+  @override
+  String get arenaRankAvgHelp => '等级平均值是您排名的百分比。较低的排名越好。\n\n例如，在100个玩家的锦标赛中排名第三名 = 3%。在1000个玩家的锦标赛中排名第10名 = 1%。';
+
+  @override
+  String get arenaMedians => '中位数';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return '此页面上的所有平均值是 $param。';
+  }
+
+  @override
+  String get arenaTotal => '总计';
+
+  @override
+  String get arenaPointsAvg => '平均分数';
+
+  @override
+  String get arenaPointsSum => '总分数';
+
+  @override
+  String get arenaRankAvg => '平均等级';
+
+  @override
+  String get arenaTournamentWinners => '锦标赛赢家';
+
+  @override
+  String get arenaTournamentShields => '锦标赛盾牌';
+
+  @override
+  String get arenaOnlyTitled => '仅限有头衔玩家';
+
+  @override
+  String get arenaOnlyTitledHelp => '需要官方头衔才能加入比赛';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '前 $count 次移动玩家并不会获得任何积分。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '查看所有$count团队',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => '转播';
 
   @override
@@ -578,11 +790,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastSinceHideResults => '由于您选择隐藏比赛结果，为避免剧透，所有棋局预览均为空白状态。';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count 直播',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2062,6 +2288,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get claimADraw => '宣布和棋';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => '提出和棋';
 
   @override
@@ -2763,7 +2992,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createdBy => '创建者:';
 
   @override
-  String get tournamentIsStarting => '锦标赛已开始';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => '本锦标赛已不再产生新的对局';
@@ -2808,11 +3037,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get draws => '和棋';
-
-  @override
-  String nextXTournament(String param) {
-    return '下一个 $param 锦标赛：';
-  }
 
   @override
   String get averageOpponent => '对手平均等级分';
@@ -3536,6 +3760,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => '如果你没有收到我们的邮件，请检查其他收件箱，例如垃圾箱，广告箱等。';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return '我们给你的邮箱 $param 发了重置密码的链接。请点击链接来重置你的密码。';
   }
@@ -3564,6 +3799,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get downloadImported => '下载导入的棋局';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => '比分表';
@@ -3670,6 +3908,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get language => '语言';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => '背景';
@@ -5057,16 +5298,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyShowEvalBar => '评估条';
 
   @override
-  String get studyFirst => '首页';
-
-  @override
-  String get studyPrevious => '上一页';
-
-  @override
   String get studyNext => '下一页';
-
-  @override
-  String get studyLast => '末页';
 
   @override
   String get studyShareAndExport => '分享并导出';
@@ -5399,6 +5631,105 @@ class AppLocalizationsZh extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param 每页';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {
@@ -5927,6 +6258,212 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       count,
       locale: localeName,
       other: '加入 $count 團隊',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get arenaArena => '競技場';
+
+  @override
+  String get arenaArenaTournaments => '錦標賽';
+
+  @override
+  String get arenaIsItRated => '這一局棋會被評分嗎？';
+
+  @override
+  String get arenaWillBeNotified => '您將會在錦標賽開始時收到通知，所以您可以放心的在錦標賽開始前下其他的棋局。';
+
+  @override
+  String get arenaIsRated => '這場錦標賽將會評分，並且影響到您的評分。';
+
+  @override
+  String get arenaIsNotRated => '這場錦標賽不會評分，並且它不會影響到您的評分。';
+
+  @override
+  String get arenaSomeRated => '一些錦標賽將會評分，並且影響到您的評分。';
+
+  @override
+  String get arenaHowAreScoresCalculated => '分數是如何計算的？';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => '贏家將會得到2積分，平局1積分，輸家0分。\n如果您連續贏了2場以上的棋局，您將會開始以火焰符號標示的連勝次數。\n在連勝後您將會收到兩倍的積分直到輸棋。\n換句話說：贏得 4 積分，平局得 2 積分，但是輸家依舊沒有積分。\n\n例如：連贏兩場加上一局平局，您將會得到 2 + 2 + ( 2 x 1 ) = 6 積分';
+
+  @override
+  String get arenaBerserk => '狂暴選項';
+
+  @override
+  String get arenaBerserkAnswer => '狂暴模式若開啟，玩家時間將會砍半，不過在獲勝時將會多 1 積分\n\n在狂暴模式下，加時制將會被停用（1+2 是一個例外，它將會改為 1+0）。\n\n狂暴模式將不會被允許在零初始時間模式時開啟（例如：0+1，0+2）。\n\n狂暴模式只會在您下了 7 步棋以上才會得到加成分數。';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => '贏家是怎麼決定的？';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => '在錦標賽中獲得最多積分的人將獲勝，當兩位(或以上)玩家擁有相同積分時，這場錦標賽將會被視為平手';
+
+  @override
+  String get arenaHowDoesPairingWork => '對手是如何配對的?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => '在錦標賽開始時，系統將會以您的模式評分為基礎分配對手。\n在您完成了第一場棋局後，系統將會分配與您排名相近的玩家作為對手，這會需要一點時間做分配。\n迅速完成棋局並獲勝就可以得到更多積分。';
+
+  @override
+  String get arenaHowDoesItEnd => '錦標賽何時會結束？';
+
+  @override
+  String get arenaHowDoesItEndAnswer => '每場錦標賽都會有一個倒數計時器，當它歸零時，錦標賽的排名就會固定，排名將會被顯示。如果有比賽在錦標賽結束後還沒完成，您還是得完成它，但是積分將不會被算進錦標賽的積分裡。';
+
+  @override
+  String get arenaOtherRules => '其他重要的規則';
+
+  @override
+  String get arenaThereIsACountdown => '在您開始您的第一步棋前將會有一個倒數計時器，在倒數結束前如果沒有下出您的第一步，您的對手將會直接獲勝';
+
+  @override
+  String get arenaThisIsPrivate => '這是一個私人的錦標賽';
+
+  @override
+  String arenaShareUrl(String param) {
+    return '分享這個網址讓其他人加入這場錦標賽：$param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return '連和場數：當棋手在競技場中連續和棋時，只有第一次和棋或者超過 $param 步的和局才會計分。 連和場數只能被勝利打破，不會被輸棋或和棋打破。';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => '計分的和局的最小步數由不同的變體而變化。 下面的表格列出了每個變體的閥值。';
+
+  @override
+  String get arenaVariant => '變體';
+
+  @override
+  String get arenaMinimumGameLength => '最少對局步數';
+
+  @override
+  String get arenaHistory => '先前的重要錦標賽';
+
+  @override
+  String get arenaNewTeamBattle => '新團隊戰';
+
+  @override
+  String get arenaCustomStartDate => '自定義開始日期';
+
+  @override
+  String get arenaCustomStartDateHelp => '在您的當地時區，這將會覆蓋在 \"比賽準備時間\" 選項';
+
+  @override
+  String get arenaAllowBerserk => '允許啟用狂暴模式';
+
+  @override
+  String get arenaAllowBerserkHelp => '讓玩家將時間減半以獲得額外積分';
+
+  @override
+  String get arenaAllowChatHelp => '讓玩家在聊天室討論';
+
+  @override
+  String get arenaArenaStreaks => '競技場連勝';
+
+  @override
+  String get arenaArenaStreaksHelp => '2次勝利後，連勝將會取得4分，而不是2分。';
+
+  @override
+  String get arenaNoBerserkAllowed => '禁止「神速」模式';
+
+  @override
+  String get arenaNoArenaStreaks => '無競技場連勝';
+
+  @override
+  String get arenaAveragePerformance => '平均表現';
+
+  @override
+  String get arenaAverageScore => '平均分數';
+
+  @override
+  String get arenaMyTournaments => '我的錦標賽';
+
+  @override
+  String get arenaEditTournament => '編輯錦標賽';
+
+  @override
+  String get arenaEditTeamBattle => '編輯團隊比賽';
+
+  @override
+  String get arenaDefender => '防守者';
+
+  @override
+  String get arenaPickYourTeam => '選擇隊伍';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => '你會為哪一個隊伍代表比賽？';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => '你必須參加某個隊伍以比賽！';
+
+  @override
+  String get arenaCreated => '已建立';
+
+  @override
+  String get arenaRecentlyPlayed => '最近玩過';
+
+  @override
+  String get arenaBestResults => '最佳紀錄';
+
+  @override
+  String get arenaTournamentStats => '錦標賽得分';
+
+  @override
+  String get arenaRankAvgHelp => '平均等地表示你的等地百分比。越低越好。\n\n舉例而言，在 100 人中被評等地 3 表示 %3；在 1000 人中被評等地 10 表示 %1';
+
+  @override
+  String get arenaMedians => '中位數';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return '所有平均為$param。';
+  }
+
+  @override
+  String get arenaTotal => '總計';
+
+  @override
+  String get arenaPointsAvg => '平均分數';
+
+  @override
+  String get arenaPointsSum => '總計分數';
+
+  @override
+  String get arenaRankAvg => '平均等地';
+
+  @override
+  String get arenaTournamentWinners => '錦標賽贏家';
+
+  @override
+  String get arenaTournamentShields => '錦標賽徽章';
+
+  @override
+  String get arenaOnlyTitled => '僅限頭銜玩家';
+
+  @override
+  String get arenaOnlyTitledHelp => '需要官方頭銜才能加入比賽';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '在$count步內平局的棋局將不會得到積分',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '查看所有 $count 團隊',
     );
     return '$_temp0';
   }
@@ -8341,9 +8878,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get createdBy => '創建者：';
 
   @override
-  String get tournamentIsStarting => '錦標賽即將開始';
-
-  @override
   String get tournamentPairingsAreNowClosed => '此錦標賽的對手配對已結束。';
 
   @override
@@ -8386,11 +8920,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get draws => '和棋';
-
-  @override
-  String nextXTournament(String param) {
-    return '下一個$param錦標賽';
-  }
 
   @override
   String get averageOpponent => '平均對手評分';
@@ -10626,16 +11155,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get studyShowEvalBar => '評估條';
 
   @override
-  String get studyFirst => '第一頁';
-
-  @override
-  String get studyPrevious => '上一頁';
-
-  @override
   String get studyNext => '下一頁';
-
-  @override
-  String get studyLast => '最後一頁';
 
   @override
   String get studyShareAndExport => '分享 & 導出';

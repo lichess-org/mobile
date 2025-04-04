@@ -122,7 +122,10 @@ class _TournamentListBody extends StatelessWidget {
       shrinkWrap: true,
       itemCount: tournamentListItems.length,
       separatorBuilder:
-          (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          (context, index) =>
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                  : const SizedBox.shrink(),
       itemBuilder: (context, index) => tournamentListItems[index],
     );
   }

@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -76,10 +77,23 @@ class _Body extends ConsumerWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: Styles.bodySectionPadding,
+              padding: Styles.bodyPadding,
               child: ListView(
                 children: [
-                  _Verdicts(state.tournament.verdicts),
+                  PlatformCard(
+                    child: Padding(
+                      padding: Styles.bodySectionPadding,
+                      child: Column(
+                        children: [
+                          _TournamentInfo(state.tournament),
+                          if (state.tournament.verdicts.list.isNotEmpty) ...[
+                            const SizedBox(height: 10),
+                            _Verdicts(state.tournament.verdicts),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   if (!state.tournament.berserkable) ...[
                     const Text.rich(
@@ -153,14 +167,17 @@ class _Standing extends ConsumerWidget {
     if (standing == null) {
       return const SizedBox.shrink();
     }
-    return Column(
-      children: [
-        ...List.generate(
-          10,
-          (i) => standing.players.getOrNull(i),
-        ).nonNulls.map((player) => _StandingPlayer(player: player)),
-        _StandingControls(state: state),
-      ],
+    return PlatformCard(
+      clipBehavior: Clip.hardEdge,
+      child: Column(
+        children: [
+          ...List.generate(
+            10,
+            (i) => standing.players.getOrNull(i),
+          ).nonNulls.map((player) => _StandingPlayer(player: player)),
+          _StandingControls(state: state),
+        ],
+      ),
     );
   }
 }
@@ -260,7 +277,7 @@ class _StandingControls extends ConsumerWidget {
               state.hasPreviousPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
                   : null,
-          semanticsLabel: context.l10n.studyFirst,
+          semanticsLabel: 'First',
           icon: Icons.first_page,
         ),
         PlatformIconButton(
@@ -270,11 +287,12 @@ class _StandingControls extends ConsumerWidget {
                       .read(tournamentControllerProvider(state.id).notifier)
                       .loadPreviousStandingsPage
                   : null,
-          semanticsLabel: context.l10n.studyPrevious,
+          semanticsLabel: 'Previous',
           icon: Icons.skip_previous,
         ),
         Text(
-          '${state.firstRankOfPage}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
+          '${state.firstRankOfPage.toString().padLeft(2)}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
+          style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
         ),
         PlatformIconButton(
           onTap:
@@ -289,7 +307,7 @@ class _StandingControls extends ConsumerWidget {
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
-          semanticsLabel: context.l10n.studyLast,
+          semanticsLabel: 'Last',
           icon: Icons.last_page,
         ),
         if (state.tournament.me != null)
@@ -299,6 +317,34 @@ class _StandingControls extends ConsumerWidget {
             // TODO l10n
             semanticsLabel: 'Jump to my page',
           ),
+      ],
+    );
+  }
+}
+
+class _TournamentInfo extends StatelessWidget {
+  const _TournamentInfo(this.tournament);
+
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(tournament.perf.icon, size: 36),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${tournament.timeIncrement.display} • ${tournament.perf.title}${tournament.timeToFinish != null ? ' • ${context.l10n.nbMinutes(tournament.timeToFinish!.inMinutes)}' : ''}',
+            ),
+            Text(
+              '${tournament.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
+            ),
+            const SizedBox(height: 5),
+          ],
+        ),
       ],
     );
   }
@@ -324,10 +370,10 @@ class _Verdicts extends ConsumerWidget {
           color:
               isLoggedIn
                   ? verdicts.accepted
-                      ? LichessColors.good
-                      : LichessColors.error
+                      ? context.lichessColors.good
+                      : context.lichessColors.error
                   : null,
-          size: 30,
+          size: 30.0,
         ),
         const SizedBox(width: 10),
         Column(
@@ -341,8 +387,8 @@ class _Verdicts extends ConsumerWidget {
                     color:
                         isLoggedIn
                             ? verdict.ok
-                                ? LichessColors.good
-                                : LichessColors.error
+                                ? context.lichessColors.good
+                                : context.lichessColors.error
                             : null,
                   ),
                 ),
